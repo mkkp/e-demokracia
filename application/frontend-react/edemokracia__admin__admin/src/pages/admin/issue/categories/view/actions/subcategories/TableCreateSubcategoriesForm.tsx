@@ -120,7 +120,9 @@ export function TableCreateSubcategoriesForm({ successCallback, cancel, owner }:
   const [data, setData] = useState<AdminIssueCategory>({
     __referenceId: uuidv1(),
   } as unknown as AdminIssueCategory);
-  const [validation, setValidation] = useState<Map<keyof AdminIssueCategory, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssueCategory, string>>(
+    new Map<keyof AdminIssueCategory, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueCategory, any>>(
     {} as unknown as Record<keyof AdminIssueCategory, any>,

@@ -108,7 +108,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
   const [data, setData] = useState<AdminCounty>({
     __referenceId: uuidv1(),
   } as unknown as AdminCounty);
-  const [validation, setValidation] = useState<Map<keyof AdminCounty, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCounty, string>>(new Map<keyof AdminCounty, string>());
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCounty, any>>(
     {} as unknown as Record<keyof AdminCounty, any>,

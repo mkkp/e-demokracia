@@ -60,6 +60,46 @@
                     </instructions>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-artifacts</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.basedir}/models/${model-name}-asm2sdk.jar</file>
+                                    <type>jar</type>
+                                    <classifier>sdk</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>${project.basedir}/models/${model-name}-asm2sdk-internal.jar</file>
+                                    <type>jar</type>
+                                    <classifier>sdk-internal</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>${project.basedir}/models/${model-name}-asm2jaxrsapi.jar</file>
+                                    <type>jar</type>
+                                    <classifier>jaxrsapi</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>${project.basedir}/models/${model-name}-script2operation.jar</file>
+                                    <type>jar</type>
+                                    <classifier>script2operation</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     <profiles>
@@ -87,59 +127,17 @@
                                 <configuration>
                                     <esm>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-esm.model</esm>
                                     <psm>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-psm.model</psm>
-                                    <asm>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-asm.model</asm>
-                                    <psm2AsmTrace>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-psm2asm.model</psm2AsmTrace>
                                     <modelVersion>${model-version}</modelVersion>
-                                    <modelName>${model-name}</modelName>
                                     <destination>${project.basedir}/models</destination>
                                     <dialectList>${dialectList}</dialectList>
                                     <validateModels>${validateModels}</validateModels>
+                                    <useCache>${useCache}</useCache>
                                     <ignoreAsm2Openapi>${ignoreOpenapi}</ignoreAsm2Openapi>
                                     <ignoreAsm2Rdbms>false</ignoreAsm2Rdbms>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>attach-artifacts</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>attach-artifact</goal>
-                                </goals>
-                                <configuration>
-                                    <artifacts>
-                                        <artifact>
-                                            <file>${project.basedir}/models/${model-name}-asm2sdk.jar</file>
-                                            <type>jar</type>
-                                            <classifier>sdk</classifier>
-                                        </artifact>
-                                        <artifact>
-                                            <file>${project.basedir}/models/${model-name}-asm2sdk-internal.jar</file>
-                                            <type>jar</type>
-                                            <classifier>sdk-internal</classifier>
-                                        </artifact>
-                                        <artifact>
-                                            <file>${project.basedir}/models/${model-name}-asm2jaxrsapi.jar</file>
-                                            <type>jar</type>
-                                            <classifier>jaxrsapi</classifier>
-                                        </artifact>
-                                        <artifact>
-                                            <file>${project.basedir}/models/${model-name}-script2operation.jar</file>
-                                            <type>jar</type>
-                                            <classifier>script2operation</classifier>
-                                        </artifact>
-                                    </artifacts>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                 </plugins>
             </build>
         </profile>

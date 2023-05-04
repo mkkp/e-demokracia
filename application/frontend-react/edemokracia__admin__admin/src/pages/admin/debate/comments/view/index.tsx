@@ -145,7 +145,7 @@ export default function AdminDebateCommentsView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminComment, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminComment, string>>(new Map<keyof AdminComment, string>());
 
   const title: string = t('edemokracia.admin.Debate.comments.View', { defaultValue: 'View / Edit Comment' });
 
@@ -439,6 +439,7 @@ export default function AdminDebateCommentsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteUpButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="thumb-up" />}
                             loadingPosition="start"
                             onClick={() => AdminCommentVoteUpAction(data, () => fetchData())}
@@ -484,6 +485,7 @@ export default function AdminDebateCommentsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteDownButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="thumb-down" />}
                             loadingPosition="start"
                             onClick={() => AdminCommentVoteDownAction(data, () => fetchData())}
@@ -528,6 +530,7 @@ export default function AdminDebateCommentsView() {
                         <Grid item xs={12} sm={12} md={2.0}>
                           <CollectionAssociationButton
                             id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVotesButtonNavigate"
+                            variant={undefined}
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >

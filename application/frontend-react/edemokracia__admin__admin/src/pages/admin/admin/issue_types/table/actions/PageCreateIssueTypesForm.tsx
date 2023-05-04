@@ -113,7 +113,9 @@ export function PageCreateIssueTypesForm({ successCallback, cancel }: PageCreate
   const [data, setData] = useState<AdminIssueType>({
     __referenceId: uuidv1(),
   } as unknown as AdminIssueType);
-  const [validation, setValidation] = useState<Map<keyof AdminIssueType, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssueType, string>>(
+    new Map<keyof AdminIssueType, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueType, any>>(
     {} as unknown as Record<keyof AdminIssueType, any>,

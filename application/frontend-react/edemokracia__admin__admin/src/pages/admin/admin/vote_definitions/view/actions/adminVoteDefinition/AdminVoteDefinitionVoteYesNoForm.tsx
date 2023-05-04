@@ -115,7 +115,9 @@ export function AdminVoteDefinitionVoteYesNoForm({
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<YesNoVoteInput>({} as unknown as YesNoVoteInput);
-  const [validation, setValidation] = useState<Map<keyof YesNoVoteInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof YesNoVoteInput, string>>(
+    new Map<keyof YesNoVoteInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof YesNoVoteInput, any>>(
     {} as unknown as Record<keyof YesNoVoteInput, any>,

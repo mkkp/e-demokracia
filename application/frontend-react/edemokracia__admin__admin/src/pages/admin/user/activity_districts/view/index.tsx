@@ -124,7 +124,9 @@ export default function AdminUserActivityDistrictsView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminDistrict, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminDistrict, string>>(
+    new Map<keyof AdminDistrict, string>(),
+  );
 
   const title: string = data.representation as string;
 

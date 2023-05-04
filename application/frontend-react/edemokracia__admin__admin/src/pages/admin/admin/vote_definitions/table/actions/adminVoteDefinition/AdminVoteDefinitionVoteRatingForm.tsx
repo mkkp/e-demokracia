@@ -114,7 +114,9 @@ export function AdminVoteDefinitionVoteRatingForm({
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<RatingVoteInput>({} as unknown as RatingVoteInput);
-  const [validation, setValidation] = useState<Map<keyof RatingVoteInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof RatingVoteInput, string>>(
+    new Map<keyof RatingVoteInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof RatingVoteInput, any>>(
     {} as unknown as Record<keyof RatingVoteInput, any>,

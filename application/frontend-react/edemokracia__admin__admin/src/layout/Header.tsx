@@ -37,7 +37,7 @@ export function Header(props: HeaderProps) {
           <Grid container direction="row">
             <CustomBreadcrumb />
           </Grid>
-          <Grid container spacing={1} alignItems="center">
+          <Grid container spacing={1} alignItems="center" justifyContent="end">
             <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
               <IconButton id="header-drawer-toggle" aria-label="open drawer" onClick={onDrawerToggle} edge="start">
                 <MdiIcon path="menu" />

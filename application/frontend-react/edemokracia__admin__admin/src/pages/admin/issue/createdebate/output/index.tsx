@@ -89,7 +89,7 @@ export default function AdminIssueCreatedebateOutput() {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof Debate, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof Debate, string>>(new Map<keyof Debate, string>());
   const { signedIdentifier } = useParams();
   const [data, setData] = useState<DebateStored>({} as unknown as DebateStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof DebateStored, any>>(

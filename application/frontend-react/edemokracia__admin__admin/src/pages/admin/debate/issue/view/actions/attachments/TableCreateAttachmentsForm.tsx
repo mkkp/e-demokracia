@@ -119,7 +119,9 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
   const [data, setData] = useState<AdminIssueAttachment>({
     __referenceId: uuidv1(),
   } as unknown as AdminIssueAttachment);
-  const [validation, setValidation] = useState<Map<keyof AdminIssueAttachment, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssueAttachment, string>>(
+    new Map<keyof AdminIssueAttachment, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueAttachment, any>>(
     {} as unknown as Record<keyof AdminIssueAttachment, any>,

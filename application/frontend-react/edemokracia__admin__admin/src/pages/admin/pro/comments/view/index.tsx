@@ -135,7 +135,7 @@ export default function AdminProCommentsView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminComment, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminComment, string>>(new Map<keyof AdminComment, string>());
 
   const title: string = t('edemokracia.admin.Pro.comments.View', { defaultValue: 'View / Edit Comment' });
 
@@ -347,6 +347,7 @@ export default function AdminProCommentsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteUpButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="thumb-up" />}
                             loadingPosition="start"
                             onClick={() => AdminCommentVoteUpAction(data, () => fetchData())}
@@ -392,6 +393,7 @@ export default function AdminProCommentsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteDownButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="thumb-down" />}
                             loadingPosition="start"
                             onClick={() => AdminCommentVoteDownAction(data, () => fetchData())}
@@ -436,6 +438,7 @@ export default function AdminProCommentsView() {
                         <Grid item xs={12} sm={12} md={2.0}>
                           <CollectionAssociationButton
                             id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVotesButtonNavigate"
+                            variant={undefined}
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >

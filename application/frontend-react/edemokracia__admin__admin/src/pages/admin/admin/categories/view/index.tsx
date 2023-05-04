@@ -156,7 +156,9 @@ export default function AdminAdminCategoriesView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminIssueCategory, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssueCategory, string>>(
+    new Map<keyof AdminIssueCategory, string>(),
+  );
 
   const [subcategoriesSortModel, setSubcategoriesSortModel] = useState<GridSortModel>([
     { field: 'title', sort: 'asc' },

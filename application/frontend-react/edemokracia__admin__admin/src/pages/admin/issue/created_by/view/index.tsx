@@ -197,7 +197,7 @@ export default function AdminIssueCreatedByView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminUser, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminUser, string>>(new Map<keyof AdminUser, string>());
 
   const [activityCitiesSortModel, setActivityCitiesSortModel] = useState<GridSortModel>([
     { field: 'representation', sort: 'asc' },
@@ -686,6 +686,7 @@ export default function AdminIssueCreatedByView() {
                         <Grid item xs={12} sm={12}>
                           <CollectionAssociationButton
                             id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminIssueCreatedByViewEdemokraciaAdminAdminEdemokraciaAdminUserVotesButtonNavigate"
+                            variant={undefined}
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >

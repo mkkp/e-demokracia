@@ -195,7 +195,7 @@ export default function AdminConConsView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminCon, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCon, string>>(new Map<keyof AdminCon, string>());
 
   const [consSortModel, setConsSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
 
@@ -621,6 +621,7 @@ export default function AdminConConsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminConConsViewEdemokraciaAdminAdminEdemokraciaAdminConVoteUpButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="thumb-up" />}
                             loadingPosition="start"
                             onClick={() => voteUpAction(data, () => fetchData())}
@@ -660,6 +661,7 @@ export default function AdminConConsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminConConsViewEdemokraciaAdminAdminEdemokraciaAdminConVoteDownButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="thumb-down" />}
                             loadingPosition="start"
                             onClick={() => voteDownAction(data, () => fetchData())}
@@ -700,6 +702,7 @@ export default function AdminConConsView() {
                         <Grid item xs={12} sm={12} md={2.0}>
                           <CollectionAssociationButton
                             id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminConConsViewEdemokraciaAdminAdminEdemokraciaAdminConVotesButtonNavigate"
+                            variant={undefined}
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >
@@ -755,6 +758,7 @@ export default function AdminConConsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminConConsViewEdemokraciaAdminAdminEdemokraciaAdminConCreateSubArgumentButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="account-voice" />}
                             loadingPosition="start"
                             onClick={() => createSubArgumentAction(data, () => fetchData())}
@@ -943,6 +947,7 @@ export default function AdminConConsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminConConsViewEdemokraciaAdminAdminEdemokraciaAdminConCreateCommentButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="comment-text-multiple" />}
                             loadingPosition="start"
                             onClick={() => createCommentAction(data, () => fetchData())}

@@ -130,7 +130,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<AdminCreateIssueInput>({} as unknown as AdminCreateIssueInput);
-  const [validation, setValidation] = useState<Map<keyof AdminCreateIssueInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCreateIssueInput, string>>(
+    new Map<keyof AdminCreateIssueInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCreateIssueInput, any>>(
     {} as unknown as Record<keyof AdminCreateIssueInput, any>,

@@ -144,7 +144,9 @@ export default function AdminIssueAttachmentsView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminIssueAttachment, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssueAttachment, string>>(
+    new Map<keyof AdminIssueAttachment, string>(),
+  );
 
   const title: string = t('edemokracia.admin.Issue.attachments.View', { defaultValue: 'View / Edit Attachment' });
 

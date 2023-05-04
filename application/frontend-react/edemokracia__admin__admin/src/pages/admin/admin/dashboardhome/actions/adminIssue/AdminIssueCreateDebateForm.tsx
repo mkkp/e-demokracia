@@ -117,7 +117,9 @@ export function AdminIssueCreateDebateForm({ successCallback, cancel, owner }: A
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<CreateDebateInput>({} as unknown as CreateDebateInput);
-  const [validation, setValidation] = useState<Map<keyof CreateDebateInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof CreateDebateInput, string>>(
+    new Map<keyof CreateDebateInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof CreateDebateInput, any>>(
     {} as unknown as Record<keyof CreateDebateInput, any>,

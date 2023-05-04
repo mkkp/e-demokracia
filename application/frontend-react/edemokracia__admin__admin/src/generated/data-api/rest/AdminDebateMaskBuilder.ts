@@ -9,7 +9,6 @@ import {
   AdminConAttributes,
 } from '../model';
 
-import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
 import {
   AdminUserActivityCountiesMaskBuilder,
   AdminUserResidentCountyMaskBuilder,
@@ -18,6 +17,13 @@ import {
   AdminUserActivityDistrictsMaskBuilder,
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
+import {
+  AdminConCreatedByMaskBuilder,
+  AdminConConsMaskBuilder,
+  AdminConProsMaskBuilder,
+  AdminConCommentsMaskBuilder,
+} from './AdminConMaskBuilder';
+import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
 import {} from './AdminVoteDefinitionMaskBuilder';
 import {
   AdminIssueAttachmentsMaskBuilder,
@@ -31,12 +37,6 @@ import {
   AdminIssueCityMaskBuilder,
   AdminIssueDistrictMaskBuilder,
 } from './AdminIssueMaskBuilder';
-import {
-  AdminConCreatedByMaskBuilder,
-  AdminConConsMaskBuilder,
-  AdminConProsMaskBuilder,
-  AdminConCommentsMaskBuilder,
-} from './AdminConMaskBuilder';
 import {
   AdminProCreatedByMaskBuilder,
   AdminProProsMaskBuilder,

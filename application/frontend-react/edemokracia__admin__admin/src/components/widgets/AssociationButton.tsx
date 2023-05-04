@@ -14,6 +14,7 @@ import { useJudoNavigation } from '../CustomBreadcrumb';
 
 export interface AssociationBaseProps {
   id: string;
+  variant?: 'text' | 'contained' | 'outlined';
   editMode?: boolean;
   children?: ReactNode;
 }
@@ -27,6 +28,7 @@ export interface AssociationButtonProps<T> extends AssociationBaseProps {
 
 export function AssociationButton<T>({
   id,
+  variant,
   editMode,
   owner,
   fetchCall,
@@ -66,7 +68,7 @@ export function AssociationButton<T>({
   return (
     <Button
       id={id}
-      variant="text"
+      variant={variant ?? 'text'}
       onClick={() => navigateAction(data!)}
       disabled={isLoading || editMode || !data?.__signedIdentifier}
     >
@@ -82,6 +84,7 @@ export interface CollectionAssociationButtonProps extends AssociationBaseProps {
 
 export function CollectionAssociationButton<O>({
   id,
+  variant,
   editMode,
   isLoading,
   navigateAction,
@@ -90,7 +93,7 @@ export function CollectionAssociationButton<O>({
   const { navigate } = useJudoNavigation();
 
   return (
-    <Button id={id} variant="text" onClick={() => navigateAction()} disabled={isLoading || editMode}>
+    <Button id={id} variant={variant ?? 'text'} onClick={() => navigateAction()} disabled={isLoading || editMode}>
       {children}
     </Button>
   );

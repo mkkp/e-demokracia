@@ -137,7 +137,7 @@ export default function AdminCreateIssueInputCityView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminCity, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCity, string>>(new Map<keyof AdminCity, string>());
 
   const [districtsSortModel, setDistrictsSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
 

@@ -7,9 +7,9 @@ import {
   AdminCityAttributes,
 } from '../model';
 
+import { AdminCountyCitiesMaskBuilder } from './AdminCountyMaskBuilder';
 import {} from './AdminIssueTypeMaskBuilder';
 import {} from './AdminDistrictMaskBuilder';
-import { AdminCountyCitiesMaskBuilder } from './AdminCountyMaskBuilder';
 import { AdminCityDistrictsMaskBuilder } from './AdminCityMaskBuilder';
 
 export class AdminCreateIssueInputIssueTypeMaskBuilder extends RelationMaskBuilder {

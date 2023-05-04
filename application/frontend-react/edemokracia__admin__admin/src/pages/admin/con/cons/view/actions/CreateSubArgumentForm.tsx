@@ -112,7 +112,9 @@ export function CreateSubArgumentForm({ successCallback, cancel, owner }: Create
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<CreateArgumentInput>({} as unknown as CreateArgumentInput);
-  const [validation, setValidation] = useState<Map<keyof CreateArgumentInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof CreateArgumentInput, string>>(
+    new Map<keyof CreateArgumentInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof CreateArgumentInput, any>>(
     {} as unknown as Record<keyof CreateArgumentInput, any>,

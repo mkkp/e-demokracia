@@ -130,7 +130,9 @@ export default function AdminProVotesView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminSimpleVote, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminSimpleVote, string>>(
+    new Map<keyof AdminSimpleVote, string>(),
+  );
 
   const title: string = t('edemokracia.admin.Pro.votes.View', { defaultValue: 'Create / View Vote' });
 

@@ -157,7 +157,7 @@ export default function AdminDashboardCreateissueOutput() {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminIssue, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssue, string>>(new Map<keyof AdminIssue, string>());
   const { signedIdentifier } = useParams();
   const [data, setData] = useState<AdminIssueStored>({} as unknown as AdminIssueStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueStored, any>>(
@@ -654,6 +654,7 @@ export default function AdminDashboardCreateissueOutput() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputEdemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="wechat" />}
                             loadingPosition="start"
                             onClick={() => AdminIssueCreateDebateAction(data, () => fetchData())}
@@ -1053,6 +1054,7 @@ export default function AdminDashboardCreateissueOutput() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputEdemokraciaAdminAdminEdemokraciaAdminIssueCreateCommentButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="comment-text-multiple" />}
                             loadingPosition="start"
                             onClick={() => AdminIssueCreateCommentAction(data, () => fetchData())}

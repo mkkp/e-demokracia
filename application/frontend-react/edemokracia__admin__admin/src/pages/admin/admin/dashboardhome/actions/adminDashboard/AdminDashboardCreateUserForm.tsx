@@ -116,7 +116,9 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<AdminCreateUserInput>({} as unknown as AdminCreateUserInput);
-  const [validation, setValidation] = useState<Map<keyof AdminCreateUserInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCreateUserInput, string>>(
+    new Map<keyof AdminCreateUserInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCreateUserInput, any>>(
     {} as unknown as Record<keyof AdminCreateUserInput, any>,

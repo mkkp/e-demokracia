@@ -172,7 +172,9 @@ export default function AdminAdminDashboardhomeDashboard() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminDashboard, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminDashboard, string>>(
+    new Map<keyof AdminDashboard, string>(),
+  );
 
   const [debatesSortModel, setDebatesSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
 

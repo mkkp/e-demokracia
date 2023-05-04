@@ -15,13 +15,13 @@ import {
   AdminUserActivityDistrictsMaskBuilder,
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
-import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
 import {
   AdminProCreatedByMaskBuilder,
   AdminProProsMaskBuilder,
   AdminProConsMaskBuilder,
   AdminProCommentsMaskBuilder,
 } from './AdminProMaskBuilder';
+import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
 
 export class AdminConCreatedByMaskBuilder extends RelationMaskBuilder {
   constructor(

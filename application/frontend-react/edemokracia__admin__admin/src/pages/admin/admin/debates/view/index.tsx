@@ -231,7 +231,7 @@ export default function AdminAdminDebatesView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminDebate, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminDebate, string>>(new Map<keyof AdminDebate, string>());
 
   const [consSortModel, setConsSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
 
@@ -765,6 +765,7 @@ export default function AdminAdminDebatesView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="wechat" />}
                             loadingPosition="start"
                             onClick={() => AdminDebateCloseDebateAction(data, () => fetchData())}
@@ -825,6 +826,7 @@ export default function AdminAdminDebatesView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCreateArgumentButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="account-voice" />}
                             loadingPosition="start"
                             onClick={() => AdminDebateCreateArgumentAction(data, () => fetchData())}
@@ -1015,6 +1017,7 @@ export default function AdminAdminDebatesView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCreateCommentButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="comment-text-multiple" />}
                             loadingPosition="start"
                             onClick={() => AdminDebateCreateCommentAction(data, () => fetchData())}

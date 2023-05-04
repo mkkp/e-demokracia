@@ -146,7 +146,7 @@ export default function AdminAdminCountiesView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminCounty, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCounty, string>>(new Map<keyof AdminCounty, string>());
 
   const [citiesSortModel, setCitiesSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
 

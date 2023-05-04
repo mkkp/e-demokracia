@@ -115,7 +115,7 @@ export function TableCreateCitiesForm({ successCallback, cancel, owner }: TableC
   const [data, setData] = useState<AdminCity>({
     __referenceId: uuidv1(),
   } as unknown as AdminCity);
-  const [validation, setValidation] = useState<Map<keyof AdminCity, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminCity, string>>(new Map<keyof AdminCity, string>());
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCity, any>>(
     {} as unknown as Record<keyof AdminCity, any>,

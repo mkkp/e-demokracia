@@ -89,7 +89,9 @@ export default function AdminDebateClosedebateOutput() {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof VoteDefinition, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof VoteDefinition, string>>(
+    new Map<keyof VoteDefinition, string>(),
+  );
   const { signedIdentifier } = useParams();
   const [data, setData] = useState<VoteDefinitionStored>({} as unknown as VoteDefinitionStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof VoteDefinitionStored, any>>(

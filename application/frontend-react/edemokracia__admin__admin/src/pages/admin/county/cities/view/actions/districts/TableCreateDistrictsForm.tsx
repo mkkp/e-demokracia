@@ -115,7 +115,9 @@ export function TableCreateDistrictsForm({ successCallback, cancel, owner }: Tab
   const [data, setData] = useState<AdminDistrict>({
     __referenceId: uuidv1(),
   } as unknown as AdminDistrict);
-  const [validation, setValidation] = useState<Map<keyof AdminDistrict, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminDistrict, string>>(
+    new Map<keyof AdminDistrict, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminDistrict, any>>(
     {} as unknown as Record<keyof AdminDistrict, any>,

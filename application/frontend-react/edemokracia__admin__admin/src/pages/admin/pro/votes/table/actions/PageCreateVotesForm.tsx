@@ -117,7 +117,9 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
   const [data, setData] = useState<AdminSimpleVote>({
     __referenceId: uuidv1(),
   } as unknown as AdminSimpleVote);
-  const [validation, setValidation] = useState<Map<keyof AdminSimpleVote, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminSimpleVote, string>>(
+    new Map<keyof AdminSimpleVote, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminSimpleVote, any>>(
     {} as unknown as Record<keyof AdminSimpleVote, any>,

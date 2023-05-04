@@ -12,6 +12,12 @@ import {
   AdminCityAttributes,
 } from '../model';
 
+import {
+  AdminIssueCategorySubcategoriesMaskBuilder,
+  AdminIssueCategoryOwnerMaskBuilder,
+} from './AdminIssueCategoryMaskBuilder';
+import { AdminCountyCitiesMaskBuilder } from './AdminCountyMaskBuilder';
+import {} from './AdminIssueDebateMaskBuilder';
 import {} from './AdminDistrictMaskBuilder';
 import {
   AdminUserActivityCountiesMaskBuilder,
@@ -21,16 +27,10 @@ import {
   AdminUserActivityDistrictsMaskBuilder,
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
-import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
-import {
-  AdminIssueCategorySubcategoriesMaskBuilder,
-  AdminIssueCategoryOwnerMaskBuilder,
-} from './AdminIssueCategoryMaskBuilder';
-import {} from './AdminIssueDebateMaskBuilder';
-import { AdminCountyCitiesMaskBuilder } from './AdminCountyMaskBuilder';
-import {} from './AdminIssueTypeMaskBuilder';
-import { AdminCityDistrictsMaskBuilder } from './AdminCityMaskBuilder';
 import {} from './AdminIssueAttachmentMaskBuilder';
+import {} from './AdminIssueTypeMaskBuilder';
+import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
+import { AdminCityDistrictsMaskBuilder } from './AdminCityMaskBuilder';
 
 export class AdminIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<AdminIssueAttachmentAttributes>) {

@@ -115,7 +115,9 @@ export function AdminConCreateCommentForm({ successCallback, cancel, owner }: Ad
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<CreateCommentInput>({} as unknown as CreateCommentInput);
-  const [validation, setValidation] = useState<Map<keyof CreateCommentInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof CreateCommentInput, string>>(
+    new Map<keyof CreateCommentInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof CreateCommentInput, any>>(
     {} as unknown as Record<keyof CreateCommentInput, any>,

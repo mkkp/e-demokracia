@@ -122,7 +122,9 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<CloseDebateInput>({} as unknown as CloseDebateInput);
-  const [validation, setValidation] = useState<Map<keyof CloseDebateInput, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof CloseDebateInput, string>>(
+    new Map<keyof CloseDebateInput, string>(),
+  );
   const [editMode, setEditMode] = useState<boolean>(true);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof CloseDebateInput, any>>(
     {} as unknown as Record<keyof CloseDebateInput, any>,

@@ -242,7 +242,7 @@ export default function AdminAdminIssuesView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminIssue, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssue, string>>(new Map<keyof AdminIssue, string>());
 
   const [attachmentsSortModel, setAttachmentsSortModel] = useState<GridSortModel>([{ field: 'link', sort: 'asc' }]);
 
@@ -768,6 +768,7 @@ export default function AdminAdminIssuesView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="wechat" />}
                             loadingPosition="start"
                             onClick={() => AdminIssueCreateDebateAction(data, () => fetchData())}
@@ -1304,6 +1305,7 @@ export default function AdminAdminIssuesView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueCreateCommentButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="comment-text-multiple" />}
                             loadingPosition="start"
                             onClick={() => AdminIssueCreateCommentAction(data, () => fetchData())}

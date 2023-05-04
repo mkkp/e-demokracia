@@ -132,7 +132,7 @@ export default function AdminDashboardCreateuserOutput() {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminUser, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminUser, string>>(new Map<keyof AdminUser, string>());
   const { signedIdentifier } = useParams();
   const [data, setData] = useState<AdminUserStored>({} as unknown as AdminUserStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminUserStored, any>>(
@@ -684,6 +684,7 @@ export default function AdminDashboardCreateuserOutput() {
                         <Grid item xs={12} sm={12}>
                           <CollectionAssociationButton
                             id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputEdemokraciaAdminAdminEdemokraciaAdminUserVotesButtonNavigate"
+                            variant={undefined}
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >

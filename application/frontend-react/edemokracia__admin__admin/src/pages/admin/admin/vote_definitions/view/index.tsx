@@ -151,7 +151,9 @@ export default function AdminAdminVoteDefinitionsView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminVoteDefinition, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminVoteDefinition, string>>(
+    new Map<keyof AdminVoteDefinition, string>(),
+  );
 
   const title: string = t('edemokracia.admin.Admin.voteDefinitions.View', {
     defaultValue: 'View / Edit Vote Definition',
@@ -451,6 +453,7 @@ export default function AdminAdminVoteDefinitionsView() {
                     <Grid item xs={12} sm={12}>
                       <AssociationButton
                         id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionDebateButtonNavigate"
+                        variant={undefined}
                         editMode={editMode}
                         navigateAction={(target) => buttonNavigateDebateAction(data, target)}
                         owner={data}
@@ -594,6 +597,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
                             onClick={() => AdminVoteDefinitionVoteYesNoAction(data, () => fetchData())}
@@ -627,6 +631,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoAbstainButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
                             onClick={() => AdminVoteDefinitionVoteYesNoAbstainAction(data, () => fetchData())}
@@ -660,6 +665,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
                             onClick={() => AdminVoteDefinitionVoteSelectAnswerAction(data, () => fetchData())}
@@ -693,6 +699,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           <LoadingButton
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteRatingButtonCallOperation"
                             loading={isLoading}
+                            variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
                             onClick={() => AdminVoteDefinitionVoteRatingAction(data, () => fetchData())}

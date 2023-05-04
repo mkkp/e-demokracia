@@ -121,7 +121,9 @@ export default function AdminIssueIssueTypeView() {
     [data],
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof AdminIssueType, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof AdminIssueType, string>>(
+    new Map<keyof AdminIssueType, string>(),
+  );
 
   const title: string = t('edemokracia.admin.Issue.issueType.View', { defaultValue: 'Issue Type View/Edit' });
 
