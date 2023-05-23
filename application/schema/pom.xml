@@ -35,8 +35,6 @@
                     <plugin>
                         <groupId>org.apache.felix</groupId>
                         <artifactId>maven-bundle-plugin</artifactId>
-                        <version>5.1.8</version>
-                        <extensions>true</extensions>
                         <configuration>
                             <instructions>
                                 <Judo-Models>name=${model-name}</Judo-Models>
@@ -103,7 +101,6 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <id>attach-artifacts</id>
@@ -141,8 +138,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>5.1.8</version>
-                <extensions>true</extensions>
                 <configuration>
                     <instructions>
                         <Judo-Models>name=${model-name}</Judo-Models>

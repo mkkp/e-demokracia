@@ -16,14 +16,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
-        <surefire-version>3.0.0-M5</surefire-version>
+        <surefire-version>3.0.0</surefire-version>
 
         <logback-test-config>${maven.multiModuleProjectDirectory}/logback-test.xml</logback-test-config>
 
-        <pax-cdi-version>1.1.3</pax-cdi-version>
         <slf4j-version>1.7.36</slf4j-version>
         <karaf-version>4.4.3</karaf-version>
 
@@ -38,24 +37,25 @@
         <validateModels>false</validateModels>
         <useCache>false</useCache>
         <validateChecksum>true</validateChecksum>
+        <karafOfflineZip>true</karafOfflineZip>
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.judo-properties-definition.fragment.hbs' file -->
-        <flutter-maven-plugin-version>1.0.2.20230313_135924_a9319e3a_develop</flutter-maven-plugin-version>
         <structured-map-proxy-version>2.0.0.20230330_221859_8a965acd_develop</structured-map-proxy-version>
         <judo-dao-api-version>1.0.4.20230309_120321_78415dc0_develop</judo-dao-api-version>
         <judo-dispatcher-api-version>1.0.2</judo-dispatcher-api-version>
         <judo-sdk-common-version>1.0.4.20230330_222100_3c176073_develop</judo-sdk-common-version>
         <mapper-version>1.0.4.20230324_115639_e833341e_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0.20230504_184929_ad9f2c3a_develop </judo-tatami-version>
-        <judo-platform-version>2.0.1.20230504_191010_271c9842_develop</judo-platform-version>
-        <judo-services-version>1.1.0.20230504_185908_f8e856be_develop</judo-services-version>
-        <judo-rdbms-schema-version>1.0.0.20230504_184607_62d6cdd2_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20230504_185907_6fd10d8c_develop</judo-tatami-client-version>
+        <judo-tatami-version>1.1.0.20230522_122536_f1174c42_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20230522_124214_96f3c68f_develop</judo-platform-version>
+        <judo-services-version>1.1.0.20230522_123414_e1463811_develop</judo-services-version>
+        <judo-rdbms-schema-version>1.0.0.20230522_122539_9d7473d4_develop</judo-rdbms-schema-version>
+        <judo-tatami-client-version>1.1.0.20230522_123401_25a78069_develop</judo-tatami-client-version>
         
-        <judo-meta-ui-version>1.1.0.20230504_183622_c3e880c3_develop</judo-meta-ui-version>
-        <judo-ui-flutter-template-version>1.0.0.20230504_183853_70b0c851_develop</judo-ui-flutter-template-version>
+        <judo-meta-ui-version>1.1.0.20230519_135518_72e9fa96_develop</judo-meta-ui-version>
+        <judo-meta-psm-version>1.3.0.20230516_100351_2fb48f5a_develop</judo-meta-psm-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20230522_110648_ba11c441_develop</judo-psm-generator-sdk-core-version>
         <!-- End of 'pom.xml.judo-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.properties-definition.fragment.hbs' file -->
@@ -74,6 +74,18 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.karaf.tooling</groupId>
                     <artifactId>karaf-maven-plugin</artifactId>
                     <version>${karaf-version}</version>
@@ -82,7 +94,10 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-install-plugin</artifactId>
-                    <version>2.5.2</version>
+                    <version>3.1.1</version>
+                    <configuration>
+                        <allowIncompleteProjects>true</allowIncompleteProjects>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -103,12 +118,46 @@
                         </execution>
                     </executions>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <extensions>true</extensions>
+                    <version>5.1.8</version>
+                    <configuration>
+                        <obrRepository>NONE</obrRepository>
+                        <instructions>
+                            <_invalidfilenames>\$Mft|\$MftMirr|\$LogFile|\$Volume|\$AttrDef|\$Bitmap|\$Boot|\$BadClus|\$Secure|\$Upcase|\$Extend|\$Quota|\$ObjId|\$Reparse</_invalidfilenames>
+                        </instructions>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-artifacts</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>attach-artifact</goal>
+                            </goals>
+                            <configuration>
+                                <artifacts>
+                                </artifacts>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
                 <!-- To define create 'pom.xml.extra-plugin-management.fragment.hbs' file -->
                 <!-- End of 'pom.xml.extra-plugin-management.fragment.hbs' -->
             </plugins>
         </pluginManagement>
         <plugins>
             <!-- Report active profiles on console. -->
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-help-plugin</artifactId>
@@ -124,6 +173,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
             <!-- To define create 'pom.xml.extra-plugins.fragment.hbs' file -->
             <!-- End of 'pom.xml.extra-plugins.fragment.hbs' -->
         </plugins>
@@ -131,6 +181,7 @@
 
     <modules>
         <module>sdk</module>
+        <module>internal</module>
         <module>app</module>
         <!-- To define create 'pom.xml.extra-modules.fragment.hbs' file -->
         <!-- End of 'pom.xml.extra-modules.fragment.hbs' -->
@@ -160,19 +211,6 @@
 
             <modules>
                 <module>schema</module>
-            </modules>
-        </profile>
-
-        <profile>
-            <id>build-frontend-flutter</id>
-            <activation>
-                <property>
-                        <name>buildFrontendFlutter</name>
-                </property>
-            </activation>
-
-            <modules>
-                <module>frontend-flutter</module>
             </modules>
         </profile>
 
@@ -257,4 +295,41 @@
         </dependencies>
     </dependencyManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.core</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.annotation</artifactId>
+            <version>8.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component.annotations</artifactId>
+            <version>1.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.namespace.service</artifactId>
+            <version>1.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>osgi.cmpn</artifactId>
+            <version>7.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
 </project>

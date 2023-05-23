@@ -9,9 +9,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>edemokracia-application-sdk</artifactId>
-    <name>edemokracia SDK</name>
-    <description>edemokracia - SDK</description>
+    <artifactId>edemokracia-application-internal</artifactId>
+    <name>edemokracia SDK Internal</name>
+    <description>edemokracia - SDK Internal is the bridge the implemented app functions and runtime</description>
 
     <packaging>bundle</packaging>
 
@@ -30,13 +30,17 @@
                     <destination>${basedir}/target/generated-sources</destination>
                     <uris>
                         <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-api:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-operation:${judo-psm-generator-sdk-core-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-impl:${judo-psm-generator-sdk-core-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-osgi:${judo-psm-generator-sdk-core-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-internal-wrapper:${judo-psm-generator-sdk-core-version}</uri>
                     </uris>
                     <type>psm-sdk-core</type>
                     <templateParameters>
                         <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                        <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
                         <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
+                        <internalWrapperPrefix>${project.groupId}.edemokracia.internal</internalWrapperPrefix>
+                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
                         <generateOptionalTypes>true</generateOptionalTypes>
                         <generatePayloadValidator>true</generatePayloadValidator>
                     </templateParameters>
@@ -70,13 +74,19 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
-
     <dependencies>
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
             <artifactId>edemokracia-application-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>party.mkkp.edemokracia</groupId>
+            <artifactId>edemokracia-application-sdk</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -106,8 +116,26 @@
 
         <dependency>
             <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-impl</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-osgi</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
             <artifactId>judo-psm-generator-sdk-core-operation</artifactId>
             <version>${judo-psm-generator-sdk-core-version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-internal-wrapper</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
     </dependencies>
 </project>

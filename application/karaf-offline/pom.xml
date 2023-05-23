@@ -42,7 +42,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <archiveTarGz>true</archiveTarGz>
-                    <archiveZip>false</archiveZip>
+                    <archiveZip>${karafOfflineZip}</archiveZip>
                     <startupFeatures>
                         <feature>eventadmin</feature>
                     </startupFeatures>
@@ -54,7 +54,7 @@
                         <feature>webconsole</feature>
                         <feature>edemokracia-application-judo-platform-prototype</feature>
                     </bootFeatures>
-                    <javase>11</javase>
+                    <javase>17</javase>
                 </configuration>
             </plugin>
         </plugins>

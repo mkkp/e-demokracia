@@ -30,37 +30,13 @@
                 <plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
-                    <version>5.1.8</version>
-                    <extensions>true</extensions>
                     <configuration>
                         <instructions>
                             <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                             <Import-Package>!lombok, *</Import-Package>
-                            <DynamicImport-Package>sdk.edemokracia.*</DynamicImport-Package>
                             <!-- <Export-Package>party.mkkp.edemokracia.edemokracia.operations.*</Export-Package> -->
                         </instructions>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>versions</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>cleanVersions</goal>
-                            </goals>
-                            <configuration>
-                                <versions>
-                                    <pax.cdi.osgi.version.clean>${pax-cdi-version}</pax.cdi.osgi.version.clean>
-                                </versions>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>generate-manifest</id>
-                            <phase>process-classes</phase>
-                            <goals>
-                                <goal>manifest</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
 
                 <plugin>
@@ -79,7 +55,6 @@
                             --add-opens java.base/java.util=ALL-UNNAMED
                             --add-opens java.base/java.time=ALL-UNNAMED
                         </argLine>
-                        <trimStackTrace>false</trimStackTrace>
                     </configuration>
                 </plugin>
 
@@ -92,8 +67,37 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>hu.blackbelt.judo.meta</groupId>
+                <artifactId>judo-psm-generator-maven-plugin</artifactId>
+                <version>${judo-meta-psm-version}</version>
+                <configuration>
+                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                    <destination>${basedir}/src/main/java</destination>
+                    <uris>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-empty-custom-operation-osgi:${judo-psm-generator-sdk-core-version}</uri>
+                    </uris>
+                    <type>psm-sdk-core</type>
+                    <templateParameters>
+                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                        <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
+                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                        <emptyCustomOperationOsgiPrefix>${project.groupId}.edemokracia.custom</emptyCustomOperationOsgiPrefix>
+                    </templateParameters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>execute-psm-sdk-generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
                 <configuration>
                     <forceJavacCompilerUse>true</forceJavacCompilerUse>
                 </configuration>
@@ -102,15 +106,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
-                <configuration>
-                    <instructions>
-                        <!--suppress UnresolvedMavenProperty -->
-                        <Require-Capability>osgi.cdi.extension;
-                            filter:="(&amp;(osgi.cdi.extension=pax-cdi-extension)(version&gt;=${version;==;${pax.cdi.osgi.version.clean}})(!(version&gt;=${version;=+;${pax.cdi.osgi.version.clean}})))",
-                            osgi.extender; filter:="(osgi.extender=osgi.cdi)"</Require-Capability>
-                    </instructions>
-                </configuration>
             </plugin>
 
             <!-- To define create 'app/pom.xml.extra-plugins.fragment.hbs' file -->
@@ -120,56 +115,7 @@
         </plugins>
     </build>
 
-    <dependencyManagement>
-        <dependencies>
-
-            <dependency>
-                <groupId>javax.enterprise</groupId>
-                <artifactId>cdi-api</artifactId>
-                <version>1.2</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.ops4j.pax.cdi</groupId>
-                <artifactId>pax-cdi-api</artifactId>
-                <version>${pax-cdi-version}</version>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>osgi.cmpn</artifactId>
-            <version>6.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>6.0.0</version>
-            <scope>provided</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.ops4j.pax.cdi</groupId>
-            <artifactId>pax-cdi-api</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
             <artifactId>edemokracia-application-sdk</artifactId>
@@ -179,7 +125,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.20</version>
+            <version>1.18.26</version>
             <scope>provided</scope>
         </dependency>
 
@@ -206,6 +152,25 @@
             <artifactId>judo-sdk-common</artifactId>
             <version>${judo-sdk-common-version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-common</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-osgi</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-empty-custom-operation-osgi</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
