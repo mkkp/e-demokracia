@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../../components-api';
-import { useL10N } from '../../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,22 +39,21 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../../utilities';
+} from '~/utilities';
 import { AdminConCreateSubArgumentForm } from './AdminConCreateSubArgumentForm';
 import {
-  AdminProStored,
-  AdminProQueryCustomizer,
-  AdminDebate,
   AdminCon,
   AdminConStored,
+  AdminDebate,
+  AdminDebateStored,
+  AdminPro,
+  AdminProQueryCustomizer,
+  AdminProStored,
+  CreateArgumentInput,
   CreateArgumentInputQueryCustomizer,
   CreateArgumentInputStored,
   EdemokraciaCreateArgumentInputType,
-  AdminPro,
-  CreateArgumentInput,
-  AdminDebateStored,
-} from '../../../../../../../generated/data-api';
-
+} from '~/generated/data-api';
 export type AdminConCreateSubArgumentActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const ADMIN_CON_CREATE_SUB_ARGUMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY =
@@ -77,15 +76,13 @@ export const useAdminConCreateSubArgumentAction: AdminConCreateSubArgumentAction
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Debate.pros.View.edemokracia.admin.Con.createSubArgument', {
-    defaultValue: 'Add argument',
-  });
+  const title: string = t('admin.ProView.cons.createSubArgument.ButtonCallOperation', { defaultValue: 'Add argument' });
   const { service: customPostHandler } = useTrackService<AdminConCreateSubArgumentActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_CON_CREATE_SUB_ARGUMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );
   const postHandler: AdminConCreateSubArgumentActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function AdminConCreateSubArgumentAction(owner: AdminConStored, successCallback: () => void) {
+  return async function adminConCreateSubArgumentAction(owner: AdminConStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
       maxWidth: 'lg',

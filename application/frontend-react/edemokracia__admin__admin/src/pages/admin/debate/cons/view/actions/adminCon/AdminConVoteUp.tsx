@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../../components-api';
-import { useL10N } from '../../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,16 +39,15 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../../utilities';
+} from '~/utilities';
 import {
-  AdminDebate,
   AdminCon,
-  AdminConStored,
   AdminConQueryCustomizer,
+  AdminConStored,
+  AdminDebate,
   AdminDebateStored,
-} from '../../../../../../../generated/data-api';
-import { adminConServiceImpl } from '../../../../../../../generated/data-axios';
-
+} from '~/generated/data-api';
+import { adminConServiceImpl } from '~/generated/data-axios';
 export type AdminConVoteUpActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const ADMIN_CON_VOTE_UP_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'AdminConVoteUpActionPostHandlerHook';
@@ -67,13 +66,13 @@ export const useAdminConVoteUpAction: AdminConVoteUpAction = () => {
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Debate.cons.View.edemokracia.admin.Con.voteUp', { defaultValue: '' });
+  const title: string = t('admin.ConView.voteUp.ButtonCallOperation', { defaultValue: '' });
   const { service: customPostHandler } = useTrackService<AdminConVoteUpActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_CON_VOTE_UP_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );
   const postHandler: AdminConVoteUpActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function AdminConVoteUpAction(owner: AdminConStored, successCallback: () => void) {
+  return async function adminConVoteUpAction(owner: AdminConStored, successCallback: () => void) {
     try {
       const result = await adminConServiceImpl.voteUp(owner);
       if (postHandler) {

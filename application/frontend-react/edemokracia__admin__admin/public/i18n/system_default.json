@@ -2,6 +2,9 @@
     "translation": {
         "judo.security.login": "Login",
         "judo.security.logout": "Logout",
+        "judo.action.create.success": "Create successful",
+        "judo.action.delete.success": "Delete successful",
+        "judo.action.save.success": "Changes saved",
         "judo.pages.back": "Back",
         "judo.pages.save": "Save",
         "judo.pages.refresh": "Refresh",

@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../../components-api';
-import { useL10N } from '../../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,22 +39,21 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../../utilities';
+} from '~/utilities';
 import { AdminIssueCreateDebateForm } from './AdminIssueCreateDebateForm';
 import {
-  AdminDashboardQueryCustomizer,
-  DebateQueryCustomizer,
-  CreateDebateInputQueryCustomizer,
-  AdminIssue,
-  CreateDebateInput,
-  AdminIssueStored,
-  Debate,
-  DebateStored,
-  CreateDebateInputStored,
-  AdminDashboardStored,
   AdminDashboard,
-} from '../../../../../../../generated/data-api';
-
+  AdminDashboardQueryCustomizer,
+  AdminDashboardStored,
+  AdminIssue,
+  AdminIssueStored,
+  CreateDebateInput,
+  CreateDebateInputQueryCustomizer,
+  CreateDebateInputStored,
+  Debate,
+  DebateQueryCustomizer,
+  DebateStored,
+} from '~/generated/data-api';
 export type AdminIssueCreateDebateActionPostHandler = (
   ownerCallback: () => void,
   result?: DebateStored,
@@ -80,7 +79,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Admin.dashboardhome.View.edemokracia.admin.Issue.createDebate', {
+  const title: string = t('admin.DashboardView.issues.createDebate.ButtonCallOperation', {
     defaultValue: 'Create debate',
   });
   const { service: customPostHandler } = useTrackService<AdminIssueCreateDebateActionPostHandlerHook>(
@@ -88,7 +87,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   );
   const postHandler: AdminIssueCreateDebateActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function AdminIssueCreateDebateAction(owner: AdminIssueStored, successCallback: () => void) {
+  return async function adminIssueCreateDebateAction(owner: AdminIssueStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
       maxWidth: 'lg',

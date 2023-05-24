@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../components-api';
-import { useL10N } from '../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,16 +39,9 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../utilities';
-import {
-  AdminProStored,
-  AdminProQueryCustomizer,
-  AdminCon,
-  AdminConStored,
-  AdminPro,
-} from '../../../../../../generated/data-api';
-import { adminProServiceImpl, adminConServiceImpl } from '../../../../../../generated/data-axios';
-
+} from '~/utilities';
+import { AdminCon, AdminConStored, AdminPro, AdminProQueryCustomizer, AdminProStored } from '~/generated/data-api';
+import { adminProServiceImpl, adminConServiceImpl } from '~/generated/data-axios';
 export type VoteDownActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const VOTE_DOWN_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'VoteDownActionPostHandlerHook';
@@ -67,7 +60,7 @@ export const useVoteDownAction: VoteDownAction = () => {
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Con.pros.View.edemokracia.admin.Con.voteDown', { defaultValue: '' });
+  const title: string = t('admin.ProView.cons.voteDown.ButtonCallOperation', { defaultValue: '' });
   const { service: customPostHandler } = useTrackService<VoteDownActionPostHandlerHook>(
     `(${OBJECTCLASS}=${VOTE_DOWN_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );

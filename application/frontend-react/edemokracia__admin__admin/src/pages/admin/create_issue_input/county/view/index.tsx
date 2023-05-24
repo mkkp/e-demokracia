@@ -14,78 +14,48 @@ import { useEffect, useState, useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridToolbarContainer,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
-import {
-  AdminCreateIssueInput,
-  AdminCityQueryCustomizer,
-  AdminCityMaskBuilder,
-  AdminCountyQueryCustomizer,
-  AdminCounty,
-  AdminCountyStored,
-  AdminCityStored,
-  AdminCity,
-  AdminCreateIssueInputStored,
-} from '../../../../../generated/data-api';
-import { adminCreateIssueInputServiceImpl, adminCountyServiceImpl } from '../../../../../generated/data-axios';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminCreateIssueInputCountyView } from './hooks/useAdminCreateIssueInputCountyView';
+import { mainContainerPadding } from '~/theme';
+
 import {
-  usePageRefreshCountyAction,
-  useTableCreateCitiesAction,
-  useRowDeleteCitiesAction,
-  useRowEditCitiesAction,
-  useRowViewCitiesAction,
-} from './actions';
+  AdminCity,
+  AdminCityQueryCustomizer,
+  AdminCityStored,
+  AdminCounty,
+  AdminCountyQueryCustomizer,
+  AdminCountyStored,
+  AdminCreateIssueInput,
+  AdminCreateIssueInputStored,
+} from '~/generated/data-api';
+import { adminCreateIssueInputServiceImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+
+import {} from './actions';
+
+import { PageActions } from './components/PageActions';
+import { CitiesTable } from './components/CitiesTable';
 
 /**
  * Name: edemokracia::admin::CreateIssueInput.county#View
@@ -97,17 +67,10 @@ export default function AdminCreateIssueInputCountyView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const pageRefreshCountyAction = usePageRefreshCountyAction();
-  const tableCreateCitiesAction = useTableCreateCitiesAction();
-  const rowDeleteCitiesAction = useRowDeleteCitiesAction();
-  const rowEditCitiesAction = useRowEditCitiesAction();
-  const rowViewCitiesAction = useRowViewCitiesAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const { queryCustomizer, citiesColumns, citiesRangeFilterOptions, citiesInitialQueryCustomizer } =
-    useAdminCreateIssueInputCountyView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -118,6 +81,7 @@ export default function AdminCreateIssueInputCountyView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCountyStored, any>>(
     {} as unknown as Record<keyof AdminCountyStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminCountyStored, value: any) => void = useCallback(
     (attributeName: keyof AdminCountyStored, value: any) => {
       const dateTypes: string[] = [];
@@ -133,23 +97,18 @@ export default function AdminCreateIssueInputCountyView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminCounty, string>>(new Map<keyof AdminCounty, string>());
 
-  const [citiesSortModel, setCitiesSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
+  const queryCustomizer: AdminCountyQueryCustomizer = {
+    _mask: '{name,representation,cities{name}}',
+  };
 
-  const citiesRowActions: TableRowAction<AdminCityStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCountyViewEdemokraciaAdminAdminEdemokraciaAdminCountyCitiesRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminCityStored) => rowDeleteCitiesAction(data, row, () => fetchData()),
-      disabled: (row: AdminCityStored) => editMode || !row.__deleteable,
-    },
-  ];
   const title: string = data.representation as string;
 
   const isFormUpdateable = useCallback(() => {
@@ -167,7 +126,7 @@ export default function AdminCreateIssueInputCountyView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -188,7 +147,7 @@ export default function AdminCreateIssueInputCountyView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -201,19 +160,13 @@ export default function AdminCreateIssueInputCountyView() {
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -232,18 +185,13 @@ export default function AdminCreateIssueInputCountyView() {
                 required
                 name="name"
                 id="TextInputedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCountyViewDefaultCountyViewName"
-                label={
-                  t('edemokracia.admin.CreateIssueInput.county.County.View.name', {
-                    defaultValue: 'County name',
-                  }) as string
-                }
+                label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
                 value={data.name}
                 className={!editMode ? 'JUDO-viewMode' : undefined}
                 disabled={false || !isFormUpdateable()}
                 error={!!validation.get('name')}
                 helperText={validation.get('name')}
                 onChange={(event) => {
-                  setEditMode(true);
                   storeDiff('name', event.target.value);
                 }}
                 InputLabelProps={{ shrink: true }}
@@ -274,9 +222,7 @@ export default function AdminCreateIssueInputCountyView() {
                       variant="h6"
                       component="h1"
                     >
-                      {t('edemokracia.admin.CreateIssueInput.county.County.View.cities.cities.Label', {
-                        defaultValue: 'Cities',
-                      })}
+                      {t('admin.CountyView.cities.Label', { defaultValue: 'Cities' })}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -289,51 +235,13 @@ export default function AdminCreateIssueInputCountyView() {
                     alignItems="stretch"
                     justifyContent="flex-start"
                   >
-                    <DataGrid
-                      {...baseTableConfig}
-                      sx={{
-                        // overflow: 'hidden',
-                        display: 'grid',
-                      }}
-                      getRowId={(row: { __identifier: string }) => row.__identifier}
-                      loading={isLoading}
-                      rows={data?.cities ?? []}
-                      getRowClassName={() => 'data-grid-row'}
-                      getCellClassName={() => 'data-grid-cell'}
-                      columns={[
-                        ...citiesColumns,
-                        ...columnsActionCalculator(
-                          'RelationTypeedemokraciaAdminAdminEdemokraciaAdminCountyCities',
-                          citiesRowActions,
-                          { shownActions: 2 },
-                        ),
-                      ]}
-                      disableRowSelectionOnClick
-                      onRowClick={(params: GridRowParams<AdminCityStored>) => {
-                        if (!editMode) {
-                          rowViewCitiesAction(data, params.row);
-                        }
-                      }}
-                      sortModel={citiesSortModel}
-                      onSortModelChange={(newModel: GridSortModel) => {
-                        setCitiesSortModel(newModel);
-                      }}
-                      components={{
-                        Toolbar: () => (
-                          <GridToolbarContainer>
-                            <Button
-                              id="CreateActionedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCountyViewEdemokraciaAdminAdminEdemokraciaAdminCountyCitiesTableCreate"
-                              variant="text"
-                              onClick={() => tableCreateCitiesAction(data, () => fetchData())}
-                              disabled={false || editMode || !isFormUpdateable()}
-                            >
-                              <MdiIcon path="file_document_plus" />
-                              {t('judo.pages.table.create', { defaultValue: 'Create' })}
-                            </Button>
-                            <div>{/* Placeholder */}</div>
-                          </GridToolbarContainer>
-                        ),
-                      }}
+                    <CitiesTable
+                      isOwnerLoading={isLoading}
+                      fetchOwnerData={fetchData}
+                      ownerData={data}
+                      editMode={editMode}
+                      isFormUpdateable={isFormUpdateable}
+                      storeDiff={storeDiff}
                     />
                   </Grid>
                 </Grid>

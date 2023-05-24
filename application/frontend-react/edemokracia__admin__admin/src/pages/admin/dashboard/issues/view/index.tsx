@@ -25,126 +25,83 @@ import {
   Typography,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridToolbarContainer,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { JudoIdentifiable } from '@judo/data-api-common';
+import { mainContainerPadding } from '~/theme';
+
 import {
-  AdminIssueTypeMaskBuilder,
-  AdminIssueDebateMaskBuilder,
-  AdminIssueDebate,
-  EdemokraciaVoteType,
-  AdminCityQueryCustomizer,
-  AdminIssueStored,
-  AdminDistrictStored,
-  AdminCommentQueryCustomizer,
-  AdminCounty,
   AdminCity,
-  AdminUserMaskBuilder,
-  AdminDistrictQueryCustomizer,
-  AdminIssueDebateQueryCustomizer,
-  AdminIssueQueryCustomizer,
-  AdminIssueCategoryStored,
-  AdminCommentMaskBuilder,
-  AdminIssueAttachmentMaskBuilder,
-  AdminIssueCategory,
-  AdminComment,
-  AdminUser,
+  AdminCityQueryCustomizer,
   AdminCityStored,
-  AdminCountyStored,
-  AdminDashboardStored,
-  EdemokraciaIssueStatus,
-  AdminDashboard,
-  AdminIssueTypeStored,
-  AdminIssueCategoryMaskBuilder,
-  AdminUserStored,
-  AdminUserQueryCustomizer,
-  AdminIssueAttachmentStored,
+  AdminComment,
+  AdminCommentQueryCustomizer,
+  AdminCommentStored,
+  AdminCounty,
   AdminCountyQueryCustomizer,
-  AdminIssueDebateStored,
-  AdminIssueAttachmentQueryCustomizer,
-  AdminIssueAttachment,
-  AdminCountyMaskBuilder,
+  AdminCountyStored,
+  AdminDashboard,
+  AdminDashboardStored,
+  AdminDistrict,
+  AdminDistrictQueryCustomizer,
+  AdminDistrictStored,
   AdminIssue,
+  AdminIssueAttachment,
+  AdminIssueAttachmentQueryCustomizer,
+  AdminIssueAttachmentStored,
+  AdminIssueCategory,
+  AdminIssueCategoryQueryCustomizer,
+  AdminIssueCategoryStored,
+  AdminIssueDebate,
+  AdminIssueDebateQueryCustomizer,
+  AdminIssueDebateStored,
+  AdminIssueQueryCustomizer,
+  AdminIssueStored,
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
-  AdminCityMaskBuilder,
-  AdminDistrict,
-  AdminDistrictMaskBuilder,
-  AdminIssueCategoryQueryCustomizer,
-  AdminCommentStored,
-} from '../../../../../generated/data-api';
-import { adminDashboardServiceImpl, adminIssueServiceImpl } from '../../../../../generated/data-axios';
-import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminDashboardIssuesView } from './hooks/useAdminDashboardIssuesView';
-import {
-  usePageRefreshIssuesAction,
-  usePageDeleteIssuesAction,
-  useRowViewCommentsAction,
-  useAdminIssueCreateDebateAction,
-  useAdminCommentVoteDownAction,
-  useTableCreateAttachmentsAction,
-  useAdminIssueCreateCommentAction,
-  useLinkViewIssueTypeAction,
-  useRowViewCategoriesAction,
-  usePageEditIssuesAction,
-  useLinkViewCityAction,
-  useLinkViewOwnerAction,
-  useLinkViewCountyAction,
-  useLinkViewDistrictAction,
-  useRowViewAttachmentsAction,
-  useRowEditAttachmentsAction,
-  useAdminCommentVoteUpAction,
-  useRowDeleteAttachmentsAction,
-} from './actions';
+  AdminIssueTypeStored,
+  AdminUser,
+  AdminUserQueryCustomizer,
+  AdminUserStored,
+  EdemokraciaIssueStatus,
+  EdemokraciaVoteType,
+} from '~/generated/data-api';
+import { adminDashboardServiceImpl, adminIssueServiceImpl } from '~/generated/data-axios';
+
+import { useAdminIssueCreateDebateAction, useAdminIssueCreateCommentAction } from './actions';
+
+import { PageActions } from './components/PageActions';
+import { IssueTypeLink } from './components/IssueTypeLink';
+import { OwnerLink } from './components/OwnerLink';
+import { CityLink } from './components/CityLink';
+import { CountyLink } from './components/CountyLink';
+import { DistrictLink } from './components/DistrictLink';
+import { AttachmentsTable } from './components/AttachmentsTable';
+import { CategoriesTable } from './components/CategoriesTable';
+import { CommentsTable } from './components/CommentsTable';
+import { DebatesTable } from './components/DebatesTable';
 
 /**
  * Name: edemokracia::admin::Dashboard.issues#View
@@ -156,58 +113,10 @@ export default function AdminDashboardIssuesView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const pageRefreshIssuesAction = usePageRefreshIssuesAction();
-  const pageDeleteIssuesAction = usePageDeleteIssuesAction();
-  const rowViewCommentsAction = useRowViewCommentsAction();
-  const AdminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
-  const AdminCommentVoteDownAction = useAdminCommentVoteDownAction();
-  const tableCreateAttachmentsAction = useTableCreateAttachmentsAction();
-  const AdminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
-  const linkViewIssueTypeAction = useLinkViewIssueTypeAction();
-  const rowViewCategoriesAction = useRowViewCategoriesAction();
-  const pageEditIssuesAction = usePageEditIssuesAction();
-  const linkViewCityAction = useLinkViewCityAction();
-  const linkViewOwnerAction = useLinkViewOwnerAction();
-  const linkViewCountyAction = useLinkViewCountyAction();
-  const linkViewDistrictAction = useLinkViewDistrictAction();
-  const rowViewAttachmentsAction = useRowViewAttachmentsAction();
-  const rowEditAttachmentsAction = useRowEditAttachmentsAction();
-  const AdminCommentVoteUpAction = useAdminCommentVoteUpAction();
-  const rowDeleteAttachmentsAction = useRowDeleteAttachmentsAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const {
-    queryCustomizer,
-    attachmentsColumns,
-    attachmentsRangeFilterOptions,
-    attachmentsInitialQueryCustomizer,
-    categoriesColumns,
-    categoriesRangeFilterOptions,
-    categoriesInitialQueryCustomizer,
-    commentsColumns,
-    commentsRangeFilterOptions,
-    commentsInitialQueryCustomizer,
-    debatesColumns,
-    debatesRangeFilterOptions,
-    debatesInitialQueryCustomizer,
-    issueTypeColumns,
-    issueTypeRangeFilterOptions,
-    issueTypeInitialQueryCustomizer,
-    ownerColumns,
-    ownerRangeFilterOptions,
-    ownerInitialQueryCustomizer,
-    cityColumns,
-    cityRangeFilterOptions,
-    cityInitialQueryCustomizer,
-    countyColumns,
-    countyRangeFilterOptions,
-    countyInitialQueryCustomizer,
-    districtColumns,
-    districtRangeFilterOptions,
-    districtInitialQueryCustomizer,
-  } = useAdminDashboardIssuesView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -224,6 +133,7 @@ export default function AdminDashboardIssuesView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueStored, any>>(
     {} as unknown as Record<keyof AdminIssueStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminIssueStored, value: any) => void = useCallback(
     (attributeName: keyof AdminIssueStored, value: any) => {
       const dateTypes: string[] = [];
@@ -239,81 +149,23 @@ export default function AdminDashboardIssuesView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminIssue, string>>(new Map<keyof AdminIssue, string>());
 
-  const [attachmentsSortModel, setAttachmentsSortModel] = useState<GridSortModel>([{ field: 'link', sort: 'asc' }]);
+  const queryCustomizer: AdminIssueQueryCustomizer = {
+    _mask:
+      '{defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},debates{status,title,closeAt,description},comments{comment,created,createdByName,upVotes,downVotes}}',
+  };
 
-  const [categoriesSortModel, setCategoriesSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+  const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
 
-  const categoriesRangeCall = async () =>
-    openRangeDialog<AdminIssueCategoryStored, AdminIssueCategoryQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories',
-      columns: categoriesColumns,
-      defaultSortField: categoriesSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminIssueServiceImpl.getRangeForCategories(undefined, processQueryCustomizer(queryCustomizer)),
-      single: false,
-      alreadySelectedItems: categoriesSelectionModel,
-      filterOptions: categoriesRangeFilterOptions,
-      initialQueryCustomizer: categoriesInitialQueryCustomizer,
-    });
-
-  const [categoriesSelectionModel, setCategoriesSelectionModel] = useState<GridRowSelectionModel>([]);
-
-  const [commentsSortModel, setCommentsSortModel] = useState<GridSortModel>([{ field: 'comment', sort: 'asc' }]);
-
-  const [debatesSortModel, setDebatesSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
-
-  const attachmentsRowActions: TableRowAction<AdminIssueAttachmentStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminIssueAttachmentStored) => rowDeleteAttachmentsAction(data, row, () => fetchData()),
-      disabled: (row: AdminIssueAttachmentStored) => editMode || !row.__deleteable,
-    },
-  ];
-  const categoriesRowActions: TableRowAction<AdminIssueCategoryStored>[] = [
-    {
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories-remove',
-      label: t('judo.pages.table.remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      action: async (row: AdminIssueCategoryStored) => {
-        setEditMode(true);
-        storeDiff('categories', [
-          ...(data.categories || []).filter(
-            (e: AdminIssueCategoryStored) => e.__signedIdentifier !== row.__signedIdentifier,
-          ),
-        ]);
-      },
-    },
-  ];
-  const commentsRowActions: TableRowAction<AdminCommentStored>[] = [
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteUpButtonCallOperation',
-      label: t('edemokracia.admin.Dashboard.issues.View.edemokracia.admin.Comment.voteUp', {
-        defaultValue: '',
-      }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      action: async (row: AdminCommentStored) => AdminCommentVoteUpAction(row, () => fetchData()),
-      disabled: (row: AdminCommentStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteDownButtonCallOperation',
-      label: t('edemokracia.admin.Dashboard.issues.View.edemokracia.admin.Comment.voteDown', {
-        defaultValue: '',
-      }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      action: async (row: AdminCommentStored) => AdminCommentVoteDownAction(row, () => fetchData()),
-      disabled: (row: AdminCommentStored) => editMode,
-    },
-  ];
-  const debatesRowActions: TableRowAction<AdminIssueDebateStored>[] = [];
-  const title: string = t('edemokracia.admin.Dashboard.issues.View', { defaultValue: 'View / Edit Issue' });
+  const title: string = t('admin.IssueView', { defaultValue: 'View / Edit Issue' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -330,7 +182,7 @@ export default function AdminDashboardIssuesView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -351,15 +203,19 @@ export default function AdminDashboardIssuesView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const saveData = async () => {
+  async function saveData() {
     setIsLoading(true);
 
     try {
       const res = await adminIssueServiceImpl.update(payloadDiff);
 
       if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
         await fetchData();
         setEditMode(false);
       }
@@ -368,9 +224,9 @@ export default function AdminDashboardIssuesView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const deleteData = async () => {
+  async function deleteData() {
     setIsLoading(true);
 
     try {
@@ -382,7 +238,7 @@ export default function AdminDashboardIssuesView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -395,70 +251,15 @@ export default function AdminDashboardIssuesView() {
   return (
     <>
       <PageHeader title={title}>
-        {editMode && isFormUpdateable() && (
-          <Grid className="page-action" item>
-            <Button
-              id="page-action-edit-cancel"
-              variant="outlined"
-              onClick={() => {
-                setEditMode(false);
-                fetchData();
-              }}
-              disabled={isLoading}
-            >
-              <MdiIcon path="cancel" />
-              {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
-            </Button>
-          </Grid>
-        )}
-        {editMode && isFormUpdateable() && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-edit-save"
-              startIcon={<MdiIcon path="content-save" />}
-              onClick={() => saveData()}
-            >
-              <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {!editMode && isFormDeleteable() && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="page-action-delete"
-              loading={isLoading}
-              loadingPosition="start"
-              startIcon={<MdiIcon path="delete" />}
-              onClick={() =>
-                pageDeleteIssuesAction(
-                  { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminDashboard>,
-                  data,
-                  () => {
-                    back();
-                  },
-                )
-              }
-              disabled={!data.__deleteable}
-            >
-              <span>{t('judo.pages.delete', { defaultValue: 'Delete' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+          saveData={saveData}
+          deleteData={deleteData}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -484,9 +285,7 @@ export default function AdminDashboardIssuesView() {
                           variant="h6"
                           component="h1"
                         >
-                          {t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.Label', {
-                            defaultValue: 'Issue',
-                          })}
+                          {t('admin.IssueView.issue.Label', { defaultValue: 'Issue' })}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -501,50 +300,13 @@ export default function AdminDashboardIssuesView() {
                         spacing={2}
                       >
                         <Grid item xs={12} sm={12} md={8.0}>
-                          <AggregationInput
-                            name="issueType"
-                            id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueIssueType"
-                            label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.issueType', {
-                                defaultValue: 'Issue Type',
-                              }) as string
-                            }
-                            labelList={[
-                              data.issueType?.title?.toString() ?? '',
-                              data.issueType?.description?.toString() ?? '',
-                            ]}
-                            value={data.issueType}
-                            error={!!validation.get('issueType')}
-                            helperText={validation.get('issueType')}
-                            icon={<MdiIcon path="folder-open" />}
+                          <IssueTypeLink
+                            ownerData={data}
                             disabled={false || !isFormUpdateable()}
                             editMode={editMode}
-                            onView={async () => linkViewIssueTypeAction(data, data?.issueType!)}
-                            onUnset={async () => {
-                              setEditMode(true);
-                              storeDiff('issueType', null);
-                            }}
-                            onSet={async () => {
-                              const res = await openRangeDialog<AdminIssueTypeStored, AdminIssueTypeQueryCustomizer>({
-                                id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueIssueType',
-                                columns: issueTypeColumns,
-                                defaultSortField: ([{ field: 'title', sort: 'asc' }] as GridSortItem[])[0],
-                                rangeCall: async (queryCustomizer) =>
-                                  await adminIssueServiceImpl.getRangeForIssueType(
-                                    data,
-                                    processQueryCustomizer(queryCustomizer),
-                                  ),
-                                single: true,
-                                alreadySelectedItems: data.issueType?.__identifier as GridRowId,
-                                filterOptions: issueTypeRangeFilterOptions,
-                                initialQueryCustomizer: issueTypeInitialQueryCustomizer,
-                              });
-
-                              if (res === undefined) return;
-
-                              setEditMode(true);
-                              storeDiff('issueType', res as AdminIssueTypeStored);
-                            }}
+                            fetchOwnerData={fetchData}
+                            storeDiff={storeDiff}
+                            validation={validation}
                           />
                         </Grid>
 
@@ -553,9 +315,7 @@ export default function AdminDashboardIssuesView() {
                             name="defaultVoteType"
                             id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueDefaultVoteType"
                             label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.defaultVoteType', {
-                                defaultValue: 'Default Vote Type',
-                              }) as string
+                              t('admin.IssueView.defaultVoteType', { defaultValue: 'Default Vote Type' }) as string
                             }
                             value={data.defaultVoteType || ''}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
@@ -563,8 +323,7 @@ export default function AdminDashboardIssuesView() {
                             error={!!validation.get('defaultVoteType')}
                             helperText={validation.get('defaultVoteType')}
                             onChange={(event) => {
-                              setEditMode(true);
-                              storeDiff('defaultVoteType', event.target.value as EdemokraciaVoteType);
+                              storeDiff('defaultVoteType', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
                             InputProps={{
@@ -611,18 +370,13 @@ export default function AdminDashboardIssuesView() {
                             required
                             name="title"
                             id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueTitle"
-                            label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.title', {
-                                defaultValue: 'Title',
-                              }) as string
-                            }
+                            label={t('admin.IssueView.title', { defaultValue: 'Title' }) as string}
                             value={data.title}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
                             error={!!validation.get('title')}
                             helperText={validation.get('title')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('title', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -641,19 +395,14 @@ export default function AdminDashboardIssuesView() {
                             required
                             name="status"
                             id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueStatus"
-                            label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.status', {
-                                defaultValue: 'Status',
-                              }) as string
-                            }
+                            label={t('admin.IssueView.status', { defaultValue: 'Status' }) as string}
                             value={data.status || ''}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
                             error={!!validation.get('status')}
                             helperText={validation.get('status')}
                             onChange={(event) => {
-                              setEditMode(true);
-                              storeDiff('status', event.target.value as EdemokraciaIssueStatus);
+                              storeDiff('status', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
                             InputProps={{
@@ -727,15 +476,10 @@ export default function AdminDashboardIssuesView() {
                               });
                             }}
                             views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.created', {
-                                defaultValue: 'Created',
-                              }) as string
-                            }
+                            label={t('admin.IssueView.created', { defaultValue: 'Created' }) as string}
                             value={serviceDateToUiDate(data.created ?? null)}
                             disabled={true || !isFormUpdateable()}
                             onChange={(newValue: Date) => {
-                              setEditMode(true);
                               storeDiff('created', newValue);
                             }}
                           />
@@ -746,11 +490,7 @@ export default function AdminDashboardIssuesView() {
                             required
                             name="description"
                             id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueDescription"
-                            label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.description', {
-                                defaultValue: 'Description',
-                              }) as string
-                            }
+                            label={t('admin.IssueView.description', { defaultValue: 'Description' }) as string}
                             value={data.description}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
@@ -759,7 +499,6 @@ export default function AdminDashboardIssuesView() {
                             error={!!validation.get('description')}
                             helperText={validation.get('description')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('description', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -780,59 +519,23 @@ export default function AdminDashboardIssuesView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="wechat" />}
                             loadingPosition="start"
-                            onClick={() => AdminIssueCreateDebateAction(data, () => fetchData())}
+                            onClick={() => adminIssueCreateDebateAction(data, () => fetchData())}
                             disabled={editMode}
                           >
                             <span>
-                              {t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.createDebate', {
-                                defaultValue: 'Create debate',
-                              })}
+                              {t('admin.IssueView.createDebate.ButtonCallOperation', { defaultValue: 'Create debate' })}
                             </span>
                           </LoadingButton>
                         </Grid>
 
                         <Grid item xs={12} sm={12}>
-                          <AggregationInput
-                            name="owner"
-                            id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueOwner"
-                            label={
-                              t('edemokracia.admin.Dashboard.issues.Issue.View.issue.issue.owner', {
-                                defaultValue: 'Owner',
-                              }) as string
-                            }
-                            labelList={[data.owner?.representation?.toString() ?? '']}
-                            value={data.owner}
-                            error={!!validation.get('owner')}
-                            helperText={validation.get('owner')}
-                            icon={<MdiIcon path="account" />}
+                          <OwnerLink
+                            ownerData={data}
                             disabled={false || !isFormUpdateable()}
                             editMode={editMode}
-                            onView={async () => linkViewOwnerAction(data, data?.owner!)}
-                            onUnset={async () => {
-                              setEditMode(true);
-                              storeDiff('owner', null);
-                            }}
-                            onSet={async () => {
-                              const res = await openRangeDialog<AdminUserStored, AdminUserQueryCustomizer>({
-                                id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueOwner',
-                                columns: ownerColumns,
-                                defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
-                                rangeCall: async (queryCustomizer) =>
-                                  await adminIssueServiceImpl.getRangeForOwner(
-                                    data,
-                                    processQueryCustomizer(queryCustomizer),
-                                  ),
-                                single: true,
-                                alreadySelectedItems: data.owner?.__identifier as GridRowId,
-                                filterOptions: ownerRangeFilterOptions,
-                                initialQueryCustomizer: ownerInitialQueryCustomizer,
-                              });
-
-                              if (res === undefined) return;
-
-                              setEditMode(true);
-                              storeDiff('owner', res as AdminUserStored);
-                            }}
+                            fetchOwnerData={fetchData}
+                            storeDiff={storeDiff}
+                            validation={validation}
                           />
                         </Grid>
                       </Grid>
@@ -849,31 +552,31 @@ export default function AdminDashboardIssuesView() {
                 childTabs={[
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherArea',
-                    name: 'area',
+                    name: 'admin.IssueView.area',
                     label: 'Area',
                     icon: 'map',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherAttachments',
-                    name: 'attachments',
+                    name: 'admin.IssueView.attachments',
                     label: 'Attachments',
                     icon: 'paperclip',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherCategories',
-                    name: 'categories',
+                    name: 'admin.IssueView.categories',
                     label: 'Categories',
                     icon: 'file-tree',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherDebates',
-                    name: 'debates',
+                    name: 'admin.IssueView.debates',
                     label: 'Debates',
                     icon: 'wechat',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherComments',
-                    name: 'comments',
+                    name: 'admin.IssueView.comments',
                     label: 'Comments',
                     icon: 'comment-text-multiple',
                   },
@@ -889,137 +592,35 @@ export default function AdminDashboardIssuesView() {
                     spacing={2}
                   >
                     <Grid item xs={12} sm={12} md={4.0}>
-                      <AggregationInput
-                        name="county"
-                        id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherAreaAreaCounty"
-                        label={
-                          t('edemokracia.admin.Dashboard.issues.Issue.View.other.area.area.county', {
-                            defaultValue: 'County',
-                          }) as string
-                        }
-                        labelList={[data.county?.representation?.toString() ?? '']}
-                        value={data.county}
-                        error={!!validation.get('county')}
-                        helperText={validation.get('county')}
-                        icon={<MdiIcon path="map" />}
+                      <CountyLink
+                        ownerData={data}
                         disabled={false || !isFormUpdateable()}
                         editMode={editMode}
-                        onView={async () => linkViewCountyAction(data, data?.county!)}
-                        onUnset={async () => {
-                          setEditMode(true);
-                          storeDiff('county', null);
-                        }}
-                        onSet={async () => {
-                          const res = await openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
-                            id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCounty',
-                            columns: countyColumns,
-                            defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
-                            rangeCall: async (queryCustomizer) =>
-                              await adminIssueServiceImpl.getRangeForCounty(
-                                data,
-                                processQueryCustomizer(queryCustomizer),
-                              ),
-                            single: true,
-                            alreadySelectedItems: data.county?.__identifier as GridRowId,
-                            filterOptions: countyRangeFilterOptions,
-                            initialQueryCustomizer: countyInitialQueryCustomizer,
-                          });
-
-                          if (res === undefined) return;
-
-                          setEditMode(true);
-                          storeDiff('county', res as AdminCountyStored);
-                        }}
+                        fetchOwnerData={fetchData}
+                        storeDiff={storeDiff}
+                        validation={validation}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={4.0}>
-                      <AggregationInput
-                        name="city"
-                        id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherAreaAreaCity"
-                        label={
-                          t('edemokracia.admin.Dashboard.issues.Issue.View.other.area.area.city', {
-                            defaultValue: 'City',
-                          }) as string
-                        }
-                        labelList={[data.city?.representation?.toString() ?? '']}
-                        value={data.city}
-                        error={!!validation.get('city')}
-                        helperText={validation.get('city')}
-                        icon={<MdiIcon path="city" />}
+                      <CityLink
+                        ownerData={data}
                         disabled={false || !isFormUpdateable()}
                         editMode={editMode}
-                        onView={async () => linkViewCityAction(data, data?.city!)}
-                        onUnset={async () => {
-                          setEditMode(true);
-                          storeDiff('city', null);
-                        }}
-                        onSet={async () => {
-                          const res = await openRangeDialog<AdminCityStored, AdminCityQueryCustomizer>({
-                            id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCity',
-                            columns: cityColumns,
-                            defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
-                            rangeCall: async (queryCustomizer) =>
-                              await adminIssueServiceImpl.getRangeForCity(
-                                data,
-                                processQueryCustomizer(queryCustomizer),
-                              ),
-                            single: true,
-                            alreadySelectedItems: data.city?.__identifier as GridRowId,
-                            filterOptions: cityRangeFilterOptions,
-                            initialQueryCustomizer: cityInitialQueryCustomizer,
-                          });
-
-                          if (res === undefined) return;
-
-                          setEditMode(true);
-                          storeDiff('city', res as AdminCityStored);
-                        }}
+                        fetchOwnerData={fetchData}
+                        storeDiff={storeDiff}
+                        validation={validation}
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={12} md={4.0}>
-                      <AggregationInput
-                        name="district"
-                        id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherAreaAreaDistrict"
-                        label={
-                          t('edemokracia.admin.Dashboard.issues.Issue.View.other.area.area.district', {
-                            defaultValue: 'District',
-                          }) as string
-                        }
-                        labelList={[data.district?.representation?.toString() ?? '']}
-                        value={data.district}
-                        error={!!validation.get('district')}
-                        helperText={validation.get('district')}
-                        icon={<MdiIcon path="home-city" />}
+                      <DistrictLink
+                        ownerData={data}
                         disabled={false || !isFormUpdateable()}
                         editMode={editMode}
-                        onView={async () => linkViewDistrictAction(data, data?.district!)}
-                        onUnset={async () => {
-                          setEditMode(true);
-                          storeDiff('district', null);
-                        }}
-                        onSet={async () => {
-                          const res = await openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
-                            id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueDistrict',
-                            columns: districtColumns,
-                            defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
-                            rangeCall: async (queryCustomizer) =>
-                              await adminIssueServiceImpl.getRangeForDistrict(
-                                data,
-                                processQueryCustomizer(queryCustomizer),
-                              ),
-                            single: true,
-                            alreadySelectedItems: data.district?.__identifier as GridRowId,
-                            filterOptions: districtRangeFilterOptions,
-                            initialQueryCustomizer: districtInitialQueryCustomizer,
-                          });
-
-                          if (res === undefined) return;
-
-                          setEditMode(true);
-                          storeDiff('district', res as AdminDistrictStored);
-                        }}
+                        fetchOwnerData={fetchData}
+                        storeDiff={storeDiff}
+                        validation={validation}
                       />
                     </Grid>
                   </Grid>
@@ -1051,51 +652,13 @@ export default function AdminDashboardIssuesView() {
                             alignItems="stretch"
                             justifyContent="flex-start"
                           >
-                            <DataGrid
-                              {...baseTableConfig}
-                              sx={{
-                                // overflow: 'hidden',
-                                display: 'grid',
-                              }}
-                              getRowId={(row: { __identifier: string }) => row.__identifier}
-                              loading={isLoading}
-                              rows={data?.attachments ?? []}
-                              getRowClassName={() => 'data-grid-row'}
-                              getCellClassName={() => 'data-grid-cell'}
-                              columns={[
-                                ...attachmentsColumns,
-                                ...columnsActionCalculator(
-                                  'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueAttachments',
-                                  attachmentsRowActions,
-                                  { shownActions: 2 },
-                                ),
-                              ]}
-                              disableRowSelectionOnClick
-                              onRowClick={(params: GridRowParams<AdminIssueAttachmentStored>) => {
-                                if (!editMode) {
-                                  rowViewAttachmentsAction(data, params.row);
-                                }
-                              }}
-                              sortModel={attachmentsSortModel}
-                              onSortModelChange={(newModel: GridSortModel) => {
-                                setAttachmentsSortModel(newModel);
-                              }}
-                              components={{
-                                Toolbar: () => (
-                                  <GridToolbarContainer>
-                                    <Button
-                                      id="CreateActionedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsTableCreate"
-                                      variant="text"
-                                      onClick={() => tableCreateAttachmentsAction(data, () => fetchData())}
-                                      disabled={false || editMode || !isFormUpdateable()}
-                                    >
-                                      <MdiIcon path="file_document_plus" />
-                                      {t('judo.pages.table.create', { defaultValue: 'Create' })}
-                                    </Button>
-                                    <div>{/* Placeholder */}</div>
-                                  </GridToolbarContainer>
-                                ),
-                              }}
+                            <AttachmentsTable
+                              isOwnerLoading={isLoading}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
                             />
                           </Grid>
                         </Grid>
@@ -1130,79 +693,13 @@ export default function AdminDashboardIssuesView() {
                             alignItems="stretch"
                             justifyContent="flex-start"
                           >
-                            <DataGrid
-                              {...baseTableConfig}
-                              sx={{
-                                // overflow: 'hidden',
-                                display: 'grid',
-                              }}
-                              getRowId={(row: { __identifier: string }) => row.__identifier}
-                              loading={isLoading}
-                              rows={data?.categories ?? []}
-                              getRowClassName={() => 'data-grid-row'}
-                              getCellClassName={() => 'data-grid-cell'}
-                              columns={[
-                                ...categoriesColumns,
-                                ...columnsActionCalculator(
-                                  'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories',
-                                  categoriesRowActions,
-                                  { shownActions: 2 },
-                                ),
-                              ]}
-                              disableRowSelectionOnClick
-                              onRowClick={(params: GridRowParams<AdminIssueCategoryStored>) => {
-                                if (!editMode) {
-                                  rowViewCategoriesAction(data, params.row);
-                                }
-                              }}
-                              sortModel={categoriesSortModel}
-                              onSortModelChange={(newModel: GridSortModel) => {
-                                setCategoriesSortModel(newModel);
-                              }}
-                              components={{
-                                Toolbar: () => (
-                                  <GridToolbarContainer>
-                                    <Button
-                                      id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories-clear"
-                                      variant="text"
-                                      onClick={async () => {
-                                        storeDiff('categories', []);
-
-                                        if (!editMode) {
-                                          setEditMode(true);
-                                        }
-                                      }}
-                                      disabled={isLoading || false || !isFormUpdateable()}
-                                    >
-                                      <MdiIcon path="link_off" />
-                                      {t('judo.pages.table.clear', { defaultValue: 'Clear' })}
-                                    </Button>
-                                    <Button
-                                      id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories-add"
-                                      variant="text"
-                                      onClick={async () => {
-                                        const res = await categoriesRangeCall();
-
-                                        if (res) {
-                                          storeDiff('categories', [
-                                            ...(data.categories || []),
-                                            ...(res as AdminIssueCategoryStored[]),
-                                          ]);
-
-                                          if (!editMode) {
-                                            setEditMode(true);
-                                          }
-                                        }
-                                      }}
-                                      disabled={isLoading || false || !isFormUpdateable()}
-                                    >
-                                      <MdiIcon path="attachment-plus" />
-                                      {t('judo.pages.table.add', { defaultValue: 'Add' })}
-                                    </Button>
-                                    <div>{/* Placeholder */}</div>
-                                  </GridToolbarContainer>
-                                ),
-                              }}
+                            <CategoriesTable
+                              isOwnerLoading={isLoading}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
                             />
                           </Grid>
                         </Grid>
@@ -1237,10 +734,7 @@ export default function AdminDashboardIssuesView() {
                               variant="h6"
                               component="h1"
                             >
-                              {t(
-                                'edemokracia.admin.Dashboard.issues.Issue.View.other.debates.debates.debates.debates.Label',
-                                { defaultValue: 'Debates' },
-                              )}
+                              {t('admin.IssueView.debates.Label', { defaultValue: 'Debates' })}
                             </Typography>
                           </Grid>
                         </Grid>
@@ -1253,37 +747,13 @@ export default function AdminDashboardIssuesView() {
                             alignItems="stretch"
                             justifyContent="flex-start"
                           >
-                            <DataGrid
-                              {...baseTableConfig}
-                              sx={{
-                                // overflow: 'hidden',
-                                display: 'grid',
-                              }}
-                              getRowId={(row: { __identifier: string }) => row.__identifier}
-                              loading={isLoading}
-                              rows={data?.debates ?? []}
-                              getRowClassName={() => 'data-grid-row'}
-                              getCellClassName={() => 'data-grid-cell'}
-                              columns={[
-                                ...debatesColumns,
-                                ...columnsActionCalculator(
-                                  'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueDebates',
-                                  debatesRowActions,
-                                  { shownActions: 2 },
-                                ),
-                              ]}
-                              disableRowSelectionOnClick
-                              sortModel={debatesSortModel}
-                              onSortModelChange={(newModel: GridSortModel) => {
-                                setDebatesSortModel(newModel);
-                              }}
-                              components={{
-                                Toolbar: () => (
-                                  <GridToolbarContainer>
-                                    <div>{/* Placeholder */}</div>
-                                  </GridToolbarContainer>
-                                ),
-                              }}
+                            <DebatesTable
+                              isOwnerLoading={isLoading}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
                             />
                           </Grid>
                         </Grid>
@@ -1317,14 +787,11 @@ export default function AdminDashboardIssuesView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="comment-text-multiple" />}
                             loadingPosition="start"
-                            onClick={() => AdminIssueCreateCommentAction(data, () => fetchData())}
+                            onClick={() => adminIssueCreateCommentAction(data, () => fetchData())}
                             disabled={editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Dashboard.issues.Issue.View.other.comments.comments.actions.createComment',
-                                { defaultValue: 'Add comment' },
-                              )}
+                              {t('admin.IssueView.createComment.ButtonCallOperation', { defaultValue: 'Add comment' })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -1346,42 +813,13 @@ export default function AdminDashboardIssuesView() {
                                 alignItems="stretch"
                                 justifyContent="flex-start"
                               >
-                                <DataGrid
-                                  {...baseTableConfig}
-                                  sx={{
-                                    // overflow: 'hidden',
-                                    display: 'grid',
-                                  }}
-                                  getRowId={(row: { __identifier: string }) => row.__identifier}
-                                  loading={isLoading}
-                                  rows={data?.comments ?? []}
-                                  getRowClassName={() => 'data-grid-row'}
-                                  getCellClassName={() => 'data-grid-cell'}
-                                  columns={[
-                                    ...commentsColumns,
-                                    ...columnsActionCalculator(
-                                      'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueComments',
-                                      commentsRowActions,
-                                      { shownActions: 2 },
-                                    ),
-                                  ]}
-                                  disableRowSelectionOnClick
-                                  onRowClick={(params: GridRowParams<AdminCommentStored>) => {
-                                    if (!editMode) {
-                                      rowViewCommentsAction(data, params.row);
-                                    }
-                                  }}
-                                  sortModel={commentsSortModel}
-                                  onSortModelChange={(newModel: GridSortModel) => {
-                                    setCommentsSortModel(newModel);
-                                  }}
-                                  components={{
-                                    Toolbar: () => (
-                                      <GridToolbarContainer>
-                                        <div>{/* Placeholder */}</div>
-                                      </GridToolbarContainer>
-                                    ),
-                                  }}
+                                <CommentsTable
+                                  isOwnerLoading={isLoading}
+                                  fetchOwnerData={fetchData}
+                                  ownerData={data}
+                                  editMode={editMode}
+                                  isFormUpdateable={isFormUpdateable}
+                                  storeDiff={storeDiff}
                                 />
                               </Grid>
                             </Grid>

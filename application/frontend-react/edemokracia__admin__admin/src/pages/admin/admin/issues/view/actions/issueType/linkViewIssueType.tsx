@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: ViewAction
@@ -16,8 +16,8 @@ import type {
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
   AdminIssueTypeStored,
-} from '../../../../../../../generated/data-api';
-import { useJudoNavigation } from '../../../../../../../components';
+} from '~/generated/data-api';
+import { useJudoNavigation } from '~/components';
 
 export const LINK_VIEW_ISSUE_TYPE_ACTION_INTERFACE_KEY = 'LinkViewIssueTypeAction';
 export type LinkViewIssueTypeAction = () => (

@@ -14,65 +14,43 @@ import { useEffect, useState, useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
-  booleanToStringSelect,
   stringToBooleanSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig } from '../../../../../config';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
+  booleanToStringSelect,
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
+import { mainContainerPadding } from '~/theme';
+
 import {
-  VoteDefinitionQueryCustomizer,
-  VoteDefinition,
   EdemokraciaVoteStatus,
+  VoteDefinition,
+  VoteDefinitionQueryCustomizer,
   VoteDefinitionStored,
-} from '../../../../../generated/data-api';
-import { voteDefinitionServiceImpl } from '../../../../../generated/data-axios';
-import { useAdminDebateClosedebateOutput } from './hooks/useAdminDebateClosedebateOutput';
-import { usePageRefreshOutputAction } from './actions';
+} from '~/generated/data-api';
+import { voteDefinitionServiceImpl } from '~/generated/data-axios';
+
+import {} from './actions';
+
+import { PageActions } from './components/PageActions';
 
 /**
  * Name: edemokracia::admin::Debate.closeDebate#Output
@@ -81,22 +59,23 @@ import { usePageRefreshOutputAction } from './actions';
  **/
 export default function AdminDebateClosedebateOutput() {
   const { t } = useTranslation();
-  const { openRangeDialog } = useRangeDialog();
   const { navigate, back } = useJudoNavigation();
+  const { signedIdentifier } = useParams();
+
+  const { openRangeDialog } = useRangeDialog();
+  const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
+  const { locale: l10nLocale } = useL10N();
+
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [editMode, setEditMode] = useState<boolean>(false);
-  const [validation, setValidation] = useState<Map<keyof VoteDefinition, string>>(
-    new Map<keyof VoteDefinition, string>(),
-  );
-  const { signedIdentifier } = useParams();
   const [data, setData] = useState<VoteDefinitionStored>({} as unknown as VoteDefinitionStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof VoteDefinitionStored, any>>(
     {} as unknown as Record<keyof VoteDefinitionStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof VoteDefinitionStored, value: any) => void = useCallback(
     (attributeName: keyof VoteDefinitionStored, value: any) => {
       const dateTypes: string[] = [];
@@ -116,15 +95,19 @@ export default function AdminDebateClosedebateOutput() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
-  const { locale: l10nLocale } = useL10N();
-  const { queryCustomizer } = useAdminDebateClosedebateOutput();
-  const pageRefreshOutputAction = usePageRefreshOutputAction();
+  const [validation, setValidation] = useState<Map<keyof VoteDefinition, string>>(new Map());
 
-  const title: string = t('edemokracia.admin.Debate.closeDebate.Output', { defaultValue: 'Entity View' });
+  const queryCustomizer: VoteDefinitionQueryCustomizer = {
+    _mask: '{}',
+  };
+
+  const title: string = t('VoteDefinitionView', { defaultValue: 'Entity View' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -141,7 +124,7 @@ export default function AdminDebateClosedebateOutput() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -162,7 +145,7 @@ export default function AdminDebateClosedebateOutput() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -175,23 +158,18 @@ export default function AdminDebateClosedebateOutput() {
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
           <Grid
+            className="operation-output-page-data"
             container
             xs={12}
             sm={12}

@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../../components-api';
-import { useL10N } from '../../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,17 +39,16 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../../utilities';
+} from '~/utilities';
 import { AdminVoteDefinitionVoteRatingForm } from './AdminVoteDefinitionVoteRatingForm';
 import {
-  AdminVoteDefinitionQueryCustomizer,
-  RatingVoteInput,
-  AdminVoteDefinitionStored,
-  RatingVoteInputQueryCustomizer,
   AdminVoteDefinition,
+  AdminVoteDefinitionQueryCustomizer,
+  AdminVoteDefinitionStored,
+  RatingVoteInput,
+  RatingVoteInputQueryCustomizer,
   RatingVoteInputStored,
-} from '../../../../../../../generated/data-api';
-
+} from '~/generated/data-api';
 export type AdminVoteDefinitionVoteRatingActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const ADMIN_VOTE_DEFINITION_VOTE_RATING_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY =
@@ -72,16 +71,14 @@ export const useAdminVoteDefinitionVoteRatingAction: AdminVoteDefinitionVoteRati
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Admin.voteDefinitions.View.edemokracia.admin.VoteDefinition.voteRating', {
-    defaultValue: 'VoteRating',
-  });
+  const title: string = t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', { defaultValue: 'VoteRating' });
   const { service: customPostHandler } = useTrackService<AdminVoteDefinitionVoteRatingActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_VOTE_DEFINITION_VOTE_RATING_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );
   const postHandler: AdminVoteDefinitionVoteRatingActionPostHandler | undefined =
     customPostHandler && customPostHandler();
 
-  return async function AdminVoteDefinitionVoteRatingAction(
+  return async function adminVoteDefinitionVoteRatingAction(
     owner: AdminVoteDefinitionStored,
     successCallback: () => void,
   ) {

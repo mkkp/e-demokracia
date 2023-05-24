@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getQueryCustomizers(#application)
+// Path expression: 'data-api/rest/'+#classDataName(#self,"MaskBuilder")+'.ts'
+// Template name: mask.ts.hbs
+// Template file: rest/mask.ts.hbs
+
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   AdminIssueTypeAttributes,
@@ -12,13 +20,17 @@ import {
   AdminCityAttributes,
 } from '../model';
 
+import {} from './AdminIssueAttachmentMaskBuilder';
 import {
   AdminIssueCategorySubcategoriesMaskBuilder,
   AdminIssueCategoryOwnerMaskBuilder,
 } from './AdminIssueCategoryMaskBuilder';
+import { AdminCityDistrictsMaskBuilder } from './AdminCityMaskBuilder';
+import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
 import { AdminCountyCitiesMaskBuilder } from './AdminCountyMaskBuilder';
 import {} from './AdminIssueDebateMaskBuilder';
 import {} from './AdminDistrictMaskBuilder';
+import {} from './AdminIssueTypeMaskBuilder';
 import {
   AdminUserActivityCountiesMaskBuilder,
   AdminUserResidentCountyMaskBuilder,
@@ -27,10 +39,6 @@ import {
   AdminUserActivityDistrictsMaskBuilder,
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
-import {} from './AdminIssueAttachmentMaskBuilder';
-import {} from './AdminIssueTypeMaskBuilder';
-import { AdminCommentCreatedByMaskBuilder } from './AdminCommentMaskBuilder';
-import { AdminCityDistrictsMaskBuilder } from './AdminCityMaskBuilder';
 
 export class AdminIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<AdminIssueAttachmentAttributes>) {

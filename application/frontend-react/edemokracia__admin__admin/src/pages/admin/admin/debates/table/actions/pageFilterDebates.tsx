@@ -2,15 +2,15 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: FilterAction
 
-import { AdminDebateQueryCustomizer } from '../../../../../../generated/data-api';
-import { useFilterDialog } from '../../../../../../components/dialog';
-import type { Filter, FilterOption } from '../../../../../../components-api';
-import { mapAllFiltersToQueryCustomizerProperties } from '../../../../../../utilities';
+import { AdminDebateQueryCustomizer } from '~/generated/data-api';
+import { useFilterDialog } from '~/components/dialog';
+import type { Filter, FilterOption } from '~/components-api';
+import { mapAllFiltersToQueryCustomizerProperties } from '~/utilities';
 
 export type PageFilterDebatesAction = (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<void>;
 

@@ -7,4 +7,3 @@
 // Template file: actor/src/pages/actions/index.tsx.hbs
 export * from './pageDeleteDistricts';
 export * from './pageRefreshDistricts';
-export * from './pageEditDistricts';

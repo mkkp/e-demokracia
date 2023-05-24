@@ -8,6 +8,5 @@
 export * from './pageRefreshCity';
 export * from './districts/rowViewDistricts';
 export * from './districts/rowDeleteDistricts';
-export * from './districts/rowEditDistricts';
 export * from './districts/TableCreateDistrictsForm';
 export * from './districts/tableCreateDistricts';

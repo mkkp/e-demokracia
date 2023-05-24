@@ -15,6 +15,8 @@ export const baseColumnConfig: Partial<GridColDef<any>> = {
 
 export const baseTableConfig: Partial<DataGridProps<any>> = {
   autoHeight: true,
+  sortingOrder: ['desc', 'asc'], // omitting null for now, needs further discussion JNG-4826
+  pageSizeOptions: [10],
 };
 
 export const serverTableConfig: Partial<DataGridProps<any>> = {

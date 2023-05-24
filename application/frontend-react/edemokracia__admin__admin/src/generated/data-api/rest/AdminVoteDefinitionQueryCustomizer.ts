@@ -1,13 +1,21 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getQueryCustomizers(#application)
+// Path expression: 'data-api/rest/'+#classDataName(#self,"QueryCustomizer")+'.ts'
+// Template name: queryCustomizer.ts.hbs
+// Template file: rest/queryCustomizer.ts.hbs
+
 import { QueryCustomizer } from '@judo/data-api-common';
 import { AdminVoteDefinition } from '../model/AdminVoteDefinition';
 
-import { FilterByText } from './FilterByText';
-import { FilterByString } from './FilterByString';
-import { FilterByInteger } from './FilterByInteger';
-import { FilterByVoteStatus } from './FilterByVoteStatus';
 import { FilterByBoolean } from './FilterByBoolean';
-import { FilterByVoteType } from './FilterByVoteType';
+import { FilterByInteger } from './FilterByInteger';
+import { FilterByString } from './FilterByString';
+import { FilterByText } from './FilterByText';
 import { FilterByTimestamp } from './FilterByTimestamp';
+import { FilterByVoteStatus } from './FilterByVoteStatus';
+import { FilterByVoteType } from './FilterByVoteType';
 
 export interface AdminVoteDefinitionQueryCustomizer extends QueryCustomizer<AdminVoteDefinition> {
   title?: Array<FilterByString>;

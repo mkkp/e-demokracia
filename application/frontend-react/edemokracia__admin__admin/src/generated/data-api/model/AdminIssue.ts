@@ -1,15 +1,23 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getClassTypes(#application)
+// Path expression: 'data-api/model/'+#classDataName(#self,"")+'.ts'
+// Template name: class.ts.hbs
+// Template file: model/class.ts.hbs
+
 import { JudoStored } from '@judo/data-api-common';
-import { AdminIssueCategoryStored } from './AdminIssueCategory';
-import { EdemokraciaVoteType } from './EdemokraciaVoteType';
-import { AdminUserStored } from './AdminUser';
-import { AdminIssueAttachmentStored } from './AdminIssueAttachment';
-import { AdminDistrictStored } from './AdminDistrict';
+import { AdminCityStored } from './AdminCity';
 import { AdminCommentStored } from './AdminComment';
 import { AdminCountyStored } from './AdminCounty';
-import { AdminCityStored } from './AdminCity';
-import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
+import { AdminDistrictStored } from './AdminDistrict';
+import { AdminIssueAttachmentStored } from './AdminIssueAttachment';
+import { AdminIssueCategoryStored } from './AdminIssueCategory';
 import { AdminIssueDebateStored } from './AdminIssueDebate';
 import { AdminIssueTypeStored } from './AdminIssueType';
+import { AdminUserStored } from './AdminUser';
+import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
+import { EdemokraciaVoteType } from './EdemokraciaVoteType';
 
 export interface AdminIssue {
   created?: null | Date;

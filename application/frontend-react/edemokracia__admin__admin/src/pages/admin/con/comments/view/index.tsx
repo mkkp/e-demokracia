@@ -14,77 +14,49 @@ import { useEffect, useState, useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { JudoIdentifiable } from '@judo/data-api-common';
+import { mainContainerPadding } from '~/theme';
+
 import {
-  AdminCon,
-  AdminConStored,
   AdminComment,
-  AdminUserStored,
-  AdminUserQueryCustomizer,
-  AdminUser,
   AdminCommentQueryCustomizer,
   AdminCommentStored,
-  AdminUserMaskBuilder,
-} from '../../../../../generated/data-api';
-import { adminConServiceImpl, adminCommentServiceImpl } from '../../../../../generated/data-axios';
-import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminConCommentsView } from './hooks/useAdminConCommentsView';
-import {
-  useAdminCommentVoteDownAction,
-  useLinkViewCreatedByAction,
-  useButtonNavigateVotesAction,
-  useAdminCommentVoteUpAction,
-  usePageRefreshCommentsAction,
-} from './actions';
+  AdminCon,
+  AdminConStored,
+  AdminUser,
+  AdminUserQueryCustomizer,
+  AdminUserStored,
+} from '~/generated/data-api';
+import { adminConServiceImpl, adminCommentServiceImpl } from '~/generated/data-axios';
+
+import { useAdminCommentVoteUpAction, useAdminCommentVoteDownAction, useButtonNavigateVotesAction } from './actions';
+
+import { PageActions } from './components/PageActions';
+import { CreatedByLink } from './components/CreatedByLink';
 
 /**
  * Name: edemokracia::admin::Con.comments#View
@@ -96,16 +68,10 @@ export default function AdminConCommentsView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const AdminCommentVoteDownAction = useAdminCommentVoteDownAction();
-  const linkViewCreatedByAction = useLinkViewCreatedByAction();
-  const buttonNavigateVotesAction = useButtonNavigateVotesAction();
-  const AdminCommentVoteUpAction = useAdminCommentVoteUpAction();
-  const pageRefreshCommentsAction = usePageRefreshCommentsAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const { queryCustomizer } = useAdminConCommentsView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -116,6 +82,7 @@ export default function AdminConCommentsView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCommentStored, any>>(
     {} as unknown as Record<keyof AdminCommentStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminCommentStored, value: any) => void = useCallback(
     (attributeName: keyof AdminCommentStored, value: any) => {
       const dateTypes: string[] = [];
@@ -131,13 +98,23 @@ export default function AdminConCommentsView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminComment, string>>(new Map<keyof AdminComment, string>());
 
-  const title: string = t('edemokracia.admin.Con.comments.View', { defaultValue: 'View / Edit Comment' });
+  const queryCustomizer: AdminCommentQueryCustomizer = {
+    _mask: '{created,comment,upVotes,downVotes,createdBy{representation}}',
+  };
+
+  const adminCommentVoteUpAction = useAdminCommentVoteUpAction();
+  const adminCommentVoteDownAction = useAdminCommentVoteDownAction();
+  const buttonNavigateVotesAction = useButtonNavigateVotesAction();
+
+  const title: string = t('admin.CommentView', { defaultValue: 'View / Edit Comment' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -154,7 +131,7 @@ export default function AdminConCommentsView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -175,7 +152,7 @@ export default function AdminConCommentsView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -188,19 +165,13 @@ export default function AdminConCommentsView() {
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -226,9 +197,7 @@ export default function AdminConCommentsView() {
                           variant="h6"
                           component="h1"
                         >
-                          {t('edemokracia.admin.Con.comments.Comment.View.group.group.Label', {
-                            defaultValue: 'Comment',
-                          })}
+                          {t('admin.CommentView.group.Label', { defaultValue: 'Comment' })}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -277,37 +246,23 @@ export default function AdminConCommentsView() {
                               });
                             }}
                             views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={
-                              t('edemokracia.admin.Con.comments.Comment.View.group.group.created', {
-                                defaultValue: 'Created',
-                              }) as string
-                            }
+                            label={t('admin.CommentView.created', { defaultValue: 'Created' }) as string}
                             value={serviceDateToUiDate(data.created ?? null)}
                             disabled={true || !isFormUpdateable()}
                             onChange={(newValue: Date) => {
-                              setEditMode(true);
                               storeDiff('created', newValue);
                             }}
                           />
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={4.0}>
-                          <AggregationInput
-                            name="createdBy"
-                            id="LinkedemokraciaAdminAdminEdemokraciaAdminConCommentsViewDefaultCommentViewGroupLabelWrapperGroupCreatedBy"
-                            label={
-                              t('edemokracia.admin.Con.comments.Comment.View.group.group.createdBy', {
-                                defaultValue: 'CreatedBy',
-                              }) as string
-                            }
-                            labelList={[data.createdBy?.representation?.toString() ?? '']}
-                            value={data.createdBy}
-                            error={!!validation.get('createdBy')}
-                            helperText={validation.get('createdBy')}
-                            icon={<MdiIcon path="table_rows" />}
+                          <CreatedByLink
+                            ownerData={data}
                             disabled={true || !isFormUpdateable()}
                             editMode={editMode}
-                            onView={async () => linkViewCreatedByAction(data, data?.createdBy!)}
+                            fetchOwnerData={fetchData}
+                            storeDiff={storeDiff}
+                            validation={validation}
                           />
                         </Grid>
 
@@ -316,11 +271,7 @@ export default function AdminConCommentsView() {
                             required
                             name="comment"
                             id="TextAreaedemokraciaAdminAdminEdemokraciaAdminConCommentsViewDefaultCommentViewGroupLabelWrapperGroupComment"
-                            label={
-                              t('edemokracia.admin.Con.comments.Comment.View.group.group.comment', {
-                                defaultValue: 'Comment',
-                              }) as string
-                            }
+                            label={t('admin.CommentView.comment', { defaultValue: 'Comment' }) as string}
                             value={data.comment}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
@@ -329,7 +280,6 @@ export default function AdminConCommentsView() {
                             error={!!validation.get('comment')}
                             helperText={validation.get('comment')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('comment', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -350,14 +300,10 @@ export default function AdminConCommentsView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="thumb-up" />}
                             loadingPosition="start"
-                            onClick={() => AdminCommentVoteUpAction(data, () => fetchData())}
+                            onClick={() => adminCommentVoteUpAction(data, () => fetchData())}
                             disabled={editMode}
                           >
-                            <span>
-                              {t('edemokracia.admin.Con.comments.Comment.View.group.group.voteUp', {
-                                defaultValue: '',
-                              })}
-                            </span>
+                            <span>{t('admin.CommentView.voteUp.ButtonCallOperation', { defaultValue: '' })}</span>
                           </LoadingButton>
                         </Grid>
 
@@ -365,11 +311,7 @@ export default function AdminConCommentsView() {
                           <TextField
                             name="upVotes"
                             id="NumericInputedemokraciaAdminAdminEdemokraciaAdminConCommentsViewDefaultCommentViewGroupLabelWrapperGroupUpVotes"
-                            label={
-                              t('edemokracia.admin.Con.comments.Comment.View.group.group.upVotes', {
-                                defaultValue: '',
-                              }) as string
-                            }
+                            label={t('admin.CommentView.upVotes', { defaultValue: '' }) as string}
                             type="number"
                             value={data.upVotes}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
@@ -377,7 +319,6 @@ export default function AdminConCommentsView() {
                             error={!!validation.get('upVotes')}
                             helperText={validation.get('upVotes')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('upVotes', Number(event.target.value));
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -396,14 +337,10 @@ export default function AdminConCommentsView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="thumb-down" />}
                             loadingPosition="start"
-                            onClick={() => AdminCommentVoteDownAction(data, () => fetchData())}
+                            onClick={() => adminCommentVoteDownAction(data, () => fetchData())}
                             disabled={editMode}
                           >
-                            <span>
-                              {t('edemokracia.admin.Con.comments.Comment.View.group.group.voteDown', {
-                                defaultValue: '',
-                              })}
-                            </span>
+                            <span>{t('admin.CommentView.voteDown.ButtonCallOperation', { defaultValue: '' })}</span>
                           </LoadingButton>
                         </Grid>
 
@@ -411,11 +348,7 @@ export default function AdminConCommentsView() {
                           <TextField
                             name="downVotes"
                             id="NumericInputedemokraciaAdminAdminEdemokraciaAdminConCommentsViewDefaultCommentViewGroupLabelWrapperGroupDownVotes"
-                            label={
-                              t('edemokracia.admin.Con.comments.Comment.View.group.group.downVotes', {
-                                defaultValue: '',
-                              }) as string
-                            }
+                            label={t('admin.CommentView.downVotes', { defaultValue: '' }) as string}
                             type="number"
                             value={data.downVotes}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
@@ -423,7 +356,6 @@ export default function AdminConCommentsView() {
                             error={!!validation.get('downVotes')}
                             helperText={validation.get('downVotes')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('downVotes', Number(event.target.value));
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -442,9 +374,7 @@ export default function AdminConCommentsView() {
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >
-                            {t('edemokracia.admin.Con.comments.Comment.View.group.group.votes', {
-                              defaultValue: 'Votes',
-                            })}
+                            {t('admin.CommentView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
                             <MdiIcon path="arrow-right" />
                           </CollectionAssociationButton>
                         </Grid>

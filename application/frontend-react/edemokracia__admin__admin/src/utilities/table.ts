@@ -13,3 +13,7 @@ export interface PersistedTableData {
   sortModel?: GridSortModel;
   filters?: Filter[];
 }
+
+export interface RefreshableTable {
+  fetchData: () => Promise<void>;
+}

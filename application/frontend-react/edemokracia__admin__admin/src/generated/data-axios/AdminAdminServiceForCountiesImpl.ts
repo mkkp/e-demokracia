@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getAccessRelationsTypes(#application)
+// Path expression: 'data-axios/'+#serviceRelationName(#self)+'Impl.ts'
+// Template name: AccessRelationServiceImpl.ts.hbs
+// Template file: data-axios/AccessRelationServiceImpl.ts.hbs
+
 import { JudoAxiosService } from './JudoAxiosService';
 import { AdminCountyQueryCustomizer, AdminCountyStored, AdminCounty } from '../data-api';
 import { AdminAdminServiceForCounties } from '../data-service';

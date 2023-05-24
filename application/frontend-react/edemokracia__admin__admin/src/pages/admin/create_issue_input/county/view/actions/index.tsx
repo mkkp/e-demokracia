@@ -9,5 +9,4 @@ export * from './pageRefreshCounty';
 export * from './cities/TableCreateCitiesForm';
 export * from './cities/tableCreateCities';
 export * from './cities/rowDeleteCities';
-export * from './cities/rowEditCities';
 export * from './cities/rowViewCities';

@@ -108,6 +108,7 @@
                                         <nodeVersion>${node-version}</nodeVersion>
                                         
                                         <tablePageLimit>${tablePageLimit}</tablePageLimit>
+                                        <defaultLanguage>hu-HU</defaultLanguage>
                                     </templateParameters>
                                     <validateChecksum>${validateChecksum}</validateChecksum>
                                     <contextAccessor>hu.blackbelt.judo.ui.generator.react.StoredVariableHelper</contextAccessor>

@@ -1,6 +1,14 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getClassTypes(#application)
+// Path expression: 'data-api/model/'+#classDataName(#self,"")+'.ts'
+// Template name: class.ts.hbs
+// Template file: model/class.ts.hbs
+
 import { JudoStored } from '@judo/data-api-common';
-import { VoteEntryStored } from './VoteEntry';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
+import { VoteEntryStored } from './VoteEntry';
 
 export interface VoteDefinition {
   title: string;

@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../../components-api';
-import { useL10N } from '../../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,27 +39,25 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../../utilities';
+} from '~/utilities';
 import { AdminDebateCloseDebateForm } from './AdminDebateCloseDebateForm';
 import {
-  CloseDebateInputQueryCustomizer,
-  VoteDefinitionQueryCustomizer,
-  SelectAnswerInputMaskBuilder,
-  SelectAnswerInput,
-  VoteDefinitionStored,
-  SelectAnswerInputQueryCustomizer,
-  EdemokraciaVoteTypeOnCloseDebate,
-  AdminVoteDefinitionStored,
-  SelectAnswerInputStored,
   AdminDebate,
-  AdminVoteDefinition,
-  AdminDebateStored,
-  CloseDebateInputStored,
-  VoteDefinition,
-  CloseDebateInput,
   AdminDebateQueryCustomizer,
-} from '../../../../../../../generated/data-api';
-
+  AdminDebateStored,
+  AdminVoteDefinition,
+  AdminVoteDefinitionStored,
+  CloseDebateInput,
+  CloseDebateInputQueryCustomizer,
+  CloseDebateInputStored,
+  EdemokraciaVoteTypeOnCloseDebate,
+  SelectAnswerInput,
+  SelectAnswerInputQueryCustomizer,
+  SelectAnswerInputStored,
+  VoteDefinition,
+  VoteDefinitionQueryCustomizer,
+  VoteDefinitionStored,
+} from '~/generated/data-api';
 export type AdminDebateCloseDebateActionPostHandler = (
   ownerCallback: () => void,
   result?: VoteDefinitionStored,
@@ -85,15 +83,13 @@ export const useAdminDebateCloseDebateAction: AdminDebateCloseDebateAction = () 
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.VoteDefinition.debate.View.edemokracia.admin.Debate.closeDebate', {
-    defaultValue: 'Close debate',
-  });
+  const title: string = t('admin.DebateView.closeDebate.ButtonCallOperation', { defaultValue: 'Close debate' });
   const { service: customPostHandler } = useTrackService<AdminDebateCloseDebateActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_DEBATE_CLOSE_DEBATE_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );
   const postHandler: AdminDebateCloseDebateActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function AdminDebateCloseDebateAction(owner: AdminDebateStored, successCallback: () => void) {
+  return async function adminDebateCloseDebateAction(owner: AdminDebateStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
       maxWidth: 'lg',

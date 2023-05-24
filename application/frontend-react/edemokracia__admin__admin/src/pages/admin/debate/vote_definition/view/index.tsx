@@ -14,76 +14,53 @@ import { useEffect, useState, useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { JudoIdentifiable } from '@judo/data-api-common';
+import { mainContainerPadding } from '~/theme';
+
 import {
+  AdminDebate,
+  AdminDebateStored,
+  AdminVoteDefinition,
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
-  AdminDebate,
-  EdemokraciaVoteType,
-  AdminVoteDefinition,
-  AdminDebateStored,
   EdemokraciaVoteStatus,
-} from '../../../../../generated/data-api';
-import { adminDebateServiceImpl, adminVoteDefinitionServiceImpl } from '../../../../../generated/data-axios';
-import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminDebateVoteDefinitionView } from './hooks/useAdminDebateVoteDefinitionView';
+  EdemokraciaVoteType,
+} from '~/generated/data-api';
+import { adminDebateServiceImpl, adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
+
 import {
-  usePageRefreshVoteDefinitionAction,
-  useAdminVoteDefinitionVoteRatingAction,
+  useButtonNavigateDebateAction,
+  useAdminVoteDefinitionVoteYesNoAction,
   useAdminVoteDefinitionVoteYesNoAbstainAction,
   useAdminVoteDefinitionVoteSelectAnswerAction,
-  useAdminVoteDefinitionVoteYesNoAction,
-  useButtonNavigateDebateAction,
+  useAdminVoteDefinitionVoteRatingAction,
 } from './actions';
+
+import { PageActions } from './components/PageActions';
 
 /**
  * Name: edemokracia::admin::Debate.voteDefinition#View
@@ -95,17 +72,10 @@ export default function AdminDebateVoteDefinitionView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const pageRefreshVoteDefinitionAction = usePageRefreshVoteDefinitionAction();
-  const AdminVoteDefinitionVoteRatingAction = useAdminVoteDefinitionVoteRatingAction();
-  const AdminVoteDefinitionVoteYesNoAbstainAction = useAdminVoteDefinitionVoteYesNoAbstainAction();
-  const AdminVoteDefinitionVoteSelectAnswerAction = useAdminVoteDefinitionVoteSelectAnswerAction();
-  const AdminVoteDefinitionVoteYesNoAction = useAdminVoteDefinitionVoteYesNoAction();
-  const buttonNavigateDebateAction = useButtonNavigateDebateAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const { queryCustomizer } = useAdminDebateVoteDefinitionView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -116,6 +86,7 @@ export default function AdminDebateVoteDefinitionView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminVoteDefinitionStored, any>>(
     {} as unknown as Record<keyof AdminVoteDefinitionStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminVoteDefinitionStored, value: any) => void = useCallback(
     (attributeName: keyof AdminVoteDefinitionStored, value: any) => {
       const dateTypes: string[] = [];
@@ -135,17 +106,28 @@ export default function AdminDebateVoteDefinitionView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminVoteDefinition, string>>(
     new Map<keyof AdminVoteDefinition, string>(),
   );
 
-  const title: string = t('edemokracia.admin.Debate.voteDefinition.View', {
-    defaultValue: 'View / Edit Vote Definition',
-  });
+  const queryCustomizer: AdminVoteDefinitionQueryCustomizer = {
+    _mask:
+      '{title,closeAt,status,created,description,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType}',
+  };
+
+  const buttonNavigateDebateAction = useButtonNavigateDebateAction();
+  const adminVoteDefinitionVoteYesNoAction = useAdminVoteDefinitionVoteYesNoAction();
+  const adminVoteDefinitionVoteYesNoAbstainAction = useAdminVoteDefinitionVoteYesNoAbstainAction();
+  const adminVoteDefinitionVoteSelectAnswerAction = useAdminVoteDefinitionVoteSelectAnswerAction();
+  const adminVoteDefinitionVoteRatingAction = useAdminVoteDefinitionVoteRatingAction();
+
+  const title: string = t('admin.VoteDefinitionView', { defaultValue: 'View / Edit Vote Definition' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -162,7 +144,7 @@ export default function AdminDebateVoteDefinitionView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -183,7 +165,7 @@ export default function AdminDebateVoteDefinitionView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -196,19 +178,13 @@ export default function AdminDebateVoteDefinitionView() {
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -231,18 +207,13 @@ export default function AdminDebateVoteDefinitionView() {
                         required
                         name="title"
                         id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewGroupTitle"
-                        label={
-                          t('edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.group.title', {
-                            defaultValue: 'Title',
-                          }) as string
-                        }
+                        label={t('admin.VoteDefinitionView.title', { defaultValue: 'Title' }) as string}
                         value={data.title}
                         className={!editMode ? 'JUDO-viewMode' : undefined}
                         disabled={false || !isFormUpdateable()}
                         error={!!validation.get('title')}
                         helperText={validation.get('title')}
                         onChange={(event) => {
-                          setEditMode(true);
                           storeDiff('title', event.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}
@@ -291,15 +262,10 @@ export default function AdminDebateVoteDefinitionView() {
                           });
                         }}
                         views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                        label={
-                          t('edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.group.closeAt', {
-                            defaultValue: 'CloseAt',
-                          }) as string
-                        }
+                        label={t('admin.VoteDefinitionView.closeAt', { defaultValue: 'CloseAt' }) as string}
                         value={serviceDateToUiDate(data.closeAt ?? null)}
                         disabled={false || !isFormUpdateable()}
                         onChange={(newValue: Date) => {
-                          setEditMode(true);
                           storeDiff('closeAt', newValue);
                         }}
                       />
@@ -310,19 +276,14 @@ export default function AdminDebateVoteDefinitionView() {
                         required
                         name="status"
                         id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewGroupStatus"
-                        label={
-                          t('edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.group.status', {
-                            defaultValue: 'Status',
-                          }) as string
-                        }
+                        label={t('admin.VoteDefinitionView.status', { defaultValue: 'Status' }) as string}
                         value={data.status || ''}
                         className={!editMode ? 'JUDO-viewMode' : undefined}
                         disabled={false || !isFormUpdateable()}
                         error={!!validation.get('status')}
                         helperText={validation.get('status')}
                         onChange={(event) => {
-                          setEditMode(true);
-                          storeDiff('status', event.target.value as EdemokraciaVoteStatus);
+                          storeDiff('status', event.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}
                         InputProps={{
@@ -374,9 +335,7 @@ export default function AdminDebateVoteDefinitionView() {
                           })
                         }
                       >
-                        {t('edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.group.debate', {
-                          defaultValue: 'Debate',
-                        })}
+                        {t('admin.VoteDefinitionView.debate.ButtonNavigate', { defaultValue: 'Debate' })}
                         <MdiIcon path="arrow-right" />
                       </AssociationButton>
                     </Grid>
@@ -416,15 +375,10 @@ export default function AdminDebateVoteDefinitionView() {
                           });
                         }}
                         views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                        label={
-                          t('edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.group.created', {
-                            defaultValue: 'Created',
-                          }) as string
-                        }
+                        label={t('admin.VoteDefinitionView.created', { defaultValue: 'Created' }) as string}
                         value={serviceDateToUiDate(data.created ?? null)}
                         disabled={false || !isFormUpdateable()}
                         onChange={(newValue: Date) => {
-                          setEditMode(true);
                           storeDiff('created', newValue);
                         }}
                       />
@@ -435,11 +389,7 @@ export default function AdminDebateVoteDefinitionView() {
                         required
                         name="description"
                         id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewGroupDescription"
-                        label={
-                          t('edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.group.description', {
-                            defaultValue: 'Description',
-                          }) as string
-                        }
+                        label={t('admin.VoteDefinitionView.description', { defaultValue: 'Description' }) as string}
                         value={data.description}
                         className={!editMode ? 'JUDO-viewMode' : undefined}
                         disabled={false || !isFormUpdateable()}
@@ -448,7 +398,6 @@ export default function AdminDebateVoteDefinitionView() {
                         error={!!validation.get('description')}
                         helperText={validation.get('description')}
                         onChange={(event) => {
-                          setEditMode(true);
                           storeDiff('description', event.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}
@@ -473,22 +422,22 @@ export default function AdminDebateVoteDefinitionView() {
                 childTabs={[
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnovote',
-                    name: 'yesnovote',
+                    name: 'admin.VoteDefinitionView.yesnovote',
                     label: 'Yes / No vote',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnoabstainvote',
-                    name: 'yesnoabstainvote',
+                    name: 'admin.VoteDefinitionView.yesnoabstainvote',
                     label: 'Yes / No / Abstain vote',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarSelectanswervote',
-                    name: 'selectanswervote',
+                    name: 'admin.VoteDefinitionView.selectanswervote',
                     label: 'Select answer vote',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarRatingvote',
-                    name: 'ratingvote',
+                    name: 'admin.VoteDefinitionView.ratingvote',
                     label: 'Rating vote',
                   },
                 ]}
@@ -511,14 +460,11 @@ export default function AdminDebateVoteDefinitionView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
-                            onClick={() => AdminVoteDefinitionVoteYesNoAction(data, () => fetchData())}
+                            onClick={() => adminVoteDefinitionVoteYesNoAction(data, () => fetchData())}
                             disabled={!data.isYesNoType || editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.tabBar.yesnovote.yesnovote.voteYesNo',
-                                { defaultValue: 'Vote' },
-                              )}
+                              {t('admin.VoteDefinitionView.voteYesNo.ButtonCallOperation', { defaultValue: 'Vote' })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -545,14 +491,13 @@ export default function AdminDebateVoteDefinitionView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
-                            onClick={() => AdminVoteDefinitionVoteYesNoAbstainAction(data, () => fetchData())}
+                            onClick={() => adminVoteDefinitionVoteYesNoAbstainAction(data, () => fetchData())}
                             disabled={!data.isYesNoAbstainType || editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.tabBar.yesnoabstainvote.yesnoabstainvote.voteYesNoAbstain',
-                                { defaultValue: 'VoteYesNoAbstain' },
-                              )}
+                              {t('admin.VoteDefinitionView.voteYesNoAbstain.ButtonCallOperation', {
+                                defaultValue: 'VoteYesNoAbstain',
+                              })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -579,14 +524,13 @@ export default function AdminDebateVoteDefinitionView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
-                            onClick={() => AdminVoteDefinitionVoteSelectAnswerAction(data, () => fetchData())}
+                            onClick={() => adminVoteDefinitionVoteSelectAnswerAction(data, () => fetchData())}
                             disabled={!data.isSelectAnswerType || editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.tabBar.selectanswervote.selectanswervote.voteSelectAnswer',
-                                { defaultValue: 'VoteSelectAnswer' },
-                              )}
+                              {t('admin.VoteDefinitionView.voteSelectAnswer.ButtonCallOperation', {
+                                defaultValue: 'VoteSelectAnswer',
+                              })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -613,14 +557,13 @@ export default function AdminDebateVoteDefinitionView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="chevron_right" />}
                             loadingPosition="start"
-                            onClick={() => AdminVoteDefinitionVoteRatingAction(data, () => fetchData())}
+                            onClick={() => adminVoteDefinitionVoteRatingAction(data, () => fetchData())}
                             disabled={!data.isRatingType || editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Debate.voteDefinition.VoteDefinition.View.tabBar.ratingvote.ratingvote.voteRating',
-                                { defaultValue: 'VoteRating' },
-                              )}
+                              {t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', {
+                                defaultValue: 'VoteRating',
+                              })}
                             </span>
                           </LoadingButton>
                         </Grid>

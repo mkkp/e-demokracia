@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getQueryCustomizers(#application)
+// Path expression: 'data-api/rest/'+#classDataName(#self,"MaskBuilder")+'.ts'
+// Template name: mask.ts.hbs
+// Template file: rest/mask.ts.hbs
+
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   AdminVoteEntryAttributes,
@@ -6,6 +14,14 @@ import {
   AdminDashboardAttributes,
 } from '../model';
 
+import {
+  AdminDebateIssueMaskBuilder,
+  AdminDebateCommentsMaskBuilder,
+  AdminDebateCreatedByMaskBuilder,
+  AdminDebateConsMaskBuilder,
+  AdminDebateProsMaskBuilder,
+  AdminDebateVoteDefinitionMaskBuilder,
+} from './AdminDebateMaskBuilder';
 import {
   AdminIssueAttachmentsMaskBuilder,
   AdminIssueOwnerMaskBuilder,
@@ -19,14 +35,6 @@ import {
   AdminIssueDistrictMaskBuilder,
 } from './AdminIssueMaskBuilder';
 import {} from './AdminVoteEntryMaskBuilder';
-import {
-  AdminDebateIssueMaskBuilder,
-  AdminDebateCommentsMaskBuilder,
-  AdminDebateCreatedByMaskBuilder,
-  AdminDebateConsMaskBuilder,
-  AdminDebateProsMaskBuilder,
-  AdminDebateVoteDefinitionMaskBuilder,
-} from './AdminDebateMaskBuilder';
 
 export class AdminDashboardIssuesMaskBuilder extends RelationMaskBuilder {
   constructor(

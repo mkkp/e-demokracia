@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: CallOperationAction
@@ -27,11 +27,11 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { useJudoNavigation, MdiIcon } from '../../../../../../../components';
-import { useDialog, useRangeDialog } from '../../../../../../../components/dialog';
-import { baseColumnConfig, toastConfig } from '../../../../../../../config';
-import { FilterOption, FilterType } from '../../../../../../../components-api';
-import { useL10N } from '../../../../../../../l10n/l10n-context';
+import { useJudoNavigation, MdiIcon } from '~/components';
+import { useDialog, useRangeDialog } from '~/components/dialog';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { FilterOption, FilterType } from '~/components-api';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
@@ -39,18 +39,16 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../../utilities';
+} from '~/utilities';
 import {
-  SelectAnswerVoteSelectionQueryCustomizer,
+  AdminVoteDefinition,
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
-  SelectAnswerVoteSelectionStored,
-  AdminVoteDefinition,
-  SelectAnswerVoteSelectionMaskBuilder,
   SelectAnswerVoteSelection,
-} from '../../../../../../../generated/data-api';
-import { adminVoteDefinitionServiceImpl } from '../../../../../../../generated/data-axios';
-
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+} from '~/generated/data-api';
+import { adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
 export type AdminVoteDefinitionVoteSelectAnswerActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const ADMIN_VOTE_DEFINITION_VOTE_SELECT_ANSWER_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY =
@@ -74,17 +72,16 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t(
-    'edemokracia.admin.Admin.voteDefinitions.Table.edemokracia.admin.VoteDefinition.voteSelectAnswer',
-    { defaultValue: 'VoteSelectAnswer' },
-  );
+  const title: string = t('admin.VoteDefinitionTable.voteDefinitions.voteSelectAnswer.ButtonCallOperation', {
+    defaultValue: 'VoteSelectAnswer',
+  });
   const { service: customPostHandler } = useTrackService<AdminVoteDefinitionVoteSelectAnswerActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_VOTE_DEFINITION_VOTE_SELECT_ANSWER_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );
   const postHandler: AdminVoteDefinitionVoteSelectAnswerActionPostHandler | undefined =
     customPostHandler && customPostHandler();
 
-  return async function AdminVoteDefinitionVoteSelectAnswerAction(
+  return async function adminVoteDefinitionVoteSelectAnswerAction(
     owner: AdminVoteDefinitionStored,
     successCallback: () => void,
   ) {
@@ -92,9 +89,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
       {
         ...baseColumnConfig,
         field: 'title',
-        headerName: t('edemokracia.admin.VoteDefinition.voteSelectAnswer.InputvoteSelectAnswer.Entity.Table.title', {
-          defaultValue: 'Title',
-        }) as string,
+        headerName: t('SelectAnswerVoteSelectionTable.input.title', { defaultValue: 'Title' }) as string,
 
         width: 230,
         type: 'string',
@@ -102,10 +97,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
       {
         ...baseColumnConfig,
         field: 'description',
-        headerName: t(
-          'edemokracia.admin.VoteDefinition.voteSelectAnswer.InputvoteSelectAnswer.Entity.Table.description',
-          { defaultValue: 'Description' },
-        ) as string,
+        headerName: t('SelectAnswerVoteSelectionTable.input.description', { defaultValue: 'Description' }) as string,
 
         width: 230,
         type: 'string',
@@ -116,19 +108,14 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
       {
         id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerEntityTableTitleFilter',
         attributeName: 'title',
-        label: t('edemokracia.admin.VoteDefinition.voteSelectAnswer.InputvoteSelectAnswer.Entity.Table.title.Filter', {
-          defaultValue: 'Title',
-        }) as string,
+        label: t('SelectAnswerVoteSelectionTable.input.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
         id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerEntityTableDescriptionFilter',
         attributeName: 'description',
-        label: t(
-          'edemokracia.admin.VoteDefinition.voteSelectAnswer.InputvoteSelectAnswer.Entity.Table.description.Filter',
-          { defaultValue: 'Description' },
-        ) as string,
+        label: t('SelectAnswerVoteSelectionTable.input.description', { defaultValue: 'Description' }) as string,
         filterType: FilterType.string,
       },
     ];

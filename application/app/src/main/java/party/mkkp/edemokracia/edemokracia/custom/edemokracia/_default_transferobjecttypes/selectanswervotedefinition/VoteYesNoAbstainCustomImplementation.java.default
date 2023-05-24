@@ -1,0 +1,28 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    C L A S S
+// ------------------------------
+// Factory expression: #allCustomizableOperations(#model)
+// Path expression: '/'+#emptyCustomOperationOsgiParentPath(#self)+'/'+#emptyCustomOperationOsgiName(#self)+'.java.default'
+// Template name: empty-custom-operation-implementation-osgi.java
+// Template file: osgi/empty-custom-operation-implementation-osgi.java.hbs
+// Debug: false
+// Payload validator: false
+// Optional types: false
+
+package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transferobjecttypes.selectanswervotedefinition;
+
+/**
+ * 
+ * Usage:
+ *  1. Rename this file from VoteYesNoAbstainCustomImplementation.java.default to VoteYesNoAbstainCustomImplementation.java
+ *  2. Implement method
+ *  3. To ignore the generation of VoteYesNoAbstainCustomImplementation.java.default file, put it to .generator-ignore file
+ */
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.selectanswervotedefinition.VoteYesNoAbstain.class)
+public class VoteYesNoAbstainCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.selectanswervotedefinition.VoteYesNoAbstain {
+
+    public void voteYesNoAbstain(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervotedefinition.SelectAnswerVoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.yesnoabstainvoteinput.YesNoAbstainVoteInput input)  {
+        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.selectanswervotedefinition.VoteYesNoAbstainExchangeFunctionsComponent");
+    }
+
+}
