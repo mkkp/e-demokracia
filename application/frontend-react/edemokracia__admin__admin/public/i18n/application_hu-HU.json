@@ -516,7 +516,7 @@
         "enumerations.EdemokraciaAttachmentType.LINK": "Link",
         "enumerations.EdemokraciaAttachmentType.MAP": "Térkép",
         "enumerations.EdemokraciaAttachmentType.VIDEO": "Videó",
-        "enumerations.EdemokraciaCreateArgumentInputType.CON": "Érv",
+        "enumerations.EdemokraciaCreateArgumentInputType.CON": "Ellenérv",
         "enumerations.EdemokraciaCreateArgumentInputType.PRO": "Érv",
         "enumerations.EdemokraciaDebateStatus.ACTIVE": "Aktív",
         "enumerations.EdemokraciaDebateStatus.CLOSED": "Lezárt",
@@ -547,7 +547,7 @@
         "enumerations.EdemokraciaYesNoAbstainVoteValue.YES": "Igen",
         "enumerations.EdemokraciaYesNoVoteValue.NO": "Nem",
         "enumerations.EdemokraciaYesNoVoteValue.YES": "Igen",
-        "menuTree.Basic data": "Basic data",
+        "menuTree.Basic data": "Alapadatok",
         "menuTree.Categories": "Kategóriák",
         "menuTree.Counties": "Vármegyék",
         "menuTree.Dashboard": "Vezérlőpult",
@@ -556,7 +556,7 @@
         "menuTree.Issues": "Ügyek",
         "menuTree.Issues, Debates": "Ügyek, viták",
         "menuTree.Users": "Felhasználók",
-        "menuTree.Vote Entries": "Szavazatok",
+        "menuTree.Vote Entries": "Szavazások",
         "menuTree.Votes": "Szavazatok"
     }
 }
