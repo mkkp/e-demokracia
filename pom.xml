@@ -11,7 +11,7 @@
 
     <properties>
         <judo-channel>develop</judo-channel>
-        <judo-version>1.0.0.20230523_040843_e6d041b5_develop</judo-version>
+        <judo-version>1.0.0.20230525_043427_8bcc0959_develop</judo-version>
 
         <sqlDialects>postgresql,hsqldb</sqlDialects>
         <validateModels>true</validateModels>
@@ -27,17 +27,18 @@
         <judo-dispatcher-api-version-defined>1.0.2</judo-dispatcher-api-version-defined>
         <judo-sdk-common-version-defined>1.0.4.20230330_222100_3c176073_develop</judo-sdk-common-version-defined>
         <mapper-version-defined>1.0.4.20230324_115639_e833341e_develop</mapper-version-defined>
-        <judo-platform-version-defined>2.0.1.20230522_124214_96f3c68f_develop</judo-platform-version-defined>
-        <judo-services-version-defined>1.1.0.20230522_123414_e1463811_develop</judo-services-version-defined>
+        <judo-platform-version-defined>2.0.1.20230525_041503_246ca8be_develop</judo-platform-version-defined>
+        <judo-services-version-defined>1.1.0.20230525_040719_43d413a7_develop</judo-services-version-defined>
         <judo-rdbms-schema-version-defined>1.0.0.20230522_122539_9d7473d4_develop</judo-rdbms-schema-version-defined>
         <judo-tatami-client-version-defined>1.1.0.20230522_123401_25a78069_develop</judo-tatami-client-version-defined>
-        <judo-esm-fullstack-project-template-version-defined>1.0.0.20230522_133305_6d96ecf4_develop</judo-esm-fullstack-project-template-version-defined>
+        <judo-esm-fullstack-project-template-version-defined>1.0.0.20230524_230830_ccbb364d_develop</judo-esm-fullstack-project-template-version-defined>
         <judo-ui-typescript-rest-template-version-defined>1.0.0.20230520_040705_be3c92ef_develop</judo-ui-typescript-rest-template-version-defined>
-        <judo-ui-react-template-version-defined>1.0.0.20230524_104021_0354e61e_develop</judo-ui-react-template-version-defined>
+        <judo-ui-react-template-version-defined>1.0.0.20230525_001308_39a59c47_develop</judo-ui-react-template-version-defined>
         <judo-generator-commons-version-defined>1.0.0.20230516_090341_cd4dbd1a_develop</judo-generator-commons-version-defined>
         <judo-psm-generator-sdk-core-version-defined>1.0.0.20230522_110648_ba11c441_develop</judo-psm-generator-sdk-core-version-defined>
         <frontendType>react</frontendType>
-
+        <defaultLanguage>hu-HU</defaultLanguage>
+		<tablePageLimit>10</tablePageLimit>
     </properties>
 
     <build>
@@ -390,6 +391,8 @@
                                         <judoPsmGeneratorSdkCoreVersion>${judo-psm-generator-sdk-core-version-defined}</judoPsmGeneratorSdkCoreVersion>
 
                                         <frontendType>${frontendType}</frontendType>
+                                        <defaultLanguage>${defaultLanguage}</defaultLanguage>
+                                        <tablePageLimit>${tablePageLimit}</tablePageLimit>
                                     </templateParameters>
                                 </configuration>
                             </execution>
