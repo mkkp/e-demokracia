@@ -18,6 +18,7 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminUserResidentDistrictView } from '~/routes';
 
 export const LINK_VIEW_RESIDENT_DISTRICT_ACTION_INTERFACE_KEY = 'LinkViewResidentDistrictAction';
 export type LinkViewResidentDistrictAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewResidentDistrictAction: LinkViewResidentDistrictAction =
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminDistrictStored) {
-    navigate(`admin/user/resident_district/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminUserResidentDistrictView(entry.__signedIdentifier));
   };
 };

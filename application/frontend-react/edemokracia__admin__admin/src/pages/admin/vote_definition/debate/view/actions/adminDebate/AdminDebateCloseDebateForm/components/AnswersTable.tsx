@@ -123,6 +123,7 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',

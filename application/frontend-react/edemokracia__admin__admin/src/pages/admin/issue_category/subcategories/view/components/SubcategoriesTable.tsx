@@ -118,6 +118,7 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -150,6 +151,7 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
           <GridToolbarContainer>
             <Button
               id="CreateActionedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewEdemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesTableCreate"
+              startIcon={<MdiIcon path="file_document_plus" />}
               variant="text"
               onClick={() =>
                 tableCreateSubcategoriesAction(ownerData, () => {
@@ -158,7 +160,6 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
               }
               disabled={editMode || isOwnerLoading || false || !isFormUpdateable()}
             >
-              <MdiIcon path="file_document_plus" />
               {t('judo.pages.table.create', { defaultValue: 'Create' })}
             </Button>
             <div>{/* Placeholder */}</div>

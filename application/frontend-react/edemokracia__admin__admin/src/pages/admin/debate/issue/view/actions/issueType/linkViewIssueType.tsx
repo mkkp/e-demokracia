@@ -18,6 +18,7 @@ import type {
   AdminIssueTypeStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueIssueTypeView } from '~/routes';
 
 export const LINK_VIEW_ISSUE_TYPE_ACTION_INTERFACE_KEY = 'LinkViewIssueTypeAction';
 export type LinkViewIssueTypeAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewIssueTypeAction: LinkViewIssueTypeAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminIssueTypeStored) {
-    navigate(`admin/issue/issue_type/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueIssueTypeView(entry.__signedIdentifier));
   };
 };

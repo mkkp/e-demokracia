@@ -212,7 +212,7 @@ export default function AdminDashboardCreateuserOutput() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="security" />
+                        <MdiIcon path="security" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityLabel"
                           variant="h6"
@@ -331,7 +331,7 @@ export default function AdminDashboardCreateuserOutput() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="card-account-details" />
+                        <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalLabel"
                           variant="h6"
@@ -496,7 +496,7 @@ export default function AdminDashboardCreateuserOutput() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="map" />
+                        <MdiIcon path="map" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasLabel"
                           variant="h6"

@@ -18,6 +18,7 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
+import { routeToAdminUserVotesTable } from '~/routes';
 
 export const BUTTON_NAVIGATE_VOTES_ACTION_INTERFACE_KEY = 'ButtonNavigateVotesAction';
 export type ButtonNavigateVotesAction = () => (owner: JudoIdentifiable<AdminUser>) => Promise<void>;
@@ -34,6 +35,6 @@ export const useButtonNavigateVotesAction: ButtonNavigateVotesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>) {
-    navigate(`admin/user/votes/table/${owner.__signedIdentifier}`);
+    navigate(routeToAdminUserVotesTable(owner.__signedIdentifier));
   };
 };

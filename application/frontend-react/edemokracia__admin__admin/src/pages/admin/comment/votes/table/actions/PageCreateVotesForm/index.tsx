@@ -45,7 +45,7 @@ import { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
-import { useRangeDialog } from '~/components/dialog';
+import { useDialog, useRangeDialog, OperationFaultDialog } from '~/components/dialog';
 import {
   AggregationInput,
   AssociationButton,
@@ -54,6 +54,7 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
+  isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -67,6 +68,7 @@ import {
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { useL10N } from '~/l10n/l10n-context';
+import { routeToAdminCommentVotesView } from '~/routes';
 
 import {
   AdminComment,
@@ -353,7 +355,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
 
                         if (result) {
                           successCallback();
-                          navigate(`admin/comment/votes/view/${result.__signedIdentifier}`);
+                          navigate(routeToAdminCommentVotesView(result.__signedIdentifier));
                         }
                       }}
                       disabled={isLoading}

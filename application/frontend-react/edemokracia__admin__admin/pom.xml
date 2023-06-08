@@ -26,8 +26,6 @@
         <override-dir>${project.parent.basedir}/generator-overrides</override-dir>
         
         
-        <tablePageLimit>10</tablePageLimit>
-        <defaultLanguage>hu-HU</defaultLanguage>
         <muiLicensePlan>community</muiLicensePlan>
         <appVersion>1.0.0</appVersion>
         
@@ -108,9 +106,6 @@
                                         <appScope>${appScope}</appScope>
                                         <appVersion>${appVersion}</appVersion>
                                         <nodeVersion>${node-version}</nodeVersion>
-
-                                        <defaultLanguage>${defaultLanguage}</defaultLanguage>
-                                        <tablePageLimit>${tablePageLimit}</tablePageLimit>
 
                                         <muiLicensePlan>${muiLicensePlan}</muiLicensePlan>
                                     </templateParameters>

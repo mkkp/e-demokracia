@@ -18,6 +18,7 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueCityView } from '~/routes';
 
 export const LINK_VIEW_CITY_ACTION_INTERFACE_KEY = 'LinkViewCityAction';
 export type LinkViewCityAction = () => (owner: JudoIdentifiable<AdminIssue>, entry: AdminCityStored) => Promise<void>;
@@ -34,6 +35,6 @@ export const useLinkViewCityAction: LinkViewCityAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCityStored) {
-    navigate(`admin/issue/city/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueCityView(entry.__signedIdentifier));
   };
 };

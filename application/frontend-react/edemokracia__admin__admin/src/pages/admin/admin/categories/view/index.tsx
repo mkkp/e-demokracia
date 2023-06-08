@@ -297,7 +297,7 @@ export default function AdminAdminCategoriesView() {
               >
                 <Grid item xs={12} sm={12}>
                   <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <MdiIcon path="file-tree" />
+                    <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
                     <Typography
                       id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesLabel"
                       variant="h6"

@@ -8,7 +8,7 @@
 
 import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
-import { Box, CssBaseline, useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import type { HeroProps, LogoProps } from '../components-api';
 import { theme } from '../theme';
 import { MenuItem } from '../components-api';
@@ -33,7 +33,6 @@ export function Layout({ items, drawerWidth, hero, logo }: LayoutProps) {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      <CssBaseline />
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
         {isSmUp ? null : (
           <Navigator
@@ -57,7 +56,7 @@ export function Layout({ items, drawerWidth, hero, logo }: LayoutProps) {
       <Box id="page-layout-container" sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Header onDrawerToggle={handleDrawerToggle} />
         <Outlet />
-        <Box component="footer" sx={{ p: 2 }}>
+        <Box component="footer" sx={{ p: (theme) => theme.spacing(2) }}>
           <Footer />
         </Box>
       </Box>

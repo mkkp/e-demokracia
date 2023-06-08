@@ -5,10 +5,11 @@
 // Path expression: 'src/theme/extras.ts'
 // Template name: actor/src/theme/extras.ts
 // Template file: actor/src/theme/extras.ts.hbs
+import type { Theme } from '@mui/material';
 
 export const mainContainerPadding = {
-  marginTop: 4,
-  marginBottom: 4,
+  marginTop: (theme: Theme) => theme.spacing(4),
+  marginBottom: (theme: Theme) => theme.spacing(4),
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',

@@ -191,6 +191,7 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -223,17 +224,18 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
           <GridToolbarContainer>
             <Button
               id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories-clear"
+              startIcon={<MdiIcon path="link_off" />}
               variant="text"
               onClick={async () => {
                 storeDiff('categories', []);
               }}
               disabled={isOwnerLoading || false || !isFormUpdateable()}
             >
-              <MdiIcon path="link_off" />
               {t('judo.pages.table.clear', { defaultValue: 'Clear' })}
             </Button>
             <Button
               id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories-add"
+              startIcon={<MdiIcon path="attachment-plus" />}
               variant="text"
               onClick={async () => {
                 const res = await categoriesRangeCall();
@@ -244,7 +246,6 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
               }}
               disabled={isOwnerLoading || false || !isFormUpdateable()}
             >
-              <MdiIcon path="attachment-plus" />
               {t('judo.pages.table.add', { defaultValue: 'Add' })}
             </Button>
             <div>{/* Placeholder */}</div>

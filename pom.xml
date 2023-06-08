@@ -11,31 +11,31 @@
 
     <properties>
         <judo-channel>develop</judo-channel>
-        <judo-version>1.0.0.20230525_043427_8bcc0959_develop</judo-version>
+        <judo-version>1.0.0.20230608_044354_070c2cf0_develop</judo-version>
 
         <sqlDialects>postgresql,hsqldb</sqlDialects>
         <validateModels>true</validateModels>
         <useCache>false</useCache>
 
-        <judo-meta-esm-version-defined>1.2.0.20230516_100400_5445a921_develop</judo-meta-esm-version-defined>
+        <judo-meta-esm-version-defined>1.2.0.20230605_225702_34faa4b8_develop</judo-meta-esm-version-defined>
         <judo-meta-psm-version-defined>1.3.0.20230516_100351_2fb48f5a_develop</judo-meta-psm-version-defined>
-        <judo-meta-ui-version-defined>1.1.0.20230519_135518_72e9fa96_develop</judo-meta-ui-version-defined>
+        <judo-meta-ui-version-defined>1.1.0.20230530_152508_0bc4a2ff_develop</judo-meta-ui-version-defined>
 
-        <judo-tatami-version-defined>1.1.0.20230522_122536_f1174c42_develop</judo-tatami-version-defined>
+        <judo-tatami-version-defined>1.1.0.20230606_042034_0c3f33c1_develop</judo-tatami-version-defined>
         <structured-map-proxy-version-defined>2.0.0.20230330_221859_8a965acd_develop</structured-map-proxy-version-defined>
         <judo-dao-api-version-defined>1.0.4.20230309_120321_78415dc0_develop</judo-dao-api-version-defined>
         <judo-dispatcher-api-version-defined>1.0.2</judo-dispatcher-api-version-defined>
         <judo-sdk-common-version-defined>1.0.4.20230330_222100_3c176073_develop</judo-sdk-common-version-defined>
         <mapper-version-defined>1.0.4.20230324_115639_e833341e_develop</mapper-version-defined>
-        <judo-platform-version-defined>2.0.1.20230525_041503_246ca8be_develop</judo-platform-version-defined>
-        <judo-services-version-defined>1.1.0.20230525_040719_43d413a7_develop</judo-services-version-defined>
+        <judo-platform-version-defined>2.0.1.20230608_041651_9979a30e_develop</judo-platform-version-defined>
+        <judo-services-version-defined>1.1.0.20230607_040728_774173e9_develop</judo-services-version-defined>
         <judo-rdbms-schema-version-defined>1.0.0.20230522_122539_9d7473d4_develop</judo-rdbms-schema-version-defined>
-        <judo-tatami-client-version-defined>1.1.0.20230522_123401_25a78069_develop</judo-tatami-client-version-defined>
-        <judo-esm-fullstack-project-template-version-defined>1.0.0.20230524_230830_ccbb364d_develop</judo-esm-fullstack-project-template-version-defined>
-        <judo-ui-typescript-rest-template-version-defined>1.0.0.20230520_040705_be3c92ef_develop</judo-ui-typescript-rest-template-version-defined>
-        <judo-ui-react-template-version-defined>1.0.0.20230525_001308_39a59c47_develop</judo-ui-react-template-version-defined>
+        <judo-tatami-client-version-defined>1.1.0.20230606_043216_1837c02a_develop</judo-tatami-client-version-defined>
+        <judo-esm-fullstack-project-template-version-defined>1.0.0.20230607_083045_ca4c6387_develop</judo-esm-fullstack-project-template-version-defined>
+        <judo-ui-typescript-rest-template-version-defined>1.0.0.20230531_040719_f83734b6_develop</judo-ui-typescript-rest-template-version-defined>
+        <judo-ui-react-template-version-defined>1.0.0.20230607_084206_3aab5238_develop</judo-ui-react-template-version-defined>
         <judo-generator-commons-version-defined>1.0.0.20230516_090341_cd4dbd1a_develop</judo-generator-commons-version-defined>
-        <judo-psm-generator-sdk-core-version-defined>1.0.0.20230522_110648_ba11c441_develop</judo-psm-generator-sdk-core-version-defined>
+        <judo-psm-generator-sdk-core-version-defined>1.0.0.20230607_141556_5a1e2dc7_develop</judo-psm-generator-sdk-core-version-defined>
         <frontendType>react</frontendType>
         <defaultLanguage>hu-HU</defaultLanguage>
 		<tablePageLimit>10</tablePageLimit>

@@ -12,6 +12,7 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminAdminCountiesView } from '~/routes';
 
 export const ROW_VIEW_COUNTIES_ACTION_INTERFACE_KEY = 'RowViewCountiesAction';
 export type RowViewCountiesAction = () => (entry: AdminCountyStored) => Promise<void>;
@@ -28,6 +29,6 @@ export const useRowViewCountiesAction: RowViewCountiesAction = () => {
   }
 
   return async function (entry: AdminCountyStored) {
-    navigate(`admin/admin/counties/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminAdminCountiesView(entry.__signedIdentifier));
   };
 };

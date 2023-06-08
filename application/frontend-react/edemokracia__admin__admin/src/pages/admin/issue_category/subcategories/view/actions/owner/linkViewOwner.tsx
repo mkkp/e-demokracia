@@ -18,6 +18,7 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueCategoryOwnerView } from '~/routes';
 
 export const LINK_VIEW_OWNER_ACTION_INTERFACE_KEY = 'LinkViewOwnerAction';
 export type LinkViewOwnerAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewOwnerAction: LinkViewOwnerAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssueCategory>, entry: AdminUserStored) {
-    navigate(`admin/issue_category/owner/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueCategoryOwnerView(entry.__signedIdentifier));
   };
 };

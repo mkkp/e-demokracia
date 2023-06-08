@@ -7,6 +7,7 @@
 // Template file: actor/src/config/table.ts.hbs
 
 import type { DataGridProps, GridColDef } from '@mui/x-data-grid';
+import { density } from '../theme';
 
 export const baseColumnConfig: Partial<GridColDef<any>> = {
   groupable: false,
@@ -16,7 +17,9 @@ export const baseColumnConfig: Partial<GridColDef<any>> = {
 export const baseTableConfig: Partial<DataGridProps<any>> = {
   autoHeight: true,
   sortingOrder: ['desc', 'asc'], // omitting null for now, needs further discussion JNG-4826
-  pageSizeOptions: [10],
+  pagination: true, // is false for DataGridPro by default
+  disableColumnFilter: true,
+  density: density.dataGridDensity || 'standard',
 };
 
 export const serverTableConfig: Partial<DataGridProps<any>> = {
@@ -24,12 +27,6 @@ export const serverTableConfig: Partial<DataGridProps<any>> = {
   sortingOrder: ['desc', 'asc'],
   sortingMode: 'server',
   paginationMode: 'server',
-};
-
-export const pageServerTableConfig: Partial<DataGridProps<any>> = {
-  ...serverTableConfig,
-  disableRowSelectionOnClick: true,
-  filterMode: 'server',
 };
 
 export const rangeDialogConfig: { numberOfElements: number } = {

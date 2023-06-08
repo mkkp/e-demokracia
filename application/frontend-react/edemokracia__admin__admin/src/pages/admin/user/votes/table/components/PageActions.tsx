@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import {
@@ -39,6 +40,7 @@ export function PageActions(props: PageActionsProps) {
       <Grid className="page-action" item>
         <Button
           id="page-action-add"
+          startIcon={<MdiIcon path="attachment-plus" />}
           onClick={() =>
             pageAddVotesAction({ __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminUser>, () =>
               fetchData(),
@@ -46,19 +48,25 @@ export function PageActions(props: PageActionsProps) {
           }
           disabled={isLoading}
         >
-          <MdiIcon path="attachment-plus" />
           {t('judo.pages.table.add', { defaultValue: 'Add' })}
         </Button>
       </Grid>
       <Grid className="page-action" item>
-        <Button id="page-action-refresh" onClick={() => pageRefreshVotesAction(() => fetchData())} disabled={isLoading}>
-          <MdiIcon path="refresh" />
+        <LoadingButton
+          loading={isLoading}
+          loadingPosition="start"
+          id="page-action-refresh"
+          startIcon={<MdiIcon path="refresh" />}
+          onClick={() => pageRefreshVotesAction(() => fetchData())}
+          disabled={isLoading}
+        >
           {t('judo.pages.table.refresh', { defaultValue: 'Refresh' })}
-        </Button>
+        </LoadingButton>
       </Grid>
       <Grid className="page-action" item>
         <Button
           id="page-action-clear"
+          startIcon={<MdiIcon path="link_off" />}
           onClick={() =>
             pageClearVotesAction({ __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminUser>, () =>
               fetchData(),
@@ -66,7 +74,6 @@ export function PageActions(props: PageActionsProps) {
           }
           disabled={isLoading}
         >
-          <MdiIcon path="link_off" />
           {t('judo.pages.table.clear', { defaultValue: 'Clear' })}
         </Button>
       </Grid>

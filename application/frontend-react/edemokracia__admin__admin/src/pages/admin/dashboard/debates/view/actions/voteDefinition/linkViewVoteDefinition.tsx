@@ -18,6 +18,7 @@ import type {
   AdminVoteDefinitionStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminDebateVoteDefinitionView } from '~/routes';
 
 export const LINK_VIEW_VOTE_DEFINITION_ACTION_INTERFACE_KEY = 'LinkViewVoteDefinitionAction';
 export type LinkViewVoteDefinitionAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewVoteDefinitionAction: LinkViewVoteDefinitionAction = () 
   }
 
   return async function (owner: JudoIdentifiable<AdminDebate>, entry: AdminVoteDefinitionStored) {
-    navigate(`admin/debate/vote_definition/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminDebateVoteDefinitionView(entry.__signedIdentifier));
   };
 };

@@ -14,23 +14,16 @@ import { huHU as huHUForDatePickers } from '../l10n/@mui/x-date-pickers';
 import { mainContainerPadding } from './extras';
 import { applicationTheme } from './application-theme';
 import { paletteTheme } from './palette';
+import { density } from './density';
 
 const baseTheme = createTheme(
   paletteTheme,
   {
+    spacing: (factor: number) => `${density.spacingMultiplier * factor}rem`,
     typography: {
-      h5: {
-        fontWeight: 500,
-        fontSize: 26,
-        letterSpacing: 0.5,
-      },
-    },
-    shape: {
-      borderRadius: 8,
-    },
-    mixins: {
-      toolbar: {
-        minHeight: 48,
+      button: {
+        fontSize: `${density.fontSize}rem`,
+        textTransform: 'none',
       },
     },
     components: {
@@ -41,65 +34,42 @@ const baseTheme = createTheme(
           },
         },
       },
-      MuiLoadingButton: {
-        defaultProps: {
-          variant: 'contained',
-          size: 'small',
-        },
-        styleOverrides: {
-          root: {
-            textTransform: 'none',
-            borderRadius: '20px 20px 20px 20px',
-            paddingLeft: 15,
-            paddingRight: 15,
-          },
-          contained: {
-            boxShadow: 'none',
-            '&:active': {
-              boxShadow: 'none',
-            },
-          },
-          outlined: {
-            border: '2px solid',
-            fontWeight: 'bold',
-            '&:hover': {
-              border: '2px solid',
-              background: alpha(paletteTheme.palette.primary.main, 0.15),
-            },
-            '&:disabled': {
-              border: '2px solid',
-            },
-          },
-        },
-      },
       MuiButton: {
         defaultProps: {
           variant: 'contained',
-          size: 'small',
+          size: density.buttonSize,
         },
         styleOverrides: {
           root: {
-            textTransform: 'none',
-            borderRadius: '20px 20px 20px 20px',
-            paddingLeft: 15,
-            paddingRight: 15,
+            borderRadius: density.borderRadius,
           },
-          contained: {
-            boxShadow: 'none',
-            '&:active': {
-              boxShadow: 'none',
-            },
+        },
+      },
+      MuiLoadingButton: {
+        defaultProps: {
+          variant: 'contained',
+          size: density.buttonSize,
+        },
+        styleOverrides: {
+          root: {
+            borderRadius: density.borderRadius,
           },
-          outlined: {
-            border: '2px solid',
-            fontWeight: 'bold',
-            '&:hover': {
-              border: '2px solid',
-              background: alpha(paletteTheme.palette.primary.main, 0.15),
-            },
-            '&:disabled': {
-              border: '2px solid',
-            },
+        },
+      },
+      MuiFormControl: {
+        styleOverrides: {
+          root: {
+            margin: 0,
+          },
+        },
+      },
+      MuiInputBase: {
+        defaultProps: {
+          size: density.inputBaseSize,
+        },
+        styleOverrides: {
+          root: {
+            fontSize: `${density.fontSize}rem`,
           },
         },
       },
@@ -108,7 +78,6 @@ const baseTheme = createTheme(
           root: {
             color: paletteTheme.palette.subtitleColor.main,
             fontWeight: 500,
-            fontSize: 16,
             '&.Mui-focused': {
               color: paletteTheme.palette.subtitleColor.main,
             },
@@ -154,16 +123,13 @@ const baseTheme = createTheme(
           root: {
             border: 'none',
           },
-          toolbarContainer: {
-            padding: '8px 8px 4px 8px',
-          },
         },
       },
       MuiPaper: {
         styleOverrides: {
           rounded: {
             boxShadow: '0px 0px 8px 1px rgba(0,0,0,0.05)',
-            borderRadius: 16,
+            borderRadius: density.borderRadius,
           },
         },
       },
@@ -182,12 +148,20 @@ const baseTheme = createTheme(
             padding: paletteTheme.spacing(1),
           },
         },
+        defaultProps: {
+          size: density.buttonSize,
+        },
       },
       MuiTooltip: {
         styleOverrides: {
           tooltip: {
             borderRadius: 4,
           },
+        },
+      },
+      MuiToolbar: {
+        defaultProps: {
+          variant: 'dense',
         },
       },
       MuiDivider: {
@@ -201,16 +175,24 @@ const baseTheme = createTheme(
           },
         },
       },
-      MuiListItemButton: {
+      MuiList: {
+        styleOverrides: {
+          root: {
+            '.MuiListSubheader-root': {
+              color: paletteTheme.palette.subtitleColor.main,
+            },
+          },
+        },
         defaultProps: {
-          disableTouchRipple: true,
+          dense: density.isListDense,
         },
       },
       MuiListItemText: {
         styleOverrides: {
-          primary: {
-            fontSize: 14,
-            fontWeight: paletteTheme.typography.fontWeightMedium,
+          root: {
+            '> span': {
+              fontSize: `${density.fontSize}rem`,
+            },
           },
         },
       },
@@ -220,9 +202,6 @@ const baseTheme = createTheme(
             color: 'inherit',
             minWidth: 'auto',
             marginRight: paletteTheme.spacing(2),
-            '& svg': {
-              fontSize: 20,
-            },
           },
         },
       },
@@ -251,15 +230,6 @@ const baseTheme = createTheme(
           },
         },
       },
-      MuiList: {
-        styleOverrides: {
-          root: {
-            '.MuiListSubheader-root': {
-              color: paletteTheme.palette.subtitleColor.main,
-            },
-          },
-        },
-      },
     },
   },
   huHUForMaterial,
@@ -280,4 +250,4 @@ declare module '@mui/material/styles' {
   }
 }
 
-export { mainContainerPadding, baseTheme, theme };
+export { density, mainContainerPadding, baseTheme, theme };

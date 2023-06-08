@@ -287,6 +287,7 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -310,6 +311,7 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
           <GridToolbarContainer>
             <Button
               id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteEntriesTableEdemokraciaAdminAdminEdemokraciaAdminAdminVoteEntriesPageFilter"
+              startIcon={<MdiIcon path="filter" />}
               variant="text"
               onClick={() => {
                 pageFilterVoteEntriesAction(
@@ -320,7 +322,6 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
               }}
               disabled={isOwnerLoading}
             >
-              <MdiIcon path="filter" />
               {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                 (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
             </Button>

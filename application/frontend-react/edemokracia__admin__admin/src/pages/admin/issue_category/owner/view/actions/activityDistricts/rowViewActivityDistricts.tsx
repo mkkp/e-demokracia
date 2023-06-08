@@ -18,6 +18,7 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminUserActivityDistrictsView } from '~/routes';
 
 export const ROW_VIEW_ACTIVITY_DISTRICTS_ACTION_INTERFACE_KEY = 'RowViewActivityDistrictsAction';
 export type RowViewActivityDistrictsAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewActivityDistrictsAction: RowViewActivityDistrictsAction =
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminDistrictStored) {
-    navigate(`admin/user/activity_districts/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminUserActivityDistrictsView(entry.__signedIdentifier));
   };
 };

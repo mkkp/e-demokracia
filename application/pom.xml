@@ -47,15 +47,15 @@
         <judo-sdk-common-version>1.0.4.20230330_222100_3c176073_develop</judo-sdk-common-version>
         <mapper-version>1.0.4.20230324_115639_e833341e_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0.20230522_122536_f1174c42_develop </judo-tatami-version>
-        <judo-platform-version>2.0.1.20230525_041503_246ca8be_develop</judo-platform-version>
-        <judo-services-version>1.1.0.20230525_040719_43d413a7_develop</judo-services-version>
+        <judo-tatami-version>1.1.0.20230606_042034_0c3f33c1_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20230608_041651_9979a30e_develop</judo-platform-version>
+        <judo-services-version>1.1.0.20230607_040728_774173e9_develop</judo-services-version>
         <judo-rdbms-schema-version>1.0.0.20230522_122539_9d7473d4_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20230522_123401_25a78069_develop</judo-tatami-client-version>
+        <judo-tatami-client-version>1.1.0.20230606_043216_1837c02a_develop</judo-tatami-client-version>
         
-        <judo-meta-ui-version>1.1.0.20230519_135518_72e9fa96_develop</judo-meta-ui-version>
+        <judo-meta-ui-version>1.1.0.20230530_152508_0bc4a2ff_develop</judo-meta-ui-version>
         <judo-meta-psm-version>1.3.0.20230516_100351_2fb48f5a_develop</judo-meta-psm-version>
-        <judo-psm-generator-sdk-core-version>1.0.0.20230522_110648_ba11c441_develop</judo-psm-generator-sdk-core-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20230607_141556_5a1e2dc7_develop</judo-psm-generator-sdk-core-version>
         <!-- End of 'pom.xml.judo-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.properties-definition.fragment.hbs' file -->
@@ -179,14 +179,6 @@
         </plugins>
     </build>
 
-    <modules>
-        <module>sdk</module>
-        <module>internal</module>
-        <module>app</module>
-        <!-- To define create 'pom.xml.extra-modules.fragment.hbs' file -->
-        <!-- End of 'pom.xml.extra-modules.fragment.hbs' -->
-    </modules>
-
     <profiles>
         <profile>
             <id>build-model</id>
@@ -215,6 +207,23 @@
         </profile>
 
         <profile>
+            <id>build-sdk</id>
+            <activation>
+                <property>
+                    <name>!skipSDK</name>
+                </property>
+            </activation>
+
+            <modules>
+                <module>sdk</module>
+                <module>internal</module>
+                <module>app</module>
+                <!-- To define create 'pom.xml.extra-modules.fragment.hbs' file -->
+                <!-- End of 'pom.xml.extra-modules.fragment.hbs' -->
+            </modules>
+        </profile>
+
+        <profile>
             <id>build-frontend-react</id>
             <activation>
                 <property>
@@ -226,6 +235,7 @@
                 <module>frontend-react</module>
             </modules>
         </profile>
+
 
         <profile>
             <id>build-docker</id>

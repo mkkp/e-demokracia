@@ -6,7 +6,7 @@ templates:
   - name: actor/public/logo512.png
     exclude: true
   
-  - name: actor/public/judo-color-logo.png
+  - name: actor/public/mkkp-logo.png
     pathExpression: "'public/mkkp-logo.png'"
     templateName: actor/public/mkkp-logo.png
     applicationBased: true

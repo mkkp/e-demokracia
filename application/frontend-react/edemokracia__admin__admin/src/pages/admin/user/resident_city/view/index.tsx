@@ -241,7 +241,7 @@ export default function AdminUserResidentCityView() {
               >
                 <Grid item xs={12} sm={12}>
                   <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <MdiIcon path="home-city" />
+                    <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
                     <Typography
                       id="LabeledemokraciaAdminAdminEdemokraciaAdminUserResidentCityViewDefaultCityViewDistrictsLabelWrapperDistrictsLabel"
                       variant="h6"

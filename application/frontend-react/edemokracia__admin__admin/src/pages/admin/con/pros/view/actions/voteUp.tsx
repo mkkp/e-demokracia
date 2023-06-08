@@ -33,6 +33,7 @@ import { baseColumnConfig, toastConfig } from '~/config';
 import { FilterOption, FilterType } from '~/components-api';
 import { useL10N } from '~/l10n/l10n-context';
 import {
+  isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -42,6 +43,7 @@ import {
 } from '~/utilities';
 import { AdminCon, AdminConStored, AdminPro, AdminProQueryCustomizer, AdminProStored } from '~/generated/data-api';
 import { adminProServiceImpl, adminConServiceImpl } from '~/generated/data-axios';
+
 export type VoteUpActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const VOTE_UP_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'VoteUpActionPostHandlerHook';
@@ -78,7 +80,7 @@ export const useVoteUpAction: VoteUpAction = () => {
         variant: 'success',
         ...toastConfig.success,
       });
-    } catch (error) {
+    } catch (error: any) {
       handleActionError(error, undefined, owner);
     }
   };

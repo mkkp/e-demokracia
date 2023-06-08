@@ -301,6 +301,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -325,6 +326,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
           <GridToolbarContainer>
             <Button
               id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminAdminDebatesPageFilter"
+              startIcon={<MdiIcon path="filter" />}
               variant="text"
               onClick={() => {
                 pageFilterDebatesAction(
@@ -335,7 +337,6 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
               }}
               disabled={isOwnerLoading}
             >
-              <MdiIcon path="filter" />
               {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                 (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
             </Button>

@@ -18,6 +18,7 @@ import type {
   AdminDistrictStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminCityDistrictsView } from '~/routes';
 
 export const ROW_VIEW_DISTRICTS_ACTION_INTERFACE_KEY = 'RowViewDistrictsAction';
 export type RowViewDistrictsAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewDistrictsAction: RowViewDistrictsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminCity>, entry: AdminDistrictStored) {
-    navigate(`admin/city/districts/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminCityDistrictsView(entry.__signedIdentifier));
   };
 };

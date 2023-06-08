@@ -12,6 +12,7 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminPro, AdminProQueryCustomizer, AdminProStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminProProsView } from '~/routes';
 
 export const ROW_VIEW_PROS_ACTION_INTERFACE_KEY = 'RowViewProsAction';
 export type RowViewProsAction = () => (owner: JudoIdentifiable<AdminPro>, entry: AdminProStored) => Promise<void>;
@@ -28,6 +29,6 @@ export const useRowViewProsAction: RowViewProsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminPro>, entry: AdminProStored) {
-    navigate(`admin/pro/pros/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminProProsView(entry.__signedIdentifier));
   };
 };

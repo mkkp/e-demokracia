@@ -18,6 +18,7 @@ import type {
   AdminSimpleVoteStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminCommentVotesView } from '~/routes';
 
 export const ROW_VIEW_VOTES_ACTION_INTERFACE_KEY = 'RowViewVotesAction';
 export type RowViewVotesAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewVotesAction: RowViewVotesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminComment>, entry: AdminSimpleVoteStored) {
-    navigate(`admin/comment/votes/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminCommentVotesView(entry.__signedIdentifier));
   };
 };

@@ -46,7 +46,7 @@ import { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
-import { useRangeDialog } from '~/components/dialog';
+import { useDialog, useRangeDialog, OperationFaultDialog } from '~/components/dialog';
 import {
   AggregationInput,
   AssociationButton,
@@ -55,6 +55,7 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
+  isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -179,7 +180,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
       if (res) {
         successCallback(res);
       }
-    } catch (error) {
+    } catch (error: any) {
       handleActionError(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
@@ -212,7 +213,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="wechat" />
+                      <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                       <Typography
                         id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebateLabel"
                         variant="h6"
@@ -402,7 +403,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="clipboard-list-outline" />
+                      <MdiIcon path="clipboard-list-outline" sx={{ marginRight: 1 }} />
                       <Typography
                         id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormGroupLabelWrapperGroupLabel"
                         variant="h6"

@@ -18,6 +18,7 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminConCreatedByView } from '~/routes';
 
 export const LINK_VIEW_CREATED_BY_ACTION_INTERFACE_KEY = 'LinkViewCreatedByAction';
 export type LinkViewCreatedByAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewCreatedByAction: LinkViewCreatedByAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminCon>, entry: AdminUserStored) {
-    navigate(`admin/con/created_by/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminConCreatedByView(entry.__signedIdentifier));
   };
 };

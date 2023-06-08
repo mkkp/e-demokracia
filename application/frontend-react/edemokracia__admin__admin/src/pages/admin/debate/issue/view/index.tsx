@@ -236,7 +236,7 @@ export default function AdminDebateIssueView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="clipboard" />
+                        <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewIssueLabelWrapperIssueLabel"
                           variant="h6"
@@ -685,7 +685,7 @@ export default function AdminDebateIssueView() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="wechat" />
+                            <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                             <Typography
                               id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesLabel"
                               variant="h6"

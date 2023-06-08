@@ -33,6 +33,7 @@ import { baseColumnConfig, toastConfig } from '~/config';
 import { FilterOption, FilterType } from '~/components-api';
 import { useL10N } from '~/l10n/l10n-context';
 import {
+  isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -52,6 +53,7 @@ import {
   CreateArgumentInputStored,
   EdemokraciaCreateArgumentInputType,
 } from '~/generated/data-api';
+
 export type CreateSubArgumentActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const CREATE_SUB_ARGUMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'CreateSubArgumentActionPostHandlerHook';

@@ -18,6 +18,7 @@ import type {
   AdminProStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminDebateProsView } from '~/routes';
 
 export const ROW_VIEW_PROS_ACTION_INTERFACE_KEY = 'RowViewProsAction';
 export type RowViewProsAction = () => (owner: JudoIdentifiable<AdminDebate>, entry: AdminProStored) => Promise<void>;
@@ -34,6 +35,6 @@ export const useRowViewProsAction: RowViewProsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminDebate>, entry: AdminProStored) {
-    navigate(`admin/debate/pros/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminDebateProsView(entry.__signedIdentifier));
   };
 };

@@ -18,6 +18,7 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminUserActivityCitiesView } from '~/routes';
 
 export const ROW_VIEW_ACTIVITY_CITIES_ACTION_INTERFACE_KEY = 'RowViewActivityCitiesAction';
 export type RowViewActivityCitiesAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewActivityCitiesAction: RowViewActivityCitiesAction = () =>
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCityStored) {
-    navigate(`admin/user/activity_cities/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminUserActivityCitiesView(entry.__signedIdentifier));
   };
 };

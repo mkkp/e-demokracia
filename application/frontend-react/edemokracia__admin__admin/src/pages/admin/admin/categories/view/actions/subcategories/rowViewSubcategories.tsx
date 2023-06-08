@@ -16,6 +16,7 @@ import type {
   AdminIssueCategoryStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueCategorySubcategoriesView } from '~/routes';
 
 export const ROW_VIEW_SUBCATEGORIES_ACTION_INTERFACE_KEY = 'RowViewSubcategoriesAction';
 export type RowViewSubcategoriesAction = () => (
@@ -35,6 +36,6 @@ export const useRowViewSubcategoriesAction: RowViewSubcategoriesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssueCategory>, entry: AdminIssueCategoryStored) {
-    navigate(`admin/issue_category/subcategories/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueCategorySubcategoriesView(entry.__signedIdentifier));
   };
 };

@@ -20,15 +20,15 @@
     <packaging>pom</packaging>
 
     <properties>
-        <judo-meta-ui-version>1.1.0.20230519_135518_72e9fa96_develop</judo-meta-ui-version>
+        <judo-meta-ui-version>1.1.0.20230530_152508_0bc4a2ff_develop</judo-meta-ui-version>
         <frontend-maven-plugin-version>1.12.1</frontend-maven-plugin-version>
         <ui-model>${basedir}/model/edemokracia-ui.model</ui-model>
 
-        <judo-ui-react-template-version>1.0.0.20230525_001308_39a59c47_develop</judo-ui-react-template-version>
-        <judo-ui-typescript-rest-template-version>1.0.0.20230520_040705_be3c92ef_develop</judo-ui-typescript-rest-template-version>
+        <judo-ui-react-template-version>1.0.0.20230607_084206_3aab5238_develop</judo-ui-react-template-version>
+        <judo-ui-typescript-rest-template-version>1.0.0.20230531_040719_f83734b6_develop</judo-ui-typescript-rest-template-version>
 
-        <node-version>16.15.1</node-version>
-        <pnpm-version>7.13.1</pnpm-version>
+        <node-version>18.16.0</node-version>
+        <pnpm-version>8.6.1</pnpm-version>
 
         <node-install-dir>${maven.multiModuleProjectDirectory}/.nodejs</node-install-dir>
 

@@ -18,6 +18,7 @@ import type {
   AdminDebateStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminDebateConsView } from '~/routes';
 
 export const ROW_VIEW_CONS_ACTION_INTERFACE_KEY = 'RowViewConsAction';
 export type RowViewConsAction = () => (owner: JudoIdentifiable<AdminDebate>, entry: AdminConStored) => Promise<void>;
@@ -34,6 +35,6 @@ export const useRowViewConsAction: RowViewConsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminDebate>, entry: AdminConStored) {
-    navigate(`admin/debate/cons/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminDebateConsView(entry.__signedIdentifier));
   };
 };

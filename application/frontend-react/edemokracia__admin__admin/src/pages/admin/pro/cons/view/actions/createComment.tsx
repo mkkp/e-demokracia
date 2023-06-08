@@ -33,6 +33,7 @@ import { baseColumnConfig, toastConfig } from '~/config';
 import { FilterOption, FilterType } from '~/components-api';
 import { useL10N } from '~/l10n/l10n-context';
 import {
+  isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -51,6 +52,7 @@ import {
   CreateCommentInputQueryCustomizer,
   CreateCommentInputStored,
 } from '~/generated/data-api';
+
 export type CreateCommentActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
 export const CREATE_COMMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'CreateCommentActionPostHandlerHook';

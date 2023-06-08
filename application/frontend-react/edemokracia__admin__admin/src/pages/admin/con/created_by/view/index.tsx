@@ -215,7 +215,7 @@ export default function AdminConCreatedByView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="security" />
+                        <MdiIcon path="security" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityLabel"
                           variant="h6"
@@ -334,7 +334,7 @@ export default function AdminConCreatedByView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="card-account-details" />
+                        <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalLabel"
                           variant="h6"
@@ -499,7 +499,7 @@ export default function AdminConCreatedByView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="map" />
+                        <MdiIcon path="map" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasLabel"
                           variant="h6"

@@ -182,6 +182,7 @@ export const ConsTable = (props: ConsTableProps) => {
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',

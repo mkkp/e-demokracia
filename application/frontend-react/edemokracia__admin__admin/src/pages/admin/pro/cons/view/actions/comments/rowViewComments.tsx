@@ -18,6 +18,7 @@ import type {
   AdminConStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminConCommentsView } from '~/routes';
 
 export const ROW_VIEW_COMMENTS_ACTION_INTERFACE_KEY = 'RowViewCommentsAction';
 export type RowViewCommentsAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewCommentsAction: RowViewCommentsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminCon>, entry: AdminCommentStored) {
-    navigate(`admin/con/comments/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminConCommentsView(entry.__signedIdentifier));
   };
 };

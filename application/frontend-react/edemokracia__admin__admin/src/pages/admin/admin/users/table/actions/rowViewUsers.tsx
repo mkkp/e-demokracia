@@ -12,6 +12,7 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminUser, AdminUserQueryCustomizer, AdminUserStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminAdminUsersView } from '~/routes';
 
 export const ROW_VIEW_USERS_ACTION_INTERFACE_KEY = 'RowViewUsersAction';
 export type RowViewUsersAction = () => (entry: AdminUserStored) => Promise<void>;
@@ -28,6 +29,6 @@ export const useRowViewUsersAction: RowViewUsersAction = () => {
   }
 
   return async function (entry: AdminUserStored) {
-    navigate(`admin/admin/users/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminAdminUsersView(entry.__signedIdentifier));
   };
 };

@@ -18,6 +18,7 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueCategoriesView } from '~/routes';
 
 export const ROW_VIEW_CATEGORIES_ACTION_INTERFACE_KEY = 'RowViewCategoriesAction';
 export type RowViewCategoriesAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewCategoriesAction: RowViewCategoriesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminIssueCategoryStored) {
-    navigate(`admin/issue/categories/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueCategoriesView(entry.__signedIdentifier));
   };
 };

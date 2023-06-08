@@ -44,7 +44,7 @@ import { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
-import { useRangeDialog } from '~/components/dialog';
+import { useDialog, useRangeDialog, OperationFaultDialog } from '~/components/dialog';
 import {
   AggregationInput,
   AssociationButton,
@@ -53,6 +53,7 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
+  isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -170,7 +171,7 @@ export function AdminVoteDefinitionVoteRatingForm({
       await adminVoteDefinitionServiceImpl.voteRating(owner, payloadDiff);
 
       successCallback();
-    } catch (error) {
+    } catch (error: any) {
       handleActionError(error, { setValidation }, data);
     } finally {
       setIsLoading(false);

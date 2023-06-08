@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { MdiIcon } from '~/components';
 import { usePageRefreshVoteDefinitionsAction } from '../actions';
 
@@ -17,14 +18,16 @@ export function PageActions(props: PageActionsProps) {
   return (
     <>
       <Grid className="page-action" item>
-        <Button
+        <LoadingButton
+          loading={isLoading}
+          loadingPosition="start"
           id="page-action-refresh"
+          startIcon={<MdiIcon path="refresh" />}
           onClick={() => pageRefreshVoteDefinitionsAction(() => fetchData())}
           disabled={isLoading}
         >
-          <MdiIcon path="refresh" />
           {t('judo.pages.table.refresh', { defaultValue: 'Refresh' })}
-        </Button>
+        </LoadingButton>
       </Grid>
     </>
   );

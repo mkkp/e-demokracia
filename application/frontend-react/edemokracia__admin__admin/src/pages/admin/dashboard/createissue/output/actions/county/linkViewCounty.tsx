@@ -18,6 +18,7 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueCountyView } from '~/routes';
 
 export const LINK_VIEW_COUNTY_ACTION_INTERFACE_KEY = 'LinkViewCountyAction';
 export type LinkViewCountyAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewCountyAction: LinkViewCountyAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCountyStored) {
-    navigate(`admin/issue/county/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueCountyView(entry.__signedIdentifier));
   };
 };

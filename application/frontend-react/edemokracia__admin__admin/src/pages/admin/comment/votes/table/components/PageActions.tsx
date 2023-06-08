@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import {
@@ -31,6 +32,7 @@ export function PageActions(props: PageActionsProps) {
       <Grid className="page-action" item>
         <Button
           id="page-action-create"
+          startIcon={<MdiIcon path="file_document_plus" />}
           onClick={() =>
             pageCreateVotesAction({ __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminComment>, () =>
               fetchData(),
@@ -38,15 +40,20 @@ export function PageActions(props: PageActionsProps) {
           }
           disabled={isLoading}
         >
-          <MdiIcon path="file_document_plus" />
           {t('judo.pages.table.create', { defaultValue: 'Create' })}
         </Button>
       </Grid>
       <Grid className="page-action" item>
-        <Button id="page-action-refresh" onClick={() => pageRefreshVotesAction(() => fetchData())} disabled={isLoading}>
-          <MdiIcon path="refresh" />
+        <LoadingButton
+          loading={isLoading}
+          loadingPosition="start"
+          id="page-action-refresh"
+          startIcon={<MdiIcon path="refresh" />}
+          onClick={() => pageRefreshVotesAction(() => fetchData())}
+          disabled={isLoading}
+        >
           {t('judo.pages.table.refresh', { defaultValue: 'Refresh' })}
-        </Button>
+        </LoadingButton>
       </Grid>
     </>
   );

@@ -108,6 +108,7 @@ export const DistrictsTable = (props: DistrictsTableProps) => {
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -140,6 +141,7 @@ export const DistrictsTable = (props: DistrictsTableProps) => {
           <GridToolbarContainer>
             <Button
               id="CreateActionedemokraciaAdminAdminEdemokraciaAdminCountyCitiesViewEdemokraciaAdminAdminEdemokraciaAdminCityDistrictsTableCreate"
+              startIcon={<MdiIcon path="file_document_plus" />}
               variant="text"
               onClick={() =>
                 tableCreateDistrictsAction(ownerData, () => {
@@ -148,7 +150,6 @@ export const DistrictsTable = (props: DistrictsTableProps) => {
               }
               disabled={editMode || isOwnerLoading || false || !isFormUpdateable()}
             >
-              <MdiIcon path="file_document_plus" />
               {t('judo.pages.table.create', { defaultValue: 'Create' })}
             </Button>
             <div>{/* Placeholder */}</div>

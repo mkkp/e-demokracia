@@ -56,6 +56,7 @@
         "judo.component.Table.error.add": "Could not add element!",
         "judo.component.Table.error.clear": "Could not clear table!",
         "judo.applications.available_applications": "Available applications",
+        "judo.error.error": "Error",
         "judo.error.internal-server-error": "An internal server error occurred.",
         "judo.error.technical": "Something went wrong. Please contact with the system admins.",
         "judo.error.technical.no-response": "No response received while processing your request. Please contact with the system admins.",
@@ -77,6 +78,15 @@
         "judo.error.validation-failed.MIN_LENGTH_VALIDATION_FAILED": "Value must be at least {{error.details.maxLength}} characters long.",
         "judo.error.validation-failed.PATTERN_VALIDATION_FAILED": "Value does not match the pattern requirements.",
         "judo.error.validation-failed.PRECISION_VALIDATION_FAILED": "Number of digits must not exceed {{error.details.precision}}.",
-        "judo.error.validation-failed.SCALE_VALIDATION_FAILED": "Number of decimals must not exceed {{error.details.scale}}."
+        "judo.error.validation-failed.SCALE_VALIDATION_FAILED": "Number of decimals must not exceed {{error.details.scale}}.",
+        "judo.error.boundary.navigate-to-dashboard": "Navigate to Dashboard",
+        "judo.error.boundary.reload-page": "Reload Page",
+        "judo.error.boundary.header.exception": "Oops! Something went wrong.",
+        "judo.error.boundary.body.exception": "We apologize for the inconvenience. Please try any of the actions below to resolve the issue.",
+        "judo.error.boundary.header.unknown-response-type": "Oops! Something went wrong.",
+        "judo.error.boundary.body.unknown-response-type": "We received an unknown response from the backend services. Please try any of the actions below to resolve the issue.",
+        "judo.error.boundary.body.404": "The page you were trying to access does not exist.",
+        "judo.error.boundary.body.403": "You don't have permission to access this page.",
+        "judo.error.boundary.body.503": "Our services were temporarily unavailable, please try again!"
     }
 }

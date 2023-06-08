@@ -18,6 +18,7 @@ import type {
   AdminCountyStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminCountyCitiesView } from '~/routes';
 
 export const ROW_VIEW_CITIES_ACTION_INTERFACE_KEY = 'RowViewCitiesAction';
 export type RowViewCitiesAction = () => (owner: JudoIdentifiable<AdminCounty>, entry: AdminCityStored) => Promise<void>;
@@ -34,6 +35,6 @@ export const useRowViewCitiesAction: RowViewCitiesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminCounty>, entry: AdminCityStored) {
-    navigate(`admin/county/cities/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminCountyCitiesView(entry.__signedIdentifier));
   };
 };

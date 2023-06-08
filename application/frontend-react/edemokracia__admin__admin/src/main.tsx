@@ -12,18 +12,23 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import '@mdi/font/css/materialdesignicons.css';
 
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import { createHashRouter, RouterProvider } from 'react-router-dom';
 import Pandino from '@pandino/pandino';
 import loaderConfiguration from '@pandino/loader-configuration-dom';
 import { PandinoProvider } from '@pandino/react-hooks';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { AuthProvider } from 'react-oidc-context';
-import { axiosRequestInterceptor, Auth, storeMeta, getUser, appBaseUri } from './auth';
+import { axiosRequestInterceptor, Auth, storeMeta, getUser } from './auth';
 import { applicationCustomizer } from './custom';
+import { theme } from './theme';
+import { L10NProvider } from './l10n/l10n-context';
 import { accessServiceImpl, judoAxiosProvider } from './generated/data-axios';
 import App from './App';
 import { routes } from './routes';
+import { RootErrorBoundary } from './components/RootErrorBoundary';
 
 axios.interceptors.request.use(axiosRequestInterceptor);
 
@@ -54,6 +59,7 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
     {
       path: '/',
       element: <App />,
+      errorElement: <RootErrorBoundary />,
       children: [...routes.map(({ path, element }) => ({ path, element }))],
     },
   ]);
@@ -65,17 +71,24 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
   const oidcConfig = {
     authority: issuer,
     client_id: clientId,
-    redirect_uri: appBaseUri,
+    redirect_uri: window.location.href,
     automaticSilentRenew: true,
   };
 
   root.render(
-    <PandinoProvider ctx={pandino.getBundleContext()}>
-      <AuthProvider {...oidcConfig}>
-        <Auth>
-          <RouterProvider router={router} />
-        </Auth>
-      </AuthProvider>
-    </PandinoProvider>,
+    <StrictMode>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <PandinoProvider ctx={pandino.getBundleContext()}>
+          <L10NProvider>
+            <AuthProvider {...oidcConfig}>
+              <Auth>
+                <RouterProvider router={router} />
+              </Auth>
+            </AuthProvider>
+          </L10NProvider>
+        </PandinoProvider>
+      </ThemeProvider>
+    </StrictMode>,
   );
 })();

@@ -18,6 +18,7 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminUserActivityCountiesView } from '~/routes';
 
 export const ROW_VIEW_ACTIVITY_COUNTIES_ACTION_INTERFACE_KEY = 'RowViewActivityCountiesAction';
 export type RowViewActivityCountiesAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewActivityCountiesAction: RowViewActivityCountiesAction = (
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCountyStored) {
-    navigate(`admin/user/activity_counties/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminUserActivityCountiesView(entry.__signedIdentifier));
   };
 };

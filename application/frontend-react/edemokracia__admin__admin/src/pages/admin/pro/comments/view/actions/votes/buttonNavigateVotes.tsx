@@ -18,6 +18,7 @@ import {
   AdminSimpleVoteQueryCustomizer,
   AdminSimpleVoteStored,
 } from '~/generated/data-api';
+import { routeToAdminCommentVotesTable } from '~/routes';
 
 export const BUTTON_NAVIGATE_VOTES_ACTION_INTERFACE_KEY = 'ButtonNavigateVotesAction';
 export type ButtonNavigateVotesAction = () => (owner: JudoIdentifiable<AdminComment>) => Promise<void>;
@@ -34,6 +35,6 @@ export const useButtonNavigateVotesAction: ButtonNavigateVotesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminComment>) {
-    navigate(`admin/comment/votes/table/${owner.__signedIdentifier}`);
+    navigate(routeToAdminCommentVotesTable(owner.__signedIdentifier));
   };
 };

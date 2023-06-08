@@ -18,6 +18,7 @@ import {
   AdminVoteDefinition,
   AdminVoteDefinitionStored,
 } from '~/generated/data-api';
+import { routeToAdminVoteDefinitionDebateView } from '~/routes';
 
 export const BUTTON_NAVIGATE_DEBATE_ACTION_INTERFACE_KEY = 'ButtonNavigateDebateAction';
 export type ButtonNavigateDebateAction = () => (
@@ -37,6 +38,6 @@ export const useButtonNavigateDebateAction: ButtonNavigateDebateAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminVoteDefinition>, target: JudoIdentifiable<AdminDebate>) {
-    navigate(`admin/vote_definition/debate/view/${target.__signedIdentifier}`);
+    navigate(routeToAdminVoteDefinitionDebateView(target.__signedIdentifier));
   };
 };

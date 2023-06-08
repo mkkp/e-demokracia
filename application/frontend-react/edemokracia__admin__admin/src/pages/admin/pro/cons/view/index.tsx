@@ -250,7 +250,7 @@ export default function AdminProConsView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="chat-minus" />
+                        <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConLabel"
                           variant="h6"
@@ -537,7 +537,7 @@ export default function AdminProConsView() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="chat-plus" />
+                            <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                             <Typography
                               id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
                               variant="h6"
@@ -580,7 +580,7 @@ export default function AdminProConsView() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="chat-minus" />
+                            <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                             <Typography
                               id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
                               variant="h6"

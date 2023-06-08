@@ -9,8 +9,9 @@
 import { Breadcrumbs, Typography, Link } from '@mui/material';
 import { useState, useContext, createContext, useMemo, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
 import type { To } from 'react-router-dom';
+import { routeToDashboard } from '~/routes';
 import { MdiIcon } from './MdiIcon';
 import { StackableDialogProvider } from './dialog/StackableDialogProvider';
 
@@ -21,8 +22,8 @@ interface BreadcrumbProviderProps {
 export type JudoNavigationSetTitle = (pageTitle: string) => void;
 
 interface JudoNavigationProviderContext {
-  clearNavigate: (to: To, signedId?: string) => void;
-  navigate: (to: To, signedId?: string) => void;
+  clearNavigate: (to: To) => void;
+  navigate: (to: To) => void;
   back: () => void;
   isBackDisabled: boolean;
   setTitle: JudoNavigationSetTitle;
@@ -96,7 +97,7 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
         });
 
         if (triggerNavigation) {
-          navigate('/');
+          navigate(routeToDashboard());
         }
       }
     },
@@ -104,31 +105,27 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
   );
 
   const judoNavigationContext = {
-    clearNavigate: (to: To, signedId?: string) => {
-      const target = signedId ? to.toString().replace(':signedIdentifier', signedId) : to;
-
+    clearNavigate: (to: To) => {
       setBreadcrumbItems([]);
       setNextBreadcrumbItem({
-        key: '0.' + target.toString(),
-        path: target,
+        key: '0.' + to.toString(),
+        path: to,
       });
 
-      navigate(target);
+      navigate(to);
     },
-    navigate: (to: To, signedId?: string) => {
-      const target = signedId ? to.toString().replace(':signedIdentifier', signedId) : to;
-
+    navigate: (to: To) => {
       if (nextBreadcrumbItem.label === null) {
         console.warn('Page title has not been set!');
       }
 
       setBreadcrumbItems([...breadcrumbItems, nextBreadcrumbItem]);
       setNextBreadcrumbItem({
-        key: breadcrumbItems.length + '.' + target.toString(),
-        path: target,
+        key: breadcrumbItems.length + '.' + to.toString(),
+        path: to,
       });
 
-      navigate(target);
+      navigate(to);
     },
     back: () => {
       breadCrumbBack(true);
@@ -155,7 +152,7 @@ export const CustomBreadcrumb = () => {
 
   return (
     <Breadcrumbs id="application-breadcrumb" maxItems={2} separator=">">
-      <Link href="">
+      <Link component={RouterLink} to={routeToDashboard()}>
         <MdiIcon path="home" />
       </Link>
       {breadcrumbItems.map(({ label, key }, index) => {

@@ -12,6 +12,7 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminIssue, AdminIssueQueryCustomizer, AdminIssueStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminAdminIssuesView } from '~/routes';
 
 export const ROW_VIEW_ISSUES_ACTION_INTERFACE_KEY = 'RowViewIssuesAction';
 export type RowViewIssuesAction = () => (entry: AdminIssueStored) => Promise<void>;
@@ -28,6 +29,6 @@ export const useRowViewIssuesAction: RowViewIssuesAction = () => {
   }
 
   return async function (entry: AdminIssueStored) {
-    navigate(`admin/admin/issues/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminAdminIssuesView(entry.__signedIdentifier));
   };
 };

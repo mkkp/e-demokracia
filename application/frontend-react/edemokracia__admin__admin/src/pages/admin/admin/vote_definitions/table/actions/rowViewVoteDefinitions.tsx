@@ -16,6 +16,7 @@ import type {
   AdminVoteDefinitionStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminAdminVoteDefinitionsView } from '~/routes';
 
 export const ROW_VIEW_VOTE_DEFINITIONS_ACTION_INTERFACE_KEY = 'RowViewVoteDefinitionsAction';
 export type RowViewVoteDefinitionsAction = () => (entry: AdminVoteDefinitionStored) => Promise<void>;
@@ -32,6 +33,6 @@ export const useRowViewVoteDefinitionsAction: RowViewVoteDefinitionsAction = () 
   }
 
   return async function (entry: AdminVoteDefinitionStored) {
-    navigate(`admin/admin/vote_definitions/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminAdminVoteDefinitionsView(entry.__signedIdentifier));
   };
 };

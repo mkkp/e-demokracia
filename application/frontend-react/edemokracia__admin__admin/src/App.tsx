@@ -7,11 +7,9 @@
 // Template file: actor/src/App.tsx.hbs
 
 import { useEffect, useState } from 'react';
-import { IconButton, ThemeProvider } from '@mui/material';
+import { IconButton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { SnackbarProvider, closeSnackbar } from 'notistack';
-import { L10NProvider } from './l10n/l10n-context';
-import { theme } from './theme';
 import { BreadcrumbProvider, MdiIcon } from './components';
 import { DialogProvider } from './components/dialog';
 import { Layout } from './layout';
@@ -25,30 +23,26 @@ function App() {
   const logoProps = useLogoProps();
 
   return (
-    <L10NProvider>
-      <ThemeProvider theme={theme}>
-        <PrincipalProvider>
-          <SnackbarProvider
-            maxSnack={3}
-            action={(snackbarId) => (
-              <IconButton
-                className="close-error-snackbar"
-                style={{ color: '#fff' }}
-                onClick={() => closeSnackbar(snackbarId)}
-              >
-                <MdiIcon path="close" />
-              </IconButton>
-            )}
+    <PrincipalProvider>
+      <SnackbarProvider
+        maxSnack={3}
+        action={(snackbarId) => (
+          <IconButton
+            className="close-error-snackbar"
+            style={{ color: '#fff' }}
+            onClick={() => closeSnackbar(snackbarId)}
           >
-            <DialogProvider>
-              <BreadcrumbProvider>
-                <Layout items={menuItems} drawerWidth={drawerWidth} logo={logoProps} hero={heroProps} />
-              </BreadcrumbProvider>
-            </DialogProvider>
-          </SnackbarProvider>
-        </PrincipalProvider>
-      </ThemeProvider>
-    </L10NProvider>
+            <MdiIcon path="close" />
+          </IconButton>
+        )}
+      >
+        <DialogProvider>
+          <BreadcrumbProvider>
+            <Layout items={menuItems} drawerWidth={drawerWidth} logo={logoProps} hero={heroProps} />
+          </BreadcrumbProvider>
+        </DialogProvider>
+      </SnackbarProvider>
+    </PrincipalProvider>
   );
 }
 

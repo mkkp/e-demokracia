@@ -216,7 +216,7 @@ export default function AdminCreateIssueInputCountyView() {
               >
                 <Grid item xs={12} sm={12}>
                   <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <MdiIcon path="city" />
+                    <MdiIcon path="city" sx={{ marginRight: 1 }} />
                     <Typography
                       id="LabeledemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCountyViewDefaultCountyViewCitiesLabelWrapperCitiesLabel"
                       variant="h6"

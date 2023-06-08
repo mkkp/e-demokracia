@@ -179,6 +179,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',

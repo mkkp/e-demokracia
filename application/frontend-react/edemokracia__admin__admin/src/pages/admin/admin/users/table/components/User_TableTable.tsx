@@ -317,6 +317,7 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -341,6 +342,7 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
           <GridToolbarContainer>
             <Button
               id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminUsersTableEdemokraciaAdminAdminEdemokraciaAdminAdminUsersPageFilter"
+              startIcon={<MdiIcon path="filter" />}
               variant="text"
               onClick={() => {
                 pageFilterUsersAction(
@@ -351,7 +353,6 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
               }}
               disabled={isOwnerLoading}
             >
-              <MdiIcon path="filter" />
               {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                 (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
             </Button>

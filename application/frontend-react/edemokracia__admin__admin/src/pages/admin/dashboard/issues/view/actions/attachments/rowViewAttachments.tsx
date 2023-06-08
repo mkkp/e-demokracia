@@ -18,6 +18,7 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueAttachmentsView } from '~/routes';
 
 export const ROW_VIEW_ATTACHMENTS_ACTION_INTERFACE_KEY = 'RowViewAttachmentsAction';
 export type RowViewAttachmentsAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewAttachmentsAction: RowViewAttachmentsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminIssueAttachmentStored) {
-    navigate(`admin/issue/attachments/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueAttachmentsView(entry.__signedIdentifier));
   };
 };

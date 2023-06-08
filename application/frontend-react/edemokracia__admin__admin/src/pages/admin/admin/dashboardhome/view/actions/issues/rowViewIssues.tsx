@@ -18,6 +18,7 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { routeToAdminDashboardIssuesView } from '~/routes';
 
 export const ROW_VIEW_ISSUES_ACTION_INTERFACE_KEY = 'RowViewIssuesAction';
 export type RowViewIssuesAction = () => (
@@ -37,6 +38,6 @@ export const useRowViewIssuesAction: RowViewIssuesAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminDashboard>, entry: AdminIssueStored) {
-    navigate(`admin/dashboard/issues/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminDashboardIssuesView(entry.__signedIdentifier));
   };
 };

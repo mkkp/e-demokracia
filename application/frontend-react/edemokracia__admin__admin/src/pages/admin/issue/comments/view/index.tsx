@@ -191,7 +191,7 @@ export default function AdminIssueCommentsView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="comment-text-multiple" />
+                        <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminIssueCommentsViewDefaultCommentViewGroupLabelWrapperGroupLabel"
                           variant="h6"

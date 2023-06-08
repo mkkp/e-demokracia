@@ -196,6 +196,7 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -220,6 +221,7 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
           <GridToolbarContainer>
             <Button
               id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCountiesPageFilter"
+              startIcon={<MdiIcon path="filter" />}
               variant="text"
               onClick={() => {
                 pageFilterCountiesAction(
@@ -230,7 +232,6 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
               }}
               disabled={isOwnerLoading}
             >
-              <MdiIcon path="filter" />
               {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                 (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
             </Button>

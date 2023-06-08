@@ -179,6 +179,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -211,6 +212,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
           <GridToolbarContainer>
             <Button
               id="CreateActionedemokraciaAdminAdminEdemokraciaAdminDebateIssueViewEdemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsTableCreate"
+              startIcon={<MdiIcon path="file_document_plus" />}
               variant="text"
               onClick={() =>
                 tableCreateAttachmentsAction(ownerData, () => {
@@ -219,7 +221,6 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
               }
               disabled={editMode || isOwnerLoading || false || !isFormUpdateable()}
             >
-              <MdiIcon path="file_document_plus" />
               {t('judo.pages.table.create', { defaultValue: 'Create' })}
             </Button>
             <div>{/* Placeholder */}</div>

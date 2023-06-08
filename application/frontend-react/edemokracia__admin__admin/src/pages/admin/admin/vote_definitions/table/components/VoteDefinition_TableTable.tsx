@@ -393,6 +393,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
   return (
     <DataGrid
       {...baseTableConfig}
+      pageSizeOptions={[10]}
       sx={{
         // overflow: 'hidden',
         display: 'grid',
@@ -419,6 +420,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
           <GridToolbarContainer>
             <Button
               id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsPageFilter"
+              startIcon={<MdiIcon path="filter" />}
               variant="text"
               onClick={() => {
                 pageFilterVoteDefinitionsAction(
@@ -429,7 +431,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
               }}
               disabled={isOwnerLoading}
             >
-              <MdiIcon path="filter" />
               {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                 (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
             </Button>

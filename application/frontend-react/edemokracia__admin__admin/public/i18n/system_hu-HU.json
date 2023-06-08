@@ -56,6 +56,7 @@
         "judo.component.Table.error.add": "Nem sikerült hozzáadni a kiválasztott elemet!",
         "judo.component.Table.error.claer": "Nem sikerült kiüríteni a táblát!",
         "judo.applications.available_applications": "Választható alkalmazások",
+        "judo.error.error": "Hiba",
         "judo.error.internal-server-error": "Belső alkalmazás hiba történt",
         "judo.error.technical": "Azonosítatlan hiba történt. Kérjük lépjen kapcsolatba a rendszer üzemeltetőivel!",
         "judo.error.technical.no-response": "Nem érkezett válasz a műveletre. Kérjük lépjen kapcsolatba a rendszer üzemeltetőivel!",
@@ -77,6 +78,15 @@
         "judo.error.validation-failed.MIN_LENGTH_VALIDATION_FAILED": "Az érték legalább {{error.details.maxLength}} karakter hosszú kell legyen.",
         "judo.error.validation-failed.PATTERN_VALIDATION_FAILED": "Az érték nem felel meg a formai követelményeknek.",
         "judo.error.validation-failed.PRECISION_VALIDATION_FAILED": "A szám nem lehet hosszabb, mint {{error.details.precision}}.",
-        "judo.error.validation-failed.SCALE_VALIDATION_FAILED": "A tizedes jegyek száma nem haladhatja meg a {{error.details.scale}}-t."
+        "judo.error.validation-failed.SCALE_VALIDATION_FAILED": "A tizedes jegyek száma nem haladhatja meg a {{error.details.scale}}-t.",
+        "judo.error.boundary.navigate-to-dashboard": "Ugrás a kezdőlapra",
+        "judo.error.boundary.reload-page": "Képernyő frissítése",
+        "judo.error.boundary.header.exception": "Hoppá! Hiba történt.",
+        "judo.error.boundary.body.exception": "Elnézést kérünk a kellemetlenségért. Kérjük, próbálja meg az alábbi műveletek bármelyikét a probléma megoldásához.",
+        "judo.error.boundary.header.unknown-response-type": "Hoppá! Hiba történt.",
+        "judo.error.boundary.body.unknown-response-type": "Ismeretlen választ kaptunk a háttérszolgáltatásoktól. Kérjük, próbálja meg az alábbi műveletek bármelyikét a probléma megoldásához.",
+        "judo.error.boundary.body.404": "A keresett oldal nem található.",
+        "judo.error.boundary.body.403": "Nincs engedélye az oldal eléréséhez.",
+        "judo.error.boundary.body.503": "Szolgáltatásaink átmenetileg nem voltak elérhetőek, kérjük, próbálja újra!"
     }
 }
