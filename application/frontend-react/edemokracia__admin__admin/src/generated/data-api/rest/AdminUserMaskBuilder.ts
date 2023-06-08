@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getQueryCustomizers(#application)
+// Path expression: 'data-api/rest/'+#classDataName(#self,"MaskBuilder")+'.ts'
+// Template name: mask.ts.hbs
+// Template file: rest/mask.ts.hbs
+
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   AdminDistrictAttributes,
@@ -8,8 +16,8 @@ import {
 } from '../model';
 
 import { AdminCityDistrictsMaskBuilder } from './AdminCityMaskBuilder';
-import {} from './AdminDistrictMaskBuilder';
 import { AdminCountyCitiesMaskBuilder } from './AdminCountyMaskBuilder';
+import {} from './AdminDistrictMaskBuilder';
 
 export class AdminUserActivityCountiesMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<AdminCountyAttributes | AdminCountyCitiesMaskBuilder>) {

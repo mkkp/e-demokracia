@@ -11,5 +11,6 @@ export * from './DialogProvider';
 export * from './FilterDialog';
 export * from './hooks';
 export * from './PageDialog';
+export * from './OperationFaultDialog';
 export * from './RangeDialog';
 export * from './StackableDialogProvider';

@@ -6,5 +6,4 @@
 // Template name: actor/src/pages/actions/index.tsx
 // Template file: actor/src/pages/actions/index.tsx.hbs
 export * from './pageRefreshVotes';
-export * from './pageEditVotes';
 export * from './pageDeleteVotes';

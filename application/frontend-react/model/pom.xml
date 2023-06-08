@@ -30,15 +30,10 @@
                         </goals>
                         <configuration>
                             <esm>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-esm.model</esm>
-                            <ignoreUi2FlutterClient>true</ignoreUi2FlutterClient>
                             <destination>${basedir}</destination>
+                            <validateModels>false</validateModels>
                             <saveModels>true</saveModels>
-                            <layoutDefinitions>
-                                <layoutDefinition>
-                                    <name>desktop</name>
-                                    <defaultLayout>true</defaultLayout>
-                                </layoutDefinition>
-                            </layoutDefinitions>
+                            <useCache>${useCache}</useCache>
                         </configuration>
                     </execution>
                 </executions>

@@ -6,6 +6,7 @@
 // Template name: actor/src/components/MdiIcon.tsx
 // Template file: actor/src/components/MdiIcon.tsx.hbs
 
+import { Box } from '@mui/material';
 import { mapIcon, mapMimeTypeIcon } from '../utilities/icons';
 
 export interface MdiIconProps {
@@ -18,21 +19,26 @@ export interface MdiIconProps {
     type: string;
     subType?: string;
   };
+  sx?: any;
 }
 
 export const MdiIcon = (props: MdiIconProps) => {
-  const { path, rotate, flip, spin, color, mimeType } = props;
+  const { path, rotate, flip, spin, color, mimeType, sx } = props;
   const mappedPath = mimeType ? mapMimeTypeIcon(mimeType.type, mimeType.subType, mapIcon(path)) : mapIcon(path);
   const style = {
     color,
-    width: '1.5rem',
+    width: '1rem',
     fontSize: 'large',
-    height: '1.5rem',
-    lineHeight: '1.5rem',
+    height: '1rem',
+    lineHeight: '1rem',
   };
   const className = `mdi mdi-${mappedPath.replace(/_/g, '-').replace(/ /g, '')} ${
     rotate ? `mdi-rotate-${rotate}` : ''
   } ${flip ? `mdi-flip-${flip}` : ''} ${spin ? 'mdi-spin' : ''}`.trim();
 
-  return <span className={className} style={style}></span>;
+  return (
+    <Box sx={{ display: 'flex', ...(sx || {}) }}>
+      <span className={className} style={style}></span>
+    </Box>
+  );
 };

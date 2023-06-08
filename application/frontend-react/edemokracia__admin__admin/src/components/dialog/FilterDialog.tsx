@@ -133,7 +133,7 @@ const FilterOperator = ({ filter, operatorId, valueId, setFilterOperator }: Filt
   );
 };
 
-const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
+const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
   if (filter.filterOption.filterType === FilterType.enumeration && !exists(filter.filterOption.enumValues)) {
     throw new Error(`Missing enumValues from FilterOptions of "${filter.filterOption.attributeName}"`);
   }
@@ -145,6 +145,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.boolean:
             return (
               <FormControlLabel
+                className={valueId}
                 control={
                   <Checkbox
                     checked={!!filter.filterBy.value}
@@ -157,6 +158,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.date:
             return (
               <DatePicker
+                className={valueId}
                 label={filter.filterOption.attributeName}
                 value={filter.filterBy.value ?? null}
                 views={['year', 'month', 'day']}
@@ -177,6 +179,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.dateTime:
             return (
               <DateTimePicker
+                className={valueId}
                 label={filter.filterOption.attributeName}
                 value={filter.filterBy.value ?? null}
                 views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
@@ -197,6 +200,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           // case FilterType.time:
           //   return (
           //     <TextField
+          //       className={valueId}
           //       label={filter.filterOption.attributeName}
           //       value={filter.filterBy.value}
           //       onChange={(event) => setFilterValue(filter, event.target.value)}
@@ -212,6 +216,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.enumeration:
             return (
               <TextField
+                className={valueId}
                 label={filter.filterOption.attributeName}
                 value={filter.filterBy.value}
                 select
@@ -227,6 +232,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.numeric:
             return (
               <TextField
+                className={valueId}
                 label={filter.filterOption.attributeName}
                 type="number"
                 value={filter.filterBy.value}
@@ -243,6 +249,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.string:
             return (
               <TextField
+                className={valueId}
                 label={filter.filterOption.attributeName}
                 value={filter.filterBy.value}
                 onChange={(event) => setFilterValue(filter, event.target.value)}
@@ -258,6 +265,7 @@ const FilterInput = ({ filter, setFilterValue }: FilterInputProps) => {
           case FilterType.trinaryLogic:
             return (
               <TrinaryLogicCombobox
+                className={valueId}
                 label={filter.filterOption.attributeName}
                 value={filter.filterBy.value}
                 onChange={(value: any) => setFilterValue(filter, value)}
@@ -427,7 +435,9 @@ export const FilterDialog = ({ id, filters, filterOptions, resolve, open, handle
                           setTempFilters((prevTempFilters) => [
                             ...prevTempFilters,
                             {
-                              id: filterOption.id,
+                              id:
+                                filterOption.id +
+                                prevTempFilters.filter((e) => e.filterOption.label == filterOption.label).length,
                               operationId: `${filterOption.id}-operation`,
                               valueId: `${filterOption.id}-value`,
                               filterOption: {

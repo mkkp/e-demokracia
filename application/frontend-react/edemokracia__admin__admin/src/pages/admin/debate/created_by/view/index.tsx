@@ -28,96 +28,60 @@ import {
   Typography,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridToolbarContainer,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
-import {
-  AdminCityQueryCustomizer,
-  AdminUserStored,
-  AdminUserQueryCustomizer,
-  AdminCountyQueryCustomizer,
-  AdminDistrictStored,
-  AdminCounty,
-  AdminCity,
-  AdminDistrictQueryCustomizer,
-  AdminDebate,
-  AdminCountyMaskBuilder,
-  AdminCityMaskBuilder,
-  AdminDistrict,
-  AdminUser,
-  AdminDebateStored,
-  AdminDistrictMaskBuilder,
-  AdminCityStored,
-  AdminCountyStored,
-} from '../../../../../generated/data-api';
-import { adminDebateServiceImpl, adminUserServiceImpl } from '../../../../../generated/data-axios';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminDebateCreatedByView } from './hooks/useAdminDebateCreatedByView';
+import { mainContainerPadding } from '~/theme';
+
 import {
-  useLinkViewResidentCountyAction,
-  useLinkEditResidentCountyAction,
-  useLinkEditResidentCityAction,
-  useRowEditActivityCountiesAction,
-  useLinkViewResidentDistrictAction,
-  useRowViewActivityCitiesAction,
-  useRowViewActivityCountiesAction,
-  useLinkViewResidentCityAction,
-  useButtonNavigateVotesAction,
-  useLinkEditResidentDistrictAction,
-  useRowEditActivityCitiesAction,
-  usePageRefreshCreatedByAction,
-  useRowEditActivityDistrictsAction,
-  useRowViewActivityDistrictsAction,
-} from './actions';
+  AdminCity,
+  AdminCityQueryCustomizer,
+  AdminCityStored,
+  AdminCounty,
+  AdminCountyQueryCustomizer,
+  AdminCountyStored,
+  AdminDebate,
+  AdminDebateStored,
+  AdminDistrict,
+  AdminDistrictQueryCustomizer,
+  AdminDistrictStored,
+  AdminUser,
+  AdminUserQueryCustomizer,
+  AdminUserStored,
+} from '~/generated/data-api';
+import { adminDebateServiceImpl, adminUserServiceImpl } from '~/generated/data-axios';
+
+import { useButtonNavigateVotesAction } from './actions';
+
+import { PageActions } from './components/PageActions';
+import { ResidentCityLink } from './components/ResidentCityLink';
+import { ResidentCountyLink } from './components/ResidentCountyLink';
+import { ResidentDistrictLink } from './components/ResidentDistrictLink';
+import { ActivityCitiesTable } from './components/ActivityCitiesTable';
+import { ActivityDistrictsTable } from './components/ActivityDistrictsTable';
+import { ActivityCountiesTable } from './components/ActivityCountiesTable';
 
 /**
  * Name: edemokracia::admin::Debate.createdBy#View
@@ -129,45 +93,10 @@ export default function AdminDebateCreatedByView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const linkViewResidentCountyAction = useLinkViewResidentCountyAction();
-  const linkEditResidentCountyAction = useLinkEditResidentCountyAction();
-  const linkEditResidentCityAction = useLinkEditResidentCityAction();
-  const rowEditActivityCountiesAction = useRowEditActivityCountiesAction();
-  const linkViewResidentDistrictAction = useLinkViewResidentDistrictAction();
-  const rowViewActivityCitiesAction = useRowViewActivityCitiesAction();
-  const rowViewActivityCountiesAction = useRowViewActivityCountiesAction();
-  const linkViewResidentCityAction = useLinkViewResidentCityAction();
-  const buttonNavigateVotesAction = useButtonNavigateVotesAction();
-  const linkEditResidentDistrictAction = useLinkEditResidentDistrictAction();
-  const rowEditActivityCitiesAction = useRowEditActivityCitiesAction();
-  const pageRefreshCreatedByAction = usePageRefreshCreatedByAction();
-  const rowEditActivityDistrictsAction = useRowEditActivityDistrictsAction();
-  const rowViewActivityDistrictsAction = useRowViewActivityDistrictsAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const {
-    queryCustomizer,
-    activityCitiesColumns,
-    activityCitiesRangeFilterOptions,
-    activityCitiesInitialQueryCustomizer,
-    activityDistrictsColumns,
-    activityDistrictsRangeFilterOptions,
-    activityDistrictsInitialQueryCustomizer,
-    activityCountiesColumns,
-    activityCountiesRangeFilterOptions,
-    activityCountiesInitialQueryCustomizer,
-    residentCityColumns,
-    residentCityRangeFilterOptions,
-    residentCityInitialQueryCustomizer,
-    residentCountyColumns,
-    residentCountyRangeFilterOptions,
-    residentCountyInitialQueryCustomizer,
-    residentDistrictColumns,
-    residentDistrictRangeFilterOptions,
-    residentDistrictInitialQueryCustomizer,
-  } = useAdminDebateCreatedByView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -178,6 +107,7 @@ export default function AdminDebateCreatedByView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminUserStored, any>>(
     {} as unknown as Record<keyof AdminUserStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminUserStored, value: any) => void = useCallback(
     (attributeName: keyof AdminUserStored, value: any) => {
       const dateTypes: string[] = [];
@@ -193,115 +123,22 @@ export default function AdminDebateCreatedByView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminUser, string>>(new Map<keyof AdminUser, string>());
 
-  const [activityCitiesSortModel, setActivityCitiesSortModel] = useState<GridSortModel>([
-    { field: 'representation', sort: 'asc' },
-  ]);
+  const queryCustomizer: AdminUserQueryCustomizer = {
+    _mask:
+      '{userName,isAdmin,created,firstName,lastName,email,phone,residentCounty{representation},residentCity{representation},residentDistrict{representation},activityCounties{representation},activityCities{representation},activityDistricts{representation}}',
+  };
 
-  const activityCitiesRangeCall = async () =>
-    openRangeDialog<AdminCityStored, AdminCityQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCities',
-      columns: activityCitiesColumns,
-      defaultSortField: activityCitiesSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityCities(undefined, processQueryCustomizer(queryCustomizer)),
-      single: false,
-      alreadySelectedItems: activityCitiesSelectionModel,
-      filterOptions: activityCitiesRangeFilterOptions,
-      initialQueryCustomizer: activityCitiesInitialQueryCustomizer,
-    });
+  const buttonNavigateVotesAction = useButtonNavigateVotesAction();
 
-  const [activityCitiesSelectionModel, setActivityCitiesSelectionModel] = useState<GridRowSelectionModel>([]);
-
-  const [activityDistrictsSortModel, setActivityDistrictsSortModel] = useState<GridSortModel>([
-    { field: 'representation', sort: 'asc' },
-  ]);
-
-  const activityDistrictsRangeCall = async () =>
-    openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityDistricts',
-      columns: activityDistrictsColumns,
-      defaultSortField: activityDistrictsSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityDistricts(undefined, processQueryCustomizer(queryCustomizer)),
-      single: false,
-      alreadySelectedItems: activityDistrictsSelectionModel,
-      filterOptions: activityDistrictsRangeFilterOptions,
-      initialQueryCustomizer: activityDistrictsInitialQueryCustomizer,
-    });
-
-  const [activityDistrictsSelectionModel, setActivityDistrictsSelectionModel] = useState<GridRowSelectionModel>([]);
-
-  const [activityCountiesSortModel, setActivityCountiesSortModel] = useState<GridSortModel>([
-    { field: 'representation', sort: 'asc' },
-  ]);
-
-  const activityCountiesRangeCall = async () =>
-    openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties',
-      columns: activityCountiesColumns,
-      defaultSortField: activityCountiesSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityCounties(undefined, processQueryCustomizer(queryCustomizer)),
-      single: false,
-      alreadySelectedItems: activityCountiesSelectionModel,
-      filterOptions: activityCountiesRangeFilterOptions,
-      initialQueryCustomizer: activityCountiesInitialQueryCustomizer,
-    });
-
-  const [activityCountiesSelectionModel, setActivityCountiesSelectionModel] = useState<GridRowSelectionModel>([]);
-
-  const activityCitiesRowActions: TableRowAction<AdminCityStored>[] = [
-    {
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCities-remove',
-      label: t('judo.pages.table.remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      action: async (row: AdminCityStored) => {
-        setEditMode(true);
-        storeDiff('activityCities', [
-          ...(data.activityCities || []).filter(
-            (e: AdminCityStored) => e.__signedIdentifier !== row.__signedIdentifier,
-          ),
-        ]);
-      },
-    },
-  ];
-  const activityDistrictsRowActions: TableRowAction<AdminDistrictStored>[] = [
-    {
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityDistricts-remove',
-      label: t('judo.pages.table.remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      action: async (row: AdminDistrictStored) => {
-        setEditMode(true);
-        storeDiff('activityDistricts', [
-          ...(data.activityDistricts || []).filter(
-            (e: AdminDistrictStored) => e.__signedIdentifier !== row.__signedIdentifier,
-          ),
-        ]);
-      },
-    },
-  ];
-  const activityCountiesRowActions: TableRowAction<AdminCountyStored>[] = [
-    {
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties-remove',
-      label: t('judo.pages.table.remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      action: async (row: AdminCountyStored) => {
-        setEditMode(true);
-        storeDiff('activityCounties', [
-          ...(data.activityCounties || []).filter(
-            (e: AdminCountyStored) => e.__signedIdentifier !== row.__signedIdentifier,
-          ),
-        ]);
-      },
-    },
-  ];
-  const title: string = t('edemokracia.admin.Debate.createdBy.View', { defaultValue: 'View / Edit User' });
+  const title: string = t('admin.UserView', { defaultValue: 'View / Edit User' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -318,7 +155,7 @@ export default function AdminDebateCreatedByView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -339,7 +176,7 @@ export default function AdminDebateCreatedByView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -352,19 +189,13 @@ export default function AdminDebateCreatedByView() {
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -384,15 +215,13 @@ export default function AdminDebateCreatedByView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="security" />
+                        <MdiIcon path="security" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityLabel"
                           variant="h6"
                           component="h1"
                         >
-                          {t('edemokracia.admin.Debate.createdBy.User.View.Security.Security.Label', {
-                            defaultValue: 'Security',
-                          })}
+                          {t('admin.UserView.Security.Label', { defaultValue: 'Security' })}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -411,18 +240,13 @@ export default function AdminDebateCreatedByView() {
                             required
                             name="userName"
                             id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityUserName"
-                            label={
-                              t('edemokracia.admin.Debate.createdBy.User.View.Security.Security.userName', {
-                                defaultValue: 'Username',
-                              }) as string
-                            }
+                            label={t('admin.UserView.userName', { defaultValue: 'Username' }) as string}
                             value={data.userName}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
                             error={!!validation.get('userName')}
                             helperText={validation.get('userName')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('userName', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -443,18 +267,13 @@ export default function AdminDebateCreatedByView() {
                               disabled={false || !isFormUpdateable()}
                               control={
                                 <Checkbox
-                                  value={data.isAdmin}
+                                  checked={data.isAdmin || false}
                                   onChange={(event) => {
-                                    setEditMode(true);
-                                    storeDiff('isAdmin', String(event.target.value).toLowerCase() === 'true');
+                                    storeDiff('isAdmin', event.target.checked);
                                   }}
                                 />
                               }
-                              label={
-                                t('edemokracia.admin.Debate.createdBy.User.View.Security.Security.isAdmin', {
-                                  defaultValue: 'Has admin access',
-                                }) as string
-                              }
+                              label={t('admin.UserView.isAdmin', { defaultValue: 'Has admin access' }) as string}
                             />
                           </FormGroup>
                         </Grid>
@@ -494,15 +313,10 @@ export default function AdminDebateCreatedByView() {
                               });
                             }}
                             views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={
-                              t('edemokracia.admin.Debate.createdBy.User.View.Security.Security.created', {
-                                defaultValue: 'Created',
-                              }) as string
-                            }
+                            label={t('admin.UserView.created', { defaultValue: 'Created' }) as string}
                             value={serviceDateToUiDate(data.created ?? null)}
                             disabled={false || !isFormUpdateable()}
                             onChange={(newValue: Date) => {
-                              setEditMode(true);
                               storeDiff('created', newValue);
                             }}
                           />
@@ -520,15 +334,13 @@ export default function AdminDebateCreatedByView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="card-account-details" />
+                        <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalLabel"
                           variant="h6"
                           component="h1"
                         >
-                          {t('edemokracia.admin.Debate.createdBy.User.View.personal.personal.Label', {
-                            defaultValue: 'Personal',
-                          })}
+                          {t('admin.UserView.personal.Label', { defaultValue: 'Personal' })}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -556,18 +368,13 @@ export default function AdminDebateCreatedByView() {
                                 required
                                 name="firstName"
                                 id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalNameFirstName"
-                                label={
-                                  t('edemokracia.admin.Debate.createdBy.User.View.personal.personal.name.firstName', {
-                                    defaultValue: 'First name',
-                                  }) as string
-                                }
+                                label={t('admin.UserView.firstName', { defaultValue: 'First name' }) as string}
                                 value={data.firstName}
                                 className={!editMode ? 'JUDO-viewMode' : undefined}
                                 disabled={false || !isFormUpdateable()}
                                 error={!!validation.get('firstName')}
                                 helperText={validation.get('firstName')}
                                 onChange={(event) => {
-                                  setEditMode(true);
                                   storeDiff('firstName', event.target.value);
                                 }}
                                 InputLabelProps={{ shrink: true }}
@@ -586,18 +393,13 @@ export default function AdminDebateCreatedByView() {
                                 required
                                 name="lastName"
                                 id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalNameLastName"
-                                label={
-                                  t('edemokracia.admin.Debate.createdBy.User.View.personal.personal.name.lastName', {
-                                    defaultValue: 'Last name',
-                                  }) as string
-                                }
+                                label={t('admin.UserView.lastName', { defaultValue: 'Last name' }) as string}
                                 value={data.lastName}
                                 className={!editMode ? 'JUDO-viewMode' : undefined}
                                 disabled={false || !isFormUpdateable()}
                                 error={!!validation.get('lastName')}
                                 helperText={validation.get('lastName')}
                                 onChange={(event) => {
-                                  setEditMode(true);
                                   storeDiff('lastName', event.target.value);
                                 }}
                                 InputLabelProps={{ shrink: true }}
@@ -627,18 +429,13 @@ export default function AdminDebateCreatedByView() {
                                 required
                                 name="email"
                                 id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContactEmail"
-                                label={
-                                  t('edemokracia.admin.Debate.createdBy.User.View.personal.personal.contact.email', {
-                                    defaultValue: 'Email',
-                                  }) as string
-                                }
+                                label={t('admin.UserView.email', { defaultValue: 'Email' }) as string}
                                 value={data.email}
                                 className={!editMode ? 'JUDO-viewMode' : undefined}
                                 disabled={false || !isFormUpdateable()}
                                 error={!!validation.get('email')}
                                 helperText={validation.get('email')}
                                 onChange={(event) => {
-                                  setEditMode(true);
                                   storeDiff('email', event.target.value);
                                 }}
                                 InputLabelProps={{ shrink: true }}
@@ -656,18 +453,13 @@ export default function AdminDebateCreatedByView() {
                               <TextField
                                 name="phone"
                                 id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContactPhone"
-                                label={
-                                  t('edemokracia.admin.Debate.createdBy.User.View.personal.personal.contact.phone', {
-                                    defaultValue: 'Phone',
-                                  }) as string
-                                }
+                                label={t('admin.UserView.phone', { defaultValue: 'Phone' }) as string}
                                 value={data.phone}
                                 className={!editMode ? 'JUDO-viewMode' : undefined}
                                 disabled={false || !isFormUpdateable()}
                                 error={!!validation.get('phone')}
                                 helperText={validation.get('phone')}
                                 onChange={(event) => {
-                                  setEditMode(true);
                                   storeDiff('phone', event.target.value);
                                 }}
                                 InputLabelProps={{ shrink: true }}
@@ -690,9 +482,7 @@ export default function AdminDebateCreatedByView() {
                             editMode={editMode}
                             navigateAction={() => buttonNavigateVotesAction(data)}
                           >
-                            {t('edemokracia.admin.Debate.createdBy.User.View.personal.personal.votes', {
-                              defaultValue: 'Votes',
-                            })}
+                            {t('admin.UserView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
                             <MdiIcon path="arrow-right" />
                           </CollectionAssociationButton>
                         </Grid>
@@ -709,15 +499,13 @@ export default function AdminDebateCreatedByView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="map" />
+                        <MdiIcon path="map" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasLabel"
                           variant="h6"
                           component="h1"
                         >
-                          {t('edemokracia.admin.Debate.createdBy.User.View.Areas.Areas.Label', {
-                            defaultValue: 'Areas',
-                          })}
+                          {t('admin.UserView.Areas.Label', { defaultValue: 'Areas' })}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -741,64 +529,35 @@ export default function AdminDebateCreatedByView() {
                             spacing={2}
                           >
                             <Grid item xs={12} sm={12} md={4.0}>
-                              <AggregationInput
-                                name="residentCounty"
-                                id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasResidencyResidentCounty"
-                                label={
-                                  t(
-                                    'edemokracia.admin.Debate.createdBy.User.View.Areas.Areas.Residency.residentCounty',
-                                    { defaultValue: 'Resident county' },
-                                  ) as string
-                                }
-                                labelList={[data.residentCounty?.representation?.toString() ?? '']}
-                                value={data.residentCounty}
-                                error={!!validation.get('residentCounty')}
-                                helperText={validation.get('residentCounty')}
-                                icon={<MdiIcon path="map" />}
+                              <ResidentCountyLink
+                                ownerData={data}
                                 disabled={false || !isFormUpdateable()}
                                 editMode={editMode}
-                                onView={async () => linkViewResidentCountyAction(data, data?.residentCounty!)}
+                                fetchOwnerData={fetchData}
+                                storeDiff={storeDiff}
+                                validation={validation}
                               />
                             </Grid>
 
                             <Grid item xs={12} sm={12} md={4.0}>
-                              <AggregationInput
-                                name="residentCity"
-                                id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasResidencyResidentCity"
-                                label={
-                                  t('edemokracia.admin.Debate.createdBy.User.View.Areas.Areas.Residency.residentCity', {
-                                    defaultValue: 'Resident city',
-                                  }) as string
-                                }
-                                labelList={[data.residentCity?.representation?.toString() ?? '']}
-                                value={data.residentCity}
-                                error={!!validation.get('residentCity')}
-                                helperText={validation.get('residentCity')}
-                                icon={<MdiIcon path="city" />}
+                              <ResidentCityLink
+                                ownerData={data}
                                 disabled={false || !isFormUpdateable()}
                                 editMode={editMode}
-                                onView={async () => linkViewResidentCityAction(data, data?.residentCity!)}
+                                fetchOwnerData={fetchData}
+                                storeDiff={storeDiff}
+                                validation={validation}
                               />
                             </Grid>
 
                             <Grid item xs={12} sm={12} md={4.0}>
-                              <AggregationInput
-                                name="residentDistrict"
-                                id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasResidencyResidentDistrict"
-                                label={
-                                  t(
-                                    'edemokracia.admin.Debate.createdBy.User.View.Areas.Areas.Residency.residentDistrict',
-                                    { defaultValue: 'Resident district' },
-                                  ) as string
-                                }
-                                labelList={[data.residentDistrict?.representation?.toString() ?? '']}
-                                value={data.residentDistrict}
-                                error={!!validation.get('residentDistrict')}
-                                helperText={validation.get('residentDistrict')}
-                                icon={<MdiIcon path="home-city" />}
+                              <ResidentDistrictLink
+                                ownerData={data}
                                 disabled={false || !isFormUpdateable()}
                                 editMode={editMode}
-                                onView={async () => linkViewResidentDistrictAction(data, data?.residentDistrict!)}
+                                fetchOwnerData={fetchData}
+                                storeDiff={storeDiff}
+                                validation={validation}
                               />
                             </Grid>
                           </Grid>
@@ -811,19 +570,19 @@ export default function AdminDebateCreatedByView() {
                             childTabs={[
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCounties',
-                                name: 'tab_activity_counties',
+                                name: 'admin.UserView.tab.activity.counties',
                                 label: 'Activity counties',
                                 icon: 'map',
                               },
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCities',
-                                name: 'activity_cities',
+                                name: 'admin.UserView.activity.cities',
                                 label: 'Activity cities',
                                 icon: 'city',
                               },
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistricts',
-                                name: 'activity_districts',
+                                name: 'admin.UserView.activity.districts',
                                 label: 'Activity districts',
                                 icon: 'home-city',
                               },
@@ -855,42 +614,13 @@ export default function AdminDebateCreatedByView() {
                                         alignItems="stretch"
                                         justifyContent="flex-start"
                                       >
-                                        <DataGrid
-                                          {...baseTableConfig}
-                                          sx={{
-                                            // overflow: 'hidden',
-                                            display: 'grid',
-                                          }}
-                                          getRowId={(row: { __identifier: string }) => row.__identifier}
-                                          loading={isLoading}
-                                          rows={data?.activityCounties ?? []}
-                                          getRowClassName={() => 'data-grid-row'}
-                                          getCellClassName={() => 'data-grid-cell'}
-                                          columns={[
-                                            ...activityCountiesColumns,
-                                            ...columnsActionCalculator(
-                                              'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties',
-                                              activityCountiesRowActions,
-                                              { shownActions: 2 },
-                                            ),
-                                          ]}
-                                          disableRowSelectionOnClick
-                                          onRowClick={(params: GridRowParams<AdminCountyStored>) => {
-                                            if (!editMode) {
-                                              rowViewActivityCountiesAction(data, params.row);
-                                            }
-                                          }}
-                                          sortModel={activityCountiesSortModel}
-                                          onSortModelChange={(newModel: GridSortModel) => {
-                                            setActivityCountiesSortModel(newModel);
-                                          }}
-                                          components={{
-                                            Toolbar: () => (
-                                              <GridToolbarContainer>
-                                                <div>{/* Placeholder */}</div>
-                                              </GridToolbarContainer>
-                                            ),
-                                          }}
+                                        <ActivityCountiesTable
+                                          isOwnerLoading={isLoading}
+                                          fetchOwnerData={fetchData}
+                                          ownerData={data}
+                                          editMode={editMode}
+                                          isFormUpdateable={isFormUpdateable}
+                                          storeDiff={storeDiff}
                                         />
                                       </Grid>
                                     </Grid>
@@ -925,42 +655,13 @@ export default function AdminDebateCreatedByView() {
                                         alignItems="stretch"
                                         justifyContent="flex-start"
                                       >
-                                        <DataGrid
-                                          {...baseTableConfig}
-                                          sx={{
-                                            // overflow: 'hidden',
-                                            display: 'grid',
-                                          }}
-                                          getRowId={(row: { __identifier: string }) => row.__identifier}
-                                          loading={isLoading}
-                                          rows={data?.activityCities ?? []}
-                                          getRowClassName={() => 'data-grid-row'}
-                                          getCellClassName={() => 'data-grid-cell'}
-                                          columns={[
-                                            ...activityCitiesColumns,
-                                            ...columnsActionCalculator(
-                                              'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCities',
-                                              activityCitiesRowActions,
-                                              { shownActions: 2 },
-                                            ),
-                                          ]}
-                                          disableRowSelectionOnClick
-                                          onRowClick={(params: GridRowParams<AdminCityStored>) => {
-                                            if (!editMode) {
-                                              rowViewActivityCitiesAction(data, params.row);
-                                            }
-                                          }}
-                                          sortModel={activityCitiesSortModel}
-                                          onSortModelChange={(newModel: GridSortModel) => {
-                                            setActivityCitiesSortModel(newModel);
-                                          }}
-                                          components={{
-                                            Toolbar: () => (
-                                              <GridToolbarContainer>
-                                                <div>{/* Placeholder */}</div>
-                                              </GridToolbarContainer>
-                                            ),
-                                          }}
+                                        <ActivityCitiesTable
+                                          isOwnerLoading={isLoading}
+                                          fetchOwnerData={fetchData}
+                                          ownerData={data}
+                                          editMode={editMode}
+                                          isFormUpdateable={isFormUpdateable}
+                                          storeDiff={storeDiff}
                                         />
                                       </Grid>
                                     </Grid>
@@ -995,42 +696,13 @@ export default function AdminDebateCreatedByView() {
                                         alignItems="stretch"
                                         justifyContent="flex-start"
                                       >
-                                        <DataGrid
-                                          {...baseTableConfig}
-                                          sx={{
-                                            // overflow: 'hidden',
-                                            display: 'grid',
-                                          }}
-                                          getRowId={(row: { __identifier: string }) => row.__identifier}
-                                          loading={isLoading}
-                                          rows={data?.activityDistricts ?? []}
-                                          getRowClassName={() => 'data-grid-row'}
-                                          getCellClassName={() => 'data-grid-cell'}
-                                          columns={[
-                                            ...activityDistrictsColumns,
-                                            ...columnsActionCalculator(
-                                              'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityDistricts',
-                                              activityDistrictsRowActions,
-                                              { shownActions: 2 },
-                                            ),
-                                          ]}
-                                          disableRowSelectionOnClick
-                                          onRowClick={(params: GridRowParams<AdminDistrictStored>) => {
-                                            if (!editMode) {
-                                              rowViewActivityDistrictsAction(data, params.row);
-                                            }
-                                          }}
-                                          sortModel={activityDistrictsSortModel}
-                                          onSortModelChange={(newModel: GridSortModel) => {
-                                            setActivityDistrictsSortModel(newModel);
-                                          }}
-                                          components={{
-                                            Toolbar: () => (
-                                              <GridToolbarContainer>
-                                                <div>{/* Placeholder */}</div>
-                                              </GridToolbarContainer>
-                                            ),
-                                          }}
+                                        <ActivityDistrictsTable
+                                          isOwnerLoading={isLoading}
+                                          fetchOwnerData={fetchData}
+                                          ownerData={data}
+                                          editMode={editMode}
+                                          isFormUpdateable={isFormUpdateable}
+                                          storeDiff={storeDiff}
                                         />
                                       </Grid>
                                     </Grid>

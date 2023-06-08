@@ -25,121 +25,72 @@ import {
   Typography,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  DataGrid,
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridToolbarContainer,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
-import {
-  AdminCon,
-  AdminIssueStored,
-  AdminCommentQueryCustomizer,
-  AdminUserMaskBuilder,
-  AdminIssueQueryCustomizer,
-  AdminProQueryCustomizer,
-  AdminCommentMaskBuilder,
-  AdminVoteDefinitionMaskBuilder,
-  AdminComment,
-  AdminDebateStored,
-  AdminUser,
-  AdminDebateQueryCustomizer,
-  AdminIssueMaskBuilder,
-  AdminVoteDefinitionQueryCustomizer,
-  AdminProMaskBuilder,
-  AdminConStored,
-  AdminUserStored,
-  AdminUserQueryCustomizer,
-  AdminConMaskBuilder,
-  AdminPro,
-  EdemokraciaDebateStatus,
-  AdminVoteDefinitionStored,
-  AdminProStored,
-  AdminDebate,
-  AdminIssue,
-  AdminConQueryCustomizer,
-  AdminVoteDefinition,
-  AdminCommentStored,
-} from '../../../../../generated/data-api';
-import { adminAdminServiceForDebatesImpl, adminDebateServiceImpl } from '../../../../../generated/data-axios';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminAdminDebatesView } from './hooks/useAdminAdminDebatesView';
+import { mainContainerPadding } from '~/theme';
+
 import {
-  useRowEditCommentsAction,
-  useRowEditConsAction,
+  AdminComment,
+  AdminCommentQueryCustomizer,
+  AdminCommentStored,
+  AdminCon,
+  AdminConQueryCustomizer,
+  AdminConStored,
+  AdminDebate,
+  AdminDebateQueryCustomizer,
+  AdminDebateStored,
+  AdminIssue,
+  AdminIssueQueryCustomizer,
+  AdminIssueStored,
+  AdminPro,
+  AdminProQueryCustomizer,
+  AdminProStored,
+  AdminUser,
+  AdminUserQueryCustomizer,
+  AdminUserStored,
+  AdminVoteDefinition,
+  AdminVoteDefinitionQueryCustomizer,
+  AdminVoteDefinitionStored,
+  EdemokraciaDebateStatus,
+} from '~/generated/data-api';
+import { adminAdminServiceForDebatesImpl, adminDebateServiceImpl } from '~/generated/data-axios';
+
+import {
   useAdminDebateCloseDebateAction,
-  usePageRefreshDebatesAction,
-  useLinkViewIssueAction,
-  useAdminCommentVoteDownAction,
-  useAdminProVoteUpAction,
-  useRowViewProsAction,
-  useLinkViewCreatedByAction,
-  useLinkViewVoteDefinitionAction,
-  useAdminConCreateCommentAction,
-  useRowDeleteConsAction,
-  useAdminProVoteDownAction,
-  useAdminConCreateSubArgumentAction,
-  useAdminProCreateCommentAction,
-  useRowDeleteProsAction,
-  useAdminConVoteUpAction,
-  useRowViewCommentsAction,
-  useAdminCommentVoteUpAction,
-  useAdminConVoteDownAction,
-  useRowViewConsAction,
   useAdminDebateCreateArgumentAction,
-  usePageDeleteDebatesAction,
-  useRowDeleteCommentsAction,
-  usePageEditDebatesAction,
-  useAdminProCreateSubArgumentAction,
-  useRowEditProsAction,
   useAdminDebateCreateCommentAction,
 } from './actions';
+
+import { PageActions } from './components/PageActions';
+import { CreatedByLink } from './components/CreatedByLink';
+import { IssueLink } from './components/IssueLink';
+import { VoteDefinitionLink } from './components/VoteDefinitionLink';
+import { ConsTable } from './components/ConsTable';
+import { ProsTable } from './components/ProsTable';
+import { CommentsTable } from './components/CommentsTable';
 
 /**
  * Name: edemokracia::admin::Admin.debates#View
@@ -152,50 +103,10 @@ export default function AdminAdminDebatesView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const rowEditCommentsAction = useRowEditCommentsAction();
-  const rowEditConsAction = useRowEditConsAction();
-  const AdminDebateCloseDebateAction = useAdminDebateCloseDebateAction();
-  const pageRefreshDebatesAction = usePageRefreshDebatesAction();
-  const linkViewIssueAction = useLinkViewIssueAction();
-  const AdminCommentVoteDownAction = useAdminCommentVoteDownAction();
-  const AdminProVoteUpAction = useAdminProVoteUpAction();
-  const rowViewProsAction = useRowViewProsAction();
-  const linkViewCreatedByAction = useLinkViewCreatedByAction();
-  const linkViewVoteDefinitionAction = useLinkViewVoteDefinitionAction();
-  const AdminConCreateCommentAction = useAdminConCreateCommentAction();
-  const rowDeleteConsAction = useRowDeleteConsAction();
-  const AdminProVoteDownAction = useAdminProVoteDownAction();
-  const AdminConCreateSubArgumentAction = useAdminConCreateSubArgumentAction();
-  const AdminProCreateCommentAction = useAdminProCreateCommentAction();
-  const rowDeleteProsAction = useRowDeleteProsAction();
-  const AdminConVoteUpAction = useAdminConVoteUpAction();
-  const rowViewCommentsAction = useRowViewCommentsAction();
-  const AdminCommentVoteUpAction = useAdminCommentVoteUpAction();
-  const AdminConVoteDownAction = useAdminConVoteDownAction();
-  const rowViewConsAction = useRowViewConsAction();
-  const AdminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
-  const pageDeleteDebatesAction = usePageDeleteDebatesAction();
-  const rowDeleteCommentsAction = useRowDeleteCommentsAction();
-  const pageEditDebatesAction = usePageEditDebatesAction();
-  const AdminProCreateSubArgumentAction = useAdminProCreateSubArgumentAction();
-  const rowEditProsAction = useRowEditProsAction();
-  const AdminDebateCreateCommentAction = useAdminDebateCreateCommentAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const {
-    queryCustomizer,
-    consColumns,
-    consRangeFilterOptions,
-    consInitialQueryCustomizer,
-    prosColumns,
-    prosRangeFilterOptions,
-    prosInitialQueryCustomizer,
-    commentsColumns,
-    commentsRangeFilterOptions,
-    commentsInitialQueryCustomizer,
-  } = useAdminAdminDebatesView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -212,6 +123,7 @@ export default function AdminAdminDebatesView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminDebateStored, any>>(
     {} as unknown as Record<keyof AdminDebateStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminDebateStored, value: any) => void = useCallback(
     (attributeName: keyof AdminDebateStored, value: any) => {
       const dateTypes: string[] = [];
@@ -227,127 +139,24 @@ export default function AdminAdminDebatesView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminDebate, string>>(new Map<keyof AdminDebate, string>());
 
-  const [consSortModel, setConsSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const queryCustomizer: AdminDebateQueryCustomizer = {
+    _mask:
+      '{title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
+  };
 
-  const [prosSortModel, setProsSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const adminDebateCloseDebateAction = useAdminDebateCloseDebateAction();
+  const adminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
+  const adminDebateCreateCommentAction = useAdminDebateCreateCommentAction();
 
-  const [commentsSortModel, setCommentsSortModel] = useState<GridSortModel>([{ field: 'created', sort: 'asc' }]);
-
-  const consRowActions: TableRowAction<AdminConStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateConsRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminConStored) => rowDeleteConsAction(data, row, () => fetchData()),
-      disabled: (row: AdminConStored) => editMode || !row.__deleteable,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminConVoteUpButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Con.voteUp', { defaultValue: '' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      action: async (row: AdminConStored) => AdminConVoteUpAction(row, () => fetchData()),
-      disabled: (row: AdminConStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminConVoteDownButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Con.voteDown', { defaultValue: '' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      action: async (row: AdminConStored) => AdminConVoteDownAction(row, () => fetchData()),
-      disabled: (row: AdminConStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminConCreateSubArgumentButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Con.createSubArgument', {
-        defaultValue: 'Add argument',
-      }) as string,
-      icon: <MdiIcon path="account-voice" />,
-      action: async (row: AdminConStored) => AdminConCreateSubArgumentAction(row, () => fetchData()),
-      disabled: (row: AdminConStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminConCreateCommentButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Con.createComment', {
-        defaultValue: 'Add comment',
-      }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      action: async (row: AdminConStored) => AdminConCreateCommentAction(row, () => fetchData()),
-      disabled: (row: AdminConStored) => editMode,
-    },
-  ];
-  const prosRowActions: TableRowAction<AdminProStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateProsRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminProStored) => rowDeleteProsAction(data, row, () => fetchData()),
-      disabled: (row: AdminProStored) => editMode || !row.__deleteable,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminProVoteUpButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Pro.voteUp', { defaultValue: '' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      action: async (row: AdminProStored) => AdminProVoteUpAction(row, () => fetchData()),
-      disabled: (row: AdminProStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminProVoteDownButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Pro.voteDown', { defaultValue: '' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      action: async (row: AdminProStored) => AdminProVoteDownAction(row, () => fetchData()),
-      disabled: (row: AdminProStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Pro.createSubArgument', {
-        defaultValue: 'Add argument',
-      }) as string,
-      icon: <MdiIcon path="account-voice" />,
-      action: async (row: AdminProStored) => AdminProCreateSubArgumentAction(row, () => fetchData()),
-      disabled: (row: AdminProStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminProCreateCommentButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Pro.createComment', {
-        defaultValue: 'Add comment',
-      }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      action: async (row: AdminProStored) => AdminProCreateCommentAction(row, () => fetchData()),
-      disabled: (row: AdminProStored) => editMode,
-    },
-  ];
-  const commentsRowActions: TableRowAction<AdminCommentStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCommentsRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminCommentStored) => rowDeleteCommentsAction(data, row, () => fetchData()),
-      disabled: (row: AdminCommentStored) => editMode || !row.__deleteable,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteUpButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Comment.voteUp', { defaultValue: '' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      action: async (row: AdminCommentStored) => AdminCommentVoteUpAction(row, () => fetchData()),
-      disabled: (row: AdminCommentStored) => editMode,
-    },
-    {
-      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteDownButtonCallOperation',
-      label: t('edemokracia.admin.Admin.debates.View.edemokracia.admin.Comment.voteDown', {
-        defaultValue: '',
-      }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      action: async (row: AdminCommentStored) => AdminCommentVoteDownAction(row, () => fetchData()),
-      disabled: (row: AdminCommentStored) => editMode,
-    },
-  ];
-
-  const title: string = t('edemokracia.admin.Admin.debates.View', { defaultValue: 'View / Edit Debate' });
+  const title: string = t('admin.DebateView', { defaultValue: 'View / Edit Debate' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -364,7 +173,7 @@ export default function AdminAdminDebatesView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -385,15 +194,19 @@ export default function AdminAdminDebatesView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const saveData = async () => {
+  async function saveData() {
     setIsLoading(true);
 
     try {
       const res = await adminDebateServiceImpl.update(payloadDiff);
 
       if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
         await fetchData();
         setEditMode(false);
       }
@@ -402,9 +215,9 @@ export default function AdminAdminDebatesView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const deleteData = async () => {
+  async function deleteData() {
     setIsLoading(true);
 
     try {
@@ -416,7 +229,7 @@ export default function AdminAdminDebatesView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -429,70 +242,20 @@ export default function AdminAdminDebatesView() {
   return (
     <>
       <PageHeader title={title}>
-        {editMode && isFormUpdateable() && (
-          <Grid className="page-action" item>
-            <Button
-              id="page-action-edit-cancel"
-              variant="outlined"
-              onClick={() => {
-                setEditMode(false);
-                fetchData();
-              }}
-              disabled={isLoading}
-            >
-              <MdiIcon path="cancel" />
-              {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
-            </Button>
-          </Grid>
-        )}
-        {editMode && isFormUpdateable() && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-edit-save"
-              startIcon={<MdiIcon path="content-save" />}
-              onClick={() => saveData()}
-            >
-              <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {!editMode && isFormDeleteable() && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="page-action-delete"
-              loading={isLoading}
-              loadingPosition="start"
-              startIcon={<MdiIcon path="delete" />}
-              onClick={() =>
-                pageDeleteDebatesAction(data, () => {
-                  back();
-                })
-              }
-              disabled={!data.__deleteable}
-            >
-              <span>{t('judo.pages.delete', { defaultValue: 'Delete' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+          saveData={saveData}
+          deleteData={deleteData}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
           <Grid
+            className="access-page-data"
             container
             xs={12}
             sm={12}
@@ -507,15 +270,13 @@ export default function AdminAdminDebatesView() {
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                     <Grid item xs={12} sm={12}>
                       <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="wechat" />
+                        <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                         <Typography
                           id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateLabel"
                           variant="h6"
                           component="h1"
                         >
-                          {t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.Label', {
-                            defaultValue: 'Debate',
-                          })}
+                          {t('admin.DebateView.debate.Label', { defaultValue: 'Debate' })}
                         </Typography>
                       </Grid>
                     </Grid>
@@ -534,18 +295,13 @@ export default function AdminAdminDebatesView() {
                             required
                             name="title"
                             id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateTitle"
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.title', {
-                                defaultValue: 'Title',
-                              }) as string
-                            }
+                            label={t('admin.DebateView.title', { defaultValue: 'Title' }) as string}
                             value={data.title}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
                             error={!!validation.get('title')}
                             helperText={validation.get('title')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('title', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -564,19 +320,14 @@ export default function AdminAdminDebatesView() {
                             required
                             name="status"
                             id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateStatus"
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.status', {
-                                defaultValue: 'Status',
-                              }) as string
-                            }
+                            label={t('admin.DebateView.status', { defaultValue: 'Status' }) as string}
                             value={data.status || ''}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
                             error={!!validation.get('status')}
                             helperText={validation.get('status')}
                             onChange={(event) => {
-                              setEditMode(true);
-                              storeDiff('status', event.target.value as EdemokraciaDebateStatus);
+                              storeDiff('status', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
                             InputProps={{
@@ -650,57 +401,34 @@ export default function AdminAdminDebatesView() {
                               });
                             }}
                             views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.closeAt', {
-                                defaultValue: 'Close at',
-                              }) as string
-                            }
+                            label={t('admin.DebateView.closeAt', { defaultValue: 'Close at' }) as string}
                             value={serviceDateToUiDate(data.closeAt ?? null)}
                             disabled={false || !isFormUpdateable()}
                             onChange={(newValue: Date) => {
-                              setEditMode(true);
                               storeDiff('closeAt', newValue);
                             }}
                           />
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={8.0}>
-                          <AggregationInput
-                            name="issue"
-                            id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateIssue"
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.issue', {
-                                defaultValue: 'Issue',
-                              }) as string
-                            }
-                            labelList={[data.issue?.representation?.toString() ?? '']}
-                            value={data.issue}
-                            error={!!validation.get('issue')}
-                            helperText={validation.get('issue')}
-                            icon={<MdiIcon path="file-document" />}
+                          <IssueLink
+                            ownerData={data}
                             disabled={true || !isFormUpdateable()}
                             editMode={editMode}
-                            onView={async () => linkViewIssueAction(data, data?.issue!)}
+                            fetchOwnerData={fetchData}
+                            storeDiff={storeDiff}
+                            validation={validation}
                           />
                         </Grid>
 
                         <Grid item xs={12} sm={12} md={4.0}>
-                          <AggregationInput
-                            name="createdBy"
-                            id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateCreatedBy"
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.createdBy', {
-                                defaultValue: 'Created by',
-                              }) as string
-                            }
-                            labelList={[data.createdBy?.representation?.toString() ?? '']}
-                            value={data.createdBy}
-                            error={!!validation.get('createdBy')}
-                            helperText={validation.get('createdBy')}
-                            icon={<MdiIcon path="account" />}
+                          <CreatedByLink
+                            ownerData={data}
                             disabled={true || !isFormUpdateable()}
                             editMode={editMode}
-                            onView={async () => linkViewCreatedByAction(data, data?.createdBy!)}
+                            fetchOwnerData={fetchData}
+                            storeDiff={storeDiff}
+                            validation={validation}
                           />
                         </Grid>
 
@@ -709,11 +437,7 @@ export default function AdminAdminDebatesView() {
                             required
                             name="description"
                             id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateDescription"
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.description', {
-                                defaultValue: 'Description',
-                              }) as string
-                            }
+                            label={t('admin.DebateView.description', { defaultValue: 'Description' }) as string}
                             value={data.description}
                             className={!editMode ? 'JUDO-viewMode' : undefined}
                             disabled={false || !isFormUpdateable()}
@@ -722,7 +446,6 @@ export default function AdminAdminDebatesView() {
                             error={!!validation.get('description')}
                             helperText={validation.get('description')}
                             onChange={(event) => {
-                              setEditMode(true);
                               storeDiff('description', event.target.value);
                             }}
                             InputLabelProps={{ shrink: true }}
@@ -737,27 +460,13 @@ export default function AdminAdminDebatesView() {
                         </Grid>
 
                         <Grid item xs={12} sm={12}>
-                          <AggregationInput
-                            name="voteDefinition"
-                            id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateVoteDefinition"
-                            label={
-                              t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.voteDefinition', {
-                                defaultValue: 'VoteDefinition',
-                              }) as string
-                            }
-                            labelList={[
-                              data.voteDefinition?.title?.toString() ?? '',
-                              data.voteDefinition?.created?.toString() ?? '',
-                              data.voteDefinition?.status?.toString() ?? '',
-                              data.voteDefinition?.closeAt?.toString() ?? '',
-                            ]}
-                            value={data.voteDefinition}
-                            error={!!validation.get('voteDefinition')}
-                            helperText={validation.get('voteDefinition')}
-                            icon={<MdiIcon path="table_rows" />}
+                          <VoteDefinitionLink
+                            ownerData={data}
                             disabled={true || !isFormUpdateable()}
                             editMode={editMode}
-                            onView={async () => linkViewVoteDefinitionAction(data, data?.voteDefinition!)}
+                            fetchOwnerData={fetchData}
+                            storeDiff={storeDiff}
+                            validation={validation}
                           />
                         </Grid>
 
@@ -768,13 +477,11 @@ export default function AdminAdminDebatesView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="wechat" />}
                             loadingPosition="start"
-                            onClick={() => AdminDebateCloseDebateAction(data, () => fetchData())}
+                            onClick={() => adminDebateCloseDebateAction(data, () => fetchData())}
                             disabled={editMode}
                           >
                             <span>
-                              {t('edemokracia.admin.Admin.debates.Debate.View.debate.debate.closeDebate', {
-                                defaultValue: 'Close debate',
-                              })}
+                              {t('admin.DebateView.closeDebate.ButtonCallOperation', { defaultValue: 'Close debate' })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -792,13 +499,13 @@ export default function AdminAdminDebatesView() {
                 childTabs={[
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewTabBarArguments',
-                    name: 'arguments',
+                    name: 'admin.DebateView.arguments',
                     label: 'Arguments',
                     icon: 'account-voice',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewTabBarComments',
-                    name: 'comments',
+                    name: 'admin.DebateView.comments',
                     label: 'Comments',
                     icon: 'comment-text-multiple',
                   },
@@ -829,14 +536,13 @@ export default function AdminAdminDebatesView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="account-voice" />}
                             loadingPosition="start"
-                            onClick={() => AdminDebateCreateArgumentAction(data, () => fetchData())}
+                            onClick={() => adminDebateCreateArgumentAction(data, () => fetchData())}
                             disabled={editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Admin.debates.Debate.View.tabBar.arguments.arguments.actions.createArgument',
-                                { defaultValue: 'Add argument' },
-                              )}
+                              {t('admin.DebateView.createArgument.ButtonCallOperation', {
+                                defaultValue: 'Add argument',
+                              })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -854,16 +560,13 @@ export default function AdminAdminDebatesView() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="chat-plus" />
+                            <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                             <Typography
                               id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
                               variant="h6"
                               component="h1"
                             >
-                              {t(
-                                'edemokracia.admin.Admin.debates.Debate.View.tabBar.arguments.arguments.pros.pros.Label',
-                                { defaultValue: 'Pro' },
-                              )}
+                              {t('admin.DebateView.pros.Label', { defaultValue: 'Pro' })}
                             </Typography>
                           </Grid>
                         </Grid>
@@ -876,42 +579,13 @@ export default function AdminAdminDebatesView() {
                             alignItems="stretch"
                             justifyContent="flex-start"
                           >
-                            <DataGrid
-                              {...baseTableConfig}
-                              sx={{
-                                // overflow: 'hidden',
-                                display: 'grid',
-                              }}
-                              getRowId={(row: { __identifier: string }) => row.__identifier}
-                              loading={isLoading}
-                              rows={data?.pros ?? []}
-                              getRowClassName={() => 'data-grid-row'}
-                              getCellClassName={() => 'data-grid-cell'}
-                              columns={[
-                                ...prosColumns,
-                                ...columnsActionCalculator(
-                                  'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDebatePros',
-                                  prosRowActions,
-                                  { shownActions: 2 },
-                                ),
-                              ]}
-                              disableRowSelectionOnClick
-                              onRowClick={(params: GridRowParams<AdminProStored>) => {
-                                if (!editMode) {
-                                  rowViewProsAction(data, params.row);
-                                }
-                              }}
-                              sortModel={prosSortModel}
-                              onSortModelChange={(newModel: GridSortModel) => {
-                                setProsSortModel(newModel);
-                              }}
-                              components={{
-                                Toolbar: () => (
-                                  <GridToolbarContainer>
-                                    <div>{/* Placeholder */}</div>
-                                  </GridToolbarContainer>
-                                ),
-                              }}
+                            <ProsTable
+                              isOwnerLoading={isLoading}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
                             />
                           </Grid>
                         </Grid>
@@ -929,16 +603,13 @@ export default function AdminAdminDebatesView() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="chat-minus" />
+                            <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                             <Typography
                               id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
                               variant="h6"
                               component="h1"
                             >
-                              {t(
-                                'edemokracia.admin.Admin.debates.Debate.View.tabBar.arguments.arguments.cons.cons.Label',
-                                { defaultValue: 'Contra' },
-                              )}
+                              {t('admin.DebateView.cons.Label', { defaultValue: 'Contra' })}
                             </Typography>
                           </Grid>
                         </Grid>
@@ -951,42 +622,13 @@ export default function AdminAdminDebatesView() {
                             alignItems="stretch"
                             justifyContent="flex-start"
                           >
-                            <DataGrid
-                              {...baseTableConfig}
-                              sx={{
-                                // overflow: 'hidden',
-                                display: 'grid',
-                              }}
-                              getRowId={(row: { __identifier: string }) => row.__identifier}
-                              loading={isLoading}
-                              rows={data?.cons ?? []}
-                              getRowClassName={() => 'data-grid-row'}
-                              getCellClassName={() => 'data-grid-cell'}
-                              columns={[
-                                ...consColumns,
-                                ...columnsActionCalculator(
-                                  'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDebateCons',
-                                  consRowActions,
-                                  { shownActions: 2 },
-                                ),
-                              ]}
-                              disableRowSelectionOnClick
-                              onRowClick={(params: GridRowParams<AdminConStored>) => {
-                                if (!editMode) {
-                                  rowViewConsAction(data, params.row);
-                                }
-                              }}
-                              sortModel={consSortModel}
-                              onSortModelChange={(newModel: GridSortModel) => {
-                                setConsSortModel(newModel);
-                              }}
-                              components={{
-                                Toolbar: () => (
-                                  <GridToolbarContainer>
-                                    <div>{/* Placeholder */}</div>
-                                  </GridToolbarContainer>
-                                ),
-                              }}
+                            <ConsTable
+                              isOwnerLoading={isLoading}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
                             />
                           </Grid>
                         </Grid>
@@ -1020,14 +662,11 @@ export default function AdminAdminDebatesView() {
                             variant={undefined}
                             startIcon={<MdiIcon path="comment-text-multiple" />}
                             loadingPosition="start"
-                            onClick={() => AdminDebateCreateCommentAction(data, () => fetchData())}
+                            onClick={() => adminDebateCreateCommentAction(data, () => fetchData())}
                             disabled={editMode}
                           >
                             <span>
-                              {t(
-                                'edemokracia.admin.Admin.debates.Debate.View.tabBar.comments.comments.actions.createComment',
-                                { defaultValue: 'Add comment' },
-                              )}
+                              {t('admin.DebateView.createComment.ButtonCallOperation', { defaultValue: 'Add comment' })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -1051,42 +690,13 @@ export default function AdminAdminDebatesView() {
                             alignItems="stretch"
                             justifyContent="flex-start"
                           >
-                            <DataGrid
-                              {...baseTableConfig}
-                              sx={{
-                                // overflow: 'hidden',
-                                display: 'grid',
-                              }}
-                              getRowId={(row: { __identifier: string }) => row.__identifier}
-                              loading={isLoading}
-                              rows={data?.comments ?? []}
-                              getRowClassName={() => 'data-grid-row'}
-                              getCellClassName={() => 'data-grid-cell'}
-                              columns={[
-                                ...commentsColumns,
-                                ...columnsActionCalculator(
-                                  'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDebateComments',
-                                  commentsRowActions,
-                                  { shownActions: 2 },
-                                ),
-                              ]}
-                              disableRowSelectionOnClick
-                              onRowClick={(params: GridRowParams<AdminCommentStored>) => {
-                                if (!editMode) {
-                                  rowViewCommentsAction(data, params.row);
-                                }
-                              }}
-                              sortModel={commentsSortModel}
-                              onSortModelChange={(newModel: GridSortModel) => {
-                                setCommentsSortModel(newModel);
-                              }}
-                              components={{
-                                Toolbar: () => (
-                                  <GridToolbarContainer>
-                                    <div>{/* Placeholder */}</div>
-                                  </GridToolbarContainer>
-                                ),
-                              }}
+                            <CommentsTable
+                              isOwnerLoading={isLoading}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
                             />
                           </Grid>
                         </Grid>

@@ -14,66 +14,44 @@ import { useEffect, useState, useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
-import {
-  AdminDistrict,
-  AdminDistrictStored,
-  AdminCityStored,
-  AdminCity,
-  AdminDistrictQueryCustomizer,
-} from '../../../../../generated/data-api';
-import { adminCityServiceImpl, adminDistrictServiceImpl } from '../../../../../generated/data-axios';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminCityDistrictsView } from './hooks/useAdminCityDistrictsView';
-import { usePageDeleteDistrictsAction, usePageRefreshDistrictsAction, usePageEditDistrictsAction } from './actions';
+import { mainContainerPadding } from '~/theme';
+
+import {
+  AdminCity,
+  AdminCityStored,
+  AdminDistrict,
+  AdminDistrictQueryCustomizer,
+  AdminDistrictStored,
+} from '~/generated/data-api';
+import { adminCityServiceImpl, adminDistrictServiceImpl } from '~/generated/data-axios';
+
+import {} from './actions';
+
+import { PageActions } from './components/PageActions';
 
 /**
  * Name: edemokracia::admin::City.districts#View
@@ -85,14 +63,10 @@ export default function AdminCityDistrictsView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const pageDeleteDistrictsAction = usePageDeleteDistrictsAction();
-  const pageRefreshDistrictsAction = usePageRefreshDistrictsAction();
-  const pageEditDistrictsAction = usePageEditDistrictsAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const { queryCustomizer } = useAdminCityDistrictsView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -109,6 +83,7 @@ export default function AdminCityDistrictsView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminDistrictStored, any>>(
     {} as unknown as Record<keyof AdminDistrictStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminDistrictStored, value: any) => void = useCallback(
     (attributeName: keyof AdminDistrictStored, value: any) => {
       const dateTypes: string[] = [];
@@ -124,13 +99,19 @@ export default function AdminCityDistrictsView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminDistrict, string>>(
     new Map<keyof AdminDistrict, string>(),
   );
+
+  const queryCustomizer: AdminDistrictQueryCustomizer = {
+    _mask: '{name,representation}',
+  };
 
   const title: string = data.representation as string;
 
@@ -149,7 +130,7 @@ export default function AdminCityDistrictsView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -170,15 +151,19 @@ export default function AdminCityDistrictsView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const saveData = async () => {
+  async function saveData() {
     setIsLoading(true);
 
     try {
       const res = await adminDistrictServiceImpl.update(payloadDiff);
 
       if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
         await fetchData();
         setEditMode(false);
       }
@@ -187,9 +172,9 @@ export default function AdminCityDistrictsView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
-  const deleteData = async () => {
+  async function deleteData() {
     setIsLoading(true);
 
     try {
@@ -201,7 +186,7 @@ export default function AdminCityDistrictsView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -214,70 +199,15 @@ export default function AdminCityDistrictsView() {
   return (
     <>
       <PageHeader title={title}>
-        {editMode && isFormUpdateable() && (
-          <Grid className="page-action" item>
-            <Button
-              id="page-action-edit-cancel"
-              variant="outlined"
-              onClick={() => {
-                setEditMode(false);
-                fetchData();
-              }}
-              disabled={isLoading}
-            >
-              <MdiIcon path="cancel" />
-              {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
-            </Button>
-          </Grid>
-        )}
-        {editMode && isFormUpdateable() && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-edit-save"
-              startIcon={<MdiIcon path="content-save" />}
-              onClick={() => saveData()}
-            >
-              <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {!editMode && isFormDeleteable() && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="page-action-delete"
-              loading={isLoading}
-              loadingPosition="start"
-              startIcon={<MdiIcon path="delete" />}
-              onClick={() =>
-                pageDeleteDistrictsAction(
-                  { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminCity>,
-                  data,
-                  () => {
-                    back();
-                  },
-                )
-              }
-              disabled={!data.__deleteable}
-            >
-              <span>{t('judo.pages.delete', { defaultValue: 'Delete' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+          saveData={saveData}
+          deleteData={deleteData}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -296,16 +226,13 @@ export default function AdminCityDistrictsView() {
                 required
                 name="name"
                 id="TextInputedemokraciaAdminAdminEdemokraciaAdminCityDistrictsViewDefaultDistrictViewName"
-                label={
-                  t('edemokracia.admin.City.districts.District.View.name', { defaultValue: 'District name' }) as string
-                }
+                label={t('admin.DistrictView.name', { defaultValue: 'District name' }) as string}
                 value={data.name}
                 className={!editMode ? 'JUDO-viewMode' : undefined}
                 disabled={false || !isFormUpdateable()}
                 error={!!validation.get('name')}
                 helperText={validation.get('name')}
                 onChange={(event) => {
-                  setEditMode(true);
                   storeDiff('name', event.target.value);
                 }}
                 InputLabelProps={{ shrink: true }}

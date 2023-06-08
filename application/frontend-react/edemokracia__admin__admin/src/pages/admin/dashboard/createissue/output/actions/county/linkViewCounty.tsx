@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: ViewAction
@@ -11,13 +11,14 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type {
+  AdminCounty,
+  AdminCountyQueryCustomizer,
+  AdminCountyStored,
   AdminIssue,
   AdminIssueStored,
-  AdminCountyQueryCustomizer,
-  AdminCounty,
-  AdminCountyStored,
-} from '../../../../../../../generated/data-api';
-import { useJudoNavigation } from '../../../../../../../components';
+} from '~/generated/data-api';
+import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueCountyView } from '~/routes';
 
 export const LINK_VIEW_COUNTY_ACTION_INTERFACE_KEY = 'LinkViewCountyAction';
 export type LinkViewCountyAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewCountyAction: LinkViewCountyAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCountyStored) {
-    navigate(`admin/issue/county/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueCountyView(entry.__signedIdentifier));
   };
 };

@@ -2,13 +2,14 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: AddAction
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
+import { Button } from '@mui/material';
 import type {
   GridColDef,
   GridRenderCellParams,
@@ -18,26 +19,27 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { MdiIcon } from '../../../../../../components';
-import { useRangeDialog } from '../../../../../../components/dialog';
-import { FilterOption, FilterType } from '../../../../../../components-api';
-import { baseColumnConfig, toastConfig } from '../../../../../../config';
-import { useL10N } from '../../../../../../l10n/l10n-context';
+import { MdiIcon } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { FilterOption, FilterType } from '~/components-api';
+import { baseColumnConfig, toastConfig } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   processQueryCustomizer,
+  fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
-} from '../../../../../../utilities';
+} from '~/utilities';
 import {
-  AdminUserStored,
   AdminSimpleVote,
-  AdminUser,
-  AdminSimpleVoteStored,
   AdminSimpleVoteQueryCustomizer,
-} from '../../../../../../generated/data-api';
-import { adminUserServiceImpl } from '../../../../../../generated/data-axios';
+  AdminSimpleVoteStored,
+  AdminUser,
+  AdminUserStored,
+} from '~/generated/data-api';
+import { adminUserServiceImpl } from '~/generated/data-axios';
 
 export type PageAddVotesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -47,21 +49,20 @@ export type PageAddVotesAction = () => (
 export const usePageAddVotesAction: PageAddVotesAction = () => {
   const { openRangeDialog } = useRangeDialog();
   const { t } = useTranslation();
+  const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const handleActionError = useErrorHandler<JudoIdentifiable<AdminUser>>(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=AddAction))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const { locale: l10nLocale } = useL10N();
-  const title: string = t('edemokracia.admin.User.votes.Table.edemokracia.admin.User.votes.PageAdd', {
-    defaultValue: 'Add',
-  });
+  const title: string = t('admin.SimpleVoteTable.votes.votes.PageAdd', { defaultValue: 'Add' });
 
   return async function pageAddVotesAction(owner: JudoIdentifiable<AdminUser>, successCallback: () => void) {
     const columns: GridColDef<AdminSimpleVoteStored>[] = [
       {
         ...baseColumnConfig,
         field: 'created',
-        headerName: t('edemokracia.admin.User.votes.votes.Vote.Table.created', { defaultValue: 'Created' }) as string,
+        headerName: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
 
         width: 170,
         type: 'dateTime',
@@ -84,7 +85,7 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
       {
         ...baseColumnConfig,
         field: 'type',
-        headerName: t('edemokracia.admin.User.votes.votes.Vote.Table.type', { defaultValue: 'Type' }) as string,
+        headerName: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
 
         width: 170,
         type: 'string',
@@ -99,14 +100,14 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
       {
         id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableCreatedFilter',
         attributeName: 'created',
-        label: t('edemokracia.admin.User.votes.votes.Vote.Table.created.Filter', { defaultValue: 'Created' }) as string,
+        label: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
         id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableTypeFilter',
         attributeName: 'type',
-        label: t('edemokracia.admin.User.votes.votes.Vote.Table.type.Filter', { defaultValue: 'Type' }) as string,
+        label: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
         filterType: FilterType.enumeration,
         enumValues: ['UP', 'DOWN'],
       },

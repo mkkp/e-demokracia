@@ -24,4 +24,5 @@ export interface TrinaryLogicProps {
   error?: boolean | undefined;
   helperText?: string | undefined;
   onChange?: (value: boolean | null) => void;
+  className?: string | undefined;
 }

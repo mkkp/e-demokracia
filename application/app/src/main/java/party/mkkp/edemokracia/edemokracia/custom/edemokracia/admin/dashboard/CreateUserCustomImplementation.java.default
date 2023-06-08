@@ -1,0 +1,28 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    C L A S S
+// ------------------------------
+// Factory expression: #allCustomizableOperations(#model)
+// Path expression: '/'+#emptyCustomOperationOsgiParentPath(#self)+'/'+#emptyCustomOperationOsgiName(#self)+'.java.default'
+// Template name: empty-custom-operation-implementation-osgi.java
+// Template file: osgi/empty-custom-operation-implementation-osgi.java.hbs
+// Debug: false
+// Payload validator: false
+// Optional types: false
+
+package party.mkkp.edemokracia.edemokracia.custom.edemokracia.admin.dashboard;
+
+/**
+ * 
+ * Usage:
+ *  1. Rename this file from CreateUserCustomImplementation.java.default to CreateUserCustomImplementation.java
+ *  2. Implement method
+ *  3. To ignore the generation of CreateUserCustomImplementation.java.default file, put it to .generator-ignore file
+ */
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.admin.dashboard.CreateUser.class)
+public class CreateUserCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.admin.dashboard.CreateUser {
+
+    public party.mkkp.edemokracia.edemokracia.api.edemokracia.admin.user.User createUser(party.mkkp.edemokracia.edemokracia.api.edemokracia.admin.createuserinput.CreateUserInput input)  {
+        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.admin.dashboard.CreateUserExchangeFunctionsComponent");
+    }
+
+}

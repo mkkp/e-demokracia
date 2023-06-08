@@ -176,27 +176,6 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <!-- 4. Create dummy file because JIB needed - to avoid the error there is no files presented -->
-                    <plugin>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.4</version>
-                        <executions>
-                            <execution>
-                                <phase>process-resources</phase>
-                                <configuration>
-                                    <tasks>
-                                        <echo file="${project.basedir}/target/classes/version.txt">${project.version}</echo>
-                                    </tasks>
-                                </configuration>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-
                 </plugins>
             </build>
             <dependencies>
@@ -220,11 +199,11 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- 5. Create image -->
+                    <!-- 4. Create image -->
                     <plugin>
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-maven-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.3.2</version>
                         <executions>
                             <execution>
                                 <id>build-platform-docker-x86_64</id>
@@ -235,9 +214,7 @@
 
                                 <configuration>
                                     <from>
-                                        <!-- <image>azul/zulu-openjdk-alpine:8</image> -->
-                                        <!--<image>adoptopenjdk/openjdk11-openj9:alpine-slim</image>-->
-                                        <image>adoptopenjdk/openjdk11:debianslim-jre</image>
+                                        <image>azul/zulu-openjdk-debian:17-latest</image> -->
                                         <platforms>
                                             <platform>
                                                 <architecture>amd64</architecture>
@@ -290,11 +267,10 @@
                         </executions>
                     </plugin>
 
-                    <!-- 6. Attach the artifact -->
+                    <!-- 5. Attach the artifact -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <id>attach-artifacts-x86_64</id>
@@ -328,11 +304,11 @@
             </activation>
             <build>
                 <plugins>
-                    <!-- 5. Create image -->
+                    <!-- 4. Create image -->
                     <plugin>
                         <groupId>com.google.cloud.tools</groupId>
                         <artifactId>jib-maven-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.3.2</version>
                         <executions>
                             <execution>
                                 <id>build-platform-docker-arm64</id>
@@ -343,9 +319,7 @@
 
                                 <configuration>
                                     <from>
-                                        <!-- <image>azul/zulu-openjdk-alpine:8</image> -->
-                                        <!--<image>adoptopenjdk/openjdk11-openj9:alpine-slim</image>-->
-                                        <image>adoptopenjdk/openjdk11:debianslim-jre</image>
+                                        <image>azul/zulu-openjdk-debian:17-latest</image>
                                         <platforms>
                                             <platform>
                                                 <architecture>arm64</architecture>
@@ -399,11 +373,10 @@
                         </executions>
                     </plugin>
 
-                    <!-- 6. Attach the artifact -->
+                    <!-- 5. Attach the artifact -->
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.0.0</version>
                         <executions>
                             <execution>
                                 <id>attach-artifacts-arm64</id>

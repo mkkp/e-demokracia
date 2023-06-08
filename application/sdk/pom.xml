@@ -10,51 +10,44 @@
     </parent>
 
     <artifactId>edemokracia-application-sdk</artifactId>
-    <name>edemokracia SDK Wrapper</name>
-    <description>edemokracia - SDK Wrapper to be able to use within IDE. It is not deployed, it is for development dependency only</description>
+    <name>edemokracia SDK</name>
+    <description>edemokracia - SDK</description>
 
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>hu.blackbelt.judo.meta</groupId>
+                <artifactId>judo-psm-generator-maven-plugin</artifactId>
+                <version>${judo-meta-psm-version}</version>
+                <configuration>
+                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                    <destination>${basedir}/target/generated-sources</destination>
+                    <uris>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-api:${judo-psm-generator-sdk-core-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-operation:${judo-psm-generator-sdk-core-version}</uri>
+                    </uris>
+                    <type>psm-sdk-core</type>
+                    <templateParameters>
+                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                        <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
+                        <generateOptionalTypes>true</generateOptionalTypes>
+                        <generatePayloadValidator>true</generatePayloadValidator>
+                    </templateParameters>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>unpack</id>
+                        <id>execute-psm-sdk-generation</id>
                         <phase>generate-sources</phase>
                         <goals>
-                            <goal>unpack</goal>
+                            <goal>generate</goal>
                         </goals>
-                        <configuration>
-                            <artifactItems>
-                                <!--
-                                <artifactItem>
-                                    <groupId>party.mkkp.edemokracia</groupId>
-                                    <artifactId>edemokracia-application-model</artifactId>
-                                    <version>${project.version}</version>
-                                    <classifier>sdk-internal</classifier>
-                                    <type>jar</type>
-                                </artifactItem>
-                                -->
-                                <artifactItem>
-                                    <groupId>party.mkkp.edemokracia</groupId>
-                                    <artifactId>edemokracia-application-model</artifactId>
-                                    <version>${project.version}</version>
-                                    <classifier>sdk</classifier>
-                                    <type>jar</type>
-                                </artifactItem>
-
-                            </artifactItems>
-                            <excludes>**/*.class</excludes>
-                            <outputDirectory>${project.build.directory}/unpacked-source</outputDirectory>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -62,7 +55,6 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -72,45 +64,20 @@
                         </goals>
                         <configuration>
                             <sources>
-                                <source>${project.build.directory}/unpacked-source</source>
+                                <source>${basedir}/target/generated-sources</source>
                             </sources>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.2.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
-    <dependencies>
 
-        <!--
+    <dependencies>
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
             <artifactId>edemokracia-application-model</artifactId>
             <version>${project.version}</version>
-            <classifier>sdk-internal</classifier>
-            <type>jar</type>
-        </dependency>
-        -->
-        <dependency>
-            <groupId>party.mkkp.edemokracia</groupId>
-            <artifactId>edemokracia-application-model</artifactId>
-            <version>${project.version}</version>
-            <classifier>sdk</classifier>
-            <type>jar</type>
         </dependency>
 
         <dependency>
@@ -123,6 +90,24 @@
             <groupId>hu.blackbelt.judo</groupId>
             <artifactId>judo-dispatcher-api</artifactId>
             <version>${judo-dispatcher-api-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-common</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-api</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-operation</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
         </dependency>
     </dependencies>
 </project>

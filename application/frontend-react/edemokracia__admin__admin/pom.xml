@@ -26,7 +26,7 @@
         <override-dir>${project.parent.basedir}/generator-overrides</override-dir>
         
         
-        <tablePageLimit>10</tablePageLimit>
+        <muiLicensePlan>community</muiLicensePlan>
         <appVersion>1.0.0</appVersion>
         
         
@@ -48,8 +48,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>5.1.8</version>
-                <extensions>true</extensions>
                 <configuration>
                     <instructions>
                         <Web-ContextPath>/${model-name}/${actor}</Web-ContextPath>
@@ -90,6 +88,11 @@
                                         <uri>${override-dir}/ui-react</uri>
                                     </uris>
                                     <type>ui-react</type>
+                                    <scanPackages>
+                                        hu.blackbelt.judo.generator.commons,
+                                        hu.blackbelt.judo.ui.generator.react,
+                                        hu.blackbelt.judo.ui.generator.typescript.rest.commons
+                                    </scanPackages>
                                     <applications>
                                         ${actor-fq-name}
                                     </applications>
@@ -103,10 +106,11 @@
                                         <appScope>${appScope}</appScope>
                                         <appVersion>${appVersion}</appVersion>
                                         <nodeVersion>${node-version}</nodeVersion>
-                                        
-                                        <tablePageLimit>${tablePageLimit}</tablePageLimit>
+
+                                        <muiLicensePlan>${muiLicensePlan}</muiLicensePlan>
                                     </templateParameters>
                                     <validateChecksum>${validateChecksum}</validateChecksum>
+                                    <contextAccessor>hu.blackbelt.judo.ui.generator.react.StoredVariableHelper</contextAccessor>
                                 </configuration>
                             </execution>
                         </executions>
@@ -150,12 +154,17 @@
                                         <uri>${override-dir}/ui-typescript</uri>
                                     </uris>
                                     <type>ui-typescript-rest</type>
+                                    <scanPackages>
+                                        hu.blackbelt.judo.generator.commons,
+                                        hu.blackbelt.judo.ui.generator.typescript.rest
+                                    </scanPackages>
                                     <applications>
                                         ${actor-fq-name}
                                     </applications>
                                     <ui>${ui-model}</ui>
                                     <destination>${basedir}/src/generated</destination>
                                     <validateChecksum>${validateChecksum}</validateChecksum>
+                                    <contextAccessor>hu.blackbelt.judo.ui.generator.typescript.rest.api.StoredVariableHelper</contextAccessor>
                                 </configuration>
                             </execution>
 

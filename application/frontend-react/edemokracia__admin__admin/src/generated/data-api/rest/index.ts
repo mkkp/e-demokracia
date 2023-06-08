@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'data-api/rest/'+'index.ts'
+// Template name: restIndex.ts.hbs
+// Template file: rest/restIndex.ts.hbs
+
 export * from './AdminUserQueryCustomizer';
 export * from './AdminSimpleVoteQueryCustomizer';
 export * from './AdminCountyQueryCustomizer';

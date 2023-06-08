@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'data-axios/'+'JudoAxiosService.ts'
+// Template name: judoAxiosService.ts.hbs
+// Template file: data-axios/judoAxiosService.ts.hbs
+
 import { AxiosInstance } from 'axios';
 import { AxiosProvider } from './AxiosProvider';
 

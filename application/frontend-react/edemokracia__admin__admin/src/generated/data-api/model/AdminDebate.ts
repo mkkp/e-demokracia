@@ -1,11 +1,19 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getClassTypes(#application)
+// Path expression: 'data-api/model/'+#classDataName(#self,"")+'.ts'
+// Template name: class.ts.hbs
+// Template file: model/class.ts.hbs
+
 import { JudoStored } from '@judo/data-api-common';
-import { EdemokraciaDebateStatus } from './EdemokraciaDebateStatus';
-import { AdminVoteDefinitionStored } from './AdminVoteDefinition';
-import { AdminProStored } from './AdminPro';
-import { AdminIssueStored } from './AdminIssue';
-import { AdminConStored } from './AdminCon';
-import { AdminUserStored } from './AdminUser';
 import { AdminCommentStored } from './AdminComment';
+import { AdminConStored } from './AdminCon';
+import { AdminIssueStored } from './AdminIssue';
+import { AdminProStored } from './AdminPro';
+import { AdminUserStored } from './AdminUser';
+import { AdminVoteDefinitionStored } from './AdminVoteDefinition';
+import { EdemokraciaDebateStatus } from './EdemokraciaDebateStatus';
 
 export interface AdminDebate {
   closeAt: Date;

@@ -88,7 +88,7 @@
                                         <descriptor>mvn:hu.blackbelt.judo.platform/judo-platform-karaf-features/${judo-platform-version}/xml/features</descriptor>
                                     </descriptors>
                                     <distribution>org.apache.karaf.features:framework</distribution>
-                                    <javase>11</javase>
+                                    <javase>17</javase>
                                     <framework>
                                         <feature>framework</feature>
                                         <feature>shell-compat</feature>
@@ -121,9 +121,9 @@
 
         <dependency>
             <groupId>hu.blackbelt.judo.platform</groupId>
-            <artifactId>judo-platform-karaf-features</artifactId>
+            <artifactId>judo-platform-sdk-karaf-features</artifactId>
             <type>xml</type>
-            <classifier>features-sdk</classifier>
+            <classifier>features</classifier>
             <scope>runtime</scope>
             <version>${judo-platform-version}</version>
         </dependency>
@@ -136,18 +136,14 @@
 
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
-            <artifactId>edemokracia-application-model</artifactId>
+            <artifactId>edemokracia-application-sdk</artifactId>
             <version>${project.version}</version>
-            <classifier>sdk</classifier>
-            <type>jar</type>
         </dependency>
 
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
-            <artifactId>edemokracia-application-model</artifactId>
+            <artifactId>edemokracia-application-internal</artifactId>
             <version>${project.version}</version>
-            <classifier>sdk-internal</classifier>
-            <type>jar</type>
         </dependency>
 
         <dependency>

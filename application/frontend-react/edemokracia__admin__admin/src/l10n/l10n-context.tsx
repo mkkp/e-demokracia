@@ -6,6 +6,7 @@
 // Template name: actor/src/l10n/l10n-context.tsx
 // Template file: actor/src/l10n/l10n-context.tsx.hbs
 
+import hu from 'date-fns/locale/hu';
 import enUS from 'date-fns/locale/en-US';
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
@@ -18,8 +19,8 @@ import { OBJECTCLASS, ServiceReference } from '@pandino/pandino-api';
 import { useTrackService, useBundleContext } from '@pandino/react-hooks';
 
 const locales = {
-  default: undefined,
   'en-US': enUS,
+  'hu-HU': hu,
 };
 
 type LocaleKey = keyof typeof locales;
@@ -42,7 +43,7 @@ export interface L10NTranslationProvider {
   provideTranslations(locale: string): Promise<L10NTranslations>;
 }
 export const L10NProvider = ({ children }: { children: ReactNode }) => {
-  const defaultLocale: LocaleKey = '' || 'default';
+  const defaultLocale: LocaleKey = 'hu-HU';
   const [locale, setLocale] = useState<LocaleKey>(defaultLocale);
   const [translation, setTranslation] = useState<any>(null);
   const [filter, setFilter] = useState<string>(`(${OBJECTCLASS}=${L10N_TRANSLATION_PROVIDER_INTERFACE_KEY})`);

@@ -1,15 +1,23 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getClassTypes(#application)
+// Path expression: 'data-api/model/'+#classDataName(#self,"")+'.ts'
+// Template name: class.ts.hbs
+// Template file: model/class.ts.hbs
+
 import { JudoStored } from '@judo/data-api-common';
-import { CommentStored } from './Comment';
 import { CityStored } from './City';
-import { EdemokraciaVoteType } from './EdemokraciaVoteType';
-import { IssueCategoryStored } from './IssueCategory';
-import { DebateStored } from './Debate';
-import { UserStored } from './User';
-import { DistrictStored } from './District';
-import { IssueAttachmentStored } from './IssueAttachment';
-import { IssueTypeStored } from './IssueType';
-import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
+import { CommentStored } from './Comment';
 import { CountyStored } from './County';
+import { DebateStored } from './Debate';
+import { DistrictStored } from './District';
+import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
+import { EdemokraciaVoteType } from './EdemokraciaVoteType';
+import { IssueAttachmentStored } from './IssueAttachment';
+import { IssueCategoryStored } from './IssueCategory';
+import { IssueTypeStored } from './IssueType';
+import { UserStored } from './User';
 
 export interface Issue {
   created: Date;

@@ -287,6 +287,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
                   }
             }
             {...serverTableConfig}
+            pageSizeOptions={[10]}
             getRowId={(row: T) => row.__identifier as GridRowId}
             loading={isLoading}
             rows={data}

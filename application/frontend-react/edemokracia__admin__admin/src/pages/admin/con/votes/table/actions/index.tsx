@@ -7,4 +7,4 @@
 // Template file: actor/src/pages/actions/index.tsx.hbs
 export * from './pageFilterVotes';
 export * from './pageRefreshVotes';
-export * from './row/rowViewVotes';
+export * from './rowViewVotes';

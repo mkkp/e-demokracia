@@ -1,8 +1,16 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getClassTypes(#application)
+// Path expression: 'data-api/model/'+#classDataName(#self,"")+'.ts'
+// Template name: class.ts.hbs
+// Template file: model/class.ts.hbs
+
 import { JudoStored } from '@judo/data-api-common';
-import { AdminProStored } from './AdminPro';
-import { AdminUserStored } from './AdminUser';
 import { AdminCommentStored } from './AdminComment';
+import { AdminProStored } from './AdminPro';
 import { AdminSimpleVoteStored } from './AdminSimpleVote';
+import { AdminUserStored } from './AdminUser';
 
 export interface AdminCon {
   createdByName?: null | string;

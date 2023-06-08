@@ -16,7 +16,7 @@ export function Logo(props: LogoProps) {
   return (
     <Box
       sx={{
-        p: 2,
+        p: (theme) => theme.spacing(2),
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

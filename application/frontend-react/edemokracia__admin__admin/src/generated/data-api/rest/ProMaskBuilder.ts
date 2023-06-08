@@ -1,9 +1,17 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getQueryCustomizers(#application)
+// Path expression: 'data-api/rest/'+#classDataName(#self,"MaskBuilder")+'.ts'
+// Template name: mask.ts.hbs
+// Template file: rest/mask.ts.hbs
+
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { CommentAttributes, ProAttributes, ConAttributes, SimpleVoteAttributes, UserAttributes } from '../model';
 
-import {} from './SimpleVoteMaskBuilder';
-import { ConCommentsMaskBuilder, ConProsMaskBuilder, ConConsMaskBuilder, ConVotesMaskBuilder } from './ConMaskBuilder';
 import { CommentVotesMaskBuilder } from './CommentMaskBuilder';
+import { ConCommentsMaskBuilder, ConProsMaskBuilder, ConConsMaskBuilder, ConVotesMaskBuilder } from './ConMaskBuilder';
+import {} from './SimpleVoteMaskBuilder';
 
 export class ProCommentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<CommentAttributes | CommentVotesMaskBuilder>) {

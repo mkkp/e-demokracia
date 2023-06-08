@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { ConfirmationDialog } from './ConfirmationDialog';
+import { OperationFaultDialog } from './OperationFaultDialog';
 import { FilterDialog } from './FilterDialog';
 import { PageDialog } from './PageDialog';
 import { RangeDialog } from './RangeDialog';

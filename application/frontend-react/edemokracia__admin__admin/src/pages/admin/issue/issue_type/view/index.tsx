@@ -14,67 +14,45 @@ import { useEffect, useState, useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRowId,
-  GridRowParams,
-  GridRowSelectionModel,
-  GridSortItem,
-  GridSortModel,
-  GridValueFormatterParams,
-} from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
-import {
-  MdiIcon,
-  ModeledTabs,
-  PageHeader,
-  DropdownButton,
-  CustomBreadcrumb,
-  useJudoNavigation,
-} from '../../../../../components';
-import { useConfirmationBeforeChange } from '../../../../../hooks';
-import { columnsActionCalculator } from '../../../../../components/table';
-import { useRangeDialog } from '../../../../../components/dialog';
-import {
-  AggregationInput,
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  TrinaryLogicCombobox,
-} from '../../../../../components/widgets';
+import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
+import { useRangeDialog } from '~/components/dialog';
+import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
   processQueryCustomizer,
-  TableRowAction,
   uiDateToServiceDate,
   serviceDateToUiDate,
   uiTimeToServiceTime,
   serviceTimeToUiTime,
   stringToBooleanSelect,
   booleanToStringSelect,
-} from '../../../../../utilities';
-import { baseTableConfig, toastConfig, dividerHeight } from '../../../../../config';
-import { useL10N } from '../../../../../l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '../../../../../custom';
+} from '~/utilities';
+import { useConfirmationBeforeChange } from '~/hooks';
+import { toastConfig, dividerHeight } from '~/config';
+import { useL10N } from '~/l10n/l10n-context';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { JudoIdentifiable } from '@judo/data-api-common';
+import { mainContainerPadding } from '~/theme';
+
 import {
   AdminIssue,
-  EdemokraciaVoteType,
   AdminIssueStored,
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
   AdminIssueTypeStored,
-} from '../../../../../generated/data-api';
-import { adminIssueServiceImpl, adminIssueTypeServiceImpl } from '../../../../../generated/data-axios';
-import { JudoIdentifiable } from '@judo/data-api-common';
-import { mainContainerPadding } from '../../../../../theme';
-import { useAdminIssueIssueTypeView } from './hooks/useAdminIssueIssueTypeView';
-import { usePageRefreshIssueTypeAction } from './actions';
+  EdemokraciaVoteType,
+} from '~/generated/data-api';
+import { adminIssueServiceImpl, adminIssueTypeServiceImpl } from '~/generated/data-axios';
+
+import {} from './actions';
+
+import { PageActions } from './components/PageActions';
 
 /**
  * Name: edemokracia::admin::Issue.issueType#View
@@ -86,12 +64,10 @@ export default function AdminIssueIssueTypeView() {
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { signedIdentifier } = useParams();
-  const pageRefreshIssueTypeAction = usePageRefreshIssueTypeAction();
 
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
-  const { queryCustomizer } = useAdminIssueIssueTypeView();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -102,6 +78,7 @@ export default function AdminIssueIssueTypeView() {
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueTypeStored, any>>(
     {} as unknown as Record<keyof AdminIssueTypeStored, any>,
   );
+  const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof AdminIssueTypeStored, value: any) => void = useCallback(
     (attributeName: keyof AdminIssueTypeStored, value: any) => {
       const dateTypes: string[] = [];
@@ -117,15 +94,21 @@ export default function AdminIssueIssueTypeView() {
         payloadDiff[attributeName] = value;
       }
       setData({ ...data, [attributeName]: value });
+      if (!editMode) {
+        setEditMode(true);
+      }
     },
     [data],
   );
-  const [editMode, setEditMode] = useState<boolean>(false);
   const [validation, setValidation] = useState<Map<keyof AdminIssueType, string>>(
     new Map<keyof AdminIssueType, string>(),
   );
 
-  const title: string = t('edemokracia.admin.Issue.issueType.View', { defaultValue: 'Issue Type View/Edit' });
+  const queryCustomizer: AdminIssueTypeQueryCustomizer = {
+    _mask: '{title,voteType,description}',
+  };
+
+  const title: string = t('admin.IssueTypeView', { defaultValue: 'Issue Type View/Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -142,7 +125,7 @@ export default function AdminIssueIssueTypeView() {
     }),
   );
 
-  const fetchData = async () => {
+  async function fetchData() {
     setIsLoading(true);
 
     try {
@@ -163,7 +146,7 @@ export default function AdminIssueIssueTypeView() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     fetchData();
@@ -176,19 +159,13 @@ export default function AdminIssueIssueTypeView() {
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              loading={isLoading}
-              loadingPosition="start"
-              id="page-action-refresh"
-              startIcon={<MdiIcon path="refresh" />}
-              onClick={() => fetchData()}
-            >
-              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
-            </LoadingButton>
-          </Grid>
-        )}
+        <PageActions
+          data={data}
+          fetchData={fetchData}
+          editMode={editMode}
+          setEditMode={setEditMode}
+          isLoading={isLoading}
+        />
       </PageHeader>
       <Container component="main" maxWidth="xl">
         <Box sx={mainContainerPadding}>
@@ -211,18 +188,13 @@ export default function AdminIssueIssueTypeView() {
                         required
                         name="title"
                         id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewGroupTitle"
-                        label={
-                          t('edemokracia.admin.Issue.issueType.IssueType.View.group.title', {
-                            defaultValue: 'Title',
-                          }) as string
-                        }
+                        label={t('admin.IssueTypeView.title', { defaultValue: 'Title' }) as string}
                         value={data.title}
                         className={!editMode ? 'JUDO-viewMode' : undefined}
                         disabled={false || !isFormUpdateable()}
                         error={!!validation.get('title')}
                         helperText={validation.get('title')}
                         onChange={(event) => {
-                          setEditMode(true);
                           storeDiff('title', event.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}
@@ -240,19 +212,14 @@ export default function AdminIssueIssueTypeView() {
                       <TextField
                         name="voteType"
                         id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewGroupVoteType"
-                        label={
-                          t('edemokracia.admin.Issue.issueType.IssueType.View.group.voteType', {
-                            defaultValue: 'VoteType',
-                          }) as string
-                        }
+                        label={t('admin.IssueTypeView.voteType', { defaultValue: 'VoteType' }) as string}
                         value={data.voteType || ''}
                         className={!editMode ? 'JUDO-viewMode' : undefined}
                         disabled={false || !isFormUpdateable()}
                         error={!!validation.get('voteType')}
                         helperText={validation.get('voteType')}
                         onChange={(event) => {
-                          setEditMode(true);
-                          storeDiff('voteType', event.target.value as EdemokraciaVoteType);
+                          storeDiff('voteType', event.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}
                         InputProps={{
@@ -296,11 +263,7 @@ export default function AdminIssueIssueTypeView() {
                         required
                         name="description"
                         id="TextAreaedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewGroupDescription"
-                        label={
-                          t('edemokracia.admin.Issue.issueType.IssueType.View.group.description', {
-                            defaultValue: 'Description',
-                          }) as string
-                        }
+                        label={t('admin.IssueTypeView.description', { defaultValue: 'Description' }) as string}
                         value={data.description}
                         className={!editMode ? 'JUDO-viewMode' : undefined}
                         disabled={false || !isFormUpdateable()}
@@ -309,7 +272,6 @@ export default function AdminIssueIssueTypeView() {
                         error={!!validation.get('description')}
                         helperText={validation.get('description')}
                         onChange={(event) => {
-                          setEditMode(true);
                           storeDiff('description', event.target.value);
                         }}
                         InputLabelProps={{ shrink: true }}

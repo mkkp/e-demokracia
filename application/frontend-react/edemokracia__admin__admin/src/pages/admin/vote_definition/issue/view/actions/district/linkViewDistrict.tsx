@@ -2,7 +2,7 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: #getActionsForPages(#application)
-// Path expression: #pagePath(#self.value)+'actions/'+#pageActionPathSuffix(#self.key,#self.value)+'.tsx'
+// Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
 // Action: ViewAction
@@ -11,13 +11,14 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type {
+  AdminDistrict,
+  AdminDistrictQueryCustomizer,
+  AdminDistrictStored,
   AdminIssue,
   AdminIssueStored,
-  AdminDistrict,
-  AdminDistrictStored,
-  AdminDistrictQueryCustomizer,
-} from '../../../../../../../generated/data-api';
-import { useJudoNavigation } from '../../../../../../../components';
+} from '~/generated/data-api';
+import { useJudoNavigation } from '~/components';
+import { routeToAdminIssueDistrictView } from '~/routes';
 
 export const LINK_VIEW_DISTRICT_ACTION_INTERFACE_KEY = 'LinkViewDistrictAction';
 export type LinkViewDistrictAction = () => (
@@ -37,6 +38,6 @@ export const useLinkViewDistrictAction: LinkViewDistrictAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminDistrictStored) {
-    navigate(`admin/issue/district/view/${entry.__signedIdentifier}`);
+    navigate(routeToAdminIssueDistrictView(entry.__signedIdentifier));
   };
 };

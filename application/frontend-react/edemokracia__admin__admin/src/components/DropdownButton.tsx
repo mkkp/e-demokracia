@@ -6,7 +6,17 @@
 // Template name: actor/src/components/DropdownButton.tsx
 // Template file: actor/src/components/DropdownButton.tsx.hbs
 
-import { Button, ClickAwayListener, Grow, MenuItem, MenuList, Paper, Popper } from '@mui/material';
+import {
+  Button,
+  ClickAwayListener,
+  Grow,
+  MenuItem,
+  MenuList,
+  Paper,
+  Popper,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import { useState, useRef, useEffect } from 'react';
 import type { ReactNode, KeyboardEvent, SyntheticEvent } from 'react';
 import { MdiIcon } from './MdiIcon';
@@ -18,7 +28,6 @@ interface DropdownMenuItem {
   label?: string;
   onClick: () => void;
   startIcon?: ReactNode;
-  endIcon?: ReactNode;
 }
 
 interface DropdownButtonProps {
@@ -29,12 +38,14 @@ interface DropdownButtonProps {
   showDropdownIcon?: boolean;
   fullWidth?: boolean;
   variant?: 'text' | 'outlined' | 'contained' | undefined;
+  startIcon?: ReactNode;
 }
 
 export function DropdownButton({
   children,
   id,
   menuItems,
+  startIcon,
   disabled = false,
   showDropdownIcon = true,
   fullWidth = false,
@@ -80,6 +91,7 @@ export function DropdownButton({
         ref={anchorRef}
         id={id}
         onClick={handleToggle}
+        startIcon={startIcon}
         endIcon={showDropdownIcon && <MdiIcon path="chevron-down" />}
         disabled={disabled}
         fullWidth={fullWidth}
@@ -117,9 +129,8 @@ export function DropdownButton({
                             menuItem.onClick();
                           }}
                         >
-                          {menuItem.startIcon}
-                          {menuItem.label}
-                          {menuItem.endIcon}
+                          <ListItemIcon sx={{ minWidth: '0 !important' }}>{menuItem.startIcon}</ListItemIcon>
+                          <ListItemText>{menuItem.label}</ListItemText>
                         </MenuItem>
                       );
                     })}

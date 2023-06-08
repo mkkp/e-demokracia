@@ -24,6 +24,7 @@ export const TrinaryLogicCombobox = ({
   error,
   helperText,
   onChange,
+  className,
 }: TrinaryLogicProps) => {
   const { t } = useTranslation();
   const onChangeHandler = onChange
@@ -42,7 +43,7 @@ export const TrinaryLogicCombobox = ({
       label={label}
       select
       value={TRINARY_LOGIC.get(value)}
-      className={!editMode ? 'JUDO-viewMode' : undefined}
+      className={`${!editMode ? 'JUDO-viewMode' : undefined} ${className}`}
       onChange={onChangeHandler}
       disabled={disabled || readOnly}
       error={error}

@@ -178,3 +178,7 @@ export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
     }
   };
 };
+
+export const isErrorOperationFault = (error: any): boolean => {
+  return error?.response?.status === 422;
+};

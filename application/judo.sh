@@ -22,12 +22,12 @@ USAGE: judo.sh COMMANDS... [OPTIONS...]
     schema-upgrade                          It can be used with persistent db (postgresql) only. It uses the current running database to
                                             generate the difference and after it applied.
     build                                   Build project.
+        -p --build-parallel                 Parallel maven build. The log can be chaotic.
         -a --build-app-module               Build app module only.
         -M --skip-model                     Skip model building.
         -B --skip-backend                   Skip backend building.
         -F --skip-frontend                  Skip frontend building.
         -FR --skip-react                    Skip react frontend building.
-        -FF --skip-flutter                  Skip flutter frontend building.
         -BM --skip-backendmodels            Skip Backend Models building.
         -KA --skip-karaf                    Skip Backend Karaf building.
         -d --docker                         Build docker image.
@@ -202,7 +202,7 @@ dump_postgresql () {
 }
 
 upgrade_postgresql_schema () {
-    ${APP_DIR}/mvnw judo-rdbms-schema:apply \
+    mvnd judo-rdbms-schema:apply \
     -DjdbcUrl=jdbc:postgresql://127.0.0.1:5432/${APP_NAME} \
     -DdbType=postgresql \
     -DdbUser=${APP_NAME} \
@@ -216,9 +216,16 @@ install_maven_wrapper () {
     sed $(get_sed_edit_option) 's/https:\/\/nexus\.judo\.technology\/repository\/maven-judong\//https:\/\/repo\.maven\.apache\.org\/maven2\//; s/https\:\/\//####/; s/\/\//\//; s/####/https\:\/\//' ${APP_DIR}/.mvn/wrapper/maven-wrapper.properties
 }
 
+install_sdkman () {
+    curl -s "https://get.sdkman.io" | bash
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+    sdk env
+    sdk env install
+}
+
 prune_application () {
     if [ $prune_confirmation -eq 1 ]; then
-        [ $prune_frontend -eq 1 ] && location="frontend-flutter and frontend-react" || location="this repository"
+        [ $prune_frontend -eq 1 ] && location="frontend-react" || location="this repository"
         echo -ne "Prune command deletes all untracked files in $location!\nAre you sure you want to continue? [Y/n]: "
         read canContinue
     else
@@ -235,8 +242,6 @@ prune_application () {
         fi
 
         if [ $prune_frontend -eq 1 ]; then
-            cd ${APP_DIR}/frontend-flutter
-            git clean -dffx
             cd ${APP_DIR}/frontend-react
             git clean -dffx
             cd $CURR_DIR
@@ -463,7 +468,7 @@ start_karaf () {
     if [ $watchBundles -eq 0 ]; then
         export JUDO_PLATFORM_BUNDLE_WATCHER=false
     fi
-    local VERSION_NUMBER=$(${APP_DIR}/mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
+    local VERSION_NUMBER=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
 
     rm -rf $KARAF_DIR && \
     mkdir $KARAF_DIR && \
@@ -485,10 +490,10 @@ start_karaf () {
 }
 
 install_bundles () {
-    ${APP_DIR}/mvnw build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR}/model
-    ${APP_DIR}/mvnw install -f ${APP_DIR}/app
-    find ./frontend-react/${APP_NAME}* -type f -name pom.xml -exec ${APP_DIR}/mvnw bundle:bundle install:install -f "{}" \;
-    find ./frontend-flutter/${APP_NAME}* -type f -name pom.xml -exec ${APP_DIR}/mvnw bundle:bundle install:install -f "{}" \;
+    local modulenames=$(find ${APP_DIR}/frontend-react/${APP_NAME}* -type f -name pom.xml | xargs -0 -I % dirname "%" | xargs -0 -I % realpath --relative-to=${APP_DIR} "%" | sed 's/\n/,/g')
+    modulenames="${modulenames},model,sdk,internal,app"
+    echo "Module names: $modulenames"
+    mvnd build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR} -DskipModels=true -pl ${modulenames}
 }
 
 # Args:
@@ -610,7 +615,7 @@ get_compose_envs () {
 load_application_image () {
     local arch=$(get_arch)
 
-    local PROJECT_VERSION=$(${APP_DIR}/mvnw org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout -f ${APP_DIR})
+    local PROJECT_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout -f ${APP_DIR})
     docker load --input ${APP_DIR}/docker/target/${APP_NAME}-application-${PROJECT_VERSION}_docker_image_${arch}.tar || exit
 }
 
@@ -625,12 +630,12 @@ schema_upgrade () {
 build () {
     echo "Building version ${FULL_VERSION_NUMBER}"
     local goal="install"
-    local modelargs=""
-    local args=""
+    local modelargs="-Dsmartbuilder.profiling=true"
+    local args="-Dsmartbuilder.profiling=true"
     if [ $reckless -eq 1 ]; then
-        modelargs="-DvalidateModels=false -DuseCache=true"
+        modelargs="$modelargs -DvalidateModels=false -DuseCache=true"
     fi
-    [ $skipModel -eq 1 ] || ${APP_DIR}/mvnw install -f $MODEL_DIR $modelargs || exit
+    [ $skipModel -eq 1 ] || mvn install -f $MODEL_DIR $modelargs || exit
     if [ $reckless -eq 1 ]; then
         if [ $karaf -eq 0 ]; then
            echo "Reckless mode can be used with local karaf only"
@@ -639,22 +644,21 @@ build () {
            start_local_env
         fi
         goal="package"
-        args="-Dprofile -Dmaven.test.skip=true -Dquick -DdialectList=$dbtype -DvalidateModels=false -DvalidateChecksum=false -DskipSchemaDocker -DskipSchemaCli -DuseCache=true -DskipKarafFeature=true -T 1C"
+        args="$args -Dprofile -Dmaven.test.skip=true -Dquick -DdialectList=$dbtype -DvalidateModels=false -DvalidateChecksum=false -DskipSchemaDocker -DskipSchemaCli -DuseCache=true -DskipKarafFeature=true"
     fi
     if [ $skipBackend -eq 1 -a $skipFrontend -eq 0 ]; then
-        [ $skipReact -eq 1 ] || ${APP_DIR}/mvnw install -f ${APP_DIR}/frontend-react || exit
-        [ $skipFlutter -eq 1 ] || ${APP_DIR}/mvnw install -f ${APP_DIR}/frontend-flutter || exit
+        [ $skipReact -eq 1 ] || mvnd install -f ${APP_DIR}/frontend-react || exit
     elif [ $skipBackend -eq 0 -a $buildAppModule -eq 1 ]; then
-        ${APP_DIR}/mvnw install -f ${APP_DIR}/app || exit
+        mvnd install -f ${APP_DIR}/app || exit
     elif [ $skipBackend -eq 0 ]; then
+#        if [ $buildParallel -eq 1 ]; then
+#            args="$args -T 1C";
+#        fi
         if [ $skipFrontend -eq 1 ]; then
-            args="-DskipFrontendReact -DskipFrontendFlutter"
+            args="$args -DskipFrontendReact"
         fi
         if [ $skipReact -eq 1 ]; then
             args="$args -DskipFrontendReact"
-        fi
-        if [ $skipFlutter -eq 1 ]; then
-            args="$args -DskipFrontendFlutter"
         fi
 
         if [ $skipBackendModels -eq 1 ]; then
@@ -664,12 +668,12 @@ build () {
             args="$args -DskipKaraf"
         fi
         if [ $dockerBuilding -eq 0 ]; then
-            args="$args -DskipDocker"
+            args="$args -DskipDocker -DkarafOfflineZip=false"
         fi
         if [ $schemaBuilding -eq 0 ]; then
             args="$args -DskipSchema"
         fi
-        ${APP_DIR}/mvnw $goal -f $APP_DIR $args || exit
+        mvnd $goal -f $APP_DIR $args || exit
     fi
     if [ $reckless -eq 1 ]; then
         schema_upgrade
@@ -728,7 +732,6 @@ skipModel=0
 skipBackend=0
 prune_confirmation=1
 skipFrontend=0
-skipFlutter=0
 skipReact=0
 skipKeycloak=0
 buildAppModule=0
@@ -737,6 +740,7 @@ import=0
 dumpName=''
 schemaUpgrade=0
 watchBundles=1
+buildParallel=0
 
 FULL_VERSION_NUMBER="SNAPSHOT"
 original_args=( "$@" )
@@ -787,12 +791,12 @@ while [ $# -ne 0 ]; do
         -dn | --dump-name)              shift 1; export dumpName=$1; shift 1;;
         schema-upgrade)                 schemaUpgrade=1; shift 1;;
         build)                          build=1; shift 1;;
+        -p | --build-parallel)          buildParallel=1; shift 1;;
         -a | --build-app-module)        buildAppModule=1; skipModel=1; shift 1;;
         -M | --skip-model)              skipModel=1; shift 1;;
         -B | --skip-backend)            skipBackend=1; shift 1;;
         -F | --skip-frontend)           skipFrontend=1; shift 1;;
         -FR | --skip-react)             skipReact=1; shift 1;;
-        -FF | --skip-flutter)           skipFlutter=1; shift 1;;
         -BM | --skip-backendmodels)     skipBackendModels=1; shift 1;;
         -KA | --skip-karaf)             karafBuilding=0; shift 1;;
         -d | --docker)                  dockerBuilding=1; shift 1;;
@@ -851,6 +855,12 @@ if [ ! -f "${APP_DIR}/mvnw" ]; then
     install_maven_wrapper
 fi
 
+if [ ! -f "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
+    install_sdkman
+fi
+source "$HOME/.sdkman/bin/sdkman-init.sh"
+sdk env
+
 if [ $dump -eq 1 ]; then
     start_postgres postgres-${APP_NAME} ${POSTGRES_PORT:-5432}
     wait_for_port 127.0.0.1 ${POSTGRES_PORT:-5432} 30
@@ -890,12 +900,15 @@ elif [ $clean -eq 1 ]; then
 fi
 
 if [ $update -eq 1 ]; then
-    [ $update_modules -eq 1 ] || ${APP_DIR}/mvnw validate -DupdateJudoVersions=true -f ${MODEL_DIR} -U || exit
-    ${APP_DIR}/mvnw validate -DupdateJudoModuleVersions=true -f ${MODEL_DIR} -U || exit
+    [ $update_modules -eq 1 ] || mvnd validate -DupdateJudoVersions=true -f ${MODEL_DIR} -U || exit
+    sdk selfupdate
+    sdk env install
+    sdk env
+    mvnd validate -DupdateJudoModuleVersions=true -f ${MODEL_DIR} -U || exit
 fi
 
 if [ $generate -eq 1 ]; then
-    ${APP_DIR}/mvnw clean install -DgenerateProject -DskipModels -f ${MODEL_DIR} || exit
+    mvnd clean install -DgenerateProject -DskipModels -f ${MODEL_DIR} || exit
 fi
 
 if [ $build -eq 1 ]; then
