@@ -276,19 +276,25 @@ export default function AdminAdminDashboardhomeDashboard() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissues',
                     name: 'edemokracia.admin.Admin.dashboardhome.Dashboard.myissues',
-                    label: 'My issues',
+                    label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.myissues', {
+                      defaultValue: 'My issues',
+                    }) as string,
                     icon: 'ticket-account',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMydebates',
                     name: 'edemokracia.admin.Admin.dashboardhome.Dashboard.mydebates',
-                    label: 'My debates',
+                    label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.mydebates', {
+                      defaultValue: 'My debates',
+                    }) as string,
                     icon: 'wechat',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotes',
                     name: 'edemokracia.admin.Admin.dashboardhome.Dashboard.myvotes',
-                    label: 'My votes',
+                    label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.myvotes', {
+                      defaultValue: 'My votes',
+                    }) as string,
                     icon: 'vote-outline',
                   },
                 ]}

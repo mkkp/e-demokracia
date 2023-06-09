@@ -268,19 +268,19 @@ export default function AdminAdminDashboardhomeView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewTabBarMyissues',
                     name: 'admin.DashboardView.myissues',
-                    label: 'My issues',
+                    label: t('admin.DashboardView.myissues', { defaultValue: 'My issues' }) as string,
                     icon: 'ticket-account',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewTabBarMydebates',
                     name: 'admin.DashboardView.mydebates',
-                    label: 'My debates',
+                    label: t('admin.DashboardView.mydebates', { defaultValue: 'My debates' }) as string,
                     icon: 'wechat',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewTabBarMyvotes',
                     name: 'admin.DashboardView.myvotes',
-                    label: 'My votes',
+                    label: t('admin.DashboardView.myvotes', { defaultValue: 'My votes' }) as string,
                     icon: 'vote-outline',
                   },
                 ]}

@@ -58,7 +58,7 @@ export function ModeledTabs({ id, activeIndex, childTabs, children }: ModeledTab
               id={`${c.id}-tab`}
               key={c.id}
               label={c.label}
-              icon={c.icon ? <MdiIcon path={c.icon} /> : ''}
+              icon={c.icon ? <MdiIcon path={c.icon} sx={{ m: '0 0.5rem' }} /> : ''}
               iconPosition="start"
               disabled={false}
             />

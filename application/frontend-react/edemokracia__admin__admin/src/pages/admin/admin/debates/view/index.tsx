@@ -500,13 +500,13 @@ export default function AdminAdminDebatesView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewTabBarArguments',
                     name: 'admin.DebateView.arguments',
-                    label: 'Arguments',
+                    label: t('admin.DebateView.arguments', { defaultValue: 'Arguments' }) as string,
                     icon: 'account-voice',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewTabBarComments',
                     name: 'admin.DebateView.comments',
-                    label: 'Comments',
+                    label: t('admin.DebateView.comments', { defaultValue: 'Comments' }) as string,
                     icon: 'comment-text-multiple',
                   },
                 ]}

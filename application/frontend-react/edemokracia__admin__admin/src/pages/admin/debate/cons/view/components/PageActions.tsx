@@ -54,13 +54,13 @@ export function PageActions(props: PageActionsProps) {
           <Button
             id="page-action-edit-cancel"
             variant="outlined"
+            startIcon={<MdiIcon path="cancel" />}
             onClick={() => {
               setEditMode(false);
               fetchData();
             }}
             disabled={isLoading}
           >
-            <MdiIcon path="cancel" />
             {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
           </Button>
         </Grid>

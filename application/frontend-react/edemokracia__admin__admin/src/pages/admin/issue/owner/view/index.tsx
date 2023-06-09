@@ -571,19 +571,25 @@ export default function AdminIssueOwnerView() {
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCounties',
                                 name: 'admin.UserView.tab.activity.counties',
-                                label: 'Activity counties',
+                                label: t('admin.UserView.tab.activity.counties', {
+                                  defaultValue: 'Activity counties',
+                                }) as string,
                                 icon: 'map',
                               },
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCities',
                                 name: 'admin.UserView.activity.cities',
-                                label: 'Activity cities',
+                                label: t('admin.UserView.activity.cities', {
+                                  defaultValue: 'Activity cities',
+                                }) as string,
                                 icon: 'city',
                               },
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistricts',
                                 name: 'admin.UserView.activity.districts',
-                                label: 'Activity districts',
+                                label: t('admin.UserView.activity.districts', {
+                                  defaultValue: 'Activity districts',
+                                }) as string,
                                 icon: 'home-city',
                               },
                             ]}

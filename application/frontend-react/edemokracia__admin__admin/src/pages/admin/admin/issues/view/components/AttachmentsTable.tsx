@@ -125,6 +125,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
         return params.row.file ? (
           <Button
             id="ColumnedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-download"
+            startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: 'image', subType: '*' }} />}
             size="small"
             variant="text"
             onClick={(event: any) => {
@@ -133,7 +134,6 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
               downloadFile(params.row, 'file');
             }}
           >
-            <MdiIcon path="file-document-outline" mimeType={{ type: 'image', subType: '*' }} />
             {extractFileNameFromToken(params.row.file)}
           </Button>
         ) : (

@@ -477,13 +477,13 @@ export default function AdminProConsView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArguments',
                     name: 'admin.ConView.arguments',
-                    label: 'Arguments',
+                    label: t('admin.ConView.arguments', { defaultValue: 'Arguments' }) as string,
                     icon: 'account-voice',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarComments',
                     name: 'admin.ConView.comments',
-                    label: 'Comments',
+                    label: t('admin.ConView.comments', { defaultValue: 'Comments' }) as string,
                     icon: 'comment-text-multiple',
                   },
                 ]}

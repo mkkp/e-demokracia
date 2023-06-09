@@ -553,31 +553,31 @@ export default function AdminDashboardIssuesView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherArea',
                     name: 'admin.IssueView.area',
-                    label: 'Area',
+                    label: t('admin.IssueView.area', { defaultValue: 'Area' }) as string,
                     icon: 'map',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherAttachments',
                     name: 'admin.IssueView.attachments',
-                    label: 'Attachments',
+                    label: t('admin.IssueView.attachments', { defaultValue: 'Attachments' }) as string,
                     icon: 'paperclip',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherCategories',
                     name: 'admin.IssueView.categories',
-                    label: 'Categories',
+                    label: t('admin.IssueView.categories', { defaultValue: 'Categories' }) as string,
                     icon: 'file-tree',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherDebates',
                     name: 'admin.IssueView.debates',
-                    label: 'Debates',
+                    label: t('admin.IssueView.debates', { defaultValue: 'Debates' }) as string,
                     icon: 'wechat',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewOtherComments',
                     name: 'admin.IssueView.comments',
-                    label: 'Comments',
+                    label: t('admin.IssueView.comments', { defaultValue: 'Comments' }) as string,
                     icon: 'comment-text-multiple',
                   },
                 ]}

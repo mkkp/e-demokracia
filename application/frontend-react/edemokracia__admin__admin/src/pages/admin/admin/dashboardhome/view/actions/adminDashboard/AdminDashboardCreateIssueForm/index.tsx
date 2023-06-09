@@ -408,8 +408,8 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
           variant="text"
           onClick={() => cancel()}
           disabled={isLoading}
+          startIcon={<MdiIcon path="close-circle-outline" />}
         >
-          <MdiIcon path="close-circle-outline" />
           {t('admin.CreateIssueInputForm.input.ButtonBack', { defaultValue: 'Cancel' }) as string}
         </Button>
         <LoadingButton

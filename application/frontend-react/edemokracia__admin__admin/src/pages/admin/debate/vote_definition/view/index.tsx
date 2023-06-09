@@ -423,22 +423,26 @@ export default function AdminDebateVoteDefinitionView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnovote',
                     name: 'admin.VoteDefinitionView.yesnovote',
-                    label: 'Yes / No vote',
+                    label: t('admin.VoteDefinitionView.yesnovote', { defaultValue: 'Yes / No vote' }) as string,
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnoabstainvote',
                     name: 'admin.VoteDefinitionView.yesnoabstainvote',
-                    label: 'Yes / No / Abstain vote',
+                    label: t('admin.VoteDefinitionView.yesnoabstainvote', {
+                      defaultValue: 'Yes / No / Abstain vote',
+                    }) as string,
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarSelectanswervote',
                     name: 'admin.VoteDefinitionView.selectanswervote',
-                    label: 'Select answer vote',
+                    label: t('admin.VoteDefinitionView.selectanswervote', {
+                      defaultValue: 'Select answer vote',
+                    }) as string,
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateVoteDefinitionViewDefaultVoteDefinitionViewTabBarRatingvote',
                     name: 'admin.VoteDefinitionView.ratingvote',
-                    label: 'Rating vote',
+                    label: t('admin.VoteDefinitionView.ratingvote', { defaultValue: 'Rating vote' }) as string,
                   },
                 ]}
               >

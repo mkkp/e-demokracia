@@ -342,8 +342,8 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
           variant="text"
           onClick={() => cancel()}
           disabled={isLoading}
+          startIcon={<MdiIcon path="close-circle-outline" />}
         >
-          <MdiIcon path="close-circle-outline" />
           {t('CreateArgumentInputForm.input.ButtonBack', { defaultValue: 'cancel' }) as string}
         </Button>
         <LoadingButton

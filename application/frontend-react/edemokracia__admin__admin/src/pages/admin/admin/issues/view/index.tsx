@@ -552,31 +552,31 @@ export default function AdminAdminIssuesView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherArea',
                     name: 'admin.IssueView.area',
-                    label: 'Area',
+                    label: t('admin.IssueView.area', { defaultValue: 'Area' }) as string,
                     icon: 'map',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherAttachments',
                     name: 'admin.IssueView.attachments',
-                    label: 'Attachments',
+                    label: t('admin.IssueView.attachments', { defaultValue: 'Attachments' }) as string,
                     icon: 'paperclip',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherCategories',
                     name: 'admin.IssueView.categories',
-                    label: 'Categories',
+                    label: t('admin.IssueView.categories', { defaultValue: 'Categories' }) as string,
                     icon: 'file-tree',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherDebates',
                     name: 'admin.IssueView.debates',
-                    label: 'Debates',
+                    label: t('admin.IssueView.debates', { defaultValue: 'Debates' }) as string,
                     icon: 'wechat',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherComments',
                     name: 'admin.IssueView.comments',
-                    label: 'Comments',
+                    label: t('admin.IssueView.comments', { defaultValue: 'Comments' }) as string,
                     icon: 'comment-text-multiple',
                   },
                 ]}

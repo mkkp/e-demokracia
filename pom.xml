@@ -33,7 +33,7 @@
         <judo-tatami-client-version-defined>1.1.0.20230606_043216_1837c02a_develop</judo-tatami-client-version-defined>
         <judo-esm-fullstack-project-template-version-defined>1.0.0.20230607_083045_ca4c6387_develop</judo-esm-fullstack-project-template-version-defined>
         <judo-ui-typescript-rest-template-version-defined>1.0.0.20230531_040719_f83734b6_develop</judo-ui-typescript-rest-template-version-defined>
-        <judo-ui-react-template-version-defined>1.0.0.20230607_084206_3aab5238_develop</judo-ui-react-template-version-defined>
+        <judo-ui-react-template-version-defined>1.0.0.20230609_152416_d362bd75_develop</judo-ui-react-template-version-defined>
         <judo-generator-commons-version-defined>1.0.0.20230516_090341_cd4dbd1a_develop</judo-generator-commons-version-defined>
         <judo-psm-generator-sdk-core-version-defined>1.0.0.20230607_141556_5a1e2dc7_develop</judo-psm-generator-sdk-core-version-defined>
         <frontendType>react</frontendType>

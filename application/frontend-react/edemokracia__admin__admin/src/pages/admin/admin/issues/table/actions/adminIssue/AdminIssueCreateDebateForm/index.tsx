@@ -350,8 +350,8 @@ export function AdminIssueCreateDebateForm({ successCallback, cancel, owner }: A
           variant="text"
           onClick={() => cancel()}
           disabled={isLoading}
+          startIcon={<MdiIcon path="close-circle-outline" />}
         >
-          <MdiIcon path="close-circle-outline" />
           {t('CreateDebateInputForm.input.ButtonBack', { defaultValue: 'Cancel' }) as string}
         </Button>
         <LoadingButton

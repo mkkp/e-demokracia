@@ -479,13 +479,13 @@ export default function AdminDebateProsView() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArguments',
                     name: 'admin.ProView.arguments',
-                    label: 'Arguments',
+                    label: t('admin.ProView.arguments', { defaultValue: 'Arguments' }) as string,
                     icon: 'account-voice',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarComments',
                     name: 'admin.ProView.comments',
-                    label: 'Comments',
+                    label: t('admin.ProView.comments', { defaultValue: 'Comments' }) as string,
                     icon: 'comment-text-multiple',
                   },
                 ]}

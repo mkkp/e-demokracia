@@ -507,31 +507,31 @@ export default function AdminDashboardCreateissueOutput() {
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherArea',
                     name: 'admin.IssueView.area',
-                    label: 'Area',
+                    label: t('admin.IssueView.area', { defaultValue: 'Area' }) as string,
                     icon: 'map',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachments',
                     name: 'admin.IssueView.attachments',
-                    label: 'Attachments',
+                    label: t('admin.IssueView.attachments', { defaultValue: 'Attachments' }) as string,
                     icon: 'paperclip',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategories',
                     name: 'admin.IssueView.categories',
-                    label: 'Categories',
+                    label: t('admin.IssueView.categories', { defaultValue: 'Categories' }) as string,
                     icon: 'file-tree',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherDebates',
                     name: 'admin.IssueView.debates',
-                    label: 'Debates',
+                    label: t('admin.IssueView.debates', { defaultValue: 'Debates' }) as string,
                     icon: 'wechat',
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherComments',
                     name: 'admin.IssueView.comments',
-                    label: 'Comments',
+                    label: t('admin.IssueView.comments', { defaultValue: 'Comments' }) as string,
                     icon: 'comment-text-multiple',
                   },
                 ]}

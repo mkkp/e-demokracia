@@ -60,10 +60,10 @@ const standaloneActions: ColumnActionsProvider<unknown> = (
           <Button
             id={id}
             variant="text"
+            startIcon={action.icon}
             disabled={action.disabled ? action.disabled(params.row) : false}
             onClick={() => action.action(params.row)}
           >
-            {action.icon}
             {(options?.showLabel ?? true) && action.label}
           </Button>
         );

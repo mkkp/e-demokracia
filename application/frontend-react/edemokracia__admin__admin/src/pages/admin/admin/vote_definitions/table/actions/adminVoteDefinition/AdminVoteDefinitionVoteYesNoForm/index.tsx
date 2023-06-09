@@ -237,8 +237,8 @@ export function AdminVoteDefinitionVoteYesNoForm({
           variant="text"
           onClick={() => cancel()}
           disabled={isLoading}
+          startIcon={<MdiIcon path="close-thick" />}
         >
-          <MdiIcon path="close-thick" />
           {t('judo.pages.cancel', { defaultValue: 'Cancel' }) as string}
         </Button>
         <LoadingButton
