@@ -4,7 +4,7 @@
     <parent>
         <artifactId>edemokracia-application</artifactId>
         <groupId>party.mkkp.edemokracia</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>edemokracia-application-docker</artifactId>

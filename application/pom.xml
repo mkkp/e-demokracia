@@ -5,7 +5,7 @@
     
     <artifactId>edemokracia-application</artifactId>
     <groupId>party.mkkp.edemokracia</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     
     <name>edemokracia backend</name>
     <!-- End of 'pom.xml.project-definition.fragment.hbs' -->
@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -21,6 +22,7 @@
 
         <surefire-version>3.0.0</surefire-version>
 
+        <!--suppress UnresolvedMavenProperty -->
         <logback-test-config>${maven.multiModuleProjectDirectory}/logback-test.xml</logback-test-config>
 
         <slf4j-version>1.7.36</slf4j-version>
@@ -30,7 +32,7 @@
         <model-groupId>party.mkkp.edemokracia</model-groupId>
         <model-artifactId>edemokracia</model-artifactId>
         <model-name>edemokracia</model-name>
-        <model-version>1.0.0-SNAPSHOT</model-version>
+        <model-version>${revision}</model-version>
         
         <dialectList>postgresql,hsqldb</dialectList>
         <ignoreOpenapi>true</ignoreOpenapi>
@@ -156,6 +158,33 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.5.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <!-- Report active profiles on console. -->
             <!--
             <plugin>

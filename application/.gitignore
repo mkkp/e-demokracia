@@ -36,3 +36,5 @@ app.*.map.json
 
 # Karaf runtime
 .karaf
+
+.flattened-pom.xml
