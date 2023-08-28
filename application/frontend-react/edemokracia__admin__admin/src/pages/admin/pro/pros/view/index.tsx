@@ -10,22 +10,25 @@
 // Page DataElement name: pros
 // Page DataElement owner name: edemokracia::admin::Pro
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -38,8 +41,10 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import {
   AdminComment,
@@ -55,7 +60,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminProServiceImpl } from '~/generated/data-axios';
+import { adminProServiceForClassImpl } from '~/generated/data-axios';
 
 import {
   useVoteUpAction,
@@ -97,6 +102,7 @@ export default function AdminProProsView() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<AdminProStored>({} as unknown as AdminProStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminProStored, any>>(
     {} as unknown as Record<keyof AdminProStored, any>,
@@ -157,7 +163,7 @@ export default function AdminProProsView() {
     setIsLoading(true);
 
     try {
-      const res = await adminProServiceImpl.refresh(
+      const res = await adminProServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminPro>,
         processQueryCustomizer(queryCustomizer),
       );
@@ -173,6 +179,7 @@ export default function AdminProProsView() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -180,7 +187,7 @@ export default function AdminProProsView() {
     setIsLoading(true);
 
     try {
-      const res = await adminProServiceImpl.update(payloadDiff);
+      const res = await adminProServiceForClassImpl.update(payloadDiff);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -201,7 +208,7 @@ export default function AdminProProsView() {
     setIsLoading(true);
 
     try {
-      await adminProServiceImpl.delete(data);
+      await adminProServiceForClassImpl.delete(data);
 
       back();
     } catch (error) {
@@ -233,460 +240,527 @@ export default function AdminProProsView() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="relation-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProLabel"
-                          variant="h6"
-                          component="h1"
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="relation-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={12} sm={12}>
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapper">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProLabel"
+                            variant="h6"
+                            component="h1"
+                          >
+                            {t('admin.ProView.pro.Label', { defaultValue: 'Pro' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperPro"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
                         >
-                          {t('admin.ProView.pro.Label', { defaultValue: 'Pro' })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
+                          <Grid item xs={12} sm={12} md={6.0}>
+                            <TextField
+                              required={true}
+                              name="title"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProTitle"
+                              label={t('admin.ProView.title', { defaultValue: 'Title' }) as string}
+                              value={data.title ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('title')}
+                              helperText={validation.get('title')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('title', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="text_fields" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperPro"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12} md={6.0}>
-                          <TextField
-                            required
-                            name="title"
-                            id="TextInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProTitle"
-                            label={t('admin.ProView.title', { defaultValue: 'Title' }) as string}
-                            value={data.title}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={false || !isFormUpdateable()}
-                            error={!!validation.get('title')}
-                            helperText={validation.get('title')}
-                            onChange={(event) => {
-                              storeDiff('title', event.target.value);
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <MdiIcon path="text_fields" />
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={3.0}>
-                          <DateTimePicker
-                            ampm={false}
-                            ampmInClock={false}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            slotProps={{
-                              textField: {
-                                id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProCreated',
-                                helperText: validation.get('created'),
-                                error: !!validation.get('created'),
-                                InputProps: {
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="schedule" />
-                                    </InputAdornment>
-                                  ),
+                          <Grid item xs={12} sm={12} md={3.0}>
+                            <DateTimePicker
+                              ampm={false}
+                              ampmInClock={false}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              slotProps={{
+                                textField: {
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProCreated',
+                                  required: true,
+                                  helperText: validation.get('created'),
+                                  error: !!validation.get('created'),
+                                  InputProps: {
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="schedule" />
+                                      </InputAdornment>
+                                    ),
+                                  },
                                 },
-                              },
-                            }}
-                            onError={(newError: DateTimeValidationError, value: any) => {
-                              // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                              setValidation((prevValidation) => {
-                                const copy = new Map<keyof AdminPro, string>(prevValidation);
-                                copy.set(
-                                  'created',
-                                  newError === 'invalidDate'
-                                    ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                        defaultValue: 'Value does not match the pattern requirements.',
-                                      }) as string)
-                                    : '',
-                                );
-                                return copy;
-                              });
-                            }}
-                            views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={t('admin.ProView.created', { defaultValue: 'Created' }) as string}
-                            value={serviceDateToUiDate(data.created ?? null)}
-                            disabled={false || !isFormUpdateable()}
-                            onChange={(newValue: Date) => {
-                              storeDiff('created', newValue);
-                            }}
-                          />
-                        </Grid>
+                              }}
+                              onError={(newError: DateTimeValidationError, value: any) => {
+                                // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                                setValidation((prevValidation) => {
+                                  const copy = new Map<keyof AdminPro, string>(prevValidation);
+                                  copy.set(
+                                    'created',
+                                    newError === 'invalidDate'
+                                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                          defaultValue: 'Value does not match the pattern requirements.',
+                                        }) as string)
+                                      : '',
+                                  );
+                                  return copy;
+                                });
+                              }}
+                              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                              label={t('admin.ProView.created', { defaultValue: 'Created' }) as string}
+                              value={serviceDateToUiDate(data.created ?? null)}
+                              readOnly={false || !isFormUpdateable()}
+                              disabled={isLoading}
+                              onChange={(newValue: Date) => {
+                                storeDiff('created', newValue);
+                              }}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={3.0}>
-                          <CreatedByLink
-                            ownerData={data}
-                            disabled={true || !isFormUpdateable()}
-                            editMode={editMode}
-                            fetchOwnerData={fetchData}
-                            storeDiff={storeDiff}
-                            validation={validation}
-                          />
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={3.0}>
+                            <CreatedByLink
+                              ownerData={data}
+                              readOnly={true || !isFormUpdateable()}
+                              disabled={isLoading}
+                              editMode={editMode}
+                              fetchOwnerData={fetchData}
+                              storeDiff={storeDiff}
+                              validation={validation}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12}>
-                          <TextField
-                            required
-                            name="description"
-                            id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProDescription"
-                            label={t('admin.ProView.description', { defaultValue: 'Description' }) as string}
-                            value={data.description}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={false || !isFormUpdateable()}
-                            multiline
-                            minRows={4.0}
-                            error={!!validation.get('description')}
-                            helperText={validation.get('description')}
-                            onChange={(event) => {
-                              storeDiff('description', event.target.value);
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <MdiIcon path="text_fields" />
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProVoteUpButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="thumb-up" />}
-                            loadingPosition="start"
-                            onClick={() => voteUpAction(data, () => fetchData())}
-                            disabled={editMode}
-                          >
-                            <span>{t('admin.ProView.pros.voteUp.ButtonCallOperation', { defaultValue: '' })}</span>
-                          </LoadingButton>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <TextField
-                            name="upVotes"
-                            id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProUpVotes"
-                            label={t('admin.ProView.upVotes', { defaultValue: '' }) as string}
-                            type="number"
-                            value={data.upVotes}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={true || !isFormUpdateable()}
-                            error={!!validation.get('upVotes')}
-                            helperText={validation.get('upVotes')}
-                            onChange={(event) => {
-                              storeDiff('upVotes', Number(event.target.value));
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{}}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <Grid container sx={{ height: dividerHeight }}></Grid>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProVoteDownButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="thumb-down" />}
-                            loadingPosition="start"
-                            onClick={() => voteDownAction(data, () => fetchData())}
-                            disabled={editMode}
-                          >
-                            <span>{t('admin.ProView.pros.voteDown.ButtonCallOperation', { defaultValue: '' })}</span>
-                          </LoadingButton>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <TextField
-                            name="downVotes"
-                            id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProDownVotes"
-                            label={t('admin.ProView.downVotes', { defaultValue: '' }) as string}
-                            type="number"
-                            value={data.downVotes}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={true || !isFormUpdateable()}
-                            error={!!validation.get('downVotes')}
-                            helperText={validation.get('downVotes')}
-                            onChange={(event) => {
-                              storeDiff('downVotes', Number(event.target.value));
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{}}
-                          />
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <Grid container sx={{ height: dividerHeight }}></Grid>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={2.0}>
-                          <CollectionAssociationButton
-                            id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProVotesButtonNavigate"
-                            variant={undefined}
-                            editMode={editMode}
-                            navigateAction={() => buttonNavigateVotesAction(data)}
-                          >
-                            {t('admin.ProView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
-                            <MdiIcon path="arrow-right" />
-                          </CollectionAssociationButton>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid container item xs={12} sm={12}>
-              <ModeledTabs
-                id="TabControlleredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBar"
-                activeIndex={0}
-                childTabs={[
-                  {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArguments',
-                    name: 'admin.ProView.arguments',
-                    label: t('admin.ProView.arguments', { defaultValue: 'Arguments' }) as string,
-                    icon: 'account-voice',
-                  },
-                  {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarComments',
-                    name: 'admin.ProView.comments',
-                    label: t('admin.ProView.comments', { defaultValue: 'Comments' }) as string,
-                    icon: 'comment-text-multiple',
-                  },
-                ]}
-              >
-                <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArguments"
-                    container
-                    direction="row"
-                    alignItems="flex-start"
-                    justifyContent="flex-start"
-                    spacing={2}
-                  >
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsActions"
-                        container
-                        direction="row"
-                        alignItems="flex-start"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="account-voice" />}
-                            loadingPosition="start"
-                            onClick={() => createSubArgumentAction(data, () => fetchData())}
-                            disabled={editMode}
-                          >
-                            <span>
-                              {t('admin.ProView.pros.createSubArgument.ButtonCallOperation', {
-                                defaultValue: 'Add argument',
+                          <Grid item xs={12} sm={12}>
+                            <TextField
+                              required={true}
+                              name="description"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProDescription"
+                              label={t('admin.ProView.description', { defaultValue: 'Description' }) as string}
+                              value={data.description ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
                               })}
-                            </span>
-                          </LoadingButton>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12} md={6.0}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapper"
-                        container
-                        direction="column"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                            <Typography
-                              id="LabeledemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
-                              variant="h6"
-                              component="h1"
-                            >
-                              {t('admin.ProView.pros.Label', { defaultValue: 'Pros' })}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros"
-                            container
-                            direction="column"
-                            alignItems="stretch"
-                            justifyContent="flex-start"
-                          >
-                            <ProsTable
-                              isOwnerLoading={isLoading}
-                              fetchOwnerData={fetchData}
-                              ownerData={data}
-                              editMode={editMode}
-                              isFormUpdateable={isFormUpdateable}
-                              storeDiff={storeDiff}
+                              disabled={isLoading}
+                              multiline
+                              minRows={4.0}
+                              error={!!validation.get('description')}
+                              helperText={validation.get('description')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('description', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="text_fields" />
+                                  </InputAdornment>
+                                ),
+                              }}
                             />
                           </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
 
-                    <Grid item xs={12} sm={12} md={6.0}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapper"
-                        container
-                        direction="column"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                            <Typography
-                              id="LabeledemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
-                              variant="h6"
-                              component="h1"
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProVoteUpButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="thumb-up" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await voteUpAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={editMode}
                             >
-                              {t('admin.ProView.cons.Label', { defaultValue: 'Cons' })}
-                            </Typography>
+                              <span>{t('admin.ProView.pros.voteUp.ButtonCallOperation', { defaultValue: '' })}</span>
+                            </LoadingButton>
                           </Grid>
-                        </Grid>
 
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapperCons"
-                            container
-                            direction="column"
-                            alignItems="stretch"
-                            justifyContent="flex-start"
-                          >
-                            <ConsTable
-                              isOwnerLoading={isLoading}
-                              fetchOwnerData={fetchData}
-                              ownerData={data}
-                              editMode={editMode}
-                              isFormUpdateable={isFormUpdateable}
-                              storeDiff={storeDiff}
-                            />
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsComments"
-                    container
-                    direction="row"
-                    alignItems="flex-start"
-                    justifyContent="flex-start"
-                    spacing={2}
-                  >
-                    <Grid item xs={12} sm={12} md={4.0}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsActions"
-                        container
-                        direction="row"
-                        alignItems="flex-start"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProCreateCommentButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="comment-text-multiple" />}
-                            loadingPosition="start"
-                            onClick={() => createCommentAction(data, () => fetchData())}
-                            disabled={editMode}
-                          >
-                            <span>
-                              {t('admin.ProView.pros.createComment.ButtonCallOperation', {
-                                defaultValue: 'Add comment',
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <NumericInput
+                              required={false}
+                              name="upVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProUpVotes"
+                              label={t('admin.ProView.upVotes', { defaultValue: '' }) as string}
+                              customInput={TextField}
+                              value={data.upVotes ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
                               })}
-                            </span>
-                          </LoadingButton>
+                              disabled={isLoading}
+                              error={!!validation.get('upVotes')}
+                              helperText={validation.get('upVotes')}
+                              onValueChange={(values, sourceInfo) => {
+                                storeDiff('upVotes', values.floatValue === undefined ? null : values.floatValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: true || !isFormUpdateable(),
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <Grid container sx={{ height: dividerHeight }}></Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProVoteDownButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="thumb-down" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await voteDownAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={editMode}
+                            >
+                              <span>{t('admin.ProView.pros.voteDown.ButtonCallOperation', { defaultValue: '' })}</span>
+                            </LoadingButton>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <NumericInput
+                              required={false}
+                              name="downVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewProLabelWrapperProDownVotes"
+                              label={t('admin.ProView.downVotes', { defaultValue: '' }) as string}
+                              customInput={TextField}
+                              value={data.downVotes ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('downVotes')}
+                              helperText={validation.get('downVotes')}
+                              onValueChange={(values, sourceInfo) => {
+                                storeDiff('downVotes', values.floatValue === undefined ? null : values.floatValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: true || !isFormUpdateable(),
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <Grid container sx={{ height: dividerHeight }}></Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={2.0}>
+                            <CollectionAssociationButton
+                              id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProVotesButtonNavigate"
+                              variant={undefined}
+                              editMode={editMode}
+                              navigateAction={() => buttonNavigateVotesAction(data)}
+                            >
+                              {t('admin.ProView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
+                              <MdiIcon path="arrow-right" />
+                            </CollectionAssociationButton>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapper"
-                        container
-                        direction="column"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperComments"
-                            container
-                            direction="column"
-                            alignItems="stretch"
-                            justifyContent="flex-start"
-                          >
-                            <CommentsTable
-                              isOwnerLoading={isLoading}
-                              fetchOwnerData={fetchData}
-                              ownerData={data}
-                              editMode={editMode}
-                              isFormUpdateable={isFormUpdateable}
-                              storeDiff={storeDiff}
-                            />
+              <Grid container item xs={12} sm={12}>
+                <ModeledTabs
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBar"
+                  ownerData={data}
+                  validation={validation}
+                  orientation='horizontal'
+                  childTabs={[
+                    {
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArguments',
+                      name: 'admin.ProView.arguments',
+                      label: t('admin.ProView.arguments', { defaultValue: 'Arguments' }) as string,
+                      disabled: isLoading,
+                      hidden: false,
+                      icon: 'account-voice',
+                      nestedDataKeys: ['cons', 'pros'],
+                    },
+                    {
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarComments',
+                      name: 'admin.ProView.comments',
+                      label: t('admin.ProView.comments', { defaultValue: 'Comments' }) as string,
+                      disabled: isLoading,
+                      hidden: false,
+                      icon: 'comment-text-multiple',
+                      nestedDataKeys: ['comments'],
+                    },
+                  ]}
+                >
+                  <Grid item xs={12} sm={12}>
+                    <Grid
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArguments"
+                      container
+                      direction="row"
+                      alignItems="flex-start"
+                      justifyContent="flex-start"
+                      spacing={2}
+                    >
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsActions"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="account-voice" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await createSubArgumentAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={editMode}
+                            >
+                              <span>
+                                {t('admin.ProView.pros.createSubArgument.ButtonCallOperation', {
+                                  defaultValue: 'Add argument',
+                                })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12} md={6.0}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapper"
+                          container
+                          direction="column"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
+                              <Typography
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
+                                variant="h6"
+                                component="h1"
+                              >
+                                {t('admin.ProView.pros.Label', { defaultValue: 'Pros' })}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros"
+                              container
+                              direction="column"
+                              alignItems="stretch"
+                              justifyContent="flex-start"
+                            >
+                              <ProsTable
+                                isOwnerLoading={isLoading}
+                                validation={validation}
+                                fetchOwnerData={fetchData}
+                                ownerData={data}
+                                editMode={editMode}
+                                isFormUpdateable={isFormUpdateable}
+                                storeDiff={storeDiff}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12} md={6.0}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapper"
+                          container
+                          direction="column"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
+                              <Typography
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
+                                variant="h6"
+                                component="h1"
+                              >
+                                {t('admin.ProView.cons.Label', { defaultValue: 'Cons' })}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapperCons"
+                              container
+                              direction="column"
+                              alignItems="stretch"
+                              justifyContent="flex-start"
+                            >
+                              <ConsTable
+                                isOwnerLoading={isLoading}
+                                validation={validation}
+                                fetchOwnerData={fetchData}
+                                ownerData={data}
+                                editMode={editMode}
+                                isFormUpdateable={isFormUpdateable}
+                                storeDiff={storeDiff}
+                              />
+                            </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </ModeledTabs>
+
+                  <Grid item xs={12} sm={12}>
+                    <Grid
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsComments"
+                      container
+                      direction="row"
+                      alignItems="flex-start"
+                      justifyContent="flex-start"
+                      spacing={2}
+                    >
+                      <Grid item xs={12} sm={12} md={4.0}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsActions"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProProsViewEdemokraciaAdminAdminEdemokraciaAdminProCreateCommentButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="comment-text-multiple" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await createCommentAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={editMode}
+                            >
+                              <span>
+                                {t('admin.ProView.pros.createComment.ButtonCallOperation', {
+                                  defaultValue: 'Add comment',
+                                })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapper"
+                          container
+                          direction="column"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperComments"
+                              container
+                              direction="column"
+                              alignItems="stretch"
+                              justifyContent="flex-start"
+                            >
+                              <CommentsTable
+                                isOwnerLoading={isLoading}
+                                validation={validation}
+                                fetchOwnerData={fetchData}
+                                ownerData={data}
+                                editMode={editMode}
+                                isFormUpdateable={isFormUpdateable}
+                                storeDiff={storeDiff}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </ModeledTabs>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

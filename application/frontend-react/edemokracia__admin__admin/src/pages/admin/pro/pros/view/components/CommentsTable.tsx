@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,11 +39,15 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
+import { Box, Typography } from '@mui/material';
 import {
   AdminComment,
   AdminCommentQueryCustomizer,
@@ -54,7 +62,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminProServiceImpl, adminCommentServiceImpl } from '~/generated/data-axios';
+import { adminProServiceForClassImpl, adminCommentServiceForClassImpl } from '~/generated/data-axios';
 import {
   useAdminCommentVoteDownAction,
   useAdminCommentVoteUpAction,
@@ -62,6 +70,8 @@ import {
   usePageDeleteProsAction,
   usePageRefreshProsAction,
 } from '../actions';
+import { applyInMemoryFilters } from '~/utilities';
+export const ADMIN_PRO_PROS_VIEW_COMMENTS = 'AdminProProsViewComments';
 
 export interface CommentsTableProps {
   ownerData: AdminProStored;
@@ -70,16 +80,27 @@ export interface CommentsTableProps {
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminProStored, value: any) => void;
+  validation: Map<keyof AdminPro, string>;
 }
 
 export const CommentsTable = (props: CommentsTableProps) => {
+  const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [commentsSortModel, setCommentsSortModel] = useState<GridSortModel>([{ field: 'created', sort: 'asc' }]);
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [data, setData] = useState<AdminCommentStored[]>([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const [commentsSortModel, setCommentsSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
+
+  const [commentsFilterModel, setCommentsFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const commentsColumns: GridColDef<AdminCommentStored>[] = [
     {
@@ -90,6 +111,7 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
       width: 170,
       type: 'dateTime',
+      filterable: false && true,
       valueGetter: ({ value }) => value && serviceDateToUiDate(value),
       valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
         return (
@@ -114,6 +136,7 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -123,6 +146,7 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -132,6 +156,7 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
       width: 100,
       type: 'number',
+      filterable: false && true,
       valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
         return value && new Intl.NumberFormat(l10nLocale).format(value);
       },
@@ -144,11 +169,61 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
       width: 100,
       type: 'number',
+      filterable: false && true,
       valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
         return value && new Intl.NumberFormat(l10nLocale).format(value);
       },
     },
   ];
+
+  const commentsRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedFilter',
+      attributeName: 'created',
+      label: t('admin.ProView.comments.created', { defaultValue: 'Created' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCommentFilter',
+      attributeName: 'comment',
+      label: t('admin.ProView.comments.comment', { defaultValue: 'Comment' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedByNameFilter',
+      attributeName: 'createdByName',
+      label: t('admin.ProView.comments.createdByName', { defaultValue: 'Created by' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsUpVotesFilter',
+      attributeName: 'upVotes',
+      label: t('admin.ProView.comments.upVotes', { defaultValue: 'up' }) as string,
+      filterType: FilterType.numeric,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsDownVotesFilter',
+      attributeName: 'downVotes',
+      label: t('admin.ProView.comments.downVotes', { defaultValue: 'down' }) as string,
+      filterType: FilterType.numeric,
+    },
+  ];
+
+  const commentsInitialQueryCustomizer: AdminCommentQueryCustomizer = {
+    _mask: '{created,comment,createdByName,upVotes,downVotes}',
+    _orderBy: commentsSortModel.length
+      ? [
+          {
+            attribute: commentsSortModel[0].field,
+            descending: commentsSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const adminCommentVoteDownAction = useAdminCommentVoteDownAction();
   const adminCommentVoteUpAction = useAdminCommentVoteUpAction();
@@ -173,42 +248,135 @@ export const CommentsTable = (props: CommentsTableProps) => {
     },
   ];
 
+  const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedFilter',
+      attributeName: 'created',
+      label: t('admin.ProView.comments.created', { defaultValue: 'Created' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCommentFilter',
+      attributeName: 'comment',
+      label: t('admin.ProView.comments.comment', { defaultValue: 'Comment' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedByNameFilter',
+      attributeName: 'createdByName',
+      label: t('admin.ProView.comments.createdByName', { defaultValue: 'Created by' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsUpVotesFilter',
+      attributeName: 'upVotes',
+      label: t('admin.ProView.comments.upVotes', { defaultValue: 'up' }) as string,
+      filterType: FilterType.numeric,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperCommentsDownVotesFilter',
+      attributeName: 'downVotes',
+      label: t('admin.ProView.comments.downVotes', { defaultValue: 'down' }) as string,
+      filterType: FilterType.numeric,
+    },
+  ];
+
+  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+
+    if (Array.isArray(newFilters)) {
+      setPaginationModel((prevState) => ({
+        ...prevState,
+        page: 0,
+      }));
+      setFilters(newFilters);
+    }
+  };
+
+  useEffect(() => {
+    const newData = applyInMemoryFilters<AdminCommentStored>(filters, ownerData?.comments ?? []);
+    setData(newData);
+  }, [ownerData?.comments, filters]);
+
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={ownerData?.comments ?? []}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...commentsColumns,
-        ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminProComments', commentsRowActions, {
-          shownActions: 2,
-        }),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminCommentStored>) => {
-        if (!editMode) {
-          rowViewCommentsAction(ownerData, params.row);
-        }
-      }}
-      sortModel={commentsSortModel}
-      onSortModelChange={(newModel: GridSortModel) => {
-        setCommentsSortModel(newModel);
-      }}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+          border: (theme) => (props.validation.has('comments') ? `2px solid ${theme.palette.error.main}` : undefined),
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...commentsColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminProComments',
+            commentsRowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminCommentStored>) => {
+          if (!editMode) {
+            rowViewCommentsAction(ownerData, params.row, () => fetchOwnerData());
+          }
+        }}
+        sortModel={commentsSortModel}
+        onSortModelChange={(newModel: GridSortModel) => {
+          setCommentsSortModel(newModel);
+        }}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperComments-filter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() =>
+                  filter(
+                    'TableedemokraciaAdminAdminEdemokraciaAdminProProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperComments-filter',
+                    filterOptions,
+                    filters,
+                  )
+                }
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+        }}
+      />
+      {props.validation.has('comments') && (
+        <Box
+          sx={{
+            color: (theme) => theme.palette.error.main,
+            display: 'flex',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
+          <Typography>{props.validation.get('comments')}</Typography>
+        </Box>
+      )}
+    </>
   );
 };

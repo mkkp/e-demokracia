@@ -7,7 +7,8 @@
 // Template file: actor/src/components/table/table-row-actions.tsx.hbs
 
 import { Button } from '@mui/material';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import type { TFunction } from 'i18next';
+import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 import type { ColumnActionsProvider, ColumnsActionsOptions, TableRowAction } from '../../utilities';
 import { exists } from '../../utilities';
 import { DropdownButton } from '../DropdownButton';
@@ -17,42 +18,38 @@ import { baseColumnConfig } from '../../config';
 export const columnsActionCalculator: ColumnActionsProvider<any> = (
   id: string,
   actions: TableRowAction<any>[],
+  t: TFunction<string, any>,
   options?: ColumnsActionsOptions,
 ): GridColDef[] => {
   if (!exists(actions) || actions.length === 0) {
     return [];
   }
 
-  let shownActionsNumber = 1;
-  if (options?.shownActions) {
-    shownActionsNumber = actions.length < options.shownActions ? actions.length : options.shownActions;
-  }
-
-  if (shownActionsNumber < 0) {
-    return standaloneActions(id, actions, options);
-  } else if (shownActionsNumber === 0) {
+  if (options?.shownActions === 0) {
     return [];
-  } else if (shownActionsNumber === 1) {
-    return dropdownActions(id, actions);
+  } else if (options?.shownActions && actions.length <= options?.shownActions) {
+    return standaloneActions(id, actions, t, options);
   } else {
-    const sliceNumber = actions.length === shownActionsNumber ? shownActionsNumber : shownActionsNumber - 1;
+    const sliceNumber = actions.length === options?.shownActions ? options?.shownActions - 1 : 1;
     const standaloneRowActions = actions.slice(0, sliceNumber);
     const dropdownRowActions = actions.slice(sliceNumber);
 
-    return [...standaloneActions(id, standaloneRowActions, options), ...dropdownActions(id, dropdownRowActions)];
+    return [...standaloneActions(id, standaloneRowActions, t, options), ...dropdownActions(id, dropdownRowActions, t)];
   }
 };
 
 const standaloneActions: ColumnActionsProvider<unknown> = (
   id: string,
   actions: TableRowAction<unknown>[],
+  t: TFunction<string, any>,
   options?: ColumnsActionsOptions,
 ): GridColDef[] => {
   return actions.map((action, index) => {
     return {
       ...baseColumnConfig,
       field: action.label + index,
-      headerName: '',
+      minWidth: 100,
+      headerName: t('judo.pages.table.column.actions.standalone', { defaultValue: 'Actions' }) as string,
       align: 'center',
       type: 'actions',
       renderCell: (params: GridRenderCellParams) => {
@@ -75,6 +72,7 @@ const standaloneActions: ColumnActionsProvider<unknown> = (
 const dropdownActions: ColumnActionsProvider<unknown> = (
   id: string,
   actions: TableRowAction<unknown>[],
+  t: TFunction<string, any>,
 ): GridColDef[] => {
   if (actions.length === 0) return [];
 
@@ -82,7 +80,8 @@ const dropdownActions: ColumnActionsProvider<unknown> = (
     {
       ...baseColumnConfig,
       field: 'actions',
-      headerName: '',
+      minWidth: 160,
+      headerName: t('judo.pages.table.column.actions.dropdown', { defaultValue: 'Additional Actions' }) as string,
       align: 'center',
       type: 'actions',
       renderCell: (params: GridRenderCellParams) => {

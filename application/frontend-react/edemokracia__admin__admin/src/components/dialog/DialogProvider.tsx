@@ -67,10 +67,12 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
     alreadySelectedItems,
     filterOptions,
     initialQueryCustomizer,
+    createTrigger,
+    editMode,
   }: OpenRangeDialogProps<T, U>) => {
     setIsOpenRangeDialog(true);
 
-    return new Promise<T[] | T>((resolve) => {
+    return new Promise<{ value: T[] | T; resolveSource: 'selection' | 'create' }>((resolve) => {
       setRangeDialog(
         <RangeDialog<T, U>
           id={id}
@@ -84,6 +86,8 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
           alreadySelectedItems={alreadySelectedItems}
           filterOptions={filterOptions}
           initalQueryCustomizer={initialQueryCustomizer}
+          createTrigger={createTrigger}
+          editMode={editMode}
         />,
       );
     });

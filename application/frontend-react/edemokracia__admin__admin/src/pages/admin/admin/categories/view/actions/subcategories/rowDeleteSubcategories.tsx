@@ -15,7 +15,10 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminIssueCategory, AdminIssueCategoryQueryCustomizer, AdminIssueCategoryStored } from '~/generated/data-api';
-import { adminIssueCategoryServiceForSubcategoriesImpl, adminIssueCategoryServiceImpl } from '~/generated/data-axios';
+import {
+  adminIssueCategoryServiceForSubcategoriesImpl,
+  adminIssueCategoryServiceForClassImpl,
+} from '~/generated/data-axios';
 
 export type RowDeleteSubcategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssueCategory>,
@@ -46,7 +49,7 @@ export const useRowDeleteSubcategoriesAction: RowDeleteSubcategoriesAction = () 
       );
 
       if (confirmed) {
-        await adminIssueCategoryServiceImpl.delete(selected);
+        await adminIssueCategoryServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

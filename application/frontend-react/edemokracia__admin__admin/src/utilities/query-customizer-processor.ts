@@ -6,7 +6,7 @@
 // Template name: actor/src/utilities/query-customizer-processor.ts
 // Template file: actor/src/utilities/query-customizer-processor.ts.hbs
 
-import { QueryCustomizer } from '@judo/data-api-common';
+import type { QueryCustomizer } from '@judo/data-api-common';
 import { exists, simpleCloneDeep } from './helper';
 
 export function processQueryCustomizer<T>(queryCustomizer: T): T {

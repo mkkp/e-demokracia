@@ -6,11 +6,12 @@
 // Template name: actor/src/utilities/table.ts
 // Template file: actor/src/utilities/table.ts.hbs
 
-import type { GridSortModel } from '@mui/x-data-grid';
+import type { GridSortModel, GridFilterModel } from '@mui/x-data-grid';
 import type { Filter } from '../components-api';
 
 export interface PersistedTableData {
   sortModel?: GridSortModel;
+  filterModel?: GridFilterModel;
   filters?: Filter[];
 }
 

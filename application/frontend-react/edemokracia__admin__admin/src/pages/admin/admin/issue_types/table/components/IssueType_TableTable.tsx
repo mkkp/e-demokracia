@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,10 +39,13 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
 import { AdminIssueType, AdminIssueTypeQueryCustomizer, AdminIssueTypeStored } from '~/generated/data-api';
 import { adminAdminServiceForIssueTypesImpl } from '~/generated/data-axios';
@@ -49,6 +56,8 @@ import {
   useRowDeleteIssueTypesAction,
   useRowViewIssueTypesAction,
 } from '../actions';
+
+export const ADMIN_ADMIN_ISSUE_TYPES_TABLE_ISSUE_TYPE_TABLE = 'AdminAdminIssueTypesTableIssueType_Table';
 
 export interface IssueType_TableTableProps {
   isOwnerLoading: boolean;
@@ -68,7 +77,8 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
 
   const [data, setData] = useState<GridRowModel<AdminIssueTypeStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [lastItem, setLastItem] = useState<AdminIssueTypeStored>();
   const [firstItem, setFirstItem] = useState<AdminIssueTypeStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
@@ -79,16 +89,18 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
     _seek: {
       limit: 10 + 1,
     },
-    _orderBy: [
-      {
-        attribute: sortModel[0].field,
-        descending: sortModel[0].sort === 'desc',
-      },
-    ],
-    ...mapAllFiltersToQueryCustomizerProperties(filters, 'title', 'voteType', 'description'),
+    _orderBy: sortModel.length
+      ? [
+          {
+            attribute: sortModel[0].field,
+            descending: sortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+    ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
-  const issueTypesSortModel: GridSortModel = [{ field: 'title', sort: 'asc' }];
+  const issueTypesSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
   const issueTypesColumns: GridColDef<AdminIssueTypeStored>[] = [
     {
@@ -99,6 +111,7 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -107,8 +120,12 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
       headerClassName: 'data-grid-column-header',
 
       width: 170,
-      type: 'string',
+      type: 'singleSelect',
+      filterable: false && true,
       sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        return t(`enumerations.EdemokraciaVoteType.${value}`, { defaultValue: value });
+      },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
@@ -121,8 +138,45 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
+
+  const issueTypesRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableDefaultIssueTypesIssueTypeTableTitleFilter',
+      attributeName: 'title',
+      label: t('admin.IssueTypeTable.issueTypes.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableDefaultIssueTypesIssueTypeTableVoteTypeFilter',
+      attributeName: 'voteType',
+      label: t('admin.IssueTypeTable.issueTypes.voteType', { defaultValue: 'Default vote type' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableDefaultIssueTypesIssueTypeTableDescriptionFilter',
+      attributeName: 'description',
+      label: t('admin.IssueTypeTable.issueTypes.description', { defaultValue: 'Description' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
+
+  const issueTypesInitialQueryCustomizer: AdminIssueTypeQueryCustomizer = {
+    _mask: '{title,voteType,description}',
+    _orderBy: issueTypesSortModel.length
+      ? [
+          {
+            attribute: issueTypesSortModel[0].field,
+            descending: issueTypesSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const pageCreateIssueTypesAction = usePageCreateIssueTypesAction();
   const pageFilterIssueTypesAction = usePageFilterIssueTypesAction(
@@ -130,6 +184,7 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
     setPage,
     setQueryCustomizer,
     openFilterDialog,
+    10,
   );
   const pageRefreshIssueTypesAction = usePageRefreshIssueTypesAction();
   const rowDeleteIssueTypesAction = useRowDeleteIssueTypesAction();
@@ -173,12 +228,17 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
     setPage(0);
     setSortModel(newModel);
 
-    const { field, sort } = newModel[0];
+    const _orderBy = newModel
+      .filter((m) => m.sort)
+      .map((m) => ({
+        attribute: m.field,
+        descending: m.sort === 'desc',
+      }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
       return {
         ...prevQueryCustomizer,
-        _orderBy: [{ attribute: field, descending: sort === 'desc' }],
+        _orderBy,
       };
     });
   }
@@ -231,60 +291,68 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
   }, [queryCustomizer]);
 
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={data}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...issueTypesColumns,
-        ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypes', rowActions, {
-          shownActions: 2,
-        }),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminIssueTypeStored>) => rowViewIssueTypesAction(params.row)}
-      sortModel={sortModel}
-      onSortModelChange={handleSortModelChange}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <Button
-              id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableEdemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesPageFilter"
-              startIcon={<MdiIcon path="filter" />}
-              variant="text"
-              onClick={() => {
-                pageFilterIssueTypesAction(
-                  'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableEdemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesPageFilter-filter',
-                  filterOptions,
-                  filters,
-                );
-              }}
-              disabled={isOwnerLoading}
-            >
-              {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
-                (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
-            </Button>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-        Pagination: () => (
-          <CustomTablePagination
-            pageChange={handlePageChange}
-            isNextButtonEnabled={isNextButtonEnabled}
-            page={page}
-            setPage={setPage}
-            rowPerPage={10}
-          />
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...issueTypesColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypes',
+            rowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminIssueTypeStored>) =>
+          rowViewIssueTypesAction(params.row, () => fetchData())
+        }
+        sortModel={sortModel}
+        onSortModelChange={handleSortModelChange}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableEdemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesPageFilter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() => {
+                  pageFilterIssueTypesAction(
+                    'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableEdemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesPageFilter-filter',
+                    filterOptions,
+                    filters,
+                  );
+                }}
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+          Pagination: () => (
+            <CustomTablePagination
+              pageChange={handlePageChange}
+              isNextButtonEnabled={isNextButtonEnabled}
+              page={page}
+              setPage={setPage}
+              rowPerPage={10}
+            />
+          ),
+        }}
+      />
+    </>
   );
 });

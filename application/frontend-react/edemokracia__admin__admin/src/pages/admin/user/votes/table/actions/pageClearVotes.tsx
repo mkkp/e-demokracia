@@ -12,7 +12,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities';
 import { AdminUser } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageClearVotesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -27,7 +27,7 @@ export const usePageClearVotesAction: PageClearVotesAction = () => {
 
   return async function pageClearVotesAction(owner: JudoIdentifiable<AdminUser>, successCallback: () => void) {
     try {
-      await adminUserServiceImpl.setVotes(
+      await adminUserServiceForClassImpl.setVotes(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminUser>,
         [],
       );

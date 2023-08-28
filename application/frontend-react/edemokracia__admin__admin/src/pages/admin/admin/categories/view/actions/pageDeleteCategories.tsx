@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminIssueCategory, AdminIssueCategoryQueryCustomizer, AdminIssueCategoryStored } from '~/generated/data-api';
-import { adminAdminServiceForCategoriesImpl, adminIssueCategoryServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCategoriesImpl, adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteCategoriesAction = () => (
   selected: AdminIssueCategoryStored,
@@ -41,7 +41,7 @@ export const usePageDeleteCategoriesAction: PageDeleteCategoriesAction = () => {
       );
 
       if (confirmed) {
-        await adminIssueCategoryServiceImpl.delete(selected);
+        await adminIssueCategoryServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

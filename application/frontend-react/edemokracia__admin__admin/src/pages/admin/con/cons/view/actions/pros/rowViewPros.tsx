@@ -12,12 +12,18 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminCon, AdminConStored, AdminPro, AdminProQueryCustomizer, AdminProStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminConProsView } from '~/routes';
 
 export const ROW_VIEW_PROS_ACTION_INTERFACE_KEY = 'RowViewProsAction';
-export type RowViewProsAction = () => (owner: JudoIdentifiable<AdminCon>, entry: AdminProStored) => Promise<void>;
+export type RowViewProsAction = () => (
+  owner: JudoIdentifiable<AdminCon>,
+  entry: AdminProStored,
+  successCallback: () => void,
+) => Promise<void>;
 
 export const useRowViewProsAction: RowViewProsAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewProsAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_PROS_ACTION_INTERFACE_KEY})`,
@@ -28,7 +34,8 @@ export const useRowViewProsAction: RowViewProsAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminCon>, entry: AdminProStored) {
+  return async function (owner: JudoIdentifiable<AdminCon>, entry: AdminProStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminConProsView(entry.__signedIdentifier));
   };
 };

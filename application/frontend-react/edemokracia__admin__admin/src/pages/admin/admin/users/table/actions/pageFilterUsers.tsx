@@ -19,31 +19,28 @@ export const usePageFilterUsersAction = (
   setPage: (page: number) => void,
   setQueryCustomizer: Function,
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
+  numberOfElements: number,
 ): PageFilterUsersAction => {
+  const columnNames = ['userName', 'isAdmin', 'firstName', 'lastName', 'phone', 'email', 'created'];
+
   return async function pageFilterUsersAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);
-    const numberOfElements = 10;
 
-    if (newFilters) {
+    if (Array.isArray(newFilters)) {
       setPage(0);
       setFilters(newFilters);
 
       setQueryCustomizer((prevQueryCustomizer: AdminUserQueryCustomizer) => {
+        // remove previous filter values, so that we can always start with a clean slate
+        for (const name of columnNames) {
+          delete (prevQueryCustomizer as any)[name];
+        }
         return {
           ...prevQueryCustomizer,
           _seek: {
             limit: numberOfElements + 1,
           },
-          ...mapAllFiltersToQueryCustomizerProperties(
-            newFilters,
-            'userName',
-            'isAdmin',
-            'firstName',
-            'lastName',
-            'phone',
-            'email',
-            'created',
-          ),
+          ...mapAllFiltersToQueryCustomizerProperties(newFilters),
         };
       });
     }

@@ -6,10 +6,10 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import { Issue, IssueType, IssueTypeQueryCustomizer, IssueTypeStored } from '../data-api';
-import { IssueServiceForIssueType } from '../data-service';
+import type { Issue, IssueType, IssueTypeQueryCustomizer, IssueTypeStored } from '../data-api';
+import type { IssueServiceForIssueType } from '../data-service';
 
 /**
  * Relation Service Implementation for Issue.issueType

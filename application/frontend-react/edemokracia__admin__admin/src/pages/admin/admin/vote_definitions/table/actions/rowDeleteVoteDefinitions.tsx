@@ -19,7 +19,10 @@ import {
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
 } from '~/generated/data-api';
-import { adminAdminServiceForVoteDefinitionsImpl, adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
+import {
+  adminAdminServiceForVoteDefinitionsImpl,
+  adminVoteDefinitionServiceForClassImpl,
+} from '~/generated/data-axios';
 
 export type RowDeleteVoteDefinitionsAction = () => (
   selected: AdminVoteDefinitionStored,
@@ -48,7 +51,7 @@ export const useRowDeleteVoteDefinitionsAction: RowDeleteVoteDefinitionsAction =
       );
 
       if (confirmed) {
-        await adminVoteDefinitionServiceImpl.delete(selected);
+        await adminVoteDefinitionServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

@@ -12,12 +12,14 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminIssue, AdminIssueQueryCustomizer, AdminIssueStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminAdminIssuesView } from '~/routes';
 
 export const ROW_VIEW_ISSUES_ACTION_INTERFACE_KEY = 'RowViewIssuesAction';
-export type RowViewIssuesAction = () => (entry: AdminIssueStored) => Promise<void>;
+export type RowViewIssuesAction = () => (entry: AdminIssueStored, successCallback: () => void) => Promise<void>;
 
 export const useRowViewIssuesAction: RowViewIssuesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewIssuesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_ISSUES_ACTION_INTERFACE_KEY})`,
@@ -28,7 +30,8 @@ export const useRowViewIssuesAction: RowViewIssuesAction = () => {
     return customNavigation;
   }
 
-  return async function (entry: AdminIssueStored) {
+  return async function (entry: AdminIssueStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminAdminIssuesView(entry.__signedIdentifier));
   };
 };

@@ -6,16 +6,18 @@
 // Template name: actor/src/components/dialog/StackableDialogProvider.tsx
 // Template file: actor/src/components/dialog/StackableDialogProvider.tsx.hbs
 
-import { useRef, createContext, useContext, useState, ReactNode } from 'react';
+import type { ReactNode } from 'react';
+import { useRef, createContext, useContext, useState } from 'react';
 import { Dialog } from '@mui/material';
 import type { DialogProps } from '@mui/material';
+import { SlideUpTransition } from '~/theme/animations';
 
 export type DialogOption = Omit<DialogProps, 'open'>;
 
-type ProviderContext = readonly [(option: DialogOption) => void, () => void];
+type ProviderContext = readonly [(option: DialogOption) => void, () => void, () => void];
 
 const EMPTY_FUNC = () => {};
-const DialogContext = createContext<ProviderContext>([EMPTY_FUNC, EMPTY_FUNC]);
+const DialogContext = createContext<ProviderContext>([EMPTY_FUNC, EMPTY_FUNC, EMPTY_FUNC]);
 
 export const useDialog = () => useContext(DialogContext);
 
@@ -41,7 +43,15 @@ export function StackableDialogProvider({ children }: { children: ReactNode }) {
       // return [...d].concat({ ...latestDialog, open: false });
     });
   };
-  const contextValue = useRef([createDialog, closeDialog] as const);
+  const closeAllDialogs = () => {
+    setDialogs((d) => {
+      for (const dialog of d) {
+        dialog.open = false;
+      }
+      return [];
+    });
+  };
+  const contextValue = useRef([createDialog, closeDialog, closeAllDialogs] as const);
 
   return (
     <DialogContext.Provider value={contextValue.current}>
@@ -55,6 +65,7 @@ export function StackableDialogProvider({ children }: { children: ReactNode }) {
 
         return (
           <Dialog
+            TransitionComponent={SlideUpTransition}
             key={i}
             // onKill={handleKill}
             {...dialogParams}

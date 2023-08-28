@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -33,7 +34,7 @@ import {
   serviceTimeToUiTime,
 } from '~/utilities';
 import { AdminCity, AdminCityQueryCustomizer, AdminCityStored, AdminUser, AdminUserStored } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type TableAddActivityCitiesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -60,6 +61,7 @@ export const useTableAddActivityCitiesAction: TableAddActivityCitiesAction = () 
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
     ];
 
@@ -72,7 +74,7 @@ export const useTableAddActivityCitiesAction: TableAddActivityCitiesAction = () 
       },
     ];
 
-    const sortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+    const sortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
     const initialQueryCustomizer: AdminCityQueryCustomizer = {
       _mask: '{representation}',
@@ -91,7 +93,7 @@ export const useTableAddActivityCitiesAction: TableAddActivityCitiesAction = () 
       columns,
       defaultSortField: sortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityCities(owner, processQueryCustomizer(queryCustomizer)),
+        await adminUserServiceForClassImpl.getRangeForActivityCities(owner, processQueryCustomizer(queryCustomizer)),
       single: false,
       alreadySelectedItems: '',
       filterOptions,
@@ -101,9 +103,9 @@ export const useTableAddActivityCitiesAction: TableAddActivityCitiesAction = () 
     if (res === undefined) return;
 
     try {
-      await adminUserServiceImpl.addActivityCities(
+      await adminUserServiceForClassImpl.addActivityCities(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminCityStored>,
-        res as Array<AdminCityStored>,
+        res.value as Array<AdminCityStored>,
       );
 
       successCallback();

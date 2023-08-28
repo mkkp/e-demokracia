@@ -20,6 +20,7 @@ import type {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridFilterModel,
   GridSortModel,
   GridRowSelectionModel,
   GridValueFormatterParams,
@@ -85,7 +86,7 @@ export const useAdminProCreateSubArgumentAction: AdminProCreateSubArgumentAction
   return async function adminProCreateSubArgumentAction(owner: AdminProStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'lg',
+      maxWidth: 'xs',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();

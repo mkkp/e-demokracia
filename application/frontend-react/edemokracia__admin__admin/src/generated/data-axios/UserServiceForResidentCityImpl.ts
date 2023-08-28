@@ -6,9 +6,9 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import {
+import type {
   CityQueryCustomizer,
   User,
   CityStored,
@@ -17,7 +17,7 @@ import {
   DistrictQueryCustomizer,
   District,
 } from '../data-api';
-import { UserServiceForResidentCity } from '../data-service';
+import type { UserServiceForResidentCity } from '../data-service';
 
 /**
  * Relation Service Implementation for User.residentCity

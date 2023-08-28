@@ -6,9 +6,9 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import {
+import type {
   IssueCategory,
   User,
   UserQueryCustomizer,
@@ -16,7 +16,7 @@ import {
   UserStored,
   IssueCategoryQueryCustomizer,
 } from '../data-api';
-import { IssueCategoryServiceForSubcategories } from '../data-service';
+import type { IssueCategoryServiceForSubcategories } from '../data-service';
 
 /**
  * Relation Service Implementation for IssueCategory.subcategories

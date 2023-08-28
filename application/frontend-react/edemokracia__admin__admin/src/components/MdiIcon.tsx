@@ -10,6 +10,7 @@ import { Box } from '@mui/material';
 import { mapIcon, mapMimeTypeIcon } from '../utilities/icons';
 
 export interface MdiIconProps {
+  className?: string;
   path: string;
   rotate?: 45 | 90 | 135 | 180 | 225 | 270 | 315;
   flip?: 'h' | 'v';
@@ -23,7 +24,7 @@ export interface MdiIconProps {
 }
 
 export const MdiIcon = (props: MdiIconProps) => {
-  const { path, rotate, flip, spin, color, mimeType, sx } = props;
+  const { className, path, rotate, flip, spin, color, mimeType, sx } = props;
   const mappedPath = mimeType ? mapMimeTypeIcon(mimeType.type, mimeType.subType, mapIcon(path)) : mapIcon(path);
   const style = {
     color,
@@ -32,13 +33,16 @@ export const MdiIcon = (props: MdiIconProps) => {
     height: '1rem',
     lineHeight: '1rem',
   };
-  const className = `mdi mdi-${mappedPath.replace(/_/g, '-').replace(/ /g, '')} ${
-    rotate ? `mdi-rotate-${rotate}` : ''
-  } ${flip ? `mdi-flip-${flip}` : ''} ${spin ? 'mdi-spin' : ''}`.trim();
+  const classes = `mdi mdi-${mappedPath.replace(/_/g, '-').replace(/ /g, '')} ${rotate ? `mdi-rotate-${rotate}` : ''} ${
+    flip ? `mdi-flip-${flip}` : ''
+  } ${spin ? 'mdi-spin' : ''}`
+    .trim()
+    .concat(' ' + className)
+    .trim();
 
   return (
     <Box sx={{ display: 'flex', ...(sx || {}) }}>
-      <span className={className} style={style}></span>
+      <span className={classes} style={style}></span>
     </Box>
   );
 };

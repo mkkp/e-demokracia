@@ -18,12 +18,18 @@ import type {
   AdminCountyStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminCountyCitiesView } from '~/routes';
 
 export const ROW_VIEW_CITIES_ACTION_INTERFACE_KEY = 'RowViewCitiesAction';
-export type RowViewCitiesAction = () => (owner: JudoIdentifiable<AdminCounty>, entry: AdminCityStored) => Promise<void>;
+export type RowViewCitiesAction = () => (
+  owner: JudoIdentifiable<AdminCounty>,
+  entry: AdminCityStored,
+  successCallback: () => void,
+) => Promise<void>;
 
 export const useRowViewCitiesAction: RowViewCitiesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewCitiesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_CITIES_ACTION_INTERFACE_KEY})`,
@@ -34,7 +40,8 @@ export const useRowViewCitiesAction: RowViewCitiesAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminCounty>, entry: AdminCityStored) {
+  return async function (owner: JudoIdentifiable<AdminCounty>, entry: AdminCityStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminCountyCitiesView(entry.__signedIdentifier));
   };
 };

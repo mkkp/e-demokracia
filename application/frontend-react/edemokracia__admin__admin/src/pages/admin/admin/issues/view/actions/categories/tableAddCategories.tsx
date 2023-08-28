@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -39,7 +40,7 @@ import {
   AdminIssueCategoryStored,
   AdminIssueStored,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl } from '~/generated/data-axios';
 
 export type TableAddCategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
@@ -66,6 +67,7 @@ export const useTableAddCategoriesAction: TableAddCategoriesAction = () => {
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
       {
         ...baseColumnConfig,
@@ -74,6 +76,7 @@ export const useTableAddCategoriesAction: TableAddCategoriesAction = () => {
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
     ];
 
@@ -93,7 +96,7 @@ export const useTableAddCategoriesAction: TableAddCategoriesAction = () => {
       },
     ];
 
-    const sortModel: GridSortModel = [{ field: 'title', sort: 'asc' }];
+    const sortModel: GridSortModel = [{ field: 'title', sort: null }];
 
     const initialQueryCustomizer: AdminIssueCategoryQueryCustomizer = {
       _mask: '{title,description}',
@@ -112,7 +115,7 @@ export const useTableAddCategoriesAction: TableAddCategoriesAction = () => {
       columns,
       defaultSortField: sortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminIssueServiceImpl.getRangeForCategories(owner, processQueryCustomizer(queryCustomizer)),
+        await adminIssueServiceForClassImpl.getRangeForCategories(owner, processQueryCustomizer(queryCustomizer)),
       single: false,
       alreadySelectedItems: '',
       filterOptions,
@@ -122,9 +125,9 @@ export const useTableAddCategoriesAction: TableAddCategoriesAction = () => {
     if (res === undefined) return;
 
     try {
-      await adminIssueServiceImpl.addCategories(
+      await adminIssueServiceForClassImpl.addCategories(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminIssueCategoryStored>,
-        res as Array<AdminIssueCategoryStored>,
+        res.value as Array<AdminIssueCategoryStored>,
       );
 
       successCallback();

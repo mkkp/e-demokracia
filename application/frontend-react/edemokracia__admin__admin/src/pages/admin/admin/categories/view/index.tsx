@@ -10,21 +10,24 @@
 // Page DataElement name: categories
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -37,8 +40,10 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import {
   AdminIssueCategory,
@@ -48,7 +53,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminAdminServiceForCategoriesImpl, adminIssueCategoryServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCategoriesImpl, adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
 
 import {} from './actions';
 
@@ -83,6 +88,7 @@ export default function AdminAdminCategoriesView() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<AdminIssueCategoryStored>({} as unknown as AdminIssueCategoryStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueCategoryStored, any>>(
     {} as unknown as Record<keyof AdminIssueCategoryStored, any>,
@@ -138,7 +144,7 @@ export default function AdminAdminCategoriesView() {
     setIsLoading(true);
 
     try {
-      const res = await adminIssueCategoryServiceImpl.refresh(
+      const res = await adminIssueCategoryServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as AdminIssueCategoryStored,
         processQueryCustomizer(queryCustomizer),
       );
@@ -154,6 +160,7 @@ export default function AdminAdminCategoriesView() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -161,7 +168,7 @@ export default function AdminAdminCategoriesView() {
     setIsLoading(true);
 
     try {
-      const res = await adminIssueCategoryServiceImpl.update(payloadDiff);
+      const res = await adminIssueCategoryServiceForClassImpl.update(payloadDiff);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -182,7 +189,7 @@ export default function AdminAdminCategoriesView() {
     setIsLoading(true);
 
     try {
-      await adminIssueCategoryServiceImpl.delete(data as AdminIssueCategoryStored);
+      await adminIssueCategoryServiceForClassImpl.delete(data as AdminIssueCategoryStored);
 
       back();
     } catch (error) {
@@ -214,122 +221,134 @@ export default function AdminAdminCategoriesView() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="access-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <TextField
-                required
-                name="title"
-                id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewTitle"
-                label={t('admin.IssueCategoryView.title', { defaultValue: 'Title' }) as string}
-                value={data.title}
-                className={!editMode ? 'JUDO-viewMode' : undefined}
-                disabled={false || !isFormUpdateable()}
-                error={!!validation.get('title')}
-                helperText={validation.get('title')}
-                onChange={(event) => {
-                  storeDiff('title', event.target.value);
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdiIcon path="text_fields" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="access-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="title"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewTitle"
+                  label={t('admin.IssueCategoryView.title', { defaultValue: 'Title' }) as string}
+                  value={data.title ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('title')}
+                  helperText={validation.get('title')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('title', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <TextField
-                required
-                name="description"
-                id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewDescription"
-                label={t('admin.IssueCategoryView.description', { defaultValue: 'Description' }) as string}
-                value={data.description}
-                className={!editMode ? 'JUDO-viewMode' : undefined}
-                disabled={false || !isFormUpdateable()}
-                error={!!validation.get('description')}
-                helperText={validation.get('description')}
-                onChange={(event) => {
-                  storeDiff('description', event.target.value);
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdiIcon path="text_fields" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="description"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewDescription"
+                  label={t('admin.IssueCategoryView.description', { defaultValue: 'Description' }) as string}
+                  value={data.description ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('description')}
+                  helperText={validation.get('description')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('description', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <OwnerLink
-                ownerData={data}
-                disabled={false || !isFormUpdateable()}
-                editMode={editMode}
-                fetchOwnerData={fetchData}
-                storeDiff={storeDiff}
-                validation={validation}
-              />
-            </Grid>
+              <Grid item xs={12} sm={12}>
+                <OwnerLink
+                  ownerData={data}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  editMode={editMode}
+                  fetchOwnerData={fetchData}
+                  storeDiff={storeDiff}
+                  validation={validation}
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapper"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                <Grid item xs={12} sm={12}>
-                  <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
-                    <Typography
-                      id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesLabel"
-                      variant="h6"
-                      component="h1"
-                    >
-                      {t('admin.IssueCategoryView.subcategories.Label', { defaultValue: 'Subcategories' })}
-                    </Typography>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapper"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                  spacing={2}
+                >
+                  <Grid item xs={12} sm={12}>
+                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                      <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
+                      <Typography
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesLabel"
+                        variant="h6"
+                        component="h1"
+                      >
+                        {t('admin.IssueCategoryView.subcategories.Label', { defaultValue: 'Subcategories' })}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories"
-                    container
-                    direction="column"
-                    alignItems="stretch"
-                    justifyContent="flex-start"
-                  >
-                    <SubcategoriesTable
-                      isOwnerLoading={isLoading}
-                      fetchOwnerData={fetchData}
-                      ownerData={data}
-                      editMode={editMode}
-                      isFormUpdateable={isFormUpdateable}
-                      storeDiff={storeDiff}
-                    />
+                  <Grid item xs={12} sm={12}>
+                    <Grid
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories"
+                      container
+                      direction="column"
+                      alignItems="stretch"
+                      justifyContent="flex-start"
+                    >
+                      <SubcategoriesTable
+                        isOwnerLoading={isLoading}
+                        validation={validation}
+                        fetchOwnerData={fetchData}
+                        ownerData={data}
+                        editMode={editMode}
+                        isFormUpdateable={isFormUpdateable}
+                        storeDiff={storeDiff}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

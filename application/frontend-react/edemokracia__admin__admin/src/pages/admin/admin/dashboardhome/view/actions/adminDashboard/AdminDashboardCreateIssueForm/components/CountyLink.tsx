@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -60,26 +61,28 @@ import {
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
   AdminIssueTypeStored,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminCreateIssueInputServiceImpl, adminDashboardServiceImpl } from '~/generated/data-axios';
+import { adminCreateIssueInputServiceForClassImpl, adminDashboardServiceForClassImpl } from '~/generated/data-axios';
 
 export interface CountyLinkProps {
   ownerData: AdminCreateIssueInput;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
   storeDiff: (attributeName: keyof AdminCreateIssueInput, value: any) => void;
   validation: Map<keyof AdminCreateIssueInput, string>;
 }
 
 export function CountyLink(props: CountyLinkProps) {
-  const { ownerData, disabled, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const countySortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const countySortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const countyColumns: GridColDef<AdminCountyStored>[] = [
     {
@@ -90,6 +93,7 @@ export function CountyLink(props: CountyLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -99,6 +103,7 @@ export function CountyLink(props: CountyLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -136,19 +141,24 @@ export function CountyLink(props: CountyLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCounty"
       label={t('admin.CreateIssueInputForm.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '', ownerData.county?.name?.toString() ?? '']}
-      value={ownerData.county}
+      ownerData={ownerData}
       error={!!validation.get('county')}
       helperText={validation.get('county')}
       icon={<MdiIcon path="city" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(county) => {
+        storeDiff('county', county);
+      }}
       onSet={async () => {
         const res = await openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCounty',
           columns: countyColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminCreateIssueInputServiceImpl.getRangeForCounty(
+            await adminCreateIssueInputServiceForClassImpl.getRangeForCounty(
               ownerData,
               processQueryCustomizer(queryCustomizer),
             ),
@@ -159,7 +169,23 @@ export function CountyLink(props: CountyLinkProps) {
         });
 
         if (res === undefined) return;
-        storeDiff('county', res as AdminCountyStored);
+        storeDiff('county', res.value as AdminCountyStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminCountyQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation,name}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminCreateIssueInputServiceForClassImpl.getRangeForCounty(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
       onUnset={async () => {
         storeDiff('county', null);

@@ -1,5 +1,6 @@
 #!/bin/bash
 APP_NAME=edemokracia
+PATH_NAME=edemokracia
 
 print-help () {
     echo """
@@ -8,6 +9,7 @@ JUDO runner.
 USAGE: judo.sh COMMANDS... [OPTIONS...]
     env <env>                               Use alternate env (custom properties file). Default judo is used.
     clean                                   Stop postgresql docker container and clear data.
+    reset-checksum                          Reset checksum. When the build fails with checksum error it can be reset with this command.
 
     prune                                   Stop postgresql docker container and delete untracked files in this repository.
         -f                                  Clear only frontend data.
@@ -207,7 +209,7 @@ upgrade_postgresql_schema () {
     -DdbType=postgresql \
     -DdbUser=${APP_NAME} \
     -DdbPassword=${APP_NAME} \
-    -DupdateModel=${APP_DIR}/model/models/${APP_NAME}-rdbms_postgresql.model \
+    -DupdateModel=${APP_DIR}/model/target/generated-resources/model/${APP_NAME}-rdbms_postgresql.model \
     -f ${APP_DIR}/schema || exit
 }
 
@@ -216,11 +218,8 @@ install_maven_wrapper () {
     sed $(get_sed_edit_option) 's/https:\/\/nexus\.judo\.technology\/repository\/maven-judong\//https:\/\/repo\.maven\.apache\.org\/maven2\//; s/https\:\/\//####/; s/\/\//\//; s/####/https\:\/\//' ${APP_DIR}/.mvn/wrapper/maven-wrapper.properties
 }
 
-install_sdkman () {
-    curl -s "https://get.sdkman.io" | bash
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-    sdk env
-    sdk env install
+reset_checksum () {
+    find ${APP_DIR} -name '.generated-file*' -type f | xargs rm -rf
 }
 
 prune_application () {
@@ -490,7 +489,7 @@ start_karaf () {
 }
 
 install_bundles () {
-    local modulenames=$(find ${APP_DIR}/frontend-react/${APP_NAME}* -type f -name pom.xml | xargs -0 -I % dirname "%" | xargs -0 -I % realpath --relative-to=${APP_DIR} "%" | sed 's/\n/,/g')
+    local modulenames=$(find ${APP_DIR}/frontend-react/${PATH_NAME}* -type f -name pom.xml | xargs -0 -I % dirname "%" | xargs -0 -I % realpath --relative-to=${APP_DIR} "%" | sed 's/\n/,/g')
     modulenames="${modulenames},model,sdk,internal,app"
     echo "Module names: $modulenames"
     mvnd build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR} -DskipModels=true -pl ${modulenames}
@@ -700,6 +699,16 @@ start_local_env () {
     fi
 }
 
+setup_sdkman () {
+    source "$HOME/.sdkman/bin/sdkman-init.sh" &> /dev/null;
+    if ! type sdk &> /dev/null; then
+        curl -s "https://get.sdkman.io" | bash
+        source "$HOME/.sdkman/bin/sdkman-init.sh" &> /dev/null;
+        sdk env install
+    fi
+    sdk env
+}
+
 ## #####################################
 ## Processing arguments
 ## #####################################
@@ -708,7 +717,7 @@ APP_DIR=$CURR_DIR
 MODEL_DIR="$(cd -P -- "$(dirname -- "${APP_DIR}")" && pwd)"
 KARAF_DIR="${APP_DIR}/.karaf"
 
-
+setup_sdkman
 echo "Java home: $(get_java_home)"
 export JAVA_HOME=$(get_java_home)
 
@@ -741,6 +750,7 @@ dumpName=''
 schemaUpgrade=0
 watchBundles=1
 buildParallel=0
+resetChecksum=0
 
 FULL_VERSION_NUMBER="SNAPSHOT"
 original_args=( "$@" )
@@ -769,6 +779,7 @@ while [ $# -ne 0 ]; do
     case "$1" in
         env)                            shift 2;;
         clean)                          clean=1; shift 1;;
+        reset-checksum)                 resetChecksum=1; shift 1;;
 
         prune)
             git_available=$( git rev-parse --is-inside-work-tree )
@@ -850,17 +861,6 @@ case $dbtype in
     ;;
 esac
 
-if [ ! -f "${APP_DIR}/mvnw" ]; then
-    echo "Installing maven wrappper"
-    install_maven_wrapper
-fi
-
-if [ ! -f "$HOME/.sdkman/bin/sdkman-init.sh" ]; then
-    install_sdkman
-fi
-source "$HOME/.sdkman/bin/sdkman-init.sh"
-sdk env
-
 if [ $dump -eq 1 ]; then
     start_postgres postgres-${APP_NAME} ${POSTGRES_PORT:-5432}
     wait_for_port 127.0.0.1 ${POSTGRES_PORT:-5432} 30
@@ -878,10 +878,13 @@ if [ $import -eq 1 ]; then
     start_postgres postgres-${APP_NAME} ${POSTGRES_PORT:-5432}
 fi
 
+if [ $resetChecksum -eq 1 ]; then
+    reset_checksum
+fi
+
 if [ $prune -eq 1 ]; then
     prune_application
 elif [ $clean -eq 1 ]; then
-
     for compose_name in $(get_compose_envs)
     do
         stop_compose $compose_name

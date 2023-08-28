@@ -9,7 +9,8 @@
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { ConfirmationDialogProps } from '../../components-api';
+import type { ConfirmationDialogProps } from '~/components-api';
+import { SlideUpTransition } from '~/theme/animations';
 
 export const ConfirmationDialog = ({
   id,
@@ -41,7 +42,15 @@ export const ConfirmationDialog = ({
   };
 
   return (
-    <Dialog id={id} open={open} onClose={handleClose} scroll="paper" fullWidth={true} maxWidth={'xs'}>
+    <Dialog
+      id={id}
+      open={open}
+      onClose={handleClose}
+      scroll="paper"
+      fullWidth={true}
+      maxWidth={'xs'}
+      TransitionComponent={SlideUpTransition}
+    >
       {title && <DialogTitle id={`${id}-dialog-title`}>{title}</DialogTitle>}
       <DialogContent dividers={!!title}>
         <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>

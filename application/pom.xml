@@ -5,7 +5,7 @@
     
     <artifactId>edemokracia-application</artifactId>
     <groupId>party.mkkp.edemokracia</groupId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     
     <name>edemokracia backend</name>
     <!-- End of 'pom.xml.project-definition.fragment.hbs' -->
@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <revision>1.0.0-SNAPSHOT</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
@@ -21,16 +22,17 @@
 
         <surefire-version>3.0.0</surefire-version>
 
+        <!--suppress UnresolvedMavenProperty -->
         <logback-test-config>${maven.multiModuleProjectDirectory}/logback-test.xml</logback-test-config>
 
-        <slf4j-version>1.7.36</slf4j-version>
+        <slf4j-version>2.0.7</slf4j-version>
         <karaf-version>4.4.3</karaf-version>
 
         <!-- To redifine create 'pom.xml.model-properties-definition.fragment.hbs' override file -->
         <model-groupId>party.mkkp.edemokracia</model-groupId>
         <model-artifactId>edemokracia</model-artifactId>
         <model-name>edemokracia</model-name>
-        <model-version>1.0.0-SNAPSHOT</model-version>
+        <model-version>${revision}</model-version>
         
         <dialectList>postgresql,hsqldb</dialectList>
         <ignoreOpenapi>true</ignoreOpenapi>
@@ -41,21 +43,28 @@
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.judo-properties-definition.fragment.hbs' file -->
-        <structured-map-proxy-version>2.0.0.20230330_221859_8a965acd_develop</structured-map-proxy-version>
-        <judo-dao-api-version>1.0.4.20230309_120321_78415dc0_develop</judo-dao-api-version>
-        <judo-dispatcher-api-version>1.0.2</judo-dispatcher-api-version>
-        <judo-sdk-common-version>1.0.4.20230330_222100_3c176073_develop</judo-sdk-common-version>
-        <mapper-version>1.0.4.20230324_115639_e833341e_develop</mapper-version>
+        <structured-map-proxy-version>2.0.0.20230826_230931_03ebb103_develop</structured-map-proxy-version>
+        <judo-dao-api-version>1.0.4.20230826_230035_c90ddfd7_develop</judo-dao-api-version>
+        <judo-dispatcher-api-version>1.0.3.20230826_230134_1ce94d88_develop</judo-dispatcher-api-version>
+        <judo-sdk-common-version>1.0.4.20230827_072232_e880560a_develop</judo-sdk-common-version>
+        <mapper-version>1.0.4.20230826_230852_5723dcb6_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0.20230606_042034_0c3f33c1_develop </judo-tatami-version>
-        <judo-platform-version>2.0.1.20230608_041651_9979a30e_develop</judo-platform-version>
-        <judo-services-version>1.1.0.20230607_040728_774173e9_develop</judo-services-version>
-        <judo-rdbms-schema-version>1.0.0.20230522_122539_9d7473d4_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20230606_043216_1837c02a_develop</judo-tatami-client-version>
+        <judo-tatami-version>1.1.0.20230827_135431_496df4d2_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20230827_141518_7cf90654_develop</judo-platform-version>
+        <judo-services-version>1.1.0.20230827_140652_db18d388_develop</judo-services-version>
+        <judo-rdbms-schema-version>1.0.0.20230827_073537_4dff4b7e_develop</judo-rdbms-schema-version>
+        <judo-tatami-client-version>1.1.0.20230827_140659_a4233d3b_develop</judo-tatami-client-version>
         
-        <judo-meta-ui-version>1.1.0.20230530_152508_0bc4a2ff_develop</judo-meta-ui-version>
-        <judo-meta-psm-version>1.3.0.20230516_100351_2fb48f5a_develop</judo-meta-psm-version>
-        <judo-psm-generator-sdk-core-version>1.0.0.20230607_141556_5a1e2dc7_develop</judo-psm-generator-sdk-core-version>
+        <judo-meta-ui-version>1.1.0.20230827_072031_56cc046f_develop</judo-meta-ui-version>
+        <judo-meta-psm-version>1.3.0.20230827_072100_176f7536_develop</judo-meta-psm-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20230827_072411_e414105c_develop</judo-psm-generator-sdk-core-version>
+        
+        <osgi-default-import>
+            org.osgi.framework;version="[1.8,2.0)",
+            !lombok,
+            javax.annotation;version="[1.0,2)",
+            org.slf4j;version="[1.6,3)"
+        </osgi-default-import>
         <!-- End of 'pom.xml.judo-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.properties-definition.fragment.hbs' file -->
@@ -77,6 +86,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
+                    <configuration>
+                        <forceJavacCompilerUse>true</forceJavacCompilerUse>
+                    </configuration>
                 </plugin>
 
                 <plugin>
@@ -127,6 +139,10 @@
                     <configuration>
                         <obrRepository>NONE</obrRepository>
                         <instructions>
+                            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                            <Import-Package>
+                                ${osgi-default-import}, *
+                            </Import-Package>
                             <_invalidfilenames>\$Mft|\$MftMirr|\$LogFile|\$Volume|\$AttrDef|\$Bitmap|\$Boot|\$BadClus|\$Secure|\$Upcase|\$Extend|\$Quota|\$ObjId|\$Reparse</_invalidfilenames>
                         </instructions>
                     </configuration>
@@ -151,11 +167,59 @@
                     </executions>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire-version}</version>
+                    <configuration>
+                        <argLine>-Dfile.encoding=UTF-8</argLine>
+                        <trimStackTrace>false</trimStackTrace>
+                        <systemPropertyVariables>
+                            <logback.configurationFile>${logback-test-config}</logback.configurationFile>
+                        </systemPropertyVariables>
+                        <argLine>
+                            -Dfile.encoding=UTF-8
+                            --add-opens java.base/java.lang=ALL-UNNAMED
+                            --add-opens java.base/java.util=ALL-UNNAMED
+                            --add-opens java.base/java.time=ALL-UNNAMED
+                        </argLine>
+                    </configuration>
+                </plugin>
                 <!-- To define create 'pom.xml.extra-plugin-management.fragment.hbs' file -->
                 <!-- End of 'pom.xml.extra-plugin-management.fragment.hbs' -->
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    <pomElements>
+                        <dependencies>flatten</dependencies>
+                        <repositories>flatten</repositories>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Report active profiles on console. -->
             <!--
             <plugin>
@@ -263,6 +327,41 @@
                 <module>karaf-offline</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>sign-artifacts</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.simplify4u.plugins</groupId>
+                        <artifactId>sign-maven-plugin</artifactId>
+                        <version>1.0.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>release-dummy</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>dummy-distribution</id>
+                    <url>file:///tmp/${project.groupId}-${project.artifactId}-${project.version}/maven-snapshot/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>dummy-distribution</id>
+                    <url>file:///tmp/${project.groupId}-${project.artifactId}-${project.version}/maven-release/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
         <!-- To define create 'pom.xml.extra-profiles.fragment.hbs' file -->
         <!-- End of 'pom.xml.extra-profiles.fragment.hbs' -->
     </profiles>

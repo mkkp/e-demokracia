@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -39,7 +40,7 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type TableAddActivityDistrictsAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -69,6 +70,7 @@ export const useTableAddActivityDistrictsAction: TableAddActivityDistrictsAction
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
     ];
 
@@ -81,7 +83,7 @@ export const useTableAddActivityDistrictsAction: TableAddActivityDistrictsAction
       },
     ];
 
-    const sortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+    const sortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
     const initialQueryCustomizer: AdminDistrictQueryCustomizer = {
       _mask: '{representation}',
@@ -100,7 +102,7 @@ export const useTableAddActivityDistrictsAction: TableAddActivityDistrictsAction
       columns,
       defaultSortField: sortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityDistricts(owner, processQueryCustomizer(queryCustomizer)),
+        await adminUserServiceForClassImpl.getRangeForActivityDistricts(owner, processQueryCustomizer(queryCustomizer)),
       single: false,
       alreadySelectedItems: '',
       filterOptions,
@@ -110,9 +112,9 @@ export const useTableAddActivityDistrictsAction: TableAddActivityDistrictsAction
     if (res === undefined) return;
 
     try {
-      await adminUserServiceImpl.addActivityDistricts(
+      await adminUserServiceForClassImpl.addActivityDistricts(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminDistrictStored>,
-        res as Array<AdminDistrictStored>,
+        res.value as Array<AdminDistrictStored>,
       );
 
       successCallback();

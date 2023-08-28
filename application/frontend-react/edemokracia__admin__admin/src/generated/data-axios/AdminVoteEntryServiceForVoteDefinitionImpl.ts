@@ -6,9 +6,9 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import {
+import type {
   AdminVoteDefinitionQueryCustomizer,
   AdminIssueStored,
   SelectAnswerVoteSelection,
@@ -23,7 +23,7 @@ import {
   AdminDebateStored,
   AdminDebateQueryCustomizer,
 } from '../data-api';
-import { AdminVoteEntryServiceForVoteDefinition } from '../data-service';
+import type { AdminVoteEntryServiceForVoteDefinition } from '../data-service';
 
 /**
  * Relation Service Implementation for AdminVoteEntry.voteDefinition

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -60,26 +61,28 @@ import {
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
   AdminIssueTypeStored,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminCreateIssueInputServiceImpl, adminDashboardServiceImpl } from '~/generated/data-axios';
+import { adminCreateIssueInputServiceForClassImpl, adminDashboardServiceForClassImpl } from '~/generated/data-axios';
 
 export interface DistrictLinkProps {
   ownerData: AdminCreateIssueInput;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
   storeDiff: (attributeName: keyof AdminCreateIssueInput, value: any) => void;
   validation: Map<keyof AdminCreateIssueInput, string>;
 }
 
 export function DistrictLink(props: DistrictLinkProps) {
-  const { ownerData, disabled, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const districtSortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const districtSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const districtColumns: GridColDef<AdminDistrictStored>[] = [
     {
@@ -90,6 +93,7 @@ export function DistrictLink(props: DistrictLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -99,6 +103,7 @@ export function DistrictLink(props: DistrictLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -108,6 +113,7 @@ export function DistrictLink(props: DistrictLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -117,6 +123,7 @@ export function DistrictLink(props: DistrictLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -173,19 +180,24 @@ export function DistrictLink(props: DistrictLinkProps) {
         ownerData.district?.county?.toString() ?? '',
         ownerData.district?.city?.toString() ?? '',
       ]}
-      value={ownerData.district}
+      ownerData={ownerData}
       error={!!validation.get('district')}
       helperText={validation.get('district')}
       icon={<MdiIcon path="home-city" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(district) => {
+        storeDiff('district', district);
+      }}
       onSet={async () => {
         const res = await openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputDistrict',
           columns: districtColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminCreateIssueInputServiceImpl.getRangeForDistrict(
+            await adminCreateIssueInputServiceForClassImpl.getRangeForDistrict(
               ownerData,
               processQueryCustomizer(queryCustomizer),
             ),
@@ -196,7 +208,23 @@ export function DistrictLink(props: DistrictLinkProps) {
         });
 
         if (res === undefined) return;
-        storeDiff('district', res as AdminDistrictStored);
+        storeDiff('district', res.value as AdminDistrictStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminDistrictQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation,name,county,city}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminCreateIssueInputServiceForClassImpl.getRangeForDistrict(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
       onUnset={async () => {
         storeDiff('district', null);

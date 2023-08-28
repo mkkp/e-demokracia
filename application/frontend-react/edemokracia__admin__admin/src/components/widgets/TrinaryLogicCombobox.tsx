@@ -9,10 +9,12 @@
 import { TextField, InputAdornment, MenuItem } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type { ChangeEvent } from 'react';
+import { clsx } from 'clsx';
 import { TRINARY_LOGIC, TrinaryLogicProps } from '../../components-api';
 import { MdiIcon } from '../MdiIcon';
 
 export const TrinaryLogicCombobox = ({
+  required = false,
   autoFocus = false,
   readOnly = false,
   disabled = false,
@@ -39,16 +41,21 @@ export const TrinaryLogicCombobox = ({
     <TextField
       name={name}
       id={id}
+      required={required}
       autoFocus={autoFocus}
       label={label}
       select
       value={TRINARY_LOGIC.get(value)}
-      className={`${!editMode ? 'JUDO-viewMode' : undefined} ${className}`}
+      className={`${clsx({
+        'JUDO-viewMode': !editMode,
+        'JUDO-required': required,
+      })} ${className}`}
       onChange={onChangeHandler}
-      disabled={disabled || readOnly}
+      disabled={disabled}
       error={error}
       helperText={helperText}
       InputProps={{
+        readOnly,
         startAdornment: (
           <InputAdornment position="start">
             <MdiIcon path="format-list-bulleted" />

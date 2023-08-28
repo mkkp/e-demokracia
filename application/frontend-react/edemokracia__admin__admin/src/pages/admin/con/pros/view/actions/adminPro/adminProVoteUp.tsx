@@ -20,6 +20,7 @@ import type {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridFilterModel,
   GridSortModel,
   GridRowSelectionModel,
   GridValueFormatterParams,
@@ -42,7 +43,7 @@ import {
   serviceTimeToUiTime,
 } from '~/utilities';
 import { AdminCon, AdminConStored, AdminPro, AdminProQueryCustomizer, AdminProStored } from '~/generated/data-api';
-import { adminProServiceImpl } from '~/generated/data-axios';
+import { adminProServiceForClassImpl } from '~/generated/data-axios';
 
 export type AdminProVoteUpActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
@@ -70,7 +71,7 @@ export const useAdminProVoteUpAction: AdminProVoteUpAction = () => {
 
   return async function adminProVoteUpAction(owner: AdminProStored, successCallback: () => void) {
     try {
-      const result = await adminProServiceImpl.voteUp(owner);
+      const result = await adminProServiceForClassImpl.voteUp(owner);
       if (postHandler) {
         postHandler(successCallback);
         return;

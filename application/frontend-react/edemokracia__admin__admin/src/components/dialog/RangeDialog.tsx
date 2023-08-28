@@ -6,33 +6,49 @@
 // Template name: actor/src/components/dialog/RangeDialog.tsx
 // Template file: actor/src/components/dialog/RangeDialog.tsx.hbs
 
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+  Typography,
+} from '@mui/material';
+import type {
   GridSortModel,
+  GridFilterModel,
   GridRowModel,
-  DataGrid,
   GridRowParams,
   GridColDef,
+  GridRowClassNameParams,
   GridSortItem,
   GridRowSelectionModel,
-  GridToolbarContainer,
   GridRowId,
 } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
+import type { MouseEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { JudoStored, QueryCustomizer } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import type { Filter, FilterOption } from '../../components-api';
+import type { Filter, FilterOption } from '~/components-api';
 import {
+  mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   processQueryCustomizer,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   mapFiltersToQueryCustomizerProperty,
-} from '../../utilities';
-import { serverTableConfig, rangeDialogConfig } from '../../config';
+} from '~/utilities';
+import { serverTableConfig, rangeDialogConfig } from '~/config';
+import { SlideUpTransition } from '~/theme/animations';
 import { CustomTablePagination } from '../CustomTablePagination';
 import { useFilterDialog } from './hooks';
+import type { ContextMenuApi } from '../table';
+import { ContextMenu, StripedDataGrid } from '../table';
+import { MdiIcon } from '../MdiIcon';
 
 interface RangeDialogProps<T extends JudoStored<T>, U extends QueryCustomizer<T>> {
   id: string;
@@ -46,6 +62,8 @@ interface RangeDialogProps<T extends JudoStored<T>, U extends QueryCustomizer<T>
   alreadySelectedItems: GridRowSelectionModel | GridRowId;
   initalQueryCustomizer: U;
   filterOptions: FilterOption[];
+  createTrigger?: () => Promise<T | undefined>;
+  editMode?: boolean;
 }
 
 export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T>>({
@@ -60,6 +78,8 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
   alreadySelectedItems,
   initalQueryCustomizer,
   filterOptions,
+  createTrigger,
+  editMode,
 }: RangeDialogProps<T, U>) => {
   const { openFilterDialog } = useFilterDialog();
   const { t } = useTranslation();
@@ -71,6 +91,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([defaultSortField]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [lastItem, setLastItem] = useState<T>();
   const [firstItem, setFirstItem] = useState<T>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
@@ -155,12 +176,17 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
     setPage(0);
     setSortModel(newModel);
 
-    const { field, sort } = newModel[0];
+    const _orderBy = newModel
+      .filter((m) => m.sort)
+      .map((m) => ({
+        attribute: m.field,
+        descending: m.sort === 'desc',
+      }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
       return {
         ...prevQueryCustomizer,
-        _orderBy: [{ attribute: field, descending: sort === 'desc' }],
+        _orderBy,
       };
     });
   };
@@ -214,7 +240,10 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
 
   const ok = () => {
     handleClose();
-    resolve(selectedItems);
+    resolve({
+      value: selectedItems,
+      resolveSource: 'selection',
+    });
   };
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
@@ -265,13 +294,21 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
   };
 
   return (
-    <Dialog id={id} open={open} onClose={cancel} scroll="paper" fullWidth={true} maxWidth={'md'}>
+    <Dialog
+      id={id}
+      open={open}
+      onClose={cancel}
+      scroll="paper"
+      fullWidth={true}
+      maxWidth={'md'}
+      TransitionComponent={SlideUpTransition}
+    >
       <DialogTitle id={`${id}-dialog-title`}>
         {t('judo.modal.range.label', { defaultValue: 'Select' }) as string}
       </DialogTitle>
       <DialogContent id={`${id}-data-grid`} dividers={true}>
         <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>
-          <DataGrid
+          <StripedDataGrid
             sx={
               single
                 ? {
@@ -292,8 +329,9 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
             loading={isLoading}
             rows={data}
             rowCount={rowCount}
-            getRowClassName={() => 'data-grid-row'}
-            getCellClassName={() => 'data-grid-cell'}
+            getRowClassName={(params: GridRowClassNameParams) => {
+              return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+            }}
             sortModel={sortModel}
             onSortModelChange={handleSortModelChange}
             checkboxSelection
@@ -308,7 +346,8 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
                 <GridToolbarContainer>
                   <Button
                     id={`${id}-set-filters`}
-                    variant="outlined"
+                    variant="text"
+                    startIcon={<MdiIcon path="filter" />}
                     onClick={async () => {
                       const newFilters = await openFilterDialog('TODO', filterOptions, filters);
 
@@ -321,6 +360,31 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
                     {t('judo.modal.range.set-filters', { defaultValue: 'Set filters' }) as string}{' '}
                     {filters.length !== 0 ? '(' + filters.length + ')' : ''}
                   </Button>
+                  {createTrigger && (
+                    <Button
+                      id={`${id}-create`}
+                      variant="text"
+                      startIcon={<MdiIcon path="file_document_plus" />}
+                      onClick={async () => {
+                        try {
+                          const result = await createTrigger();
+                          if (result) {
+                            handleClose();
+                            resolve({
+                              value: result,
+                              resolveSource: 'create',
+                            });
+                          }
+                        } catch (error) {
+                          console.error(error);
+                        }
+                      }}
+                      disabled={isLoading || editMode}
+                    >
+                      {t('judo.pages.table.create', { defaultValue: 'Create' })}
+                    </Button>
+                  )}
+                  <div>{/* Placeholder */}</div>
                 </GridToolbarContainer>
               ),
               Pagination: () => (
@@ -334,6 +398,13 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
               ),
             }}
           />
+          {editMode && createTrigger && (
+            <Typography sx={{ fontStyle: 'italic' }}>
+              {t('judo.modal.range.create-blocked-edit-mode', {
+                defaultValue: 'Creating new elements is disabled because you have unsaved changes',
+              })}
+            </Typography>
+          )}
         </DialogContentText>
       </DialogContent>
       <DialogActions>

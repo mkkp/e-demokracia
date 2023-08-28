@@ -19,22 +19,28 @@ export const usePageFilterVotesAction = (
   setPage: (page: number) => void,
   setQueryCustomizer: Function,
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
+  numberOfElements: number,
 ): PageFilterVotesAction => {
+  const columnNames = ['created', 'type'];
+
   return async function pageFilterVotesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);
-    const numberOfElements = 10;
 
-    if (newFilters) {
+    if (Array.isArray(newFilters)) {
       setPage(0);
       setFilters(newFilters);
 
       setQueryCustomizer((prevQueryCustomizer: AdminSimpleVoteQueryCustomizer) => {
+        // remove previous filter values, so that we can always start with a clean slate
+        for (const name of columnNames) {
+          delete (prevQueryCustomizer as any)[name];
+        }
         return {
           ...prevQueryCustomizer,
           _seek: {
             limit: numberOfElements + 1,
           },
-          ...mapAllFiltersToQueryCustomizerProperties(newFilters, 'created', 'type'),
+          ...mapAllFiltersToQueryCustomizerProperties(newFilters),
         };
       });
     }

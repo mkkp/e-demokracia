@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,10 +39,13 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
 import { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
 import { adminAdminServiceForCountiesImpl } from '~/generated/data-axios';
@@ -49,6 +56,8 @@ import {
   useRowDeleteCountiesAction,
   useRowViewCountiesAction,
 } from '../actions';
+
+export const ADMIN_ADMIN_COUNTIES_TABLE_COUNTY_TABLE = 'AdminAdminCountiesTableCounty_Table';
 
 export interface County_TableTableProps {
   isOwnerLoading: boolean;
@@ -68,7 +77,8 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
 
   const [data, setData] = useState<GridRowModel<AdminCountyStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: null }]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [lastItem, setLastItem] = useState<AdminCountyStored>();
   const [firstItem, setFirstItem] = useState<AdminCountyStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
@@ -79,16 +89,18 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
     _seek: {
       limit: 10 + 1,
     },
-    _orderBy: [
-      {
-        attribute: sortModel[0].field,
-        descending: sortModel[0].sort === 'desc',
-      },
-    ],
-    ...mapAllFiltersToQueryCustomizerProperties(filters, 'name'),
+    _orderBy: sortModel.length
+      ? [
+          {
+            attribute: sortModel[0].field,
+            descending: sortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+    ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
-  const countiesSortModel: GridSortModel = [{ field: 'name', sort: 'asc' }];
+  const countiesSortModel: GridSortModel = [{ field: 'name', sort: null }];
 
   const countiesColumns: GridColDef<AdminCountyStored>[] = [
     {
@@ -99,8 +111,30 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
+
+  const countiesRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableDefaultCountiesCountyTableNameFilter',
+      attributeName: 'name',
+      label: t('admin.CountyTable.counties.name', { defaultValue: 'Name' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
+
+  const countiesInitialQueryCustomizer: AdminCountyQueryCustomizer = {
+    _mask: '{name}',
+    _orderBy: countiesSortModel.length
+      ? [
+          {
+            attribute: countiesSortModel[0].field,
+            descending: countiesSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const pageCreateCountiesAction = usePageCreateCountiesAction();
   const pageFilterCountiesAction = usePageFilterCountiesAction(
@@ -108,6 +142,7 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
     setPage,
     setQueryCustomizer,
     openFilterDialog,
+    10,
   );
   const pageRefreshCountiesAction = usePageRefreshCountiesAction();
   const rowDeleteCountiesAction = useRowDeleteCountiesAction();
@@ -136,12 +171,17 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
     setPage(0);
     setSortModel(newModel);
 
-    const { field, sort } = newModel[0];
+    const _orderBy = newModel
+      .filter((m) => m.sort)
+      .map((m) => ({
+        attribute: m.field,
+        descending: m.sort === 'desc',
+      }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
       return {
         ...prevQueryCustomizer,
-        _orderBy: [{ attribute: field, descending: sort === 'desc' }],
+        _orderBy,
       };
     });
   }
@@ -194,60 +234,63 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
   }, [queryCustomizer]);
 
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={data}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...countiesColumns,
-        ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminCounties', rowActions, {
-          shownActions: 2,
-        }),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminCountyStored>) => rowViewCountiesAction(params.row)}
-      sortModel={sortModel}
-      onSortModelChange={handleSortModelChange}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <Button
-              id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCountiesPageFilter"
-              startIcon={<MdiIcon path="filter" />}
-              variant="text"
-              onClick={() => {
-                pageFilterCountiesAction(
-                  'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCountiesPageFilter-filter',
-                  filterOptions,
-                  filters,
-                );
-              }}
-              disabled={isOwnerLoading}
-            >
-              {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
-                (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
-            </Button>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-        Pagination: () => (
-          <CustomTablePagination
-            pageChange={handlePageChange}
-            isNextButtonEnabled={isNextButtonEnabled}
-            page={page}
-            setPage={setPage}
-            rowPerPage={10}
-          />
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...countiesColumns,
+          ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminCounties', rowActions, t, {
+            shownActions: 2,
+          }),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminCountyStored>) => rowViewCountiesAction(params.row, () => fetchData())}
+        sortModel={sortModel}
+        onSortModelChange={handleSortModelChange}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCountiesPageFilter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() => {
+                  pageFilterCountiesAction(
+                    'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCountiesPageFilter-filter',
+                    filterOptions,
+                    filters,
+                  );
+                }}
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+          Pagination: () => (
+            <CustomTablePagination
+              pageChange={handlePageChange}
+              isNextButtonEnabled={isNextButtonEnabled}
+              page={page}
+              setPage={setPage}
+              rowPerPage={10}
+            />
+          ),
+        }}
+      />
+    </>
   );
 });

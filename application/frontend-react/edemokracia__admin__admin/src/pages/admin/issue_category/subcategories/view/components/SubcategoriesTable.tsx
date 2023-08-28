@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,11 +39,15 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
+import { Box, Typography } from '@mui/material';
 import {
   AdminIssueCategory,
   AdminIssueCategoryQueryCustomizer,
@@ -48,7 +56,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminIssueCategoryServiceImpl } from '~/generated/data-axios';
+import { adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageDeleteSubcategoriesAction,
   usePageRefreshSubcategoriesAction,
@@ -56,6 +64,8 @@ import {
   useRowViewSubcategoriesAction,
   useTableCreateSubcategoriesAction,
 } from '../actions';
+import { applyInMemoryFilters } from '~/utilities';
+export const ADMIN_ISSUE_CATEGORY_SUBCATEGORIES_VIEW_SUBCATEGORIES = 'AdminIssueCategorySubcategoriesViewSubcategories';
 
 export interface SubcategoriesTableProps {
   ownerData: AdminIssueCategoryStored;
@@ -64,18 +74,27 @@ export interface SubcategoriesTableProps {
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminIssueCategoryStored, value: any) => void;
+  validation: Map<keyof AdminIssueCategory, string>;
 }
 
 export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
+  const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [subcategoriesSortModel, setSubcategoriesSortModel] = useState<GridSortModel>([
-    { field: 'title', sort: 'asc' },
-  ]);
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [data, setData] = useState<AdminIssueCategoryStored[]>([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const [subcategoriesSortModel, setSubcategoriesSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+
+  const [subcategoriesFilterModel, setSubcategoriesFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const subcategoriesColumns: GridColDef<AdminIssueCategoryStored>[] = [
     {
@@ -86,6 +105,7 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -95,8 +115,37 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
+
+  const subcategoriesRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesTitleFilter',
+      attributeName: 'title',
+      label: t('admin.IssueCategoryView.subcategories.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
+      attributeName: 'description',
+      label: t('admin.IssueCategoryView.subcategories.description', { defaultValue: 'Description' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
+
+  const subcategoriesInitialQueryCustomizer: AdminIssueCategoryQueryCustomizer = {
+    _mask: '{title,description}',
+    _orderBy: subcategoriesSortModel.length
+      ? [
+          {
+            attribute: subcategoriesSortModel[0].field,
+            descending: subcategoriesSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const pageDeleteSubcategoriesAction = usePageDeleteSubcategoriesAction();
   const pageRefreshSubcategoriesAction = usePageRefreshSubcategoriesAction();
@@ -115,57 +164,128 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
     },
   ];
 
+  const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesTitleFilter',
+      attributeName: 'title',
+      label: t('admin.IssueCategoryView.subcategories.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
+      attributeName: 'description',
+      label: t('admin.IssueCategoryView.subcategories.description', { defaultValue: 'Description' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
+
+  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+
+    if (Array.isArray(newFilters)) {
+      setPaginationModel((prevState) => ({
+        ...prevState,
+        page: 0,
+      }));
+      setFilters(newFilters);
+    }
+  };
+
+  useEffect(() => {
+    const newData = applyInMemoryFilters<AdminIssueCategoryStored>(filters, ownerData?.subcategories ?? []);
+    setData(newData);
+  }, [ownerData?.subcategories, filters]);
+
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={ownerData?.subcategories ?? []}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...subcategoriesColumns,
-        ...columnsActionCalculator(
-          'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategories',
-          subcategoriesRowActions,
-          { shownActions: 2 },
-        ),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminIssueCategoryStored>) => {
-        if (!editMode) {
-          rowViewSubcategoriesAction(ownerData, params.row);
-        }
-      }}
-      sortModel={subcategoriesSortModel}
-      onSortModelChange={(newModel: GridSortModel) => {
-        setSubcategoriesSortModel(newModel);
-      }}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <Button
-              id="CreateActionedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewEdemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesTableCreate"
-              startIcon={<MdiIcon path="file_document_plus" />}
-              variant="text"
-              onClick={() =>
-                tableCreateSubcategoriesAction(ownerData, () => {
-                  fetchOwnerData();
-                })
-              }
-              disabled={editMode || isOwnerLoading || false || !isFormUpdateable()}
-            >
-              {t('judo.pages.table.create', { defaultValue: 'Create' })}
-            </Button>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+          border: (theme) =>
+            props.validation.has('subcategories') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...subcategoriesColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategories',
+            subcategoriesRowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminIssueCategoryStored>) => {
+          if (!editMode) {
+            rowViewSubcategoriesAction(ownerData, params.row, () => fetchOwnerData());
+          }
+        }}
+        sortModel={subcategoriesSortModel}
+        onSortModelChange={(newModel: GridSortModel) => {
+          setSubcategoriesSortModel(newModel);
+        }}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="CreateActionedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewEdemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesTableCreate"
+                startIcon={<MdiIcon path="file_document_plus" />}
+                variant="text"
+                onClick={() =>
+                  tableCreateSubcategoriesAction(ownerData, () => {
+                    fetchOwnerData();
+                  })
+                }
+                disabled={editMode || isOwnerLoading || false || !isFormUpdateable()}
+              >
+                {t('judo.pages.table.create', { defaultValue: 'Create' })}
+              </Button>
+              <Button
+                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-filter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() =>
+                  filter(
+                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-filter',
+                    filterOptions,
+                    filters,
+                  )
+                }
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+        }}
+      />
+      {props.validation.has('subcategories') && (
+        <Box
+          sx={{
+            color: (theme) => theme.palette.error.main,
+            display: 'flex',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
+          <Typography>{props.validation.get('subcategories')}</Typography>
+        </Box>
+      )}
+    </>
   );
 };

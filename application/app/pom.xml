@@ -9,7 +9,7 @@
     <parent>
         <artifactId>edemokracia-application</artifactId>
         <groupId>party.mkkp.edemokracia</groupId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     
     <artifactId>edemokracia-application-app</artifactId>
@@ -27,42 +27,10 @@
     <build>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <configuration>
-                        <instructions>
-                            <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                            <Import-Package>!lombok, *</Import-Package>
-                            <!-- <Export-Package>party.mkkp.edemokracia.edemokracia.operations.*</Export-Package> -->
-                        </instructions>
-                    </configuration>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire-version}</version>
-                    <configuration>
-                        <argLine>-Dfile.encoding=UTF-8</argLine>
-                        <trimStackTrace>false</trimStackTrace>
-                        <systemPropertyVariables>
-                            <logback.configurationFile>${logback-test-config}</logback.configurationFile>
-                        </systemPropertyVariables>
-                        <argLine>
-                            -Dfile.encoding=UTF-8
-                            --add-opens java.base/java.lang=ALL-UNNAMED
-                            --add-opens java.base/java.util=ALL-UNNAMED
-                            --add-opens java.base/java.time=ALL-UNNAMED
-                        </argLine>
-                    </configuration>
-                </plugin>
-
                 <!-- To define create 'app/pom.xml.extra-plugin-management.fragment.hbs' file -->
                 <!-- End of 'app/pom.xml.extra-plugin-management.fragment.hbs'  -->
                 
                 
-
             </plugins>
         </pluginManagement>
         <plugins>
@@ -94,13 +62,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
-                </configuration>
             </plugin>
 
             <plugin>

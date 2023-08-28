@@ -13,15 +13,59 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.initializer;
 
 /**
  * 
+ * 
+ * 
+ * var edemokracia::IssueType think_about = edemokracia::IssueType!filter(c | c.title == "Gondok gondolkodni")!any();
+ * if (think_about!isUndefined()) {
+ * 	think_about = new edemokracia::IssueType(title = "Gondok gondolkodni", description = "Gondok gondolkodni");
+ * }
+ * 
+ * var edemokracia::IssueType lets_do_it = edemokracia::IssueType!filter(c | c.title == "Csináljuk meg")!any();
+ * if (lets_do_it!isUndefined()) {
+ * 	lets_do_it = new edemokracia::IssueType(title = "Csináljuk meg", description = "Csináljuk meg");
+ * }
+ * 
+ * var edemokracia::IssueType help = edemokracia::IssueType!filter(c | c.title == "Segítsünk")!any();
+ * if (help!isUndefined()) {
+ * 	help = new edemokracia::IssueType(title = "Segítsünk", description = "Segítsünk");
+ * }
+ * 
+ * var edemokracia::IssueType decide = edemokracia::IssueType!filter(c | c.title == "Döntsük el")!any();
+ * if (decide!isUndefined()) {
+ * 	decide = new edemokracia::IssueType(title = "Döntsük el", description = "Döntsük el");
+ * }
+ * 
+ * var edemokracia::IssueType select = edemokracia::IssueType!filter(c | c.title == "Válasszuk ki")!any();
+ * if (select!isUndefined()) {
+ * 	select = new edemokracia::IssueType(title = "Válasszuk ki", description = "Válasszuk ki");
+ * }
+ * 
+ * var edemokracia::IssueType bring_together = edemokracia::IssueType!filter(c | c.title == "Hozzuk össze")!any();
+ * if (bring_together!isUndefined()) {
+ * 	bring_together = new edemokracia::IssueType(title = "Hozzuk össze", description = "Hozzuk össze");
+ * }
+ * 
+ * var edemokracia::IssueType support = edemokracia::IssueType!filter(c | c.title == "Képviseljük / támogassuk")!any();
+ * if (support!isUndefined()) {
+ * 	support = new edemokracia::IssueType(title = "Képviseljük / támogassuk", description = "Képviseljük / támogassuk");
+ * }
+ * 
+ * var edemokracia::IssueType dont_let = edemokracia::IssueType!filter(c | c.title == "Ne hagyjuk")!any();
+ * if (dont_let!isUndefined()) {
+ * 	dont_let = new edemokracia::IssueType(title = "Ne hagyjuk", description = "Ne hagyjuk");
+ * }
+ * 
+ * 
  * Usage:
  *  1. Rename this file from InitIssueTypesCustomImplementation.java.default to InitIssueTypesCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of InitIssueTypesCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitIssueTypes.class)
 public class InitIssueTypesCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitIssueTypes {
 
-    public void initIssueTypes()  {
+    public void run()  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.initializer.InitIssueTypesExchangeFunctionsComponent");
     }
 

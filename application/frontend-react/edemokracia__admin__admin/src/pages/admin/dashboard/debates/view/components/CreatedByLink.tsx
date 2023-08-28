@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -63,8 +64,9 @@ import {
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminDebateServiceImpl, adminUserServiceImpl } from '~/generated/data-axios';
+import { adminDebateServiceForClassImpl, adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewCreatedByAction } from '../actions';
 
@@ -74,18 +76,19 @@ export interface CreatedByLinkProps {
   validation: Map<keyof AdminDebateStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function CreatedByLink(props: CreatedByLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const createdBySortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const createdBySortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const linkViewCreatedByAction = useLinkViewCreatedByAction();
 
@@ -95,13 +98,18 @@ export function CreatedByLink(props: CreatedByLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateCreatedBy"
       label={t('admin.DebateView.createdBy', { defaultValue: 'Created by' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
-      value={ownerData.createdBy}
+      ownerData={ownerData}
       error={!!validation.get('createdBy')}
       helperText={validation.get('createdBy')}
       icon={<MdiIcon path="account" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewCreatedByAction(ownerData, ownerData?.createdBy!)}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(createdBy) => {
+        storeDiff('createdBy', createdBy);
+      }}
+      onView={async () => linkViewCreatedByAction(ownerData, ownerData?.createdBy!, () => fetchOwnerData())}
     />
   );
 }

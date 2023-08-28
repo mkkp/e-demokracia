@@ -18,15 +18,18 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminIssueCountyView } from '~/routes';
 
 export const LINK_VIEW_COUNTY_ACTION_INTERFACE_KEY = 'LinkViewCountyAction';
 export type LinkViewCountyAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
   entry: AdminCountyStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useLinkViewCountyAction: LinkViewCountyAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<LinkViewCountyAction>(
     `(${OBJECTCLASS}=${LINK_VIEW_COUNTY_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useLinkViewCountyAction: LinkViewCountyAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCountyStored) {
+  return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCountyStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminIssueCountyView(entry.__signedIdentifier));
   };
 };

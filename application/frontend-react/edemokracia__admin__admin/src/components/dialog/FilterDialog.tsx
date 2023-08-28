@@ -39,7 +39,7 @@ import type {
   Operation,
 } from '../../components-api';
 import { FilterType } from '../../components-api';
-import { dateToJudoDateString, exists } from '../../utilities';
+import { dateToJudoDateString, exists, uiDateToServiceDate, serviceDateToUiDate } from '../../utilities';
 import { mainContainerPadding } from '../../theme';
 import { _BooleanOperation, _EnumerationOperation, _NumericOperation, _StringOperation } from '@judo/data-api-common';
 import { DropdownButton } from '../DropdownButton';
@@ -110,6 +110,8 @@ const getOperatorsByFilter = (filter: Filter): string[] => {
 };
 
 const FilterOperator = ({ filter, operatorId, valueId, setFilterOperator }: FilterOperatorProps) => {
+  const { t } = useTranslation();
+
   const onChangeHandler = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     setFilterOperator(filter, getOperationEnumValue(filter, event.target.value));
   };
@@ -118,15 +120,14 @@ const FilterOperator = ({ filter, operatorId, valueId, setFilterOperator }: Filt
     <TextField
       name={'operation'}
       id={operatorId}
-      label={'Operation'}
+      label={t('judo.modal.filter.operation', { defaultValue: 'Operation' }) as string}
       select
       value={filter.filterBy.operator}
       onChange={onChangeHandler}
     >
       {getOperatorsByFilter(filter).map((item) => (
         <MenuItem className="filter-operation-item" id={valueId} key={item} value={item}>
-          {/* TODO: do not forget localization here*/}
-          {item}
+          {t(`judo.modal.filter.${item}`, { defaultValue: 'Operation' }) as string}
         </MenuItem>
       ))}
     </TextField>
@@ -134,6 +135,8 @@ const FilterOperator = ({ filter, operatorId, valueId, setFilterOperator }: Filt
 };
 
 const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
+  const { t } = useTranslation();
+
   if (filter.filterOption.filterType === FilterType.enumeration && !exists(filter.filterOption.enumValues)) {
     throw new Error(`Missing enumValues from FilterOptions of "${filter.filterOption.attributeName}"`);
   }
@@ -152,17 +155,17 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
                     onChange={(event) => setFilterValue(filter, !!event.target.value)}
                   />
                 }
-                label={filter.filterOption.attributeName}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
               />
             );
           case FilterType.date:
             return (
               <DatePicker
                 className={valueId}
-                label={filter.filterOption.attributeName}
-                value={filter.filterBy.value ?? null}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
+                value={serviceDateToUiDate(filter.filterBy.value ?? null)}
                 views={['year', 'month', 'day']}
-                onChange={(newValue) => setFilterValue(filter, newValue)}
+                onChange={(newValue) => setFilterValue(filter, uiDateToServiceDate(newValue))}
                 slotProps={{
                   textField: {
                     InputProps: {
@@ -180,7 +183,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
             return (
               <DateTimePicker
                 className={valueId}
-                label={filter.filterOption.attributeName}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
                 value={filter.filterBy.value ?? null}
                 views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                 onChange={(newValue) => setFilterValue(filter, newValue)}
@@ -201,7 +204,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
           //   return (
           //     <TextField
           //       className={valueId}
-          //       label={filter.filterOption.attributeName}
+          //       label={filter.filterOption.label ?? filter.filterOption.attributeName}
           //       value={filter.filterBy.value}
           //       onChange={(event) => setFilterValue(filter, event.target.value)}
           //       InputProps={{
@@ -217,7 +220,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
             return (
               <TextField
                 className={valueId}
-                label={filter.filterOption.attributeName}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
                 value={filter.filterBy.value}
                 select
                 onChange={(event) => setFilterValue(filter, event.target.value)}
@@ -233,7 +236,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
             return (
               <TextField
                 className={valueId}
-                label={filter.filterOption.attributeName}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
                 type="number"
                 value={filter.filterBy.value}
                 onChange={(event) => setFilterValue(filter, Number(event.target.value))}
@@ -250,7 +253,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
             return (
               <TextField
                 className={valueId}
-                label={filter.filterOption.attributeName}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
                 value={filter.filterBy.value}
                 onChange={(event) => setFilterValue(filter, event.target.value)}
                 InputProps={{
@@ -266,7 +269,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
             return (
               <TrinaryLogicCombobox
                 className={valueId}
-                label={filter.filterOption.attributeName}
+                label={filter.filterOption.label ?? filter.filterOption.attributeName}
                 value={filter.filterBy.value}
                 onChange={(value: any) => setFilterValue(filter, value)}
               />

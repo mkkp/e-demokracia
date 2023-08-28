@@ -6,9 +6,9 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import {
+import type {
   SimpleVote,
   User,
   UserQueryCustomizer,
@@ -16,7 +16,7 @@ import {
   SimpleVoteStored,
   SimpleVoteQueryCustomizer,
 } from '../data-api';
-import { UserServiceForVotes } from '../data-service';
+import type { UserServiceForVotes } from '../data-service';
 
 /**
  * Relation Service Implementation for User.votes

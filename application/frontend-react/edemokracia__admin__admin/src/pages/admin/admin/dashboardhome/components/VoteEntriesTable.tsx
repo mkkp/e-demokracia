@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,11 +39,15 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
+import { Box, Typography } from '@mui/material';
 import {
   AdminDashboard,
   AdminDashboardQueryCustomizer,
@@ -54,8 +62,10 @@ import {
   AdminVoteEntryQueryCustomizer,
   AdminVoteEntryStored,
 } from '~/generated/data-api';
-import { adminDashboardServiceImpl, adminVoteEntryServiceImpl } from '~/generated/data-axios';
+import { adminDashboardServiceForClassImpl, adminVoteEntryServiceForClassImpl } from '~/generated/data-axios';
 import { usePageRefreshDashboardhomeAction } from '../actions';
+import { applyInMemoryFilters } from '~/utilities';
+export const ADMIN_ADMIN_DASHBOARDHOME_DASHBOARD_VOTE_ENTRIES = 'AdminAdminDashboardhomeDashboardVoteEntries';
 
 export interface VoteEntriesTableProps {
   ownerData: AdminDashboardStored;
@@ -64,16 +74,27 @@ export interface VoteEntriesTableProps {
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminDashboardStored, value: any) => void;
+  validation: Map<keyof AdminDashboard, string>;
 }
 
 export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
+  const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [voteEntriesSortModel, setVoteEntriesSortModel] = useState<GridSortModel>([{ field: 'created', sort: 'asc' }]);
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [data, setData] = useState<AdminVoteEntryStored[]>([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const [voteEntriesSortModel, setVoteEntriesSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
+
+  const [voteEntriesFilterModel, setVoteEntriesFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const voteEntriesColumns: GridColDef<AdminVoteEntryStored>[] = [
     {
@@ -86,6 +107,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
       width: 170,
       type: 'dateTime',
+      filterable: false && true,
       valueGetter: ({ value }) => value && serviceDateToUiDate(value),
       valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
         return (
@@ -112,6 +134,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -123,6 +146,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -134,6 +158,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -144,51 +169,218 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
       headerClassName: 'data-grid-column-header',
 
       width: 170,
-      type: 'string',
+      type: 'singleSelect',
+      filterable: false && true,
       sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        return t(`enumerations.EdemokraciaVoteStatus.${value}`, { defaultValue: value });
+      },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
     },
   ];
 
+  const voteEntriesRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      attributeName: 'created',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.created', {
+        defaultValue: 'Created',
+      }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      attributeName: 'issueTitle',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.issueTitle', {
+        defaultValue: 'Issue Title',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      attributeName: 'debateTitle',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.debateTitle', {
+        defaultValue: 'Debate Title',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      attributeName: 'voteTitle',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteTitle', {
+        defaultValue: 'Vote Title',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      attributeName: 'voteStatus',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteStatus', {
+        defaultValue: 'Vote Status',
+      }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+    },
+  ];
+
+  const voteEntriesInitialQueryCustomizer: AdminVoteEntryQueryCustomizer = {
+    _mask: '{created,issueTitle,debateTitle,voteTitle,voteStatus}',
+    _orderBy: voteEntriesSortModel.length
+      ? [
+          {
+            attribute: voteEntriesSortModel[0].field,
+            descending: voteEntriesSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
+
   const pageRefreshDashboardhomeAction = usePageRefreshDashboardhomeAction();
 
   const voteEntriesRowActions: TableRowAction<AdminVoteEntryStored>[] = [];
 
+  const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      attributeName: 'created',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.created', {
+        defaultValue: 'Created',
+      }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      attributeName: 'issueTitle',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.issueTitle', {
+        defaultValue: 'Issue Title',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      attributeName: 'debateTitle',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.debateTitle', {
+        defaultValue: 'Debate Title',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      attributeName: 'voteTitle',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteTitle', {
+        defaultValue: 'Vote Title',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      attributeName: 'voteStatus',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteStatus', {
+        defaultValue: 'Vote Status',
+      }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+    },
+  ];
+
+  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+
+    if (Array.isArray(newFilters)) {
+      setPaginationModel((prevState) => ({
+        ...prevState,
+        page: 0,
+      }));
+      setFilters(newFilters);
+    }
+  };
+
+  useEffect(() => {
+    const newData = applyInMemoryFilters<AdminVoteEntryStored>(filters, ownerData?.voteEntries ?? []);
+    setData(newData);
+  }, [ownerData?.voteEntries, filters]);
+
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={ownerData?.voteEntries ?? []}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...voteEntriesColumns,
-        ...columnsActionCalculator(
-          'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntries',
-          voteEntriesRowActions,
-          { shownActions: 2 },
-        ),
-      ]}
-      disableRowSelectionOnClick
-      sortModel={voteEntriesSortModel}
-      onSortModelChange={(newModel: GridSortModel) => {
-        setVoteEntriesSortModel(newModel);
-      }}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+          border: (theme) =>
+            props.validation.has('voteEntries') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...voteEntriesColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntries',
+            voteEntriesRowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        sortModel={voteEntriesSortModel}
+        onSortModelChange={(newModel: GridSortModel) => {
+          setVoteEntriesSortModel(newModel);
+        }}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() =>
+                  filter(
+                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter',
+                    filterOptions,
+                    filters,
+                  )
+                }
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+        }}
+      />
+      {props.validation.has('voteEntries') && (
+        <Box
+          sx={{
+            color: (theme) => theme.palette.error.main,
+            display: 'flex',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
+          <Typography>{props.validation.get('voteEntries')}</Typography>
+        </Box>
+      )}
+    </>
   );
 };

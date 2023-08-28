@@ -15,7 +15,8 @@
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
 // Action: CreateAction
 
-import { useState, useEffect, useRef, useCallback, Dispatch, SetStateAction, FC } from 'react';
+import type { Dispatch, SetStateAction, FC } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -38,9 +39,10 @@ import {
   Popper,
   TextField,
 } from '@mui/material';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
@@ -50,12 +52,14 @@ import {
   AssociationButton,
   BinaryInput,
   CollectionAssociationButton,
+  NumericInput,
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
   isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  passesLocalValidation,
   fileHandling,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -66,14 +70,16 @@ import {
 } from '~/utilities';
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
 import { routeToAdminAdminCountiesView } from '~/routes';
 
 import { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
-import { adminAdminServiceForCountiesImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCountiesImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
 
 export interface PageCreateCountiesFormProps {
-  successCallback: () => void;
+  successCallback: (result: AdminCountyStored, open?: boolean) => void;
   cancel: () => void;
 }
 
@@ -85,6 +91,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
   const anchorRef = useRef<HTMLDivElement>(null);
   const { navigate } = useJudoNavigation();
   const [open, setOpen] = useState(false);
+  const [createDialog, closeDialog] = useDialog();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -137,7 +144,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
     setIsLoading(true);
 
     try {
-      const res = await adminCountyServiceImpl.getTemplate();
+      const res = await adminCountyServiceForClassImpl.getTemplate();
       setData((prevData) => ({ ...prevData, ...res }));
       setPayloadDiff({
         ...res,
@@ -198,24 +205,29 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container xs={12} sm={12} spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <TextField
-              required
+              required={true}
               name="name"
               id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCountiesCreateDefaultCountyFormName"
               autoFocus
               label={t('admin.CountyForm.name', { defaultValue: 'County name' }) as string}
-              value={data.name}
-              className={!editMode ? 'JUDO-viewMode' : undefined}
-              disabled={false || !isFormUpdateable()}
+              value={data.name ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
               error={!!validation.get('name')}
               helperText={validation.get('name')}
               onChange={(event) => {
-                storeDiff('name', event.target.value);
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('name', realValue);
               }}
               InputLabelProps={{ shrink: true }}
               InputProps={{
+                readOnly: false || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
                     <MdiIcon path="text_fields" />
@@ -244,7 +256,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
             onClick={async () => {
               const result = await saveData();
               if (result) {
-                successCallback();
+                successCallback(result);
               }
             }}
           >
@@ -266,10 +278,10 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
                     <MenuItem
                       key="create-and-navigate"
                       onClick={async (event: any) => {
-                        const result: { __signedIdentifier: string } | undefined = await saveData();
+                        const result: AdminCountyStored | undefined = await saveData();
 
                         if (result) {
-                          successCallback();
+                          successCallback(result);
                           navigate(routeToAdminAdminCountiesView(result.__signedIdentifier));
                         }
                       }}

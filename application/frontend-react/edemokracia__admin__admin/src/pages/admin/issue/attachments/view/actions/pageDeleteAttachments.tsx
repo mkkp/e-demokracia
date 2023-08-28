@@ -21,7 +21,7 @@ import {
   AdminIssueAttachmentStored,
   AdminIssueStored,
 } from '~/generated/data-api';
-import { adminIssueServiceForAttachmentsImpl, adminIssueAttachmentServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForAttachmentsImpl, adminIssueAttachmentServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteAttachmentsAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
@@ -52,7 +52,7 @@ export const usePageDeleteAttachmentsAction: PageDeleteAttachmentsAction = () =>
       );
 
       if (confirmed) {
-        await adminIssueAttachmentServiceImpl.delete(selected);
+        await adminIssueAttachmentServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

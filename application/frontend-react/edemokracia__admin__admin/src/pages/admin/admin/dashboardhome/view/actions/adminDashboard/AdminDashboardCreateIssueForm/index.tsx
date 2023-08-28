@@ -15,7 +15,8 @@
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
 // Action: CallOperationAction
 
-import { useState, useEffect, useRef, useCallback, Dispatch, SetStateAction, FC } from 'react';
+import type { Dispatch, SetStateAction, FC } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -39,10 +40,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
@@ -52,12 +54,14 @@ import {
   AssociationButton,
   BinaryInput,
   CollectionAssociationButton,
+  NumericInput,
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
   isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  passesLocalValidation,
   fileHandling,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -68,7 +72,9 @@ import {
 } from '~/utilities';
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
 
 import {
   AdminCity,
@@ -93,7 +99,7 @@ import {
   AdminIssueTypeQueryCustomizer,
   AdminIssueTypeStored,
 } from '~/generated/data-api';
-import { adminCreateIssueInputServiceImpl, adminDashboardServiceImpl } from '~/generated/data-axios';
+import { adminCreateIssueInputServiceForClassImpl, adminDashboardServiceForClassImpl } from '~/generated/data-axios';
 
 import { CityLink } from './components/CityLink';
 import { CountyLink } from './components/CountyLink';
@@ -162,7 +168,7 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
     setIsLoading(true);
 
     try {
-      const res = await adminCreateIssueInputServiceImpl.getTemplate();
+      const res = await adminCreateIssueInputServiceForClassImpl.getTemplate();
       setData(res);
       setPayloadDiff({
         ...res,
@@ -183,7 +189,7 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
     setIsLoading(true);
 
     try {
-      const res = await adminDashboardServiceImpl.createIssue(payloadDiff);
+      const res = await adminDashboardServiceForClassImpl.createIssue(payloadDiff);
 
       if (res) {
         successCallback(res);
@@ -214,7 +220,7 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container xs={12} sm={12} spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapper">
               <CardContent>
@@ -244,7 +250,8 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                       <Grid item xs={12} sm={12}>
                         <IssueTypeLink
                           ownerData={data}
-                          disabled={false || !isFormUpdateable()}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
                           editMode={editMode}
                           storeDiff={storeDiff}
                           validation={validation}
@@ -253,21 +260,26 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
 
                       <Grid item xs={12} sm={12} md={4.0}>
                         <TextField
-                          required
+                          required={true}
                           name="title"
                           id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueTitle"
                           autoFocus
                           label={t('admin.CreateIssueInputForm.title', { defaultValue: 'Title' }) as string}
-                          value={data.title}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
-                          disabled={false || !isFormUpdateable()}
+                          value={data.title ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
                           error={!!validation.get('title')}
                           helperText={validation.get('title')}
                           onChange={(event) => {
-                            storeDiff('title', event.target.value);
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('title', realValue);
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
                                 <MdiIcon path="text_fields" />
@@ -281,10 +293,14 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                         <DateTimePicker
                           ampm={false}
                           ampmInClock={false}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
                           slotProps={{
                             textField: {
                               id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDebateCloseAt',
+                              required: true,
                               helperText: validation.get('debateCloseAt'),
                               error: !!validation.get('debateCloseAt'),
                               InputProps: {
@@ -316,7 +332,8 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                             t('admin.CreateIssueInputForm.debateCloseAt', { defaultValue: 'Debate close at' }) as string
                           }
                           value={serviceDateToUiDate(data.debateCloseAt ?? null)}
-                          disabled={false || !isFormUpdateable()}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
                           onChange={(newValue: Date) => {
                             storeDiff('debateCloseAt', newValue);
                           }}
@@ -325,22 +342,27 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
 
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required
+                          required={true}
                           name="description"
                           id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDescription"
                           label={t('admin.CreateIssueInputForm.description', { defaultValue: 'Description' }) as string}
-                          value={data.description}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
-                          disabled={false || !isFormUpdateable()}
+                          value={data.description ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
                           multiline
                           minRows={4.0}
                           error={!!validation.get('description')}
                           helperText={validation.get('description')}
                           onChange={(event) => {
-                            storeDiff('description', event.target.value);
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('description', realValue);
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
                                 <MdiIcon path="text_fields" />
@@ -353,7 +375,8 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                       <Grid item xs={12} sm={12} md={4.0}>
                         <CityLink
                           ownerData={data}
-                          disabled={false || !isFormUpdateable()}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
                           editMode={editMode}
                           storeDiff={storeDiff}
                           validation={validation}
@@ -363,7 +386,8 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                       <Grid item xs={12} sm={12} md={4.0}>
                         <CountyLink
                           ownerData={data}
-                          disabled={false || !isFormUpdateable()}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
                           editMode={editMode}
                           storeDiff={storeDiff}
                           validation={validation}
@@ -373,7 +397,8 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                       <Grid item xs={12} sm={12} md={4.0}>
                         <DistrictLink
                           ownerData={data}
-                          disabled={false || !isFormUpdateable()}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
                           editMode={editMode}
                           storeDiff={storeDiff}
                           validation={validation}

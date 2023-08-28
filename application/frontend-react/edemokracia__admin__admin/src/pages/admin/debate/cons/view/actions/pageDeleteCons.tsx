@@ -21,7 +21,7 @@ import {
   AdminDebate,
   AdminDebateStored,
 } from '~/generated/data-api';
-import { adminDebateServiceForConsImpl, adminConServiceImpl } from '~/generated/data-axios';
+import { adminDebateServiceForConsImpl, adminConServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteConsAction = () => (
   owner: JudoIdentifiable<AdminDebate>,
@@ -52,7 +52,7 @@ export const usePageDeleteConsAction: PageDeleteConsAction = () => {
       );
 
       if (confirmed) {
-        await adminConServiceImpl.delete(selected);
+        await adminConServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

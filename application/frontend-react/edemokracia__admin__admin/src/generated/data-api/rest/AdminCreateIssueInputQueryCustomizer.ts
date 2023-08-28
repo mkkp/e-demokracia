@@ -6,7 +6,7 @@
 // Template name: queryCustomizer.ts.hbs
 // Template file: rest/queryCustomizer.ts.hbs
 
-import { QueryCustomizer } from '@judo/data-api-common';
+import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminCreateIssueInput } from '../model/AdminCreateIssueInput';
 
 export interface AdminCreateIssueInputQueryCustomizer extends QueryCustomizer<AdminCreateIssueInput> {}

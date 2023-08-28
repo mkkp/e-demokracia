@@ -10,21 +10,24 @@
 // Page DataElement name: counties
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -37,8 +40,10 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import {
   AdminCity,
@@ -48,7 +53,7 @@ import {
   AdminCountyQueryCustomizer,
   AdminCountyStored,
 } from '~/generated/data-api';
-import { adminAdminServiceForCountiesImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCountiesImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
 
 import {} from './actions';
 
@@ -82,6 +87,7 @@ export default function AdminAdminCountiesView() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<AdminCountyStored>({} as unknown as AdminCountyStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCountyStored, any>>(
     {} as unknown as Record<keyof AdminCountyStored, any>,
@@ -135,7 +141,7 @@ export default function AdminAdminCountiesView() {
     setIsLoading(true);
 
     try {
-      const res = await adminCountyServiceImpl.refresh(
+      const res = await adminCountyServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as AdminCountyStored,
         processQueryCustomizer(queryCustomizer),
       );
@@ -151,6 +157,7 @@ export default function AdminAdminCountiesView() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -158,7 +165,7 @@ export default function AdminAdminCountiesView() {
     setIsLoading(true);
 
     try {
-      const res = await adminCountyServiceImpl.update(payloadDiff);
+      const res = await adminCountyServiceForClassImpl.update(payloadDiff);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -179,7 +186,7 @@ export default function AdminAdminCountiesView() {
     setIsLoading(true);
 
     try {
-      await adminCountyServiceImpl.delete(data as AdminCountyStored);
+      await adminCountyServiceForClassImpl.delete(data as AdminCountyStored);
 
       back();
     } catch (error) {
@@ -211,86 +218,92 @@ export default function AdminAdminCountiesView() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="access-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <TextField
-                required
-                name="name"
-                id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewName"
-                label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
-                value={data.name}
-                className={!editMode ? 'JUDO-viewMode' : undefined}
-                disabled={false || !isFormUpdateable()}
-                error={!!validation.get('name')}
-                helperText={validation.get('name')}
-                onChange={(event) => {
-                  storeDiff('name', event.target.value);
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdiIcon path="text_fields" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="access-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="name"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewName"
+                  label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
+                  value={data.name ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('name')}
+                  helperText={validation.get('name')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('name', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapper"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                <Grid item xs={12} sm={12}>
-                  <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <MdiIcon path="city" sx={{ marginRight: 1 }} />
-                    <Typography
-                      id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapperCitiesLabel"
-                      variant="h6"
-                      component="h1"
-                    >
-                      {t('admin.CountyView.cities.Label', { defaultValue: 'Cities' })}
-                    </Typography>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapper"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                  spacing={2}
+                >
+                  <Grid item xs={12} sm={12}>
+                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                      <MdiIcon path="city" sx={{ marginRight: 1 }} />
+                      <Typography
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapperCitiesLabel"
+                        variant="h6"
+                        component="h1"
+                      >
+                        {t('admin.CountyView.cities.Label', { defaultValue: 'Cities' })}
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapperCities"
-                    container
-                    direction="column"
-                    alignItems="stretch"
-                    justifyContent="flex-start"
-                  >
-                    <CitiesTable
-                      isOwnerLoading={isLoading}
-                      fetchOwnerData={fetchData}
-                      ownerData={data}
-                      editMode={editMode}
-                      isFormUpdateable={isFormUpdateable}
-                      storeDiff={storeDiff}
-                    />
+                  <Grid item xs={12} sm={12}>
+                    <Grid
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapperCities"
+                      container
+                      direction="column"
+                      alignItems="stretch"
+                      justifyContent="flex-start"
+                    >
+                      <CitiesTable
+                        isOwnerLoading={isLoading}
+                        validation={validation}
+                        fetchOwnerData={fetchData}
+                        ownerData={data}
+                        editMode={editMode}
+                        isFormUpdateable={isFormUpdateable}
+                        storeDiff={storeDiff}
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminCon, AdminConQueryCustomizer, AdminConStored } from '~/generated/data-api';
-import { adminConServiceForConsImpl, adminConServiceImpl } from '~/generated/data-axios';
+import { adminConServiceForConsImpl, adminConServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteConsAction = () => (
   owner: JudoIdentifiable<AdminCon>,
@@ -46,7 +46,7 @@ export const useRowDeleteConsAction: RowDeleteConsAction = () => {
       );
 
       if (confirmed) {
-        await adminConServiceImpl.delete(selected);
+        await adminConServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

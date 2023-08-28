@@ -6,7 +6,9 @@
 // Template name: actor/src/utilities/form-utils.ts
 // Template file: actor/src/utilities/form-utils.ts.hbs
 
+import type { Dispatch, SetStateAction } from 'react';
 import { format } from 'date-fns';
+import type { TFunction } from 'i18next';
 
 export const uiDateToServiceDate = (date?: any | null): string | null => {
   if (date === undefined || date === null) {
@@ -44,3 +46,33 @@ export const serviceTimeToUiTime = (timeStr?: any) => {
   }
   return timeStr;
 };
+
+export function passesLocalValidation<T>(
+  data: T,
+  requiredByRecord: Record<string, boolean>,
+  t: TFunction<string, any>,
+  setValidation: Dispatch<SetStateAction<Map<keyof T, string>>>,
+): boolean {
+  const failsRequired = (input: any): boolean => input === null || input === undefined || input === '';
+  const errorList: string[] = [];
+  for (const attr in requiredByRecord) {
+    if (failsRequired(data[attr as keyof T] as any) && requiredByRecord[attr]) {
+      errorList.push(attr);
+    }
+  }
+  if (errorList.length > 0) {
+    const message = t('judo.error.validation-failed.MISSING_REQUIRED_ATTRIBUTE', {
+      defaultValue: 'Missing required attribute.',
+    }) as string;
+
+    setValidation((prevValidation) => {
+      const copy = new Map<keyof T, string>(prevValidation);
+      for (const errorAttr of errorList) {
+        copy.set(errorAttr as keyof T, message);
+      }
+      return copy;
+    });
+    return false;
+  }
+  return true;
+}

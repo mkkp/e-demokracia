@@ -7,7 +7,7 @@
 // Template file: actor/src/components/ModeledTabs.tsx.hbs
 
 import type { ReactNode, SyntheticEvent } from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
 import { MdiIcon } from './MdiIcon';
 
@@ -31,45 +31,82 @@ export function TabPanel(props: TabPanelProps) {
 export interface ChildTabProps {
   id: string;
   name: string;
+  nestedDataKeys: string[];
   label?: string;
   icon?: string;
+  disabled?: boolean | null;
+  hidden?: boolean | null;
 }
 
 export interface ModeledTabsProps {
   id: string;
-  activeIndex: number;
+  ownerData?: Record<any, any>;
   childTabs: ChildTabProps[];
   children: ReactNode;
+  orientation?: 'horizontal' | 'vertical';
+  validation: Map<any, string>;
 }
 
-export function ModeledTabs({ id, activeIndex, childTabs, children }: ModeledTabsProps) {
-  const [value, setValue] = useState<number>(activeIndex);
+export function ModeledTabs({ id, ownerData, childTabs, children, orientation, validation }: ModeledTabsProps) {
+  const [value, setValue] = useState<number>(0);
+  const border = orientation === 'vertical' ? 'borderRight' : 'borderBottom';
+  const additionalBoxSx = orientation === 'vertical' ? { flexGrow: 1, display: 'flex' } : {};
 
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  useEffect(() => {
+    if (ownerData && ownerData.__identifier) {
+      sessionStorage.setItem(`${id}-${ownerData.__identifier}`, String(value));
+    }
+  }, [value]);
+
+  useEffect(() => {
+    if (ownerData && ownerData.__identifier) {
+      setValue(Number(sessionStorage.getItem(`${id}-${ownerData.__identifier}`) || '0'));
+    }
+  }, [ownerData]);
+
+  const hasNestedError = (tab: ChildTabProps): boolean => {
+    if (tab.nestedDataKeys.length) {
+      return tab.nestedDataKeys.some((key) => validation.has(key));
+    }
+    return false;
+  };
+
+  const tabsHaveError = (): boolean => {
+    return childTabs.some((tab) => hasNestedError(tab));
   };
 
   return (
-    <Box id={id} sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} textColor="secondary" indicatorColor="secondary">
-          {childTabs.map((c: any, index: number) => (
+    <Box id={id} sx={{ width: '100%', ...additionalBoxSx }}>
+      <Tabs
+        orientation={orientation}
+        variant="scrollable"
+        value={value}
+        onChange={(event: SyntheticEvent, newValue: number) => setValue(newValue)}
+        textColor="secondary"
+        indicatorColor="secondary"
+        sx={{ [border]: 1, borderColor: 'divider' }}
+      >
+        {childTabs
+          .filter((c) => !c.hidden)
+          .map((c: any, index: number) => (
             <Tab
+              className={hasNestedError(c) ? 'JUDO-nestedError' : undefined}
               id={`${c.id}-tab`}
               key={c.id}
               label={c.label}
               icon={c.icon ? <MdiIcon path={c.icon} sx={{ m: '0 0.5rem' }} /> : ''}
               iconPosition="start"
-              disabled={false}
+              disabled={c.disabled}
             />
           ))}
-        </Tabs>
-      </Box>
-      {childTabs.map((c: any, index: number) => (
-        <TabPanel id={`${c.id}-tab-panel`} key={c.id} value={value} index={index}>
-          {Array.isArray(children) ? children[index] : ''}
-        </TabPanel>
-      ))}
+      </Tabs>
+      {childTabs
+        .filter((c) => !c.hidden)
+        .map((c: any, index: number) => (
+          <TabPanel id={`${c.id}-tab-panel`} key={c.id} value={value} index={index}>
+            {Array.isArray(children) ? children[index] : ''}
+          </TabPanel>
+        ))}
     </Box>
   );
 }

@@ -18,15 +18,18 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminIssueCategoriesView } from '~/routes';
 
 export const ROW_VIEW_CATEGORIES_ACTION_INTERFACE_KEY = 'RowViewCategoriesAction';
 export type RowViewCategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
   entry: AdminIssueCategoryStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewCategoriesAction: RowViewCategoriesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewCategoriesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_CATEGORIES_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,12 @@ export const useRowViewCategoriesAction: RowViewCategoriesAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminIssueCategoryStored) {
+  return async function (
+    owner: JudoIdentifiable<AdminIssue>,
+    entry: AdminIssueCategoryStored,
+    successCallback: () => void,
+  ) {
+    closeAllDialogs();
     navigate(routeToAdminIssueCategoriesView(entry.__signedIdentifier));
   };
 };

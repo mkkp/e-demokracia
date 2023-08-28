@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -61,8 +62,9 @@ import {
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminDebateServiceImpl, adminIssueServiceImpl } from '~/generated/data-axios';
+import { adminDebateServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewIssueAction } from '../actions';
 
@@ -72,18 +74,19 @@ export interface IssueLinkProps {
   validation: Map<keyof AdminDebateStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function IssueLink(props: IssueLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const issueSortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const issueSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const linkViewIssueAction = useLinkViewIssueAction();
 
@@ -93,13 +96,18 @@ export function IssueLink(props: IssueLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewDebateLabelWrapperDebateIssue"
       label={t('admin.DebateView.issue', { defaultValue: 'Issue' }) as string}
       labelList={[ownerData.issue?.representation?.toString() ?? '']}
-      value={ownerData.issue}
+      ownerData={ownerData}
       error={!!validation.get('issue')}
       helperText={validation.get('issue')}
       icon={<MdiIcon path="file-document" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewIssueAction(ownerData, ownerData?.issue!)}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(issue) => {
+        storeDiff('issue', issue);
+      }}
+      onView={async () => linkViewIssueAction(ownerData, ownerData?.issue!, () => fetchOwnerData())}
     />
   );
 }

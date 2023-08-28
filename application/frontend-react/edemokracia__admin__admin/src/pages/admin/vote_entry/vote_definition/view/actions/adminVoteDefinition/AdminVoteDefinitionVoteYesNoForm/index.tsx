@@ -15,7 +15,8 @@
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
 // Action: CallOperationAction
 
-import { useState, useEffect, useRef, useCallback, Dispatch, SetStateAction, FC } from 'react';
+import type { Dispatch, SetStateAction, FC } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -38,9 +39,10 @@ import {
   Popper,
   TextField,
 } from '@mui/material';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
@@ -50,12 +52,14 @@ import {
   AssociationButton,
   BinaryInput,
   CollectionAssociationButton,
+  NumericInput,
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
   isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  passesLocalValidation,
   fileHandling,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -66,7 +70,9 @@ import {
 } from '~/utilities';
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
 
 import {
   AdminVoteDefinition,
@@ -79,7 +85,7 @@ import {
   YesNoVoteInputQueryCustomizer,
   YesNoVoteInputStored,
 } from '~/generated/data-api';
-import { yesNoVoteInputServiceImpl, adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
+import { yesNoVoteInputServiceForClassImpl, adminVoteDefinitionServiceForClassImpl } from '~/generated/data-axios';
 
 export interface AdminVoteDefinitionVoteYesNoFormProps {
   successCallback: () => void;
@@ -148,7 +154,7 @@ export function AdminVoteDefinitionVoteYesNoForm({
     setIsLoading(true);
 
     try {
-      const res = await yesNoVoteInputServiceImpl.getTemplate();
+      const res = await yesNoVoteInputServiceForClassImpl.getTemplate();
       setData(res);
       setPayloadDiff({
         ...res,
@@ -169,7 +175,7 @@ export function AdminVoteDefinitionVoteYesNoForm({
     setIsLoading(true);
 
     try {
-      await adminVoteDefinitionServiceImpl.voteYesNo(owner, payloadDiff);
+      await adminVoteDefinitionServiceForClassImpl.voteYesNo(owner, payloadDiff);
 
       successCallback();
     } catch (error: any) {
@@ -198,16 +204,20 @@ export function AdminVoteDefinitionVoteYesNoForm({
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container xs={12} sm={12} spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <TextField
+              required={false}
               name="value"
               id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoInputDefaultYesNoVoteInputFormValue"
               autoFocus
               label={t('YesNoVoteInputForm.value', { defaultValue: 'Vote' }) as string}
               value={data.value || ''}
-              className={!editMode ? 'JUDO-viewMode' : undefined}
-              disabled={false || !isFormUpdateable()}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              disabled={isLoading}
               error={!!validation.get('value')}
               helperText={validation.get('value')}
               onChange={(event) => {
@@ -215,6 +225,7 @@ export function AdminVoteDefinitionVoteYesNoForm({
               }}
               InputLabelProps={{ shrink: true }}
               InputProps={{
+                readOnly: false || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
                     <MdiIcon path="list" />

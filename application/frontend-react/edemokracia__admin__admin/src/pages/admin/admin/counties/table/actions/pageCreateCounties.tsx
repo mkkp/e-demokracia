@@ -13,7 +13,7 @@ import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, G
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useJudoNavigation } from '~/components';
 import type { DialogOption } from '~/components/dialog';
 import { useDialog } from '~/components/dialog';
@@ -22,10 +22,13 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { toastConfig } from '~/config';
 
 import { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
-import { adminAdminServiceForCountiesImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCountiesImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
 import { PageCreateCountiesForm } from './PageCreateCountiesForm';
 
-export type PageCreateCountiesAction = () => (successCallback: () => void) => void;
+export type PageCreateCountiesAction = () => (
+  successCallback: (result: AdminCountyStored) => void,
+  closedCallback?: () => void,
+) => void;
 
 export const usePageCreateCountiesAction: PageCreateCountiesAction = () => {
   const [createDialog, closeDialog] = useDialog();
@@ -33,26 +36,36 @@ export const usePageCreateCountiesAction: PageCreateCountiesAction = () => {
   const { navigate } = useJudoNavigation();
   const { enqueueSnackbar } = useSnackbar();
 
-  return function pageCreateCountiesAction(successCallback: () => void) {
+  return function pageCreateCountiesAction(
+    successCallback: (result: AdminCountyStored) => void,
+    closedCallback?: () => void,
+  ) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'lg',
+      maxWidth: 'xs',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();
+          closedCallback && closedCallback();
         }
       },
       children: (
         <PageCreateCountiesForm
-          successCallback={() => {
-            closeDialog();
-            enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
-              variant: 'success',
-              ...toastConfig.success,
-            });
-            successCallback();
+          successCallback={(result: AdminCountyStored, open?: boolean) => {
+            if (!open) {
+              closeDialog();
+              enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
+                variant: 'success',
+                ...toastConfig.success,
+              });
+            }
+
+            successCallback(result);
           }}
-          cancel={closeDialog}
+          cancel={() => {
+            closeDialog();
+            closedCallback && closedCallback();
+          }}
         />
       ),
     });

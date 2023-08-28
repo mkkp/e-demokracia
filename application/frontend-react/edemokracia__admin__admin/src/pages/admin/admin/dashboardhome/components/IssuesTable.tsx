@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,11 +39,15 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
+import { Box, Typography } from '@mui/material';
 import {
   AdminDashboard,
   AdminDashboardQueryCustomizer,
@@ -54,7 +62,7 @@ import {
   AdminVoteEntryQueryCustomizer,
   AdminVoteEntryStored,
 } from '~/generated/data-api';
-import { adminDashboardServiceImpl, adminIssueServiceImpl } from '~/generated/data-axios';
+import { adminDashboardServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshDashboardhomeAction,
   useRowDeleteIssuesAction,
@@ -62,6 +70,8 @@ import {
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
 } from '../actions';
+import { applyInMemoryFilters } from '~/utilities';
+export const ADMIN_ADMIN_DASHBOARDHOME_DASHBOARD_ISSUES = 'AdminAdminDashboardhomeDashboardIssues';
 
 export interface IssuesTableProps {
   ownerData: AdminDashboardStored;
@@ -70,16 +80,27 @@ export interface IssuesTableProps {
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminDashboardStored, value: any) => void;
+  validation: Map<keyof AdminDashboard, string>;
 }
 
 export const IssuesTable = (props: IssuesTableProps) => {
+  const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [issuesSortModel, setIssuesSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [data, setData] = useState<AdminIssueStored[]>([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const [issuesSortModel, setIssuesSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+
+  const [issuesFilterModel, setIssuesFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const issuesColumns: GridColDef<AdminIssueStored>[] = [
     {
@@ -92,6 +113,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -103,6 +125,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
       width: 170,
       type: 'dateTime',
+      filterable: false && true,
       valueGetter: ({ value }) => value && serviceDateToUiDate(value),
       valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
         return (
@@ -128,8 +151,12 @@ export const IssuesTable = (props: IssuesTableProps) => {
       headerClassName: 'data-grid-column-header',
 
       width: 170,
-      type: 'string',
+      type: 'singleSelect',
+      filterable: false && true,
       sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        return t(`enumerations.EdemokraciaIssueStatus.${value}`, { defaultValue: value });
+      },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
@@ -144,11 +171,57 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
       width: 100,
       type: 'number',
+      filterable: false && true,
       valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
         return value && new Intl.NumberFormat(l10nLocale).format(value);
       },
     },
   ];
+
+  const issuesRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
+      attributeName: 'title',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
+      attributeName: 'created',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', { defaultValue: 'Created' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
+      attributeName: 'status',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', { defaultValue: 'Status' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
+      attributeName: 'numberOfDebates',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
+        defaultValue: 'Debates',
+      }) as string,
+      filterType: FilterType.numeric,
+    },
+  ];
+
+  const issuesInitialQueryCustomizer: AdminIssueQueryCustomizer = {
+    _mask: '{title,created,status,numberOfDebates}',
+    _orderBy: issuesSortModel.length
+      ? [
+          {
+            attribute: issuesSortModel[0].field,
+            descending: issuesSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const pageRefreshDashboardhomeAction = usePageRefreshDashboardhomeAction();
   const rowDeleteIssuesAction = useRowDeleteIssuesAction();
@@ -184,44 +257,131 @@ export const IssuesTable = (props: IssuesTableProps) => {
     },
   ];
 
+  const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
+      attributeName: 'title',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
+      attributeName: 'created',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', { defaultValue: 'Created' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
+      attributeName: 'status',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', { defaultValue: 'Status' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
+      attributeName: 'numberOfDebates',
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
+        defaultValue: 'Debates',
+      }) as string,
+      filterType: FilterType.numeric,
+    },
+  ];
+
+  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+
+    if (Array.isArray(newFilters)) {
+      setPaginationModel((prevState) => ({
+        ...prevState,
+        page: 0,
+      }));
+      setFilters(newFilters);
+    }
+  };
+
+  useEffect(() => {
+    const newData = applyInMemoryFilters<AdminIssueStored>(filters, ownerData?.issues ?? []);
+    setData(newData);
+  }, [ownerData?.issues, filters]);
+
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={ownerData?.issues ?? []}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...issuesColumns,
-        ...columnsActionCalculator(
-          'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardIssues',
-          issuesRowActions,
-          { shownActions: 2 },
-        ),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminIssueStored>) => {
-        if (!editMode) {
-          rowViewIssuesAction(ownerData, params.row);
-        }
-      }}
-      sortModel={issuesSortModel}
-      onSortModelChange={(newModel: GridSortModel) => {
-        setIssuesSortModel(newModel);
-      }}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+          border: (theme) => (props.validation.has('issues') ? `2px solid ${theme.palette.error.main}` : undefined),
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...issuesColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardIssues',
+            issuesRowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminIssueStored>) => {
+          if (!editMode) {
+            rowViewIssuesAction(ownerData, params.row, () => fetchOwnerData());
+          }
+        }}
+        sortModel={issuesSortModel}
+        onSortModelChange={(newModel: GridSortModel) => {
+          setIssuesSortModel(newModel);
+        }}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues-filter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() =>
+                  filter(
+                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues-filter',
+                    filterOptions,
+                    filters,
+                  )
+                }
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+        }}
+      />
+      {props.validation.has('issues') && (
+        <Box
+          sx={{
+            color: (theme) => theme.palette.error.main,
+            display: 'flex',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
+          <Typography>{props.validation.get('issues')}</Typography>
+        </Box>
+      )}
+    </>
   );
 };

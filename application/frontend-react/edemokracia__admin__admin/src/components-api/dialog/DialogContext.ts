@@ -6,9 +6,9 @@
 // Template name: actor/src/components-api/dialog/DialogContext.ts
 // Template file: actor/src/components-api/dialog/DialogContext.ts.hbs
 
-import { ReactNode } from 'react';
-import { JudoStored, QueryCustomizer } from '@judo/data-api-common';
-import { GridColDef, GridRowId, GridRowSelectionModel, GridSortItem } from '@mui/x-data-grid';
+import type { ReactNode } from 'react';
+import type { JudoStored, QueryCustomizer } from '@judo/data-api-common';
+import type { GridColDef, GridRowId, GridRowSelectionModel, GridSortItem } from '@mui/x-data-grid';
 import { Filter, FilterOption } from './FilterDialog';
 
 export interface DialogProviderProps {
@@ -36,12 +36,14 @@ export interface OpenRangeDialogProps<T extends JudoStored<T>, U extends QueryCu
   alreadySelectedItems: GridRowSelectionModel | GridRowId;
   initialQueryCustomizer: U;
   filterOptions: FilterOption[];
+  createTrigger?: () => Promise<T | undefined>;
+  editMode?: boolean;
 }
 
 export interface RangeDialogProviderContext {
   openRangeDialog: <T extends JudoStored<T>, U extends QueryCustomizer<T>>(
     props: OpenRangeDialogProps<T, U>,
-  ) => Promise<T[] | T>;
+  ) => Promise<{ value: T[] | T; resolveSource: 'selection' | 'create' }>;
 }
 
 export interface FilterDialogProviderContext {

@@ -7,8 +7,8 @@
 // Template file: data-axios/AccessRelationServiceImpl.ts.hbs
 
 import { JudoAxiosService } from './JudoAxiosService';
-import { AdminCountyQueryCustomizer, AdminCountyStored, AdminCounty } from '../data-api';
-import { AdminAdminServiceForCounties } from '../data-service';
+import type { AdminCountyQueryCustomizer, AdminCountyStored, AdminCounty } from '../data-api';
+import type { AdminAdminServiceForCounties } from '../data-service';
 
 /**
  * Access Relation Service Implementation for AdminAdmin.counties

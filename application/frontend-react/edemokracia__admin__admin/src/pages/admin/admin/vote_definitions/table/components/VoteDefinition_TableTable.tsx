@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,10 +39,13 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
 import {
   AdminVoteDefinition,
@@ -56,6 +63,9 @@ import {
   useAdminVoteDefinitionVoteYesNoAction,
   useAdminVoteDefinitionVoteYesNoAbstainAction,
 } from '../actions';
+
+export const ADMIN_ADMIN_VOTE_DEFINITIONS_TABLE_VOTE_DEFINITION_TABLE =
+  'AdminAdminVoteDefinitionsTableVoteDefinition_Table';
 
 export interface VoteDefinition_TableTableProps {
   isOwnerLoading: boolean;
@@ -75,7 +85,8 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
   const [data, setData] = useState<GridRowModel<AdminVoteDefinitionStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [lastItem, setLastItem] = useState<AdminVoteDefinitionStored>();
   const [firstItem, setFirstItem] = useState<AdminVoteDefinitionStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
@@ -87,25 +98,18 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
     _seek: {
       limit: 10 + 1,
     },
-    _orderBy: [
-      {
-        attribute: sortModel[0].field,
-        descending: sortModel[0].sort === 'desc',
-      },
-    ],
-    ...mapAllFiltersToQueryCustomizerProperties(
-      filters,
-      'voteType',
-      'title',
-      'numberOfVotes',
-      'created',
-      'status',
-      'closeAt',
-      'description',
-    ),
+    _orderBy: sortModel.length
+      ? [
+          {
+            attribute: sortModel[0].field,
+            descending: sortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+    ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
-  const voteDefinitionsSortModel: GridSortModel = [{ field: 'title', sort: 'asc' }];
+  const voteDefinitionsSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
   const voteDefinitionsColumns: GridColDef<AdminVoteDefinitionStored>[] = [
     {
@@ -115,8 +119,12 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       headerClassName: 'data-grid-column-header',
 
       width: 170,
-      type: 'string',
+      type: 'singleSelect',
+      filterable: false && true,
       sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        return t(`enumerations.EdemokraciaVoteType.${value}`, { defaultValue: value });
+      },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
@@ -129,6 +137,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -140,6 +149,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
       width: 100,
       type: 'number',
+      filterable: false && true,
       valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
         return value && new Intl.NumberFormat(l10nLocale).format(value);
       },
@@ -152,6 +162,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
       width: 170,
       type: 'dateTime',
+      filterable: false && true,
       valueGetter: ({ value }) => value && serviceDateToUiDate(value),
       valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
         return (
@@ -175,8 +186,12 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       headerClassName: 'data-grid-column-header',
 
       width: 170,
-      type: 'string',
+      type: 'singleSelect',
+      filterable: false && true,
       sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        return t(`enumerations.EdemokraciaVoteStatus.${value}`, { defaultValue: value });
+      },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
@@ -189,6 +204,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
       width: 170,
       type: 'dateTime',
+      filterable: false && true,
       valueGetter: ({ value }) => value && serviceDateToUiDate(value),
       valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
         return (
@@ -213,14 +229,82 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
+
+  const voteDefinitionsRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableVoteTypeFilter',
+      attributeName: 'voteType',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.voteType', { defaultValue: 'VoteType' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableTitleFilter',
+      attributeName: 'title',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableNumberOfVotesFilter',
+      attributeName: 'numberOfVotes',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.numberOfVotes', { defaultValue: 'NumberOfVotes' }) as string,
+      filterType: FilterType.numeric,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableCreatedFilter',
+      attributeName: 'created',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.created', { defaultValue: 'Created' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableStatusFilter',
+      attributeName: 'status',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.status', { defaultValue: 'Status' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableCloseAtFilter',
+      attributeName: 'closeAt',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.closeAt', { defaultValue: 'CloseAt' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableDefaultVoteDefinitionsVoteDefinitionTableDescriptionFilter',
+      attributeName: 'description',
+      label: t('admin.VoteDefinitionTable.voteDefinitions.description', { defaultValue: 'Description' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
+
+  const voteDefinitionsInitialQueryCustomizer: AdminVoteDefinitionQueryCustomizer = {
+    _mask:
+      '{voteType,title,numberOfVotes,created,status,closeAt,description,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType}',
+    _orderBy: voteDefinitionsSortModel.length
+      ? [
+          {
+            attribute: voteDefinitionsSortModel[0].field,
+            descending: voteDefinitionsSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const pageFilterVoteDefinitionsAction = usePageFilterVoteDefinitionsAction(
     setFilters,
     setPage,
     setQueryCustomizer,
     openFilterDialog,
+    10,
   );
   const pageRefreshVoteDefinitionsAction = usePageRefreshVoteDefinitionsAction();
   const rowDeleteVoteDefinitionsAction = useRowDeleteVoteDefinitionsAction();
@@ -331,12 +415,17 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
     setPage(0);
     setSortModel(newModel);
 
-    const { field, sort } = newModel[0];
+    const _orderBy = newModel
+      .filter((m) => m.sort)
+      .map((m) => ({
+        attribute: m.field,
+        descending: m.sort === 'desc',
+      }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
       return {
         ...prevQueryCustomizer,
-        _orderBy: [{ attribute: field, descending: sort === 'desc' }],
+        _orderBy,
       };
     });
   }
@@ -391,62 +480,68 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
   }, [queryCustomizer]);
 
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={data}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...voteDefinitionsColumns,
-        ...columnsActionCalculator(
-          'RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitions',
-          rowActions,
-          { shownActions: 2 },
-        ),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminVoteDefinitionStored>) => rowViewVoteDefinitionsAction(params.row)}
-      sortModel={sortModel}
-      onSortModelChange={handleSortModelChange}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <Button
-              id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsPageFilter"
-              startIcon={<MdiIcon path="filter" />}
-              variant="text"
-              onClick={() => {
-                pageFilterVoteDefinitionsAction(
-                  'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsPageFilter-filter',
-                  filterOptions,
-                  filters,
-                );
-              }}
-              disabled={isOwnerLoading}
-            >
-              {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
-                (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
-            </Button>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-        Pagination: () => (
-          <CustomTablePagination
-            pageChange={handlePageChange}
-            isNextButtonEnabled={isNextButtonEnabled}
-            page={page}
-            setPage={setPage}
-            rowPerPage={10}
-          />
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...voteDefinitionsColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitions',
+            rowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminVoteDefinitionStored>) =>
+          rowViewVoteDefinitionsAction(params.row, () => fetchData())
+        }
+        sortModel={sortModel}
+        onSortModelChange={handleSortModelChange}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsPageFilter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() => {
+                  pageFilterVoteDefinitionsAction(
+                    'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsPageFilter-filter',
+                    filterOptions,
+                    filters,
+                  );
+                }}
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+          Pagination: () => (
+            <CustomTablePagination
+              pageChange={handlePageChange}
+              isNextButtonEnabled={isNextButtonEnabled}
+              page={page}
+              setPage={setPage}
+              rowPerPage={10}
+            />
+          ),
+        }}
+      />
+    </>
   );
 });

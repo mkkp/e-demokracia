@@ -15,7 +15,8 @@
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
 // Action: CallOperationAction
 
-import { useState, useEffect, useRef, useCallback, Dispatch, SetStateAction, FC } from 'react';
+import type { Dispatch, SetStateAction, FC } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -39,9 +40,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
@@ -51,12 +53,14 @@ import {
   AssociationButton,
   BinaryInput,
   CollectionAssociationButton,
+  NumericInput,
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
   isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  passesLocalValidation,
   fileHandling,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -67,7 +71,9 @@ import {
 } from '~/utilities';
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
 
 import {
   AdminDebate,
@@ -77,7 +83,7 @@ import {
   CreateCommentInputQueryCustomizer,
   CreateCommentInputStored,
 } from '~/generated/data-api';
-import { createCommentInputServiceImpl, adminDebateServiceImpl } from '~/generated/data-axios';
+import { createCommentInputServiceForClassImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
 
 export interface AdminDebateCreateCommentFormProps {
   successCallback: () => void;
@@ -142,7 +148,7 @@ export function AdminDebateCreateCommentForm({ successCallback, cancel, owner }:
     setIsLoading(true);
 
     try {
-      const res = await createCommentInputServiceImpl.getTemplate();
+      const res = await createCommentInputServiceForClassImpl.getTemplate();
       setData(res);
       setPayloadDiff({
         ...res,
@@ -163,7 +169,7 @@ export function AdminDebateCreateCommentForm({ successCallback, cancel, owner }:
     setIsLoading(true);
 
     try {
-      await adminDebateServiceImpl.createComment(owner, payloadDiff);
+      await adminDebateServiceForClassImpl.createComment(owner, payloadDiff);
 
       successCallback();
     } catch (error: any) {
@@ -192,7 +198,7 @@ export function AdminDebateCreateCommentForm({ successCallback, cancel, owner }:
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container xs={12} sm={12} spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreateCommentInputDefaultCreateCommentInputFormCommentLabelWrapper">
               <CardContent>
@@ -221,23 +227,28 @@ export function AdminDebateCreateCommentForm({ successCallback, cancel, owner }:
                     >
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required
+                          required={true}
                           name="comment"
                           id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateCreateCommentInputDefaultCreateCommentInputFormCommentLabelWrapperCommentComment"
                           autoFocus
                           label={t('CreateCommentInputForm.comment', { defaultValue: 'Comment' }) as string}
-                          value={data.comment}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
-                          disabled={false || !isFormUpdateable()}
+                          value={data.comment ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
                           multiline
                           minRows={4.0}
                           error={!!validation.get('comment')}
                           helperText={validation.get('comment')}
                           onChange={(event) => {
-                            storeDiff('comment', event.target.value);
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('comment', realValue);
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
                                 <MdiIcon path="text_fields" />

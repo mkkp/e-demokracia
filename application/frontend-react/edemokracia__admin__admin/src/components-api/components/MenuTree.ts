@@ -9,9 +9,11 @@
 export type MenuItem = {
   id: string;
   icon?: string;
+  level?: number;
   label: string;
   to?: string;
   items?: MenuItem[];
+  hidden?: boolean;
 };
 
 export interface MenuProps {

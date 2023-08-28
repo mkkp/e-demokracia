@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminDebate, AdminDebateQueryCustomizer, AdminDebateStored } from '~/generated/data-api';
-import { adminAdminServiceForDebatesImpl, adminDebateServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForDebatesImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteDebatesAction = () => (selected: AdminDebateStored, successCallback: () => void) => Promise<void>;
 
@@ -38,7 +38,7 @@ export const useRowDeleteDebatesAction: RowDeleteDebatesAction = () => {
       );
 
       if (confirmed) {
-        await adminDebateServiceImpl.delete(selected);
+        await adminDebateServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

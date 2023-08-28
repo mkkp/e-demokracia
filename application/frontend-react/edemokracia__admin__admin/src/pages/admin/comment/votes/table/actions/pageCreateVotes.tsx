@@ -13,7 +13,7 @@ import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, G
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useJudoNavigation } from '~/components';
 import type { DialogOption } from '~/components/dialog';
 import { useDialog } from '~/components/dialog';
@@ -29,12 +29,13 @@ import {
   AdminSimpleVoteStored,
   EdemokraciaSimpleVoteType,
 } from '~/generated/data-api';
-import { adminCommentServiceForVotesImpl, adminSimpleVoteServiceImpl } from '~/generated/data-axios';
+import { adminCommentServiceForVotesImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
 import { PageCreateVotesForm } from './PageCreateVotesForm';
 
 export type PageCreateVotesAction = () => (
   owner: JudoIdentifiable<AdminSimpleVote>,
-  successCallback: () => void,
+  successCallback: (result: AdminSimpleVoteStored) => void,
+  closedCallback?: () => void,
 ) => void;
 
 export const usePageCreateVotesAction: PageCreateVotesAction = () => {
@@ -43,26 +44,37 @@ export const usePageCreateVotesAction: PageCreateVotesAction = () => {
   const { navigate } = useJudoNavigation();
   const { enqueueSnackbar } = useSnackbar();
 
-  return function pageCreateVotesAction(owner: JudoIdentifiable<AdminSimpleVote>, successCallback: () => void) {
+  return function pageCreateVotesAction(
+    owner: JudoIdentifiable<AdminSimpleVote>,
+    successCallback: (result: AdminSimpleVoteStored) => void,
+    closedCallback?: () => void,
+  ) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'lg',
+      maxWidth: 'xs',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();
+          closedCallback && closedCallback();
         }
       },
       children: (
         <PageCreateVotesForm
-          successCallback={() => {
-            closeDialog();
-            enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
-              variant: 'success',
-              ...toastConfig.success,
-            });
-            successCallback();
+          successCallback={(result: AdminSimpleVoteStored, open?: boolean) => {
+            if (!open) {
+              closeDialog();
+              enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
+                variant: 'success',
+                ...toastConfig.success,
+              });
+            }
+
+            successCallback(result);
           }}
-          cancel={closeDialog}
+          cancel={() => {
+            closeDialog();
+            closedCallback && closedCallback();
+          }}
           owner={owner}
         />
       ),

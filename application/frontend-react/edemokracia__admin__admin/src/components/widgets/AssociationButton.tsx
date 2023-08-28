@@ -6,10 +6,11 @@
 // Template name: actor/src/components/widgets/AssociationButton.tsx
 // Template file: actor/src/components/widgets/AssociationButton.tsx.hbs
 
-import { ReactNode, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useJudoNavigation } from '../CustomBreadcrumb';
 
 export interface AssociationBaseProps {

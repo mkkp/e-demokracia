@@ -21,7 +21,7 @@ import {
   AdminDebate,
   AdminDebateStored,
 } from '~/generated/data-api';
-import { adminDebateServiceForCommentsImpl, adminCommentServiceImpl } from '~/generated/data-axios';
+import { adminDebateServiceForCommentsImpl, adminCommentServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteCommentsAction = () => (
   owner: JudoIdentifiable<AdminDebate>,
@@ -52,7 +52,7 @@ export const useRowDeleteCommentsAction: RowDeleteCommentsAction = () => {
       );
 
       if (confirmed) {
-        await adminCommentServiceImpl.delete(selected);
+        await adminCommentServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

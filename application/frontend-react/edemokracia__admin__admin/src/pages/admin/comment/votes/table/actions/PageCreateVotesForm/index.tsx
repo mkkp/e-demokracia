@@ -15,7 +15,8 @@
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
 // Action: CreateAction
 
-import { useState, useEffect, useRef, useCallback, Dispatch, SetStateAction, FC } from 'react';
+import type { Dispatch, SetStateAction, FC } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -38,10 +39,11 @@ import {
   Popper,
   TextField,
 } from '@mui/material';
-import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
@@ -51,12 +53,14 @@ import {
   AssociationButton,
   BinaryInput,
   CollectionAssociationButton,
+  NumericInput,
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
   isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  passesLocalValidation,
   fileHandling,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -67,7 +71,9 @@ import {
 } from '~/utilities';
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
 import { routeToAdminCommentVotesView } from '~/routes';
 
 import {
@@ -78,10 +84,10 @@ import {
   AdminSimpleVoteStored,
   EdemokraciaSimpleVoteType,
 } from '~/generated/data-api';
-import { adminCommentServiceForVotesImpl, adminSimpleVoteServiceImpl } from '~/generated/data-axios';
+import { adminCommentServiceForVotesImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
 
 export interface PageCreateVotesFormProps {
-  successCallback: () => void;
+  successCallback: (result: AdminSimpleVoteStored, open?: boolean) => void;
   cancel: () => void;
   owner: JudoIdentifiable<AdminSimpleVote>;
 }
@@ -94,6 +100,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
   const anchorRef = useRef<HTMLDivElement>(null);
   const { navigate } = useJudoNavigation();
   const [open, setOpen] = useState(false);
+  const [createDialog, closeDialog] = useDialog();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
@@ -148,7 +155,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
     setIsLoading(true);
 
     try {
-      const res = await adminSimpleVoteServiceImpl.getTemplate();
+      const res = await adminSimpleVoteServiceForClassImpl.getTemplate();
       setData((prevData) => ({ ...prevData, ...res }));
       setPayloadDiff({
         ...res,
@@ -209,7 +216,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container xs={12} sm={12} spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <Grid
               id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentVotesCreateDefaultVoteFormGroup"
@@ -223,11 +230,15 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
                 <DateTimePicker
                   ampm={false}
                   ampmInClock={false}
-                  className={!editMode ? 'JUDO-viewMode' : undefined}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
                   autoFocus
                   slotProps={{
                     textField: {
                       id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminCommentVotesCreateDefaultVoteFormGroupCreated',
+                      required: true,
                       helperText: validation.get('created'),
                       error: !!validation.get('created'),
                       InputProps: {
@@ -257,7 +268,8 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
                   views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                   label={t('admin.SimpleVoteForm.created', { defaultValue: 'Created' }) as string}
                   value={serviceDateToUiDate(data.created ?? null)}
-                  disabled={false || !isFormUpdateable()}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
                   onChange={(newValue: Date) => {
                     storeDiff('created', newValue);
                   }}
@@ -266,13 +278,16 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <TextField
-                  required
+                  required={true}
                   name="type"
                   id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminCommentVotesCreateDefaultVoteFormGroupType"
                   label={t('admin.SimpleVoteForm.type', { defaultValue: 'Type' }) as string}
                   value={data.type || ''}
-                  className={!editMode ? 'JUDO-viewMode' : undefined}
-                  disabled={false || !isFormUpdateable()}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
                   error={!!validation.get('type')}
                   helperText={validation.get('type')}
                   onChange={(event) => {
@@ -280,6 +295,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
                   }}
                   InputLabelProps={{ shrink: true }}
                   InputProps={{
+                    readOnly: false || !isFormUpdateable(),
                     startAdornment: (
                       <InputAdornment position="start">
                         <MdiIcon path="list" />
@@ -329,7 +345,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
             onClick={async () => {
               const result = await saveData();
               if (result) {
-                successCallback();
+                successCallback(result);
               }
             }}
           >
@@ -351,10 +367,10 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
                     <MenuItem
                       key="create-and-navigate"
                       onClick={async (event: any) => {
-                        const result: { __signedIdentifier: string } | undefined = await saveData();
+                        const result: AdminSimpleVoteStored | undefined = await saveData();
 
                         if (result) {
-                          successCallback();
+                          successCallback(result);
                           navigate(routeToAdminCommentVotesView(result.__signedIdentifier));
                         }
                       }}

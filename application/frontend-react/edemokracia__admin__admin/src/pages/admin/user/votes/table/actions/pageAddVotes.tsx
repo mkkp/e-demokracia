@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -39,7 +40,7 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageAddVotesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -66,6 +67,7 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
 
         width: 170,
         type: 'dateTime',
+        filterable: false && true,
         valueGetter: ({ value }) => value && serviceDateToUiDate(value),
         valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
           return (
@@ -88,8 +90,12 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
         headerName: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
 
         width: 170,
-        type: 'string',
+        type: 'singleSelect',
+        filterable: false && true,
         sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          return t(`enumerations.EdemokraciaSimpleVoteType.${value}`, { defaultValue: value });
+        },
         description: t('judo.pages.table.column.not-sortable', {
           defaultValue: 'This column is not sortable.',
         }) as string,
@@ -113,7 +119,7 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
       },
     ];
 
-    const sortModel: GridSortModel = [{ field: 'created', sort: 'asc' }];
+    const sortModel: GridSortModel = [{ field: 'created', sort: null }];
 
     const initialQueryCustomizer: AdminSimpleVoteQueryCustomizer = {
       _mask: '{created,type}',
@@ -132,7 +138,7 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
       columns,
       defaultSortField: sortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForVotes(owner, processQueryCustomizer(queryCustomizer)),
+        await adminUserServiceForClassImpl.getRangeForVotes(owner, processQueryCustomizer(queryCustomizer)),
       single: false,
       alreadySelectedItems: '',
       filterOptions,
@@ -142,9 +148,9 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
     if (res === undefined) return;
 
     try {
-      await adminUserServiceImpl.addVotes(
+      await adminUserServiceForClassImpl.addVotes(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminSimpleVoteStored>,
-        res as Array<AdminSimpleVoteStored>,
+        res.value as Array<AdminSimpleVoteStored>,
       );
 
       successCallback();

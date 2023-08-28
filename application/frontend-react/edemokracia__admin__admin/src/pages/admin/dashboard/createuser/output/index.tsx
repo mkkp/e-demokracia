@@ -10,7 +10,8 @@
 // Page DataElement name: output
 // Page DataElement owner name: createUser
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -28,18 +29,20 @@ import {
   Typography,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -52,8 +55,10 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import {
   AdminCity,
@@ -69,7 +74,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 import { useButtonNavigateVotesAction } from './actions';
 
@@ -100,6 +105,7 @@ export default function AdminDashboardCreateuserOutput() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<AdminUserStored>({} as unknown as AdminUserStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminUserStored, any>>(
     {} as unknown as Record<keyof AdminUserStored, any>,
@@ -156,7 +162,7 @@ export default function AdminDashboardCreateuserOutput() {
     setIsLoading(true);
 
     try {
-      const res = await adminUserServiceImpl.refresh(
+      const res = await adminUserServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminUser>,
         processQueryCustomizer(queryCustomizer),
       );
@@ -172,6 +178,7 @@ export default function AdminDashboardCreateuserOutput() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -195,534 +202,583 @@ export default function AdminDashboardCreateuserOutput() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="operation-output-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="security" sx={{ marginRight: 1 }} />
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityLabel"
-                          variant="h6"
-                          component="h1"
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="operation-output-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={12} sm={12}>
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapper">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="security" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityLabel"
+                            variant="h6"
+                            component="h1"
+                          >
+                            {t('admin.UserView.Security.Label', { defaultValue: 'Security' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurity"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
                         >
-                          {t('admin.UserView.Security.Label', { defaultValue: 'Security' })}
-                        </Typography>
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <TextField
+                              required={true}
+                              name="userName"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityUserName"
+                              label={t('admin.UserView.userName', { defaultValue: 'Username' }) as string}
+                              value={data.userName ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('userName')}
+                              helperText={validation.get('userName')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('userName', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="text_fields" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <FormGroup>
+                              <FormControlLabel
+                                className="switch"
+                                sx={{ marginTop: '6px' }}
+                                disabled={false || !isFormUpdateable() || isLoading}
+                                control={
+                                  <Checkbox
+                                    checked={data.isAdmin || false}
+                                    onChange={(event) => {
+                                      storeDiff('isAdmin', event.target.checked);
+                                    }}
+                                  />
+                                }
+                                label={t('admin.UserView.isAdmin', { defaultValue: 'Has admin access' }) as string}
+                              />
+                            </FormGroup>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <DateTimePicker
+                              ampm={false}
+                              ampmInClock={false}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
+                              })}
+                              slotProps={{
+                                textField: {
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityCreated',
+                                  required: false,
+                                  helperText: validation.get('created'),
+                                  error: !!validation.get('created'),
+                                  InputProps: {
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="schedule" />
+                                      </InputAdornment>
+                                    ),
+                                  },
+                                },
+                              }}
+                              onError={(newError: DateTimeValidationError, value: any) => {
+                                // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                                setValidation((prevValidation) => {
+                                  const copy = new Map<keyof AdminUser, string>(prevValidation);
+                                  copy.set(
+                                    'created',
+                                    newError === 'invalidDate'
+                                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                          defaultValue: 'Value does not match the pattern requirements.',
+                                        }) as string)
+                                      : '',
+                                  );
+                                  return copy;
+                                });
+                              }}
+                              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                              label={t('admin.UserView.created', { defaultValue: 'Created' }) as string}
+                              value={serviceDateToUiDate(data.created ?? null)}
+                              readOnly={false || !isFormUpdateable()}
+                              disabled={isLoading}
+                              onChange={(newValue: Date) => {
+                                storeDiff('created', newValue);
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
                       </Grid>
                     </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurity"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <TextField
-                            required
-                            name="userName"
-                            id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityUserName"
-                            label={t('admin.UserView.userName', { defaultValue: 'Username' }) as string}
-                            value={data.userName}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={false || !isFormUpdateable()}
-                            error={!!validation.get('userName')}
-                            helperText={validation.get('userName')}
-                            onChange={(event) => {
-                              storeDiff('userName', event.target.value);
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <MdiIcon path="text_fields" />
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
+              <Grid item xs={12} sm={12}>
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapper">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalLabel"
+                            variant="h6"
+                            component="h1"
+                          >
+                            {t('admin.UserView.personal.Label', { defaultValue: 'Personal' })}
+                          </Typography>
                         </Grid>
+                      </Grid>
 
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <FormGroup>
-                            <FormControlLabel
-                              sx={{ marginTop: '6px' }}
-                              disabled={false || !isFormUpdateable()}
-                              control={
-                                <Checkbox
-                                  checked={data.isAdmin || false}
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonal"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalName"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <TextField
+                                  required={true}
+                                  name="firstName"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalNameFirstName"
+                                  label={t('admin.UserView.firstName', { defaultValue: 'First name' }) as string}
+                                  value={data.firstName ?? ''}
+                                  className={clsx({
+                                    'JUDO-viewMode': !editMode,
+                                    'JUDO-required': true,
+                                  })}
+                                  disabled={isLoading}
+                                  error={!!validation.get('firstName')}
+                                  helperText={validation.get('firstName')}
                                   onChange={(event) => {
-                                    storeDiff('isAdmin', event.target.checked);
+                                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                    storeDiff('firstName', realValue);
+                                  }}
+                                  InputLabelProps={{ shrink: true }}
+                                  InputProps={{
+                                    readOnly: false || !isFormUpdateable(),
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="text_fields" />
+                                      </InputAdornment>
+                                    ),
                                   }}
                                 />
-                              }
-                              label={t('admin.UserView.isAdmin', { defaultValue: 'Has admin access' }) as string}
-                            />
-                          </FormGroup>
-                        </Grid>
+                              </Grid>
 
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <DateTimePicker
-                            ampm={false}
-                            ampmInClock={false}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            slotProps={{
-                              textField: {
-                                id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewSecurityLabelWrapperSecurityCreated',
-                                helperText: validation.get('created'),
-                                error: !!validation.get('created'),
-                                InputProps: {
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="schedule" />
-                                    </InputAdornment>
-                                  ),
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <TextField
+                                  required={true}
+                                  name="lastName"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalNameLastName"
+                                  label={t('admin.UserView.lastName', { defaultValue: 'Last name' }) as string}
+                                  value={data.lastName ?? ''}
+                                  className={clsx({
+                                    'JUDO-viewMode': !editMode,
+                                    'JUDO-required': true,
+                                  })}
+                                  disabled={isLoading}
+                                  error={!!validation.get('lastName')}
+                                  helperText={validation.get('lastName')}
+                                  onChange={(event) => {
+                                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                    storeDiff('lastName', realValue);
+                                  }}
+                                  InputLabelProps={{ shrink: true }}
+                                  InputProps={{
+                                    readOnly: false || !isFormUpdateable(),
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="text_fields" />
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                />
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalContact"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <TextField
+                                  required={true}
+                                  name="email"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalContactEmail"
+                                  label={t('admin.UserView.email', { defaultValue: 'Email' }) as string}
+                                  value={data.email ?? ''}
+                                  className={clsx({
+                                    'JUDO-viewMode': !editMode,
+                                    'JUDO-required': true,
+                                  })}
+                                  disabled={isLoading}
+                                  error={!!validation.get('email')}
+                                  helperText={validation.get('email')}
+                                  onChange={(event) => {
+                                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                    storeDiff('email', realValue);
+                                  }}
+                                  InputLabelProps={{ shrink: true }}
+                                  InputProps={{
+                                    readOnly: false || !isFormUpdateable(),
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="email" />
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                />
+                              </Grid>
+
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <TextField
+                                  required={false}
+                                  name="phone"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalContactPhone"
+                                  label={t('admin.UserView.phone', { defaultValue: 'Phone' }) as string}
+                                  value={data.phone ?? ''}
+                                  className={clsx({
+                                    'JUDO-viewMode': !editMode,
+                                    'JUDO-required': false,
+                                  })}
+                                  disabled={isLoading}
+                                  error={!!validation.get('phone')}
+                                  helperText={validation.get('phone')}
+                                  onChange={(event) => {
+                                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                    storeDiff('phone', realValue);
+                                  }}
+                                  InputLabelProps={{ shrink: true }}
+                                  InputProps={{
+                                    readOnly: false || !isFormUpdateable(),
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="phone" />
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                />
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12}>
+                            <CollectionAssociationButton
+                              id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputEdemokraciaAdminAdminEdemokraciaAdminUserVotesButtonNavigate"
+                              variant={undefined}
+                              editMode={editMode}
+                              navigateAction={() => buttonNavigateVotesAction(data)}
+                            >
+                              {t('admin.UserView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
+                              <MdiIcon path="arrow-right" />
+                            </CollectionAssociationButton>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapper">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="map" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasLabel"
+                            variant="h6"
+                            component="h1"
+                          >
+                            {t('admin.UserView.Areas.Label', { defaultValue: 'Areas' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreas"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="center"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasResidency"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <ResidentCountyLink
+                                  ownerData={data}
+                                  readOnly={false || !isFormUpdateable()}
+                                  disabled={isLoading}
+                                  editMode={editMode}
+                                  fetchOwnerData={fetchData}
+                                  storeDiff={storeDiff}
+                                  validation={validation}
+                                />
+                              </Grid>
+
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <ResidentCityLink
+                                  ownerData={data}
+                                  readOnly={false || !isFormUpdateable()}
+                                  disabled={isLoading}
+                                  editMode={editMode}
+                                  fetchOwnerData={fetchData}
+                                  storeDiff={storeDiff}
+                                  validation={validation}
+                                />
+                              </Grid>
+
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <ResidentDistrictLink
+                                  ownerData={data}
+                                  readOnly={false || !isFormUpdateable()}
+                                  disabled={isLoading}
+                                  editMode={editMode}
+                                  fetchOwnerData={fetchData}
+                                  storeDiff={storeDiff}
+                                  validation={validation}
+                                />
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid container item xs={12} sm={12}>
+                            <ModeledTabs
+                              id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivity"
+                              ownerData={data}
+                              validation={validation}
+                              orientation='horizontal'
+                              childTabs={[
+                                {
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCounties',
+                                  name: 'admin.UserView.tab.activity.counties',
+                                  label: t('admin.UserView.tab.activity.counties', {
+                                    defaultValue: 'Activity counties',
+                                  }) as string,
+                                  disabled: isLoading,
+                                  hidden: false,
+                                  icon: 'map',
+                                  nestedDataKeys: ['activityCounties'],
                                 },
-                              },
-                            }}
-                            onError={(newError: DateTimeValidationError, value: any) => {
-                              // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                              setValidation((prevValidation) => {
-                                const copy = new Map<keyof AdminUser, string>(prevValidation);
-                                copy.set(
-                                  'created',
-                                  newError === 'invalidDate'
-                                    ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                        defaultValue: 'Value does not match the pattern requirements.',
-                                      }) as string)
-                                    : '',
-                                );
-                                return copy;
-                              });
-                            }}
-                            views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={t('admin.UserView.created', { defaultValue: 'Created' }) as string}
-                            value={serviceDateToUiDate(data.created ?? null)}
-                            disabled={false || !isFormUpdateable()}
-                            onChange={(newValue: Date) => {
-                              storeDiff('created', newValue);
-                            }}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalLabel"
-                          variant="h6"
-                          component="h1"
-                        >
-                          {t('admin.UserView.personal.Label', { defaultValue: 'Personal' })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonal"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalName"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <TextField
-                                required
-                                name="firstName"
-                                id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalNameFirstName"
-                                label={t('admin.UserView.firstName', { defaultValue: 'First name' }) as string}
-                                value={data.firstName}
-                                className={!editMode ? 'JUDO-viewMode' : undefined}
-                                disabled={false || !isFormUpdateable()}
-                                error={!!validation.get('firstName')}
-                                helperText={validation.get('firstName')}
-                                onChange={(event) => {
-                                  storeDiff('firstName', event.target.value);
-                                }}
-                                InputLabelProps={{ shrink: true }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="text_fields" />
-                                    </InputAdornment>
-                                  ),
-                                }}
-                              />
-                            </Grid>
-
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <TextField
-                                required
-                                name="lastName"
-                                id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalNameLastName"
-                                label={t('admin.UserView.lastName', { defaultValue: 'Last name' }) as string}
-                                value={data.lastName}
-                                className={!editMode ? 'JUDO-viewMode' : undefined}
-                                disabled={false || !isFormUpdateable()}
-                                error={!!validation.get('lastName')}
-                                helperText={validation.get('lastName')}
-                                onChange={(event) => {
-                                  storeDiff('lastName', event.target.value);
-                                }}
-                                InputLabelProps={{ shrink: true }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="text_fields" />
-                                    </InputAdornment>
-                                  ),
-                                }}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalContact"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <TextField
-                                required
-                                name="email"
-                                id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalContactEmail"
-                                label={t('admin.UserView.email', { defaultValue: 'Email' }) as string}
-                                value={data.email}
-                                className={!editMode ? 'JUDO-viewMode' : undefined}
-                                disabled={false || !isFormUpdateable()}
-                                error={!!validation.get('email')}
-                                helperText={validation.get('email')}
-                                onChange={(event) => {
-                                  storeDiff('email', event.target.value);
-                                }}
-                                InputLabelProps={{ shrink: true }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="email" />
-                                    </InputAdornment>
-                                  ),
-                                }}
-                              />
-                            </Grid>
-
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <TextField
-                                name="phone"
-                                id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewPersonalLabelWrapperPersonalContactPhone"
-                                label={t('admin.UserView.phone', { defaultValue: 'Phone' }) as string}
-                                value={data.phone}
-                                className={!editMode ? 'JUDO-viewMode' : undefined}
-                                disabled={false || !isFormUpdateable()}
-                                error={!!validation.get('phone')}
-                                helperText={validation.get('phone')}
-                                onChange={(event) => {
-                                  storeDiff('phone', event.target.value);
-                                }}
-                                InputLabelProps={{ shrink: true }}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="phone" />
-                                    </InputAdornment>
-                                  ),
-                                }}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                          <CollectionAssociationButton
-                            id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputEdemokraciaAdminAdminEdemokraciaAdminUserVotesButtonNavigate"
-                            variant={undefined}
-                            editMode={editMode}
-                            navigateAction={() => buttonNavigateVotesAction(data)}
-                          >
-                            {t('admin.UserView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
-                            <MdiIcon path="arrow-right" />
-                          </CollectionAssociationButton>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasLabel"
-                          variant="h6"
-                          component="h1"
-                        >
-                          {t('admin.UserView.Areas.Label', { defaultValue: 'Areas' })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreas"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="center"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasResidency"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <ResidentCountyLink
-                                ownerData={data}
-                                disabled={false || !isFormUpdateable()}
-                                editMode={editMode}
-                                fetchOwnerData={fetchData}
-                                storeDiff={storeDiff}
-                                validation={validation}
-                              />
-                            </Grid>
-
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <ResidentCityLink
-                                ownerData={data}
-                                disabled={false || !isFormUpdateable()}
-                                editMode={editMode}
-                                fetchOwnerData={fetchData}
-                                storeDiff={storeDiff}
-                                validation={validation}
-                              />
-                            </Grid>
-
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <ResidentDistrictLink
-                                ownerData={data}
-                                disabled={false || !isFormUpdateable()}
-                                editMode={editMode}
-                                fetchOwnerData={fetchData}
-                                storeDiff={storeDiff}
-                                validation={validation}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-
-                        <Grid container item xs={12} sm={12}>
-                          <ModeledTabs
-                            id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivity"
-                            activeIndex={0}
-                            childTabs={[
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCounties',
-                                name: 'admin.UserView.tab.activity.counties',
-                                label: t('admin.UserView.tab.activity.counties', {
-                                  defaultValue: 'Activity counties',
-                                }) as string,
-                                icon: 'map',
-                              },
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCities',
-                                name: 'admin.UserView.activity.cities',
-                                label: t('admin.UserView.activity.cities', {
-                                  defaultValue: 'Activity cities',
-                                }) as string,
-                                icon: 'city',
-                              },
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistricts',
-                                name: 'admin.UserView.activity.districts',
-                                label: t('admin.UserView.activity.districts', {
-                                  defaultValue: 'Activity districts',
-                                }) as string,
-                                icon: 'home-city',
-                              },
-                            ]}
-                          >
-                            <Grid item xs={12} sm={12}>
-                              <Grid
-                                id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCounties"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              >
-                                <Grid item xs={12} sm={12}>
-                                  <Grid
-                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapper"
-                                    container
-                                    direction="column"
-                                    alignItems="stretch"
-                                    justifyContent="flex-start"
-                                    spacing={2}
-                                  >
-                                    <Grid item xs={12} sm={12}>
-                                      <Grid
-                                        id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties"
-                                        container
-                                        direction="column"
-                                        alignItems="stretch"
-                                        justifyContent="flex-start"
-                                      >
-                                        <ActivityCountiesTable
-                                          isOwnerLoading={isLoading}
-                                          fetchOwnerData={fetchData}
-                                          ownerData={data}
-                                          editMode={editMode}
-                                          isFormUpdateable={isFormUpdateable}
-                                          storeDiff={storeDiff}
-                                        />
+                                {
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCities',
+                                  name: 'admin.UserView.activity.cities',
+                                  label: t('admin.UserView.activity.cities', {
+                                    defaultValue: 'Activity cities',
+                                  }) as string,
+                                  disabled: isLoading,
+                                  hidden: false,
+                                  icon: 'city',
+                                  nestedDataKeys: ['activityCities'],
+                                },
+                                {
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistricts',
+                                  name: 'admin.UserView.activity.districts',
+                                  label: t('admin.UserView.activity.districts', {
+                                    defaultValue: 'Activity districts',
+                                  }) as string,
+                                  disabled: isLoading,
+                                  hidden: false,
+                                  icon: 'home-city',
+                                  nestedDataKeys: ['activityDistricts'],
+                                },
+                              ]}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCounties"
+                                  container
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="flex-start"
+                                  spacing={2}
+                                >
+                                  <Grid item xs={12} sm={12}>
+                                    <Grid
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapper"
+                                      container
+                                      direction="column"
+                                      alignItems="stretch"
+                                      justifyContent="flex-start"
+                                      spacing={2}
+                                    >
+                                      <Grid item xs={12} sm={12}>
+                                        <Grid
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties"
+                                          container
+                                          direction="column"
+                                          alignItems="stretch"
+                                          justifyContent="flex-start"
+                                        >
+                                          <ActivityCountiesTable
+                                            isOwnerLoading={isLoading}
+                                            validation={validation}
+                                            fetchOwnerData={fetchData}
+                                            ownerData={data}
+                                            editMode={editMode}
+                                            isFormUpdateable={isFormUpdateable}
+                                            storeDiff={storeDiff}
+                                          />
+                                        </Grid>
                                       </Grid>
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
 
-                            <Grid item xs={12} sm={12} md={4.0}>
-                              <Grid
-                                id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCities"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              >
-                                <Grid item xs={12} sm={12}>
-                                  <Grid
-                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapper"
-                                    container
-                                    direction="column"
-                                    alignItems="stretch"
-                                    justifyContent="flex-start"
-                                    spacing={2}
-                                  >
-                                    <Grid item xs={12} sm={12}>
-                                      <Grid
-                                        id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities"
-                                        container
-                                        direction="column"
-                                        alignItems="stretch"
-                                        justifyContent="flex-start"
-                                      >
-                                        <ActivityCitiesTable
-                                          isOwnerLoading={isLoading}
-                                          fetchOwnerData={fetchData}
-                                          ownerData={data}
-                                          editMode={editMode}
-                                          isFormUpdateable={isFormUpdateable}
-                                          storeDiff={storeDiff}
-                                        />
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <Grid
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCities"
+                                  container
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="flex-start"
+                                  spacing={2}
+                                >
+                                  <Grid item xs={12} sm={12}>
+                                    <Grid
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapper"
+                                      container
+                                      direction="column"
+                                      alignItems="stretch"
+                                      justifyContent="flex-start"
+                                      spacing={2}
+                                    >
+                                      <Grid item xs={12} sm={12}>
+                                        <Grid
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities"
+                                          container
+                                          direction="column"
+                                          alignItems="stretch"
+                                          justifyContent="flex-start"
+                                        >
+                                          <ActivityCitiesTable
+                                            isOwnerLoading={isLoading}
+                                            validation={validation}
+                                            fetchOwnerData={fetchData}
+                                            ownerData={data}
+                                            editMode={editMode}
+                                            isFormUpdateable={isFormUpdateable}
+                                            storeDiff={storeDiff}
+                                          />
+                                        </Grid>
                                       </Grid>
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
 
-                            <Grid item xs={12} sm={12}>
-                              <Grid
-                                id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistricts"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              >
-                                <Grid item xs={12} sm={12}>
-                                  <Grid
-                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapper"
-                                    container
-                                    direction="column"
-                                    alignItems="stretch"
-                                    justifyContent="flex-start"
-                                    spacing={2}
-                                  >
-                                    <Grid item xs={12} sm={12}>
-                                      <Grid
-                                        id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts"
-                                        container
-                                        direction="column"
-                                        alignItems="stretch"
-                                        justifyContent="flex-start"
-                                      >
-                                        <ActivityDistrictsTable
-                                          isOwnerLoading={isLoading}
-                                          fetchOwnerData={fetchData}
-                                          ownerData={data}
-                                          editMode={editMode}
-                                          isFormUpdateable={isFormUpdateable}
-                                          storeDiff={storeDiff}
-                                        />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistricts"
+                                  container
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="flex-start"
+                                  spacing={2}
+                                >
+                                  <Grid item xs={12} sm={12}>
+                                    <Grid
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapper"
+                                      container
+                                      direction="column"
+                                      alignItems="stretch"
+                                      justifyContent="flex-start"
+                                      spacing={2}
+                                    >
+                                      <Grid item xs={12} sm={12}>
+                                        <Grid
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts"
+                                          container
+                                          direction="column"
+                                          alignItems="stretch"
+                                          justifyContent="flex-start"
+                                        >
+                                          <ActivityDistrictsTable
+                                            isOwnerLoading={isLoading}
+                                            validation={validation}
+                                            fetchOwnerData={fetchData}
+                                            ownerData={data}
+                                            editMode={editMode}
+                                            isFormUpdateable={isFormUpdateable}
+                                            storeDiff={storeDiff}
+                                          />
+                                        </Grid>
                                       </Grid>
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
-                          </ModeledTabs>
+                            </ModeledTabs>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

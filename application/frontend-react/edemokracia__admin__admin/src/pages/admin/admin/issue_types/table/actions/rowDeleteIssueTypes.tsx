@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminIssueType, AdminIssueTypeQueryCustomizer, AdminIssueTypeStored } from '~/generated/data-api';
-import { adminAdminServiceForIssueTypesImpl, adminIssueTypeServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForIssueTypesImpl, adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteIssueTypesAction = () => (
   selected: AdminIssueTypeStored,
@@ -41,7 +41,7 @@ export const useRowDeleteIssueTypesAction: RowDeleteIssueTypesAction = () => {
       );
 
       if (confirmed) {
-        await adminIssueTypeServiceImpl.delete(selected);
+        await adminIssueTypeServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

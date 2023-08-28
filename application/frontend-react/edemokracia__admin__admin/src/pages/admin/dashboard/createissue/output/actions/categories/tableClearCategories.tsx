@@ -12,7 +12,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities';
 import { AdminIssue } from '~/generated/data-api';
-import { adminIssueServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl } from '~/generated/data-axios';
 
 export type TableClearCategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
@@ -27,7 +27,7 @@ export const useTableClearCategoriesAction: TableClearCategoriesAction = () => {
 
   return async function tableClearCategoriesAction(owner: JudoIdentifiable<AdminIssue>, successCallback: () => void) {
     try {
-      await adminIssueServiceImpl.setCategories(
+      await adminIssueServiceForClassImpl.setCategories(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminIssue>,
         [],
       );

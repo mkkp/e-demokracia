@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -60,26 +61,28 @@ import {
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
   AdminIssueTypeStored,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminCreateIssueInputServiceImpl, adminDashboardServiceImpl } from '~/generated/data-axios';
+import { adminCreateIssueInputServiceForClassImpl, adminDashboardServiceForClassImpl } from '~/generated/data-axios';
 
 export interface IssueTypeLinkProps {
   ownerData: AdminCreateIssueInput;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
   storeDiff: (attributeName: keyof AdminCreateIssueInput, value: any) => void;
   validation: Map<keyof AdminCreateIssueInput, string>;
 }
 
 export function IssueTypeLink(props: IssueTypeLinkProps) {
-  const { ownerData, disabled, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const issueTypeSortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const issueTypeSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const issueTypeColumns: GridColDef<AdminIssueTypeStored>[] = [
     {
@@ -92,6 +95,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -101,6 +105,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -110,6 +115,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -158,19 +164,24 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
         ownerData.issueType?.title?.toString() ?? '',
         ownerData.issueType?.description?.toString() ?? '',
       ]}
-      value={ownerData.issueType}
+      ownerData={ownerData}
       error={!!validation.get('issueType')}
       helperText={validation.get('issueType')}
       icon={<MdiIcon path="folder-open" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(issueType) => {
+        storeDiff('issueType', issueType);
+      }}
       onSet={async () => {
         const res = await openRangeDialog<AdminIssueTypeStored, AdminIssueTypeQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputIssueType',
           columns: issueTypeColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminCreateIssueInputServiceImpl.getRangeForIssueType(
+            await adminCreateIssueInputServiceForClassImpl.getRangeForIssueType(
               ownerData,
               processQueryCustomizer(queryCustomizer),
             ),
@@ -181,7 +192,23 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
         });
 
         if (res === undefined) return;
-        storeDiff('issueType', res as AdminIssueTypeStored);
+        storeDiff('issueType', res.value as AdminIssueTypeStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminIssueTypeQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation,title,description}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminCreateIssueInputServiceForClassImpl.getRangeForIssueType(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
       onUnset={async () => {
         storeDiff('issueType', null);

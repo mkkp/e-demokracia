@@ -12,7 +12,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities';
 import { AdminCity, AdminCityQueryCustomizer, AdminCityStored, AdminUser, AdminUserStored } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowRemoveActivityCitiesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -32,7 +32,7 @@ export const useRowRemoveActivityCitiesAction: RowRemoveActivityCitiesAction = (
     successCallback: () => void,
   ) {
     try {
-      await adminUserServiceImpl.removeActivityCities(
+      await adminUserServiceForClassImpl.removeActivityCities(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminUser>,
         [selected],
       );

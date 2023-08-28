@@ -12,12 +12,14 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminAdminCountiesView } from '~/routes';
 
 export const ROW_VIEW_COUNTIES_ACTION_INTERFACE_KEY = 'RowViewCountiesAction';
-export type RowViewCountiesAction = () => (entry: AdminCountyStored) => Promise<void>;
+export type RowViewCountiesAction = () => (entry: AdminCountyStored, successCallback: () => void) => Promise<void>;
 
 export const useRowViewCountiesAction: RowViewCountiesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewCountiesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_COUNTIES_ACTION_INTERFACE_KEY})`,
@@ -28,7 +30,8 @@ export const useRowViewCountiesAction: RowViewCountiesAction = () => {
     return customNavigation;
   }
 
-  return async function (entry: AdminCountyStored) {
+  return async function (entry: AdminCountyStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminAdminCountiesView(entry.__signedIdentifier));
   };
 };

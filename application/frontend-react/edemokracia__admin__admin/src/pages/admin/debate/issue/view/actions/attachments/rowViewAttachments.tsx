@@ -18,15 +18,18 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminIssueAttachmentsView } from '~/routes';
 
 export const ROW_VIEW_ATTACHMENTS_ACTION_INTERFACE_KEY = 'RowViewAttachmentsAction';
 export type RowViewAttachmentsAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
   entry: AdminIssueAttachmentStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewAttachmentsAction: RowViewAttachmentsAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewAttachmentsAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_ATTACHMENTS_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,12 @@ export const useRowViewAttachmentsAction: RowViewAttachmentsAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminIssueAttachmentStored) {
+  return async function (
+    owner: JudoIdentifiable<AdminIssue>,
+    entry: AdminIssueAttachmentStored,
+    successCallback: () => void,
+  ) {
+    closeAllDialogs();
     navigate(routeToAdminIssueAttachmentsView(entry.__signedIdentifier));
   };
 };

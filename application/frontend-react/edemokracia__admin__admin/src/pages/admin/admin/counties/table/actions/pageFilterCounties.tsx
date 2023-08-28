@@ -19,22 +19,28 @@ export const usePageFilterCountiesAction = (
   setPage: (page: number) => void,
   setQueryCustomizer: Function,
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
+  numberOfElements: number,
 ): PageFilterCountiesAction => {
+  const columnNames = ['name'];
+
   return async function pageFilterCountiesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);
-    const numberOfElements = 10;
 
-    if (newFilters) {
+    if (Array.isArray(newFilters)) {
       setPage(0);
       setFilters(newFilters);
 
       setQueryCustomizer((prevQueryCustomizer: AdminCountyQueryCustomizer) => {
+        // remove previous filter values, so that we can always start with a clean slate
+        for (const name of columnNames) {
+          delete (prevQueryCustomizer as any)[name];
+        }
         return {
           ...prevQueryCustomizer,
           _seek: {
             limit: numberOfElements + 1,
           },
-          ...mapAllFiltersToQueryCustomizerProperties(newFilters, 'name'),
+          ...mapAllFiltersToQueryCustomizerProperties(newFilters),
         };
       });
     }

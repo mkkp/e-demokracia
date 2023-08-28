@@ -18,15 +18,18 @@ import type {
   AdminVoteDefinitionStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminDebateVoteDefinitionView } from '~/routes';
 
 export const LINK_VIEW_VOTE_DEFINITION_ACTION_INTERFACE_KEY = 'LinkViewVoteDefinitionAction';
 export type LinkViewVoteDefinitionAction = () => (
   owner: JudoIdentifiable<AdminDebate>,
   entry: AdminVoteDefinitionStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useLinkViewVoteDefinitionAction: LinkViewVoteDefinitionAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<LinkViewVoteDefinitionAction>(
     `(${OBJECTCLASS}=${LINK_VIEW_VOTE_DEFINITION_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,12 @@ export const useLinkViewVoteDefinitionAction: LinkViewVoteDefinitionAction = () 
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminDebate>, entry: AdminVoteDefinitionStored) {
+  return async function (
+    owner: JudoIdentifiable<AdminDebate>,
+    entry: AdminVoteDefinitionStored,
+    successCallback: () => void,
+  ) {
+    closeAllDialogs();
     navigate(routeToAdminDebateVoteDefinitionView(entry.__signedIdentifier));
   };
 };

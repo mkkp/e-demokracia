@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,11 +39,15 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
+import { Box, Typography } from '@mui/material';
 import {
   AdminComment,
   AdminCommentQueryCustomizer,
@@ -54,7 +62,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminProServiceImpl } from '~/generated/data-axios';
+import { adminProServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageDeleteProsAction,
   usePageRefreshProsAction,
@@ -65,6 +73,8 @@ import {
   useAdminProVoteDownAction,
   useAdminProVoteUpAction,
 } from '../actions';
+import { applyInMemoryFilters } from '~/utilities';
+export const ADMIN_CON_PROS_VIEW_PROS = 'AdminConProsViewPros';
 
 export interface ProsTableProps {
   ownerData: AdminProStored;
@@ -73,16 +83,27 @@ export interface ProsTableProps {
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminProStored, value: any) => void;
+  validation: Map<keyof AdminPro, string>;
 }
 
 export const ProsTable = (props: ProsTableProps) => {
+  const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [prosSortModel, setProsSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [data, setData] = useState<AdminProStored[]>([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
+  const [prosSortModel, setProsSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+
+  const [prosFilterModel, setProsFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const prosColumns: GridColDef<AdminProStored>[] = [
     {
@@ -93,6 +114,7 @@ export const ProsTable = (props: ProsTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -102,6 +124,7 @@ export const ProsTable = (props: ProsTableProps) => {
 
       width: 100,
       type: 'number',
+      filterable: false && true,
       valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
         return value && new Intl.NumberFormat(l10nLocale).format(value);
       },
@@ -114,11 +137,47 @@ export const ProsTable = (props: ProsTableProps) => {
 
       width: 100,
       type: 'number',
+      filterable: false && true,
       valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
         return value && new Intl.NumberFormat(l10nLocale).format(value);
       },
     },
   ];
+
+  const prosRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsTitleFilter',
+      attributeName: 'title',
+      label: t('admin.ProView.pros.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsUpVotesFilter',
+      attributeName: 'upVotes',
+      label: t('admin.ProView.pros.upVotes', { defaultValue: 'up' }) as string,
+      filterType: FilterType.numeric,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsDownVotesFilter',
+      attributeName: 'downVotes',
+      label: t('admin.ProView.pros.downVotes', { defaultValue: 'down' }) as string,
+      filterType: FilterType.numeric,
+    },
+  ];
+
+  const prosInitialQueryCustomizer: AdminProQueryCustomizer = {
+    _mask: '{title,upVotes,downVotes}',
+    _orderBy: prosSortModel.length
+      ? [
+          {
+            attribute: prosSortModel[0].field,
+            descending: prosSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
 
   const pageDeleteProsAction = usePageDeleteProsAction();
   const pageRefreshProsAction = usePageRefreshProsAction();
@@ -167,42 +226,118 @@ export const ProsTable = (props: ProsTableProps) => {
     },
   ];
 
+  const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsTitleFilter',
+      attributeName: 'title',
+      label: t('admin.ProView.pros.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsUpVotesFilter',
+      attributeName: 'upVotes',
+      label: t('admin.ProView.pros.upVotes', { defaultValue: 'up' }) as string,
+      filterType: FilterType.numeric,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsDownVotesFilter',
+      attributeName: 'downVotes',
+      label: t('admin.ProView.pros.downVotes', { defaultValue: 'down' }) as string,
+      filterType: FilterType.numeric,
+    },
+  ];
+
+  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+
+    if (Array.isArray(newFilters)) {
+      setPaginationModel((prevState) => ({
+        ...prevState,
+        page: 0,
+      }));
+      setFilters(newFilters);
+    }
+  };
+
+  useEffect(() => {
+    const newData = applyInMemoryFilters<AdminProStored>(filters, ownerData?.pros ?? []);
+    setData(newData);
+  }, [ownerData?.pros, filters]);
+
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={ownerData?.pros ?? []}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...prosColumns,
-        ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminProPros', prosRowActions, {
-          shownActions: 2,
-        }),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminProStored>) => {
-        if (!editMode) {
-          rowViewProsAction(ownerData, params.row);
-        }
-      }}
-      sortModel={prosSortModel}
-      onSortModelChange={(newModel: GridSortModel) => {
-        setProsSortModel(newModel);
-      }}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+          border: (theme) => (props.validation.has('pros') ? `2px solid ${theme.palette.error.main}` : undefined),
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...prosColumns,
+          ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminProPros', prosRowActions, t, {
+            shownActions: 2,
+          }),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminProStored>) => {
+          if (!editMode) {
+            rowViewProsAction(ownerData, params.row, () => fetchOwnerData());
+          }
+        }}
+        sortModel={prosSortModel}
+        onSortModelChange={(newModel: GridSortModel) => {
+          setProsSortModel(newModel);
+        }}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros-filter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() =>
+                  filter(
+                    'TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros-filter',
+                    filterOptions,
+                    filters,
+                  )
+                }
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+        }}
+      />
+      {props.validation.has('pros') && (
+        <Box
+          sx={{
+            color: (theme) => theme.palette.error.main,
+            display: 'flex',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
+          <Typography>{props.validation.get('pros')}</Typography>
+        </Box>
+      )}
+    </>
   );
 };

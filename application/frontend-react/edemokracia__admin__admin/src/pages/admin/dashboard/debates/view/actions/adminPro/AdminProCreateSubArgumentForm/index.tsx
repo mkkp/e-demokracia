@@ -15,7 +15,8 @@
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
 // Action: CallOperationAction
 
-import { useState, useEffect, useRef, useCallback, Dispatch, SetStateAction, FC } from 'react';
+import type { Dispatch, SetStateAction, FC } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -39,9 +40,10 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
 import { useJudoNavigation, MdiIcon, ModeledTabs } from '~/components';
@@ -51,12 +53,14 @@ import {
   AssociationButton,
   BinaryInput,
   CollectionAssociationButton,
+  NumericInput,
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import {
   isErrorOperationFault,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  passesLocalValidation,
   fileHandling,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -67,7 +71,9 @@ import {
 } from '~/utilities';
 import { toastConfig, dividerHeight } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
+import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
 
 import {
   AdminDashboard,
@@ -82,7 +88,7 @@ import {
   CreateArgumentInputStored,
   EdemokraciaCreateArgumentInputType,
 } from '~/generated/data-api';
-import { createArgumentInputServiceImpl, adminProServiceImpl } from '~/generated/data-axios';
+import { createArgumentInputServiceForClassImpl, adminProServiceForClassImpl } from '~/generated/data-axios';
 
 export interface AdminProCreateSubArgumentFormProps {
   successCallback: () => void;
@@ -147,7 +153,7 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
     setIsLoading(true);
 
     try {
-      const res = await createArgumentInputServiceImpl.getTemplate();
+      const res = await createArgumentInputServiceForClassImpl.getTemplate();
       setData(res);
       setPayloadDiff({
         ...res,
@@ -168,7 +174,7 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
     setIsLoading(true);
 
     try {
-      await adminProServiceImpl.createSubArgument(owner, payloadDiff);
+      await adminProServiceForClassImpl.createSubArgument(owner, payloadDiff);
 
       successCallback();
     } catch (error: any) {
@@ -197,7 +203,7 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
         </IconButton>
       </DialogTitle>
       <DialogContent dividers>
-        <Grid container xs={12} sm={12} spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentInputDefaultCreateArgumentInputFormGroupLabelWrapper">
               <CardContent>
@@ -226,21 +232,26 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
                     >
                       <Grid item xs={12} sm={12} md={8.0}>
                         <TextField
-                          required
+                          required={true}
                           name="title"
                           id="TextInputedemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentInputDefaultCreateArgumentInputFormGroupLabelWrapperGroupTitle"
                           autoFocus
                           label={t('CreateArgumentInputForm.title', { defaultValue: 'Title' }) as string}
-                          value={data.title}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
-                          disabled={false || !isFormUpdateable()}
+                          value={data.title ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
                           error={!!validation.get('title')}
                           helperText={validation.get('title')}
                           onChange={(event) => {
-                            storeDiff('title', event.target.value);
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('title', realValue);
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
                                 <MdiIcon path="text_fields" />
@@ -252,13 +263,16 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
 
                       <Grid item xs={12} sm={12} md={4.0}>
                         <TextField
-                          required
+                          required={true}
                           name="type"
                           id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentInputDefaultCreateArgumentInputFormGroupLabelWrapperGroupType"
                           label={t('CreateArgumentInputForm.type', { defaultValue: 'Type' }) as string}
                           value={data.type || ''}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
-                          disabled={false || !isFormUpdateable()}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
                           error={!!validation.get('type')}
                           helperText={validation.get('type')}
                           onChange={(event) => {
@@ -266,6 +280,7 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
                                 <MdiIcon path="list" />
@@ -291,22 +306,27 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
 
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required
+                          required={true}
                           name="description"
                           id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProCreateSubArgumentInputDefaultCreateArgumentInputFormGroupLabelWrapperGroupDescription"
                           label={t('CreateArgumentInputForm.description', { defaultValue: 'Description' }) as string}
-                          value={data.description}
-                          className={!editMode ? 'JUDO-viewMode' : undefined}
-                          disabled={false || !isFormUpdateable()}
+                          value={data.description ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
                           multiline
                           minRows={4.0}
                           error={!!validation.get('description')}
                           helperText={validation.get('description')}
                           onChange={(event) => {
-                            storeDiff('description', event.target.value);
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('description', realValue);
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
                                 <MdiIcon path="text_fields" />

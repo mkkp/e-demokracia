@@ -11,20 +11,21 @@ import { density } from '../theme';
 
 export const baseColumnConfig: Partial<GridColDef<any>> = {
   groupable: false,
-  hideable: false,
+  hideable: true,
+  filterable: false,
 };
 
 export const baseTableConfig: Partial<DataGridProps<any>> = {
   autoHeight: true,
-  sortingOrder: ['desc', 'asc'], // omitting null for now, needs further discussion JNG-4826
+  sortingOrder: ['asc', 'desc', null],
   pagination: true, // is false for DataGridPro by default
-  disableColumnFilter: true,
+  disableColumnFilter: !false,
   density: density.dataGridDensity || 'standard',
 };
 
 export const serverTableConfig: Partial<DataGridProps<any>> = {
   ...baseTableConfig,
-  sortingOrder: ['desc', 'asc'],
+  sortingOrder: ['asc', 'desc'],
   sortingMode: 'server',
   paginationMode: 'server',
 };

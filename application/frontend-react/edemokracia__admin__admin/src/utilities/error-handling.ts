@@ -9,7 +9,8 @@
 import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTrackService } from '@pandino/react-hooks';
-import { SnackbarMessage, OptionsObject, SnackbarKey, useSnackbar } from 'notistack';
+import type { SnackbarMessage, OptionsObject, SnackbarKey } from 'notistack';
+import { useSnackbar } from 'notistack';
 import { exists } from './helper';
 import { toastConfig } from '../config';
 

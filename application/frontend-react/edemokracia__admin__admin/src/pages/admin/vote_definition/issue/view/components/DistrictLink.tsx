@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -73,8 +74,9 @@ import {
   AdminVoteDefinitionStored,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl, adminDistrictServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewDistrictAction } from '../actions';
 
@@ -84,18 +86,19 @@ export interface DistrictLinkProps {
   validation: Map<keyof AdminIssueStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function DistrictLink(props: DistrictLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const districtSortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const districtSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const districtColumns: GridColDef<AdminDistrictStored>[] = [
     {
@@ -106,6 +109,7 @@ export function DistrictLink(props: DistrictLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -138,13 +142,18 @@ export function DistrictLink(props: DistrictLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherAreaAreaDistrict"
       label={t('admin.IssueView.district', { defaultValue: 'District' }) as string}
       labelList={[ownerData.district?.representation?.toString() ?? '']}
-      value={ownerData.district}
+      ownerData={ownerData}
       error={!!validation.get('district')}
       helperText={validation.get('district')}
       icon={<MdiIcon path="home-city" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewDistrictAction(ownerData, ownerData?.district!)}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(district) => {
+        storeDiff('district', district);
+      }}
+      onView={async () => linkViewDistrictAction(ownerData, ownerData?.district!, () => fetchOwnerData())}
       onUnset={async () => {
         storeDiff('district', null);
       }}
@@ -152,17 +161,34 @@ export function DistrictLink(props: DistrictLinkProps) {
         const res = await openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueDistrict',
           columns: districtColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminIssueServiceImpl.getRangeForDistrict(ownerData, processQueryCustomizer(queryCustomizer)),
+            await adminIssueServiceForClassImpl.getRangeForDistrict(ownerData, processQueryCustomizer(queryCustomizer)),
           single: true,
           alreadySelectedItems: ownerData.district?.__identifier as GridRowId,
           filterOptions: districtRangeFilterOptions,
           initialQueryCustomizer: districtInitialQueryCustomizer,
+          editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('district', res as AdminDistrictStored);
+        storeDiff('district', res.value as AdminDistrictStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminDistrictQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminIssueServiceForClassImpl.getRangeForDistrict(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
     />
   );

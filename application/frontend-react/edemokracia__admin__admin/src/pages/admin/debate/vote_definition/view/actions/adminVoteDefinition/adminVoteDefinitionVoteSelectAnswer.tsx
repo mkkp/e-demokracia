@@ -20,6 +20,7 @@ import type {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridFilterModel,
   GridSortModel,
   GridRowSelectionModel,
   GridValueFormatterParams,
@@ -51,7 +52,7 @@ import {
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '~/generated/data-api';
-import { adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
+import { adminVoteDefinitionServiceForClassImpl } from '~/generated/data-axios';
 
 export type AdminVoteDefinitionVoteSelectAnswerActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
@@ -97,6 +98,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
       {
         ...baseColumnConfig,
@@ -105,6 +107,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
     ];
 
@@ -124,7 +127,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
       },
     ];
 
-    const sortModel: GridSortModel = [{ field: 'title', sort: 'asc' }];
+    const sortModel: GridSortModel = [{ field: 'title', sort: null }];
 
     const initialQueryCustomizer: SelectAnswerVoteSelectionQueryCustomizer = {
       _mask: '{title,description}',
@@ -143,7 +146,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
       columns,
       defaultSortField: sortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminVoteDefinitionServiceImpl.getRangeForVoteSelectAnswer(
+        await adminVoteDefinitionServiceForClassImpl.getRangeForVoteSelectAnswer(
           owner,
           processQueryCustomizer(queryCustomizer),
         ),
@@ -156,9 +159,9 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
     if (res === undefined) return;
 
     try {
-      const result = await adminVoteDefinitionServiceImpl.voteSelectAnswer(
+      const result = await adminVoteDefinitionServiceForClassImpl.voteSelectAnswer(
         owner,
-        res as SelectAnswerVoteSelectionStored,
+        res.value as SelectAnswerVoteSelectionStored,
       );
       if (postHandler) {
         postHandler(successCallback);

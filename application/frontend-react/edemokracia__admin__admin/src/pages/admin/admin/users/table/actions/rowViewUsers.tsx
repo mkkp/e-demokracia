@@ -12,12 +12,14 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminUser, AdminUserQueryCustomizer, AdminUserStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminAdminUsersView } from '~/routes';
 
 export const ROW_VIEW_USERS_ACTION_INTERFACE_KEY = 'RowViewUsersAction';
-export type RowViewUsersAction = () => (entry: AdminUserStored) => Promise<void>;
+export type RowViewUsersAction = () => (entry: AdminUserStored, successCallback: () => void) => Promise<void>;
 
 export const useRowViewUsersAction: RowViewUsersAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewUsersAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_USERS_ACTION_INTERFACE_KEY})`,
@@ -28,7 +30,8 @@ export const useRowViewUsersAction: RowViewUsersAction = () => {
     return customNavigation;
   }
 
-  return async function (entry: AdminUserStored) {
+  return async function (entry: AdminUserStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminAdminUsersView(entry.__signedIdentifier));
   };
 };

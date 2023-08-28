@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,10 +39,13 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
 import { AdminDebate, AdminDebateQueryCustomizer, AdminDebateStored } from '~/generated/data-api';
 import { adminAdminServiceForDebatesImpl } from '~/generated/data-axios';
@@ -51,6 +58,8 @@ import {
   useAdminDebateCreateArgumentAction,
   useAdminDebateCreateCommentAction,
 } from '../actions';
+
+export const ADMIN_ADMIN_DEBATES_TABLE_DEBATE_TABLE = 'AdminAdminDebatesTableDebate_Table';
 
 export interface Debate_TableTableProps {
   isOwnerLoading: boolean;
@@ -70,7 +79,8 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
 
   const [data, setData] = useState<GridRowModel<AdminDebateStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'issueTitle', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'issueTitle', sort: null }]);
+  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
   const [lastItem, setLastItem] = useState<AdminDebateStored>();
   const [firstItem, setFirstItem] = useState<AdminDebateStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
@@ -81,16 +91,18 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
     _seek: {
       limit: 10 + 1,
     },
-    _orderBy: [
-      {
-        attribute: sortModel[0].field,
-        descending: sortModel[0].sort === 'desc',
-      },
-    ],
-    ...mapAllFiltersToQueryCustomizerProperties(filters, 'issueTitle', 'title', 'status', 'closeAt', 'description'),
+    _orderBy: sortModel.length
+      ? [
+          {
+            attribute: sortModel[0].field,
+            descending: sortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+    ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
-  const debatesSortModel: GridSortModel = [{ field: 'issueTitle', sort: 'asc' }];
+  const debatesSortModel: GridSortModel = [{ field: 'issueTitle', sort: null }];
 
   const debatesColumns: GridColDef<AdminDebateStored>[] = [
     {
@@ -101,6 +113,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -110,6 +123,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -118,8 +132,12 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
       headerClassName: 'data-grid-column-header',
 
       width: 170,
-      type: 'string',
+      type: 'singleSelect',
+      filterable: false && true,
       sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        return t(`enumerations.EdemokraciaDebateStatus.${value}`, { defaultValue: value });
+      },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
@@ -132,6 +150,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
 
       width: 170,
       type: 'dateTime',
+      filterable: false && true,
       valueGetter: ({ value }) => value && serviceDateToUiDate(value),
       valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
         return (
@@ -156,10 +175,67 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
-  const pageFilterDebatesAction = usePageFilterDebatesAction(setFilters, setPage, setQueryCustomizer, openFilterDialog);
+  const debatesRangeFilterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableDefaultDebatesDebateTableIssueTitleFilter',
+      attributeName: 'issueTitle',
+      label: t('admin.DebateTable.debates.issueTitle', { defaultValue: 'Issue' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableDefaultDebatesDebateTableTitleFilter',
+      attributeName: 'title',
+      label: t('admin.DebateTable.debates.title', { defaultValue: 'Title' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableDefaultDebatesDebateTableStatusFilter',
+      attributeName: 'status',
+      label: t('admin.DebateTable.debates.status', { defaultValue: 'Status' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableDefaultDebatesDebateTableCloseAtFilter',
+      attributeName: 'closeAt',
+      label: t('admin.DebateTable.debates.closeAt', { defaultValue: 'Close at' }) as string,
+      filterType: FilterType.dateTime,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableDefaultDebatesDebateTableDescriptionFilter',
+      attributeName: 'description',
+      label: t('admin.DebateTable.debates.description', { defaultValue: 'Description' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
+
+  const debatesInitialQueryCustomizer: AdminDebateQueryCustomizer = {
+    _mask: '{issueTitle,title,status,closeAt,description}',
+    _orderBy: debatesSortModel.length
+      ? [
+          {
+            attribute: debatesSortModel[0].field,
+            descending: debatesSortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+  };
+
+  const pageFilterDebatesAction = usePageFilterDebatesAction(
+    setFilters,
+    setPage,
+    setQueryCustomizer,
+    openFilterDialog,
+    10,
+  );
   const pageRefreshDebatesAction = usePageRefreshDebatesAction();
   const rowDeleteDebatesAction = useRowDeleteDebatesAction();
   const rowViewDebatesAction = useRowViewDebatesAction();
@@ -241,12 +317,17 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
     setPage(0);
     setSortModel(newModel);
 
-    const { field, sort } = newModel[0];
+    const _orderBy = newModel
+      .filter((m) => m.sort)
+      .map((m) => ({
+        attribute: m.field,
+        descending: m.sort === 'desc',
+      }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
       return {
         ...prevQueryCustomizer,
-        _orderBy: [{ attribute: field, descending: sort === 'desc' }],
+        _orderBy,
       };
     });
   }
@@ -299,60 +380,63 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   }, [queryCustomizer]);
 
   return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={data}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...debatesColumns,
-        ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminDebates', rowActions, {
-          shownActions: 2,
-        }),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminDebateStored>) => rowViewDebatesAction(params.row)}
-      sortModel={sortModel}
-      onSortModelChange={handleSortModelChange}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <Button
-              id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminAdminDebatesPageFilter"
-              startIcon={<MdiIcon path="filter" />}
-              variant="text"
-              onClick={() => {
-                pageFilterDebatesAction(
-                  'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminAdminDebatesPageFilter-filter',
-                  filterOptions,
-                  filters,
-                );
-              }}
-              disabled={isOwnerLoading}
-            >
-              {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
-                (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
-            </Button>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-        Pagination: () => (
-          <CustomTablePagination
-            pageChange={handlePageChange}
-            isNextButtonEnabled={isNextButtonEnabled}
-            page={page}
-            setPage={setPage}
-            rowPerPage={10}
-          />
-        ),
-      }}
-    />
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...debatesColumns,
+          ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminDebates', rowActions, t, {
+            shownActions: 2,
+          }),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminDebateStored>) => rowViewDebatesAction(params.row, () => fetchData())}
+        sortModel={sortModel}
+        onSortModelChange={handleSortModelChange}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminAdminDebatesPageFilter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() => {
+                  pageFilterDebatesAction(
+                    'FilterActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminAdminDebatesPageFilter-filter',
+                    filterOptions,
+                    filters,
+                  );
+                }}
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+          Pagination: () => (
+            <CustomTablePagination
+              pageChange={handlePageChange}
+              isNextButtonEnabled={isNextButtonEnabled}
+              page={page}
+              setPage={setPage}
+              rowPerPage={10}
+            />
+          ),
+        }}
+      />
+    </>
   );
 });

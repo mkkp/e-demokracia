@@ -9,4 +9,5 @@
 export * from './AggregationInput';
 export * from './AssociationButton';
 export * from './BinaryInput';
+export * from './NumericInput';
 export * from './TrinaryLogicCombobox';

@@ -18,15 +18,18 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminIssueCategoryOwnerView } from '~/routes';
 
 export const LINK_VIEW_OWNER_ACTION_INTERFACE_KEY = 'LinkViewOwnerAction';
 export type LinkViewOwnerAction = () => (
   owner: JudoIdentifiable<AdminIssueCategory>,
   entry: AdminUserStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useLinkViewOwnerAction: LinkViewOwnerAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<LinkViewOwnerAction>(
     `(${OBJECTCLASS}=${LINK_VIEW_OWNER_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,12 @@ export const useLinkViewOwnerAction: LinkViewOwnerAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminIssueCategory>, entry: AdminUserStored) {
+  return async function (
+    owner: JudoIdentifiable<AdminIssueCategory>,
+    entry: AdminUserStored,
+    successCallback: () => void,
+  ) {
+    closeAllDialogs();
     navigate(routeToAdminIssueCategoryOwnerView(entry.__signedIdentifier));
   };
 };

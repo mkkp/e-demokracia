@@ -20,6 +20,7 @@ import type {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridFilterModel,
   GridSortModel,
   GridRowSelectionModel,
   GridValueFormatterParams,
@@ -42,7 +43,7 @@ import {
   serviceTimeToUiTime,
 } from '~/utilities';
 import { AdminCon, AdminConQueryCustomizer, AdminConStored } from '~/generated/data-api';
-import { adminConServiceImpl } from '~/generated/data-axios';
+import { adminConServiceForClassImpl } from '~/generated/data-axios';
 
 export type VoteDownActionPostHandler = (ownerCallback: () => void) => Promise<void>;
 
@@ -70,7 +71,7 @@ export const useVoteDownAction: VoteDownAction = () => {
 
   return async function voteDownAction(owner: AdminConStored, successCallback: () => void) {
     try {
-      const result = await adminConServiceImpl.voteDown(owner);
+      const result = await adminConServiceForClassImpl.voteDown(owner);
       if (postHandler) {
         postHandler(successCallback);
         return;

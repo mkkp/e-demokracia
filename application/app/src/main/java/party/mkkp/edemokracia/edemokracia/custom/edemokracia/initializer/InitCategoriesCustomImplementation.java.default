@@ -13,15 +13,69 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.initializer;
 
 /**
  * 
+ * 
+ * var edemokracia::IssueCategory szocialis_kerdesek = edemokracia::IssueCategory!filter(c | c.title == "Szociális kérdések")!any();
+ * if (szocialis_kerdesek!isUndefined()) {
+ * 	szocialis_kerdesek = new edemokracia::IssueCategory(title = "Szociális kérdések", description = "Szociális kérdések");
+ * }
+ * 
+ * var edemokracia::IssueCategory oktatas = edemokracia::IssueCategory!filter(c | c.title == "Oktatás")!any();
+ * if (oktatas!isUndefined()) {
+ * 	oktatas = new edemokracia::IssueCategory(title = "Oktatás", description = "Oktatás");
+ * }
+ * 
+ * var edemokracia::IssueCategory egeszsegugy = edemokracia::IssueCategory!filter(c | c.title == "Egészségügy")!any();
+ * if (egeszsegugy!isUndefined()) {
+ * 	egeszsegugy = new edemokracia::IssueCategory(title = "Egészségügy", description = "Egészségügy");
+ * }
+ * 
+ * var edemokracia::IssueCategory kornyezetvedelem = edemokracia::IssueCategory!filter(c | c.title == "Környezetvédelem")!any();
+ * if (kornyezetvedelem!isUndefined()) {
+ * 	kornyezetvedelem = new edemokracia::IssueCategory(title = "Környezetvédelem", description = "Környezetvédelem");
+ * }
+ * 
+ * var edemokracia::IssueCategory kultura = edemokracia::IssueCategory!filter(c | c.title == "Kultúra")!any();
+ * if (kultura!isUndefined()) {
+ * 	kultura = new edemokracia::IssueCategory(title = "Kultúra", description = "Kultúra");
+ * }
+ * 
+ * var edemokracia::IssueCategory gazdasag = edemokracia::IssueCategory!filter(c | c.title == "Gazdaság")!any();
+ * if (gazdasag!isUndefined()) {
+ * 	gazdasag = new edemokracia::IssueCategory(title = "Gazdaság", description = "Gazdaság");
+ * }
+ * 
+ * var edemokracia::IssueCategory energetika_logisztika = edemokracia::IssueCategory!filter(c | c.title == "Energetika, logisztika")!any();
+ * if (energetika_logisztika!isUndefined()) {
+ * 	energetika_logisztika = new edemokracia::IssueCategory(title = "Energetika, logisztika", description = "Energetika, logisztika");
+ * }
+ * 
+ * var edemokracia::IssueCategory belugy = edemokracia::IssueCategory!filter(c | c.title == "Belügy")!any();
+ * if (belugy!isUndefined()) {
+ * 	belugy = new edemokracia::IssueCategory(title = "Belügy", description = "Belügy");
+ * }
+ * 
+ * var edemokracia::IssueCategory kulugy = edemokracia::IssueCategory!filter(c | c.title == "Külügy")!any();
+ * if (kulugy!isUndefined()) {
+ * 	kulugy = new edemokracia::IssueCategory(title = "Külügy", description = "Külügy");
+ * }
+ * 
+ * var edemokracia::IssueCategory it_media = edemokracia::IssueCategory!filter(c | c.title == "Információ technológia, Média és tömegtájékoztatás")!any();
+ * if (it_media!isUndefined()) {
+ * 	it_media = new edemokracia::IssueCategory(title = "Információ technológia, Média és tömegtájékoztatás", description = "Információ technológia, Média és tömegtájékoztatás");
+ * }
+ * 
+ * 
+ * 
  * Usage:
  *  1. Rename this file from InitCategoriesCustomImplementation.java.default to InitCategoriesCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of InitCategoriesCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitCategories.class)
 public class InitCategoriesCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitCategories {
 
-    public void initCategories()  {
+    public void run()  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.initializer.InitCategoriesExchangeFunctionsComponent");
     }
 

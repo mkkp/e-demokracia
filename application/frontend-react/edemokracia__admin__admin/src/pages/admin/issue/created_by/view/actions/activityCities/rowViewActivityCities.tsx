@@ -18,15 +18,18 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminUserActivityCitiesView } from '~/routes';
 
 export const ROW_VIEW_ACTIVITY_CITIES_ACTION_INTERFACE_KEY = 'RowViewActivityCitiesAction';
 export type RowViewActivityCitiesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
   entry: AdminCityStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewActivityCitiesAction: RowViewActivityCitiesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewActivityCitiesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_ACTIVITY_CITIES_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useRowViewActivityCitiesAction: RowViewActivityCitiesAction = () =>
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCityStored) {
+  return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCityStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminUserActivityCitiesView(entry.__signedIdentifier));
   };
 };

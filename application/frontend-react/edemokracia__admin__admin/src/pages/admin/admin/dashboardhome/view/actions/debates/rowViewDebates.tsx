@@ -18,15 +18,18 @@ import type {
   AdminDebateStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminDashboardDebatesView } from '~/routes';
 
 export const ROW_VIEW_DEBATES_ACTION_INTERFACE_KEY = 'RowViewDebatesAction';
 export type RowViewDebatesAction = () => (
   owner: JudoIdentifiable<AdminDashboard>,
   entry: AdminDebateStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewDebatesAction: RowViewDebatesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewDebatesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_DEBATES_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,12 @@ export const useRowViewDebatesAction: RowViewDebatesAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminDashboard>, entry: AdminDebateStored) {
+  return async function (
+    owner: JudoIdentifiable<AdminDashboard>,
+    entry: AdminDebateStored,
+    successCallback: () => void,
+  ) {
+    closeAllDialogs();
     navigate(routeToAdminDashboardDebatesView(entry.__signedIdentifier));
   };
 };

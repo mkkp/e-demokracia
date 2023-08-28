@@ -6,11 +6,12 @@
 // Template name: actor/src/layout/Navigator.tsx
 // Template file: actor/src/layout/Navigator.tsx.hbs
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import type { DrawerProps } from '@mui/material';
 import {
+  Collapse,
   Divider,
   Drawer,
-  DrawerProps,
   List,
   ListItem,
   ListItemButton,
@@ -20,36 +21,20 @@ import {
   Icon,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import SimpleBar from 'simplebar-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { usePrincipal } from '../auth';
 import { Hero, Logo, useJudoNavigation, MdiIcon } from '../components';
 import type { MenuItem, HeroProps, LogoProps } from '../components-api';
+import { MenuItems } from './MenuItems';
+
+import 'simplebar-react/dist/simplebar.min.css';
 
 export interface NavigatorProps {
   items: Array<MenuItem>;
   heroProps: HeroProps;
   logoProps: LogoProps;
-}
-
-function ActionItem(props: MenuItem) {
-  const { t } = useTranslation();
-  const { clearNavigate } = useJudoNavigation();
-  const { id, label, to, icon } = props;
-
-  return (
-    <ListItemButton className="navigation-item" id={id} onClick={() => to && clearNavigate(to)}>
-      {icon ? (
-        <ListItemIcon className="navigation-item-icon">
-          <MdiIcon path={icon} />
-        </ListItemIcon>
-      ) : null}
-      <ListItemText
-        classes={{ primary: 'navigation-item-label' }}
-        primary={t(`menuTree.${label}`, { defaultValue: label })}
-      />
-    </ListItemButton>
-  );
 }
 
 export function Navigator(props: DrawerProps & NavigatorProps) {
@@ -66,41 +51,22 @@ export function Navigator(props: DrawerProps & NavigatorProps) {
 
   return (
     <Drawer variant="permanent" {...other}>
-      <Logo {...logoProps} />
-      <Hero {...heroProps} />
-      <Divider variant="middle" />
-      <List id="application-navigator" component="nav">
-        {items.map((item) =>
-          item.items && item.items.length ? (
-            <List
-              component="nav"
-              key={item.label}
-              subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                  {t(`menuTree.${item.label}`, { defaultValue: item.label })}
-                </ListSubheader>
-              }
-            >
-              {item.items.map((subItem) => (
-                <ActionItem key={subItem.label} {...subItem} />
-              ))}
-            </List>
-          ) : (
-            <ActionItem key={item.label} {...item} />
-          ),
-        )}
-      </List>
-      {items.length ? <Divider variant="middle" /> : null}
-      <List>
-        <ListItem disablePadding>
-          <ListItemButton id="navigator-logout" onClick={() => doLogout()}>
-            <ListItemIcon>
-              <MdiIcon path="logout" />
-            </ListItemIcon>
-            <ListItemText primary={t('judo.security.logout', { defaultValue: 'Logout' })} />
-          </ListItemButton>
-        </ListItem>
-      </List>
+      <SimpleBar style={{ height: '100vh' }}>
+        <Logo {...logoProps} />
+        <Hero {...heroProps} />
+        <Divider variant="middle" />
+        <MenuItems items={items} />
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton id="navigator-logout" onClick={() => doLogout()}>
+              <ListItemIcon>
+                <MdiIcon path="logout" />
+              </ListItemIcon>
+              <ListItemText primary={t('judo.security.logout', { defaultValue: 'Logout' })} />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </SimpleBar>
     </Drawer>
   );
 }

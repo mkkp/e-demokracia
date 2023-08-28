@@ -13,15 +13,30 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 
 /**
  * 
+ * 
+ * if (this.isYesNoType) {
+ * 	var edemokracia::YesNoVoteDefinition target = this as edemokracia::YesNoVoteDefinition;
+ * 	var edemokracia::YesNoVoteEntry voteEntry = new edemokracia::YesNoVoteEntry(
+ * 		value = input.value,
+ * 		voteDefinition = target,
+ * 		user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any()	
+ * 	);
+ * 	target.voteEntries += voteEntry;
+ * }
+ * 
+ * 
+ * 
+ * 
  * Usage:
  *  1. Rename this file from VoteYesNoCustomImplementation.java.default to VoteYesNoCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of VoteYesNoCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.votedefinition.VoteYesNo.class)
 public class VoteYesNoCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.votedefinition.VoteYesNo {
 
-    public void voteYesNo(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.votedefinition.VoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.yesnovoteinput.YesNoVoteInput input)  {
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.votedefinition.VoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.yesnovoteinput.YesNoVoteInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.votedefinition.VoteYesNoExchangeFunctionsComponent");
     }
 

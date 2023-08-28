@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -71,8 +72,9 @@ import {
   AdminUserStored,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewCountyAction } from '../actions';
 
@@ -82,18 +84,19 @@ export interface CountyLinkProps {
   validation: Map<keyof AdminIssueStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function CountyLink(props: CountyLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const countySortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const countySortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const countyColumns: GridColDef<AdminCountyStored>[] = [
     {
@@ -104,6 +107,7 @@ export function CountyLink(props: CountyLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -136,13 +140,18 @@ export function CountyLink(props: CountyLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewOtherAreaAreaCounty"
       label={t('admin.IssueView.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '']}
-      value={ownerData.county}
+      ownerData={ownerData}
       error={!!validation.get('county')}
       helperText={validation.get('county')}
       icon={<MdiIcon path="map" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewCountyAction(ownerData, ownerData?.county!)}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(county) => {
+        storeDiff('county', county);
+      }}
+      onView={async () => linkViewCountyAction(ownerData, ownerData?.county!, () => fetchOwnerData())}
       onUnset={async () => {
         storeDiff('county', null);
       }}
@@ -150,17 +159,34 @@ export function CountyLink(props: CountyLinkProps) {
         const res = await openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCounty',
           columns: countyColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminIssueServiceImpl.getRangeForCounty(ownerData, processQueryCustomizer(queryCustomizer)),
+            await adminIssueServiceForClassImpl.getRangeForCounty(ownerData, processQueryCustomizer(queryCustomizer)),
           single: true,
           alreadySelectedItems: ownerData.county?.__identifier as GridRowId,
           filterOptions: countyRangeFilterOptions,
           initialQueryCustomizer: countyInitialQueryCustomizer,
+          editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('county', res as AdminCountyStored);
+        storeDiff('county', res.value as AdminCountyStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminCountyQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminIssueServiceForClassImpl.getRangeForCounty(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
     />
   );

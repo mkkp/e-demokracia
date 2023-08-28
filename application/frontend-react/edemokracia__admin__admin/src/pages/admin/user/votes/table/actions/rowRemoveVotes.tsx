@@ -18,7 +18,7 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowRemoveVotesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -38,7 +38,7 @@ export const useRowRemoveVotesAction: RowRemoveVotesAction = () => {
     successCallback: () => void,
   ) {
     try {
-      await adminUserServiceImpl.removeVotes(
+      await adminUserServiceForClassImpl.removeVotes(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminUser>,
         [selected],
       );

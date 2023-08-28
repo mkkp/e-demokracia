@@ -12,12 +12,14 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { AdminIssueType, AdminIssueTypeQueryCustomizer, AdminIssueTypeStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminAdminIssueTypesView } from '~/routes';
 
 export const ROW_VIEW_ISSUE_TYPES_ACTION_INTERFACE_KEY = 'RowViewIssueTypesAction';
-export type RowViewIssueTypesAction = () => (entry: AdminIssueTypeStored) => Promise<void>;
+export type RowViewIssueTypesAction = () => (entry: AdminIssueTypeStored, successCallback: () => void) => Promise<void>;
 
 export const useRowViewIssueTypesAction: RowViewIssueTypesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewIssueTypesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_ISSUE_TYPES_ACTION_INTERFACE_KEY})`,
@@ -28,7 +30,8 @@ export const useRowViewIssueTypesAction: RowViewIssueTypesAction = () => {
     return customNavigation;
   }
 
-  return async function (entry: AdminIssueTypeStored) {
+  return async function (entry: AdminIssueTypeStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminAdminIssueTypesView(entry.__signedIdentifier));
   };
 };

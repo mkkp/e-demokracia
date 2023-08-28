@@ -80,7 +80,7 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <PandinoProvider ctx={pandino.getBundleContext()}>
-          <L10NProvider>
+          <L10NProvider axios={axios}>
             <AuthProvider {...oidcConfig}>
               <Auth>
                 <RouterProvider router={router} />

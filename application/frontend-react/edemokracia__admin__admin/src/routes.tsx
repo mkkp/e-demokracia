@@ -7,7 +7,8 @@
 // Template file: actor/src/routes.tsx.hbs
 
 import { Navigate, Route } from 'react-router-dom';
-import { lazy, ReactElement, Suspense } from 'react';
+import type { ReactElement } from 'react';
+import { lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
 

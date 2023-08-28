@@ -18,15 +18,18 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminUserActivityCountiesView } from '~/routes';
 
 export const ROW_VIEW_ACTIVITY_COUNTIES_ACTION_INTERFACE_KEY = 'RowViewActivityCountiesAction';
 export type RowViewActivityCountiesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
   entry: AdminCountyStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewActivityCountiesAction: RowViewActivityCountiesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewActivityCountiesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_ACTIVITY_COUNTIES_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useRowViewActivityCountiesAction: RowViewActivityCountiesAction = (
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCountyStored) {
+  return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCountyStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminUserActivityCountiesView(entry.__signedIdentifier));
   };
 };

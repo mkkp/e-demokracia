@@ -18,15 +18,18 @@ import type {
   AdminSimpleVoteStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminConVotesView } from '~/routes';
 
 export const ROW_VIEW_VOTES_ACTION_INTERFACE_KEY = 'RowViewVotesAction';
 export type RowViewVotesAction = () => (
   owner: JudoIdentifiable<AdminCon>,
   entry: AdminSimpleVoteStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewVotesAction: RowViewVotesAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewVotesAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_VOTES_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useRowViewVotesAction: RowViewVotesAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminCon>, entry: AdminSimpleVoteStored) {
+  return async function (owner: JudoIdentifiable<AdminCon>, entry: AdminSimpleVoteStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminConVotesView(entry.__signedIdentifier));
   };
 };

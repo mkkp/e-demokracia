@@ -6,7 +6,7 @@
 // Template name: judoAxiosProvider.ts.hbs
 // Template file: data-axios/judoAxiosProvider.ts.hbs
 
-import { AxiosInstance } from 'axios';
+import type { AxiosInstance } from 'axios';
 import { AxiosProvider, JudoAxiosProviderInitData } from './AxiosProvider';
 
 export class JudoAxiosProvider implements AxiosProvider {

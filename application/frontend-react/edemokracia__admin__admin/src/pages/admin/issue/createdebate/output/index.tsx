@@ -10,21 +10,24 @@
 // Page DataElement name: output
 // Page DataElement owner name: createDebate
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -37,11 +40,13 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import { Debate, DebateQueryCustomizer, DebateStored, EdemokraciaDebateStatus } from '~/generated/data-api';
-import { debateServiceImpl } from '~/generated/data-axios';
+import { debateServiceForClassImpl } from '~/generated/data-axios';
 
 import {} from './actions';
 
@@ -66,6 +71,7 @@ export default function AdminIssueCreatedebateOutput() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<DebateStored>({} as unknown as DebateStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof DebateStored, any>>(
     {} as unknown as Record<keyof DebateStored, any>,
@@ -119,7 +125,7 @@ export default function AdminIssueCreatedebateOutput() {
     setIsLoading(true);
 
     try {
-      const res = await debateServiceImpl.refresh(
+      const res = await debateServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<Debate>,
         processQueryCustomizer(queryCustomizer),
       );
@@ -135,6 +141,7 @@ export default function AdminIssueCreatedebateOutput() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -158,18 +165,18 @@ export default function AdminIssueCreatedebateOutput() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="operation-output-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          ></Grid>
-        </Box>
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="operation-output-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            ></Grid>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

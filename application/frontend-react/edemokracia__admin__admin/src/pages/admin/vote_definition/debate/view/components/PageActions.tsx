@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { MdiIcon, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import {
   AdminComment,
   AdminCommentQueryCustomizer,
@@ -41,6 +42,7 @@ export function PageActions(props: PageActionsProps) {
   const { data, editMode, setEditMode, isLoading, fetchData } = props;
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
+  const { openConfirmDialog } = useConfirmDialog();
 
   const pageRefreshDebateAction = usePageRefreshDebateAction();
 

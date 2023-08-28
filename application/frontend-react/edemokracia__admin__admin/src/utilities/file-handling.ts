@@ -7,7 +7,7 @@
 // Template file: actor/src/utilities/file-handling.ts.hbs
 
 import jwt_decode from 'jwt-decode';
-import { JudoStored, QueryCustomizer } from '@judo/data-api-common';
+import type { JudoStored, QueryCustomizer } from '@judo/data-api-common';
 import { accessServiceImpl } from '../generated/data-axios';
 
 export type FileHandlingHook = () => {

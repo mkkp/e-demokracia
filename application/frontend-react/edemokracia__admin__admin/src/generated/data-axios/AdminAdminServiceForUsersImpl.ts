@@ -7,8 +7,8 @@
 // Template file: data-axios/AccessRelationServiceImpl.ts.hbs
 
 import { JudoAxiosService } from './JudoAxiosService';
-import { AdminUserStored, AdminUserQueryCustomizer, AdminUser } from '../data-api';
-import { AdminAdminServiceForUsers } from '../data-service';
+import type { AdminUserStored, AdminUserQueryCustomizer, AdminUser } from '../data-api';
+import type { AdminAdminServiceForUsers } from '../data-service';
 
 /**
  * Access Relation Service Implementation for AdminAdmin.users

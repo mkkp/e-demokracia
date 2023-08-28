@@ -7,6 +7,7 @@
 // Template file: actor/src/theme/palette.ts.hbs
 
 import { createTheme } from '@mui/material';
+// You can add extra imports by overriding the `actor/src/theme/palette.ts.extra-imports.fragment.hbs` file
 
 export const paletteTheme = createTheme({
   palette: {
@@ -25,7 +26,9 @@ export const paletteTheme = createTheme({
       default: '#FAFAFAFF',
     },
     subtitleColor: {
-      main: '#8c8c8c',
+      main: '#8C8C8C',
     },
+    // You can add extra palette attributes by overriding the `actor/src/theme/palette.ts.extra-palette-attributes.fragment.hbs` file
   },
+  // You can add extra theme attributes by overriding the `actor/src/theme/palette.ts.extra-attributes.fragment.hbs` file
 });

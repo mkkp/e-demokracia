@@ -13,15 +13,24 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 
 /**
  * 
+ * 
+ * this.comments  += new edemokracia::Comment(
+ * 		comment = input.comment,
+ * 		created = edemokracia::types::Timestamp!now(),
+ * 		createdBy = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any()
+ * );
+ * 
+ * 
  * Usage:
  *  1. Rename this file from CreateCommentCustomImplementation.java.default to CreateCommentCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of CreateCommentCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.con.CreateComment.class)
 public class CreateCommentCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.con.CreateComment {
 
-    public void createComment(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.con.Con _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createcommentinput.CreateCommentInput input)  {
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.con.Con _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createcommentinput.CreateCommentInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.con.CreateCommentExchangeFunctionsComponent");
     }
 

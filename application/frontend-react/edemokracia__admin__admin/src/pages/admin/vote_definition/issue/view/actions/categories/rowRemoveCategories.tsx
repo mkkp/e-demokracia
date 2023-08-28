@@ -18,7 +18,7 @@ import {
   AdminIssueCategoryStored,
   AdminIssueStored,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowRemoveCategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
@@ -38,7 +38,7 @@ export const useRowRemoveCategoriesAction: RowRemoveCategoriesAction = () => {
     successCallback: () => void,
   ) {
     try {
-      await adminIssueServiceImpl.removeCategories(
+      await adminIssueServiceForClassImpl.removeCategories(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminIssue>,
         [selected],
       );

@@ -13,15 +13,32 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 
 /**
  * 
+ * 
+ * 
+ * var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any();
+ * 
+ * var edemokracia::Debate debate = new edemokracia::Debate(
+ * 	title = input.title, 
+ * 	description = input.description,
+ * 	closeAt = input.closeAt,
+ * 	createdBy = user,
+ * 	status = edemokracia::DebateStatus#CREATED
+ * );
+ * 
+ * this.debates += debate;
+ * return debate;
+ * 
+ * 
  * Usage:
  *  1. Rename this file from CreateDebateCustomImplementation.java.default to CreateDebateCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of CreateDebateCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.CreateDebate.class)
 public class CreateDebateCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.CreateDebate {
 
-    public party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.debate.Debate createDebate(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createdebateinput.CreateDebateInput input)  {
+    public party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.debate.Debate apply(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createdebateinput.CreateDebateInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.issue.CreateDebateExchangeFunctionsComponent");
     }
 

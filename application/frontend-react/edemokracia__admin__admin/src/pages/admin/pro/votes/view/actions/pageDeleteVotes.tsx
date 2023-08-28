@@ -21,7 +21,7 @@ import {
   AdminSimpleVoteQueryCustomizer,
   AdminSimpleVoteStored,
 } from '~/generated/data-api';
-import { adminProServiceForVotesImpl, adminSimpleVoteServiceImpl } from '~/generated/data-axios';
+import { adminProServiceForVotesImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteVotesAction = () => (
   owner: JudoIdentifiable<AdminPro>,
@@ -52,7 +52,7 @@ export const usePageDeleteVotesAction: PageDeleteVotesAction = () => {
       );
 
       if (confirmed) {
-        await adminSimpleVoteServiceImpl.delete(selected);
+        await adminSimpleVoteServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

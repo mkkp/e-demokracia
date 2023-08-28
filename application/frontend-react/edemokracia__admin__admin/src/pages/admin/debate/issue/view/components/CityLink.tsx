@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -73,8 +74,9 @@ import {
   AdminUserStored,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl, adminCityServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl, adminCityServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewCityAction } from '../actions';
 
@@ -84,18 +86,19 @@ export interface CityLinkProps {
   validation: Map<keyof AdminIssueStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function CityLink(props: CityLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const citySortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const citySortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const cityColumns: GridColDef<AdminCityStored>[] = [
     {
@@ -106,6 +109,7 @@ export function CityLink(props: CityLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -138,13 +142,18 @@ export function CityLink(props: CityLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewOtherAreaAreaCity"
       label={t('admin.IssueView.city', { defaultValue: 'City' }) as string}
       labelList={[ownerData.city?.representation?.toString() ?? '']}
-      value={ownerData.city}
+      ownerData={ownerData}
       error={!!validation.get('city')}
       helperText={validation.get('city')}
       icon={<MdiIcon path="city" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewCityAction(ownerData, ownerData?.city!)}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(city) => {
+        storeDiff('city', city);
+      }}
+      onView={async () => linkViewCityAction(ownerData, ownerData?.city!, () => fetchOwnerData())}
       onUnset={async () => {
         storeDiff('city', null);
       }}
@@ -152,17 +161,31 @@ export function CityLink(props: CityLinkProps) {
         const res = await openRangeDialog<AdminCityStored, AdminCityQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCity',
           columns: cityColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminIssueServiceImpl.getRangeForCity(ownerData, processQueryCustomizer(queryCustomizer)),
+            await adminIssueServiceForClassImpl.getRangeForCity(ownerData, processQueryCustomizer(queryCustomizer)),
           single: true,
           alreadySelectedItems: ownerData.city?.__identifier as GridRowId,
           filterOptions: cityRangeFilterOptions,
           initialQueryCustomizer: cityInitialQueryCustomizer,
+          editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('city', res as AdminCityStored);
+        storeDiff('city', res.value as AdminCityStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminCityQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminIssueServiceForClassImpl.getRangeForCity(ownerData, processQueryCustomizer(queryCustomizer));
       }}
     />
   );

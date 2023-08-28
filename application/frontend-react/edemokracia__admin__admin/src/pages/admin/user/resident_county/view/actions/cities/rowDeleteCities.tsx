@@ -21,7 +21,7 @@ import {
   AdminCounty,
   AdminCountyStored,
 } from '~/generated/data-api';
-import { adminCountyServiceForCitiesImpl, adminCityServiceImpl } from '~/generated/data-axios';
+import { adminCountyServiceForCitiesImpl, adminCityServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteCitiesAction = () => (
   owner: JudoIdentifiable<AdminCounty>,
@@ -52,7 +52,7 @@ export const useRowDeleteCitiesAction: RowDeleteCitiesAction = () => {
       );
 
       if (confirmed) {
-        await adminCityServiceImpl.delete(selected);
+        await adminCityServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -71,8 +72,9 @@ import {
   AdminUserStored,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl, adminIssueTypeServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl, adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewIssueTypeAction } from '../actions';
 
@@ -82,18 +84,19 @@ export interface IssueTypeLinkProps {
   validation: Map<keyof AdminIssueStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function IssueTypeLink(props: IssueTypeLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const issueTypeSortModel: GridSortModel = [{ field: 'title', sort: 'asc' }];
+  const issueTypeSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
   const issueTypeColumns: GridColDef<AdminIssueTypeStored>[] = [
     {
@@ -104,6 +107,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -113,6 +117,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -152,13 +157,18 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewIssueLabelWrapperIssueIssueType"
       label={t('admin.IssueView.issueType', { defaultValue: 'Issue Type' }) as string}
       labelList={[ownerData.issueType?.title?.toString() ?? '', ownerData.issueType?.description?.toString() ?? '']}
-      value={ownerData.issueType}
+      ownerData={ownerData}
       error={!!validation.get('issueType')}
       helperText={validation.get('issueType')}
       icon={<MdiIcon path="folder-open" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewIssueTypeAction(ownerData, ownerData?.issueType!)}
+      autoCompleteAttribute={'title'}
+      onAutoCompleteSelect={(issueType) => {
+        storeDiff('issueType', issueType);
+      }}
+      onView={async () => linkViewIssueTypeAction(ownerData, ownerData?.issueType!, () => fetchOwnerData())}
       onUnset={async () => {
         storeDiff('issueType', null);
       }}
@@ -166,17 +176,37 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
         const res = await openRangeDialog<AdminIssueTypeStored, AdminIssueTypeQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueIssueType',
           columns: issueTypeColumns,
-          defaultSortField: ([{ field: 'title', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'title', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminIssueServiceImpl.getRangeForIssueType(ownerData, processQueryCustomizer(queryCustomizer)),
+            await adminIssueServiceForClassImpl.getRangeForIssueType(
+              ownerData,
+              processQueryCustomizer(queryCustomizer),
+            ),
           single: true,
           alreadySelectedItems: ownerData.issueType?.__identifier as GridRowId,
           filterOptions: issueTypeRangeFilterOptions,
           initialQueryCustomizer: issueTypeInitialQueryCustomizer,
+          editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('issueType', res as AdminIssueTypeStored);
+        storeDiff('issueType', res.value as AdminIssueTypeStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminIssueTypeQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                title: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{title,description}',
+          _orderBy: [{ attribute: 'title', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminIssueServiceForClassImpl.getRangeForIssueType(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
     />
   );

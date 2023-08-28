@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -39,7 +40,7 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type TableAddActivityCountiesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -69,6 +70,7 @@ export const useTableAddActivityCountiesAction: TableAddActivityCountiesAction =
 
         width: 230,
         type: 'string',
+        filterable: false && true,
       },
     ];
 
@@ -81,7 +83,7 @@ export const useTableAddActivityCountiesAction: TableAddActivityCountiesAction =
       },
     ];
 
-    const sortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+    const sortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
     const initialQueryCustomizer: AdminCountyQueryCustomizer = {
       _mask: '{representation}',
@@ -100,7 +102,7 @@ export const useTableAddActivityCountiesAction: TableAddActivityCountiesAction =
       columns,
       defaultSortField: sortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityCounties(owner, processQueryCustomizer(queryCustomizer)),
+        await adminUserServiceForClassImpl.getRangeForActivityCounties(owner, processQueryCustomizer(queryCustomizer)),
       single: false,
       alreadySelectedItems: '',
       filterOptions,
@@ -110,9 +112,9 @@ export const useTableAddActivityCountiesAction: TableAddActivityCountiesAction =
     if (res === undefined) return;
 
     try {
-      await adminUserServiceImpl.addActivityCounties(
+      await adminUserServiceForClassImpl.addActivityCounties(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminCountyStored>,
-        res as Array<AdminCountyStored>,
+        res.value as Array<AdminCountyStored>,
       );
 
       successCallback();

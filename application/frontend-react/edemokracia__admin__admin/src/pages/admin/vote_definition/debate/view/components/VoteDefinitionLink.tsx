@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -61,8 +62,9 @@ import {
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminDebateServiceImpl, adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
+import { adminDebateServiceForClassImpl, adminVoteDefinitionServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewVoteDefinitionAction } from '../actions';
 
@@ -72,18 +74,19 @@ export interface VoteDefinitionLinkProps {
   validation: Map<keyof AdminDebateStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function VoteDefinitionLink(props: VoteDefinitionLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const voteDefinitionSortModel: GridSortModel = [{ field: 'title', sort: 'asc' }];
+  const voteDefinitionSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
   const linkViewVoteDefinitionAction = useLinkViewVoteDefinitionAction();
 
@@ -98,13 +101,18 @@ export function VoteDefinitionLink(props: VoteDefinitionLinkProps) {
         ownerData.voteDefinition?.status?.toString() ?? '',
         ownerData.voteDefinition?.closeAt?.toString() ?? '',
       ]}
-      value={ownerData.voteDefinition}
+      ownerData={ownerData}
       error={!!validation.get('voteDefinition')}
       helperText={validation.get('voteDefinition')}
       icon={<MdiIcon path="table_rows" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewVoteDefinitionAction(ownerData, ownerData?.voteDefinition!)}
+      autoCompleteAttribute={'title'}
+      onAutoCompleteSelect={(voteDefinition) => {
+        storeDiff('voteDefinition', voteDefinition);
+      }}
+      onView={async () => linkViewVoteDefinitionAction(ownerData, ownerData?.voteDefinition!, () => fetchOwnerData())}
     />
   );
 }

@@ -16,12 +16,17 @@ import type {
   AdminVoteDefinitionStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminAdminVoteDefinitionsView } from '~/routes';
 
 export const ROW_VIEW_VOTE_DEFINITIONS_ACTION_INTERFACE_KEY = 'RowViewVoteDefinitionsAction';
-export type RowViewVoteDefinitionsAction = () => (entry: AdminVoteDefinitionStored) => Promise<void>;
+export type RowViewVoteDefinitionsAction = () => (
+  entry: AdminVoteDefinitionStored,
+  successCallback: () => void,
+) => Promise<void>;
 
 export const useRowViewVoteDefinitionsAction: RowViewVoteDefinitionsAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewVoteDefinitionsAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_VOTE_DEFINITIONS_ACTION_INTERFACE_KEY})`,
@@ -32,7 +37,8 @@ export const useRowViewVoteDefinitionsAction: RowViewVoteDefinitionsAction = () 
     return customNavigation;
   }
 
-  return async function (entry: AdminVoteDefinitionStored) {
+  return async function (entry: AdminVoteDefinitionStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminAdminVoteDefinitionsView(entry.__signedIdentifier));
   };
 };

@@ -21,7 +21,7 @@ import {
   AdminDebateQueryCustomizer,
   AdminDebateStored,
 } from '~/generated/data-api';
-import { adminDashboardServiceForDebatesImpl, adminDebateServiceImpl } from '~/generated/data-axios';
+import { adminDashboardServiceForDebatesImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteDebatesAction = () => (
   owner: JudoIdentifiable<AdminDashboard>,
@@ -52,7 +52,7 @@ export const useRowDeleteDebatesAction: RowDeleteDebatesAction = () => {
       );
 
       if (confirmed) {
-        await adminDebateServiceImpl.delete(selected);
+        await adminDebateServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

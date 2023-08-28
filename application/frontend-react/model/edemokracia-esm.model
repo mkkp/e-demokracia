@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" version="1.0.0.20230609_174926_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230605_225702_34faa4b8_develop" version="1.0.0.20230828_145646_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_7D8NwWkNEe25ONJ3V89cVA" name="types">
     <elements xsi:type="type:StringType" xmi:id="_7D8NwmkNEe25ONJ3V89cVA" name="String" maxLength="255"/>
     <elements xsi:type="type:NumericType" xmi:id="_7D8Nw2kNEe25ONJ3V89cVA" name="Long" precision="18"/>
@@ -1555,17 +1555,17 @@
           <components xsi:type="ui:DataField" xmi:id="_T5jY0I4jEe29qs15q2b6yw" name="description" label="Description" iconName="text_fields" col="12" row="4" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ" textMultiLine="true"/>
         </components>
         <components xsi:type="ui:TabBar" xmi:id="_i6xVQI4jEe29qs15q2b6yw" name="tabBar" col="12">
-          <tabs xmi:id="_kxgNYI4jEe29qs15q2b6yw" name="yesnovote" label="Yes / No vote" enabledBy="_nvFY0I4jEe29qs15q2b6yw" col="12" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T6ChAI4jEe29qs15q2b6yw" name="voteYesNo" label="Vote" iconName="chevron_right" enabledBy="_nvFY0I4jEe29qs15q2b6yw" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw" operation="voteYesNo"/>
+          <tabs xmi:id="_kxgNYI4jEe29qs15q2b6yw" name="yesnovote" label="Yes / No vote" col="12" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw" enabledBy="_nvFY0I4jEe29qs15q2b6yw">
+            <components xsi:type="ui:OperationForm" xmi:id="_T6ChAI4jEe29qs15q2b6yw" name="voteYesNo" label="Vote" iconName="chevron_right" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw" enabledBy="_nvFY0I4jEe29qs15q2b6yw" operation="voteYesNo"/>
           </tabs>
-          <tabs xmi:id="_z_MfkI4jEe29qs15q2b6yw" name="yesnoabstainvote" label="Yes / No / Abstain vote" enabledBy="_nu-rII4jEe29qs15q2b6yw" col="12" hiddenBy="_DT-e8I4pEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T6DvII4jEe29qs15q2b6yw" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" enabledBy="_nu-rII4jEe29qs15q2b6yw" hiddenBy="_DT-e8I4pEe29qs15q2b6yw" operation="voteYesNoAbstain"/>
+          <tabs xmi:id="_z_MfkI4jEe29qs15q2b6yw" name="yesnoabstainvote" label="Yes / No / Abstain vote" col="12" hiddenBy="_DT-e8I4pEe29qs15q2b6yw" enabledBy="_nu-rII4jEe29qs15q2b6yw">
+            <components xsi:type="ui:OperationForm" xmi:id="_T6DvII4jEe29qs15q2b6yw" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" hiddenBy="_DT-e8I4pEe29qs15q2b6yw" enabledBy="_nu-rII4jEe29qs15q2b6yw" operation="voteYesNoAbstain"/>
           </tabs>
-          <tabs xmi:id="_1tyvYI4jEe29qs15q2b6yw" name="selectanswervote" label="Select answer vote" enabledBy="_nu2vUI4jEe29qs15q2b6yw" col="12" hiddenBy="_zbgxcI4oEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T6Ar0I4jEe29qs15q2b6yw" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" enabledBy="_nu2vUI4jEe29qs15q2b6yw" hiddenBy="_zbgxcI4oEe29qs15q2b6yw" operation="voteSelectAnswer"/>
+          <tabs xmi:id="_1tyvYI4jEe29qs15q2b6yw" name="selectanswervote" label="Select answer vote" col="12" hiddenBy="_zbgxcI4oEe29qs15q2b6yw" enabledBy="_nu2vUI4jEe29qs15q2b6yw">
+            <components xsi:type="ui:OperationForm" xmi:id="_T6Ar0I4jEe29qs15q2b6yw" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" hiddenBy="_zbgxcI4oEe29qs15q2b6yw" enabledBy="_nu2vUI4jEe29qs15q2b6yw" operation="voteSelectAnswer"/>
           </tabs>
-          <tabs xmi:id="_31NH0I4jEe29qs15q2b6yw" name="ratingvote" label="Rating vote" enabledBy="_nuvakI4jEe29qs15q2b6yw" col="12" hiddenBy="_maoVEI4oEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T5_dsI4jEe29qs15q2b6yw" name="voteRating" label="VoteRating" iconName="chevron_right" enabledBy="_nuvakI4jEe29qs15q2b6yw" hiddenBy="_maoVEI4oEe29qs15q2b6yw" operation="voteRating"/>
+          <tabs xmi:id="_31NH0I4jEe29qs15q2b6yw" name="ratingvote" label="Rating vote" col="12" hiddenBy="_maoVEI4oEe29qs15q2b6yw" enabledBy="_nuvakI4jEe29qs15q2b6yw">
+            <components xsi:type="ui:OperationForm" xmi:id="_T5_dsI4jEe29qs15q2b6yw" name="voteRating" label="VoteRating" iconName="chevron_right" hiddenBy="_maoVEI4oEe29qs15q2b6yw" enabledBy="_nuvakI4jEe29qs15q2b6yw" operation="voteRating"/>
           </tabs>
         </components>
       </view>

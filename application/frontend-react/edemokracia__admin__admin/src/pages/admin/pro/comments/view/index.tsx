@@ -10,22 +10,25 @@
 // Page DataElement name: comments
 // Page DataElement owner name: edemokracia::admin::Pro
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -38,8 +41,10 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import {
   AdminComment,
@@ -51,7 +56,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminProServiceImpl, adminCommentServiceImpl } from '~/generated/data-axios';
+import { adminProServiceForClassImpl, adminCommentServiceForClassImpl } from '~/generated/data-axios';
 
 import { useAdminCommentVoteUpAction, useAdminCommentVoteDownAction, useButtonNavigateVotesAction } from './actions';
 
@@ -78,6 +83,7 @@ export default function AdminProCommentsView() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<AdminCommentStored>({} as unknown as AdminCommentStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCommentStored, any>>(
     {} as unknown as Record<keyof AdminCommentStored, any>,
@@ -135,7 +141,7 @@ export default function AdminProCommentsView() {
     setIsLoading(true);
 
     try {
-      const res = await adminCommentServiceImpl.refresh(
+      const res = await adminCommentServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminComment>,
         processQueryCustomizer(queryCustomizer),
       );
@@ -151,6 +157,7 @@ export default function AdminProCommentsView() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -174,218 +181,255 @@ export default function AdminProCommentsView() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="relation-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupLabel"
-                          variant="h6"
-                          component="h1"
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="relation-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={12} sm={12}>
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapper">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupLabel"
+                            variant="h6"
+                            component="h1"
+                          >
+                            {t('admin.CommentView.group.Label', { defaultValue: 'Comment' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroup"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
                         >
-                          {t('admin.CommentView.group.Label', { defaultValue: 'Comment' })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroup"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <DateTimePicker
-                            ampm={false}
-                            ampmInClock={false}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            slotProps={{
-                              textField: {
-                                id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupCreated',
-                                helperText: validation.get('created'),
-                                error: !!validation.get('created'),
-                                InputProps: {
-                                  startAdornment: (
-                                    <InputAdornment position="start">
-                                      <MdiIcon path="schedule" />
-                                    </InputAdornment>
-                                  ),
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <DateTimePicker
+                              ampm={false}
+                              ampmInClock={false}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
+                              })}
+                              slotProps={{
+                                textField: {
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupCreated',
+                                  required: false,
+                                  helperText: validation.get('created'),
+                                  error: !!validation.get('created'),
+                                  InputProps: {
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <MdiIcon path="schedule" />
+                                      </InputAdornment>
+                                    ),
+                                  },
                                 },
-                              },
-                            }}
-                            onError={(newError: DateTimeValidationError, value: any) => {
-                              // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                              setValidation((prevValidation) => {
-                                const copy = new Map<keyof AdminComment, string>(prevValidation);
-                                copy.set(
-                                  'created',
-                                  newError === 'invalidDate'
-                                    ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                        defaultValue: 'Value does not match the pattern requirements.',
-                                      }) as string)
-                                    : '',
-                                );
-                                return copy;
-                              });
-                            }}
-                            views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                            label={t('admin.CommentView.created', { defaultValue: 'Created' }) as string}
-                            value={serviceDateToUiDate(data.created ?? null)}
-                            disabled={true || !isFormUpdateable()}
-                            onChange={(newValue: Date) => {
-                              storeDiff('created', newValue);
-                            }}
-                          />
-                        </Grid>
+                              }}
+                              onError={(newError: DateTimeValidationError, value: any) => {
+                                // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                                setValidation((prevValidation) => {
+                                  const copy = new Map<keyof AdminComment, string>(prevValidation);
+                                  copy.set(
+                                    'created',
+                                    newError === 'invalidDate'
+                                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                          defaultValue: 'Value does not match the pattern requirements.',
+                                        }) as string)
+                                      : '',
+                                  );
+                                  return copy;
+                                });
+                              }}
+                              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                              label={t('admin.CommentView.created', { defaultValue: 'Created' }) as string}
+                              value={serviceDateToUiDate(data.created ?? null)}
+                              readOnly={true || !isFormUpdateable()}
+                              disabled={isLoading}
+                              onChange={(newValue: Date) => {
+                                storeDiff('created', newValue);
+                              }}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <CreatedByLink
-                            ownerData={data}
-                            disabled={true || !isFormUpdateable()}
-                            editMode={editMode}
-                            fetchOwnerData={fetchData}
-                            storeDiff={storeDiff}
-                            validation={validation}
-                          />
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <CreatedByLink
+                              ownerData={data}
+                              readOnly={true || !isFormUpdateable()}
+                              disabled={isLoading}
+                              editMode={editMode}
+                              fetchOwnerData={fetchData}
+                              storeDiff={storeDiff}
+                              validation={validation}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12}>
-                          <TextField
-                            required
-                            name="comment"
-                            id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupComment"
-                            label={t('admin.CommentView.comment', { defaultValue: 'Comment' }) as string}
-                            value={data.comment}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={false || !isFormUpdateable()}
-                            multiline
-                            minRows={4.0}
-                            error={!!validation.get('comment')}
-                            helperText={validation.get('comment')}
-                            onChange={(event) => {
-                              storeDiff('comment', event.target.value);
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <MdiIcon path="text_fields" />
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
-                        </Grid>
+                          <Grid item xs={12} sm={12}>
+                            <TextField
+                              required={true}
+                              name="comment"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupComment"
+                              label={t('admin.CommentView.comment', { defaultValue: 'Comment' }) as string}
+                              value={data.comment ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              disabled={isLoading}
+                              multiline
+                              minRows={4.0}
+                              error={!!validation.get('comment')}
+                              helperText={validation.get('comment')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('comment', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="text_fields" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteUpButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="thumb-up" />}
-                            loadingPosition="start"
-                            onClick={() => adminCommentVoteUpAction(data, () => fetchData())}
-                            disabled={editMode}
-                          >
-                            <span>{t('admin.CommentView.voteUp.ButtonCallOperation', { defaultValue: '' })}</span>
-                          </LoadingButton>
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteUpButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="thumb-up" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminCommentVoteUpAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={editMode}
+                            >
+                              <span>{t('admin.CommentView.voteUp.ButtonCallOperation', { defaultValue: '' })}</span>
+                            </LoadingButton>
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <TextField
-                            name="upVotes"
-                            id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupUpVotes"
-                            label={t('admin.CommentView.upVotes', { defaultValue: '' }) as string}
-                            type="number"
-                            value={data.upVotes}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={true || !isFormUpdateable()}
-                            error={!!validation.get('upVotes')}
-                            helperText={validation.get('upVotes')}
-                            onChange={(event) => {
-                              storeDiff('upVotes', Number(event.target.value));
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{}}
-                          />
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <NumericInput
+                              required={false}
+                              name="upVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupUpVotes"
+                              label={t('admin.CommentView.upVotes', { defaultValue: '' }) as string}
+                              customInput={TextField}
+                              value={data.upVotes ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('upVotes')}
+                              helperText={validation.get('upVotes')}
+                              onValueChange={(values, sourceInfo) => {
+                                storeDiff('upVotes', values.floatValue === undefined ? null : values.floatValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: true || !isFormUpdateable(),
+                              }}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <Grid container sx={{ height: dividerHeight }}></Grid>
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <Grid container sx={{ height: dividerHeight }}></Grid>
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteDownButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="thumb-down" />}
-                            loadingPosition="start"
-                            onClick={() => adminCommentVoteDownAction(data, () => fetchData())}
-                            disabled={editMode}
-                          >
-                            <span>{t('admin.CommentView.voteDown.ButtonCallOperation', { defaultValue: '' })}</span>
-                          </LoadingButton>
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVoteDownButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="thumb-down" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminCommentVoteDownAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={editMode}
+                            >
+                              <span>{t('admin.CommentView.voteDown.ButtonCallOperation', { defaultValue: '' })}</span>
+                            </LoadingButton>
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <TextField
-                            name="downVotes"
-                            id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupDownVotes"
-                            label={t('admin.CommentView.downVotes', { defaultValue: '' }) as string}
-                            type="number"
-                            value={data.downVotes}
-                            className={!editMode ? 'JUDO-viewMode' : undefined}
-                            disabled={true || !isFormUpdateable()}
-                            error={!!validation.get('downVotes')}
-                            helperText={validation.get('downVotes')}
-                            onChange={(event) => {
-                              storeDiff('downVotes', Number(event.target.value));
-                            }}
-                            InputLabelProps={{ shrink: true }}
-                            InputProps={{}}
-                          />
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <NumericInput
+                              required={false}
+                              name="downVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProCommentsViewDefaultCommentViewGroupLabelWrapperGroupDownVotes"
+                              label={t('admin.CommentView.downVotes', { defaultValue: '' }) as string}
+                              customInput={TextField}
+                              value={data.downVotes ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('downVotes')}
+                              helperText={validation.get('downVotes')}
+                              onValueChange={(values, sourceInfo) => {
+                                storeDiff('downVotes', values.floatValue === undefined ? null : values.floatValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: true || !isFormUpdateable(),
+                              }}
+                            />
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={1.0}>
-                          <Grid container sx={{ height: dividerHeight }}></Grid>
-                        </Grid>
+                          <Grid item xs={12} sm={12} md={1.0}>
+                            <Grid container sx={{ height: dividerHeight }}></Grid>
+                          </Grid>
 
-                        <Grid item xs={12} sm={12} md={2.0}>
-                          <CollectionAssociationButton
-                            id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVotesButtonNavigate"
-                            variant={undefined}
-                            editMode={editMode}
-                            navigateAction={() => buttonNavigateVotesAction(data)}
-                          >
-                            {t('admin.CommentView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
-                            <MdiIcon path="arrow-right" />
-                          </CollectionAssociationButton>
+                          <Grid item xs={12} sm={12} md={2.0}>
+                            <CollectionAssociationButton
+                              id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminProCommentsViewEdemokraciaAdminAdminEdemokraciaAdminCommentVotesButtonNavigate"
+                              variant={undefined}
+                              editMode={editMode}
+                              navigateAction={() => buttonNavigateVotesAction(data)}
+                            >
+                              {t('admin.CommentView.votes.ButtonNavigate', { defaultValue: 'Votes' })}
+                              <MdiIcon path="arrow-right" />
+                            </CollectionAssociationButton>
+                          </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

@@ -16,6 +16,7 @@ export interface TrinaryLogicProps {
   autoFocus?: boolean;
   readOnly?: boolean;
   disabled?: boolean;
+  required?: boolean;
   editMode?: boolean;
   value?: boolean | null;
   id?: string;

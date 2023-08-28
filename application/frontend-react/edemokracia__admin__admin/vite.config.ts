@@ -1,9 +1,13 @@
 import path from 'node:path';
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import rollupPluginEsmer from './rollup/rollup-plugin-esmer.js';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
+  define: {
+    "process.env.NODE_ENV": mode === 'reckless' ? `"production"` : `"${mode}"`, // treat reckless as production
+  },
   base: '',
   resolve: {
     alias: [
@@ -13,18 +17,18 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks: mode !== 'reckless' ? {
           '@mui/material': ['@mui/material'],
           '@mui/x-data-grid': ['@mui/x-data-grid'],
           '@mui/x-date-pickers': ['@mui/x-date-pickers'],
-          'axios': ['axios'],
-          'oidc-client-ts': ['oidc-client-ts'],
-          'uuid': ['uuid'],
-        },
-      },
+      } : {},
+    },
     },
   },
   plugins: [
-      react(),
+    rollupPluginEsmer({
+      enabled: mode === 'reckless',
+    }),
+    react(),
   ],
-});
+}));

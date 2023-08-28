@@ -18,15 +18,18 @@ import type {
   AdminUserStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminUserResidentDistrictView } from '~/routes';
 
 export const LINK_VIEW_RESIDENT_DISTRICT_ACTION_INTERFACE_KEY = 'LinkViewResidentDistrictAction';
 export type LinkViewResidentDistrictAction = () => (
   owner: JudoIdentifiable<AdminUser>,
   entry: AdminDistrictStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useLinkViewResidentDistrictAction: LinkViewResidentDistrictAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<LinkViewResidentDistrictAction>(
     `(${OBJECTCLASS}=${LINK_VIEW_RESIDENT_DISTRICT_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useLinkViewResidentDistrictAction: LinkViewResidentDistrictAction =
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminDistrictStored) {
+  return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminDistrictStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminUserResidentDistrictView(entry.__signedIdentifier));
   };
 };

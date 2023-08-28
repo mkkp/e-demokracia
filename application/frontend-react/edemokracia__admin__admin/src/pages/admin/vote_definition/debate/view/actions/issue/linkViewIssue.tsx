@@ -18,15 +18,18 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminDebateIssueView } from '~/routes';
 
 export const LINK_VIEW_ISSUE_ACTION_INTERFACE_KEY = 'LinkViewIssueAction';
 export type LinkViewIssueAction = () => (
   owner: JudoIdentifiable<AdminDebate>,
   entry: AdminIssueStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useLinkViewIssueAction: LinkViewIssueAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<LinkViewIssueAction>(
     `(${OBJECTCLASS}=${LINK_VIEW_ISSUE_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useLinkViewIssueAction: LinkViewIssueAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminDebate>, entry: AdminIssueStored) {
+  return async function (owner: JudoIdentifiable<AdminDebate>, entry: AdminIssueStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminDebateIssueView(entry.__signedIdentifier));
   };
 };

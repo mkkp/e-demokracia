@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.5.0 http://karaf.apache.org/xmlns/features/v1.5.0">
 
     <repository>mvn:hu.blackbelt.judo.platform/judo-platform-karaf-features/${judo-platform-version}/xml/features</repository>
-    <repository>mvn:hu.blackbelt.judo.platform/judo-platform-karaf-features/${judo-platform-version}/xml/features-sdk</repository>
+    <repository>mvn:hu.blackbelt.judo.platform/judo-platform-sdk-karaf-features/${judo-platform-version}/xml/features</repository>
     <!-- To define create 'karaf-features/src/main/feature/feature.xml.extra-repositories.fragment.hbs' file -->
     <!-- End of 'karaf-features/src/main/feature/feature.xml.extra-repositories.fragment.hbs' -->
 

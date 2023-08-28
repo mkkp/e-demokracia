@@ -13,7 +13,7 @@ import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle, G
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useJudoNavigation } from '~/components';
 import type { DialogOption } from '~/components/dialog';
 import { useDialog } from '~/components/dialog';
@@ -29,10 +29,13 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminAdminServiceForCategoriesImpl, adminIssueCategoryServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCategoriesImpl, adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
 import { PageCreateCategoriesForm } from './PageCreateCategoriesForm';
 
-export type PageCreateCategoriesAction = () => (successCallback: () => void) => void;
+export type PageCreateCategoriesAction = () => (
+  successCallback: (result: AdminIssueCategoryStored) => void,
+  closedCallback?: () => void,
+) => void;
 
 export const usePageCreateCategoriesAction: PageCreateCategoriesAction = () => {
   const [createDialog, closeDialog] = useDialog();
@@ -40,26 +43,36 @@ export const usePageCreateCategoriesAction: PageCreateCategoriesAction = () => {
   const { navigate } = useJudoNavigation();
   const { enqueueSnackbar } = useSnackbar();
 
-  return function pageCreateCategoriesAction(successCallback: () => void) {
+  return function pageCreateCategoriesAction(
+    successCallback: (result: AdminIssueCategoryStored) => void,
+    closedCallback?: () => void,
+  ) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'lg',
+      maxWidth: 'xs',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();
+          closedCallback && closedCallback();
         }
       },
       children: (
         <PageCreateCategoriesForm
-          successCallback={() => {
-            closeDialog();
-            enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
-              variant: 'success',
-              ...toastConfig.success,
-            });
-            successCallback();
+          successCallback={(result: AdminIssueCategoryStored, open?: boolean) => {
+            if (!open) {
+              closeDialog();
+              enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
+                variant: 'success',
+                ...toastConfig.success,
+              });
+            }
+
+            successCallback(result);
           }}
-          cancel={closeDialog}
+          cancel={() => {
+            closeDialog();
+            closedCallback && closedCallback();
+          }}
         />
       ),
     });

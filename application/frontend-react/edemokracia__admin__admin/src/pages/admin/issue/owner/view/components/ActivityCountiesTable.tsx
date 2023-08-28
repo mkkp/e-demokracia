@@ -6,23 +6,27 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import type { MouseEvent } from 'react';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
   GridValueFormatterParams,
+  GridRowClassNameParams,
   GridRowId,
   GridRowModel,
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer, DataGrid } from '@mui/x-data-grid';
+import { GridToolbarContainer } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
@@ -35,11 +39,15 @@ import {
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
+  mapFilterModelToFilters,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
+import { ContextMenu, StripedDataGrid } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
+import { Box, Typography } from '@mui/material';
 import {
   AdminCity,
   AdminCityQueryCustomizer,
@@ -56,7 +64,7 @@ import {
   AdminUserQueryCustomizer,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshOwnerAction,
   useRowRemoveActivityCountiesAction,
@@ -64,6 +72,8 @@ import {
   useTableAddActivityCountiesAction,
   useTableClearActivityCountiesAction,
 } from '../actions';
+import { applyInMemoryFilters } from '~/utilities';
+export const ADMIN_ISSUE_OWNER_VIEW_ACTIVITY_COUNTIES = 'AdminIssueOwnerViewActivityCounties';
 
 export interface ActivityCountiesTableProps {
   ownerData: AdminUserStored;
@@ -72,18 +82,29 @@ export interface ActivityCountiesTableProps {
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminUserStored, value: any) => void;
+  validation: Map<keyof AdminUser, string>;
 }
 
 export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
+  const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
+  const [filters, setFilters] = useState<Filter[]>([]);
+  const [data, setData] = useState<AdminCountyStored[]>([]);
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 10,
+    page: 0,
+  });
+
   const [activityCountiesSortModel, setActivityCountiesSortModel] = useState<GridSortModel>([
-    { field: 'representation', sort: 'asc' },
+    { field: 'representation', sort: null },
   ]);
+
+  const [activityCountiesFilterModel, setActivityCountiesFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const activityCountiesColumns: GridColDef<AdminCountyStored>[] = [
     {
@@ -94,6 +115,7 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -145,7 +167,10 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
       columns: activityCountiesColumns,
       defaultSortField: activityCountiesSortModel[0],
       rangeCall: async (queryCustomizer) =>
-        await adminUserServiceImpl.getRangeForActivityCounties(undefined, processQueryCustomizer(queryCustomizer)),
+        await adminUserServiceForClassImpl.getRangeForActivityCounties(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        ),
       single: false,
       alreadySelectedItems: activityCountiesSelectionModel,
       filterOptions: activityCountiesRangeFilterOptions,
@@ -154,73 +179,137 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
 
   const [activityCountiesSelectionModel, setActivityCountiesSelectionModel] = useState<GridRowSelectionModel>([]);
 
-  return (
-    <DataGrid
-      {...baseTableConfig}
-      pageSizeOptions={[10]}
-      sx={{
-        // overflow: 'hidden',
-        display: 'grid',
-      }}
-      getRowId={(row: { __identifier: string }) => row.__identifier}
-      loading={isOwnerLoading}
-      rows={ownerData?.activityCounties ?? []}
-      getRowClassName={() => 'data-grid-row'}
-      getCellClassName={() => 'data-grid-cell'}
-      columns={[
-        ...activityCountiesColumns,
-        ...columnsActionCalculator(
-          'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties',
-          activityCountiesRowActions,
-          { shownActions: 2 },
-        ),
-      ]}
-      disableRowSelectionOnClick
-      onRowClick={(params: GridRowParams<AdminCountyStored>) => {
-        if (!editMode) {
-          rowViewActivityCountiesAction(ownerData, params.row);
-        }
-      }}
-      sortModel={activityCountiesSortModel}
-      onSortModelChange={(newModel: GridSortModel) => {
-        setActivityCountiesSortModel(newModel);
-      }}
-      components={{
-        Toolbar: () => (
-          <GridToolbarContainer>
-            <Button
-              id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties-clear"
-              startIcon={<MdiIcon path="link_off" />}
-              variant="text"
-              onClick={async () => {
-                storeDiff('activityCounties', []);
-              }}
-              disabled={isOwnerLoading || false || !isFormUpdateable()}
-            >
-              {t('judo.pages.table.clear', { defaultValue: 'Clear' })}
-            </Button>
-            <Button
-              id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties-add"
-              startIcon={<MdiIcon path="attachment-plus" />}
-              variant="text"
-              onClick={async () => {
-                const res = await activityCountiesRangeCall();
+  const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
+      attributeName: 'representation',
+      label: t('admin.UserView.activityCounties.representation', { defaultValue: 'County' }) as string,
+      filterType: FilterType.string,
+    },
+  ];
 
-                if (res) {
-                  storeDiff('activityCounties', [
-                    ...(ownerData.activityCounties || []),
-                    ...(res as AdminCountyStored[]),
-                  ]);
+  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+
+    if (Array.isArray(newFilters)) {
+      setPaginationModel((prevState) => ({
+        ...prevState,
+        page: 0,
+      }));
+      setFilters(newFilters);
+    }
+  };
+
+  useEffect(() => {
+    const newData = applyInMemoryFilters<AdminCountyStored>(filters, ownerData?.activityCounties ?? []);
+    setData(newData);
+  }, [ownerData?.activityCounties, filters]);
+
+  return (
+    <>
+      <StripedDataGrid
+        {...baseTableConfig}
+        pageSizeOptions={[10]}
+        sx={{
+          // overflow: 'hidden',
+          display: 'grid',
+          border: (theme) =>
+            props.validation.has('activityCounties') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        getRowId={(row: { __identifier: string }) => row.__identifier}
+        loading={isOwnerLoading}
+        rows={data}
+        getRowClassName={(params: GridRowClassNameParams) => {
+          return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+        }}
+        columns={[
+          ...activityCountiesColumns,
+          ...columnsActionCalculator(
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties',
+            activityCountiesRowActions,
+            t,
+            { shownActions: 2 },
+          ),
+        ]}
+        disableRowSelectionOnClick
+        onRowClick={(params: GridRowParams<AdminCountyStored>) => {
+          if (!editMode) {
+            rowViewActivityCountiesAction(ownerData, params.row, () => fetchOwnerData());
+          }
+        }}
+        sortModel={activityCountiesSortModel}
+        onSortModelChange={(newModel: GridSortModel) => {
+          setActivityCountiesSortModel(newModel);
+        }}
+        paginationModel={paginationModel}
+        onPaginationModelChange={setPaginationModel}
+        components={{
+          Toolbar: () => (
+            <GridToolbarContainer>
+              <Button
+                id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties-clear"
+                startIcon={<MdiIcon path="link_off" />}
+                variant="text"
+                onClick={async () => {
+                  storeDiff('activityCounties', []);
+                }}
+                disabled={isOwnerLoading || false || !isFormUpdateable()}
+              >
+                {t('judo.pages.table.clear', { defaultValue: 'Clear' })}
+              </Button>
+              <Button
+                id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties-add"
+                startIcon={<MdiIcon path="attachment-plus" />}
+                variant="text"
+                onClick={async () => {
+                  const res = await activityCountiesRangeCall();
+
+                  if (res) {
+                    storeDiff('activityCounties', [
+                      ...(ownerData.activityCounties || []),
+                      ...(res.value as AdminCountyStored[]),
+                    ]);
+                  }
+                }}
+                disabled={isOwnerLoading || false || !isFormUpdateable()}
+              >
+                {t('judo.pages.table.add', { defaultValue: 'Add' })}
+              </Button>
+              <Button
+                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-filter"
+                startIcon={<MdiIcon path="filter" />}
+                variant="text"
+                onClick={() =>
+                  filter(
+                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-filter',
+                    filterOptions,
+                    filters,
+                  )
                 }
-              }}
-              disabled={isOwnerLoading || false || !isFormUpdateable()}
-            >
-              {t('judo.pages.table.add', { defaultValue: 'Add' })}
-            </Button>
-            <div>{/* Placeholder */}</div>
-          </GridToolbarContainer>
-        ),
-      }}
-    />
+                disabled={isOwnerLoading}
+              >
+                {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
+                  (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
+              </Button>
+              <div>{/* Placeholder */}</div>
+            </GridToolbarContainer>
+          ),
+        }}
+      />
+      {props.validation.has('activityCounties') && (
+        <Box
+          sx={{
+            color: (theme) => theme.palette.error.main,
+            display: 'flex',
+            alignItems: 'center',
+            pl: 1,
+            pr: 1,
+          }}
+        >
+          <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
+          <Typography>{props.validation.get('activityCounties')}</Typography>
+        </Box>
+      )}
+    </>
   );
 };

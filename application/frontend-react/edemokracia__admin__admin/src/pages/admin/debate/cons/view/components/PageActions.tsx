@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { MdiIcon, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import {
   AdminComment,
   AdminCommentQueryCustomizer,
@@ -35,6 +36,7 @@ export function PageActions(props: PageActionsProps) {
   const { data, editMode, setEditMode, isLoading, fetchData, saveData, deleteData } = props;
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
+  const { openConfirmDialog } = useConfirmDialog();
 
   const pageRefreshConsAction = usePageRefreshConsAction();
   const pageDeleteConsAction = usePageDeleteConsAction();
@@ -98,7 +100,19 @@ export function PageActions(props: PageActionsProps) {
             loading={isLoading}
             loadingPosition="start"
             startIcon={<MdiIcon path="delete" />}
-            onClick={() => deleteData()}
+            onClick={async () => {
+              const confirmed = await openConfirmDialog(
+                'page-delete-action',
+                t('judo.modal.confirm.confirm-delete', {
+                  defaultValue: 'Are you sure you would like to delete the selected element?',
+                }),
+                t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+              );
+
+              if (confirmed) {
+                deleteData();
+              }
+            }}
             disabled={!data.__deleteable}
           >
             <span>{t('judo.pages.delete', { defaultValue: 'Delete' })}</span>

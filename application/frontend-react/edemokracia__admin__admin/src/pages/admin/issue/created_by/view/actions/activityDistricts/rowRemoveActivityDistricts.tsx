@@ -18,7 +18,7 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceImpl } from '~/generated/data-axios';
+import { adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowRemoveActivityDistrictsAction = () => (
   owner: JudoIdentifiable<AdminUser>,
@@ -38,7 +38,7 @@ export const useRowRemoveActivityDistrictsAction: RowRemoveActivityDistrictsActi
     successCallback: () => void,
   ) {
     try {
-      await adminUserServiceImpl.removeActivityDistricts(
+      await adminUserServiceForClassImpl.removeActivityDistricts(
         { __signedIdentifier: owner.__signedIdentifier } as JudoIdentifiable<AdminUser>,
         [selected],
       );

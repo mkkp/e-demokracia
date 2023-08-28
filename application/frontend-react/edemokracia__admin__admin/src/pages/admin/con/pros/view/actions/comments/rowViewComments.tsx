@@ -18,15 +18,18 @@ import type {
   AdminProStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminProCommentsView } from '~/routes';
 
 export const ROW_VIEW_COMMENTS_ACTION_INTERFACE_KEY = 'RowViewCommentsAction';
 export type RowViewCommentsAction = () => (
   owner: JudoIdentifiable<AdminPro>,
   entry: AdminCommentStored,
+  successCallback: () => void,
 ) => Promise<void>;
 
 export const useRowViewCommentsAction: RowViewCommentsAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<RowViewCommentsAction>(
     `(${OBJECTCLASS}=${ROW_VIEW_COMMENTS_ACTION_INTERFACE_KEY})`,
@@ -37,7 +40,8 @@ export const useRowViewCommentsAction: RowViewCommentsAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminPro>, entry: AdminCommentStored) {
+  return async function (owner: JudoIdentifiable<AdminPro>, entry: AdminCommentStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminProCommentsView(entry.__signedIdentifier));
   };
 };

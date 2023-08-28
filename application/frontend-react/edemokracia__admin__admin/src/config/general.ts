@@ -29,3 +29,9 @@ export const toastConfig: OptionsObject & { success: OptionsObject; error: Optio
     variant: 'error',
   },
 };
+
+export const debounceInputs: number = 500;
+
+export const animationDuration: number = 0.8;
+
+export const delayDuration: number = 0.2;

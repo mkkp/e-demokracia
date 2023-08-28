@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -73,8 +74,9 @@ import {
   AdminVoteDefinitionStored,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminIssueServiceImpl, adminUserServiceImpl } from '~/generated/data-axios';
+import { adminIssueServiceForClassImpl, adminUserServiceForClassImpl } from '~/generated/data-axios';
 
 import { useLinkViewOwnerAction } from '../actions';
 
@@ -84,18 +86,19 @@ export interface OwnerLinkProps {
   validation: Map<keyof AdminIssueStored, string>;
   fetchOwnerData: () => Promise<void>;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
 }
 
 export function OwnerLink(props: OwnerLinkProps) {
-  const { ownerData, disabled, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const ownerSortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const ownerSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const ownerColumns: GridColDef<AdminUserStored>[] = [
     {
@@ -106,6 +109,7 @@ export function OwnerLink(props: OwnerLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -138,13 +142,18 @@ export function OwnerLink(props: OwnerLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewIssueLabelWrapperIssueOwner"
       label={t('admin.IssueView.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
-      value={ownerData.owner}
+      ownerData={ownerData}
       error={!!validation.get('owner')}
       helperText={validation.get('owner')}
       icon={<MdiIcon path="account" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
-      onView={async () => linkViewOwnerAction(ownerData, ownerData?.owner!)}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(owner) => {
+        storeDiff('owner', owner);
+      }}
+      onView={async () => linkViewOwnerAction(ownerData, ownerData?.owner!, () => fetchOwnerData())}
       onUnset={async () => {
         storeDiff('owner', null);
       }}
@@ -152,17 +161,31 @@ export function OwnerLink(props: OwnerLinkProps) {
         const res = await openRangeDialog<AdminUserStored, AdminUserQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueOwner',
           columns: ownerColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminIssueServiceImpl.getRangeForOwner(ownerData, processQueryCustomizer(queryCustomizer)),
+            await adminIssueServiceForClassImpl.getRangeForOwner(ownerData, processQueryCustomizer(queryCustomizer)),
           single: true,
           alreadySelectedItems: ownerData.owner?.__identifier as GridRowId,
           filterOptions: ownerRangeFilterOptions,
           initialQueryCustomizer: ownerInitialQueryCustomizer,
+          editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('owner', res as AdminUserStored);
+        storeDiff('owner', res.value as AdminUserStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminUserQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminIssueServiceForClassImpl.getRangeForOwner(ownerData, processQueryCustomizer(queryCustomizer));
       }}
     />
   );

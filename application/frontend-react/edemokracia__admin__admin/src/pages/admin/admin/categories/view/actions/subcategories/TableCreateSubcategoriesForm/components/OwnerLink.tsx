@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
 import type {
   GridColDef,
+  GridFilterModel,
   GridRenderCellParams,
   GridRowParams,
   GridSortModel,
@@ -45,26 +46,28 @@ import {
   AdminUser,
   AdminUserQueryCustomizer,
   AdminUserStored,
+  _StringOperation,
 } from '~/generated/data-api';
-import { adminIssueCategoryServiceImpl } from '~/generated/data-axios';
+import { adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
 
 export interface OwnerLinkProps {
   ownerData: AdminIssueCategory;
   disabled: boolean;
+  readOnly: boolean;
   editMode: boolean;
   storeDiff: (attributeName: keyof AdminIssueCategory, value: any) => void;
   validation: Map<keyof AdminIssueCategory, string>;
 }
 
 export function OwnerLink(props: OwnerLinkProps) {
-  const { ownerData, disabled, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const ownerSortModel: GridSortModel = [{ field: 'representation', sort: 'asc' }];
+  const ownerSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
   const ownerColumns: GridColDef<AdminUserStored>[] = [
     {
@@ -75,6 +78,7 @@ export function OwnerLink(props: OwnerLinkProps) {
 
       width: 230,
       type: 'string',
+      filterable: false && true,
     },
   ];
 
@@ -105,19 +109,27 @@ export function OwnerLink(props: OwnerLinkProps) {
       id="LinkedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultCategoryFormOwner"
       label={t('admin.IssueCategoryForm.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
-      value={ownerData.owner}
+      ownerData={ownerData}
       error={!!validation.get('owner')}
       helperText={validation.get('owner')}
       icon={<MdiIcon path="account" />}
       disabled={disabled}
+      readOnly={readOnly}
       editMode={editMode}
+      autoCompleteAttribute={'representation'}
+      onAutoCompleteSelect={(owner) => {
+        storeDiff('owner', owner);
+      }}
       onSet={async () => {
         const res = await openRangeDialog<AdminUserStored, AdminUserQueryCustomizer>({
           id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategoryOwner',
           columns: ownerColumns,
-          defaultSortField: ([{ field: 'representation', sort: 'asc' }] as GridSortItem[])[0],
+          defaultSortField: ([{ field: 'representation', sort: null }] as GridSortItem[])[0],
           rangeCall: async (queryCustomizer) =>
-            await adminIssueCategoryServiceImpl.getRangeForOwner(ownerData, processQueryCustomizer(queryCustomizer)),
+            await adminIssueCategoryServiceForClassImpl.getRangeForOwner(
+              ownerData,
+              processQueryCustomizer(queryCustomizer),
+            ),
           single: true,
           alreadySelectedItems: ownerData.owner?.__identifier as GridRowId,
           filterOptions: ownerRangeFilterOptions,
@@ -125,7 +137,23 @@ export function OwnerLink(props: OwnerLinkProps) {
         });
 
         if (res === undefined) return;
-        storeDiff('owner', res as AdminUserStored);
+        storeDiff('owner', res.value as AdminUserStored);
+      }}
+      onAutoCompleteSearch={async (searchText: string) => {
+        const queryCustomizer: AdminUserQueryCustomizer = {
+          ...(searchText?.length
+            ? {
+                representation: [{ operator: _StringOperation.like, value: searchText }],
+              }
+            : {}),
+          _mask: '{representation}',
+          _orderBy: [{ attribute: 'representation', descending: false }],
+          _seek: { limit: 10 },
+        };
+        return await adminIssueCategoryServiceForClassImpl.getRangeForOwner(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
       }}
       onUnset={async () => {
         storeDiff('owner', null);

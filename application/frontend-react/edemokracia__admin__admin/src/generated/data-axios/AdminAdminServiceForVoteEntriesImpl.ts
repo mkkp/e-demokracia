@@ -7,8 +7,8 @@
 // Template file: data-axios/AccessRelationServiceImpl.ts.hbs
 
 import { JudoAxiosService } from './JudoAxiosService';
-import { AdminVoteEntry, AdminVoteEntryQueryCustomizer, AdminVoteEntryStored } from '../data-api';
-import { AdminAdminServiceForVoteEntries } from '../data-service';
+import type { AdminVoteEntry, AdminVoteEntryQueryCustomizer, AdminVoteEntryStored } from '../data-api';
+import type { AdminAdminServiceForVoteEntries } from '../data-service';
 
 /**
  * Access Relation Service Implementation for AdminAdmin.voteEntries

@@ -19,29 +19,28 @@ export const usePageFilterDebatesAction = (
   setPage: (page: number) => void,
   setQueryCustomizer: Function,
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
+  numberOfElements: number,
 ): PageFilterDebatesAction => {
+  const columnNames = ['issueTitle', 'title', 'status', 'closeAt', 'description'];
+
   return async function pageFilterDebatesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);
-    const numberOfElements = 10;
 
-    if (newFilters) {
+    if (Array.isArray(newFilters)) {
       setPage(0);
       setFilters(newFilters);
 
       setQueryCustomizer((prevQueryCustomizer: AdminDebateQueryCustomizer) => {
+        // remove previous filter values, so that we can always start with a clean slate
+        for (const name of columnNames) {
+          delete (prevQueryCustomizer as any)[name];
+        }
         return {
           ...prevQueryCustomizer,
           _seek: {
             limit: numberOfElements + 1,
           },
-          ...mapAllFiltersToQueryCustomizerProperties(
-            newFilters,
-            'issueTitle',
-            'title',
-            'status',
-            'closeAt',
-            'description',
-          ),
+          ...mapAllFiltersToQueryCustomizerProperties(newFilters),
         };
       });
     }

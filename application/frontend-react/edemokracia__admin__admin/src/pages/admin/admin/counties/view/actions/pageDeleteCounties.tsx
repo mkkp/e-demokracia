@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
-import { adminAdminServiceForCountiesImpl, adminCountyServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForCountiesImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteCountiesAction = () => (
   selected: AdminCountyStored,
@@ -41,7 +41,7 @@ export const usePageDeleteCountiesAction: PageDeleteCountiesAction = () => {
       );
 
       if (confirmed) {
-        await adminCountyServiceImpl.delete(selected);
+        await adminCountyServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

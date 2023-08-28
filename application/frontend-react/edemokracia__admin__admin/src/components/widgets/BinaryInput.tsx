@@ -1,15 +1,15 @@
-import { useRef, useCallback } from 'react';
-import { Button, ButtonBase, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { useRef, useCallback, useState } from 'react';
+import { clsx } from 'clsx';
+import { CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
-import jwt_decode from 'jwt-decode';
 import { toastConfig } from '../../config';
 import { MdiIcon } from '../MdiIcon';
 import { fileHandling } from '../../utilities';
 
 interface BinaryInputProps<P> {
+  id: string;
   label: string;
-  downloadId: string;
   data: P;
   attributeName: keyof P;
   attributePath: string;
@@ -18,8 +18,8 @@ interface BinaryInputProps<P> {
   disabled?: boolean;
   readonly?: boolean;
   required?: boolean;
-  uploadId?: string;
   uploadCallback?: (uploadedData: { token: string }) => Promise<any>;
+  deleteCallback?: () => Promise<void>;
   icon?: string;
   mimeType?: {
     type: string;
@@ -28,6 +28,7 @@ interface BinaryInputProps<P> {
 }
 
 export function BinaryInput<P>(props: BinaryInputProps<P>) {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { enqueueSnackbar } = useSnackbar();
@@ -46,12 +47,15 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
       <Grid item xs>
         <TextField
           required={props.required}
-          name={props.downloadId}
-          id={props.downloadId}
+          name={props.id}
+          id={props.id}
           label={props.label}
           value={extractFileName(props.data[props.attributeName] as string | undefined)}
-          className="JUDO-viewMode"
-          disabled={props.disabled}
+          className={clsx({
+            'JUDO-viewMode': true,
+            'JUDO-required': props.required,
+          })}
+          disabled={props.disabled || isUploading}
           error={!!props.validation.get(props.attributeName)}
           helperText={props.validation.get(props.attributeName)}
           fullWidth
@@ -70,23 +74,36 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
                       <MdiIcon path={props.icon} />
                     </InputAdornment>
                   ),
+                  endAdornment: (
+                    <CircularProgress size='1rem' sx={{ visibility: isUploading ? 'visible' : 'hidden' }} />
+                  ),
                 }
-              : {}
+              : {
+                  endAdornment: (
+                    <CircularProgress size='1rem' sx={{ visibility: isUploading ? 'visible' : 'hidden' }} />
+                  ),
+                }
           }
         />
       </Grid>
       <Grid item xs="auto">
         <IconButton
-          disabled={props.disabled || !props.data[props.attributeName]}
-          id={props.downloadId}
+          disabled={!props.data[props.attributeName] || isUploading}
+          id={`${props.id}-download`}
           onClick={() => downloadFile(props.data, props.attributeName as string)}
+          title={t('judo.component.BinaryInput.download', { defaultValue: 'Download file' }) as string}
         >
           <MdiIcon path="download" mimeType={props.mimeType} />
         </IconButton>
       </Grid>
       {!props.readonly && (
         <Grid item xs="auto">
-          <IconButton disabled={props.disabled} id={props.uploadId!} onClick={() => fileInput.current!.click()}>
+          <IconButton
+            disabled={props.disabled || isUploading}
+            id={`${props.id}-upload`}
+            onClick={() => fileInput.current!.click()}
+            title={t('judo.component.BinaryInput.upload', { defaultValue: 'Upload file' }) as string}
+          >
             <input
               ref={fileInput}
               hidden
@@ -94,6 +111,7 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
               accept={props.mimeType && `${props.mimeType.type}/${props.mimeType.subType}`}
               onChange={async (event: any) => {
                 try {
+                  setIsUploading(true);
                   const uploadedData = await uploadFile(
                     props.data,
                     props.attributeName as string,
@@ -131,10 +149,29 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
                     },
                   );
                   console.error(err);
+                } finally {
+                  setIsUploading(false);
                 }
               }}
             />
             <MdiIcon path="upload" />
+          </IconButton>
+        </Grid>
+      )}
+      {!props.readonly && props.data[props.attributeName] && props.deleteCallback && (
+        <Grid item xs="auto">
+          <IconButton
+            id={`${props.id}-remove`}
+            className={`${props.attributeName as string}-remove`}
+            disabled={props.readonly || props.disabled || isUploading}
+            onClick={async () => {
+              if (props.deleteCallback) {
+                await props.deleteCallback();
+              }
+            }}
+            title={t('judo.component.BinaryInput.remove', { defaultValue: 'Remove file' }) as string}
+          >
+            <MdiIcon path="link-off" />
           </IconButton>
         </Grid>
       )}

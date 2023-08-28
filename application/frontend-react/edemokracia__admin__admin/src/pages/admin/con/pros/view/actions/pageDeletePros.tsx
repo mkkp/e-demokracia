@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminCon, AdminConStored, AdminPro, AdminProQueryCustomizer, AdminProStored } from '~/generated/data-api';
-import { adminConServiceForProsImpl, adminProServiceImpl } from '~/generated/data-axios';
+import { adminConServiceForProsImpl, adminProServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteProsAction = () => (
   owner: JudoIdentifiable<AdminCon>,
@@ -46,7 +46,7 @@ export const usePageDeleteProsAction: PageDeleteProsAction = () => {
       );
 
       if (confirmed) {
-        await adminProServiceImpl.delete(selected);
+        await adminProServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

@@ -56,10 +56,45 @@ const baseTheme = createTheme(
           },
         },
       },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            '&.JUDO-nestedError': {
+              color: paletteTheme.palette.error.main,
+            },
+          },
+        },
+      },
       MuiFormControl: {
         styleOverrides: {
           root: {
             margin: 0,
+          },
+        },
+      },
+      MuiFormControlLabel: {
+        styleOverrides: {
+          root: {
+            '&.switch > .MuiFormControlLabel-label': {
+              fontSize: `${density.fontSize}rem`,
+            },
+          },
+        },
+      },
+      MuiDialogContent: {
+        styleOverrides: {
+          root: {
+            backgroundColor: paletteTheme.palette.background.default,
+          },
+        },
+      },
+      MuiFormLabel: {
+        styleOverrides: {
+          asterisk: { color: 'red' },
+          root: {
+            '&.Mui-required': {
+              fontWeight: 900,
+            },
           },
         },
       },
@@ -84,6 +119,7 @@ const baseTheme = createTheme(
           },
         },
       },
+      // To override this block, please create the 'actor/src/theme/index.ts.mui-text-field.fragment.hbs' file
       MuiTextField: {
         defaultProps: {
           fullWidth: true,
@@ -104,6 +140,14 @@ const baseTheme = createTheme(
           },
         },
       },
+      // End of 'actor/src/theme/index.ts.mui-text-field.fragment.hbs'
+      MuiAutocomplete: {
+        defaultProps: {
+          fullWidth: true,
+          variant: 'filled',
+          color: 'secondary',
+        },
+      },
       MuiRadio: {
         defaultProps: {
           color: 'secondary',
@@ -118,6 +162,7 @@ const baseTheme = createTheme(
           },
         },
       },
+      // To override this block, please create the 'actor/src/theme/index.ts.mui-data-grid.fragment.hbs' file
       MuiDataGrid: {
         styleOverrides: {
           root: {
@@ -125,6 +170,7 @@ const baseTheme = createTheme(
           },
         },
       },
+      // End of 'actor/src/theme/index.ts.mui-data-grid.fragment.hbs'
       MuiPaper: {
         styleOverrides: {
           rounded: {
@@ -218,15 +264,6 @@ const baseTheme = createTheme(
           root: {
             width: '100%',
             length: '100%',
-          },
-        },
-      },
-      MuiDialog: {
-        styleOverrides: {
-          root: {
-            '> .MuiDialog-container > .MuiPaper-root': {
-              backgroundColor: paletteTheme.palette.background.default,
-            },
           },
         },
       },

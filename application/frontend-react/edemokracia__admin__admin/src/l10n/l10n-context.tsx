@@ -10,12 +10,14 @@ import hu from 'date-fns/locale/hu';
 import enUS from 'date-fns/locale/en-US';
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import { OBJECTCLASS, ServiceReference } from '@pandino/pandino-api';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ServiceReference } from '@pandino/pandino-api';
 import { useTrackService, useBundleContext } from '@pandino/react-hooks';
 
 const locales = {
@@ -42,14 +44,36 @@ export const L10N_TRANSLATION_PROVIDER_INTERFACE_KEY = 'L10NTranslationProvider'
 export interface L10NTranslationProvider {
   provideTranslations(locale: string): Promise<L10NTranslations>;
 }
-export const L10NProvider = ({ children }: { children: ReactNode }) => {
+export const L10NProvider = ({ axios, children }: { axios?: AxiosInstance; children: ReactNode }) => {
   const defaultLocale: LocaleKey = 'hu-HU';
   const [locale, setLocale] = useState<LocaleKey>(defaultLocale);
   const [translation, setTranslation] = useState<any>(null);
   const [filter, setFilter] = useState<string>(`(${OBJECTCLASS}=${L10N_TRANSLATION_PROVIDER_INTERFACE_KEY})`);
   const { service: translationProvider } = useTrackService<L10NTranslationProvider>(filter);
+  const [interceptorId, setInterceptorId] = useState<number | null>(null);
 
   useEffect(() => {
+    if (axios) {
+      if (interceptorId !== null) {
+        axios.interceptors.request.eject(interceptorId);
+      }
+      const newInterceptorId = axios.interceptors.request.use(
+        (config: AxiosRequestConfig): AxiosRequestConfig => {
+          if (!config.headers) {
+            config.headers = {};
+          }
+          const shortLocale = locale.indexOf('-') > -1 ? locale.substring(0, locale.indexOf('-')) : locale;
+          config.headers['Accept-Language'] = `${locale}, ${shortLocale};q=0.9, *;q=0.5`;
+
+          return config;
+        },
+        (error: AxiosError): Promise<AxiosError> => {
+          return Promise.reject(error);
+        },
+      );
+      setInterceptorId(newInterceptorId);
+    }
+
     (async () => {
       let dataSystem: { translation: any } = { translation: {} };
       let dataApplication: { translation: any } = { translation: {} };
@@ -60,9 +84,9 @@ export const L10NProvider = ({ children }: { children: ReactNode }) => {
         dataApplication = { translation: applicationTranslations };
       } else {
         try {
-          const responseSystem = await fetch(`i18n/system_${locale}.json`);
+          const responseSystem = await fetch(`i18n/system_${locale}.json?stamp=${new Date().toISOString()}`);
           dataSystem = await responseSystem.json();
-          const responseApplication = await fetch(`i18n/application_${locale}.json`);
+          const responseApplication = await fetch(`i18n/application_${locale}.json?stamp=${new Date().toISOString()}`);
           dataApplication = await responseApplication.json();
         } catch (error) {
           console.error(`Error fetching i18n resources: ${error}`);

@@ -13,15 +13,178 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.initializer;
 
 /**
  * 
+ * 
+ * var edemokracia::County budapest_county = edemokracia::County!filter(c | c.name == "Budapest")!any();
+ * if (budapest_county!isUndefined()) {
+ * 	budapest_county = new edemokracia::County(name = "Budapest");
+ * }
+ * 
+ * var edemokracia::County bacs_kiskun = edemokracia::County!filter(c | c.name == "Bács-Kiskun")!any();
+ * if (bacs_kiskun!isUndefined()) {
+ * 	bacs_kiskun = new edemokracia::County(name = "Bács-Kiskun");
+ * }
+ * 
+ * var edemokracia::City budapest = budapest_county.cities!filter(c | c.name == "Budapest")!any();
+ * if (budapest!isUndefined()) {
+ * 	budapest = new edemokracia::City(name = "Budapest");
+ * 	budapest_county.cities += budapest;
+ * }
+ * 
+ * var edemokracia::City kecskemet = bacs_kiskun.cities!filter(c | c.name == "Kecskemét")!any();
+ * if (kecskemet!isUndefined()) {
+ * 	kecskemet = new edemokracia::City(name = "Kecskemét");
+ * 	bacs_kiskun.cities += kecskemet;
+ * }
+ * 
+ * var edemokracia::District budapest_1 = budapest.districts!filter(c | c.name == "I. ker")!any();
+ * if (budapest_1!isUndefined()) {
+ * 	budapest_1 = new edemokracia::District(name = "I. ker");
+ * 	budapest.districts += budapest_1;
+ * }
+ * 
+ * var edemokracia::District budapest_2 = budapest.districts!filter(c | c.name == "II. ker")!any();
+ * if (budapest_2!isUndefined()) {
+ * 	budapest_2 = new edemokracia::District(name = "II. ker");
+ * 	budapest.districts += budapest_2;
+ * }
+ * 
+ * var edemokracia::District budapest_3 = budapest.districts!filter(c | c.name == "III. ker")!any();
+ * if (budapest_3!isUndefined()) {
+ * 	budapest_3 = new edemokracia::District(name = "III. ker");
+ * 	budapest.districts += budapest_3;
+ * }
+ * 
+ * var edemokracia::District budapest_4 = budapest.districts!filter(c | c.name == "IV. ker")!any();
+ * if (budapest_4!isUndefined()) {
+ * 	budapest_4 = new edemokracia::District(name = "IV. ker");
+ * 	budapest.districts += budapest_4;
+ * }
+ * 
+ * var edemokracia::District budapest_5 = budapest.districts!filter(c | c.name == "V. ker")!any();
+ * if (budapest_5!isUndefined()) {
+ * 	budapest_5 = new edemokracia::District(name = "V. ker");
+ * 	budapest.districts += budapest_5;
+ * }
+ * 
+ * var edemokracia::District budapest_6 = budapest.districts!filter(c | c.name == "VI. ker")!any();
+ * if (budapest_6!isUndefined()) {
+ * 	budapest_6 = new edemokracia::District(name = "VI. ker");
+ * 	budapest.districts += budapest_6;
+ * }
+ * 
+ * var edemokracia::District budapest_7 = budapest.districts!filter(c | c.name == "VII. ker")!any();
+ * if (budapest_7!isUndefined()) {
+ * 	budapest_7 = new edemokracia::District(name = "VII. ker");
+ * 	budapest.districts += budapest_7;
+ * }
+ * 
+ * var edemokracia::District budapest_8 = budapest.districts!filter(c | c.name == "VIII. ker")!any();
+ * if (budapest_8!isUndefined()) {
+ * 	budapest_8 = new edemokracia::District(name = "VIII. ker");
+ * 	budapest.districts += budapest_8;
+ * }
+ * 
+ * var edemokracia::District budapest_9 = budapest.districts!filter(c | c.name == "IX. ker")!any();
+ * if (budapest_9!isUndefined()) {
+ * 	budapest_9 = new edemokracia::District(name = "IX. ker");
+ * 	budapest.districts += budapest_9;
+ * }
+ * 
+ * var edemokracia::District budapest_10 = budapest.districts!filter(c | c.name == "X. ker")!any();
+ * if (budapest_10!isUndefined()) {
+ * 	budapest_10 = new edemokracia::District(name = "X. ker");
+ * 	budapest.districts += budapest_10;
+ * }
+ * 
+ * var edemokracia::District budapest_11 = budapest.districts!filter(c | c.name == "XI. ker")!any();
+ * if (budapest_11!isUndefined()) {
+ * 	budapest_11 = new edemokracia::District(name = "XI. ker");
+ * 	budapest.districts += budapest_11;
+ * }
+ * 
+ * var edemokracia::District budapest_12 = budapest.districts!filter(c | c.name == "XII. ker")!any();
+ * if (budapest_12!isUndefined()) {
+ * 	budapest_12 = new edemokracia::District(name = "XII. ker");
+ * 	budapest.districts += budapest_12;
+ * }
+ * 
+ * var edemokracia::District budapest_13 = budapest.districts!filter(c | c.name == "XIII. ker")!any();
+ * if (budapest_13!isUndefined()) {
+ * 	budapest_13 = new edemokracia::District(name = "XIII. ker");
+ * 	budapest.districts += budapest_13;
+ * }
+ * 
+ * var edemokracia::District budapest_14 = budapest.districts!filter(c | c.name == "XIV. ker")!any();
+ * if (budapest_14!isUndefined()) {
+ * 	budapest_14 = new edemokracia::District(name = "XIV. ker");
+ * 	budapest.districts += budapest_14;
+ * }
+ * 
+ * var edemokracia::District budapest_15 = budapest.districts!filter(c | c.name == "XV. ker")!any();
+ * if (budapest_15!isUndefined()) {
+ * 	budapest_15 = new edemokracia::District(name = "XV. ker");
+ * 	budapest.districts += budapest_15;
+ * }
+ * 
+ * var edemokracia::District budapest_16 = budapest.districts!filter(c | c.name == "XVI. ker")!any();
+ * if (budapest_16!isUndefined()) {
+ * 	budapest_16 = new edemokracia::District(name = "XVI. ker");
+ * 	budapest.districts += budapest_16;
+ * }
+ * 
+ * var edemokracia::District budapest_17 = budapest.districts!filter(c | c.name == "XVII. ker")!any();
+ * if (budapest_17!isUndefined()) {
+ * 	budapest_17 = new edemokracia::District(name = "XVII. ker");
+ * 	budapest.districts += budapest_17;
+ * }
+ * 
+ * var edemokracia::District budapest_18 = budapest.districts!filter(c | c.name == "XVIII. ker")!any();
+ * if (budapest_18!isUndefined()) {
+ * 	budapest_18 = new edemokracia::District(name = "XVIII. ker");
+ * 	budapest.districts += budapest_18;
+ * }
+ * 
+ * var edemokracia::District budapest_19 = budapest.districts!filter(c | c.name == "XIX. ker")!any();
+ * if (budapest_19!isUndefined()) {
+ * 	budapest_19 = new edemokracia::District(name = "XIX. ker");
+ * 	budapest.districts += budapest_19;
+ * }
+ * 
+ * var edemokracia::District budapest_20 = budapest.districts!filter(c | c.name == "XX. ker")!any();
+ * if (budapest_20!isUndefined()) {
+ * 	budapest_20 = new edemokracia::District(name = "XX. ker");
+ * 	budapest.districts += budapest_20;
+ * }
+ * 
+ * var edemokracia::District budapest_21 = budapest.districts!filter(c | c.name == "XI. ker")!any();
+ * if (budapest_21!isUndefined()) {
+ * 	budapest_21 = new edemokracia::District(name = "XXI. ker");
+ * 	budapest.districts += budapest_21;
+ * }
+ * 
+ * var edemokracia::District budapest_22 = budapest.districts!filter(c | c.name == "XII. ker")!any();
+ * if (budapest_22!isUndefined()) {
+ * 	budapest_22 = new edemokracia::District(name = "XXII. ker");
+ * 	budapest.districts += budapest_22;
+ * }
+ * 
+ * var edemokracia::District budapest_23 = budapest.districts!filter(c | c.name == "XXIII. ker")!any();
+ * if (budapest_23!isUndefined()) {
+ * 	budapest_23 = new edemokracia::District(name = "XXIII. ker");
+ * 	budapest.districts += budapest_23;
+ * }
+ * 
+ * 
  * Usage:
  *  1. Rename this file from InitAreasCustomImplementation.java.default to InitAreasCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of InitAreasCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitAreas.class)
 public class InitAreasCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitAreas {
 
-    public void initAreas()  {
+    public void run()  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.initializer.InitAreasExchangeFunctionsComponent");
     }
 

@@ -21,7 +21,7 @@ import {
   AdminDistrictQueryCustomizer,
   AdminDistrictStored,
 } from '~/generated/data-api';
-import { adminCityServiceForDistrictsImpl, adminDistrictServiceImpl } from '~/generated/data-axios';
+import { adminCityServiceForDistrictsImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
 
 export type RowDeleteDistrictsAction = () => (
   owner: JudoIdentifiable<AdminCity>,
@@ -52,7 +52,7 @@ export const useRowDeleteDistrictsAction: RowDeleteDistrictsAction = () => {
       );
 
       if (confirmed) {
-        await adminDistrictServiceImpl.delete(selected);
+        await adminDistrictServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

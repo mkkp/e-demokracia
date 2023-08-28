@@ -18,12 +18,18 @@ import type {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
 import { routeToAdminIssueCityView } from '~/routes';
 
 export const LINK_VIEW_CITY_ACTION_INTERFACE_KEY = 'LinkViewCityAction';
-export type LinkViewCityAction = () => (owner: JudoIdentifiable<AdminIssue>, entry: AdminCityStored) => Promise<void>;
+export type LinkViewCityAction = () => (
+  owner: JudoIdentifiable<AdminIssue>,
+  entry: AdminCityStored,
+  successCallback: () => void,
+) => Promise<void>;
 
 export const useLinkViewCityAction: LinkViewCityAction = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
   const { service: useCustomNavigation } = useTrackService<LinkViewCityAction>(
     `(${OBJECTCLASS}=${LINK_VIEW_CITY_ACTION_INTERFACE_KEY})`,
@@ -34,7 +40,8 @@ export const useLinkViewCityAction: LinkViewCityAction = () => {
     return customNavigation;
   }
 
-  return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCityStored) {
+  return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminCityStored, successCallback: () => void) {
+    closeAllDialogs();
     navigate(routeToAdminIssueCityView(entry.__signedIdentifier));
   };
 };

@@ -18,6 +18,7 @@ import { MdiIcon, PageHeader } from '~/components';
 import type { PersistedTableData, RefreshableTable } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
 
 import { PageActions } from './components/PageActions';
 import { IssueType_TableTable } from './components/IssueType_TableTable';
@@ -48,17 +49,19 @@ export default function AdminAdminIssueTypesTable() {
         <PageActions fetchData={handleFetchData} isLoading={isLoading} />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Card>
-                <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTable-data-grid">
-                  <IssueType_TableTable ref={tableRef} isOwnerLoading={isLoading} setIsOwnerLoading={setIsLoading} />
-                </CardContent>
-              </Card>
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Card>
+                  <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTable-data-grid">
+                    <IssueType_TableTable ref={tableRef} isOwnerLoading={isLoading} setIsOwnerLoading={setIsLoading} />
+                  </CardContent>
+                </Card>
+              </Grid>
             </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

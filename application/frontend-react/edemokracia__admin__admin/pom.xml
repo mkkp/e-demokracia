@@ -6,7 +6,7 @@
     <parent>
         <groupId>party.mkkp.edemokracia</groupId>
         <artifactId>edemokracia-application-frontend-react</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
     <artifactId>edemokracia-application-frontend-react-edemokracia__admin__admin</artifactId>
     <name>edemokracia - Admin frontend react</name>
@@ -239,7 +239,18 @@
                                 </goals>
                                 <phase>compile</phase>
                                 <configuration>
-                                    <arguments>run build:ci</arguments>
+                                    <arguments>run build</arguments>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>test</id>
+                                <goals>
+                                    <goal>pnpm</goal>
+                                </goals>
+                                <phase>test</phase>
+                                <configuration>
+                                    <arguments>run --if-present test</arguments>
                                 </configuration>
                             </execution>
                         </executions>
@@ -283,7 +294,7 @@
                                 </goals>
                                 <phase>compile</phase>
                                 <configuration>
-                                    <arguments>run build</arguments>
+                                    <arguments>run build:reckless</arguments>
                                 </configuration>
                             </execution>
                         </executions>

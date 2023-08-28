@@ -13,15 +13,33 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.admin.dashboard;
 
 /**
  * 
+ * 
+ * 
+ * 
+ * var edemokracia::admin::AdminPrincipalUser user = edemokracia::admin::AdminPrincipalUser!filter(u | u.userName == input.userName)!any();
+ * 
+ * if (user!isUndefined()) {
+ * 	new edemokracia::admin::AdminPrincipalUser(
+ * 	    userName = input.userName,
+ * 	    email = input.email,
+ * 	    lastName = input.lastName,
+ * 	    firstName = input.firstName,
+ * 	    isAdmin = input.hasAdminAccess,
+ * 	    phone = input.phone
+ *     )
+ * }
+ * return user;
+ * 
  * Usage:
  *  1. Rename this file from CreateUserCustomImplementation.java.default to CreateUserCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of CreateUserCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.admin.dashboard.CreateUser.class)
 public class CreateUserCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.admin.dashboard.CreateUser {
 
-    public party.mkkp.edemokracia.edemokracia.api.edemokracia.admin.user.User createUser(party.mkkp.edemokracia.edemokracia.api.edemokracia.admin.createuserinput.CreateUserInput input)  {
+    public party.mkkp.edemokracia.edemokracia.api.edemokracia.admin.user.User apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.admin.createuserinput.CreateUserInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.admin.dashboard.CreateUserExchangeFunctionsComponent");
     }
 

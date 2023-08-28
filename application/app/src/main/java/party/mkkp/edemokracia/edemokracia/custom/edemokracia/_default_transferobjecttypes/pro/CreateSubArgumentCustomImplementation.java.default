@@ -13,15 +13,27 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 
 /**
  * 
+ * 
+ * var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any()
+ * 
+ * if (input.type == edemokracia::CreateArgumentInputType#CON) {
+ * 	this.cons += new edemokracia::Con(createdBy = user, title = input.title, description = input.description);
+ * }
+ * if (input.type == edemokracia::CreateArgumentInputType#PRO) {
+ * 	this.pros += new edemokracia::Pro(createdBy = user, title = this.title, description = input.description);
+ * }
+ * 
+ * 
  * Usage:
  *  1. Rename this file from CreateSubArgumentCustomImplementation.java.default to CreateSubArgumentCustomImplementation.java
  *  2. Implement method
  *  3. To ignore the generation of CreateSubArgumentCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.pro.CreateSubArgument.class)
 public class CreateSubArgumentCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.pro.CreateSubArgument {
 
-    public void createSubArgument(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.pro.Pro _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createargumentinput.CreateArgumentInput input)  {
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.pro.Pro _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createargumentinput.CreateArgumentInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.pro.CreateSubArgumentExchangeFunctionsComponent");
     }
 

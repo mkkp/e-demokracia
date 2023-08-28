@@ -15,7 +15,7 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import { AdminIssue, AdminIssueQueryCustomizer, AdminIssueStored } from '~/generated/data-api';
-import { adminAdminServiceForIssuesImpl, adminIssueServiceImpl } from '~/generated/data-axios';
+import { adminAdminServiceForIssuesImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 
 export type PageDeleteIssuesAction = () => (selected: AdminIssueStored, successCallback: () => void) => Promise<void>;
 
@@ -38,7 +38,7 @@ export const usePageDeleteIssuesAction: PageDeleteIssuesAction = () => {
       );
 
       if (confirmed) {
-        await adminIssueServiceImpl.delete(selected);
+        await adminIssueServiceForClassImpl.delete(selected);
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
           ...toastConfig.success,

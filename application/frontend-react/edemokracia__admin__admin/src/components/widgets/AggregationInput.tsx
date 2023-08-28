@@ -6,21 +6,44 @@
 // Template name: actor/src/components/widgets/AggregationInput.tsx
 // Template file: actor/src/components/widgets/AggregationInput.tsx.hbs
 
-import { ButtonBase, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
-import { useState } from 'react';
+import {
+  Autocomplete,
+  Button,
+  ButtonGroup,
+  Box,
+  CircularProgress,
+  Grid,
+  IconButton,
+  InputAdornment,
+  TextField,
+  ClickAwayListener,
+  Grow,
+  Paper,
+  Popper,
+  MenuItem,
+  MenuList,
+} from '@mui/material';
+import { debounce } from '@mui/material/utils';
+import { useTranslation } from 'react-i18next';
+import type { JudoStored } from '@judo/data-api-common';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import type { ReactNode } from 'react';
+import { clsx } from 'clsx';
+import { debounceInputs } from '~/config';
 import { exists } from '../../utilities';
 import { MdiIcon } from '../MdiIcon';
 
 interface AggregationInputProps {
-  name?: string;
-  id?: string;
+  name: string;
+  id: string;
+  required?: boolean;
   label?: string;
-  value: any | undefined | null;
-  error?: boolean | undefined;
-  helperText?: string | undefined;
-  disabled?: boolean | undefined;
-  editMode?: boolean | undefined;
+  ownerData: any;
+  error?: boolean;
+  helperText?: string;
+  readOnly?: boolean;
+  disabled?: boolean;
+  editMode?: boolean;
   labelList: string[];
   icon?: ReactNode;
   onCreate?: () => Promise<void> | undefined;
@@ -30,15 +53,20 @@ interface AggregationInputProps {
   onSet?: () => Promise<void> | undefined;
   onUnset?: () => Promise<void> | undefined;
   onView?: () => Promise<void> | undefined;
+  autoCompleteAttribute: string;
+  onAutoCompleteSearch?: (searchText: string) => Promise<JudoStored<any>[]>;
+  onAutoCompleteSelect: (target?: JudoStored<any> | null) => void;
 }
 
 export const AggregationInput = ({
   name,
   id,
+  required,
   label,
-  value,
+  ownerData,
   error = false,
   helperText,
+  readOnly = false,
   disabled = false,
   editMode = true,
   labelList,
@@ -50,77 +78,247 @@ export const AggregationInput = ({
   onSet,
   onUnset,
   onView,
+  autoCompleteAttribute,
+  onAutoCompleteSearch,
+  onAutoCompleteSelect,
 }: AggregationInputProps) => {
-  const [focused, setFocused] = useState(false);
+  const [options, setOptions] = useState<JudoStored<any>[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [allowFetch, setAllowFetch] = useState(false);
+  const [value, setValue] = useState<any>(ownerData[name] || null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
+
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    setValue(ownerData[name] || null);
+  }, [ownerData[name]]);
+
+  const handleSearch = async (searchText: string) => {
+    try {
+      if (onAutoCompleteSearch) {
+        setLoading(true);
+        const data = await onAutoCompleteSearch(searchText);
+        setOptions(data);
+      }
+    } catch (error) {
+      // Handle error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onInputChange = useMemo(
+    () =>
+      debounce((event: any, value: string) => {
+        if (allowFetch) {
+          handleSearch(value);
+        }
+      }, debounceInputs),
+    [ownerData, allowFetch],
+  );
+
+  const handleDropdownToggle = () => {
+    setDropdownOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleDropdownClose = (event: Event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
+      return;
+    }
+
+    setDropdownOpen(false);
+  };
 
   return (
     <Grid container item direction="row" justifyContent="stretch" alignContent="stretch">
-      <ButtonBase
-        sx={{ padding: 0, flexGrow: 1 }}
-        disabled={disabled || !onSet}
-        onFocusCapture={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        onClick={onSet}
-      >
-        <TextField
-          name={name}
+      <Box sx={{ padding: 0, flexGrow: 1 }}>
+        <Autocomplete
+          freeSolo={true}
+          forcePopupIcon={!!onAutoCompleteSearch}
           id={id}
-          label={label}
-          error={error}
-          helperText={helperText}
-          focused={focused}
-          fullWidth
-          value={labelList.filter((l) => !!l && l.length > 0).join(' - ')}
-          className={!editMode ? 'JUDO-viewMode' : undefined}
-          sx={{
-            ':hover': {
-              cursor: 'pointer',
-            },
-            '.MuiFilledInput-input:hover': {
-              cursor: 'pointer',
-            },
+          disabled={disabled}
+          readOnly={readOnly || !onAutoCompleteSearch || !onSet}
+          onOpen={() => {
+            if (!readOnly) {
+              setAllowFetch(true);
+              handleSearch('');
+            }
           }}
-          InputProps={{
-            readOnly: !onSet || disabled,
-            startAdornment: <InputAdornment position="start">{icon}</InputAdornment>,
+          isOptionEqualToValue={(option: any, value: any) =>
+            option[autoCompleteAttribute] === value[autoCompleteAttribute]
+          }
+          getOptionLabel={(option) => (option[autoCompleteAttribute as keyof JudoStored<any>] as string) || ''}
+          options={options}
+          value={ownerData[name] || null}
+          clearOnBlur={true}
+          loading={loading}
+          disableClearable={true}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              name={name}
+              id={id}
+              required={required}
+              label={label}
+              error={error}
+              helperText={helperText}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': required,
+              })}
+              onFocus={(event) => {
+                event.target.select();
+              }}
+              InputProps={{
+                ...params.InputProps,
+                readOnly: readOnly || !onSet,
+                startAdornment: icon && (
+                  <InputAdornment position="start" style={{ marginTop: 0 }}>
+                    {icon}
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <>
+                    {loading ? <CircularProgress color="inherit" size='1rem' sx={{ mt: -2 }} /> : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
+          onInputChange={onInputChange}
+          onChange={(event, target) => {
+            setValue(target);
+            onAutoCompleteSelect(target);
           }}
         />
-      </ButtonBase>
-      {exists(value) && onView && (
-        <IconButton className={`${name}-view`} disabled={disabled || editMode} onClick={onView}>
-          <MdiIcon path="eye" />
-        </IconButton>
-      )}
-      {exists(value) && onEdit && (
-        <IconButton className={`${name}-edit`} disabled={disabled || editMode} onClick={onEdit}>
-          <MdiIcon path="pencil" />
-        </IconButton>
-      )}
-      {exists(value) && onDelete && (
-        <IconButton className={`${name}-delete`} disabled={disabled || editMode} onClick={onDelete}>
-          <MdiIcon path="delete" />
-        </IconButton>
-      )}
-      {exists(value) && onRemove && (
-        <IconButton className={`${name}-remove`} disabled={disabled} onClick={onRemove}>
-          <MdiIcon path="link_off" />
-        </IconButton>
-      )}
-      {exists(value) && onUnset && (
-        <IconButton className={`${name}-unset`} disabled={disabled} onClick={onUnset}>
-          <MdiIcon path="link_off" />
-        </IconButton>
-      )}
-      {!exists(value) && onCreate && (
-        <IconButton className={`${name}-create`} disabled={disabled || editMode} onClick={onCreate}>
-          <MdiIcon path="file_document_plus" />
-        </IconButton>
-      )}
-      {/*onSet && (
-        <IconButton className={`${name}-set`} disabled={disabled} onClick={onSet}>
-            <MdiIcon path="link" />
-        </IconButton>
-      )*/}
+      </Box>
+      <ButtonGroup ref={anchorRef} aria-label="link button group">
+        {onSet && (
+          <IconButton
+            className={`${name}-set`}
+            disabled={disabled || readOnly}
+            onClick={(event: any) => {
+              handleDropdownClose(event);
+              onSet();
+            }}
+            title={t('judo.component.AggregationInput.open-filter', { defaultValue: 'Open search dialog' }) as string}
+          >
+            <MdiIcon path="magnify" />
+          </IconButton>
+        )}
+        {exists(value) && onView && (
+          <IconButton
+            className={`${name}-view`}
+            disabled={editMode}
+            onClick={(event: any) => {
+              handleDropdownClose(event);
+              onView();
+            }}
+            title={t('judo.component.AggregationInput.navigate', { defaultValue: 'Navigate to element' }) as string}
+          >
+            <MdiIcon path="eye" />
+          </IconButton>
+        )}
+        {!exists(value) && onCreate && (
+          <IconButton
+            className={`${name}-create`}
+            disabled={disabled || readOnly || editMode}
+            onClick={(event: any) => {
+              handleDropdownClose(event);
+              onCreate();
+            }}
+            title={t('judo.component.AggregationInput.create', { defaultValue: 'Create' }) as string}
+          >
+            <MdiIcon path="file_document_plus" />
+          </IconButton>
+        )}
+        {exists(value) && (onEdit || onDelete || onRemove || onUnset) && (
+          <IconButton className={`${name}-dropdown`} onClick={handleDropdownToggle}>
+            <MdiIcon path="chevron-down" />
+          </IconButton>
+        )}
+      </ButtonGroup>
+      <Popper
+        sx={{
+          zIndex: 1,
+        }}
+        open={dropdownOpen}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+            }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleDropdownClose}>
+                <MenuList id={`${name}-menu`} autoFocusItem>
+                  {exists(value) && onEdit && (
+                    <MenuItem
+                      className={`${name}-edit`}
+                      disabled={disabled || editMode}
+                      onClick={(event: any) => {
+                        handleDropdownClose(event);
+                        onEdit();
+                      }}
+                    >
+                      <MdiIcon path="pencil" sx={{ mr: 2 }} />
+                      {t('judo.component.AggregationInput.open-editor', { defaultValue: 'Edit' }) as string}
+                    </MenuItem>
+                  )}
+                  {exists(value) && onDelete && (
+                    <MenuItem
+                      className={`${name}-delete`}
+                      disabled={disabled || editMode}
+                      onClick={(event: any) => {
+                        handleDropdownClose(event);
+                        onDelete();
+                      }}
+                    >
+                      <MdiIcon path="delete" sx={{ mr: 2 }} />
+                      {t('judo.component.AggregationInput.delete', { defaultValue: 'Delete' }) as string}
+                    </MenuItem>
+                  )}
+                  {exists(value) && onRemove && (
+                    <MenuItem
+                      className={`${name}-remove`}
+                      disabled={disabled}
+                      onClick={(event: any) => {
+                        handleDropdownClose(event);
+                        onRemove();
+                      }}
+                    >
+                      <MdiIcon path="link_off" sx={{ mr: 2 }} />
+                      {t('judo.component.AggregationInput.remove', { defaultValue: 'Remove' }) as string}
+                    </MenuItem>
+                  )}
+                  {exists(value) && onUnset && (
+                    <MenuItem
+                      className={`${name}-unset`}
+                      disabled={disabled}
+                      onClick={(event: any) => {
+                        handleDropdownClose(event);
+                        onUnset();
+                      }}
+                    >
+                      <MdiIcon path="link_off" sx={{ mr: 2 }} />
+                      {t('judo.component.AggregationInput.unset', { defaultValue: 'Unset' }) as string}
+                    </MenuItem>
+                  )}
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </Grid>
   );
 };

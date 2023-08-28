@@ -10,22 +10,25 @@
 // Page DataElement name: voteDefinitions
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import { useEffect, useState, useCallback, FC } from 'react';
+import type { FC } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { DateTimePicker, DateTimeValidationError } from '@mui/x-date-pickers';
+import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
-import { AssociationButton, BinaryInput, CollectionAssociationButton } from '~/components/widgets';
+import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
 import {
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   fileHandling,
+  passesLocalValidation,
   processQueryCustomizer,
   uiDateToServiceDate,
   serviceDateToUiDate,
@@ -38,8 +41,10 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { toastConfig, dividerHeight } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
-import { JudoIdentifiable } from '@judo/data-api-common';
+import type { JudoIdentifiable } from '@judo/data-api-common';
 import { mainContainerPadding } from '~/theme';
+import { PageContainerTransition } from '~/theme/animations';
+import { clsx } from 'clsx';
 
 import {
   AdminVoteDefinition,
@@ -48,7 +53,10 @@ import {
   EdemokraciaVoteStatus,
   EdemokraciaVoteType,
 } from '~/generated/data-api';
-import { adminAdminServiceForVoteDefinitionsImpl, adminVoteDefinitionServiceImpl } from '~/generated/data-axios';
+import {
+  adminAdminServiceForVoteDefinitionsImpl,
+  adminVoteDefinitionServiceForClassImpl,
+} from '~/generated/data-axios';
 
 import {
   useButtonNavigateDebateAction,
@@ -87,6 +95,7 @@ export default function AdminAdminVoteDefinitionsView() {
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<AdminVoteDefinitionStored>({} as unknown as AdminVoteDefinitionStored);
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminVoteDefinitionStored, any>>(
     {} as unknown as Record<keyof AdminVoteDefinitionStored, any>,
@@ -153,7 +162,7 @@ export default function AdminAdminVoteDefinitionsView() {
     setIsLoading(true);
 
     try {
-      const res = await adminVoteDefinitionServiceImpl.refresh(
+      const res = await adminVoteDefinitionServiceForClassImpl.refresh(
         { __signedIdentifier: signedIdentifier } as AdminVoteDefinitionStored,
         processQueryCustomizer(queryCustomizer),
       );
@@ -169,6 +178,7 @@ export default function AdminAdminVoteDefinitionsView() {
       handleFetchError(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   }
 
@@ -176,7 +186,7 @@ export default function AdminAdminVoteDefinitionsView() {
     setIsLoading(true);
 
     try {
-      const res = await adminVoteDefinitionServiceImpl.update(payloadDiff);
+      const res = await adminVoteDefinitionServiceForClassImpl.update(payloadDiff);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -197,7 +207,7 @@ export default function AdminAdminVoteDefinitionsView() {
     setIsLoading(true);
 
     try {
-      await adminVoteDefinitionServiceImpl.delete(data as AdminVoteDefinitionStored);
+      await adminVoteDefinitionServiceForClassImpl.delete(data as AdminVoteDefinitionStored);
 
       back();
     } catch (error) {
@@ -229,398 +239,464 @@ export default function AdminAdminVoteDefinitionsView() {
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="access-page-data"
-            container
-            xs={12}
-            sm={12}
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroup">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <TextField
-                        required
-                        name="title"
-                        id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupTitle"
-                        label={t('admin.VoteDefinitionView.title', { defaultValue: 'Title' }) as string}
-                        value={data.title}
-                        className={!editMode ? 'JUDO-viewMode' : undefined}
-                        disabled={false || !isFormUpdateable()}
-                        error={!!validation.get('title')}
-                        helperText={validation.get('title')}
-                        onChange={(event) => {
-                          storeDiff('title', event.target.value);
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MdiIcon path="text_fields" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
+        <PageContainerTransition>
+          <Box sx={mainContainerPadding}>
+            <Grid
+              className="access-page-data"
+              container
+              spacing={2}
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <Grid item xs={12} sm={12}>
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroup">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <TextField
+                          required={true}
+                          name="title"
+                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupTitle"
+                          label={t('admin.VoteDefinitionView.title', { defaultValue: 'Title' }) as string}
+                          value={data.title ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
+                          error={!!validation.get('title')}
+                          helperText={validation.get('title')}
+                          onChange={(event) => {
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('title', realValue);
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            readOnly: false || !isFormUpdateable(),
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MdiIcon path="text_fields" />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <DateTimePicker
-                        ampm={false}
-                        ampmInClock={false}
-                        className={!editMode ? 'JUDO-viewMode' : undefined}
-                        slotProps={{
-                          textField: {
-                            id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupCloseAt',
-                            helperText: validation.get('closeAt'),
-                            error: !!validation.get('closeAt'),
-                            InputProps: {
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <MdiIcon path="schedule" />
-                                </InputAdornment>
-                              ),
+                      <Grid item xs={12} sm={12}>
+                        <DateTimePicker
+                          ampm={false}
+                          ampmInClock={false}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          slotProps={{
+                            textField: {
+                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupCloseAt',
+                              required: true,
+                              helperText: validation.get('closeAt'),
+                              error: !!validation.get('closeAt'),
+                              InputProps: {
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="schedule" />
+                                  </InputAdornment>
+                                ),
+                              },
                             },
-                          },
-                        }}
-                        onError={(newError: DateTimeValidationError, value: any) => {
-                          // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                          setValidation((prevValidation) => {
-                            const copy = new Map<keyof AdminVoteDefinition, string>(prevValidation);
-                            copy.set(
-                              'closeAt',
-                              newError === 'invalidDate'
-                                ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                    defaultValue: 'Value does not match the pattern requirements.',
-                                  }) as string)
-                                : '',
-                            );
-                            return copy;
-                          });
-                        }}
-                        views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                        label={t('admin.VoteDefinitionView.closeAt', { defaultValue: 'CloseAt' }) as string}
-                        value={serviceDateToUiDate(data.closeAt ?? null)}
-                        disabled={false || !isFormUpdateable()}
-                        onChange={(newValue: Date) => {
-                          storeDiff('closeAt', newValue);
-                        }}
-                      />
-                    </Grid>
+                          }}
+                          onError={(newError: DateTimeValidationError, value: any) => {
+                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                            setValidation((prevValidation) => {
+                              const copy = new Map<keyof AdminVoteDefinition, string>(prevValidation);
+                              copy.set(
+                                'closeAt',
+                                newError === 'invalidDate'
+                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                      defaultValue: 'Value does not match the pattern requirements.',
+                                    }) as string)
+                                  : '',
+                              );
+                              return copy;
+                            });
+                          }}
+                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                          label={t('admin.VoteDefinitionView.closeAt', { defaultValue: 'CloseAt' }) as string}
+                          value={serviceDateToUiDate(data.closeAt ?? null)}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
+                          onChange={(newValue: Date) => {
+                            storeDiff('closeAt', newValue);
+                          }}
+                        />
+                      </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <TextField
-                        required
-                        name="status"
-                        id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupStatus"
-                        label={t('admin.VoteDefinitionView.status', { defaultValue: 'Status' }) as string}
-                        value={data.status || ''}
-                        className={!editMode ? 'JUDO-viewMode' : undefined}
-                        disabled={false || !isFormUpdateable()}
-                        error={!!validation.get('status')}
-                        helperText={validation.get('status')}
-                        onChange={(event) => {
-                          storeDiff('status', event.target.value);
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MdiIcon path="list" />
-                            </InputAdornment>
-                          ),
-                        }}
-                        select
-                      >
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusCREATED"
-                          value={'CREATED'}
+                      <Grid item xs={12} sm={12}>
+                        <TextField
+                          required={true}
+                          name="status"
+                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupStatus"
+                          label={t('admin.VoteDefinitionView.status', { defaultValue: 'Status' }) as string}
+                          value={data.status || ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
+                          error={!!validation.get('status')}
+                          helperText={validation.get('status')}
+                          onChange={(event) => {
+                            storeDiff('status', event.target.value);
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            readOnly: false || !isFormUpdateable(),
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MdiIcon path="list" />
+                              </InputAdornment>
+                            ),
+                          }}
+                          select
                         >
-                          {t('enumerations.EdemokraciaVoteStatus.CREATED', { defaultValue: 'CREATED' })}
-                        </MenuItem>
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusPENDING"
-                          value={'PENDING'}
-                        >
-                          {t('enumerations.EdemokraciaVoteStatus.PENDING', { defaultValue: 'PENDING' })}
-                        </MenuItem>
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusACTIVE"
-                          value={'ACTIVE'}
-                        >
-                          {t('enumerations.EdemokraciaVoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                        </MenuItem>
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusCLOSED"
-                          value={'CLOSED'}
-                        >
-                          {t('enumerations.EdemokraciaVoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                        </MenuItem>
-                      </TextField>
-                    </Grid>
+                          <MenuItem
+                            id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusCREATED"
+                            value={'CREATED'}
+                          >
+                            {t('enumerations.EdemokraciaVoteStatus.CREATED', { defaultValue: 'CREATED' })}
+                          </MenuItem>
+                          <MenuItem
+                            id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusPENDING"
+                            value={'PENDING'}
+                          >
+                            {t('enumerations.EdemokraciaVoteStatus.PENDING', { defaultValue: 'PENDING' })}
+                          </MenuItem>
+                          <MenuItem
+                            id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusACTIVE"
+                            value={'ACTIVE'}
+                          >
+                            {t('enumerations.EdemokraciaVoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
+                          </MenuItem>
+                          <MenuItem
+                            id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusCLOSED"
+                            value={'CLOSED'}
+                          >
+                            {t('enumerations.EdemokraciaVoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
+                          </MenuItem>
+                        </TextField>
+                      </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <AssociationButton
-                        id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionDebateButtonNavigate"
-                        variant={undefined}
-                        editMode={editMode}
-                        navigateAction={(target) => buttonNavigateDebateAction(data, target)}
-                        owner={data}
-                        fetchCall={async (owner: JudoIdentifiable<any>) =>
-                          adminVoteDefinitionServiceImpl.getDebate(owner, {
-                            _mask: '{}',
-                          })
-                        }
-                      >
-                        {t('admin.VoteDefinitionView.debate.ButtonNavigate', { defaultValue: 'Debate' })}
-                        <MdiIcon path="arrow-right" />
-                      </AssociationButton>
-                    </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <AssociationButton
+                          id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionDebateButtonNavigate"
+                          variant={undefined}
+                          editMode={editMode}
+                          navigateAction={(target) => buttonNavigateDebateAction(data, target)}
+                          owner={data}
+                          fetchCall={async (owner: JudoIdentifiable<any>) =>
+                            adminVoteDefinitionServiceForClassImpl.getDebate(owner, {
+                              _mask: '{}',
+                            })
+                          }
+                        >
+                          {t('admin.VoteDefinitionView.debate.ButtonNavigate', { defaultValue: 'Debate' })}
+                          <MdiIcon path="arrow-right" />
+                        </AssociationButton>
+                      </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <DateTimePicker
-                        ampm={false}
-                        ampmInClock={false}
-                        className={!editMode ? 'JUDO-viewMode' : undefined}
-                        slotProps={{
-                          textField: {
-                            id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupCreated',
-                            helperText: validation.get('created'),
-                            error: !!validation.get('created'),
-                            InputProps: {
-                              startAdornment: (
-                                <InputAdornment position="start">
-                                  <MdiIcon path="schedule" />
-                                </InputAdornment>
-                              ),
+                      <Grid item xs={12} sm={12}>
+                        <DateTimePicker
+                          ampm={false}
+                          ampmInClock={false}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          slotProps={{
+                            textField: {
+                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupCreated',
+                              required: true,
+                              helperText: validation.get('created'),
+                              error: !!validation.get('created'),
+                              InputProps: {
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="schedule" />
+                                  </InputAdornment>
+                                ),
+                              },
                             },
-                          },
-                        }}
-                        onError={(newError: DateTimeValidationError, value: any) => {
-                          // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                          setValidation((prevValidation) => {
-                            const copy = new Map<keyof AdminVoteDefinition, string>(prevValidation);
-                            copy.set(
-                              'created',
-                              newError === 'invalidDate'
-                                ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                    defaultValue: 'Value does not match the pattern requirements.',
-                                  }) as string)
-                                : '',
-                            );
-                            return copy;
-                          });
-                        }}
-                        views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                        label={t('admin.VoteDefinitionView.created', { defaultValue: 'Created' }) as string}
-                        value={serviceDateToUiDate(data.created ?? null)}
-                        disabled={false || !isFormUpdateable()}
-                        onChange={(newValue: Date) => {
-                          storeDiff('created', newValue);
-                        }}
-                      />
-                    </Grid>
+                          }}
+                          onError={(newError: DateTimeValidationError, value: any) => {
+                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                            setValidation((prevValidation) => {
+                              const copy = new Map<keyof AdminVoteDefinition, string>(prevValidation);
+                              copy.set(
+                                'created',
+                                newError === 'invalidDate'
+                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                      defaultValue: 'Value does not match the pattern requirements.',
+                                    }) as string)
+                                  : '',
+                              );
+                              return copy;
+                            });
+                          }}
+                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                          label={t('admin.VoteDefinitionView.created', { defaultValue: 'Created' }) as string}
+                          value={serviceDateToUiDate(data.created ?? null)}
+                          readOnly={false || !isFormUpdateable()}
+                          disabled={isLoading}
+                          onChange={(newValue: Date) => {
+                            storeDiff('created', newValue);
+                          }}
+                        />
+                      </Grid>
 
+                      <Grid item xs={12} sm={12}>
+                        <TextField
+                          required={true}
+                          name="description"
+                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupDescription"
+                          label={t('admin.VoteDefinitionView.description', { defaultValue: 'Description' }) as string}
+                          value={data.description ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
+                          multiline
+                          minRows={4.0}
+                          error={!!validation.get('description')}
+                          helperText={validation.get('description')}
+                          onChange={(event) => {
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('description', realValue);
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            readOnly: false || !isFormUpdateable(),
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MdiIcon path="text_fields" />
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid container item xs={12} sm={12}>
+                <ModeledTabs
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBar"
+                  ownerData={data}
+                  validation={validation}
+                  orientation='horizontal'
+                  childTabs={[
+                    {
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnovote',
+                      name: 'admin.VoteDefinitionView.yesnovote',
+                      label: t('admin.VoteDefinitionView.yesnovote', { defaultValue: 'Yes / No vote' }) as string,
+                      disabled: !data.isYesNoType || isLoading,
+                      hidden: data.isNotYesNoType,
+                      nestedDataKeys: [],
+                    },
+                    {
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnoabstainvote',
+                      name: 'admin.VoteDefinitionView.yesnoabstainvote',
+                      label: t('admin.VoteDefinitionView.yesnoabstainvote', {
+                        defaultValue: 'Yes / No / Abstain vote',
+                      }) as string,
+                      disabled: !data.isYesNoAbstainType || isLoading,
+                      hidden: data.isNotYesNoAbstainType,
+                      nestedDataKeys: [],
+                    },
+                    {
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarSelectanswervote',
+                      name: 'admin.VoteDefinitionView.selectanswervote',
+                      label: t('admin.VoteDefinitionView.selectanswervote', {
+                        defaultValue: 'Select answer vote',
+                      }) as string,
+                      disabled: !data.isSelectAnswerType || isLoading,
+                      hidden: data.isNotSelectAnswerType,
+                      nestedDataKeys: [],
+                    },
+                    {
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarRatingvote',
+                      name: 'admin.VoteDefinitionView.ratingvote',
+                      label: t('admin.VoteDefinitionView.ratingvote', { defaultValue: 'Rating vote' }) as string,
+                      disabled: !data.isRatingType || isLoading,
+                      hidden: data.isNotRatingType,
+                      nestedDataKeys: [],
+                    },
+                  ]}
+                >
+                  {!data.isNotYesNoType && (
                     <Grid item xs={12} sm={12}>
-                      <TextField
-                        required
-                        name="description"
-                        id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewGroupDescription"
-                        label={t('admin.VoteDefinitionView.description', { defaultValue: 'Description' }) as string}
-                        value={data.description}
-                        className={!editMode ? 'JUDO-viewMode' : undefined}
-                        disabled={false || !isFormUpdateable()}
-                        multiline
-                        minRows={4.0}
-                        error={!!validation.get('description')}
-                        helperText={validation.get('description')}
-                        onChange={(event) => {
-                          storeDiff('description', event.target.value);
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MdiIcon path="text_fields" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnovoteYesnovote"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        {!data.isNotYesNoType && (
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="chevron_right" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminVoteDefinitionVoteYesNoAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={!data.isYesNoType || editMode}
+                            >
+                              <span>
+                                {t('admin.VoteDefinitionView.voteYesNo.ButtonCallOperation', { defaultValue: 'Vote' })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        )}
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
+                  )}
+
+                  {!data.isNotYesNoAbstainType && (
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnoabstainvoteYesnoabstainvote"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        {!data.isNotYesNoAbstainType && (
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoAbstainButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="chevron_right" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminVoteDefinitionVoteYesNoAbstainAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={!data.isYesNoAbstainType || editMode}
+                            >
+                              <span>
+                                {t('admin.VoteDefinitionView.voteYesNoAbstain.ButtonCallOperation', {
+                                  defaultValue: 'VoteYesNoAbstain',
+                                })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        )}
+                      </Grid>
+                    </Grid>
+                  )}
+
+                  {!data.isNotSelectAnswerType && (
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarSelectanswervoteSelectanswervote"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        {!data.isNotSelectAnswerType && (
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="chevron_right" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminVoteDefinitionVoteSelectAnswerAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={!data.isSelectAnswerType || editMode}
+                            >
+                              <span>
+                                {t('admin.VoteDefinitionView.voteSelectAnswer.ButtonCallOperation', {
+                                  defaultValue: 'VoteSelectAnswer',
+                                })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        )}
+                      </Grid>
+                    </Grid>
+                  )}
+
+                  {!data.isNotRatingType && (
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarRatingvoteRatingvote"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        {!data.isNotRatingType && (
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteRatingButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="chevron_right" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminVoteDefinitionVoteRatingAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={!data.isRatingType || editMode}
+                            >
+                              <span>
+                                {t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', {
+                                  defaultValue: 'VoteRating',
+                                })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        )}
+                      </Grid>
+                    </Grid>
+                  )}
+                </ModeledTabs>
+              </Grid>
             </Grid>
-
-            <Grid container item xs={12} sm={12}>
-              <ModeledTabs
-                id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBar"
-                activeIndex={0}
-                childTabs={[
-                  {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnovote',
-                    name: 'admin.VoteDefinitionView.yesnovote',
-                    label: t('admin.VoteDefinitionView.yesnovote', { defaultValue: 'Yes / No vote' }) as string,
-                  },
-                  {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnoabstainvote',
-                    name: 'admin.VoteDefinitionView.yesnoabstainvote',
-                    label: t('admin.VoteDefinitionView.yesnoabstainvote', {
-                      defaultValue: 'Yes / No / Abstain vote',
-                    }) as string,
-                  },
-                  {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarSelectanswervote',
-                    name: 'admin.VoteDefinitionView.selectanswervote',
-                    label: t('admin.VoteDefinitionView.selectanswervote', {
-                      defaultValue: 'Select answer vote',
-                    }) as string,
-                  },
-                  {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarRatingvote',
-                    name: 'admin.VoteDefinitionView.ratingvote',
-                    label: t('admin.VoteDefinitionView.ratingvote', { defaultValue: 'Rating vote' }) as string,
-                  },
-                ]}
-              >
-                {!data.isNotYesNoType && (
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnovoteYesnovote"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      {!data.isNotYesNoType && (
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
-                            loadingPosition="start"
-                            onClick={() => adminVoteDefinitionVoteYesNoAction(data, () => fetchData())}
-                            disabled={!data.isYesNoType || editMode}
-                          >
-                            <span>
-                              {t('admin.VoteDefinitionView.voteYesNo.ButtonCallOperation', { defaultValue: 'Vote' })}
-                            </span>
-                          </LoadingButton>
-                        </Grid>
-                      )}
-                    </Grid>
-                  </Grid>
-                )}
-
-                {!data.isNotYesNoAbstainType && (
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarYesnoabstainvoteYesnoabstainvote"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      {!data.isNotYesNoAbstainType && (
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoAbstainButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
-                            loadingPosition="start"
-                            onClick={() => adminVoteDefinitionVoteYesNoAbstainAction(data, () => fetchData())}
-                            disabled={!data.isYesNoAbstainType || editMode}
-                          >
-                            <span>
-                              {t('admin.VoteDefinitionView.voteYesNoAbstain.ButtonCallOperation', {
-                                defaultValue: 'VoteYesNoAbstain',
-                              })}
-                            </span>
-                          </LoadingButton>
-                        </Grid>
-                      )}
-                    </Grid>
-                  </Grid>
-                )}
-
-                {!data.isNotSelectAnswerType && (
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarSelectanswervoteSelectanswervote"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      {!data.isNotSelectAnswerType && (
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
-                            loadingPosition="start"
-                            onClick={() => adminVoteDefinitionVoteSelectAnswerAction(data, () => fetchData())}
-                            disabled={!data.isSelectAnswerType || editMode}
-                          >
-                            <span>
-                              {t('admin.VoteDefinitionView.voteSelectAnswer.ButtonCallOperation', {
-                                defaultValue: 'VoteSelectAnswer',
-                              })}
-                            </span>
-                          </LoadingButton>
-                        </Grid>
-                      )}
-                    </Grid>
-                  </Grid>
-                )}
-
-                {!data.isNotRatingType && (
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewDefaultVoteDefinitionViewTabBarRatingvoteRatingvote"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      {!data.isNotRatingType && (
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteRatingButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
-                            loadingPosition="start"
-                            onClick={() => adminVoteDefinitionVoteRatingAction(data, () => fetchData())}
-                            disabled={!data.isRatingType || editMode}
-                          >
-                            <span>
-                              {t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', {
-                                defaultValue: 'VoteRating',
-                              })}
-                            </span>
-                          </LoadingButton>
-                        </Grid>
-                      )}
-                    </Grid>
-                  </Grid>
-                )}
-              </ModeledTabs>
-            </Grid>
-          </Grid>
-        </Box>
+          </Box>
+        </PageContainerTransition>
       </Container>
     </>
   );

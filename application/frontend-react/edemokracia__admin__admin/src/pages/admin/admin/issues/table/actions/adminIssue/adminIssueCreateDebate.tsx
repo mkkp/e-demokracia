@@ -20,6 +20,7 @@ import type {
   GridColDef,
   GridRenderCellParams,
   GridRowParams,
+  GridFilterModel,
   GridSortModel,
   GridRowSelectionModel,
   GridValueFormatterParams,
@@ -91,7 +92,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   return async function adminIssueCreateDebateAction(owner: AdminIssueStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'lg',
+      maxWidth: 'xs',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();

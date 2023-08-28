@@ -9,6 +9,7 @@
 import { Dialog, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
+import { SlideUpTransition } from '~/theme/animations';
 
 interface PageDialogProps {
   page: ReactNode;
@@ -34,7 +35,7 @@ export const PageDialog = ({ page, open, handleClose, resolve }: PageDialogProps
   };
 
   return (
-    <Dialog open={open} onClose={ok} scroll="paper">
+    <Dialog open={open} onClose={ok} scroll="paper" TransitionComponent={SlideUpTransition}>
       <DialogContent dividers={true}>
         <DialogContentText ref={descriptionElementRef} tabIndex={-1}>
           {page}
