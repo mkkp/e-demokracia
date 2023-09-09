@@ -72,6 +72,7 @@
         "judo.component.AggregationInput.unset": "Elem eltávolítása",
         "judo.component.AggregationInput.create": "Új elem létrehozása",
         "judo.component.BinaryInput.download": "Fájl letöltése",
+        "judo.component.BinaryInput.view": "Fájl megtekintése",
         "judo.component.BinaryInput.upload": "Fájl feltöltése",
         "judo.component.BinaryInput.remove": "Fájl eltávolítása",
         "judo.component.TrinaryLogic.unknown": "Ismeretlen",
