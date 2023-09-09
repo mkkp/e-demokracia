@@ -20,11 +20,12 @@ export const toastConfig: OptionsObject & { success: OptionsObject; error: Optio
   ...generalToastConfig,
   success: {
     ...generalToastConfig,
-    autoHideDuration: 5000,
+    autoHideDuration: 2500,
     variant: 'success',
   },
   error: {
     ...generalToastConfig,
+    autoHideDuration: 2500,
     persist: true,
     variant: 'error',
   },

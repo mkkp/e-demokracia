@@ -9,6 +9,7 @@
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useState, useEffect } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
+import { useDataStore } from '~/hooks';
 import { MdiIcon } from './MdiIcon';
 
 export interface TabPanelProps {
@@ -48,19 +49,20 @@ export interface ModeledTabsProps {
 }
 
 export function ModeledTabs({ id, ownerData, childTabs, children, orientation, validation }: ModeledTabsProps) {
+  const { getItemWithDefault, setItem } = useDataStore('sessionStorage');
   const [value, setValue] = useState<number>(0);
   const border = orientation === 'vertical' ? 'borderRight' : 'borderBottom';
   const additionalBoxSx = orientation === 'vertical' ? { flexGrow: 1, display: 'flex' } : {};
 
   useEffect(() => {
     if (ownerData && ownerData.__identifier) {
-      sessionStorage.setItem(`${id}-${ownerData.__identifier}`, String(value));
+      setItem(`${id}-${ownerData.__identifier}-activeTab`, String(value));
     }
   }, [value]);
 
   useEffect(() => {
     if (ownerData && ownerData.__identifier) {
-      setValue(Number(sessionStorage.getItem(`${id}-${ownerData.__identifier}`) || '0'));
+      setValue(Number(getItemWithDefault(`${id}-${ownerData.__identifier}-activeTab`, '0')));
     }
   }, [ownerData]);
 

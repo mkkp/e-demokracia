@@ -30,9 +30,6 @@ import { IssueType_TableTable } from './components/IssueType_TableTable';
  * Type: Table
  **/
 export default function AdminAdminIssueTypesTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminAdminIssueTypesTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();

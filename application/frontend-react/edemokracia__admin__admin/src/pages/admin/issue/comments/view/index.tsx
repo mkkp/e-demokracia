@@ -10,7 +10,7 @@
 // Page DataElement name: comments
 // Page DataElement owner name: edemokracia::admin::Issue
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
@@ -19,7 +19,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -57,11 +57,20 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminIssueServiceForClassImpl, adminCommentServiceForClassImpl } from '~/generated/data-axios';
-
 import { useAdminCommentVoteUpAction, useAdminCommentVoteDownAction, useButtonNavigateVotesAction } from './actions';
 
 import { PageActions } from './components/PageActions';
 import { CreatedByLink } from './components/CreatedByLink';
+
+export type AdminIssueCommentsViewPostRefreshAction = (
+  data: AdminCommentStored,
+  storeDiff: (attributeName: keyof AdminCommentStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminComment, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ISSUE_COMMENTS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminIssueCommentsViewPostRefreshHook';
+export type AdminIssueCommentsViewPostRefreshHook = () => AdminIssueCommentsViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Issue.comments#View
@@ -103,7 +112,10 @@ export default function AdminIssueCommentsView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -115,6 +127,11 @@ export default function AdminIssueCommentsView() {
   const queryCustomizer: AdminCommentQueryCustomizer = {
     _mask: '{created,comment,upVotes,downVotes,createdBy{representation}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminIssueCommentsViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ISSUE_COMMENTS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminIssueCommentsViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const adminCommentVoteUpAction = useAdminCommentVoteUpAction();
   const adminCommentVoteDownAction = useAdminCommentVoteDownAction();
@@ -153,6 +170,13 @@ export default function AdminIssueCommentsView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminCommentStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -164,10 +188,6 @@ export default function AdminIssueCommentsView() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminComment, string>());
-  }, [editMode]);
 
   return (
     <>
@@ -273,7 +293,9 @@ export default function AdminIssueCommentsView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('createdBy', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>

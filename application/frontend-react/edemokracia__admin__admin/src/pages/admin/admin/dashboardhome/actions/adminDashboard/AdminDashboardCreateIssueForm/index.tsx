@@ -43,7 +43,7 @@ import {
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
@@ -147,7 +147,10 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -253,7 +256,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                           readOnly={false || !isFormUpdateable()}
                           disabled={isLoading}
                           editMode={editMode}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminIssueType | AdminIssueTypeStored | null) => {
+                            storeDiff('issueType', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -378,7 +383,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                           readOnly={false || !isFormUpdateable()}
                           disabled={isLoading}
                           editMode={editMode}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminCity | AdminCityStored | null) => {
+                            storeDiff('city', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -389,7 +396,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                           readOnly={false || !isFormUpdateable()}
                           disabled={isLoading}
                           editMode={editMode}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminCounty | AdminCountyStored | null) => {
+                            storeDiff('county', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -400,7 +409,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                           readOnly={false || !isFormUpdateable()}
                           disabled={isLoading}
                           editMode={editMode}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
+                            storeDiff('district', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>

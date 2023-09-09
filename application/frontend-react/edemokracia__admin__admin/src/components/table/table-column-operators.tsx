@@ -4,6 +4,8 @@ import {
   getGridDateOperators,
   getGridBooleanOperators,
   getGridSingleSelectOperators,
+  GridFilterInputValue,
+  GridFilterInputBoolean,
 } from '@mui/x-data-grid';
 import type { GridFilterOperator } from '@mui/x-data-grid';
 
@@ -20,12 +22,12 @@ function filterNumericColumnOperators(operator: GridFilterOperator): boolean {
 
 function filterDateColumnOperators(operator: GridFilterOperator): boolean {
   // https://github.com/mui/mui-x/blob/master/packages/grid/x-data-grid/src/colDef/gridDateOperators.ts
-  return !['not', 'isEmpty', 'isNotEmpty'].includes(operator.value);
+  return !['isEmpty', 'isNotEmpty'].includes(operator.value);
 }
 
 function filterDateTimeColumnOperators(operator: GridFilterOperator): boolean {
   // https://github.com/mui/mui-x/blob/master/packages/grid/x-data-grid/src/colDef/gridDateOperators.ts
-  return !['is', 'not', 'isEmpty', 'isNotEmpty'].includes(operator.value);
+  return !['isEmpty', 'isNotEmpty'].includes(operator.value);
 }
 
 function filterBooleanColumnOperators(operator: GridFilterOperator): boolean {
@@ -35,10 +37,29 @@ function filterBooleanColumnOperators(operator: GridFilterOperator): boolean {
 
 function filterSingleSelectColumnOperators(operator: GridFilterOperator): boolean {
   // https://github.com/mui/mui-x/blob/master/packages/grid/x-data-grid/src/colDef/gridBooleanOperators.ts
-  return !['not', 'isAnyOf'].includes(operator.value);
+  return !['isAnyOf'].includes(operator.value);
 }
 
-export const stringColumnOperators: GridFilterOperator[] = getGridStringOperators().filter(filterStringColumnOperators);
+export const getStringyNotEqualOperator = (type: string): GridFilterOperator<any, number | string | null, any> => ({
+  value: 'not',
+  getApplyFilterFn: (filterItem) => {
+    if (!filterItem.field || !filterItem.value || !filterItem.operator) {
+      return null;
+    }
+
+    return (params): boolean => {
+      return params.value !== filterItem.value;
+    };
+  },
+  InputComponent: GridFilterInputValue,
+  InputComponentProps: { type },
+  getValueAsString: (value: string) => value,
+});
+
+export const stringColumnOperators: GridFilterOperator[] = [
+  ...getGridStringOperators().filter(filterStringColumnOperators),
+  getStringyNotEqualOperator('string'),
+];
 export const numericColumnOperators: GridFilterOperator[] =
   getGridNumericOperators().filter(filterNumericColumnOperators);
 export const dateColumnOperators: GridFilterOperator[] = getGridDateOperators().filter(filterDateColumnOperators);

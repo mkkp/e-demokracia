@@ -13,7 +13,7 @@ export type MenuItem = {
   label: string;
   to?: string;
   items?: MenuItem[];
-  hidden?: boolean;
+  hiddenBy?: string;
 };
 
 export interface MenuProps {

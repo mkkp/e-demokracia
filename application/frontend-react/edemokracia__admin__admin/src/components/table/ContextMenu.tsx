@@ -13,7 +13,8 @@ export interface ContextMenuProps<T, P extends JudoStored<T>> {
   filters: Filter[];
   filterOptions: FilterOption[];
   data: P[];
-  onFiltersUpdated: (newFilters: Filter[]) => void;
+  onFilterByCell: (filter: Filter) => void;
+  onExcludeByCell: (filter: Filter) => void;
 }
 
 export interface ContextMenuApi {
@@ -23,11 +24,12 @@ export interface ContextMenuApi {
 export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>>(
   <T, P extends JudoStored<T>>(props: ContextMenuProps<T, P>, ref: ForwardedRef<ContextMenuApi>) => {
     const { t } = useTranslation();
-    const { filters, data, onFiltersUpdated, filterOptions, columns } = props;
+    const { filters, data, onFilterByCell, onExcludeByCell, filterOptions, columns } = props;
     const [selectedColumn, setSelectedColumn] = useState<GridColDef<P> | undefined>();
     const [selectedRow, setSelectedRow] = useState<string | undefined>();
     const [selectedRowData, setSelectedRowData] = useState<P | undefined>();
     const [selectedValue, setSelectedValue] = useState<any>();
+    const [filterType, setFilterType] = useState<FilterType | undefined>();
     const [textContent, setTextContent] = useState<any>();
     const [contextMenu, setContextMenu] = useState<{
       mouseX: number;
@@ -60,6 +62,11 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
         setSelectedValue(value);
         setSelectedColumn(column);
         setContextMenu(contextMenu === null ? { mouseX: event.clientX - 2, mouseY: event.clientY - 4 } : null);
+        const fo = filterOptions.find((f) => f.attributeName === field)!;
+        const ft: FilterType | undefined = fo?.filterType;
+        if (ft) {
+          setFilterType(ft);
+        }
       }
     };
 
@@ -76,33 +83,27 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
       if (field && selectedValue !== null && selectedValue !== undefined) {
         const filterOption = filterOptions.find((f) => f.attributeName === field)!;
         const filterType: FilterType = filterOption.filterType;
-        const sourceFilters = filters.filter((f) => f.filterOption.attributeName !== field);
-        const newFilters: Filter[] = [
-          ...sourceFilters,
-          {
-            valueId: `${field as string}-value-${sourceFilters.length + 1}`,
-            operationId: `${field as string}-operation-${sourceFilters.length + 1}`,
-            id: field as string,
-            filterOption: {
-              id: `${field as string}-option-${sourceFilters.length + 1}`,
-              attributeName: field as string,
-              filterType: filterType,
-              ...(filterType === FilterType.enumeration
-                ? {
-                    enumValues: filterOption.enumValues,
-                  }
-                : {}),
-            },
-            filterBy: {
-              value: selectedValue,
-              operator: (filterType === FilterType.boolean || filterType === FilterType.enumeration
-                ? 'equals'
-                : 'equal') as Operation,
-            },
+        onFilterByCell({
+          valueId: `${field as string}-value-${new Date().toISOString()}`,
+          operationId: `${field as string}-operation-${new Date().toISOString()}`,
+          id: field as string,
+          filterOption: {
+            id: `${field as string}-option-${new Date().toISOString()}`,
+            attributeName: field as string,
+            filterType: filterType,
+            ...(filterType === FilterType.enumeration
+              ? {
+                  enumValues: filterOption.enumValues,
+                }
+              : {}),
           },
-        ];
-
-        onFiltersUpdated(newFilters);
+          filterBy: {
+            value: selectedValue,
+            operator: (filterType === FilterType.boolean || filterType === FilterType.enumeration
+              ? 'equals'
+              : 'equal') as Operation,
+          },
+        });
       }
       closeContextMenu();
     };
@@ -111,35 +112,30 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
       if (field && selectedValue !== null && selectedValue !== undefined) {
         const filterOption = filterOptions.find((f) => f.attributeName === field)!;
         const filterType: FilterType = filterOption.filterType;
-        const sourceFilters = filters.filter((f) => f.filterOption.attributeName !== field);
-        const newFilters: Filter[] = [
-          ...sourceFilters,
-          {
-            valueId: `${field as string}-value-${sourceFilters.length + 1}`,
-            operationId: `${field as string}-operation-${sourceFilters.length + 1}`,
-            id: field as string,
-            filterOption: {
-              id: `${field as string}-option-${sourceFilters.length + 1}`,
-              attributeName: field as string,
-              filterType: filterType,
-              ...(filterType === FilterType.enumeration
-                ? {
-                    enumValues: filterOption.enumValues,
-                  }
-                : {}),
-            },
-            filterBy: {
-              value: filterType === FilterType.boolean ? !selectedValue : selectedValue, // invert bool value because we only have "equals" operator
-              operator: (filterType === FilterType.boolean
-                ? 'equals'
-                : filterType === FilterType.enumeration
-                ? 'notEquals'
-                : 'notEqual') as Operation,
-            },
-          },
-        ];
 
-        onFiltersUpdated(newFilters);
+        onExcludeByCell({
+          valueId: `${field as string}-value-${new Date().toISOString()}`,
+          operationId: `${field as string}-operation-${new Date().toISOString()}`,
+          id: field as string,
+          filterOption: {
+            id: `${field as string}-option-${new Date().toISOString()}`,
+            attributeName: field as string,
+            filterType: filterType,
+            ...(filterType === FilterType.enumeration
+              ? {
+                  enumValues: filterOption.enumValues,
+                }
+              : {}),
+          },
+          filterBy: {
+            value: filterType === FilterType.boolean ? !selectedValue : selectedValue, // invert bool value because we only have "equals" operator
+            operator: (filterType === FilterType.boolean
+              ? 'equals'
+              : filterType === FilterType.enumeration
+              ? 'notEquals'
+              : 'notEqual') as Operation,
+          },
+        });
       }
       closeContextMenu();
     };
@@ -172,32 +168,37 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
             }
           </Typography>
         </MenuItem>
-        <MenuItem onClick={filterByCell}>
-          <MdiIcon path="equal" sx={{ mr: 1 }} />
-          <Typography variant="inherit">
-            {
-              t('judo.component.Table.ContextMenu.filterBy', {
-                defaultValue: 'Filter based on the selected value',
-                columnName: selectedColumn?.headerName,
-                field: field,
-                value: selectedValue,
-              }) as string
-            }
-          </Typography>
-        </MenuItem>
-        <MenuItem onClick={excludeByCell}>
-          <MdiIcon path="not-equal-variant" sx={{ mr: 1 }} />
-          <Typography variant="inherit">
-            {
-              t('judo.component.Table.ContextMenu.excludeBy', {
-                defaultValue: 'Exclude based on the selected value',
-                columnName: selectedColumn?.headerName,
-                field: field,
-                value: selectedValue,
-              }) as string
-            }
-          </Typography>
-        </MenuItem>
+        {/* Do not allow filtering for empty values */}
+        {selectedValue !== null && selectedValue !== undefined && (
+          <MenuItem onClick={filterByCell}>
+            <MdiIcon path="equal" sx={{ mr: 1 }} />
+            <Typography variant="inherit">
+              {
+                t('judo.component.Table.ContextMenu.filterBy', {
+                  defaultValue: 'Filter based on the selected value',
+                  columnName: selectedColumn?.headerName,
+                  field: field,
+                  value: selectedValue,
+                }) as string
+              }
+            </Typography>
+          </MenuItem>
+        )}
+        {filterType !== FilterType.boolean && filterType !== FilterType.trinaryLogic && (
+          <MenuItem onClick={excludeByCell}>
+            <MdiIcon path="not-equal-variant" sx={{ mr: 1 }} />
+            <Typography variant="inherit">
+              {
+                t('judo.component.Table.ContextMenu.excludeBy', {
+                  defaultValue: 'Exclude based on the selected value',
+                  columnName: selectedColumn?.headerName,
+                  field: field,
+                  value: selectedValue,
+                }) as string
+              }
+            </Typography>
+          </MenuItem>
+        )}
       </Menu>
     );
   },

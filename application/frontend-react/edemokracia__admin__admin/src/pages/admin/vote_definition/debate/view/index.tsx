@@ -10,7 +10,7 @@
 // Page DataElement name: debate
 // Page DataElement owner name: edemokracia::admin::VoteDefinition
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,7 +30,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -82,7 +82,6 @@ import {
   EdemokraciaDebateStatus,
 } from '~/generated/data-api';
 import { adminVoteDefinitionServiceForClassImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
-
 import {
   useAdminDebateCloseDebateAction,
   useAdminDebateCreateArgumentAction,
@@ -96,6 +95,17 @@ import { VoteDefinitionLink } from './components/VoteDefinitionLink';
 import { ConsTable } from './components/ConsTable';
 import { ProsTable } from './components/ProsTable';
 import { CommentsTable } from './components/CommentsTable';
+
+export type AdminVoteDefinitionDebateViewPostRefreshAction = (
+  data: AdminDebateStored,
+  storeDiff: (attributeName: keyof AdminDebateStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminDebate, string>>>,
+) => Promise<void>;
+
+export const ADMIN_VOTE_DEFINITION_DEBATE_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminVoteDefinitionDebateViewPostRefreshHook';
+export type AdminVoteDefinitionDebateViewPostRefreshHook = () => AdminVoteDefinitionDebateViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::VoteDefinition.debate#View
@@ -137,7 +147,10 @@ export default function AdminVoteDefinitionDebateView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -150,6 +163,12 @@ export default function AdminVoteDefinitionDebateView() {
     _mask:
       '{title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminVoteDefinitionDebateViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_VOTE_DEFINITION_DEBATE_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminVoteDefinitionDebateViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const adminDebateCloseDebateAction = useAdminDebateCloseDebateAction();
   const adminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
@@ -188,6 +207,13 @@ export default function AdminVoteDefinitionDebateView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminDebateStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -199,10 +225,6 @@ export default function AdminVoteDefinitionDebateView() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminDebate, string>());
-  }, [editMode]);
 
   return (
     <>
@@ -393,7 +415,9 @@ export default function AdminVoteDefinitionDebateView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminIssue | AdminIssueStored | null) => {
+                                storeDiff('issue', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -405,7 +429,9 @@ export default function AdminVoteDefinitionDebateView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('createdBy', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -449,7 +475,9 @@ export default function AdminVoteDefinitionDebateView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminVoteDefinition | AdminVoteDefinitionStored | null) => {
+                                storeDiff('voteDefinition', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>

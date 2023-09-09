@@ -41,7 +41,7 @@ import {
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
@@ -134,7 +134,10 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -171,7 +174,7 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
     fetchData();
   }, []);
 
-  const saveData = async () => {
+  const submit = async () => {
     setIsLoading(true);
 
     try {
@@ -284,7 +287,9 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
               readOnly={false || !isFormUpdateable()}
               disabled={isLoading}
               editMode={editMode}
-              storeDiff={storeDiff}
+              onChange={(value: AdminUser | AdminUserStored | null) => {
+                storeDiff('owner', value);
+              }}
               validation={validation}
             />
           </Grid>
@@ -306,7 +311,7 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
             id="CreateActionedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCategoriesPageCreate-action-form-action-create"
             variant="contained"
             onClick={async () => {
-              const result = await saveData();
+              const result = await submit();
               if (result) {
                 successCallback(result);
               }
@@ -330,7 +335,7 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
                     <MenuItem
                       key="create-and-navigate"
                       onClick={async (event: any) => {
-                        const result: AdminIssueCategoryStored | undefined = await saveData();
+                        const result: AdminIssueCategoryStored | undefined = await submit();
 
                         if (result) {
                           successCallback(result);

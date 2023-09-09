@@ -30,9 +30,6 @@ import { County_TableTable } from './components/County_TableTable';
  * Type: Table
  **/
 export default function AdminAdminCountiesTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminAdminCountiesTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();

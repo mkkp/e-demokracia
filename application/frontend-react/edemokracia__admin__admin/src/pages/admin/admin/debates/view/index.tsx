@@ -10,7 +10,7 @@
 // Page DataElement name: debates
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,7 +30,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -82,7 +82,6 @@ import {
   EdemokraciaDebateStatus,
 } from '~/generated/data-api';
 import { adminAdminServiceForDebatesImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
-
 import {
   useAdminDebateCloseDebateAction,
   useAdminDebateCreateArgumentAction,
@@ -96,6 +95,16 @@ import { VoteDefinitionLink } from './components/VoteDefinitionLink';
 import { ConsTable } from './components/ConsTable';
 import { ProsTable } from './components/ProsTable';
 import { CommentsTable } from './components/CommentsTable';
+
+export type AdminAdminDebatesViewPostRefreshAction = (
+  data: AdminDebateStored,
+  storeDiff: (attributeName: keyof AdminDebateStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminDebate, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ADMIN_DEBATES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminDebatesViewPostRefreshHook';
+export type AdminAdminDebatesViewPostRefreshHook = () => AdminAdminDebatesViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Admin.debates#View
@@ -144,7 +153,10 @@ export default function AdminAdminDebatesView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -157,6 +169,11 @@ export default function AdminAdminDebatesView() {
     _mask:
       '{title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminAdminDebatesViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_DEBATES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminAdminDebatesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const adminDebateCloseDebateAction = useAdminDebateCloseDebateAction();
   const adminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
@@ -195,6 +212,13 @@ export default function AdminAdminDebatesView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminDebateStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -203,7 +227,7 @@ export default function AdminAdminDebatesView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -214,6 +238,7 @@ export default function AdminAdminDebatesView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminDebate, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -242,10 +267,6 @@ export default function AdminAdminDebatesView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminDebate, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -255,7 +276,7 @@ export default function AdminAdminDebatesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>
@@ -437,7 +458,9 @@ export default function AdminAdminDebatesView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminIssue | AdminIssueStored | null) => {
+                                storeDiff('issue', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -449,7 +472,9 @@ export default function AdminAdminDebatesView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('createdBy', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -493,7 +518,9 @@ export default function AdminAdminDebatesView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminVoteDefinition | AdminVoteDefinitionStored | null) => {
+                                storeDiff('voteDefinition', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>

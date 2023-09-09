@@ -10,7 +10,7 @@
 // Page DataElement name: voteDefinition
 // Page DataElement owner name: edemokracia::admin::VoteEntry
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
@@ -19,7 +19,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -56,7 +56,6 @@ import {
   EdemokraciaVoteType,
 } from '~/generated/data-api';
 import { adminVoteEntryServiceForClassImpl, adminVoteDefinitionServiceForClassImpl } from '~/generated/data-axios';
-
 import {
   useButtonNavigateDebateAction,
   useAdminVoteDefinitionVoteYesNoAction,
@@ -66,6 +65,17 @@ import {
 } from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminVoteEntryVoteDefinitionViewPostRefreshAction = (
+  data: AdminVoteDefinitionStored,
+  storeDiff: (attributeName: keyof AdminVoteDefinitionStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminVoteDefinition, string>>>,
+) => Promise<void>;
+
+export const ADMIN_VOTE_ENTRY_VOTE_DEFINITION_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminVoteEntryVoteDefinitionViewPostRefreshHook';
+export type AdminVoteEntryVoteDefinitionViewPostRefreshHook = () => AdminVoteEntryVoteDefinitionViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::VoteEntry.voteDefinition#View
@@ -111,7 +121,10 @@ export default function AdminVoteEntryVoteDefinitionView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -126,6 +139,12 @@ export default function AdminVoteEntryVoteDefinitionView() {
     _mask:
       '{title,closeAt,status,created,description,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminVoteEntryVoteDefinitionViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_VOTE_ENTRY_VOTE_DEFINITION_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminVoteEntryVoteDefinitionViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const buttonNavigateDebateAction = useButtonNavigateDebateAction();
   const adminVoteDefinitionVoteYesNoAction = useAdminVoteDefinitionVoteYesNoAction();
@@ -166,6 +185,13 @@ export default function AdminVoteEntryVoteDefinitionView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminVoteDefinitionStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -177,10 +203,6 @@ export default function AdminVoteEntryVoteDefinitionView() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminVoteDefinition, string>());
-  }, [editMode]);
 
   return (
     <>

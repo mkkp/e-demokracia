@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -55,6 +58,7 @@ import {
   useRowDeleteUsersAction,
   useRowViewUsersAction,
 } from '../actions';
+import { GridLogicOperator } from '@mui/x-data-grid';
 
 export const ADMIN_ADMIN_USERS_TABLE_USER_TABLE = 'AdminAdminUsersTableUser_Table';
 
@@ -64,6 +68,7 @@ export interface User_TableTableProps {
 }
 
 export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps>((props, ref) => {
+  const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { isOwnerLoading, setIsOwnerLoading } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
@@ -77,12 +82,16 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
   const [data, setData] = useState<GridRowModel<AdminUserStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'userName', sort: null }]);
-  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUsersTableDefaultUsersUserTable-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUsersTableDefaultUsersUserTable-filters`;
+  const [filterModel, setFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [lastItem, setLastItem] = useState<AdminUserStored>();
   const [firstItem, setFirstItem] = useState<AdminUserStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
-  const [filters, setFilters] = useState<Filter[]>([]);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminUserQueryCustomizer>({
     _mask: '{userName,isAdmin,firstName,lastName,phone,email,created}',
     _seek: {
@@ -98,6 +107,13 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+
+  useEffect(() => {
+    setItemStringified(filtersKey, filters);
+  }, [filters]);
+  useEffect(() => {
+    setItemStringified(filterModelKey, filterModel);
+  }, [filterModel]);
 
   const usersSortModel: GridSortModel = [{ field: 'userName', sort: null }];
 
@@ -327,6 +343,25 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
     },
   ];
 
+  const handleFiltersChange = (newFilters: Filter[]) => {
+    setPage(0);
+    setFilters(newFilters);
+
+    setQueryCustomizer((prevQueryCustomizer: AdminUserQueryCustomizer) => {
+      // remove previous filter values, so that we can always start with a clean slate
+      for (const name of usersColumns.map((c) => c.field)) {
+        delete (prevQueryCustomizer as any)[name];
+      }
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: 10 + 1,
+        },
+        ...mapAllFiltersToQueryCustomizerProperties(newFilters),
+      };
+    });
+  };
+
   function handleSortModelChange(newModel: GridSortModel) {
     setPage(0);
     setSortModel(newModel);
@@ -401,6 +436,11 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
         sx={{
           // overflow: 'hidden',
           display: 'grid',
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}

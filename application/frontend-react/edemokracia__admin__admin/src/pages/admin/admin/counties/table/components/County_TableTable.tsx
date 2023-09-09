@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -56,6 +59,7 @@ import {
   useRowDeleteCountiesAction,
   useRowViewCountiesAction,
 } from '../actions';
+import { GridLogicOperator } from '@mui/x-data-grid';
 
 export const ADMIN_ADMIN_COUNTIES_TABLE_COUNTY_TABLE = 'AdminAdminCountiesTableCounty_Table';
 
@@ -65,6 +69,7 @@ export interface County_TableTableProps {
 }
 
 export const County_TableTable = forwardRef<RefreshableTable, County_TableTableProps>((props, ref) => {
+  const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { isOwnerLoading, setIsOwnerLoading } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
@@ -78,12 +83,16 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
   const [data, setData] = useState<GridRowModel<AdminCountyStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: null }]);
-  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableDefaultCountiesCountyTable-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableDefaultCountiesCountyTable-filters`;
+  const [filterModel, setFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [lastItem, setLastItem] = useState<AdminCountyStored>();
   const [firstItem, setFirstItem] = useState<AdminCountyStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
-  const [filters, setFilters] = useState<Filter[]>([]);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminCountyQueryCustomizer>({
     _mask: '{name}',
     _seek: {
@@ -99,6 +108,13 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+
+  useEffect(() => {
+    setItemStringified(filtersKey, filters);
+  }, [filters]);
+  useEffect(() => {
+    setItemStringified(filterModelKey, filterModel);
+  }, [filterModel]);
 
   const countiesSortModel: GridSortModel = [{ field: 'name', sort: null }];
 
@@ -166,6 +182,25 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
       disabled: (row: AdminCountyStored) => !row.__deleteable,
     },
   ];
+
+  const handleFiltersChange = (newFilters: Filter[]) => {
+    setPage(0);
+    setFilters(newFilters);
+
+    setQueryCustomizer((prevQueryCustomizer: AdminCountyQueryCustomizer) => {
+      // remove previous filter values, so that we can always start with a clean slate
+      for (const name of countiesColumns.map((c) => c.field)) {
+        delete (prevQueryCustomizer as any)[name];
+      }
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: 10 + 1,
+        },
+        ...mapAllFiltersToQueryCustomizerProperties(newFilters),
+      };
+    });
+  };
 
   function handleSortModelChange(newModel: GridSortModel) {
     setPage(0);
@@ -241,6 +276,11 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
         sx={{
           // overflow: 'hidden',
           display: 'grid',
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}

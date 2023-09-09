@@ -10,7 +10,7 @@
 // Page DataElement name: activityCounties
 // Page DataElement owner name: edemokracia::admin::User
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -56,11 +56,21 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminUserServiceForClassImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
 import { CitiesTable } from './components/CitiesTable';
+
+export type AdminUserActivityCountiesViewPostRefreshAction = (
+  data: AdminCountyStored,
+  storeDiff: (attributeName: keyof AdminCountyStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminCounty, string>>>,
+) => Promise<void>;
+
+export const ADMIN_USER_ACTIVITY_COUNTIES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminUserActivityCountiesViewPostRefreshHook';
+export type AdminUserActivityCountiesViewPostRefreshHook = () => AdminUserActivityCountiesViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::User.activityCounties#View
@@ -105,7 +115,10 @@ export default function AdminUserActivityCountiesView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -117,6 +130,12 @@ export default function AdminUserActivityCountiesView() {
   const queryCustomizer: AdminCountyQueryCustomizer = {
     _mask: '{name,representation,cities{name}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminUserActivityCountiesViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_USER_ACTIVITY_COUNTIES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminUserActivityCountiesViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
@@ -151,6 +170,13 @@ export default function AdminUserActivityCountiesView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminCountyStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -159,7 +185,7 @@ export default function AdminUserActivityCountiesView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -170,6 +196,7 @@ export default function AdminUserActivityCountiesView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminCounty, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -184,10 +211,6 @@ export default function AdminUserActivityCountiesView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminCounty, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -197,7 +220,7 @@ export default function AdminUserActivityCountiesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">

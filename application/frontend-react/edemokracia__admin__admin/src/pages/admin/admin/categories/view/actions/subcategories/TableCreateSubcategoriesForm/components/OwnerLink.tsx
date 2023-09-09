@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/actions/actionForm/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -55,12 +55,12 @@ export interface OwnerLinkProps {
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
-  storeDiff: (attributeName: keyof AdminIssueCategory, value: any) => void;
+  onChange: (value: AdminUser | AdminUserStored | null) => void;
   validation: Map<keyof AdminIssueCategory, string>;
 }
 
 export function OwnerLink(props: OwnerLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -118,7 +118,8 @@ export function OwnerLink(props: OwnerLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {
-        storeDiff('owner', owner);
+        // storeDiff('owner', owner);
+        onChange(owner as AdminUserStored);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminUserStored, AdminUserQueryCustomizer>({
@@ -131,13 +132,14 @@ export function OwnerLink(props: OwnerLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.owner?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.owner ? [ownerData.owner] : undefined,
           filterOptions: ownerRangeFilterOptions,
           initialQueryCustomizer: ownerInitialQueryCustomizer,
         });
 
         if (res === undefined) return;
-        storeDiff('owner', res.value as AdminUserStored);
+        // storeDiff('owner', res.value as AdminUserStored);
+        onChange(res.value as AdminUserStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminUserQueryCustomizer = {
@@ -156,7 +158,8 @@ export function OwnerLink(props: OwnerLinkProps) {
         );
       }}
       onUnset={async () => {
-        storeDiff('owner', null);
+        // storeDiff('owner', null);
+        onChange(null);
       }}
     />
   );

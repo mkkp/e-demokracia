@@ -10,7 +10,7 @@
 // Page DataElement name: county
 // Page DataElement owner name: edemokracia::admin::CreateIssueInput
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -56,11 +56,21 @@ import {
   AdminCreateIssueInputStored,
 } from '~/generated/data-api';
 import { adminCreateIssueInputServiceForClassImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
 import { CitiesTable } from './components/CitiesTable';
+
+export type AdminCreateIssueInputCountyViewPostRefreshAction = (
+  data: AdminCountyStored,
+  storeDiff: (attributeName: keyof AdminCountyStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminCounty, string>>>,
+) => Promise<void>;
+
+export const ADMIN_CREATE_ISSUE_INPUT_COUNTY_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminCreateIssueInputCountyViewPostRefreshHook';
+export type AdminCreateIssueInputCountyViewPostRefreshHook = () => AdminCreateIssueInputCountyViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::CreateIssueInput.county#View
@@ -102,7 +112,10 @@ export default function AdminCreateIssueInputCountyView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -114,6 +127,12 @@ export default function AdminCreateIssueInputCountyView() {
   const queryCustomizer: AdminCountyQueryCustomizer = {
     _mask: '{name,representation,cities{name}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminCreateIssueInputCountyViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_CREATE_ISSUE_INPUT_COUNTY_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminCreateIssueInputCountyViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
@@ -148,6 +167,13 @@ export default function AdminCreateIssueInputCountyView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminCountyStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -159,10 +185,6 @@ export default function AdminCreateIssueInputCountyView() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminCounty, string>());
-  }, [editMode]);
 
   return (
     <>

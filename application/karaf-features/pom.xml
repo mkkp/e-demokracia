@@ -22,6 +22,15 @@
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <!-- To define create 'karaf-features/pom.xml.extra-plugin-management.fragment.hbs' file -->
+                <!-- End of 'karaf-features/pom.xml.extra-plugin-management.fragment.hbs'  -->
+                
+                
+            </plugins>
+        </pluginManagement>
+
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/feature</directory>
@@ -52,6 +61,11 @@
                     <aggregateFeatures>true</aggregateFeatures>
                 </configuration>
             </plugin>
+
+            <!-- To define create 'karaf-features/pom.xml.extra-plugins.fragment.hbs' file -->
+            <!-- End of 'karaf-features/pom.xml.extra-plugins.fragment.hbs' -->
+            
+
         </plugins>
     </build>
     <profiles>
@@ -174,6 +188,9 @@
             <artifactId>edemokracia-application-frontend-react-edemokracia__admin__admin</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- To define create 'karaf-features/pom.xml.extra-dependencies.fragment.hbs' file -->
+        <!-- End of 'karaf-features/pom.xml.extra-dependencies.fragment.hbs' -->
 
     </dependencies>
 </project>

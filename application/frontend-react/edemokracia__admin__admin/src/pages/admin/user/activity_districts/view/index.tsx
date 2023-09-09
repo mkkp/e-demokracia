@@ -10,7 +10,7 @@
 // Page DataElement name: activityDistricts
 // Page DataElement owner name: edemokracia::admin::User
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -53,10 +53,20 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminUserServiceForClassImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminUserActivityDistrictsViewPostRefreshAction = (
+  data: AdminDistrictStored,
+  storeDiff: (attributeName: keyof AdminDistrictStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminDistrict, string>>>,
+) => Promise<void>;
+
+export const ADMIN_USER_ACTIVITY_DISTRICTS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminUserActivityDistrictsViewPostRefreshHook';
+export type AdminUserActivityDistrictsViewPostRefreshHook = () => AdminUserActivityDistrictsViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::User.activityDistricts#View
@@ -101,7 +111,10 @@ export default function AdminUserActivityDistrictsView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -115,6 +128,12 @@ export default function AdminUserActivityDistrictsView() {
   const queryCustomizer: AdminDistrictQueryCustomizer = {
     _mask: '{name,representation}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminUserActivityDistrictsViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_USER_ACTIVITY_DISTRICTS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminUserActivityDistrictsViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
@@ -149,6 +168,13 @@ export default function AdminUserActivityDistrictsView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminDistrictStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -157,7 +183,7 @@ export default function AdminUserActivityDistrictsView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -168,6 +194,7 @@ export default function AdminUserActivityDistrictsView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminDistrict, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -182,10 +209,6 @@ export default function AdminUserActivityDistrictsView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminDistrict, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -195,7 +218,7 @@ export default function AdminUserActivityDistrictsView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">

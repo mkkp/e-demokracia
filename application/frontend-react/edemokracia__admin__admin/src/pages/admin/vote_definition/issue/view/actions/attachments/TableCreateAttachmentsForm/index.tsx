@@ -41,7 +41,7 @@ import {
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
@@ -133,7 +133,10 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -170,7 +173,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
     fetchData();
   }, []);
 
-  const saveData = async () => {
+  const submit = async () => {
     setIsLoading(true);
 
     try {
@@ -344,7 +347,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
             id="CreateActionedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewEdemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsTableCreate-action-form-action-create"
             variant="contained"
             onClick={async () => {
-              const result = await saveData();
+              const result = await submit();
               if (result) {
                 successCallback(result);
               }
@@ -368,7 +371,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
                     <MenuItem
                       key="create-and-navigate"
                       onClick={async (event: any) => {
-                        const result: AdminIssueAttachmentStored | undefined = await saveData();
+                        const result: AdminIssueAttachmentStored | undefined = await submit();
 
                         if (result) {
                           successCallback(result);

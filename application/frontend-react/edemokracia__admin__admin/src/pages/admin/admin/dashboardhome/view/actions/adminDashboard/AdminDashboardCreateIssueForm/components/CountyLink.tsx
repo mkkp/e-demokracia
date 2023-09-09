@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/actions/actionForm/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -70,12 +70,12 @@ export interface CountyLinkProps {
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
-  storeDiff: (attributeName: keyof AdminCreateIssueInput, value: any) => void;
+  onChange: (value: AdminCounty | AdminCountyStored | null) => void;
   validation: Map<keyof AdminCreateIssueInput, string>;
 }
 
 export function CountyLink(props: CountyLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -150,7 +150,8 @@ export function CountyLink(props: CountyLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(county) => {
-        storeDiff('county', county);
+        // storeDiff('county', county);
+        onChange(county as AdminCountyStored);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
@@ -163,13 +164,14 @@ export function CountyLink(props: CountyLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.county?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.county ? [ownerData.county] : undefined,
           filterOptions: countyRangeFilterOptions,
           initialQueryCustomizer: countyInitialQueryCustomizer,
         });
 
         if (res === undefined) return;
-        storeDiff('county', res.value as AdminCountyStored);
+        // storeDiff('county', res.value as AdminCountyStored);
+        onChange(res.value as AdminCountyStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminCountyQueryCustomizer = {
@@ -188,7 +190,8 @@ export function CountyLink(props: CountyLinkProps) {
         );
       }}
       onUnset={async () => {
-        storeDiff('county', null);
+        // storeDiff('county', null);
+        onChange(null);
       }}
     />
   );

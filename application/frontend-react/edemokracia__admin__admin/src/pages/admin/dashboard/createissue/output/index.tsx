@@ -10,7 +10,7 @@
 // Page DataElement name: output
 // Page DataElement owner name: createIssue
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,7 +30,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -92,7 +92,6 @@ import {
   EdemokraciaVoteType,
 } from '~/generated/data-api';
 import { adminIssueServiceForClassImpl } from '~/generated/data-axios';
-
 import { useAdminIssueCreateDebateAction, useAdminIssueCreateCommentAction } from './actions';
 
 import { PageActions } from './components/PageActions';
@@ -105,6 +104,17 @@ import { AttachmentsTable } from './components/AttachmentsTable';
 import { CategoriesTable } from './components/CategoriesTable';
 import { CommentsTable } from './components/CommentsTable';
 import { DebatesTable } from './components/DebatesTable';
+
+export type AdminDashboardCreateissueOutputPostRefreshAction = (
+  data: AdminIssueStored,
+  storeDiff: (attributeName: keyof AdminIssueStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminIssue, string>>>,
+) => Promise<void>;
+
+export const ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminDashboardCreateissueOutputPostRefreshHook';
+export type AdminDashboardCreateissueOutputPostRefreshHook = () => AdminDashboardCreateissueOutputPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Dashboard.createIssue#Output
@@ -145,7 +155,10 @@ export default function AdminDashboardCreateissueOutput() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -158,6 +171,12 @@ export default function AdminDashboardCreateissueOutput() {
     _mask:
       '{defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},debates{status,title,closeAt,description},comments{comment,created,createdByName,upVotes,downVotes}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminDashboardCreateissueOutputPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminDashboardCreateissueOutputPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
@@ -195,6 +214,13 @@ export default function AdminDashboardCreateissueOutput() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminIssueStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -206,10 +232,6 @@ export default function AdminDashboardCreateissueOutput() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminIssue, string>());
-  }, [editMode]);
 
   return (
     <>
@@ -266,7 +288,9 @@ export default function AdminDashboardCreateissueOutput() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminIssueType | AdminIssueTypeStored | null) => {
+                                storeDiff('issueType', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -534,7 +558,9 @@ export default function AdminDashboardCreateissueOutput() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('owner', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -615,7 +641,9 @@ export default function AdminDashboardCreateissueOutput() {
                           disabled={isLoading}
                           editMode={editMode}
                           fetchOwnerData={fetchData}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminCounty | AdminCountyStored | null) => {
+                            storeDiff('county', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -627,7 +655,9 @@ export default function AdminDashboardCreateissueOutput() {
                           disabled={isLoading}
                           editMode={editMode}
                           fetchOwnerData={fetchData}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminCity | AdminCityStored | null) => {
+                            storeDiff('city', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -639,7 +669,9 @@ export default function AdminDashboardCreateissueOutput() {
                           disabled={isLoading}
                           editMode={editMode}
                           fetchOwnerData={fetchData}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
+                            storeDiff('district', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>

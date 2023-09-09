@@ -10,7 +10,7 @@
 // Page DataElement name: votes
 // Page DataElement owner name: edemokracia::admin::Comment
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
@@ -19,7 +19,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -55,10 +55,19 @@ import {
   EdemokraciaSimpleVoteType,
 } from '~/generated/data-api';
 import { adminCommentServiceForClassImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminCommentVotesViewPostRefreshAction = (
+  data: AdminSimpleVoteStored,
+  storeDiff: (attributeName: keyof AdminSimpleVoteStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminSimpleVote, string>>>,
+) => Promise<void>;
+
+export const ADMIN_COMMENT_VOTES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminCommentVotesViewPostRefreshHook';
+export type AdminCommentVotesViewPostRefreshHook = () => AdminCommentVotesViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Comment.votes#View
@@ -106,7 +115,10 @@ export default function AdminCommentVotesView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -120,6 +132,11 @@ export default function AdminCommentVotesView() {
   const queryCustomizer: AdminSimpleVoteQueryCustomizer = {
     _mask: '{created,type}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminCommentVotesViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_COMMENT_VOTES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminCommentVotesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = t('admin.SimpleVoteView', { defaultValue: 'Create / View Vote' });
 
@@ -154,6 +171,13 @@ export default function AdminCommentVotesView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminSimpleVoteStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -162,7 +186,7 @@ export default function AdminCommentVotesView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -173,6 +197,7 @@ export default function AdminCommentVotesView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminSimpleVote, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -201,10 +226,6 @@ export default function AdminCommentVotesView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminSimpleVote, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -214,7 +235,7 @@ export default function AdminCommentVotesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>

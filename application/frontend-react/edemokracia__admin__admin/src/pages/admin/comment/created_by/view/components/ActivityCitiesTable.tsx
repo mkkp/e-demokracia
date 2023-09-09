@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -73,6 +76,8 @@ import {
   useTableClearActivityCitiesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
+import { GridLogicOperator } from '@mui/x-data-grid';
+
 export const ADMIN_COMMENT_CREATED_BY_VIEW_ACTIVITY_CITIES = 'AdminCommentCreatedByViewActivityCities';
 
 export interface ActivityCitiesTableProps {
@@ -86,6 +91,7 @@ export interface ActivityCitiesTableProps {
 }
 
 export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
+  const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
@@ -93,7 +99,12 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities-${ownerData.__identifier}-filters`;
+  const [activityCitiesFilterModel, setActivityCitiesFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [data, setData] = useState<AdminCityStored[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
@@ -103,8 +114,6 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
   const [activityCitiesSortModel, setActivityCitiesSortModel] = useState<GridSortModel>([
     { field: 'representation', sort: null },
   ]);
-
-  const [activityCitiesFilterModel, setActivityCitiesFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const activityCitiesColumns: GridColDef<AdminCityStored>[] = [
     {
@@ -161,24 +170,6 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
     },
   ];
 
-  const activityCitiesRangeCall = async () =>
-    openRangeDialog<AdminCityStored, AdminCityQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCities',
-      columns: activityCitiesColumns,
-      defaultSortField: activityCitiesSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminUserServiceForClassImpl.getRangeForActivityCities(
-          ownerData,
-          processQueryCustomizer(queryCustomizer),
-        ),
-      single: false,
-      alreadySelectedItems: activityCitiesSelectionModel,
-      filterOptions: activityCitiesRangeFilterOptions,
-      initialQueryCustomizer: activityCitiesInitialQueryCustomizer,
-    });
-
-  const [activityCitiesSelectionModel, setActivityCitiesSelectionModel] = useState<GridRowSelectionModel>([]);
-
   const filterOptions: FilterOption[] = [
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCitiesRepresentationFilter',
@@ -197,8 +188,23 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
         page: 0,
       }));
       setFilters(newFilters);
+      setItemStringified(filtersKey, newFilters);
     }
   };
+
+  useEffect(() => {
+    if (ownerData?.__identifier) {
+      const storedFilters = getItemParsed<Filter[]>(filtersKey);
+      if (storedFilters !== null) {
+        setFilters(storedFilters);
+      }
+
+      const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
+      if (storedFilterModel !== null) {
+        setActivityCitiesFilterModel(storedFilterModel);
+      }
+    }
+  }, [ownerData]);
 
   useEffect(() => {
     const newData = applyInMemoryFilters<AdminCityStored>(filters, ownerData?.activityCities ?? []);
@@ -215,6 +221,11 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
           display: 'grid',
           border: (theme) =>
             props.validation.has('activityCities') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}
@@ -262,13 +273,24 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
                 startIcon={<MdiIcon path="attachment-plus" />}
                 variant="text"
                 onClick={async () => {
-                  const res = await activityCitiesRangeCall();
+                  const res = await openRangeDialog<AdminCityStored, AdminCityQueryCustomizer>({
+                    id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCities',
+                    columns: activityCitiesColumns,
+                    defaultSortField: activityCitiesSortModel[0],
+                    rangeCall: async (queryCustomizer) =>
+                      await adminUserServiceForClassImpl.getRangeForActivityCities(
+                        ownerData,
+                        processQueryCustomizer(queryCustomizer),
+                      ),
+                    single: false,
+                    alreadySelectedItems: ownerData.activityCities ? [...ownerData.activityCities] : undefined,
+                    filterOptions: activityCitiesRangeFilterOptions,
+                    initialQueryCustomizer: activityCitiesInitialQueryCustomizer,
+                  });
 
                   if (res) {
-                    storeDiff('activityCities', [
-                      ...(ownerData.activityCities || []),
-                      ...(res.value as AdminCityStored[]),
-                    ]);
+                    const newList = [...(ownerData.activityCities || []), ...(res.value as AdminCityStored[])];
+                    storeDiff('activityCities', newList);
                   }
                 }}
                 disabled={isOwnerLoading || false || !isFormUpdateable()}

@@ -15,6 +15,7 @@ import { MenuItem } from '../components-api';
 import { Navigator } from './Navigator';
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { registerGlobalHotkeys } from '../hotkeys';
 
 export interface LayoutProps {
   items: Array<MenuItem>;
@@ -26,6 +27,7 @@ export interface LayoutProps {
 export function Layout({ items, drawerWidth, hero, logo }: LayoutProps) {
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
+  registerGlobalHotkeys();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

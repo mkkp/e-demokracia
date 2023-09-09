@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -64,6 +67,7 @@ import {
   useRowRemoveVotesAction,
   useRowViewVotesAction,
 } from '../actions';
+import { GridLogicOperator } from '@mui/x-data-grid';
 
 export const ADMIN_USER_VOTES_TABLE_VOTE_TABLE = 'AdminUserVotesTableVote_Table';
 
@@ -74,7 +78,9 @@ export interface Vote_TableTableProps {
 }
 
 export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps>((props, ref) => {
+  const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { isOwnerLoading, setIsOwnerLoading, ownerData } = props;
+  const { sub: __identifier } = decodeToken<{ sub: string }>(ownerData.__signedIdentifier)!;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -87,12 +93,16 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
   const [data, setData] = useState<GridRowModel<AdminSimpleVoteStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
-  const [filterModel, setFilterModel] = useState<GridFilterModel>({ items: [] });
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTable-${__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTable-${__identifier}-filters`;
+  const [filterModel, setFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [lastItem, setLastItem] = useState<AdminSimpleVoteStored>();
   const [firstItem, setFirstItem] = useState<AdminSimpleVoteStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
-  const [filters, setFilters] = useState<Filter[]>([]);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminSimpleVoteQueryCustomizer>({
     _mask: '{created,type}',
     _seek: {
@@ -108,6 +118,21 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+
+  useEffect(() => {
+    setFilters(
+      getItemParsedWithDefault(
+        `TableedemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTable-${__identifier}-filters`,
+        [...filters],
+      ),
+    );
+  }, [ownerData]);
+  useEffect(() => {
+    setItemStringified(filtersKey, filters);
+  }, [filters]);
+  useEffect(() => {
+    setItemStringified(filterModelKey, filterModel);
+  }, [filterModel]);
 
   const votesSortModel: GridSortModel = [{ field: 'created', sort: null }];
 
@@ -219,6 +244,25 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
     },
   ];
 
+  const handleFiltersChange = (newFilters: Filter[]) => {
+    setPage(0);
+    setFilters(newFilters);
+
+    setQueryCustomizer((prevQueryCustomizer: AdminSimpleVoteQueryCustomizer) => {
+      // remove previous filter values, so that we can always start with a clean slate
+      for (const name of votesColumns.map((c) => c.field)) {
+        delete (prevQueryCustomizer as any)[name];
+      }
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: 10 + 1,
+        },
+        ...mapAllFiltersToQueryCustomizerProperties(newFilters),
+      };
+    });
+  };
+
   function handleSortModelChange(newModel: GridSortModel) {
     setPage(0);
     setSortModel(newModel);
@@ -293,6 +337,11 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
         sx={{
           // overflow: 'hidden',
           display: 'grid',
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}

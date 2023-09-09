@@ -235,8 +235,8 @@ export const AggregationInput = ({
             <MdiIcon path="file_document_plus" />
           </IconButton>
         )}
-        {exists(value) && (onEdit || onDelete || onRemove || onUnset) && (
-          <IconButton className={`${name}-dropdown`} onClick={handleDropdownToggle}>
+        {exists(value) && (onEdit || onDelete || onRemove || onUnset) && !readOnly && (
+          <IconButton className={`${name}-dropdown`} disabled={disabled} onClick={handleDropdownToggle}>
             <MdiIcon path="chevron-down" />
           </IconButton>
         )}

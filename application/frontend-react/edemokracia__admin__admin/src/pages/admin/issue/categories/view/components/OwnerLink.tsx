@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -56,16 +56,16 @@ import { useLinkViewOwnerAction } from '../actions';
 
 export interface OwnerLinkProps {
   ownerData: AdminIssueCategoryStored;
-  storeDiff: (attributeName: keyof AdminIssueCategoryStored, value: any) => void;
   validation: Map<keyof AdminIssueCategoryStored, string>;
   fetchOwnerData: () => Promise<void>;
+  onChange: (value: AdminUser | AdminUserStored | null) => void;
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
 }
 
 export function OwnerLink(props: OwnerLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -125,11 +125,13 @@ export function OwnerLink(props: OwnerLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {
-        storeDiff('owner', owner);
+        // storeDiff('owner', owner);
+        onChange(owner as AdminUserStored);
       }}
       onView={async () => linkViewOwnerAction(ownerData, ownerData?.owner!, () => fetchOwnerData())}
       onUnset={async () => {
-        storeDiff('owner', null);
+        // storeDiff('owner', null);
+        onChange(null);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminUserStored, AdminUserQueryCustomizer>({
@@ -142,14 +144,15 @@ export function OwnerLink(props: OwnerLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.owner?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.owner ? [ownerData.owner] : undefined,
           filterOptions: ownerRangeFilterOptions,
           initialQueryCustomizer: ownerInitialQueryCustomizer,
           editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('owner', res.value as AdminUserStored);
+        // storeDiff('owner', res.value as AdminUserStored);
+        onChange(res.value as AdminUserStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminUserQueryCustomizer = {

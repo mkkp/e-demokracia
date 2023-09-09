@@ -184,7 +184,9 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
               <DateTimePicker
                 className={valueId}
                 label={filter.filterOption.label ?? filter.filterOption.attributeName}
-                value={filter.filterBy.value ?? null}
+                value={serviceDateToUiDate(filter.filterBy.value ?? null)}
+                ampm={false}
+                ampmInClock={false}
                 views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                 onChange={(newValue) => setFilterValue(filter, newValue)}
                 slotProps={{
@@ -192,7 +194,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
                     InputProps: {
                       startAdornment: (
                         <InputAdornment position="start">
-                          <MdiIcon path="event" />
+                          <MdiIcon path="calendar-range" />
                         </InputAdornment>
                       ),
                     },

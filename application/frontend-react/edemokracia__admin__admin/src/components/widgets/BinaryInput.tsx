@@ -86,16 +86,30 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
           }
         />
       </Grid>
-      <Grid item xs="auto">
-        <IconButton
-          disabled={!props.data[props.attributeName] || isUploading}
-          id={`${props.id}-download`}
-          onClick={() => downloadFile(props.data, props.attributeName as string)}
-          title={t('judo.component.BinaryInput.download', { defaultValue: 'Download file' }) as string}
-        >
-          <MdiIcon path="download" mimeType={props.mimeType} />
-        </IconButton>
-      </Grid>
+      {props.data[props.attributeName] && (
+        <Grid item xs="auto">
+          <IconButton
+            disabled={props.disabled || isUploading}
+            id={`${props.id}-download`}
+            onClick={() => downloadFile(props.data, props.attributeName as string, 'attachment')}
+            title={t('judo.component.BinaryInput.download', { defaultValue: 'Download file' }) as string}
+          >
+            <MdiIcon path="download" mimeType={props.mimeType} />
+          </IconButton>
+        </Grid>
+      )}
+      {props.data[props.attributeName] && (
+        <Grid item xs="auto">
+          <IconButton
+            disabled={props.disabled || isUploading}
+            id={`${props.id}-view`}
+            onClick={() => downloadFile(props.data, props.attributeName as string, 'inline')}
+            title={t('judo.component.BinaryInput.view', { defaultValue: 'View file' }) as string}
+          >
+            <MdiIcon path="eye" />
+          </IconButton>
+        </Grid>
+      )}
       {!props.readonly && (
         <Grid item xs="auto">
           <IconButton

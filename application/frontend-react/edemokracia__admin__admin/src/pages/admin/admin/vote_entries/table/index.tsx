@@ -30,9 +30,6 @@ import { VoteEntry_TableTable } from './components/VoteEntry_TableTable';
  * Type: Table
  **/
 export default function AdminAdminVoteEntriesTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminAdminVoteEntriesTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();

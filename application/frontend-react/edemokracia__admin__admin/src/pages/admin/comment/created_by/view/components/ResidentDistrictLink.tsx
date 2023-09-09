@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -62,16 +62,16 @@ import { useLinkViewResidentDistrictAction } from '../actions';
 
 export interface ResidentDistrictLinkProps {
   ownerData: AdminUserStored;
-  storeDiff: (attributeName: keyof AdminUserStored, value: any) => void;
   validation: Map<keyof AdminUserStored, string>;
   fetchOwnerData: () => Promise<void>;
+  onChange: (value: AdminDistrict | AdminDistrictStored | null) => void;
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
 }
 
 export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -131,13 +131,15 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentDistrict) => {
-        storeDiff('residentDistrict', residentDistrict);
+        // storeDiff('residentDistrict', residentDistrict);
+        onChange(residentDistrict as AdminDistrictStored);
       }}
       onView={async () =>
         linkViewResidentDistrictAction(ownerData, ownerData?.residentDistrict!, () => fetchOwnerData())
       }
       onUnset={async () => {
-        storeDiff('residentDistrict', null);
+        // storeDiff('residentDistrict', null);
+        onChange(null);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
@@ -150,14 +152,15 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.residentDistrict?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.residentDistrict ? [ownerData.residentDistrict] : undefined,
           filterOptions: residentDistrictRangeFilterOptions,
           initialQueryCustomizer: residentDistrictInitialQueryCustomizer,
           editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('residentDistrict', res.value as AdminDistrictStored);
+        // storeDiff('residentDistrict', res.value as AdminDistrictStored);
+        onChange(res.value as AdminDistrictStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminDistrictQueryCustomizer = {

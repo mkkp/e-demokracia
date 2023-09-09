@@ -10,7 +10,7 @@
 // Page DataElement name: issueType
 // Page DataElement owner name: edemokracia::admin::Issue
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -54,10 +54,19 @@ import {
   EdemokraciaVoteType,
 } from '~/generated/data-api';
 import { adminIssueServiceForClassImpl, adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminIssueIssueTypeViewPostRefreshAction = (
+  data: AdminIssueTypeStored,
+  storeDiff: (attributeName: keyof AdminIssueTypeStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminIssueType, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ISSUE_ISSUE_TYPE_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminIssueIssueTypeViewPostRefreshHook';
+export type AdminIssueIssueTypeViewPostRefreshHook = () => AdminIssueIssueTypeViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Issue.issueType#View
@@ -99,7 +108,10 @@ export default function AdminIssueIssueTypeView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -113,6 +125,11 @@ export default function AdminIssueIssueTypeView() {
   const queryCustomizer: AdminIssueTypeQueryCustomizer = {
     _mask: '{title,voteType,description}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminIssueIssueTypeViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ISSUE_ISSUE_TYPE_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminIssueIssueTypeViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = t('admin.IssueTypeView', { defaultValue: 'Issue Type View/Edit' });
 
@@ -147,6 +164,13 @@ export default function AdminIssueIssueTypeView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminIssueTypeStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -158,10 +182,6 @@ export default function AdminIssueIssueTypeView() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminIssueType, string>());
-  }, [editMode]);
 
   return (
     <>

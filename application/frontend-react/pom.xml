@@ -19,12 +19,12 @@
     <packaging>pom</packaging>
 
     <properties>
-        <judo-meta-ui-version>1.1.0.20230827_072031_56cc046f_develop</judo-meta-ui-version>
+        <judo-meta-ui-version>1.1.0.20230907_040800_058fed60_develop</judo-meta-ui-version>
         <frontend-maven-plugin-version>1.12.1</frontend-maven-plugin-version>
         <ui-model>${basedir}/model/edemokracia-ui.model</ui-model>
 
-        <judo-ui-react-template-version>1.0.0.20230827_215338_1e97bc87_develop</judo-ui-react-template-version>
-        <judo-ui-typescript-rest-template-version>1.0.0.20230827_072721_97e6d473_develop</judo-ui-typescript-rest-template-version>
+        <judo-ui-react-template-version>1.0.0.20230907_150907_4c3f18b4_develop</judo-ui-react-template-version>
+        <judo-ui-typescript-rest-template-version>1.0.0.20230907_041527_23740a24_develop</judo-ui-typescript-rest-template-version>
 
         <node-version>18.16.0</node-version>
         <pnpm-version>8.6.1</pnpm-version>

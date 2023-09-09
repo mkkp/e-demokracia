@@ -10,7 +10,7 @@
 // Page DataElement name: residentDistrict
 // Page DataElement owner name: edemokracia::admin::User
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -53,10 +53,20 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminUserServiceForClassImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminUserResidentDistrictViewPostRefreshAction = (
+  data: AdminDistrictStored,
+  storeDiff: (attributeName: keyof AdminDistrictStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminDistrict, string>>>,
+) => Promise<void>;
+
+export const ADMIN_USER_RESIDENT_DISTRICT_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminUserResidentDistrictViewPostRefreshHook';
+export type AdminUserResidentDistrictViewPostRefreshHook = () => AdminUserResidentDistrictViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::User.residentDistrict#View
@@ -101,7 +111,10 @@ export default function AdminUserResidentDistrictView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -115,6 +128,12 @@ export default function AdminUserResidentDistrictView() {
   const queryCustomizer: AdminDistrictQueryCustomizer = {
     _mask: '{name,representation}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminUserResidentDistrictViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_USER_RESIDENT_DISTRICT_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminUserResidentDistrictViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
@@ -149,6 +168,13 @@ export default function AdminUserResidentDistrictView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminDistrictStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -157,7 +183,7 @@ export default function AdminUserResidentDistrictView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -168,6 +194,7 @@ export default function AdminUserResidentDistrictView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminDistrict, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -182,10 +209,6 @@ export default function AdminUserResidentDistrictView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminDistrict, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -195,7 +218,7 @@ export default function AdminUserResidentDistrictView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
         />
       </PageHeader>
       <Container component="main" maxWidth="xl">

@@ -29,9 +29,6 @@ import { Vote_TableTable } from './components/Vote_TableTable';
  * Type: Table
  **/
 export default function AdminUserVotesTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminUserVotesTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { signedIdentifier } = useParams();

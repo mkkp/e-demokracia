@@ -10,7 +10,7 @@
 // Page DataElement name: issues
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -30,7 +30,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -92,7 +92,6 @@ import {
   EdemokraciaVoteType,
 } from '~/generated/data-api';
 import { adminAdminServiceForIssuesImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
-
 import { useAdminIssueCreateDebateAction, useAdminIssueCreateCommentAction } from './actions';
 
 import { PageActions } from './components/PageActions';
@@ -105,6 +104,16 @@ import { AttachmentsTable } from './components/AttachmentsTable';
 import { CategoriesTable } from './components/CategoriesTable';
 import { CommentsTable } from './components/CommentsTable';
 import { DebatesTable } from './components/DebatesTable';
+
+export type AdminAdminIssuesViewPostRefreshAction = (
+  data: AdminIssueStored,
+  storeDiff: (attributeName: keyof AdminIssueStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminIssue, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ADMIN_ISSUES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminIssuesViewPostRefreshHook';
+export type AdminAdminIssuesViewPostRefreshHook = () => AdminAdminIssuesViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Admin.issues#View
@@ -153,7 +162,10 @@ export default function AdminAdminIssuesView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -166,6 +178,11 @@ export default function AdminAdminIssuesView() {
     _mask:
       '{defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},debates{status,title,closeAt,description},comments{comment,created,createdByName,upVotes,downVotes}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminAdminIssuesViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_ISSUES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminAdminIssuesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
@@ -203,6 +220,13 @@ export default function AdminAdminIssuesView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminIssueStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -211,7 +235,7 @@ export default function AdminAdminIssuesView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -222,6 +246,7 @@ export default function AdminAdminIssuesView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminIssue, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -250,10 +275,6 @@ export default function AdminAdminIssuesView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminIssue, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -263,7 +284,7 @@ export default function AdminAdminIssuesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>
@@ -311,7 +332,9 @@ export default function AdminAdminIssuesView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminIssueType | AdminIssueTypeStored | null) => {
+                                storeDiff('issueType', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -579,7 +602,9 @@ export default function AdminAdminIssuesView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('owner', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>
@@ -660,7 +685,9 @@ export default function AdminAdminIssuesView() {
                           disabled={isLoading}
                           editMode={editMode}
                           fetchOwnerData={fetchData}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminCounty | AdminCountyStored | null) => {
+                            storeDiff('county', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -672,7 +699,9 @@ export default function AdminAdminIssuesView() {
                           disabled={isLoading}
                           editMode={editMode}
                           fetchOwnerData={fetchData}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminCity | AdminCityStored | null) => {
+                            storeDiff('city', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>
@@ -684,7 +713,9 @@ export default function AdminAdminIssuesView() {
                           disabled={isLoading}
                           editMode={editMode}
                           fetchOwnerData={fetchData}
-                          storeDiff={storeDiff}
+                          onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
+                            storeDiff('district', value);
+                          }}
                           validation={validation}
                         />
                       </Grid>

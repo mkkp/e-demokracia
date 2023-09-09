@@ -10,7 +10,7 @@
 // Page DataElement name: users
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -33,7 +33,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -75,7 +75,6 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminAdminServiceForUsersImpl, adminUserServiceForClassImpl } from '~/generated/data-axios';
-
 import { useButtonNavigateVotesAction } from './actions';
 
 import { PageActions } from './components/PageActions';
@@ -85,6 +84,16 @@ import { ResidentDistrictLink } from './components/ResidentDistrictLink';
 import { ActivityCitiesTable } from './components/ActivityCitiesTable';
 import { ActivityDistrictsTable } from './components/ActivityDistrictsTable';
 import { ActivityCountiesTable } from './components/ActivityCountiesTable';
+
+export type AdminAdminUsersViewPostRefreshAction = (
+  data: AdminUserStored,
+  storeDiff: (attributeName: keyof AdminUserStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminUser, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ADMIN_USERS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminUsersViewPostRefreshHook';
+export type AdminAdminUsersViewPostRefreshHook = () => AdminAdminUsersViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Admin.users#View
@@ -133,7 +142,10 @@ export default function AdminAdminUsersView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -146,6 +158,11 @@ export default function AdminAdminUsersView() {
     _mask:
       '{userName,isAdmin,created,firstName,lastName,email,phone,residentCounty{representation},residentCity{representation},residentDistrict{representation},activityCounties{representation},activityCities{representation},activityDistricts{representation}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminAdminUsersViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_USERS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminAdminUsersViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const buttonNavigateVotesAction = useButtonNavigateVotesAction();
 
@@ -182,6 +199,13 @@ export default function AdminAdminUsersView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminUserStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -190,7 +214,7 @@ export default function AdminAdminUsersView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -201,6 +225,7 @@ export default function AdminAdminUsersView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminUser, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -229,10 +254,6 @@ export default function AdminAdminUsersView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminUser, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -242,7 +263,7 @@ export default function AdminAdminUsersView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>
@@ -615,7 +636,9 @@ export default function AdminAdminUsersView() {
                                   disabled={isLoading}
                                   editMode={editMode}
                                   fetchOwnerData={fetchData}
-                                  storeDiff={storeDiff}
+                                  onChange={(value: AdminCounty | AdminCountyStored | null) => {
+                                    storeDiff('residentCounty', value);
+                                  }}
                                   validation={validation}
                                 />
                               </Grid>
@@ -627,7 +650,9 @@ export default function AdminAdminUsersView() {
                                   disabled={isLoading}
                                   editMode={editMode}
                                   fetchOwnerData={fetchData}
-                                  storeDiff={storeDiff}
+                                  onChange={(value: AdminCity | AdminCityStored | null) => {
+                                    storeDiff('residentCity', value);
+                                  }}
                                   validation={validation}
                                 />
                               </Grid>
@@ -639,7 +664,9 @@ export default function AdminAdminUsersView() {
                                   disabled={isLoading}
                                   editMode={editMode}
                                   fetchOwnerData={fetchData}
-                                  storeDiff={storeDiff}
+                                  onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
+                                    storeDiff('residentDistrict', value);
+                                  }}
                                   validation={validation}
                                 />
                               </Grid>

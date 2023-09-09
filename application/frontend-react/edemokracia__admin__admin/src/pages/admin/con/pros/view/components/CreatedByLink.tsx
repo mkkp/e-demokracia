@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -60,16 +60,16 @@ import { useLinkViewCreatedByAction } from '../actions';
 
 export interface CreatedByLinkProps {
   ownerData: AdminProStored;
-  storeDiff: (attributeName: keyof AdminProStored, value: any) => void;
   validation: Map<keyof AdminProStored, string>;
   fetchOwnerData: () => Promise<void>;
+  onChange: (value: AdminUser | AdminUserStored | null) => void;
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
 }
 
 export function CreatedByLink(props: CreatedByLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -95,7 +95,8 @@ export function CreatedByLink(props: CreatedByLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(createdBy) => {
-        storeDiff('createdBy', createdBy);
+        // storeDiff('createdBy', createdBy);
+        onChange(createdBy as AdminUserStored);
       }}
       onView={async () => linkViewCreatedByAction(ownerData, ownerData?.createdBy!, () => fetchOwnerData())}
     />

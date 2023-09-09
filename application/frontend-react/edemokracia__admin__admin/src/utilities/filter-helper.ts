@@ -1,5 +1,6 @@
 import { _NumericOperation, _StringOperation, _BooleanOperation, _EnumerationOperation } from '@judo/data-api-common';
-import type { GridFilterModel } from '@mui/x-data-grid';
+import type { GridFilterModel, GridFilterItem } from '@mui/x-data-grid';
+import { GridLogicOperator } from '@mui/x-data-grid';
 import { isEqual, compareAsc } from 'date-fns';
 import type { Filter, FilterOption, Operation } from '../components-api';
 import { FilterType } from '../components-api';
@@ -181,6 +182,9 @@ function mapStringOperator(operator: string): _StringOperation {
   if (operator === 'equals') {
     return _StringOperation.equal;
   }
+  if (operator === 'not') {
+    return _StringOperation.notEqual;
+  }
 
   // contains
   return _StringOperation.like;
@@ -208,6 +212,9 @@ function mapNumericOperator(operator: string): _NumericOperation {
 }
 
 function mapDateOperator(operator: string): _NumericOperation {
+  if (operator === 'is') {
+    return _NumericOperation.equal;
+  }
   if (operator === 'not') {
     return _NumericOperation.notEqual;
   }
@@ -322,4 +329,53 @@ export function mapFilterModelToFilters(filterModel: GridFilterModel, filterOpti
   }
 
   return filters;
+}
+
+export function mapFilterToFilterModel(filter: Filter): GridFilterItem {
+  const filterOption = filter.filterOption;
+  const filterBy = filter.filterBy;
+  const res: Omit<GridFilterItem, 'value' | 'operator'> = {
+    id: filter.id,
+    field: filterOption.attributeName,
+  };
+  switch (filterOption!.filterType) {
+    case FilterType.string:
+      return {
+        ...res,
+        value: filterBy.value,
+        operator: filterBy.operator === _StringOperation.equal ? 'equals' : 'not',
+      };
+    case FilterType.numeric:
+      return {
+        ...res,
+        value: filterBy.value,
+        operator: filterBy.operator === _NumericOperation.equal ? '=' : '!=',
+      };
+    case FilterType.date:
+    case FilterType.dateTime:
+      return {
+        ...res,
+        value: filterBy.value,
+        operator: filterBy.operator === _NumericOperation.equal ? 'is' : 'not',
+      };
+    case FilterType.boolean:
+    case FilterType.trinaryLogic:
+      return {
+        ...res,
+        value: String(filterBy.value),
+        operator: filterBy.operator === ('equal' || 'equals') ? 'is' : 'not',
+      };
+    case FilterType.enumeration:
+      return {
+        ...res,
+        value: filterBy.value,
+        operator: filterBy.operator === _EnumerationOperation.equals ? 'is' : 'not',
+      };
+    default:
+      return {
+        ...res,
+        value: filterBy.value,
+        operator: 'equals', // not equals is not supported by MUI for strings
+      };
+  }
 }

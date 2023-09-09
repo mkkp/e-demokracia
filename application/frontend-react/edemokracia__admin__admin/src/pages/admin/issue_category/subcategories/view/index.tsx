@@ -10,7 +10,7 @@
 // Page DataElement name: subcategories
 // Page DataElement owner name: edemokracia::admin::IssueCategory
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -54,12 +54,23 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
 import { OwnerLink } from './components/OwnerLink';
 import { SubcategoriesTable } from './components/SubcategoriesTable';
+
+export type AdminIssueCategorySubcategoriesViewPostRefreshAction = (
+  data: AdminIssueCategoryStored,
+  storeDiff: (attributeName: keyof AdminIssueCategoryStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminIssueCategory, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ISSUE_CATEGORY_SUBCATEGORIES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminIssueCategorySubcategoriesViewPostRefreshHook';
+export type AdminIssueCategorySubcategoriesViewPostRefreshHook =
+  () => AdminIssueCategorySubcategoriesViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::IssueCategory.subcategories#View
@@ -107,7 +118,10 @@ export default function AdminIssueCategorySubcategoriesView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -121,6 +135,12 @@ export default function AdminIssueCategorySubcategoriesView() {
   const queryCustomizer: AdminIssueCategoryQueryCustomizer = {
     _mask: '{title,description,owner{representation},subcategories{title,description}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminIssueCategorySubcategoriesViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ISSUE_CATEGORY_SUBCATEGORIES_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminIssueCategorySubcategoriesViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const title: string = t('admin.IssueCategoryView', { defaultValue: 'View / Edit Category' });
 
@@ -155,6 +175,13 @@ export default function AdminIssueCategorySubcategoriesView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminIssueCategoryStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -163,7 +190,7 @@ export default function AdminIssueCategorySubcategoriesView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -174,6 +201,7 @@ export default function AdminIssueCategorySubcategoriesView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminIssueCategory, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -202,10 +230,6 @@ export default function AdminIssueCategorySubcategoriesView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminIssueCategory, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -215,7 +239,7 @@ export default function AdminIssueCategorySubcategoriesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>
@@ -297,7 +321,9 @@ export default function AdminIssueCategorySubcategoriesView() {
                   disabled={isLoading}
                   editMode={editMode}
                   fetchOwnerData={fetchData}
-                  storeDiff={storeDiff}
+                  onChange={(value: AdminUser | AdminUserStored | null) => {
+                    storeDiff('owner', value);
+                  }}
                   validation={validation}
                 />
               </Grid>

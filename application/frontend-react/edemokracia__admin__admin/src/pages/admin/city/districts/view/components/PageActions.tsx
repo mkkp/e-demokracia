@@ -19,12 +19,12 @@ export interface PageActionsProps {
   setEditMode: (mode: boolean) => void;
   isLoading: boolean;
   fetchData: () => Promise<void>;
-  saveData: () => Promise<void>;
+  submit: () => Promise<void>;
   deleteData: () => Promise<void>;
 }
 
 export function PageActions(props: PageActionsProps) {
-  const { data, editMode, setEditMode, isLoading, fetchData, saveData, deleteData } = props;
+  const { data, editMode, setEditMode, isLoading, fetchData, submit, deleteData } = props;
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { openConfirmDialog } = useConfirmDialog();
@@ -65,7 +65,7 @@ export function PageActions(props: PageActionsProps) {
             loadingPosition="start"
             id="page-action-edit-save"
             startIcon={<MdiIcon path="content-save" />}
-            onClick={() => saveData()}
+            onClick={() => submit()}
           >
             <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
           </LoadingButton>

@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -60,16 +60,16 @@ import { useLinkViewResidentCountyAction } from '../actions';
 
 export interface ResidentCountyLinkProps {
   ownerData: AdminUserStored;
-  storeDiff: (attributeName: keyof AdminUserStored, value: any) => void;
   validation: Map<keyof AdminUserStored, string>;
   fetchOwnerData: () => Promise<void>;
+  onChange: (value: AdminCounty | AdminCountyStored | null) => void;
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
 }
 
 export function ResidentCountyLink(props: ResidentCountyLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -129,11 +129,13 @@ export function ResidentCountyLink(props: ResidentCountyLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentCounty) => {
-        storeDiff('residentCounty', residentCounty);
+        // storeDiff('residentCounty', residentCounty);
+        onChange(residentCounty as AdminCountyStored);
       }}
       onView={async () => linkViewResidentCountyAction(ownerData, ownerData?.residentCounty!, () => fetchOwnerData())}
       onUnset={async () => {
-        storeDiff('residentCounty', null);
+        // storeDiff('residentCounty', null);
+        onChange(null);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
@@ -146,14 +148,15 @@ export function ResidentCountyLink(props: ResidentCountyLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.residentCounty?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.residentCounty ? [ownerData.residentCounty] : undefined,
           filterOptions: residentCountyRangeFilterOptions,
           initialQueryCustomizer: residentCountyInitialQueryCustomizer,
           editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('residentCounty', res.value as AdminCountyStored);
+        // storeDiff('residentCounty', res.value as AdminCountyStored);
+        onChange(res.value as AdminCountyStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminCountyQueryCustomizer = {

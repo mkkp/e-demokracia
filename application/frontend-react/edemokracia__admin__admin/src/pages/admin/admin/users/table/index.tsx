@@ -30,9 +30,6 @@ import { User_TableTable } from './components/User_TableTable';
  * Type: Table
  **/
 export default function AdminAdminUsersTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminAdminUsersTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();

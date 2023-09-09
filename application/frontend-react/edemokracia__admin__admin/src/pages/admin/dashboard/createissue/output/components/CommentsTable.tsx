@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -90,6 +93,8 @@ import {
   useRowViewCommentsAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
+import { GridLogicOperator } from '@mui/x-data-grid';
+
 export const ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_COMMENTS = 'AdminDashboardCreateissueOutputComments';
 
 export interface CommentsTableProps {
@@ -103,6 +108,7 @@ export interface CommentsTableProps {
 }
 
 export const CommentsTable = (props: CommentsTableProps) => {
+  const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
@@ -110,7 +116,12 @@ export const CommentsTable = (props: CommentsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCommentsCommentsActionsCommentsLabelWrapperComments-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCommentsCommentsActionsCommentsLabelWrapperComments-${ownerData.__identifier}-filters`;
+  const [commentsFilterModel, setCommentsFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [data, setData] = useState<AdminCommentStored[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
@@ -118,8 +129,6 @@ export const CommentsTable = (props: CommentsTableProps) => {
   });
 
   const [commentsSortModel, setCommentsSortModel] = useState<GridSortModel>([{ field: 'comment', sort: null }]);
-
-  const [commentsFilterModel, setCommentsFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const commentsColumns: GridColDef<AdminCommentStored>[] = [
     {
@@ -312,8 +321,23 @@ export const CommentsTable = (props: CommentsTableProps) => {
         page: 0,
       }));
       setFilters(newFilters);
+      setItemStringified(filtersKey, newFilters);
     }
   };
+
+  useEffect(() => {
+    if (ownerData?.__identifier) {
+      const storedFilters = getItemParsed<Filter[]>(filtersKey);
+      if (storedFilters !== null) {
+        setFilters(storedFilters);
+      }
+
+      const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
+      if (storedFilterModel !== null) {
+        setCommentsFilterModel(storedFilterModel);
+      }
+    }
+  }, [ownerData]);
 
   useEffect(() => {
     const newData = applyInMemoryFilters<AdminCommentStored>(filters, ownerData?.comments ?? []);
@@ -329,6 +353,11 @@ export const CommentsTable = (props: CommentsTableProps) => {
           // overflow: 'hidden',
           display: 'grid',
           border: (theme) => (props.validation.has('comments') ? `2px solid ${theme.palette.error.main}` : undefined),
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}

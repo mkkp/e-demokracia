@@ -12,8 +12,8 @@ import {
   Icon,
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from 'react-oidc-context';
 import { usePrincipal } from '../auth';
+import { AdminAdminPrincipalUserStored } from '~/generated/data-api';
 import { Hero, Logo, useJudoNavigation, MdiIcon } from '../components';
 import type { MenuItem, HeroProps, LogoProps } from '../components-api';
 
@@ -21,10 +21,10 @@ export interface MenuItemsProps {
   items: Array<MenuItem>;
 }
 
-function ActionItem(props: MenuItem) {
+function ActionItem(props: MenuItem & { isHidden: (menuItem: MenuItem) => boolean }) {
   const { t } = useTranslation();
   const { clearNavigate } = useJudoNavigation();
-  const { id, level, label, to, icon, items, hidden } = props;
+  const { id, level, label, to, icon, items, isHidden } = props;
   const [open, setOpen] = useState<boolean>(!!window.localStorage.getItem(id + '-open'));
 
   const hasSubGroup = () => Array.isArray(items) && items.length > 0;
@@ -39,7 +39,7 @@ function ActionItem(props: MenuItem) {
 
   return (
     <>
-      {!hidden && (
+      {!isHidden(props) && (
         <ListItemButton
           className="navigation-item"
           sx={{ paddingLeft: (level || 1) * 2 }}
@@ -68,7 +68,7 @@ function ActionItem(props: MenuItem) {
       {hasSubGroup() && (
         <Collapse in={open} timeout="auto" unmountOnExit>
           {(items || []).map((item) => (
-            <ActionItem key={item.label} level={(level || 1) + 1} hidden={item.hidden} {...item} />
+            <ActionItem key={item.label} level={(level || 1) + 1} isHidden={isHidden} {...item} />
           ))}
         </Collapse>
       )}
@@ -79,26 +79,23 @@ function ActionItem(props: MenuItem) {
 export function MenuItems(props: MenuItemsProps) {
   const { items } = props;
   const { t } = useTranslation();
-  const { signoutRedirect, isAuthenticated } = useAuth();
-  const doLogout = useCallback(() => {
-    const redirectUrl = window.location.href.split('#')[0];
-    signoutRedirect({
-      post_logout_redirect_uri: redirectUrl,
-    });
-  }, [isAuthenticated]);
   const { principal } = usePrincipal();
+
+  const isHidden = (menuItem: MenuItem): boolean => {
+    return menuItem.hiddenBy ? !!principal[menuItem.hiddenBy as keyof AdminAdminPrincipalUserStored] : false;
+  };
 
   return (
     <>
       <List id="application-navigator" component="nav">
         {items.map((item) =>
           item.items && item.items.length ? (
-            !item.hidden && (
+            !isHidden(item) && (
               <List
                 component="nav"
                 key={item.label}
                 subheader={
-                  !item.hidden && (
+                  !isHidden(item) && (
                     <ListSubheader component="div" id="nested-list-subheader">
                       {t(`menuTree.${item.label}`, { defaultValue: item.label })}
                     </ListSubheader>
@@ -106,12 +103,12 @@ export function MenuItems(props: MenuItemsProps) {
                 }
               >
                 {item.items.map((subItem) => (
-                  <ActionItem key={subItem.label} hidden={item.hidden} {...subItem} />
+                  <ActionItem key={subItem.label} isHidden={isHidden} {...subItem} />
                 ))}
               </List>
             )
           ) : (
-            <ActionItem key={item.label} hidden={item.hidden} {...item} />
+            <ActionItem key={item.label} isHidden={isHidden} {...item} />
           ),
         )}
       </List>

@@ -10,7 +10,7 @@
 // Page DataElement name: output
 // Page DataElement owner name: createDebate
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -47,10 +47,20 @@ import { clsx } from 'clsx';
 
 import { Debate, DebateQueryCustomizer, DebateStored, EdemokraciaDebateStatus } from '~/generated/data-api';
 import { debateServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminIssueCreatedebateOutputPostRefreshAction = (
+  data: DebateStored,
+  storeDiff: (attributeName: keyof DebateStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof Debate, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ISSUE_CREATEDEBATE_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminIssueCreatedebateOutputPostRefreshHook';
+export type AdminIssueCreatedebateOutputPostRefreshHook = () => AdminIssueCreatedebateOutputPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Issue.createDebate#Output
@@ -91,7 +101,10 @@ export default function AdminIssueCreatedebateOutput() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -103,6 +116,12 @@ export default function AdminIssueCreatedebateOutput() {
   const queryCustomizer: DebateQueryCustomizer = {
     _mask: '{}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminIssueCreatedebateOutputPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ISSUE_CREATEDEBATE_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminIssueCreatedebateOutputPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const title: string = t('DebateView', { defaultValue: 'Entity View' });
 
@@ -137,6 +156,13 @@ export default function AdminIssueCreatedebateOutput() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof DebateStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -148,10 +174,6 @@ export default function AdminIssueCreatedebateOutput() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof Debate, string>());
-  }, [editMode]);
 
   return (
     <>

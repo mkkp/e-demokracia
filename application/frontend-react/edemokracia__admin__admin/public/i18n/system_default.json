@@ -62,6 +62,7 @@
         "judo.component.AggregationInput.unset": "Unset element",
         "judo.component.AggregationInput.create": "Create new element",
         "judo.component.BinaryInput.download": "Download file",
+        "judo.component.BinaryInput.view": "View file",
         "judo.component.BinaryInput.upload": "Upload file",
         "judo.component.BinaryInput.remove": "Remove file",
         "judo.component.TrinaryLogic.unknown": "Unknown",

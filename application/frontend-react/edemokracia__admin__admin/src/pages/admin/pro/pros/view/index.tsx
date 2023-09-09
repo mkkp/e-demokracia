@@ -10,7 +10,7 @@
 // Page DataElement name: pros
 // Page DataElement owner name: edemokracia::admin::Pro
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
@@ -19,7 +19,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -61,7 +61,6 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminProServiceForClassImpl } from '~/generated/data-axios';
-
 import {
   useVoteUpAction,
   useVoteDownAction,
@@ -75,6 +74,16 @@ import { CreatedByLink } from './components/CreatedByLink';
 import { ConsTable } from './components/ConsTable';
 import { ProsTable } from './components/ProsTable';
 import { CommentsTable } from './components/CommentsTable';
+
+export type AdminProProsViewPostRefreshAction = (
+  data: AdminProStored,
+  storeDiff: (attributeName: keyof AdminProStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminPro, string>>>,
+) => Promise<void>;
+
+export const ADMIN_PRO_PROS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminProProsViewPostRefreshHook';
+export type AdminProProsViewPostRefreshHook = () => AdminProProsViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Pro.pros#View
@@ -122,7 +131,10 @@ export default function AdminProProsView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -135,6 +147,11 @@ export default function AdminProProsView() {
     _mask:
       '{title,created,description,upVotes,downVotes,createdByName,createdBy{representation},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminProProsViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_PRO_PROS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminProProsViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const voteUpAction = useVoteUpAction();
   const voteDownAction = useVoteDownAction();
@@ -175,6 +192,13 @@ export default function AdminProProsView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminProStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -183,7 +207,7 @@ export default function AdminProProsView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -194,6 +218,7 @@ export default function AdminProProsView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminPro, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -222,10 +247,6 @@ export default function AdminProProsView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminPro, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -235,7 +256,7 @@ export default function AdminProProsView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>
@@ -362,7 +383,9 @@ export default function AdminProProsView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('createdBy', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>

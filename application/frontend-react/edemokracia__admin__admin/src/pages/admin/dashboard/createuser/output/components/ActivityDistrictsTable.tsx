@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -71,6 +74,8 @@ import {
   useTableClearActivityDistrictsAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
+import { GridLogicOperator } from '@mui/x-data-grid';
+
 export const ADMIN_DASHBOARD_CREATEUSER_OUTPUT_ACTIVITY_DISTRICTS = 'AdminDashboardCreateuserOutputActivityDistricts';
 
 export interface ActivityDistrictsTableProps {
@@ -84,6 +89,7 @@ export interface ActivityDistrictsTableProps {
 }
 
 export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
+  const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
@@ -91,7 +97,12 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filters`;
+  const [activityDistrictsFilterModel, setActivityDistrictsFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [data, setData] = useState<AdminDistrictStored[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
@@ -101,8 +112,6 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
   const [activityDistrictsSortModel, setActivityDistrictsSortModel] = useState<GridSortModel>([
     { field: 'representation', sort: null },
   ]);
-
-  const [activityDistrictsFilterModel, setActivityDistrictsFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const activityDistrictsColumns: GridColDef<AdminDistrictStored>[] = [
     {
@@ -159,24 +168,6 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
     },
   ];
 
-  const activityDistrictsRangeCall = async () =>
-    openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityDistricts',
-      columns: activityDistrictsColumns,
-      defaultSortField: activityDistrictsSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminUserServiceForClassImpl.getRangeForActivityDistricts(
-          ownerData,
-          processQueryCustomizer(queryCustomizer),
-        ),
-      single: false,
-      alreadySelectedItems: activityDistrictsSelectionModel,
-      filterOptions: activityDistrictsRangeFilterOptions,
-      initialQueryCustomizer: activityDistrictsInitialQueryCustomizer,
-    });
-
-  const [activityDistrictsSelectionModel, setActivityDistrictsSelectionModel] = useState<GridRowSelectionModel>([]);
-
   const filterOptions: FilterOption[] = [
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
@@ -195,8 +186,23 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
         page: 0,
       }));
       setFilters(newFilters);
+      setItemStringified(filtersKey, newFilters);
     }
   };
+
+  useEffect(() => {
+    if (ownerData?.__identifier) {
+      const storedFilters = getItemParsed<Filter[]>(filtersKey);
+      if (storedFilters !== null) {
+        setFilters(storedFilters);
+      }
+
+      const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
+      if (storedFilterModel !== null) {
+        setActivityDistrictsFilterModel(storedFilterModel);
+      }
+    }
+  }, [ownerData]);
 
   useEffect(() => {
     const newData = applyInMemoryFilters<AdminDistrictStored>(filters, ownerData?.activityDistricts ?? []);
@@ -213,6 +219,11 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
           display: 'grid',
           border: (theme) =>
             props.validation.has('activityDistricts') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}
@@ -260,13 +271,24 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
                 startIcon={<MdiIcon path="attachment-plus" />}
                 variant="text"
                 onClick={async () => {
-                  const res = await activityDistrictsRangeCall();
+                  const res = await openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
+                    id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityDistricts',
+                    columns: activityDistrictsColumns,
+                    defaultSortField: activityDistrictsSortModel[0],
+                    rangeCall: async (queryCustomizer) =>
+                      await adminUserServiceForClassImpl.getRangeForActivityDistricts(
+                        ownerData,
+                        processQueryCustomizer(queryCustomizer),
+                      ),
+                    single: false,
+                    alreadySelectedItems: ownerData.activityDistricts ? [...ownerData.activityDistricts] : undefined,
+                    filterOptions: activityDistrictsRangeFilterOptions,
+                    initialQueryCustomizer: activityDistrictsInitialQueryCustomizer,
+                  });
 
                   if (res) {
-                    storeDiff('activityDistricts', [
-                      ...(ownerData.activityDistricts || []),
-                      ...(res.value as AdminDistrictStored[]),
-                    ]);
+                    const newList = [...(ownerData.activityDistricts || []), ...(res.value as AdminDistrictStored[])];
+                    storeDiff('activityDistricts', newList);
                   }
                 }}
                 disabled={isOwnerLoading || false || !isFormUpdateable()}

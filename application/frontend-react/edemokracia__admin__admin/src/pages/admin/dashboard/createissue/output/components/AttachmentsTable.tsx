@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -90,6 +93,8 @@ import {
   useTableCreateAttachmentsAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
+import { GridLogicOperator } from '@mui/x-data-grid';
+
 export const ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_ATTACHMENTS = 'AdminDashboardCreateissueOutputAttachments';
 
 export interface AttachmentsTableProps {
@@ -103,6 +108,7 @@ export interface AttachmentsTableProps {
 }
 
 export const AttachmentsTable = (props: AttachmentsTableProps) => {
+  const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
@@ -110,7 +116,12 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filters`;
+  const [attachmentsFilterModel, setAttachmentsFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [data, setData] = useState<AdminIssueAttachmentStored[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
@@ -118,8 +129,6 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
   });
 
   const [attachmentsSortModel, setAttachmentsSortModel] = useState<GridSortModel>([{ field: 'link', sort: null }]);
-
-  const [attachmentsFilterModel, setAttachmentsFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const attachmentsColumns: GridColDef<AdminIssueAttachmentStored>[] = [
     {
@@ -145,19 +154,29 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
       align: 'center',
       renderCell: (params: GridRenderCellParams<any, AdminIssueAttachmentStored>) => {
         return params.row.file ? (
-          <Button
-            id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-download"
-            startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: 'image', subType: '*' }} />}
-            size="small"
-            variant="text"
-            onClick={(event: any) => {
-              event.preventDefault();
-              event.stopPropagation();
-              downloadFile(params.row, 'file');
-            }}
-          >
-            {extractFileNameFromToken(params.row.file)}
-          </Button>
+          <ButtonGroup size="small" variant="outlined">
+            <Button
+              id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-download"
+              startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: 'image', subType: '*' }} />}
+              onClick={(event: any) => {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadFile(params.row, 'file', 'attachment');
+              }}
+            >
+              {extractFileNameFromToken(params.row.file)}
+            </Button>
+            <Button
+              id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-view"
+              onClick={(event: any) => {
+                event.preventDefault();
+                event.stopPropagation();
+                downloadFile(params.row, 'file', 'inline');
+              }}
+            >
+              <MdiIcon path="eye" sx={{ mr: 0.5 }} />
+            </Button>
+          </ButtonGroup>
         ) : (
           <MdiIcon path="minus" />
         );
@@ -256,8 +275,23 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
         page: 0,
       }));
       setFilters(newFilters);
+      setItemStringified(filtersKey, newFilters);
     }
   };
+
+  useEffect(() => {
+    if (ownerData?.__identifier) {
+      const storedFilters = getItemParsed<Filter[]>(filtersKey);
+      if (storedFilters !== null) {
+        setFilters(storedFilters);
+      }
+
+      const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
+      if (storedFilterModel !== null) {
+        setAttachmentsFilterModel(storedFilterModel);
+      }
+    }
+  }, [ownerData]);
 
   useEffect(() => {
     const newData = applyInMemoryFilters<AdminIssueAttachmentStored>(filters, ownerData?.attachments ?? []);
@@ -274,6 +308,11 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
           display: 'grid',
           border: (theme) =>
             props.validation.has('attachments') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}

@@ -30,9 +30,6 @@ import { Debate_TableTable } from './components/Debate_TableTable';
  * Type: Table
  **/
 export default function AdminAdminDebatesTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminAdminDebatesTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();

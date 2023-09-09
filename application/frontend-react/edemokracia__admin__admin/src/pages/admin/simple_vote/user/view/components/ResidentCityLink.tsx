@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -62,16 +62,16 @@ import { useLinkViewResidentCityAction } from '../actions';
 
 export interface ResidentCityLinkProps {
   ownerData: AdminUserStored;
-  storeDiff: (attributeName: keyof AdminUserStored, value: any) => void;
   validation: Map<keyof AdminUserStored, string>;
   fetchOwnerData: () => Promise<void>;
+  onChange: (value: AdminCity | AdminCityStored | null) => void;
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
 }
 
 export function ResidentCityLink(props: ResidentCityLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -131,11 +131,13 @@ export function ResidentCityLink(props: ResidentCityLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentCity) => {
-        storeDiff('residentCity', residentCity);
+        // storeDiff('residentCity', residentCity);
+        onChange(residentCity as AdminCityStored);
       }}
       onView={async () => linkViewResidentCityAction(ownerData, ownerData?.residentCity!, () => fetchOwnerData())}
       onUnset={async () => {
-        storeDiff('residentCity', null);
+        // storeDiff('residentCity', null);
+        onChange(null);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminCityStored, AdminCityQueryCustomizer>({
@@ -148,14 +150,15 @@ export function ResidentCityLink(props: ResidentCityLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.residentCity?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.residentCity ? [ownerData.residentCity] : undefined,
           filterOptions: residentCityRangeFilterOptions,
           initialQueryCustomizer: residentCityInitialQueryCustomizer,
           editMode: editMode,
         });
 
         if (res === undefined) return;
-        storeDiff('residentCity', res.value as AdminCityStored);
+        // storeDiff('residentCity', res.value as AdminCityStored);
+        onChange(res.value as AdminCityStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminCityQueryCustomizer = {

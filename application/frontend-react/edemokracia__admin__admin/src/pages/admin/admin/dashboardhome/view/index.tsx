@@ -10,7 +10,7 @@
 // Page DataElement name: dashboardhome
 // Page DataElement owner name: edemokracia::admin::Admin
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, Typography } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -60,13 +60,23 @@ import {
   AdminVoteEntryStored,
 } from '~/generated/data-api';
 import { adminAdminServiceForDashboardhomeImpl, adminDashboardServiceForClassImpl } from '~/generated/data-axios';
-
 import { useAdminDashboardCreateIssueAction, useAdminDashboardCreateUserAction } from './actions';
 
 import { PageActions } from './components/PageActions';
 import { DebatesTable } from './components/DebatesTable';
 import { IssuesTable } from './components/IssuesTable';
 import { VoteEntriesTable } from './components/VoteEntriesTable';
+
+export type AdminAdminDashboardhomeViewPostRefreshAction = (
+  data: AdminDashboardStored,
+  storeDiff: (attributeName: keyof AdminDashboardStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminDashboard, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ADMIN_DASHBOARDHOME_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminAdminDashboardhomeViewPostRefreshHook';
+export type AdminAdminDashboardhomeViewPostRefreshHook = () => AdminAdminDashboardhomeViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Admin.dashboardhome#View
@@ -109,7 +119,10 @@ export default function AdminAdminDashboardhomeView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -124,6 +137,12 @@ export default function AdminAdminDashboardhomeView() {
     _mask:
       '{welcome,issues{title,created,status,numberOfDebates},debates{title,issueTitle,closeAt,status},voteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminAdminDashboardhomeViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_DASHBOARDHOME_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminAdminDashboardhomeViewPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const adminDashboardCreateIssueAction = useAdminDashboardCreateIssueAction();
   const adminDashboardCreateUserAction = useAdminDashboardCreateUserAction();
@@ -186,6 +205,13 @@ export default function AdminAdminDashboardhomeView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminDashboardStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -199,10 +225,6 @@ export default function AdminAdminDashboardhomeView() {
       fetchData();
     }
   }, [signedIdentifier]);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminDashboard, string>());
-  }, [editMode]);
 
   return (
     <>

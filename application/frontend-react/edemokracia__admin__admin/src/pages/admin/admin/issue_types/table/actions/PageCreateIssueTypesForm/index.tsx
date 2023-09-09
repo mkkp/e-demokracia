@@ -41,7 +41,7 @@ import {
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
@@ -130,7 +130,10 @@ export function PageCreateIssueTypesForm({ successCallback, cancel }: PageCreate
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -167,7 +170,7 @@ export function PageCreateIssueTypesForm({ successCallback, cancel }: PageCreate
     fetchData();
   }, []);
 
-  const saveData = async () => {
+  const submit = async () => {
     setIsLoading(true);
 
     try {
@@ -353,7 +356,7 @@ export function PageCreateIssueTypesForm({ successCallback, cancel }: PageCreate
             id="CreateActionedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesTableEdemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesPageCreate-action-form-action-create"
             variant="contained"
             onClick={async () => {
-              const result = await saveData();
+              const result = await submit();
               if (result) {
                 successCallback(result);
               }
@@ -377,7 +380,7 @@ export function PageCreateIssueTypesForm({ successCallback, cancel }: PageCreate
                     <MenuItem
                       key="create-and-navigate"
                       onClick={async (event: any) => {
-                        const result: AdminIssueTypeStored | undefined = await saveData();
+                        const result: AdminIssueTypeStored | undefined = await submit();
 
                         if (result) {
                           successCallback(result);

@@ -26,7 +26,7 @@ import type {
   GridRowSelectionModel,
   GridRowId,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import type { MouseEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { JudoStored, QueryCustomizer } from '@judo/data-api-common';
@@ -37,10 +37,12 @@ import type { Filter, FilterOption } from '~/components-api';
 import {
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   processQueryCustomizer,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   mapFiltersToQueryCustomizerProperty,
+  isRowSelectable,
 } from '~/utilities';
 import { serverTableConfig, rangeDialogConfig } from '~/config';
 import { SlideUpTransition } from '~/theme/animations';
@@ -49,6 +51,7 @@ import { useFilterDialog } from './hooks';
 import type { ContextMenuApi } from '../table';
 import { ContextMenu, StripedDataGrid } from '../table';
 import { MdiIcon } from '../MdiIcon';
+import { GridLogicOperator } from '@mui/x-data-grid';
 
 interface RangeDialogProps<T extends JudoStored<T>, U extends QueryCustomizer<T>> {
   id: string;
@@ -59,7 +62,7 @@ interface RangeDialogProps<T extends JudoStored<T>, U extends QueryCustomizer<T>
   columns: GridColDef<T>[];
   defaultSortField: GridSortItem;
   rangeCall: (queryCustomizer: U) => Promise<Array<T>>;
-  alreadySelectedItems: GridRowSelectionModel | GridRowId;
+  alreadySelectedItems?: T[];
   initalQueryCustomizer: U;
   filterOptions: FilterOption[];
   createTrigger?: () => Promise<T | undefined>;
@@ -151,23 +154,16 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
     setFilters(newFilters);
 
     setQueryCustomizer((prevQueryCustomizer) => {
-      const tempQueryCustomizer: any = { ...prevQueryCustomizer };
-
-      filterOptions.forEach((filter) => {
-        tempQueryCustomizer[filter.attributeName] = mapFiltersToQueryCustomizerProperty(
-          newFilters,
-          filter.attributeName,
-        );
-      });
-
+      // remove previous filter values, so that we can always start with a clean slate
+      for (const name of columns.map((c) => c.field)) {
+        delete (prevQueryCustomizer as any)[name];
+      }
       return {
         ...prevQueryCustomizer,
         _seek: {
-          lastItem: undefined,
           limit: rangeDialogConfig.numberOfElements + 1,
-          reverse: undefined,
         },
-        ...tempQueryCustomizer,
+        ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
     });
   };
@@ -190,35 +186,6 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
       };
     });
   };
-
-  // useEffect(() => {
-  //   setPage(0);
-  //   const { field, sort } = sortModel[0];
-
-  //   setQueryCustomizer((prevQueryCustomizer) => {
-  //     const tempQueryCustomizer = { ...prevQueryCustomizer };
-
-  //     filterOptions.forEach(
-  //       (filter) =>
-  //         // @ts-ignore
-  //         (tempQueryCustomizer[filter.attributeName] = mapFiltersToQueryCustomizerProperty(
-  //           filters,
-  //           filter.attributeName,
-  //         )),
-  //     );
-
-  //     return {
-  //       ...prevQueryCustomizer,
-  //       _seek: {
-  //         lastItem: undefined,
-  //         limit: rangeDialogConfig.numberOfElements + 1,
-  //         reverse: undefined,
-  //       },
-  //       _orderBy: [{ attribute: field, descending: sort === 'desc' }],
-  //       ...tempQueryCustomizer,
-  //     };
-  //   });
-  // }, [sortModel, filters]);
 
   useEffect(() => {
     fetchData();
@@ -290,7 +257,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
   };
 
   const handleIsRowSelectable = (params: GridRowParams<T & { __selected?: boolean }>) => {
-    return !params.row.__selected;
+    return isRowSelectable(params.row, single, alreadySelectedItems);
   };
 
   return (
@@ -323,6 +290,11 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
                     display: 'grid',
                   }
             }
+            slotProps={{
+              filterPanel: {
+                logicOperators: [GridLogicOperator.And],
+              },
+            }}
             {...serverTableConfig}
             pageSizeOptions={[10]}
             getRowId={(row: T) => row.__identifier as GridRowId}
@@ -336,7 +308,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
             onSortModelChange={handleSortModelChange}
             checkboxSelection
             onRowSelectionModelChange={!single ? handleOnSelection : handleSingleOnSelection}
-            isRowSelectable={!single ? handleIsRowSelectable : undefined}
+            isRowSelectable={handleIsRowSelectable}
             rowSelectionModel={selectionModel}
             hideFooterSelectedRowCount={single}
             columns={columns}

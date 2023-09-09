@@ -10,7 +10,7 @@
 // Page DataElement name: district
 // Page DataElement owner name: edemokracia::admin::Issue
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
@@ -18,7 +18,7 @@ import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -53,10 +53,19 @@ import {
   AdminIssueStored,
 } from '~/generated/data-api';
 import { adminIssueServiceForClassImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
-
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
+
+export type AdminIssueDistrictViewPostRefreshAction = (
+  data: AdminDistrictStored,
+  storeDiff: (attributeName: keyof AdminDistrictStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminDistrict, string>>>,
+) => Promise<void>;
+
+export const ADMIN_ISSUE_DISTRICT_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminIssueDistrictViewPostRefreshHook';
+export type AdminIssueDistrictViewPostRefreshHook = () => AdminIssueDistrictViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Issue.district#View
@@ -98,7 +107,10 @@ export default function AdminIssueDistrictView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -112,6 +124,11 @@ export default function AdminIssueDistrictView() {
   const queryCustomizer: AdminDistrictQueryCustomizer = {
     _mask: '{name,representation}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminIssueDistrictViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ISSUE_DISTRICT_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminIssueDistrictViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
@@ -146,6 +163,13 @@ export default function AdminIssueDistrictView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminDistrictStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -157,10 +181,6 @@ export default function AdminIssueDistrictView() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminDistrict, string>());
-  }, [editMode]);
 
   return (
     <>

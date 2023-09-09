@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -72,6 +75,8 @@ import {
   useTableClearActivityCountiesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
+import { GridLogicOperator } from '@mui/x-data-grid';
+
 export const ADMIN_ADMIN_USERS_VIEW_ACTIVITY_COUNTIES = 'AdminAdminUsersViewActivityCounties';
 
 export interface ActivityCountiesTableProps {
@@ -85,6 +90,7 @@ export interface ActivityCountiesTableProps {
 }
 
 export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
+  const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { openFilterDialog } = useFilterDialog();
   const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
   const { t } = useTranslation();
@@ -92,7 +98,12 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUsersViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUsersViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-${ownerData.__identifier}-filters`;
+  const [activityCountiesFilterModel, setActivityCountiesFilterModel] = useState<GridFilterModel>(
+    getItemParsedWithDefault(filterModelKey, { items: [] }),
+  );
+  const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
   const [data, setData] = useState<AdminCountyStored[]>([]);
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10,
@@ -102,8 +113,6 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
   const [activityCountiesSortModel, setActivityCountiesSortModel] = useState<GridSortModel>([
     { field: 'representation', sort: null },
   ]);
-
-  const [activityCountiesFilterModel, setActivityCountiesFilterModel] = useState<GridFilterModel>({ items: [] });
 
   const activityCountiesColumns: GridColDef<AdminCountyStored>[] = [
     {
@@ -161,24 +170,6 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
     },
   ];
 
-  const activityCountiesRangeCall = async () =>
-    openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties',
-      columns: activityCountiesColumns,
-      defaultSortField: activityCountiesSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await adminUserServiceForClassImpl.getRangeForActivityCounties(
-          ownerData,
-          processQueryCustomizer(queryCustomizer),
-        ),
-      single: false,
-      alreadySelectedItems: activityCountiesSelectionModel,
-      filterOptions: activityCountiesRangeFilterOptions,
-      initialQueryCustomizer: activityCountiesInitialQueryCustomizer,
-    });
-
-  const [activityCountiesSelectionModel, setActivityCountiesSelectionModel] = useState<GridRowSelectionModel>([]);
-
   const filterOptions: FilterOption[] = [
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUsersViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
@@ -197,8 +188,23 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
         page: 0,
       }));
       setFilters(newFilters);
+      setItemStringified(filtersKey, newFilters);
     }
   };
+
+  useEffect(() => {
+    if (ownerData?.__identifier) {
+      const storedFilters = getItemParsed<Filter[]>(filtersKey);
+      if (storedFilters !== null) {
+        setFilters(storedFilters);
+      }
+
+      const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
+      if (storedFilterModel !== null) {
+        setActivityCountiesFilterModel(storedFilterModel);
+      }
+    }
+  }, [ownerData]);
 
   useEffect(() => {
     const newData = applyInMemoryFilters<AdminCountyStored>(filters, ownerData?.activityCounties ?? []);
@@ -215,6 +221,11 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
           display: 'grid',
           border: (theme) =>
             props.validation.has('activityCounties') ? `2px solid ${theme.palette.error.main}` : undefined,
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}
@@ -262,13 +273,24 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
                 startIcon={<MdiIcon path="attachment-plus" />}
                 variant="text"
                 onClick={async () => {
-                  const res = await activityCountiesRangeCall();
+                  const res = await openRangeDialog<AdminCountyStored, AdminCountyQueryCustomizer>({
+                    id: 'RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCounties',
+                    columns: activityCountiesColumns,
+                    defaultSortField: activityCountiesSortModel[0],
+                    rangeCall: async (queryCustomizer) =>
+                      await adminUserServiceForClassImpl.getRangeForActivityCounties(
+                        ownerData,
+                        processQueryCustomizer(queryCustomizer),
+                      ),
+                    single: false,
+                    alreadySelectedItems: ownerData.activityCounties ? [...ownerData.activityCounties] : undefined,
+                    filterOptions: activityCountiesRangeFilterOptions,
+                    initialQueryCustomizer: activityCountiesInitialQueryCustomizer,
+                  });
 
                   if (res) {
-                    storeDiff('activityCounties', [
-                      ...(ownerData.activityCounties || []),
-                      ...(res.value as AdminCountyStored[]),
-                    ]);
+                    const newList = [...(ownerData.activityCounties || []), ...(res.value as AdminCountyStored[])];
+                    storeDiff('activityCounties', newList);
                   }
                 }}
                 disabled={isOwnerLoading || false || !isFormUpdateable()}

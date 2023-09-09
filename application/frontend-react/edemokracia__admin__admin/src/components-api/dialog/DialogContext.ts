@@ -33,7 +33,7 @@ export interface OpenRangeDialogProps<T extends JudoStored<T>, U extends QueryCu
   defaultSortField: GridSortItem;
   rangeCall: (queryCustomizer: U) => Promise<Array<T>>;
   single?: boolean;
-  alreadySelectedItems: GridRowSelectionModel | GridRowId;
+  alreadySelectedItems?: T[];
   initialQueryCustomizer: U;
   filterOptions: FilterOption[];
   createTrigger?: () => Promise<T | undefined>;

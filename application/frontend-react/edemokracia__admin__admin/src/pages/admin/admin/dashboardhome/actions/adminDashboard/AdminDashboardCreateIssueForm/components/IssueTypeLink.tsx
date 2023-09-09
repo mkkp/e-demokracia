@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/actions/actionForm/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -70,12 +70,12 @@ export interface IssueTypeLinkProps {
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
-  storeDiff: (attributeName: keyof AdminCreateIssueInput, value: any) => void;
+  onChange: (value: AdminIssueType | AdminIssueTypeStored | null) => void;
   validation: Map<keyof AdminCreateIssueInput, string>;
 }
 
 export function IssueTypeLink(props: IssueTypeLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -173,7 +173,8 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(issueType) => {
-        storeDiff('issueType', issueType);
+        // storeDiff('issueType', issueType);
+        onChange(issueType as AdminIssueTypeStored);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminIssueTypeStored, AdminIssueTypeQueryCustomizer>({
@@ -186,13 +187,14 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.issueType?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.issueType ? [ownerData.issueType] : undefined,
           filterOptions: issueTypeRangeFilterOptions,
           initialQueryCustomizer: issueTypeInitialQueryCustomizer,
         });
 
         if (res === undefined) return;
-        storeDiff('issueType', res.value as AdminIssueTypeStored);
+        // storeDiff('issueType', res.value as AdminIssueTypeStored);
+        onChange(res.value as AdminIssueTypeStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminIssueTypeQueryCustomizer = {
@@ -211,7 +213,8 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
         );
       }}
       onUnset={async () => {
-        storeDiff('issueType', null);
+        // storeDiff('issueType', null);
+        onChange(null);
       }}
     />
   );

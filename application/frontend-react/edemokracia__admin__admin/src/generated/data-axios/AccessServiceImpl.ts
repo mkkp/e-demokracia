@@ -59,8 +59,8 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    * @return {Promise<JudoDownloadFile>}
    */
-  async downloadFile(downloadToken: string): Promise<any> {
-    const response = await this.axios.get(this.axiosProvider.getFilePath('download'), {
+  async downloadFile(downloadToken: string, disposition: 'inline' | 'attachment'): Promise<any> {
+    const response = await this.axios.get(`${this.axiosProvider.getFilePath('download')}?disposition=${disposition}`, {
       responseType: 'blob',
       headers: {
         'X-Token': downloadToken,

@@ -12,7 +12,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -26,20 +26,23 @@ import type {
   GridRowSelectionModel,
   GridSortItem,
 } from '@mui/x-data-grid';
-import { GridToolbarContainer } from '@mui/x-data-grid';
+import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
+import { useDataStore } from '~/hooks';
 import {
+  decodeToken,
   fileHandling,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
   mapAllFiltersToQueryCustomizerProperties,
   mapFilterModelToFilters,
+  mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
 } from '~/utilities';
@@ -66,6 +69,7 @@ import {
   VoteDefinitionStored,
 } from '~/generated/data-api';
 import { closeDebateInputServiceForClassImpl, adminDashboardServiceForClassImpl } from '~/generated/data-axios';
+import { GridLogicOperator } from '@mui/x-data-grid';
 
 export interface AnswersTableProps {
   ownerData: CloseDebateInput;
@@ -147,24 +151,6 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
     },
   ];
 
-  const answersRangeCall = async () =>
-    openRangeDialog<SelectAnswerInputStored, SelectAnswerInputQueryCustomizer>({
-      id: 'RelationTypeedemokraciaAdminAdminEdemokraciaCloseDebateInputAnswers',
-      columns: answersColumns,
-      defaultSortField: answersSortModel[0],
-      rangeCall: async (queryCustomizer) =>
-        await closeDebateInputServiceForClassImpl.getRangeForAnswers(
-          ownerData,
-          processQueryCustomizer(queryCustomizer),
-        ),
-      single: false,
-      alreadySelectedItems: answersSelectionModel,
-      filterOptions: answersRangeFilterOptions,
-      initialQueryCustomizer: answersInitialQueryCustomizer,
-    });
-
-  const [answersSelectionModel, setAnswersSelectionModel] = useState<GridRowSelectionModel>([]);
-
   return (
     <>
       <StripedDataGrid
@@ -174,6 +160,11 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
           // overflow: 'hidden',
           display: 'grid',
           border: (theme) => (props.validation.has('answers') ? `2px solid ${theme.palette.error.main}` : undefined),
+        }}
+        slotProps={{
+          filterPanel: {
+            logicOperators: [GridLogicOperator.And],
+          },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
         loading={isOwnerLoading}
@@ -214,10 +205,24 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
                 startIcon={<MdiIcon path="attachment-plus" />}
                 variant="text"
                 onClick={async () => {
-                  const res = await answersRangeCall();
+                  const res = await openRangeDialog<SelectAnswerInputStored, SelectAnswerInputQueryCustomizer>({
+                    id: 'RelationTypeedemokraciaAdminAdminEdemokraciaCloseDebateInputAnswers',
+                    columns: answersColumns,
+                    defaultSortField: answersSortModel[0],
+                    rangeCall: async (queryCustomizer) =>
+                      await closeDebateInputServiceForClassImpl.getRangeForAnswers(
+                        ownerData,
+                        processQueryCustomizer(queryCustomizer),
+                      ),
+                    single: false,
+                    alreadySelectedItems: ownerData.answers ? [...ownerData.answers] : undefined,
+                    filterOptions: answersRangeFilterOptions,
+                    initialQueryCustomizer: answersInitialQueryCustomizer,
+                  });
 
                   if (res) {
-                    storeDiff('answers', [...(ownerData.answers || []), ...(res.value as SelectAnswerInputStored[])]);
+                    const newList = [...(ownerData.answers || []), ...(res.value as SelectAnswerInputStored[])];
+                    storeDiff('answers', newList);
                   }
                 }}
                 disabled={isOwnerLoading || false || !isFormUpdateable()}

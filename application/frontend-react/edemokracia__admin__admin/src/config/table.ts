@@ -20,6 +20,7 @@ export const baseTableConfig: Partial<DataGridProps<any>> = {
   sortingOrder: ['asc', 'desc', null],
   pagination: true, // is false for DataGridPro by default
   disableColumnFilter: !false,
+  disableColumnSelector: true,
   density: density.dataGridDensity || 'standard',
 };
 
@@ -31,5 +32,5 @@ export const serverTableConfig: Partial<DataGridProps<any>> = {
 };
 
 export const rangeDialogConfig: { numberOfElements: number } = {
-  numberOfElements: 5,
+  numberOfElements: 10,
 };

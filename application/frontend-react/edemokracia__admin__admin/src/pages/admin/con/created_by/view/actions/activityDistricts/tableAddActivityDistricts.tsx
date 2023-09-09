@@ -9,7 +9,7 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -104,7 +104,6 @@ export const useTableAddActivityDistrictsAction: TableAddActivityDistrictsAction
       rangeCall: async (queryCustomizer) =>
         await adminUserServiceForClassImpl.getRangeForActivityDistricts(owner, processQueryCustomizer(queryCustomizer)),
       single: false,
-      alreadySelectedItems: '',
       filterOptions,
       initialQueryCustomizer,
     });

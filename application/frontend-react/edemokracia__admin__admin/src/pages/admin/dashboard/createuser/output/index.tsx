@@ -10,7 +10,7 @@
 // Page DataElement name: output
 // Page DataElement owner name: createUser
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -33,7 +33,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -75,7 +75,6 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminUserServiceForClassImpl } from '~/generated/data-axios';
-
 import { useButtonNavigateVotesAction } from './actions';
 
 import { PageActions } from './components/PageActions';
@@ -85,6 +84,17 @@ import { ResidentDistrictLink } from './components/ResidentDistrictLink';
 import { ActivityCitiesTable } from './components/ActivityCitiesTable';
 import { ActivityDistrictsTable } from './components/ActivityDistrictsTable';
 import { ActivityCountiesTable } from './components/ActivityCountiesTable';
+
+export type AdminDashboardCreateuserOutputPostRefreshAction = (
+  data: AdminUserStored,
+  storeDiff: (attributeName: keyof AdminUserStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminUser, string>>>,
+) => Promise<void>;
+
+export const ADMIN_DASHBOARD_CREATEUSER_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY =
+  'AdminDashboardCreateuserOutputPostRefreshHook';
+export type AdminDashboardCreateuserOutputPostRefreshHook = () => AdminDashboardCreateuserOutputPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Dashboard.createUser#Output
@@ -125,7 +135,10 @@ export default function AdminDashboardCreateuserOutput() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -138,6 +151,12 @@ export default function AdminDashboardCreateuserOutput() {
     _mask:
       '{userName,isAdmin,created,firstName,lastName,email,phone,residentCounty{representation},residentCity{representation},residentDistrict{representation},activityCounties{representation},activityCities{representation},activityDistricts{representation}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminDashboardCreateuserOutputPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_DASHBOARD_CREATEUSER_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminDashboardCreateuserOutputPostRefreshAction | undefined =
+    postRefreshHook && postRefreshHook();
 
   const buttonNavigateVotesAction = useButtonNavigateVotesAction();
 
@@ -174,6 +193,13 @@ export default function AdminDashboardCreateuserOutput() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminUserStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -185,10 +211,6 @@ export default function AdminDashboardCreateuserOutput() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  useEffect(() => {
-    setValidation(new Map<keyof AdminUser, string>());
-  }, [editMode]);
 
   return (
     <>
@@ -570,7 +592,9 @@ export default function AdminDashboardCreateuserOutput() {
                                   disabled={isLoading}
                                   editMode={editMode}
                                   fetchOwnerData={fetchData}
-                                  storeDiff={storeDiff}
+                                  onChange={(value: AdminCounty | AdminCountyStored | null) => {
+                                    storeDiff('residentCounty', value);
+                                  }}
                                   validation={validation}
                                 />
                               </Grid>
@@ -582,7 +606,9 @@ export default function AdminDashboardCreateuserOutput() {
                                   disabled={isLoading}
                                   editMode={editMode}
                                   fetchOwnerData={fetchData}
-                                  storeDiff={storeDiff}
+                                  onChange={(value: AdminCity | AdminCityStored | null) => {
+                                    storeDiff('residentCity', value);
+                                  }}
                                   validation={validation}
                                 />
                               </Grid>
@@ -594,7 +620,9 @@ export default function AdminDashboardCreateuserOutput() {
                                   disabled={isLoading}
                                   editMode={editMode}
                                   fetchOwnerData={fetchData}
-                                  storeDiff={storeDiff}
+                                  onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
+                                    storeDiff('residentDistrict', value);
+                                  }}
                                   validation={validation}
                                 />
                               </Grid>

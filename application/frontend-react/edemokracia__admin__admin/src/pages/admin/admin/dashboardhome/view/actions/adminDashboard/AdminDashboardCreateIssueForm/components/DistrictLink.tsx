@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/actions/actionForm/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -70,12 +70,12 @@ export interface DistrictLinkProps {
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
-  storeDiff: (attributeName: keyof AdminCreateIssueInput, value: any) => void;
+  onChange: (value: AdminDistrict | AdminDistrictStored | null) => void;
   validation: Map<keyof AdminCreateIssueInput, string>;
 }
 
 export function DistrictLink(props: DistrictLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -189,7 +189,8 @@ export function DistrictLink(props: DistrictLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(district) => {
-        storeDiff('district', district);
+        // storeDiff('district', district);
+        onChange(district as AdminDistrictStored);
       }}
       onSet={async () => {
         const res = await openRangeDialog<AdminDistrictStored, AdminDistrictQueryCustomizer>({
@@ -202,13 +203,14 @@ export function DistrictLink(props: DistrictLinkProps) {
               processQueryCustomizer(queryCustomizer),
             ),
           single: true,
-          alreadySelectedItems: ownerData.district?.__identifier as GridRowId,
+          alreadySelectedItems: ownerData.district ? [ownerData.district] : undefined,
           filterOptions: districtRangeFilterOptions,
           initialQueryCustomizer: districtInitialQueryCustomizer,
         });
 
         if (res === undefined) return;
-        storeDiff('district', res.value as AdminDistrictStored);
+        // storeDiff('district', res.value as AdminDistrictStored);
+        onChange(res.value as AdminDistrictStored);
       }}
       onAutoCompleteSearch={async (searchText: string) => {
         const queryCustomizer: AdminDistrictQueryCustomizer = {
@@ -227,7 +229,8 @@ export function DistrictLink(props: DistrictLinkProps) {
         );
       }}
       onUnset={async () => {
-        storeDiff('district', null);
+        // storeDiff('district', null);
+        onChange(null);
       }}
     />
   );

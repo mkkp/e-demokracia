@@ -41,7 +41,7 @@ import {
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useSnackbar } from 'notistack';
 import { v1 as uuidv1 } from 'uuid';
@@ -123,7 +123,10 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -160,7 +163,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
     fetchData();
   }, []);
 
-  const saveData = async () => {
+  const submit = async () => {
     setIsLoading(true);
 
     try {
@@ -254,7 +257,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
             id="CreateActionedemokraciaAdminAdminEdemokraciaAdminAdminCountiesTableEdemokraciaAdminAdminEdemokraciaAdminAdminCountiesPageCreate-action-form-action-create"
             variant="contained"
             onClick={async () => {
-              const result = await saveData();
+              const result = await submit();
               if (result) {
                 successCallback(result);
               }
@@ -278,7 +281,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
                     <MenuItem
                       key="create-and-navigate"
                       onClick={async (event: any) => {
-                        const result: AdminCountyStored | undefined = await saveData();
+                        const result: AdminCountyStored | undefined = await submit();
 
                         if (result) {
                           successCallback(result);

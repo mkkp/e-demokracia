@@ -30,9 +30,6 @@ import { Category_TableTable } from './components/Category_TableTable';
  * Type: Table
  **/
 export default function AdminAdminCategoriesTable() {
-  const persistedTableData: PersistedTableData = JSON.parse(
-    window.sessionStorage.getItem('pages.AdminAdminCategoriesTable') || '{}',
-  );
   const tableRef = useRef<RefreshableTable>(null);
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();

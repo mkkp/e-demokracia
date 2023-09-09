@@ -9,7 +9,7 @@
 import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useJudoNavigation } from '../CustomBreadcrumb';
 

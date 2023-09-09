@@ -10,7 +10,7 @@
 // Page DataElement name: pros
 // Page DataElement owner name: edemokracia::admin::Debate
 
-import type { FC } from 'react';
+import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
@@ -19,7 +19,7 @@ import type { DateValidationError, DateTimeValidationError, TimeValidationError 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useSnackbar } from 'notistack';
-import { ComponentProxy } from '@pandino/react-hooks';
+import { ComponentProxy, useTrackService } from '@pandino/react-hooks';
 import { useParams } from 'react-router-dom';
 import { MdiIcon, ModeledTabs, PageHeader, DropdownButton, CustomBreadcrumb, useJudoNavigation } from '~/components';
 import { useRangeDialog } from '~/components/dialog';
@@ -63,7 +63,6 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminDebateServiceForClassImpl, adminProServiceForClassImpl } from '~/generated/data-axios';
-
 import {
   useAdminProVoteUpAction,
   useAdminProVoteDownAction,
@@ -77,6 +76,16 @@ import { CreatedByLink } from './components/CreatedByLink';
 import { ConsTable } from './components/ConsTable';
 import { ProsTable } from './components/ProsTable';
 import { CommentsTable } from './components/CommentsTable';
+
+export type AdminDebateProsViewPostRefreshAction = (
+  data: AdminProStored,
+  storeDiff: (attributeName: keyof AdminProStored, value: any) => void,
+  setEditMode: Dispatch<SetStateAction<boolean>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof AdminPro, string>>>,
+) => Promise<void>;
+
+export const ADMIN_DEBATE_PROS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminDebateProsViewPostRefreshHook';
+export type AdminDebateProsViewPostRefreshHook = () => AdminDebateProsViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Debate.pros#View
@@ -124,7 +133,10 @@ export default function AdminDebateProsView() {
       } else {
         payloadDiff[attributeName] = value;
       }
-      setData({ ...data, [attributeName]: value });
+      setData((prevData) => ({
+        ...prevData,
+        [attributeName]: value,
+      }));
       if (!editMode) {
         setEditMode(true);
       }
@@ -137,6 +149,11 @@ export default function AdminDebateProsView() {
     _mask:
       '{title,created,description,upVotes,downVotes,createdByName,createdBy{representation},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
+
+  const { service: postRefreshHook } = useTrackService<AdminDebateProsViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_DEBATE_PROS_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  );
+  const postRefreshAction: AdminDebateProsViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const adminProVoteUpAction = useAdminProVoteUpAction();
   const adminProVoteDownAction = useAdminProVoteDownAction();
@@ -177,6 +194,13 @@ export default function AdminDebateProsView() {
         __version: res.__version,
         __entityType: res.__entityType,
       } as Record<keyof AdminProStored, any>);
+      if (postRefreshAction) {
+        try {
+          await postRefreshAction(res, storeDiff, setEditMode, setValidation);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     } catch (error) {
       handleFetchError(error);
     } finally {
@@ -185,7 +209,7 @@ export default function AdminDebateProsView() {
     }
   }
 
-  async function saveData() {
+  async function submit() {
     setIsLoading(true);
 
     try {
@@ -196,6 +220,7 @@ export default function AdminDebateProsView() {
           variant: 'success',
           ...toastConfig.success,
         });
+        setValidation(new Map<keyof AdminPro, string>());
         await fetchData();
         setEditMode(false);
       }
@@ -224,10 +249,6 @@ export default function AdminDebateProsView() {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setValidation(new Map<keyof AdminPro, string>());
-  }, [editMode]);
-
   return (
     <>
       <PageHeader title={title}>
@@ -237,7 +258,7 @@ export default function AdminDebateProsView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          saveData={saveData}
+          submit={submit}
           deleteData={deleteData}
         />
       </PageHeader>
@@ -364,7 +385,9 @@ export default function AdminDebateProsView() {
                               disabled={isLoading}
                               editMode={editMode}
                               fetchOwnerData={fetchData}
-                              storeDiff={storeDiff}
+                              onChange={(value: AdminUser | AdminUserStored | null) => {
+                                storeDiff('createdBy', value);
+                              }}
                               validation={validation}
                             />
                           </Grid>

@@ -7,7 +7,7 @@
 // Template file: actor/src/pages/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import { Button, ButtonGroup } from '@mui/material';
 import type {
   GridColDef,
   GridFilterModel,
@@ -72,16 +72,16 @@ import { useLinkViewIssueAction } from '../actions';
 
 export interface IssueLinkProps {
   ownerData: AdminDebateStored;
-  storeDiff: (attributeName: keyof AdminDebateStored, value: any) => void;
   validation: Map<keyof AdminDebateStored, string>;
   fetchOwnerData: () => Promise<void>;
+  onChange: (value: AdminIssue | AdminIssueStored | null) => void;
   disabled: boolean;
   readOnly: boolean;
   editMode: boolean;
 }
 
 export function IssueLink(props: IssueLinkProps) {
-  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, storeDiff, validation } = props;
+  const { ownerData, disabled, readOnly, editMode, fetchOwnerData, onChange, validation } = props;
   const { t } = useTranslation();
   const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
@@ -107,7 +107,8 @@ export function IssueLink(props: IssueLinkProps) {
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(issue) => {
-        storeDiff('issue', issue);
+        // storeDiff('issue', issue);
+        onChange(issue as AdminIssueStored);
       }}
       onView={async () => linkViewIssueAction(ownerData, ownerData?.issue!, () => fetchOwnerData())}
     />

@@ -16,5 +16,5 @@ export interface AccessService {
 
   uploadFile(attributePath: string, file: File): Promise<string>;
 
-  downloadFile(downloadToken: string): Promise<any>;
+  downloadFile(downloadToken: string, disposition: 'inline' | 'attachment'): Promise<any>;
 }

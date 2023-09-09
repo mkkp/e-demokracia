@@ -36,7 +36,7 @@ export const usePageDialog = () => {
   const context = useContext(PageDialogContextState);
 
   if (context === undefined) {
-    throw new Error('useConfirmDialog was used outside its Provider');
+    throw new Error('usePageDialog was used outside its Provider');
   }
 
   return context;
