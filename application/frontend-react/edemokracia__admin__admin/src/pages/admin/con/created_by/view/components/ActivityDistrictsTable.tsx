@@ -99,8 +99,8 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filters`;
   const [activityDistrictsFilterModel, setActivityDistrictsFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -130,7 +130,7 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
 
   const activityDistrictsRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.UserView.activityDistricts.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,
@@ -172,7 +172,7 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.UserView.activityDistricts.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,
@@ -298,12 +298,12 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
                 {t('judo.pages.table.add', { defaultValue: 'Add' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminConCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-filter',
                     filterOptions,
                     filters,
                   )

@@ -99,8 +99,8 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-${ownerData.__identifier}-filters`;
   const [activityCountiesFilterModel, setActivityCountiesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -130,7 +130,7 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
 
   const activityCountiesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.UserView.activityCounties.representation', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
@@ -172,7 +172,7 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.UserView.activityCounties.representation', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
@@ -298,12 +298,12 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
                 {t('judo.pages.table.add', { defaultValue: 'Add' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties-filter',
                     filterOptions,
                     filters,
                   )

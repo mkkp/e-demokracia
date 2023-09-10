@@ -50,7 +50,7 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
   judoAxiosProvider.init({
     axios,
     basePathFactory: () => API_DEFAULT_BASE_URL + API_RELATIVE_PATH,
-    filePathFactory: () => FILE_DEFAULT_BASE_URL + '/Edemokracia',
+    filePathFactory: () => FILE_DEFAULT_BASE_URL + '/edemokracia',
   });
 
   const root = createRoot(document.getElementById('root') as HTMLElement);

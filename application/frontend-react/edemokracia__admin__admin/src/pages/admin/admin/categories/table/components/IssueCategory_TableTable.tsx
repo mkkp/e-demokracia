@@ -61,14 +61,14 @@ import {
 } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
-export const ADMIN_ADMIN_CATEGORIES_TABLE_CATEGORY_TABLE = 'AdminAdminCategoriesTableCategory_Table';
+export const ADMIN_ADMIN_CATEGORIES_TABLE_ISSUE_CATEGORY_TABLE = 'AdminAdminCategoriesTableIssueCategory_Table';
 
-export interface Category_TableTableProps {
+export interface IssueCategory_TableTableProps {
   isOwnerLoading: boolean;
   setIsOwnerLoading: (value: boolean) => void;
 }
 
-export const Category_TableTable = forwardRef<RefreshableTable, Category_TableTableProps>((props, ref) => {
+export const IssueCategory_TableTable = forwardRef<RefreshableTable, IssueCategory_TableTableProps>((props, ref) => {
   const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { isOwnerLoading, setIsOwnerLoading } = props;
   const { t } = useTranslation();
@@ -83,8 +83,8 @@ export const Category_TableTable = forwardRef<RefreshableTable, Category_TableTa
   const [data, setData] = useState<GridRowModel<AdminIssueCategoryStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesCategoryTable-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesCategoryTable-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesIssueCategoryTable-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesIssueCategoryTable-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -143,14 +143,14 @@ export const Category_TableTable = forwardRef<RefreshableTable, Category_TableTa
 
   const categoriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesCategoryTableTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesIssueCategoryTableTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueCategoryTable.categories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesCategoryTableDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesIssueCategoryTableDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueCategoryTable.categories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -183,14 +183,14 @@ export const Category_TableTable = forwardRef<RefreshableTable, Category_TableTa
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesCategoryTableTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesIssueCategoryTableTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueCategoryTable.categories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesCategoryTableDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTableDefaultCategoriesIssueCategoryTableDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueCategoryTable.categories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

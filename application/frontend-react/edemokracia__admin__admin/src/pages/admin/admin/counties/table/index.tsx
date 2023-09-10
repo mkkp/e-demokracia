@@ -34,7 +34,7 @@ export default function AdminAdminCountiesTable() {
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.CountyTable', { defaultValue: 'Counties' });
+  const title: string = t('admin.CountyTable', { defaultValue: 'County Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();

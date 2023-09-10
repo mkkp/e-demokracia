@@ -85,7 +85,7 @@ export function CreatedByLink(props: CreatedByLinkProps) {
   return (
     <AggregationInput
       name="createdBy"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConCreatedBy"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConCreatedBy"
       label={t('admin.ConView.createdBy', { defaultValue: 'Created by' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
       ownerData={ownerData}

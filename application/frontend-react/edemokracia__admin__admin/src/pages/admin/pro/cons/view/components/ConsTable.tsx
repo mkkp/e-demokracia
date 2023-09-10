@@ -100,8 +100,8 @@ export const ConsTable = (props: ConsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filters`;
   const [consFilterModel, setConsFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -155,21 +155,21 @@ export const ConsTable = (props: ConsTableProps) => {
 
   const consRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsTitleFilter',
       attributeName: 'title',
       label: t('admin.ConView.cons.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsUpVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('admin.ConView.cons.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsDownVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('admin.ConView.cons.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -237,21 +237,21 @@ export const ConsTable = (props: ConsTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsTitleFilter',
       attributeName: 'title',
       label: t('admin.ConView.cons.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsUpVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('admin.ConView.cons.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsDownVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('admin.ConView.cons.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -333,12 +333,12 @@ export const ConsTable = (props: ConsTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperCons-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperCons-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-filter',
                     filterOptions,
                     filters,
                   )

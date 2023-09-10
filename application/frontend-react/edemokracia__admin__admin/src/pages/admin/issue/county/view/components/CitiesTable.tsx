@@ -92,8 +92,8 @@ export const CitiesTable = (props: CitiesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewCitiesLabelWrapperCities-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewCitiesLabelWrapperCities-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewEditCitiesLabelWrapperCities-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewEditCitiesLabelWrapperCities-${ownerData.__identifier}-filters`;
   const [citiesFilterModel, setCitiesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -121,7 +121,7 @@ export const CitiesTable = (props: CitiesTableProps) => {
 
   const citiesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewCitiesLabelWrapperCitiesNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewEditCitiesLabelWrapperCitiesNameFilter',
       attributeName: 'name',
       label: t('admin.CountyView.cities.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -157,7 +157,7 @@ export const CitiesTable = (props: CitiesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewCitiesLabelWrapperCitiesNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewEditCitiesLabelWrapperCitiesNameFilter',
       attributeName: 'name',
       label: t('admin.CountyView.cities.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -255,12 +255,12 @@ export const CitiesTable = (props: CitiesTableProps) => {
                 {t('judo.pages.table.create', { defaultValue: 'Create' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewCitiesLabelWrapperCities-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewEditCitiesLabelWrapperCities-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewCitiesLabelWrapperCities-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCountyViewDefaultCountyViewEditCitiesLabelWrapperCities-filter',
                     filterOptions,
                     filters,
                   )

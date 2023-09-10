@@ -82,14 +82,14 @@ export const useTableAddCategoriesAction: TableAddCategoriesAction = () => {
 
     const filterOptions: FilterOption[] = [
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesTitleFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesTitleFilter',
         attributeName: 'title',
         label: t('admin.IssueView.categories.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesDescriptionFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesDescriptionFilter',
         attributeName: 'description',
         label: t('admin.IssueView.categories.description', { defaultValue: 'Description' }) as string,
         filterType: FilterType.string,

@@ -93,7 +93,7 @@ export function IssueLink(props: IssueLinkProps) {
   return (
     <AggregationInput
       name="issue"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionDebateViewDefaultDebateViewDebateLabelWrapperDebateIssue"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionDebateViewDefaultDebateViewEditDebateLabelWrapperDebateIssue"
       label={t('admin.DebateView.issue', { defaultValue: 'Issue' }) as string}
       labelList={[ownerData.issue?.representation?.toString() ?? '']}
       ownerData={ownerData}

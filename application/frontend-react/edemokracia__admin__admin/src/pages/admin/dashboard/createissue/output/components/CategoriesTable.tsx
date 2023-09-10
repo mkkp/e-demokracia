@@ -117,8 +117,8 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategories-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategories-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategories-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategories-${ownerData.__identifier}-filters`;
   const [categoriesFilterModel, setCategoriesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -156,14 +156,14 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
 
   const categoriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueView.categories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueView.categories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -205,14 +205,14 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueView.categories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategoriesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueView.categories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -337,12 +337,12 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
                 {t('judo.pages.table.add', { defaultValue: 'Add' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategories-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategories-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategories-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategories-filter',
                     filterOptions,
                     filters,
                   )

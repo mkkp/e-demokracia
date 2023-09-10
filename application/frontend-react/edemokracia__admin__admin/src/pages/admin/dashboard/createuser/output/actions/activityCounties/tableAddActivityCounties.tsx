@@ -76,7 +76,7 @@ export const useTableAddActivityCountiesAction: TableAddActivityCountiesAction =
 
     const filterOptions: FilterOption[] = [
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCountiesRepresentationFilter',
         attributeName: 'representation',
         label: t('admin.UserView.activityCounties.representation', { defaultValue: 'County' }) as string,
         filterType: FilterType.string,

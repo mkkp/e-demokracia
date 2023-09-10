@@ -140,7 +140,7 @@ export default function AdminAdminCategoriesView() {
   );
   const postRefreshAction: AdminAdminCategoriesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
-  const title: string = t('admin.IssueCategoryView', { defaultValue: 'View / Edit Category' });
+  const title: string = t('admin.IssueCategoryView', { defaultValue: 'IssueCategory View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -256,7 +256,7 @@ export default function AdminAdminCategoriesView() {
                 <TextField
                   required={true}
                   name="title"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewTitle"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultIssueCategoryViewEditTitle"
                   label={t('admin.IssueCategoryView.title', { defaultValue: 'Title' }) as string}
                   value={data.title ?? ''}
                   className={clsx({
@@ -286,7 +286,7 @@ export default function AdminAdminCategoriesView() {
                 <TextField
                   required={true}
                   name="description"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewDescription"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultIssueCategoryViewEditDescription"
                   label={t('admin.IssueCategoryView.description', { defaultValue: 'Description' }) as string}
                   value={data.description ?? ''}
                   className={clsx({
@@ -328,7 +328,7 @@ export default function AdminAdminCategoriesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapper"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapper"
                   container
                   direction="column"
                   alignItems="stretch"
@@ -339,7 +339,7 @@ export default function AdminAdminCategoriesView() {
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -350,7 +350,7 @@ export default function AdminAdminCategoriesView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories"
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories"
                       container
                       direction="column"
                       alignItems="stretch"

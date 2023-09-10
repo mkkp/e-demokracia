@@ -144,7 +144,7 @@ export function AdminVoteDefinitionVoteYesNoAbstainForm({
     },
     [data],
   );
-  const title: string = t('YesNoAbstainVoteInputForm', { defaultValue: 'Vote Yes / No / Abstain' });
+  const title: string = t('YesNoAbstainVoteInputForm', { defaultValue: 'YesNoAbstainVoteInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

@@ -87,7 +87,7 @@ export const useAdminDashboardCreateUserAction: AdminDashboardCreateUserAction =
   return async function adminDashboardCreateUserAction(successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'xs',
+      maxWidth: 'md',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();

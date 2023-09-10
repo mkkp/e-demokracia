@@ -116,8 +116,8 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filters`;
   const [attachmentsFilterModel, setAttachmentsFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -156,8 +156,8 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-download"
-              startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: 'image', subType: '*' }} />}
+              id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-download"
+              startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -167,7 +167,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-view"
+              id="ColumnedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsFile-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -206,14 +206,14 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
 
   const attachmentsRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsLinkFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsLinkFilter',
       attributeName: 'link',
       label: t('admin.IssueView.attachments.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsTypeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsTypeFilter',
       attributeName: 'type',
       label: t('admin.IssueView.attachments.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -251,14 +251,14 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsLinkFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsLinkFilter',
       attributeName: 'link',
       label: t('admin.IssueView.attachments.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsTypeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachmentsTypeFilter',
       attributeName: 'type',
       label: t('admin.IssueView.attachments.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -358,12 +358,12 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
                 {t('judo.pages.table.create', { defaultValue: 'Create' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-filter',
                     filterOptions,
                     filters,
                   )

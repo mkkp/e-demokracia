@@ -84,7 +84,7 @@ export function OwnerLink(props: OwnerLinkProps) {
 
   const ownerRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultCategoryFormOwnerRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultIssueCategoryFormOwnerRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.IssueCategoryForm.owner.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
@@ -106,7 +106,7 @@ export function OwnerLink(props: OwnerLinkProps) {
   return (
     <AggregationInput
       name="owner"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultCategoryFormOwner"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultIssueCategoryFormOwner"
       label={t('admin.IssueCategoryForm.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
       ownerData={ownerData}

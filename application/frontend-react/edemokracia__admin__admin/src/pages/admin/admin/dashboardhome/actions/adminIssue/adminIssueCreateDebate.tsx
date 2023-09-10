@@ -94,7 +94,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   return async function adminIssueCreateDebateAction(owner: AdminIssueStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'xs',
+      maxWidth: 'md',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();

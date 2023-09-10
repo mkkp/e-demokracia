@@ -161,7 +161,7 @@ export default function AdminDebateCreatedByView() {
 
   const buttonNavigateVotesAction = useButtonNavigateVotesAction();
 
-  const title: string = t('admin.UserView', { defaultValue: 'View / Edit User' });
+  const title: string = t('admin.UserView', { defaultValue: 'User View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -236,14 +236,14 @@ export default function AdminDebateCreatedByView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditSecurityLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="security" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurityLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -254,7 +254,7 @@ export default function AdminDebateCreatedByView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapperSecurity"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurity"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -265,7 +265,7 @@ export default function AdminDebateCreatedByView() {
                             <TextField
                               required={true}
                               name="userName"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityUserName"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurityUserName"
                               label={t('admin.UserView.userName', { defaultValue: 'Username' }) as string}
                               value={data.userName ?? ''}
                               className={clsx({
@@ -320,7 +320,7 @@ export default function AdminDebateCreatedByView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurityCreated',
                                   required: false,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -366,14 +366,14 @@ export default function AdminDebateCreatedByView() {
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -384,7 +384,7 @@ export default function AdminDebateCreatedByView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonal"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonal"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -393,7 +393,7 @@ export default function AdminDebateCreatedByView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalName"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalName"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -404,7 +404,7 @@ export default function AdminDebateCreatedByView() {
                                 <TextField
                                   required={true}
                                   name="firstName"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalNameFirstName"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalNameFirstName"
                                   label={t('admin.UserView.firstName', { defaultValue: 'First name' }) as string}
                                   value={data.firstName ?? ''}
                                   className={clsx({
@@ -434,7 +434,7 @@ export default function AdminDebateCreatedByView() {
                                 <TextField
                                   required={true}
                                   name="lastName"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalNameLastName"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalNameLastName"
                                   label={t('admin.UserView.lastName', { defaultValue: 'Last name' }) as string}
                                   value={data.lastName ?? ''}
                                   className={clsx({
@@ -464,7 +464,7 @@ export default function AdminDebateCreatedByView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContact"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalContact"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -475,7 +475,7 @@ export default function AdminDebateCreatedByView() {
                                 <TextField
                                   required={true}
                                   name="email"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContactEmail"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalContactEmail"
                                   label={t('admin.UserView.email', { defaultValue: 'Email' }) as string}
                                   value={data.email ?? ''}
                                   className={clsx({
@@ -505,7 +505,7 @@ export default function AdminDebateCreatedByView() {
                                 <TextField
                                   required={false}
                                   name="phone"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContactPhone"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalContactPhone"
                                   label={t('admin.UserView.phone', { defaultValue: 'Phone' }) as string}
                                   value={data.phone ?? ''}
                                   className={clsx({
@@ -552,14 +552,14 @@ export default function AdminDebateCreatedByView() {
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="map" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -570,7 +570,7 @@ export default function AdminDebateCreatedByView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreas"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreas"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -579,7 +579,7 @@ export default function AdminDebateCreatedByView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasResidency"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasResidency"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -632,13 +632,13 @@ export default function AdminDebateCreatedByView() {
 
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
-                              id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivity"
+                              id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivity"
                               ownerData={data}
                               validation={validation}
                               orientation='horizontal'
                               childTabs={[
                                 {
-                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCounties',
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCounties',
                                   name: 'admin.UserView.tab.activity.counties',
                                   label: t('admin.UserView.tab.activity.counties', {
                                     defaultValue: 'Activity counties',
@@ -649,7 +649,7 @@ export default function AdminDebateCreatedByView() {
                                   nestedDataKeys: ['activityCounties'],
                                 },
                                 {
-                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCities',
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCities',
                                   name: 'admin.UserView.activity.cities',
                                   label: t('admin.UserView.activity.cities', {
                                     defaultValue: 'Activity cities',
@@ -660,7 +660,7 @@ export default function AdminDebateCreatedByView() {
                                   nestedDataKeys: ['activityCities'],
                                 },
                                 {
-                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistricts',
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistricts',
                                   name: 'admin.UserView.activity.districts',
                                   label: t('admin.UserView.activity.districts', {
                                     defaultValue: 'Activity districts',
@@ -674,7 +674,7 @@ export default function AdminDebateCreatedByView() {
                             >
                               <Grid item xs={12} sm={12}>
                                 <Grid
-                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCounties"
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCounties"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -683,7 +683,7 @@ export default function AdminDebateCreatedByView() {
                                 >
                                   <Grid item xs={12} sm={12}>
                                     <Grid
-                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapper"
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapper"
                                       container
                                       direction="column"
                                       alignItems="stretch"
@@ -692,7 +692,7 @@ export default function AdminDebateCreatedByView() {
                                     >
                                       <Grid item xs={12} sm={12}>
                                         <Grid
-                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties"
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties"
                                           container
                                           direction="column"
                                           alignItems="stretch"
@@ -716,7 +716,7 @@ export default function AdminDebateCreatedByView() {
 
                               <Grid item xs={12} sm={12} md={4.0}>
                                 <Grid
-                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCities"
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCitiesActivityCities"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -725,7 +725,7 @@ export default function AdminDebateCreatedByView() {
                                 >
                                   <Grid item xs={12} sm={12}>
                                     <Grid
-                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapper"
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapper"
                                       container
                                       direction="column"
                                       alignItems="stretch"
@@ -734,7 +734,7 @@ export default function AdminDebateCreatedByView() {
                                     >
                                       <Grid item xs={12} sm={12}>
                                         <Grid
-                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities"
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities"
                                           container
                                           direction="column"
                                           alignItems="stretch"
@@ -758,7 +758,7 @@ export default function AdminDebateCreatedByView() {
 
                               <Grid item xs={12} sm={12}>
                                 <Grid
-                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistricts"
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistricts"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -767,7 +767,7 @@ export default function AdminDebateCreatedByView() {
                                 >
                                   <Grid item xs={12} sm={12}>
                                     <Grid
-                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapper"
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapper"
                                       container
                                       direction="column"
                                       alignItems="stretch"
@@ -776,7 +776,7 @@ export default function AdminDebateCreatedByView() {
                                     >
                                       <Grid item xs={12} sm={12}>
                                         <Grid
-                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts"
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts"
                                           container
                                           direction="column"
                                           alignItems="stretch"

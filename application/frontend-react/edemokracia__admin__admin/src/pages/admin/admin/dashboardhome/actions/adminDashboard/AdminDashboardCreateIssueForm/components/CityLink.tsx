@@ -119,21 +119,21 @@ export function CityLink(props: CityLinkProps) {
 
   const cityRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCityRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCityRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.CreateIssueInputForm.city.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCityNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCityNameFilter',
       attributeName: 'name',
       label: t('admin.CreateIssueInputForm.city.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCityCountyFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCityCountyFilter',
       attributeName: 'county',
       label: t('admin.CreateIssueInputForm.city.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
@@ -155,7 +155,7 @@ export function CityLink(props: CityLinkProps) {
   return (
     <AggregationInput
       name="city"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCity"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCity"
       label={t('admin.CreateIssueInputForm.city', { defaultValue: 'City' }) as string}
       labelList={[
         ownerData.city?.representation?.toString() ?? '',

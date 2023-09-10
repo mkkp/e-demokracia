@@ -21,7 +21,7 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 
 import { PageActions } from './components/PageActions';
-import { Category_TableTable } from './components/Category_TableTable';
+import { IssueCategory_TableTable } from './components/IssueCategory_TableTable';
 
 /**
  * Name: edemokracia::admin::Admin.categories#Table
@@ -34,7 +34,7 @@ export default function AdminAdminCategoriesTable() {
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.IssueCategoryTable', { defaultValue: 'Categories' });
+  const title: string = t('admin.IssueCategoryTable', { defaultValue: 'IssueCategory Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();
@@ -52,7 +52,11 @@ export default function AdminAdminCategoriesTable() {
               <Grid item xs={12}>
                 <Card>
                   <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTable-data-grid">
-                    <Category_TableTable ref={tableRef} isOwnerLoading={isLoading} setIsOwnerLoading={setIsLoading} />
+                    <IssueCategory_TableTable
+                      ref={tableRef}
+                      isOwnerLoading={isLoading}
+                      setIsOwnerLoading={setIsLoading}
+                    />
                   </CardContent>
                 </Card>
               </Grid>

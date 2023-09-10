@@ -51,33 +51,31 @@ import { ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
 import {
+  AdminPro,
+  AdminProStored,
   AdminSimpleVote,
   AdminSimpleVoteQueryCustomizer,
   AdminSimpleVoteStored,
-  AdminUser,
-  AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceForClassImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
+import { adminProServiceForClassImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
 import {
-  usePageAddVotesAction,
-  usePageClearVotesAction,
+  usePageCreateVotesAction,
   usePageFilterVotesAction,
   usePageRefreshVotesAction,
-  usePageSetVotesAction,
-  useRowRemoveVotesAction,
+  useRowDeleteVotesAction,
   useRowViewVotesAction,
 } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
-export const ADMIN_USER_VOTES_TABLE_VOTE_TABLE = 'AdminUserVotesTableVote_Table';
+export const ADMIN_PRO_VOTES_TABLE_SIMPLE_VOTE_TABLE = 'AdminProVotesTableSimpleVote_Table';
 
-export interface Vote_TableTableProps {
-  ownerData: JudoIdentifiable<AdminUser>;
+export interface SimpleVote_TableTableProps {
+  ownerData: JudoIdentifiable<AdminPro>;
   isOwnerLoading: boolean;
   setIsOwnerLoading: (value: boolean) => void;
 }
 
-export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps>((props, ref) => {
+export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_TableTableProps>((props, ref) => {
   const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { isOwnerLoading, setIsOwnerLoading, ownerData } = props;
   const { sub: __identifier } = decodeToken<{ sub: string }>(ownerData.__signedIdentifier)!;
@@ -93,8 +91,8 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
   const [data, setData] = useState<GridRowModel<AdminSimpleVoteStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTable-${__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTable-${__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTable-${__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTable-${__identifier}-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -122,7 +120,7 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
   useEffect(() => {
     setFilters(
       getItemParsedWithDefault(
-        `TableedemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTable-${__identifier}-filters`,
+        `TableedemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTable-${__identifier}-filters`,
         [...filters],
       ),
     );
@@ -183,14 +181,14 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
 
   const votesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTableCreatedFilter',
       attributeName: 'created',
       label: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableTypeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTableTypeFilter',
       attributeName: 'type',
       label: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -210,24 +208,22 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
       : [],
   };
 
-  const pageAddVotesAction = usePageAddVotesAction();
-  const pageClearVotesAction = usePageClearVotesAction();
+  const pageCreateVotesAction = usePageCreateVotesAction();
   const pageFilterVotesAction = usePageFilterVotesAction(setFilters, setPage, setQueryCustomizer, openFilterDialog, 10);
   const pageRefreshVotesAction = usePageRefreshVotesAction();
-  const pageSetVotesAction = usePageSetVotesAction();
-  const rowRemoveVotesAction = useRowRemoveVotesAction();
+  const rowDeleteVotesAction = useRowDeleteVotesAction();
   const rowViewVotesAction = useRowViewVotesAction();
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTableCreatedFilter',
       attributeName: 'created',
       label: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableTypeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProVotesTableDefaultVotesSimpleVoteTableTypeFilter',
       attributeName: 'type',
       label: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -237,10 +233,11 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
 
   const rowActions: TableRowAction<AdminSimpleVoteStored>[] = [
     {
-      id: 'RemoveActionedemokraciaAdminAdminEdemokraciaAdminUserVotesTableEdemokraciaAdminAdminEdemokraciaAdminUserVotesRowRemove',
-      label: t('judo.pages.table.remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      action: async (row: AdminSimpleVoteStored) => rowRemoveVotesAction(ownerData, row, () => fetchData()),
+      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminProVotesTableEdemokraciaAdminAdminEdemokraciaAdminProVotesRowDelete',
+      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
+      icon: <MdiIcon path="delete_forever" />,
+      action: async (row: AdminSimpleVoteStored) => rowDeleteVotesAction(ownerData, row, () => fetchData()),
+      disabled: (row: AdminSimpleVoteStored) => !row.__deleteable,
     },
   ];
 
@@ -301,7 +298,7 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
     setIsOwnerLoading(true);
 
     try {
-      const res = await adminUserServiceForClassImpl.getVotes(ownerData, processQueryCustomizer(queryCustomizer));
+      const res = await adminProServiceForClassImpl.getVotes(ownerData, processQueryCustomizer(queryCustomizer));
 
       if (res.length > 10) {
         setIsNextButtonEnabled(true);
@@ -351,7 +348,7 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
         }}
         columns={[
           ...votesColumns,
-          ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserVotes', rowActions, t, {
+          ...columnsActionCalculator('RelationTypeedemokraciaAdminAdminEdemokraciaAdminProVotes', rowActions, t, {
             shownActions: 2,
           }),
         ]}
@@ -365,12 +362,12 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="FilterActionedemokraciaAdminAdminEdemokraciaAdminUserVotesTableEdemokraciaAdminAdminEdemokraciaAdminUserVotesPageFilter"
+                id="FilterActionedemokraciaAdminAdminEdemokraciaAdminProVotesTableEdemokraciaAdminAdminEdemokraciaAdminProVotesPageFilter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() => {
                   pageFilterVotesAction(
-                    'FilterActionedemokraciaAdminAdminEdemokraciaAdminUserVotesTableEdemokraciaAdminAdminEdemokraciaAdminUserVotesPageFilter-filter',
+                    'FilterActionedemokraciaAdminAdminEdemokraciaAdminProVotesTableEdemokraciaAdminAdminEdemokraciaAdminProVotesPageFilter-filter',
                     filterOptions,
                     filters,
                   );

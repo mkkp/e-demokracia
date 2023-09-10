@@ -123,7 +123,7 @@ export default function AdminIssueCreatedebateOutput() {
   const postRefreshAction: AdminIssueCreatedebateOutputPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const title: string = t('DebateView', { defaultValue: 'Entity View' });
+  const title: string = t('DebateView', { defaultValue: 'Debate View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;

@@ -104,14 +104,14 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
 
     const filterOptions: FilterOption[] = [
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableCreatedFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesSimpleVoteTableCreatedFilter',
         attributeName: 'created',
         label: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesVoteTableTypeFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminUserVotesTableDefaultVotesSimpleVoteTableTypeFilter',
         attributeName: 'type',
         label: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
         filterType: FilterType.enumeration,

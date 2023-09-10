@@ -181,7 +181,7 @@ export default function AdminDashboardDebatesView() {
   const adminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
   const adminDebateCreateCommentAction = useAdminDebateCreateCommentAction();
 
-  const title: string = t('admin.DebateView', { defaultValue: 'View / Edit Debate' });
+  const title: string = t('admin.DebateView', { defaultValue: 'Debate View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -294,14 +294,14 @@ export default function AdminDashboardDebatesView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -312,7 +312,7 @@ export default function AdminDashboardDebatesView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebate"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebate"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -323,7 +323,7 @@ export default function AdminDashboardDebatesView() {
                             <TextField
                               required={true}
                               name="title"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateTitle"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateTitle"
                               label={t('admin.DebateView.title', { defaultValue: 'Title' }) as string}
                               value={data.title ?? ''}
                               className={clsx({
@@ -353,7 +353,7 @@ export default function AdminDashboardDebatesView() {
                             <TextField
                               required={true}
                               name="status"
-                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateStatus"
+                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateStatus"
                               label={t('admin.DebateView.status', { defaultValue: 'Status' }) as string}
                               value={data.status || ''}
                               className={clsx({
@@ -414,7 +414,7 @@ export default function AdminDashboardDebatesView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateCloseAt',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateCloseAt',
                                   required: true,
                                   helperText: validation.get('closeAt'),
                                   error: !!validation.get('closeAt'),
@@ -485,7 +485,7 @@ export default function AdminDashboardDebatesView() {
                             <TextField
                               required={true}
                               name="description"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateDescription"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateDescription"
                               label={t('admin.DebateView.description', { defaultValue: 'Description' }) as string}
                               value={data.description ?? ''}
                               className={clsx({
@@ -560,13 +560,13 @@ export default function AdminDashboardDebatesView() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBar"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBar"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArguments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArguments',
                       name: 'admin.DebateView.arguments',
                       label: t('admin.DebateView.arguments', { defaultValue: 'Arguments' }) as string,
                       disabled: isLoading,
@@ -575,7 +575,7 @@ export default function AdminDashboardDebatesView() {
                       nestedDataKeys: ['cons', 'pros'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarComments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarComments',
                       name: 'admin.DebateView.comments',
                       label: t('admin.DebateView.comments', { defaultValue: 'Comments' }) as string,
                       disabled: isLoading,
@@ -587,7 +587,7 @@ export default function AdminDashboardDebatesView() {
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArguments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArguments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -596,7 +596,7 @@ export default function AdminDashboardDebatesView() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -632,7 +632,7 @@ export default function AdminDashboardDebatesView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsProsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -643,7 +643,7 @@ export default function AdminDashboardDebatesView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -654,7 +654,7 @@ export default function AdminDashboardDebatesView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsProsLabelWrapperPros"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapperPros"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -676,7 +676,7 @@ export default function AdminDashboardDebatesView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsConsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -687,7 +687,7 @@ export default function AdminDashboardDebatesView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -698,7 +698,7 @@ export default function AdminDashboardDebatesView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarArgumentsArgumentsConsLabelWrapperCons"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapperCons"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -722,7 +722,7 @@ export default function AdminDashboardDebatesView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarCommentsComments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarCommentsComments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -731,7 +731,7 @@ export default function AdminDashboardDebatesView() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarCommentsCommentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarCommentsCommentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -767,7 +767,7 @@ export default function AdminDashboardDebatesView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarCommentsCommentsCommentsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarCommentsCommentsCommentsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -776,7 +776,7 @@ export default function AdminDashboardDebatesView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewTabBarCommentsCommentsCommentsLabelWrapperComments"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditTabBarCommentsCommentsCommentsLabelWrapperComments"
                               container
                               direction="column"
                               alignItems="stretch"

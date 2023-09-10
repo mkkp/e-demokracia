@@ -238,7 +238,7 @@ export default function AdminUserActivityCitiesView() {
                 <TextField
                   required={true}
                   name="name"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewName"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewEditName"
                   label={t('admin.CityView.name', { defaultValue: 'City name' }) as string}
                   value={data.name ?? ''}
                   className={clsx({
@@ -266,7 +266,7 @@ export default function AdminUserActivityCitiesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewDistrictsLabelWrapper"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewEditDistrictsLabelWrapper"
                   container
                   direction="column"
                   alignItems="stretch"
@@ -277,7 +277,7 @@ export default function AdminUserActivityCitiesView() {
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewDistrictsLabelWrapperDistrictsLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewEditDistrictsLabelWrapperDistrictsLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -288,7 +288,7 @@ export default function AdminUserActivityCitiesView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="TableedemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewDistrictsLabelWrapperDistricts"
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminUserActivityCitiesViewDefaultCityViewEditDistrictsLabelWrapperDistricts"
                       container
                       direction="column"
                       alignItems="stretch"

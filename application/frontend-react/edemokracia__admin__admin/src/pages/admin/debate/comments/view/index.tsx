@@ -143,7 +143,7 @@ export default function AdminDebateCommentsView() {
   const adminCommentVoteDownAction = useAdminCommentVoteDownAction();
   const buttonNavigateVotesAction = useButtonNavigateVotesAction();
 
-  const title: string = t('admin.CommentView', { defaultValue: 'View / Edit Comment' });
+  const title: string = t('admin.CommentView', { defaultValue: 'Comment View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -256,14 +256,14 @@ export default function AdminDebateCommentsView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapperGroupLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapperGroupLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -274,7 +274,7 @@ export default function AdminDebateCommentsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapperGroup"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapperGroup"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -291,7 +291,7 @@ export default function AdminDebateCommentsView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapperGroupCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapperGroupCreated',
                                   required: false,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -348,7 +348,7 @@ export default function AdminDebateCommentsView() {
                             <TextField
                               required={true}
                               name="comment"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapperGroupComment"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapperGroupComment"
                               label={t('admin.CommentView.comment', { defaultValue: 'Comment' }) as string}
                               value={data.comment ?? ''}
                               className={clsx({
@@ -401,7 +401,7 @@ export default function AdminDebateCommentsView() {
                             <NumericInput
                               required={false}
                               name="upVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapperGroupUpVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapperGroupUpVotes"
                               label={t('admin.CommentView.upVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.upVotes ?? ''}
@@ -451,7 +451,7 @@ export default function AdminDebateCommentsView() {
                             <NumericInput
                               required={false}
                               name="downVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewGroupLabelWrapperGroupDownVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateCommentsViewDefaultCommentViewEditGroupLabelWrapperGroupDownVotes"
                               label={t('admin.CommentView.downVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.downVotes ?? ''}

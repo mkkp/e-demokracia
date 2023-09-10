@@ -152,7 +152,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
   const adminVoteDefinitionVoteSelectAnswerAction = useAdminVoteDefinitionVoteSelectAnswerAction();
   const adminVoteDefinitionVoteRatingAction = useAdminVoteDefinitionVoteRatingAction();
 
-  const title: string = t('admin.VoteDefinitionView', { defaultValue: 'View / Edit Vote Definition' });
+  const title: string = t('admin.VoteDefinitionView', { defaultValue: 'VoteDefinition View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -227,14 +227,14 @@ export default function AdminVoteEntryVoteDefinitionView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewGroup">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditGroup">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <TextField
                           required={true}
                           name="title"
-                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewGroupTitle"
+                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditGroupTitle"
                           label={t('admin.VoteDefinitionView.title', { defaultValue: 'Title' }) as string}
                           value={data.title ?? ''}
                           className={clsx({
@@ -270,7 +270,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                           })}
                           slotProps={{
                             textField: {
-                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewGroupCloseAt',
+                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditGroupCloseAt',
                               required: true,
                               helperText: validation.get('closeAt'),
                               error: !!validation.get('closeAt'),
@@ -313,7 +313,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                         <TextField
                           required={true}
                           name="status"
-                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewGroupStatus"
+                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditGroupStatus"
                           label={t('admin.VoteDefinitionView.status', { defaultValue: 'Status' }) as string}
                           value={data.status || ''}
                           className={clsx({
@@ -392,7 +392,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                           })}
                           slotProps={{
                             textField: {
-                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewGroupCreated',
+                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditGroupCreated',
                               required: true,
                               helperText: validation.get('created'),
                               error: !!validation.get('created'),
@@ -435,7 +435,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                         <TextField
                           required={true}
                           name="description"
-                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewGroupDescription"
+                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditGroupDescription"
                           label={t('admin.VoteDefinitionView.description', { defaultValue: 'Description' }) as string}
                           value={data.description ?? ''}
                           className={clsx({
@@ -469,13 +469,13 @@ export default function AdminVoteEntryVoteDefinitionView() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBar"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBar"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnovote',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarYesnovote',
                       name: 'admin.VoteDefinitionView.yesnovote',
                       label: t('admin.VoteDefinitionView.yesnovote', { defaultValue: 'Yes / No vote' }) as string,
                       disabled: !data.isYesNoType || isLoading,
@@ -483,7 +483,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                       nestedDataKeys: [],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnoabstainvote',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarYesnoabstainvote',
                       name: 'admin.VoteDefinitionView.yesnoabstainvote',
                       label: t('admin.VoteDefinitionView.yesnoabstainvote', {
                         defaultValue: 'Yes / No / Abstain vote',
@@ -493,7 +493,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                       nestedDataKeys: [],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarSelectanswervote',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarSelectanswervote',
                       name: 'admin.VoteDefinitionView.selectanswervote',
                       label: t('admin.VoteDefinitionView.selectanswervote', {
                         defaultValue: 'Select answer vote',
@@ -503,7 +503,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                       nestedDataKeys: [],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarRatingvote',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarRatingvote',
                       name: 'admin.VoteDefinitionView.ratingvote',
                       label: t('admin.VoteDefinitionView.ratingvote', { defaultValue: 'Rating vote' }) as string,
                       disabled: !data.isRatingType || isLoading,
@@ -515,7 +515,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                   {!data.isNotYesNoType && (
                     <Grid item xs={12} sm={12}>
                       <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnovoteYesnovote"
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarYesnovoteYesnovote"
                         container
                         direction="row"
                         alignItems="flex-start"
@@ -553,7 +553,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                   {!data.isNotYesNoAbstainType && (
                     <Grid item xs={12} sm={12}>
                       <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarYesnoabstainvoteYesnoabstainvote"
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarYesnoabstainvoteYesnoabstainvote"
                         container
                         direction="row"
                         alignItems="flex-start"
@@ -593,7 +593,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                   {!data.isNotSelectAnswerType && (
                     <Grid item xs={12} sm={12}>
                       <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarSelectanswervoteSelectanswervote"
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarSelectanswervoteSelectanswervote"
                         container
                         direction="row"
                         alignItems="flex-start"
@@ -633,7 +633,7 @@ export default function AdminVoteEntryVoteDefinitionView() {
                   {!data.isNotRatingType && (
                     <Grid item xs={12} sm={12}>
                       <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewTabBarRatingvoteRatingvote"
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminVoteEntryVoteDefinitionViewDefaultVoteDefinitionViewEditTabBarRatingvoteRatingvote"
                         container
                         direction="row"
                         alignItems="flex-start"

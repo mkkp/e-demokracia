@@ -99,7 +99,7 @@ export const useAdminDashboardCreateIssueAction: AdminDashboardCreateIssueAction
   return async function adminDashboardCreateIssueAction(successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'xs',
+      maxWidth: 'md',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();

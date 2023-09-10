@@ -138,7 +138,7 @@ export default function AdminCommentVotesView() {
   );
   const postRefreshAction: AdminCommentVotesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
-  const title: string = t('admin.SimpleVoteView', { defaultValue: 'Create / View Vote' });
+  const title: string = t('admin.SimpleVoteView', { defaultValue: 'SimpleVote View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -252,7 +252,7 @@ export default function AdminCommentVotesView() {
             >
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultVoteViewGroup"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultSimpleVoteViewEditGroup"
                   container
                   direction="row"
                   alignItems="flex-start"
@@ -269,7 +269,7 @@ export default function AdminCommentVotesView() {
                       })}
                       slotProps={{
                         textField: {
-                          id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultVoteViewGroupCreated',
+                          id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultSimpleVoteViewEditGroupCreated',
                           required: true,
                           helperText: validation.get('created'),
                           error: !!validation.get('created'),
@@ -312,7 +312,7 @@ export default function AdminCommentVotesView() {
                     <TextField
                       required={true}
                       name="type"
-                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultVoteViewGroupType"
+                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultSimpleVoteViewEditGroupType"
                       label={t('admin.SimpleVoteView.type', { defaultValue: 'Type' }) as string}
                       value={data.type || ''}
                       className={clsx({
@@ -349,7 +349,7 @@ export default function AdminCommentVotesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultVoteViewGroup2"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentVotesViewDefaultSimpleVoteViewEditGroup2"
                   container
                   direction="row"
                   alignItems="flex-start"

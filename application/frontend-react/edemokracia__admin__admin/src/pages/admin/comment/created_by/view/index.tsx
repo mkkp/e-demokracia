@@ -162,7 +162,7 @@ export default function AdminCommentCreatedByView() {
 
   const buttonNavigateVotesAction = useButtonNavigateVotesAction();
 
-  const title: string = t('admin.UserView', { defaultValue: 'View / Edit User' });
+  const title: string = t('admin.UserView', { defaultValue: 'User View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -237,14 +237,14 @@ export default function AdminCommentCreatedByView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewSecurityLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditSecurityLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="security" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurityLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -255,7 +255,7 @@ export default function AdminCommentCreatedByView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewSecurityLabelWrapperSecurity"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurity"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -266,7 +266,7 @@ export default function AdminCommentCreatedByView() {
                             <TextField
                               required={true}
                               name="userName"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityUserName"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurityUserName"
                               label={t('admin.UserView.userName', { defaultValue: 'Username' }) as string}
                               value={data.userName ?? ''}
                               className={clsx({
@@ -321,7 +321,7 @@ export default function AdminCommentCreatedByView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewSecurityLabelWrapperSecurityCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditSecurityLabelWrapperSecurityCreated',
                                   required: false,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -367,14 +367,14 @@ export default function AdminCommentCreatedByView() {
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -385,7 +385,7 @@ export default function AdminCommentCreatedByView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonal"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonal"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -394,7 +394,7 @@ export default function AdminCommentCreatedByView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalName"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalName"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -405,7 +405,7 @@ export default function AdminCommentCreatedByView() {
                                 <TextField
                                   required={true}
                                   name="firstName"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalNameFirstName"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalNameFirstName"
                                   label={t('admin.UserView.firstName', { defaultValue: 'First name' }) as string}
                                   value={data.firstName ?? ''}
                                   className={clsx({
@@ -435,7 +435,7 @@ export default function AdminCommentCreatedByView() {
                                 <TextField
                                   required={true}
                                   name="lastName"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalNameLastName"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalNameLastName"
                                   label={t('admin.UserView.lastName', { defaultValue: 'Last name' }) as string}
                                   value={data.lastName ?? ''}
                                   className={clsx({
@@ -465,7 +465,7 @@ export default function AdminCommentCreatedByView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContact"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalContact"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -476,7 +476,7 @@ export default function AdminCommentCreatedByView() {
                                 <TextField
                                   required={true}
                                   name="email"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContactEmail"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalContactEmail"
                                   label={t('admin.UserView.email', { defaultValue: 'Email' }) as string}
                                   value={data.email ?? ''}
                                   className={clsx({
@@ -506,7 +506,7 @@ export default function AdminCommentCreatedByView() {
                                 <TextField
                                   required={false}
                                   name="phone"
-                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewPersonalLabelWrapperPersonalContactPhone"
+                                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditPersonalLabelWrapperPersonalContactPhone"
                                   label={t('admin.UserView.phone', { defaultValue: 'Phone' }) as string}
                                   value={data.phone ?? ''}
                                   className={clsx({
@@ -553,14 +553,14 @@ export default function AdminCommentCreatedByView() {
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="map" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -571,7 +571,7 @@ export default function AdminCommentCreatedByView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreas"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreas"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -580,7 +580,7 @@ export default function AdminCommentCreatedByView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasResidency"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasResidency"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -633,13 +633,13 @@ export default function AdminCommentCreatedByView() {
 
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
-                              id="TabControlleredemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivity"
+                              id="TabControlleredemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivity"
                               ownerData={data}
                               validation={validation}
                               orientation='horizontal'
                               childTabs={[
                                 {
-                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCounties',
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCounties',
                                   name: 'admin.UserView.tab.activity.counties',
                                   label: t('admin.UserView.tab.activity.counties', {
                                     defaultValue: 'Activity counties',
@@ -650,7 +650,7 @@ export default function AdminCommentCreatedByView() {
                                   nestedDataKeys: ['activityCounties'],
                                 },
                                 {
-                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCities',
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCities',
                                   name: 'admin.UserView.activity.cities',
                                   label: t('admin.UserView.activity.cities', {
                                     defaultValue: 'Activity cities',
@@ -661,7 +661,7 @@ export default function AdminCommentCreatedByView() {
                                   nestedDataKeys: ['activityCities'],
                                 },
                                 {
-                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistricts',
+                                  id: 'TabedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistricts',
                                   name: 'admin.UserView.activity.districts',
                                   label: t('admin.UserView.activity.districts', {
                                     defaultValue: 'Activity districts',
@@ -675,7 +675,7 @@ export default function AdminCommentCreatedByView() {
                             >
                               <Grid item xs={12} sm={12}>
                                 <Grid
-                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCounties"
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCounties"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -684,7 +684,7 @@ export default function AdminCommentCreatedByView() {
                                 >
                                   <Grid item xs={12} sm={12}>
                                     <Grid
-                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapper"
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapper"
                                       container
                                       direction="column"
                                       alignItems="stretch"
@@ -693,7 +693,7 @@ export default function AdminCommentCreatedByView() {
                                     >
                                       <Grid item xs={12} sm={12}>
                                         <Grid
-                                          id="TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties"
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityTabActivityCountiesTabActivityCountiesActivityCountiesLabelWrapperActivityCounties"
                                           container
                                           direction="column"
                                           alignItems="stretch"
@@ -717,7 +717,7 @@ export default function AdminCommentCreatedByView() {
 
                               <Grid item xs={12} sm={12} md={4.0}>
                                 <Grid
-                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCities"
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCitiesActivityCities"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -726,7 +726,7 @@ export default function AdminCommentCreatedByView() {
                                 >
                                   <Grid item xs={12} sm={12}>
                                     <Grid
-                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapper"
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapper"
                                       container
                                       direction="column"
                                       alignItems="stretch"
@@ -735,7 +735,7 @@ export default function AdminCommentCreatedByView() {
                                     >
                                       <Grid item xs={12} sm={12}>
                                         <Grid
-                                          id="TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities"
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityCitiesActivityCitiesActivityCitiesLabelWrapperActivityCities"
                                           container
                                           direction="column"
                                           alignItems="stretch"
@@ -759,7 +759,7 @@ export default function AdminCommentCreatedByView() {
 
                               <Grid item xs={12} sm={12}>
                                 <Grid
-                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistricts"
+                                  id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistricts"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -768,7 +768,7 @@ export default function AdminCommentCreatedByView() {
                                 >
                                   <Grid item xs={12} sm={12}>
                                     <Grid
-                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapper"
+                                      id="FlexedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapper"
                                       container
                                       direction="column"
                                       alignItems="stretch"
@@ -777,7 +777,7 @@ export default function AdminCommentCreatedByView() {
                                     >
                                       <Grid item xs={12} sm={12}>
                                         <Grid
-                                          id="TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts"
+                                          id="TableedemokraciaAdminAdminEdemokraciaAdminCommentCreatedByViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts"
                                           container
                                           direction="column"
                                           alignItems="stretch"

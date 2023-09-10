@@ -61,15 +61,15 @@ import { adminConServiceForClassImpl, adminSimpleVoteServiceForClassImpl } from 
 import { usePageFilterVotesAction, usePageRefreshVotesAction, useRowViewVotesAction } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
-export const ADMIN_CON_VOTES_TABLE_VOTE_TABLE = 'AdminConVotesTableVote_Table';
+export const ADMIN_CON_VOTES_TABLE_SIMPLE_VOTE_TABLE = 'AdminConVotesTableSimpleVote_Table';
 
-export interface Vote_TableTableProps {
+export interface SimpleVote_TableTableProps {
   ownerData: JudoIdentifiable<AdminCon>;
   isOwnerLoading: boolean;
   setIsOwnerLoading: (value: boolean) => void;
 }
 
-export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps>((props, ref) => {
+export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_TableTableProps>((props, ref) => {
   const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { isOwnerLoading, setIsOwnerLoading, ownerData } = props;
   const { sub: __identifier } = decodeToken<{ sub: string }>(ownerData.__signedIdentifier)!;
@@ -85,8 +85,8 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
   const [data, setData] = useState<GridRowModel<AdminSimpleVoteStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTable-${__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTable-${__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTable-${__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTable-${__identifier}-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -114,7 +114,7 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
   useEffect(() => {
     setFilters(
       getItemParsedWithDefault(
-        `TableedemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTable-${__identifier}-filters`,
+        `TableedemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTable-${__identifier}-filters`,
         [...filters],
       ),
     );
@@ -175,14 +175,14 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
 
   const votesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTableCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTableCreatedFilter',
       attributeName: 'created',
       label: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTableTypeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTableTypeFilter',
       attributeName: 'type',
       label: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -208,14 +208,14 @@ export const Vote_TableTable = forwardRef<RefreshableTable, Vote_TableTableProps
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTableCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTableCreatedFilter',
       attributeName: 'created',
       label: t('admin.SimpleVoteTable.votes.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesVoteTableTypeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConVotesTableDefaultVotesSimpleVoteTableTypeFilter',
       attributeName: 'type',
       label: t('admin.SimpleVoteTable.votes.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

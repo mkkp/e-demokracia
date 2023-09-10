@@ -161,7 +161,7 @@ export default function AdminDebateProsView() {
   const adminProCreateSubArgumentAction = useAdminProCreateSubArgumentAction();
   const adminProCreateCommentAction = useAdminProCreateCommentAction();
 
-  const title: string = t('admin.ProView', { defaultValue: 'View / Edit Pro' });
+  const title: string = t('admin.ProView', { defaultValue: 'Pro View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -274,14 +274,14 @@ export default function AdminDebateProsView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperProLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperProLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -292,7 +292,7 @@ export default function AdminDebateProsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperPro"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperPro"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -303,7 +303,7 @@ export default function AdminDebateProsView() {
                             <TextField
                               required={true}
                               name="title"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperProTitle"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperProTitle"
                               label={t('admin.ProView.title', { defaultValue: 'Title' }) as string}
                               value={data.title ?? ''}
                               className={clsx({
@@ -339,7 +339,7 @@ export default function AdminDebateProsView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperProCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperProCreated',
                                   required: true,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -396,7 +396,7 @@ export default function AdminDebateProsView() {
                             <TextField
                               required={true}
                               name="description"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperProDescription"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperProDescription"
                               label={t('admin.ProView.description', { defaultValue: 'Description' }) as string}
                               value={data.description ?? ''}
                               className={clsx({
@@ -449,7 +449,7 @@ export default function AdminDebateProsView() {
                             <NumericInput
                               required={false}
                               name="upVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperProUpVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperProUpVotes"
                               label={t('admin.ProView.upVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.upVotes ?? ''}
@@ -499,7 +499,7 @@ export default function AdminDebateProsView() {
                             <NumericInput
                               required={false}
                               name="downVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewProLabelWrapperProDownVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditProLabelWrapperProDownVotes"
                               label={t('admin.ProView.downVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.downVotes ?? ''}
@@ -544,13 +544,13 @@ export default function AdminDebateProsView() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBar"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBar"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArguments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArguments',
                       name: 'admin.ProView.arguments',
                       label: t('admin.ProView.arguments', { defaultValue: 'Arguments' }) as string,
                       disabled: isLoading,
@@ -559,7 +559,7 @@ export default function AdminDebateProsView() {
                       nestedDataKeys: ['cons', 'pros'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarComments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarComments',
                       name: 'admin.ProView.comments',
                       label: t('admin.ProView.comments', { defaultValue: 'Comments' }) as string,
                       disabled: isLoading,
@@ -571,7 +571,7 @@ export default function AdminDebateProsView() {
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArguments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArguments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -580,7 +580,7 @@ export default function AdminDebateProsView() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -616,7 +616,7 @@ export default function AdminDebateProsView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -627,7 +627,7 @@ export default function AdminDebateProsView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -638,7 +638,7 @@ export default function AdminDebateProsView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperPros"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -660,7 +660,7 @@ export default function AdminDebateProsView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -671,7 +671,7 @@ export default function AdminDebateProsView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -682,7 +682,7 @@ export default function AdminDebateProsView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarArgumentsArgumentsConsLabelWrapperCons"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -706,7 +706,7 @@ export default function AdminDebateProsView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarCommentsComments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarCommentsComments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -715,7 +715,7 @@ export default function AdminDebateProsView() {
                     >
                       <Grid item xs={12} sm={12} md={4.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarCommentsCommentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarCommentsCommentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -751,7 +751,7 @@ export default function AdminDebateProsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarCommentsCommentsCommentsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -760,7 +760,7 @@ export default function AdminDebateProsView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewTabBarCommentsCommentsCommentsLabelWrapperComments"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarCommentsCommentsCommentsLabelWrapperComments"
                               container
                               direction="column"
                               alignItems="stretch"

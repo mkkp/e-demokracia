@@ -100,8 +100,8 @@ export const ProsTable = (props: ProsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperPros-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperPros-${ownerData.__identifier}-filters`;
   const [prosFilterModel, setProsFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -155,21 +155,21 @@ export const ProsTable = (props: ProsTableProps) => {
 
   const prosRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsTitleFilter',
       attributeName: 'title',
       label: t('admin.ProView.pros.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsUpVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('admin.ProView.pros.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsDownVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('admin.ProView.pros.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -237,21 +237,21 @@ export const ProsTable = (props: ProsTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsTitleFilter',
       attributeName: 'title',
       label: t('admin.ProView.pros.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsUpVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('admin.ProView.pros.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperProsDownVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperProsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('admin.ProView.pros.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -333,12 +333,12 @@ export const ProsTable = (props: ProsTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperPros-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewTabBarArgumentsArgumentsProsLabelWrapperPros-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminConProsViewDefaultProViewEditTabBarArgumentsArgumentsProsLabelWrapperPros-filter',
                     filterOptions,
                     filters,
                   )

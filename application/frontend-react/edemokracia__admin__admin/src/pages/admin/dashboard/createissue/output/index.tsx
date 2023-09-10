@@ -181,7 +181,7 @@ export default function AdminDashboardCreateissueOutput() {
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
 
-  const title: string = t('admin.IssueView', { defaultValue: 'View / Edit Issue' });
+  const title: string = t('admin.IssueView', { defaultValue: 'Issue View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -256,14 +256,14 @@ export default function AdminDashboardCreateissueOutput() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssueLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssueLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -274,7 +274,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssue"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssue"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -299,7 +299,7 @@ export default function AdminDashboardCreateissueOutput() {
                             <TextField
                               required={false}
                               name="defaultVoteType"
-                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssueDefaultVoteType"
+                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssueDefaultVoteType"
                               label={
                                 t('admin.IssueView.defaultVoteType', { defaultValue: 'Default Vote Type' }) as string
                               }
@@ -364,7 +364,7 @@ export default function AdminDashboardCreateissueOutput() {
                             <TextField
                               required={true}
                               name="title"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssueTitle"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssueTitle"
                               label={t('admin.IssueView.title', { defaultValue: 'Title' }) as string}
                               value={data.title ?? ''}
                               className={clsx({
@@ -394,7 +394,7 @@ export default function AdminDashboardCreateissueOutput() {
                             <TextField
                               required={true}
                               name="status"
-                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssueStatus"
+                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssueStatus"
                               label={t('admin.IssueView.status', { defaultValue: 'Status' }) as string}
                               value={data.status || ''}
                               className={clsx({
@@ -455,7 +455,7 @@ export default function AdminDashboardCreateissueOutput() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssueCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssueCreated',
                                   required: false,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -498,7 +498,7 @@ export default function AdminDashboardCreateissueOutput() {
                             <TextField
                               required={true}
                               name="description"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewIssueLabelWrapperIssueDescription"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditIssueLabelWrapperIssueDescription"
                               label={t('admin.IssueView.description', { defaultValue: 'Description' }) as string}
                               value={data.description ?? ''}
                               className={clsx({
@@ -573,13 +573,13 @@ export default function AdminDashboardCreateissueOutput() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOther"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOther"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherArea',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherArea',
                       name: 'admin.IssueView.area',
                       label: t('admin.IssueView.area', { defaultValue: 'Area' }) as string,
                       disabled: isLoading,
@@ -588,7 +588,7 @@ export default function AdminDashboardCreateissueOutput() {
                       nestedDataKeys: ['city', 'county', 'district'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachments',
                       name: 'admin.IssueView.attachments',
                       label: t('admin.IssueView.attachments', { defaultValue: 'Attachments' }) as string,
                       disabled: isLoading,
@@ -597,7 +597,7 @@ export default function AdminDashboardCreateissueOutput() {
                       nestedDataKeys: ['attachments'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategories',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategories',
                       name: 'admin.IssueView.categories',
                       label: t('admin.IssueView.categories', { defaultValue: 'Categories' }) as string,
                       disabled: isLoading,
@@ -606,7 +606,7 @@ export default function AdminDashboardCreateissueOutput() {
                       nestedDataKeys: ['categories'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherDebates',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherDebates',
                       name: 'admin.IssueView.debates',
                       label: t('admin.IssueView.debates', { defaultValue: 'Debates' }) as string,
                       disabled: isLoading,
@@ -615,7 +615,7 @@ export default function AdminDashboardCreateissueOutput() {
                       nestedDataKeys: ['debates'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherComments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherComments',
                       name: 'admin.IssueView.comments',
                       label: t('admin.IssueView.comments', { defaultValue: 'Comments' }) as string,
                       disabled: isLoading,
@@ -627,7 +627,7 @@ export default function AdminDashboardCreateissueOutput() {
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAreaArea"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAreaArea"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -680,7 +680,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -689,7 +689,7 @@ export default function AdminDashboardCreateissueOutput() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -698,7 +698,7 @@ export default function AdminDashboardCreateissueOutput() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -722,7 +722,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategories"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategories"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -731,7 +731,7 @@ export default function AdminDashboardCreateissueOutput() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -740,7 +740,7 @@ export default function AdminDashboardCreateissueOutput() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCategoriesCategoriesCategoriesLabelWrapperCategories"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCategoriesCategoriesCategoriesLabelWrapperCategories"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -764,7 +764,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherDebatesDebates"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherDebatesDebates"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -773,7 +773,7 @@ export default function AdminDashboardCreateissueOutput() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -784,7 +784,7 @@ export default function AdminDashboardCreateissueOutput() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -795,7 +795,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebates"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -819,7 +819,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCommentsComments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCommentsComments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -828,7 +828,7 @@ export default function AdminDashboardCreateissueOutput() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCommentsCommentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCommentsCommentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -862,7 +862,7 @@ export default function AdminDashboardCreateissueOutput() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCommentsCommentsActionsCommentsLabelWrapper"
+                              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCommentsCommentsActionsCommentsLabelWrapper"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -871,7 +871,7 @@ export default function AdminDashboardCreateissueOutput() {
                             >
                               <Grid item xs={12} sm={12}>
                                 <Grid
-                                  id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherCommentsCommentsActionsCommentsLabelWrapperComments"
+                                  id="TableedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherCommentsCommentsActionsCommentsLabelWrapperComments"
                                   container
                                   direction="column"
                                   alignItems="stretch"

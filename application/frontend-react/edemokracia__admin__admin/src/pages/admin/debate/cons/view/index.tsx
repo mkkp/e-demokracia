@@ -161,7 +161,7 @@ export default function AdminDebateConsView() {
   const adminConCreateSubArgumentAction = useAdminConCreateSubArgumentAction();
   const adminConCreateCommentAction = useAdminConCreateCommentAction();
 
-  const title: string = t('admin.ConView', { defaultValue: 'View / Edit Con' });
+  const title: string = t('admin.ConView', { defaultValue: 'Con View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -274,14 +274,14 @@ export default function AdminDebateConsView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -292,7 +292,7 @@ export default function AdminDebateConsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperCon"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperCon"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -303,7 +303,7 @@ export default function AdminDebateConsView() {
                             <TextField
                               required={true}
                               name="title"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConTitle"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConTitle"
                               label={t('admin.ConView.title', { defaultValue: 'Title' }) as string}
                               value={data.title ?? ''}
                               className={clsx({
@@ -339,7 +339,7 @@ export default function AdminDebateConsView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConCreated',
                                   required: true,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -396,7 +396,7 @@ export default function AdminDebateConsView() {
                             <TextField
                               required={true}
                               name="description"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConDescription"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConDescription"
                               label={t('admin.ConView.description', { defaultValue: 'Description' }) as string}
                               value={data.description ?? ''}
                               className={clsx({
@@ -449,7 +449,7 @@ export default function AdminDebateConsView() {
                             <NumericInput
                               required={false}
                               name="upVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConUpVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConUpVotes"
                               label={t('admin.ConView.upVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.upVotes ?? ''}
@@ -499,7 +499,7 @@ export default function AdminDebateConsView() {
                             <NumericInput
                               required={false}
                               name="downVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewConLabelWrapperConDownVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditConLabelWrapperConDownVotes"
                               label={t('admin.ConView.downVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.downVotes ?? ''}
@@ -544,13 +544,13 @@ export default function AdminDebateConsView() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBar"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBar"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArguments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArguments',
                       name: 'admin.ConView.arguments',
                       label: t('admin.ConView.arguments', { defaultValue: 'Arguments' }) as string,
                       disabled: isLoading,
@@ -559,7 +559,7 @@ export default function AdminDebateConsView() {
                       nestedDataKeys: ['cons', 'pros'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarComments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarComments',
                       name: 'admin.ConView.comments',
                       label: t('admin.ConView.comments', { defaultValue: 'Comments' }) as string,
                       disabled: isLoading,
@@ -571,7 +571,7 @@ export default function AdminDebateConsView() {
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArguments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArguments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -580,7 +580,7 @@ export default function AdminDebateConsView() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -616,7 +616,7 @@ export default function AdminDebateConsView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsProsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -627,7 +627,7 @@ export default function AdminDebateConsView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -638,7 +638,7 @@ export default function AdminDebateConsView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapperPros"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsProsLabelWrapperPros"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -660,7 +660,7 @@ export default function AdminDebateConsView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -671,7 +671,7 @@ export default function AdminDebateConsView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -682,7 +682,7 @@ export default function AdminDebateConsView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperCons"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperCons"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -706,7 +706,7 @@ export default function AdminDebateConsView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarCommentsComments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarCommentsComments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -715,7 +715,7 @@ export default function AdminDebateConsView() {
                     >
                       <Grid item xs={12} sm={12} md={4.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarCommentsCommentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarCommentsCommentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -751,7 +751,7 @@ export default function AdminDebateConsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -760,7 +760,7 @@ export default function AdminDebateConsView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperComments"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperComments"
                               container
                               direction="column"
                               alignItems="stretch"

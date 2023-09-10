@@ -97,8 +97,8 @@ export const CommentsTable = (props: CommentsTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperComments-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperComments-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperComments-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperComments-${ownerData.__identifier}-filters`;
   const [commentsFilterModel, setCommentsFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -187,35 +187,35 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
   const commentsRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedFilter',
       attributeName: 'created',
       label: t('admin.ConView.comments.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCommentFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsCommentFilter',
       attributeName: 'comment',
       label: t('admin.ConView.comments.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedByNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedByNameFilter',
       attributeName: 'createdByName',
       label: t('admin.ConView.comments.createdByName', { defaultValue: 'Created by' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsUpVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('admin.ConView.comments.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsDownVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('admin.ConView.comments.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -259,35 +259,35 @@ export const CommentsTable = (props: CommentsTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedFilter',
       attributeName: 'created',
       label: t('admin.ConView.comments.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCommentFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsCommentFilter',
       attributeName: 'comment',
       label: t('admin.ConView.comments.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedByNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsCreatedByNameFilter',
       attributeName: 'createdByName',
       label: t('admin.ConView.comments.createdByName', { defaultValue: 'Created by' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsUpVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('admin.ConView.comments.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperCommentsDownVotesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperCommentsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('admin.ConView.comments.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -372,12 +372,12 @@ export const CommentsTable = (props: CommentsTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperComments-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperComments-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperComments-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperComments-filter',
                     filterOptions,
                     filters,
                   )

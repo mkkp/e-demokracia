@@ -140,7 +140,7 @@ export function AdminProCreateSubArgumentForm({ successCallback, cancel, owner }
     },
     [data],
   );
-  const title: string = t('CreateArgumentInputForm', { defaultValue: 'Add argument' });
+  const title: string = t('CreateArgumentInputForm', { defaultValue: 'CreateArgumentInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

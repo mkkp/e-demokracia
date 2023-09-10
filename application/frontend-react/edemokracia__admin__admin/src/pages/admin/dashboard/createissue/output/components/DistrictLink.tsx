@@ -113,7 +113,7 @@ export function DistrictLink(props: DistrictLinkProps) {
 
   const districtRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAreaAreaDistrictRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAreaAreaDistrictRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.IssueView.district.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
@@ -137,7 +137,7 @@ export function DistrictLink(props: DistrictLinkProps) {
   return (
     <AggregationInput
       name="district"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAreaAreaDistrict"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAreaAreaDistrict"
       label={t('admin.IssueView.district', { defaultValue: 'District' }) as string}
       labelList={[ownerData.district?.representation?.toString() ?? '']}
       ownerData={ownerData}

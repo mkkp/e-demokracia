@@ -253,7 +253,7 @@ export default function AdminAdminCountiesView() {
                 <TextField
                   required={true}
                   name="name"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewName"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewEditName"
                   label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
                   value={data.name ?? ''}
                   className={clsx({
@@ -281,7 +281,7 @@ export default function AdminAdminCountiesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapper"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewEditCitiesLabelWrapper"
                   container
                   direction="column"
                   alignItems="stretch"
@@ -292,7 +292,7 @@ export default function AdminAdminCountiesView() {
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="city" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapperCitiesLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewEditCitiesLabelWrapperCitiesLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -303,7 +303,7 @@ export default function AdminAdminCountiesView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewCitiesLabelWrapperCities"
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminAdminCountiesViewDefaultCountyViewEditCitiesLabelWrapperCities"
                       container
                       direction="column"
                       alignItems="stretch"

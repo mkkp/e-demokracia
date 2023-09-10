@@ -34,7 +34,7 @@ export default function AdminAdminVoteDefinitionsTable() {
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.VoteDefinitionTable', { defaultValue: 'Vote Definitions' });
+  const title: string = t('admin.VoteDefinitionTable', { defaultValue: 'VoteDefinition Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();

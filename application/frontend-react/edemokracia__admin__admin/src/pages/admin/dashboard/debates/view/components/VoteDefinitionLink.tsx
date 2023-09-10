@@ -95,7 +95,7 @@ export function VoteDefinitionLink(props: VoteDefinitionLinkProps) {
   return (
     <AggregationInput
       name="voteDefinition"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewDebateLabelWrapperDebateVoteDefinition"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateVoteDefinition"
       label={t('admin.DebateView.voteDefinition', { defaultValue: 'VoteDefinition' }) as string}
       labelList={[
         ownerData.voteDefinition?.title?.toString() ?? '',

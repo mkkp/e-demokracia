@@ -149,7 +149,7 @@ export default function AdminIssueAttachmentsView() {
   const postRefreshAction: AdminIssueAttachmentsViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const title: string = t('admin.IssueAttachmentView', { defaultValue: 'View / Edit Attachment' });
+  const title: string = t('admin.IssueAttachmentView', { defaultValue: 'IssueAttachment View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -263,7 +263,7 @@ export default function AdminIssueAttachmentsView() {
             >
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultAttachmentViewGroup"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultIssueAttachmentViewEditGroup"
                   container
                   direction="row"
                   alignItems="flex-start"
@@ -274,7 +274,7 @@ export default function AdminIssueAttachmentsView() {
                     <TextField
                       required={true}
                       name="type"
-                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultAttachmentViewGroupType"
+                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultIssueAttachmentViewEditGroupType"
                       label={t('admin.IssueAttachmentView.type', { defaultValue: 'Type' }) as string}
                       value={data.type || ''}
                       className={clsx({
@@ -322,11 +322,11 @@ export default function AdminIssueAttachmentsView() {
                   <Grid item xs={12} sm={12} md={4.0}>
                     <BinaryInput
                       required={false}
-                      id="BinaryTypeInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultAttachmentViewGroupFile"
+                      id="BinaryTypeInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultIssueAttachmentViewEditGroupFile"
                       label={t('admin.IssueAttachmentView.file', { defaultValue: 'File' }) as string}
                       icon="file-document-outline"
                       mimeType={{
-                        type: 'image',
+                        type: '*',
                         subType: '*',
                       }}
                       editMode={editMode}
@@ -349,7 +349,7 @@ export default function AdminIssueAttachmentsView() {
                     <TextField
                       required={false}
                       name="link"
-                      id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultAttachmentViewGroupLink"
+                      id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsViewDefaultIssueAttachmentViewEditGroupLink"
                       label={t('admin.IssueAttachmentView.link', { defaultValue: 'Link' }) as string}
                       value={data.link ?? ''}
                       className={clsx({

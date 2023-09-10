@@ -34,7 +34,7 @@ export default function AdminAdminDebatesTable() {
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.DebateTable', { defaultValue: 'Debates' });
+  const title: string = t('admin.DebateTable', { defaultValue: 'Debate Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();

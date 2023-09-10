@@ -81,7 +81,7 @@ export const useCreateCommentAction: CreateCommentAction = () => {
   return async function createCommentAction(owner: AdminProStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'xs',
+      maxWidth: 'md',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();

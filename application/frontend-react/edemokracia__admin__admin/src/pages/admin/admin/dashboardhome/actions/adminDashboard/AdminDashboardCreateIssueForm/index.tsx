@@ -38,7 +38,6 @@ import {
   Paper,
   Popper,
   TextField,
-  Typography,
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -157,7 +156,7 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
     },
     [data],
   );
-  const title: string = t('admin.CreateIssueInputForm', { defaultValue: 'Create issue' });
+  const title: string = t('admin.CreateIssueInputForm', { defaultValue: 'CreateIssueInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -225,201 +224,178 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
       <DialogContent dividers>
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapper">
-              <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
-                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
-                      <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueLabel"
-                        variant="h6"
-                        component="h1"
-                      >
-                        {t('admin.CreateIssueInputForm.issue.Label', { defaultValue: 'Create issue' })}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+            <Grid
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssue"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12}>
+                <IssueTypeLink
+                  ownerData={data}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  editMode={editMode}
+                  onChange={(value: AdminIssueType | AdminIssueTypeStored | null) => {
+                    storeDiff('issueType', value);
+                  }}
+                  validation={validation}
+                />
+              </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssue"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <IssueTypeLink
-                          ownerData={data}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          editMode={editMode}
-                          onChange={(value: AdminIssueType | AdminIssueTypeStored | null) => {
-                            storeDiff('issueType', value);
-                          }}
-                          validation={validation}
-                        />
-                      </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <TextField
+                  required={true}
+                  name="title"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueTitle"
+                  autoFocus
+                  label={t('admin.CreateIssueInputForm.title', { defaultValue: 'Title' }) as string}
+                  value={data.title ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('title')}
+                  helperText={validation.get('title')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('title', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <TextField
-                          required={true}
-                          name="title"
-                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueTitle"
-                          autoFocus
-                          label={t('admin.CreateIssueInputForm.title', { defaultValue: 'Title' }) as string}
-                          value={data.title ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('title')}
-                          helperText={validation.get('title')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('title', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <DateTimePicker
+                  ampm={false}
+                  ampmInClock={false}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  slotProps={{
+                    textField: {
+                      id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDebateCloseAt',
+                      required: true,
+                      helperText: validation.get('debateCloseAt'),
+                      error: !!validation.get('debateCloseAt'),
+                      InputProps: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="schedule" />
+                          </InputAdornment>
+                        ),
+                      },
+                    },
+                  }}
+                  onError={(newError: DateTimeValidationError, value: any) => {
+                    // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                    setValidation((prevValidation) => {
+                      const copy = new Map<keyof AdminCreateIssueInput, string>(prevValidation);
+                      copy.set(
+                        'debateCloseAt',
+                        newError === 'invalidDate'
+                          ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                              defaultValue: 'Value does not match the pattern requirements.',
+                            }) as string)
+                          : '',
+                      );
+                      return copy;
+                    });
+                  }}
+                  views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                  label={t('admin.CreateIssueInputForm.debateCloseAt', { defaultValue: 'Debate close at' }) as string}
+                  value={serviceDateToUiDate(data.debateCloseAt ?? null)}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  onChange={(newValue: Date) => {
+                    storeDiff('debateCloseAt', newValue);
+                  }}
+                />
+              </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <DateTimePicker
-                          ampm={false}
-                          ampmInClock={false}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          slotProps={{
-                            textField: {
-                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDebateCloseAt',
-                              required: true,
-                              helperText: validation.get('debateCloseAt'),
-                              error: !!validation.get('debateCloseAt'),
-                              InputProps: {
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="schedule" />
-                                  </InputAdornment>
-                                ),
-                              },
-                            },
-                          }}
-                          onError={(newError: DateTimeValidationError, value: any) => {
-                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                            setValidation((prevValidation) => {
-                              const copy = new Map<keyof AdminCreateIssueInput, string>(prevValidation);
-                              copy.set(
-                                'debateCloseAt',
-                                newError === 'invalidDate'
-                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                      defaultValue: 'Value does not match the pattern requirements.',
-                                    }) as string)
-                                  : '',
-                              );
-                              return copy;
-                            });
-                          }}
-                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                          label={
-                            t('admin.CreateIssueInputForm.debateCloseAt', { defaultValue: 'Debate close at' }) as string
-                          }
-                          value={serviceDateToUiDate(data.debateCloseAt ?? null)}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          onChange={(newValue: Date) => {
-                            storeDiff('debateCloseAt', newValue);
-                          }}
-                        />
-                      </Grid>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="description"
+                  id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDescription"
+                  label={t('admin.CreateIssueInputForm.description', { defaultValue: 'Description' }) as string}
+                  value={data.description ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  multiline
+                  minRows={4.0}
+                  error={!!validation.get('description')}
+                  helperText={validation.get('description')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('description', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="description"
-                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDescription"
-                          label={t('admin.CreateIssueInputForm.description', { defaultValue: 'Description' }) as string}
-                          value={data.description ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          multiline
-                          minRows={4.0}
-                          error={!!validation.get('description')}
-                          helperText={validation.get('description')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('description', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <CityLink
+                  ownerData={data}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  editMode={editMode}
+                  onChange={(value: AdminCity | AdminCityStored | null) => {
+                    storeDiff('city', value);
+                  }}
+                  validation={validation}
+                />
+              </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <CityLink
-                          ownerData={data}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          editMode={editMode}
-                          onChange={(value: AdminCity | AdminCityStored | null) => {
-                            storeDiff('city', value);
-                          }}
-                          validation={validation}
-                        />
-                      </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <CountyLink
+                  ownerData={data}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  editMode={editMode}
+                  onChange={(value: AdminCounty | AdminCountyStored | null) => {
+                    storeDiff('county', value);
+                  }}
+                  validation={validation}
+                />
+              </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <CountyLink
-                          ownerData={data}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          editMode={editMode}
-                          onChange={(value: AdminCounty | AdminCountyStored | null) => {
-                            storeDiff('county', value);
-                          }}
-                          validation={validation}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <DistrictLink
-                          ownerData={data}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          editMode={editMode}
-                          onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
-                            storeDiff('district', value);
-                          }}
-                          validation={validation}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <DistrictLink
+                  ownerData={data}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  editMode={editMode}
+                  onChange={(value: AdminDistrict | AdminDistrictStored | null) => {
+                    storeDiff('district', value);
+                  }}
+                  validation={validation}
+                />
+              </Grid>
+            </Grid>
           </Grid>
 
           <Grid item xs={12} sm={12}>

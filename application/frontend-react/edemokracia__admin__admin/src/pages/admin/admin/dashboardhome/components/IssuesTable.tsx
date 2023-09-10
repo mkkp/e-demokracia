@@ -97,8 +97,8 @@ export const IssuesTable = (props: IssuesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues-${ownerData.__identifier}-filters`;
   const [issuesFilterModel, setIssuesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -189,21 +189,21 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
   const issuesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
       attributeName: 'title',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
       attributeName: 'created',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
       attributeName: 'status',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -211,7 +211,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
       attributeName: 'numberOfDebates',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
         defaultValue: 'Debates',
@@ -268,21 +268,21 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
       attributeName: 'title',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
       attributeName: 'created',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
       attributeName: 'status',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -290,7 +290,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
       attributeName: 'numberOfDebates',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
         defaultValue: 'Debates',
@@ -377,12 +377,12 @@ export const IssuesTable = (props: IssuesTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues-filter',
                     filterOptions,
                     filters,
                   )

@@ -38,7 +38,6 @@ import {
   Paper,
   Popper,
   TextField,
-  Typography,
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -143,7 +142,7 @@ export function AdminIssueCreateDebateForm({ successCallback, cancel, owner }: A
     },
     [data],
   );
-  const title: string = t('CreateDebateInputForm', { defaultValue: 'Create debate' });
+  const title: string = t('CreateDebateInputForm', { defaultValue: 'CreateDebateInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -211,147 +210,126 @@ export function AdminIssueCreateDebateForm({ successCallback, cancel, owner }: A
       <DialogContent dividers>
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateLabelWrapper">
-              <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
-                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                      <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateLabelWrapperDebateLabel"
-                        variant="h6"
-                        component="h1"
-                      >
-                        {t('CreateDebateInputForm.debate.Label', { defaultValue: 'Create debate' })}
-                      </Typography>
-                    </Grid>
-                  </Grid>
+            <Grid
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebate"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12} md={8.0}>
+                <TextField
+                  required={true}
+                  name="title"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateTitle"
+                  autoFocus
+                  label={t('CreateDebateInputForm.title', { defaultValue: 'Title' }) as string}
+                  value={data.title ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('title')}
+                  helperText={validation.get('title')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('title', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateLabelWrapperDebate"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12} md={8.0}>
-                        <TextField
-                          required={true}
-                          name="title"
-                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateLabelWrapperDebateTitle"
-                          autoFocus
-                          label={t('CreateDebateInputForm.title', { defaultValue: 'Title' }) as string}
-                          value={data.title ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('title')}
-                          helperText={validation.get('title')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('title', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <DateTimePicker
+                  ampm={false}
+                  ampmInClock={false}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  slotProps={{
+                    textField: {
+                      id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateCloseAt',
+                      required: true,
+                      helperText: validation.get('closeAt'),
+                      error: !!validation.get('closeAt'),
+                      InputProps: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="schedule" />
+                          </InputAdornment>
+                        ),
+                      },
+                    },
+                  }}
+                  onError={(newError: DateTimeValidationError, value: any) => {
+                    // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                    setValidation((prevValidation) => {
+                      const copy = new Map<keyof CreateDebateInput, string>(prevValidation);
+                      copy.set(
+                        'closeAt',
+                        newError === 'invalidDate'
+                          ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                              defaultValue: 'Value does not match the pattern requirements.',
+                            }) as string)
+                          : '',
+                      );
+                      return copy;
+                    });
+                  }}
+                  views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                  label={t('CreateDebateInputForm.closeAt', { defaultValue: 'Close at' }) as string}
+                  value={serviceDateToUiDate(data.closeAt ?? null)}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  onChange={(newValue: Date) => {
+                    storeDiff('closeAt', newValue);
+                  }}
+                />
+              </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <DateTimePicker
-                          ampm={false}
-                          ampmInClock={false}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          slotProps={{
-                            textField: {
-                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateLabelWrapperDebateCloseAt',
-                              required: true,
-                              helperText: validation.get('closeAt'),
-                              error: !!validation.get('closeAt'),
-                              InputProps: {
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="schedule" />
-                                  </InputAdornment>
-                                ),
-                              },
-                            },
-                          }}
-                          onError={(newError: DateTimeValidationError, value: any) => {
-                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                            setValidation((prevValidation) => {
-                              const copy = new Map<keyof CreateDebateInput, string>(prevValidation);
-                              copy.set(
-                                'closeAt',
-                                newError === 'invalidDate'
-                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                      defaultValue: 'Value does not match the pattern requirements.',
-                                    }) as string)
-                                  : '',
-                              );
-                              return copy;
-                            });
-                          }}
-                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                          label={t('CreateDebateInputForm.closeAt', { defaultValue: 'Close at' }) as string}
-                          value={serviceDateToUiDate(data.closeAt ?? null)}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          onChange={(newValue: Date) => {
-                            storeDiff('closeAt', newValue);
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="description"
-                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateLabelWrapperDebateDescription"
-                          label={t('CreateDebateInputForm.description', { defaultValue: 'Description' }) as string}
-                          value={data.description ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          multiline
-                          minRows={4.0}
-                          error={!!validation.get('description')}
-                          helperText={validation.get('description')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('description', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="description"
+                  id="TextAreaedemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateInputDefaultCreateDebateInputFormDebateDescription"
+                  label={t('CreateDebateInputForm.description', { defaultValue: 'Description' }) as string}
+                  value={data.description ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  multiline
+                  minRows={4.0}
+                  error={!!validation.get('description')}
+                  helperText={validation.get('description')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('description', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
 
           <Grid item xs={12} sm={12}>

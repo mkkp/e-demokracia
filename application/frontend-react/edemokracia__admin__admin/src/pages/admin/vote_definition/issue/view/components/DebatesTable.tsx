@@ -113,8 +113,8 @@ export const DebatesTable = (props: DebatesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebates-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebates-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates-${ownerData.__identifier}-filters`;
   const [debatesFilterModel, setDebatesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -194,7 +194,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
 
   const debatesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesStatusFilter',
       attributeName: 'status',
       label: t('admin.IssueView.debates.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -202,21 +202,21 @@ export const DebatesTable = (props: DebatesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueView.debates.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesCloseAtFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesCloseAtFilter',
       attributeName: 'closeAt',
       label: t('admin.IssueView.debates.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueView.debates.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -241,7 +241,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesStatusFilter',
       attributeName: 'status',
       label: t('admin.IssueView.debates.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -249,21 +249,21 @@ export const DebatesTable = (props: DebatesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueView.debates.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesCloseAtFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesCloseAtFilter',
       attributeName: 'closeAt',
       label: t('admin.IssueView.debates.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebatesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueView.debates.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -343,12 +343,12 @@ export const DebatesTable = (props: DebatesTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebates-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewOtherDebatesDebatesDebatesLabelWrapperDebates-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates-filter',
                     filterOptions,
                     filters,
                   )

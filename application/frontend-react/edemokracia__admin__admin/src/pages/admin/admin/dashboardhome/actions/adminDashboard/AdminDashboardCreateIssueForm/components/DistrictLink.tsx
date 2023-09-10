@@ -129,28 +129,28 @@ export function DistrictLink(props: DistrictLinkProps) {
 
   const districtRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDistrictRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDistrictRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.CreateIssueInputForm.district.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDistrictNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDistrictNameFilter',
       attributeName: 'name',
       label: t('admin.CreateIssueInputForm.district.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDistrictCountyFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDistrictCountyFilter',
       attributeName: 'county',
       label: t('admin.CreateIssueInputForm.district.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDistrictCityFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDistrictCityFilter',
       attributeName: 'city',
       label: t('admin.CreateIssueInputForm.district.city', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
@@ -172,7 +172,7 @@ export function DistrictLink(props: DistrictLinkProps) {
   return (
     <AggregationInput
       name="district"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueDistrict"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueDistrict"
       label={t('admin.CreateIssueInputForm.district', { defaultValue: 'District' }) as string}
       labelList={[
         ownerData.district?.representation?.toString() ?? '',

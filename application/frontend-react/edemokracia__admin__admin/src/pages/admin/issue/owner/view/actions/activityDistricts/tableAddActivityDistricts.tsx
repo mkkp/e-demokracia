@@ -76,7 +76,7 @@ export const useTableAddActivityDistrictsAction: TableAddActivityDistrictsAction
 
     const filterOptions: FilterOption[] = [
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueOwnerViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistrictsRepresentationFilter',
         attributeName: 'representation',
         label: t('admin.UserView.activityDistricts.representation', { defaultValue: 'District' }) as string,
         filterType: FilterType.string,

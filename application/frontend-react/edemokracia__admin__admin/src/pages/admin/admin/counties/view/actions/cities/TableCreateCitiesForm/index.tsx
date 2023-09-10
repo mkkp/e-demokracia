@@ -140,7 +140,7 @@ export function TableCreateCitiesForm({ successCallback, cancel, owner }: TableC
     },
     [data],
   );
-  const title: string = t('admin.CityForm', { defaultValue: 'Create city' });
+  const title: string = t('admin.CityForm', { defaultValue: 'City Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

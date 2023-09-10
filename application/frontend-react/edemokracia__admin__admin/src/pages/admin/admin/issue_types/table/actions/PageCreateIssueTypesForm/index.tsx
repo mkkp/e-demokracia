@@ -140,7 +140,7 @@ export function PageCreateIssueTypesForm({ successCallback, cancel }: PageCreate
     },
     [data],
   );
-  const title: string = t('admin.IssueTypeForm', { defaultValue: 'Create Issue Type' });
+  const title: string = t('admin.IssueTypeForm', { defaultValue: 'IssueType Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

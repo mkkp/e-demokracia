@@ -144,7 +144,7 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
     },
     [data],
   );
-  const title: string = t('admin.IssueCategoryForm', { defaultValue: 'Create Category' });
+  const title: string = t('admin.IssueCategoryForm', { defaultValue: 'IssueCategory Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -224,7 +224,7 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
             <TextField
               required={true}
               name="title"
-              id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesCreateDefaultCategoryFormTitle"
+              id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesCreateDefaultIssueCategoryFormTitle"
               autoFocus
               label={t('admin.IssueCategoryForm.title', { defaultValue: 'Title' }) as string}
               value={data.title ?? ''}
@@ -255,7 +255,7 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
             <TextField
               required={true}
               name="description"
-              id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesCreateDefaultCategoryFormDescription"
+              id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesCreateDefaultIssueCategoryFormDescription"
               label={t('admin.IssueCategoryForm.description', { defaultValue: 'Description' }) as string}
               value={data.description ?? ''}
               className={clsx({

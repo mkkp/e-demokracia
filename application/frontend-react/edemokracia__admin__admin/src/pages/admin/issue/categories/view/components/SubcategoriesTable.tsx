@@ -92,8 +92,8 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filters`;
   const [subcategoriesFilterModel, setSubcategoriesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -131,14 +131,14 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
 
   const subcategoriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueCategoryView.subcategories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueCategoryView.subcategories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -175,14 +175,14 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueCategoryView.subcategories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueCategoryView.subcategories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -281,12 +281,12 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
                 {t('judo.pages.table.create', { defaultValue: 'Create' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-filter',
                     filterOptions,
                     filters,
                   )

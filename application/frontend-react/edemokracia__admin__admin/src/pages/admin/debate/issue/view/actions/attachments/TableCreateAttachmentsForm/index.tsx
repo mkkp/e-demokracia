@@ -143,7 +143,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
     },
     [data],
   );
-  const title: string = t('admin.IssueAttachmentForm', { defaultValue: 'Create Attachment' });
+  const title: string = t('admin.IssueAttachmentForm', { defaultValue: 'IssueAttachment Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -221,7 +221,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <Grid
-              id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultAttachmentFormGroup"
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultIssueAttachmentFormGroup"
               container
               direction="row"
               alignItems="flex-start"
@@ -232,7 +232,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
                 <TextField
                   required={true}
                   name="type"
-                  id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultAttachmentFormGroupType"
+                  id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultIssueAttachmentFormGroupType"
                   autoFocus
                   label={t('admin.IssueAttachmentForm.type', { defaultValue: 'Type' }) as string}
                   value={data.type || ''}
@@ -276,7 +276,7 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
                 <TextField
                   required={false}
                   name="link"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultAttachmentFormGroupLink"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultIssueAttachmentFormGroupLink"
                   label={t('admin.IssueAttachmentForm.link', { defaultValue: 'Link' }) as string}
                   value={data.link ?? ''}
                   className={clsx({
@@ -305,11 +305,11 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
               <Grid item xs={12} sm={12} md={4.0}>
                 <BinaryInput
                   required={false}
-                  id="BinaryTypeInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultAttachmentFormGroupFile"
+                  id="BinaryTypeInputedemokraciaAdminAdminEdemokraciaAdminIssueAttachmentsCreateDefaultIssueAttachmentFormGroupFile"
                   label={t('admin.IssueAttachmentForm.file', { defaultValue: 'File' }) as string}
                   icon="file-document-outline"
                   mimeType={{
-                    type: 'image',
+                    type: '*',
                     subType: '*',
                   }}
                   editMode={editMode}

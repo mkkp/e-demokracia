@@ -148,7 +148,7 @@ export function TableCreateSubcategoriesForm({ successCallback, cancel, owner }:
     },
     [data],
   );
-  const title: string = t('admin.IssueCategoryForm', { defaultValue: 'Create Category' });
+  const title: string = t('admin.IssueCategoryForm', { defaultValue: 'IssueCategory Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -228,7 +228,7 @@ export function TableCreateSubcategoriesForm({ successCallback, cancel, owner }:
             <TextField
               required={true}
               name="title"
-              id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultCategoryFormTitle"
+              id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultIssueCategoryFormTitle"
               autoFocus
               label={t('admin.IssueCategoryForm.title', { defaultValue: 'Title' }) as string}
               value={data.title ?? ''}
@@ -259,7 +259,7 @@ export function TableCreateSubcategoriesForm({ successCallback, cancel, owner }:
             <TextField
               required={true}
               name="description"
-              id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultCategoryFormDescription"
+              id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesCreateDefaultIssueCategoryFormDescription"
               label={t('admin.IssueCategoryForm.description', { defaultValue: 'Description' }) as string}
               value={data.description ?? ''}
               className={clsx({

@@ -147,7 +147,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
     },
     [data],
   );
-  const title: string = t('CloseDebateInputForm', { defaultValue: 'Close debate' });
+  const title: string = t('CloseDebateInputForm', { defaultValue: 'CloseDebateInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -215,14 +215,14 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
       <DialogContent dividers>
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapper">
+            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebateLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebateLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -233,7 +233,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebate"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebate"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -244,7 +244,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                         <TextField
                           required={true}
                           name="voteType"
-                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebateVoteType"
+                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebateVoteType"
                           autoFocus
                           label={t('CloseDebateInputForm.voteType', { defaultValue: 'VoteType' }) as string}
                           value={data.voteType || ''}
@@ -316,7 +316,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                           })}
                           slotProps={{
                             textField: {
-                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebateCloseAt',
+                              id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebateCloseAt',
                               required: true,
                               helperText: validation.get('closeAt'),
                               error: !!validation.get('closeAt'),
@@ -359,7 +359,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                         <TextField
                           required={true}
                           name="title"
-                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebateTitle"
+                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebateTitle"
                           label={t('CloseDebateInputForm.title', { defaultValue: 'Vote title' }) as string}
                           value={data.title ?? ''}
                           className={clsx({
@@ -389,7 +389,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                         <TextField
                           required={true}
                           name="description"
-                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormDebateLabelWrapperDebateDescription"
+                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebateDescription"
                           label={t('CloseDebateInputForm.description', { defaultValue: 'Vote description' }) as string}
                           value={data.description ?? ''}
                           className={clsx({
@@ -424,14 +424,14 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormGroupLabelWrapper">
+            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="clipboard-list-outline" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormGroupLabelWrapperGroupLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -442,7 +442,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormGroupLabelWrapperGroup"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroup"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -451,7 +451,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormGroupLabelWrapperGroupAnswersLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupAnswersLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -460,7 +460,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateFormGroupLabelWrapperGroupAnswersLabelWrapperAnswers"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupAnswersLabelWrapperAnswers"
                               container
                               direction="column"
                               alignItems="stretch"

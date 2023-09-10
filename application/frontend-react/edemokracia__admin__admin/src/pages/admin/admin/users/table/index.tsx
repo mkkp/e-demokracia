@@ -34,7 +34,7 @@ export default function AdminAdminUsersTable() {
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.UserTable', { defaultValue: 'Users' });
+  const title: string = t('admin.UserTable', { defaultValue: 'User Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();

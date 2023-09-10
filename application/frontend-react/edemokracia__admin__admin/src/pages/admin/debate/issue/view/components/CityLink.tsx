@@ -115,7 +115,7 @@ export function CityLink(props: CityLinkProps) {
 
   const cityRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewOtherAreaAreaCityRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewEditOtherAreaAreaCityRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.IssueView.city.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
@@ -139,7 +139,7 @@ export function CityLink(props: CityLinkProps) {
   return (
     <AggregationInput
       name="city"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewOtherAreaAreaCity"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDebateIssueViewDefaultIssueViewEditOtherAreaAreaCity"
       label={t('admin.IssueView.city', { defaultValue: 'City' }) as string}
       labelList={[ownerData.city?.representation?.toString() ?? '']}
       ownerData={ownerData}

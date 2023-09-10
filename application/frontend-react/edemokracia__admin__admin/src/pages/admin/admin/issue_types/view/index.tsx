@@ -136,7 +136,7 @@ export default function AdminAdminIssueTypesView() {
   );
   const postRefreshAction: AdminAdminIssueTypesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
-  const title: string = t('admin.IssueTypeView', { defaultValue: 'Issue Type View/Edit' });
+  const title: string = t('admin.IssueTypeView', { defaultValue: 'IssueType View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -249,14 +249,14 @@ export default function AdminAdminIssueTypesView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewGroup">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewEditGroup">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <TextField
                           required={true}
                           name="title"
-                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewGroupTitle"
+                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewEditGroupTitle"
                           label={t('admin.IssueTypeView.title', { defaultValue: 'Title' }) as string}
                           value={data.title ?? ''}
                           className={clsx({
@@ -286,7 +286,7 @@ export default function AdminAdminIssueTypesView() {
                         <TextField
                           required={false}
                           name="voteType"
-                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewGroupVoteType"
+                          id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewEditGroupVoteType"
                           label={t('admin.IssueTypeView.voteType', { defaultValue: 'VoteType' }) as string}
                           value={data.voteType || ''}
                           className={clsx({
@@ -344,7 +344,7 @@ export default function AdminAdminIssueTypesView() {
                         <TextField
                           required={true}
                           name="description"
-                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewGroupDescription"
+                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminIssueTypesViewDefaultIssueTypeViewEditGroupDescription"
                           label={t('admin.IssueTypeView.description', { defaultValue: 'Description' }) as string}
                           value={data.description ?? ''}
                           className={clsx({

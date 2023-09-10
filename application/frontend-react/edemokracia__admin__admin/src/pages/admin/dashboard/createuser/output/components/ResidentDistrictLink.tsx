@@ -93,7 +93,7 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
 
   const residentDistrictRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasResidencyResidentDistrictRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewEditAreasLabelWrapperAreasResidencyResidentDistrictRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.UserView.residentDistrict.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,
@@ -117,7 +117,7 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
   return (
     <AggregationInput
       name="residentDistrict"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewAreasLabelWrapperAreasResidencyResidentDistrict"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserOutputDefaultUserViewEditAreasLabelWrapperAreasResidencyResidentDistrict"
       label={t('admin.UserView.residentDistrict', { defaultValue: 'Resident district' }) as string}
       labelList={[ownerData.residentDistrict?.representation?.toString() ?? '']}
       ownerData={ownerData}

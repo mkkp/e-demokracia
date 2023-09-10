@@ -142,7 +142,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
     },
     [data],
   );
-  const title: string = t('admin.CreateUserInputForm', { defaultValue: 'TransferObject Form' });
+  const title: string = t('admin.CreateUserInputForm', { defaultValue: 'CreateUserInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -210,14 +210,14 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
       <DialogContent dividers>
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormSecurityLabelWrapper">
+            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormSecurityLabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="security" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormSecurityLabelWrapperSecurityLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormSecurityLabelWrapperSecurityLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -228,7 +228,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormSecurityLabelWrapperSecurity"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormSecurityLabelWrapperSecurity"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -239,7 +239,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
                         <TextField
                           required={true}
                           name="userName"
-                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormSecurityLabelWrapperSecurityUserName"
+                          id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormSecurityLabelWrapperSecurityUserName"
                           autoFocus
                           label={t('admin.CreateUserInputForm.userName', { defaultValue: 'UserName' }) as string}
                           value={data.userName ?? ''}
@@ -292,14 +292,14 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapper">
+            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonalLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonalLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -310,7 +310,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonal"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonal"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -319,7 +319,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonalName"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonalName"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -330,7 +330,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
                             <TextField
                               required={true}
                               name="firstName"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonalNameFirstName"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonalNameFirstName"
                               label={t('admin.CreateUserInputForm.firstName', { defaultValue: 'FirstName' }) as string}
                               value={data.firstName ?? ''}
                               className={clsx({
@@ -360,7 +360,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
                             <TextField
                               required={true}
                               name="lastName"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonalNameLastName"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonalNameLastName"
                               label={t('admin.CreateUserInputForm.lastName', { defaultValue: 'LastName' }) as string}
                               value={data.lastName ?? ''}
                               className={clsx({
@@ -390,7 +390,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
                             <TextField
                               required={true}
                               name="email"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonalNameEmail"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonalNameEmail"
                               label={t('admin.CreateUserInputForm.email', { defaultValue: 'Email' }) as string}
                               value={data.email ?? ''}
                               className={clsx({
@@ -420,7 +420,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
                             <TextField
                               required={false}
                               name="phone"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormPersonalLabelWrapperPersonalNamePhone"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormPersonalLabelWrapperPersonalNamePhone"
                               label={t('admin.CreateUserInputForm.phone', { defaultValue: 'Phone' }) as string}
                               value={data.phone ?? ''}
                               className={clsx({
@@ -456,7 +456,7 @@ export function AdminDashboardCreateUserForm({ successCallback, cancel }: AdminD
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultTransferObjectFormButtons"
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateUserInputDefaultCreateUserInputFormButtons"
               container
               direction="row"
               alignItems="flex-start"

@@ -38,7 +38,6 @@ import {
   Paper,
   Popper,
   TextField,
-  Typography,
 } from '@mui/material';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -139,7 +138,7 @@ export function AdminConCreateCommentForm({ successCallback, cancel, owner }: Ad
     },
     [data],
   );
-  const title: string = t('CreateCommentInputForm', { defaultValue: 'Add comment' });
+  const title: string = t('CreateCommentInputForm', { defaultValue: 'CreateCommentInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -205,68 +204,47 @@ export function AdminConCreateCommentForm({ successCallback, cancel, owner }: Ad
       <DialogContent dividers>
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminConCreateCommentInputDefaultCreateCommentInputFormCommentLabelWrapper">
-              <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
-                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="forum" sx={{ marginRight: 1 }} />
-                      <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminConCreateCommentInputDefaultCreateCommentInputFormCommentLabelWrapperCommentLabel"
-                        variant="h6"
-                        component="h1"
-                      >
-                        {t('CreateCommentInputForm.comment.Label', { defaultValue: 'Add comment' })}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminConCreateCommentInputDefaultCreateCommentInputFormCommentLabelWrapperComment"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="comment"
-                          id="TextAreaedemokraciaAdminAdminEdemokraciaAdminConCreateCommentInputDefaultCreateCommentInputFormCommentLabelWrapperCommentComment"
-                          autoFocus
-                          label={t('CreateCommentInputForm.comment', { defaultValue: 'Comment' }) as string}
-                          value={data.comment ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          multiline
-                          minRows={4.0}
-                          error={!!validation.get('comment')}
-                          helperText={validation.get('comment')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('comment', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
+            <Grid
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminConCreateCommentInputDefaultCreateCommentInputFormComment"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="comment"
+                  id="TextAreaedemokraciaAdminAdminEdemokraciaAdminConCreateCommentInputDefaultCreateCommentInputFormCommentComment"
+                  autoFocus
+                  label={t('CreateCommentInputForm.comment', { defaultValue: 'Comment' }) as string}
+                  value={data.comment ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  multiline
+                  minRows={4.0}
+                  error={!!validation.get('comment')}
+                  helperText={validation.get('comment')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('comment', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
 
           <Grid item xs={12} sm={12}>

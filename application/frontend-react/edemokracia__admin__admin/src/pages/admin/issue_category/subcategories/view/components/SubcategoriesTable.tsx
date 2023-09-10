@@ -91,8 +91,8 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-${ownerData.__identifier}-filters`;
   const [subcategoriesFilterModel, setSubcategoriesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -130,14 +130,14 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
 
   const subcategoriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueCategoryView.subcategories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueCategoryView.subcategories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -175,14 +175,14 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueCategoryView.subcategories.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueCategoryView.subcategories.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -281,12 +281,12 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
                 {t('judo.pages.table.create', { defaultValue: 'Create' })}
               </Button>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories-filter',
                     filterOptions,
                     filters,
                   )

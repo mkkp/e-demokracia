@@ -91,8 +91,8 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filters`;
   const [voteEntriesFilterModel, setVoteEntriesFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -192,7 +192,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
   const voteEntriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.created', {
         defaultValue: 'Created',
@@ -201,7 +201,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
       attributeName: 'issueTitle',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.issueTitle', {
         defaultValue: 'Issue Title',
@@ -210,7 +210,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
       attributeName: 'debateTitle',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.debateTitle', {
         defaultValue: 'Debate Title',
@@ -219,7 +219,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteTitle', {
         defaultValue: 'Vote Title',
@@ -228,7 +228,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
       attributeName: 'voteStatus',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteStatus', {
         defaultValue: 'Vote Status',
@@ -256,7 +256,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.created', {
         defaultValue: 'Created',
@@ -265,7 +265,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
       attributeName: 'issueTitle',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.issueTitle', {
         defaultValue: 'Issue Title',
@@ -274,7 +274,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
       attributeName: 'debateTitle',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.debateTitle', {
         defaultValue: 'Debate Title',
@@ -283,7 +283,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteTitle', {
         defaultValue: 'Vote Title',
@@ -292,7 +292,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
       attributeName: 'voteStatus',
       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.voteStatus', {
         defaultValue: 'Vote Status',
@@ -376,12 +376,12 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter"
+                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter',
+                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter',
                     filterOptions,
                     filters,
                   )

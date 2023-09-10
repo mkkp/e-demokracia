@@ -132,7 +132,7 @@ export default function AdminDebateClosedebateOutput() {
   const postRefreshAction: AdminDebateClosedebateOutputPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const title: string = t('VoteDefinitionView', { defaultValue: 'Entity View' });
+  const title: string = t('VoteDefinitionView', { defaultValue: 'VoteDefinition View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;

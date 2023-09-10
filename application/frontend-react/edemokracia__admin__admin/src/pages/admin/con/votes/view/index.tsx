@@ -132,7 +132,7 @@ export default function AdminConVotesView() {
   );
   const postRefreshAction: AdminConVotesViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
-  const title: string = t('admin.SimpleVoteView', { defaultValue: 'Create / View Vote' });
+  const title: string = t('admin.SimpleVoteView', { defaultValue: 'SimpleVote View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -208,7 +208,7 @@ export default function AdminConVotesView() {
             >
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultVoteViewGroup"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultSimpleVoteViewEditGroup"
                   container
                   direction="row"
                   alignItems="flex-start"
@@ -225,7 +225,7 @@ export default function AdminConVotesView() {
                       })}
                       slotProps={{
                         textField: {
-                          id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultVoteViewGroupCreated',
+                          id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultSimpleVoteViewEditGroupCreated',
                           required: true,
                           helperText: validation.get('created'),
                           error: !!validation.get('created'),
@@ -268,7 +268,7 @@ export default function AdminConVotesView() {
                     <TextField
                       required={true}
                       name="type"
-                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultVoteViewGroupType"
+                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultSimpleVoteViewEditGroupType"
                       label={t('admin.SimpleVoteView.type', { defaultValue: 'Type' }) as string}
                       value={data.type || ''}
                       className={clsx({
@@ -305,7 +305,7 @@ export default function AdminConVotesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultVoteViewGroup2"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminConVotesViewDefaultSimpleVoteViewEditGroup2"
                   container
                   direction="row"
                   alignItems="flex-start"

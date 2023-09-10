@@ -47,9 +47,9 @@
         <inherited xmi:id="_toUoQGkwEe25ONJ3V89cVA"/>
       </attributes>
       <mapping xmi:id="_rus0MGkwEe25ONJ3V89cVA" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-      <form xmi:id="_ndHDMGkwEe25ONJ3V89cVA" name="AdminPrincipalUser_Form" label="Create User" iconName="account" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-      <table xmi:id="_ndKGgGkwEe25ONJ3V89cVA" name="AdminPrincipalUser_Table" label="Users" iconName="account" rowsPerPage="10"/>
-      <view xmi:id="_ndEm8GkwEe25ONJ3V89cVA" name="AdminPrincipalUser_View" label="View / Edit User" iconName="account" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+      <form xmi:id="_ndHDMGkwEe25ONJ3V89cVA" name="AdminPrincipalUser_Form" label="AdminPrincipalUser Form" iconName="account" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_ndKGgGkwEe25ONJ3V89cVA" name="AdminPrincipalUser_Table" label="AdminPrincipalUser Table" iconName="account" rowsPerPage="10"/>
+      <view xmi:id="_ndEm8GkwEe25ONJ3V89cVA" name="AdminPrincipalUser_View_Edit" label="AdminPrincipalUser View / Edit" iconName="account" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_a0XksH2iEe2LTNnGda5kaw" name="City" createable="false" updateable="false" deleteable="false">
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_a0XksX2iEe2LTNnGda5kaw" lower="0" upper="-1" target="_a0UhYH2iEe2LTNnGda5kaw" name="districts" createable="true" updateable="true" deleteable="true" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="MAPPED" rangeType="ANY" binding="_5bxnkHW6Ee2LTNnGda5kaw" getterExpression="">
@@ -65,14 +65,14 @@
         <inherited xmi:id="_0F5Y0IXxEe2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_a0XktX2iEe2LTNnGda5kaw" target="_knKwMHW6Ee2LTNnGda5kaw"/>
-      <form xmi:id="_a0Xktn2iEe2LTNnGda5kaw" name="City_Form" label="Create city" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_a0Xktn2iEe2LTNnGda5kaw" name="City_Form" label="City Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_dL4qsH4bEe2j59SYy0JH0Q" name="name" label="City name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0Xks32iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </form>
-      <table xmi:id="_a0Xkt32iEe2LTNnGda5kaw" name="City_Table" label="Cities" rowsPerPage="10">
+      <table xmi:id="_a0Xkt32iEe2LTNnGda5kaw" name="City_Table" label="City Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_IgwWoIX2Ee2kLcMqsIbMgQ" name="county" label="County" iconName="text_fields" visible="true" sort="NONE" dataFeature="_XCNnMIXxEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_dL7uAH4bEe2j59SYy0JH0Q" name="name" label="City name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0Xks32iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0XkuH2iEe2LTNnGda5kaw" name="City_View" label="City" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_0F3joIXxEe2kLcMqsIbMgQ">
+      <view xmi:id="_a0XkuH2iEe2LTNnGda5kaw" name="City_View_Edit" label="City View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_0F3joIXxEe2kLcMqsIbMgQ">
         <components xsi:type="ui:DataField" xmi:id="_dL1nYH4bEe2j59SYy0JH0Q" name="name" label="City name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0Xks32iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cLC8gIXhEe2kLcMqsIbMgQ" name="districts" label="Districts" iconName="home-city" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" relationFeature="_a0XksX2iEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
           <columns xsi:type="ui:DataColumn" xmi:id="_cLEKoIXhEe2kLcMqsIbMgQ" name="name" label="Name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0UhYX2iEe2LTNnGda5kaw"/>
@@ -108,7 +108,7 @@
       <operations xmi:id="_Fv_yAH2tEe2Z3oDlL3R4tA" name="voteDown" customImplementation="false" body="" stateful="true" operationType="MAPPED" binding="voteDown" initializer="false">
         <inherited xmi:id="_FwAZEH2tEe2Z3oDlL3R4tA"/>
       </operations>
-      <form xmi:id="_p_Je8GksEe25ONJ3V89cVA" name="Comment_Form" label="Create Comment" iconName="comment-text" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_p_Je8GksEe25ONJ3V89cVA" name="Comment_Form" label="Comment Form" iconName="comment-text" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:Group" xmi:id="_v1fnoG5YEe2wNaja8kBvcQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_BYSQUG5WEe2wNaja8kBvcQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_Hq4FMG5VEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:TabularReferenceField" xmi:id="_IgYHIIfuEe2u0fVmwtP5bA" name="createdBy" label="CreatedBy" iconName="table_rows" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qbmKYGksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
@@ -123,14 +123,14 @@
           </components>
         </components>
       </form>
-      <table xmi:id="_p_So4GksEe25ONJ3V89cVA" name="Comment_Table" label="Comments" iconName="comment-text" rowsPerPage="10">
+      <table xmi:id="_p_So4GksEe25ONJ3V89cVA" name="Comment_Table" label="Comment Table" iconName="comment-text" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_xE0lsG5REe2Q6M99rsfqSQ" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_Q31g0G5REe2Q6M99rsfqSQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_BYNX0G5WEe2wNaja8kBvcQ" name="comment" label="Comment" iconName="text_fields" visible="true" sort="NONE" dataFeature="_HqzzwG5VEe2wNaja8kBvcQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_BYVToG5WEe2wNaja8kBvcQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_Hq4FMG5VEe2wNaja8kBvcQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3kyREH4bEe2j59SYy0JH0Q" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3k-eUH4bEe2j59SYy0JH0Q" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
       </table>
-      <view xmi:id="_p_AVAGksEe25ONJ3V89cVA" name="Comment_View" label="View / Edit Comment" iconName="comment-text-multiple" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_p_AVAGksEe25ONJ3V89cVA" name="Comment_View_Edit" label="Comment View / Edit" iconName="comment-text-multiple" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_eX7kkG5YEe2wNaja8kBvcQ" name="group" label="Comment" iconName="comment-text-multiple" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_BYP0EG5WEe2wNaja8kBvcQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_Hq4FMG5VEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:TabularReferenceField" xmi:id="_IgQyYIfuEe2u0fVmwtP5bA" name="createdBy" label="CreatedBy" iconName="table_rows" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qbmKYGksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
@@ -199,7 +199,7 @@
         <input xmi:id="_RCHSUYgoEe2u0fVmwtP5bA" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_RCHSUogoEe2u0fVmwtP5bA"/>
       </operations>
-      <form xmi:id="_qAjNIGksEe25ONJ3V89cVA" name="Con_Form" label="Create Con" iconName="sticker-minus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_qAjNIGksEe25ONJ3V89cVA" name="Con_Form" label="Con Form" iconName="sticker-minus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_EuIKwG5WEe2wNaja8kBvcQ" name="createdByName" label="CreatedByName" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_1M9fwG5REe2Q6M99rsfqSQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3nMr4H4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O6fpIH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3nWc4H4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O6qoQH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -244,7 +244,7 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_uRqpwIj5Ee2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
         </components>
       </form>
-      <table xmi:id="_qAs-IGksEe25ONJ3V89cVA" name="Con_Table" label="Cons" iconName="sticker-minus" rowsPerPage="10">
+      <table xmi:id="_qAs-IGksEe25ONJ3V89cVA" name="Con_Table" label="Con Table" iconName="sticker-minus" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_EuKnAG5WEe2wNaja8kBvcQ" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_1M9fwG5REe2Q6M99rsfqSQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3nQWQH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_O6fpIH2hEe2LTNnGda5kaw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3naHQH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O6qoQH2hEe2LTNnGda5kaw"/>
@@ -252,7 +252,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_cIf_QIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_cIkQsIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
       </table>
-      <view xmi:id="_qAaDMGksEe25ONJ3V89cVA" name="Con_View" label="View / Edit Con" iconName="sticker-minus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_qAaDMGksEe25ONJ3V89cVA" name="Con_View_Edit" label="Con View / Edit" iconName="sticker-minus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="__VtG0G5QEe2Q6M99rsfqSQ" name="con" label="Contra" iconName="chat-minus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_3ndKkH4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" col="6" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O60ZQH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_3nJokH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O6fpIH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -313,13 +313,13 @@
         <inherited xmi:id="_NdjkoIXyEe2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_EOggMH2kEe2LTNnGda5kaw" target="_uBoOUH2jEe2LTNnGda5kaw"/>
-      <form xmi:id="_a0aoBn2iEe2LTNnGda5kaw" name="County_Form" label="Create county" iconName="map" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_a0aoBn2iEe2LTNnGda5kaw" name="County_Form" label="County Form" iconName="map" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_dLdM4H4bEe2j59SYy0JH0Q" name="name" label="County name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0aoA32iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </form>
-      <table xmi:id="_a0aoB32iEe2LTNnGda5kaw" name="County_Table" label="Counties" rowsPerPage="10">
+      <table xmi:id="_a0aoB32iEe2LTNnGda5kaw" name="County_Table" label="County Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_dLheUH4bEe2j59SYy0JH0Q" name="name" label="Name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0aoA32iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0aoCH2iEe2LTNnGda5kaw" name="County_View" label="County" iconName="map" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_NdiWgIXyEe2kLcMqsIbMgQ">
+      <view xmi:id="_a0aoCH2iEe2LTNnGda5kaw" name="County_View_Edit" label="County View / Edit" iconName="map" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_NdiWgIXyEe2kLcMqsIbMgQ">
         <components xsi:type="ui:DataField" xmi:id="_dLSNwH4bEe2j59SYy0JH0Q" name="name" label="County name" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0aoA32iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cK7AsIXhEe2kLcMqsIbMgQ" name="cities" label="Cities" iconName="city" col="12" stretch="NONE" row="8" fit="LOOSE" onBlur="false" relationFeature="_23Z_YH2nEe27Ga2Ojs4Fgg" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
           <columns xsi:type="ui:DataColumn" xmi:id="_cK9c8IXhEe2kLcMqsIbMgQ" name="name" label="Name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0Xks32iEe2LTNnGda5kaw"/>
@@ -348,8 +348,8 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_98TXcOMeEe2Bgcx6em3jZg" name="debateCloseAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
         <inherited xmi:id="_98TXceMeEe2Bgcx6em3jZg"/>
       </attributes>
-      <form xmi:id="_oCqSgIeIEe2kLcMqsIbMgQ" name="CreateIssueInput_Form" label="Create issue" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
-        <components xsi:type="ui:Group" xmi:id="_RqJLwI1DEe2VSOmaAz6G9Q" name="issue" label="Create issue" iconName="clipboard" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
+      <form xmi:id="_oCqSgIeIEe2kLcMqsIbMgQ" name="CreateIssueInput_Form" label="CreateIssueInput Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" dialogSize="MD">
+        <components xsi:type="ui:Group" xmi:id="_RqJLwI1DEe2VSOmaAz6G9Q" name="issue" label="" iconName="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:TabularReferenceField" xmi:id="_WNovANu5Ee2Bgcx6em3jZg" name="issueType" label="Issue type" iconName="folder-open" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_I14DsNu5Ee2Bgcx6em3jZg" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
             <columns xsi:type="ui:DataColumn" xmi:id="_XfjHMNvXEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" visible="true" sort="NONE" dataFeature="_vOHLENvTEe2Bgcx6em3jZg"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_WNsZYNu5Ee2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg"/>
@@ -379,11 +379,11 @@
           <components xsi:type="ui:ActionButton" xmi:id="_XsmEII1IEe2VSOmaAz6G9Q" name="cancel" label="Cancel" iconName="close-circle-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="CANCEL"/>
         </components>
       </form>
-      <table xmi:id="_oCuj8IeIEe2kLcMqsIbMgQ" name="CreateIssueInput_Table" label="" rowsPerPage="10">
+      <table xmi:id="_oCuj8IeIEe2kLcMqsIbMgQ" name="CreateIssueInput_Table" label="CreateIssueInput Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_DelsAI1DEe2VSOmaAz6G9Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_E2dOAIeJEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DeovUI1DEe2VSOmaAz6G9Q" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_E2fDMIeJEe2kLcMqsIbMgQ"/>
       </table>
-      <view xmi:id="_oClaAIeIEe2kLcMqsIbMgQ" name="CreateIssueInput_View" label="" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+      <view xmi:id="_oClaAIeIEe2kLcMqsIbMgQ" name="CreateIssueInput_View_Edit" label="CreateIssueInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_eNSH8I1eEe2J66C5CrhpQw" name="CreateUserInput" createable="false" updateable="false" deleteable="false">
       <attributes xsi:type="structure:DataMember" xmi:id="_g6NoQI1eEe2J66C5CrhpQw" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
@@ -404,7 +404,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_jte4wI1sEe29qs15q2b6yw" name="phone" dataType="_7D8Ny2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
         <inherited xmi:id="_jtff0I1sEe29qs15q2b6yw"/>
       </attributes>
-      <form xmi:id="_eNqicI1eEe2J66C5CrhpQw" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_eNqicI1eEe2J66C5CrhpQw" name="CreateUserInput_Form" label="CreateUserInput Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" dialogSize="MD">
         <components xsi:type="ui:Group" xmi:id="_ngqE4I1rEe29qs15q2b6yw" name="security" label="Security" iconName="security" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_kCfU4I1rEe29qs15q2b6yw" name="userName" label="UserName" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_g6NoQI1eEe2J66C5CrhpQw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_kCmpoI1rEe29qs15q2b6yw" name="hasAdminAccess" label="IsAdmin" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_uRgZgI1eEe2J66C5CrhpQw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -422,14 +422,14 @@
           <components xsi:type="ui:ActionButton" xmi:id="_FczTEI1tEe29qs15q2b6yw" name="cancel" label="Cancel" iconName="close-circle-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="SUBMIT"/>
         </components>
       </form>
-      <table xmi:id="_eNzsYI1eEe2J66C5CrhpQw" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+      <table xmi:id="_eNzsYI1eEe2J66C5CrhpQw" name="CreateUserInput_Table" label="CreateUserInput Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_kCgjAI1rEe29qs15q2b6yw" name="userName" label="UserName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_g6NoQI1eEe2J66C5CrhpQw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_kCkNYI1rEe29qs15q2b6yw" name="email" label="Email" iconName="text_fields" visible="true" sort="NONE" dataFeature="_kbxqgI1eEe2J66C5CrhpQw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_kCn3wI1rEe29qs15q2b6yw" name="hasAdminAccess" label="IsAdmin" iconName="check_box" visible="true" sort="NONE" dataFeature="_uRgZgI1eEe2J66C5CrhpQw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_kCriII1rEe29qs15q2b6yw" name="firstName" label="FirstName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a4hfsI1rEe29qs15q2b6yw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_kCvMgI1rEe29qs15q2b6yw" name="lastName" label="LastName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_e2CeII1rEe29qs15q2b6yw"/>
       </table>
-      <view xmi:id="_eNgxcI1eEe2J66C5CrhpQw" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_eNgxcI1eEe2J66C5CrhpQw" name="CreateUserInput_View_Edit" label="CreateUserInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_kCeGwI1rEe29qs15q2b6yw" name="userName" label="UserName" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_g6NoQI1eEe2J66C5CrhpQw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_kChxII1rEe29qs15q2b6yw" name="email" label="Email" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_kbxqgI1eEe2J66C5CrhpQw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_kClbgI1rEe29qs15q2b6yw" name="hasAdminAccess" label="IsAdmin" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_uRgZgI1eEe2J66C5CrhpQw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -465,7 +465,7 @@
       <table xmi:id="_3NM1IIyNEe2VSOmaAz6G9Q" name="Dashboard_Table" label="Dashboard Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_Z48P4IyYEe2VSOmaAz6G9Q" name="welcome" label="Welcome" iconName="text_fields" visible="true" sort="NONE" dataFeature="_OIqfwIyYEe2VSOmaAz6G9Q"/>
       </table>
-      <view xmi:id="_3M7vYIyNEe2VSOmaAz6G9Q" name="Dashboard_View" label="Dashboard" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_3M7vYIyNEe2VSOmaAz6G9Q" name="Dashboard_View_Edit" label="Dashboard View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_Z44lgIyYEe2VSOmaAz6G9Q" name="welcome" label="" iconName="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_OIqfwIyYEe2VSOmaAz6G9Q" enumWidget="COMBO" textMultiLine="false" textWidget="TEXT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:ActionGroup" xmi:id="_RsmuQI1hEe2J66C5CrhpQw" name="actionGroup" label="actionGroup" iconName="" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="2">
           <actions xmi:id="_6YOX8IyTEe2VSOmaAz6G9Q" name="createIssue" label="Create issue" iconName="ticket-confirmation" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="createIssue"/>
@@ -548,7 +548,7 @@
         <input xmi:id="_OjxfsIe8Ee2kLcMqsIbMgQ" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_OjwRkIe8Ee2kLcMqsIbMgQ"/>
       </operations>
-      <form xmi:id="_qF180GksEe25ONJ3V89cVA" name="Debate_Form" label="Create Debate" iconName="wechat" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_qF180GksEe25ONJ3V89cVA" name="Debate_Form" label="Debate Form" iconName="wechat" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:Group" xmi:id="_IpWBYG3NEe2siJt-xjHAyw" name="Navigations" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE"/>
         <components xsi:type="ui:Group" xmi:id="_SLXxQG3NEe2siJt-xjHAyw" name="Details" label="Details" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE"/>
         <components xsi:type="ui:TabBar" xmi:id="_cviTkG3NEe2siJt-xjHAyw" name="tabBar" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -611,14 +611,14 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_3GSE8I4mEe29qs15q2b6yw" name="isYesNoType" label="IsYesNoType" iconName="check_box" visible="true" sort="NONE" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
         </components>
       </form>
-      <table xmi:id="_qF_GwGksEe25ONJ3V89cVA" name="Debate_Table" label="Debates" iconName="wechat" rowsPerPage="10">
+      <table xmi:id="_qF_GwGksEe25ONJ3V89cVA" name="Debate_Table" label="Debate Table" iconName="wechat" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_lHHAgNvAEe2Bgcx6em3jZg" name="issueTitle" label="Issue" iconName="ticket-confirmation" visible="true" sort="NONE" dataFeature="_a6olcNvAEe2Bgcx6em3jZg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_4RlKgG5VEe2wNaja8kBvcQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_4RdOsG5VEe2wNaja8kBvcQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_4ROlMG5VEe2wNaja8kBvcQ" name="closeAt" label="Close at" iconName="schedule" visible="true" sort="NONE" dataFeature="_7FHekG5UEe2wNaja8kBvcQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_4RV58G5VEe2wNaja8kBvcQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FMXEG5UEe2wNaja8kBvcQ"/>
       </table>
-      <view xmi:id="_qFsy4GksEe25ONJ3V89cVA" name="Debate_View" label="View / Edit Debate" iconName="wechat" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_qFsy4GksEe25ONJ3V89cVA" name="Debate_View_Edit" label="Debate View / Edit" iconName="wechat" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_cKg3IGk8Ee25ONJ3V89cVA" name="debate" label="Debate" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_4RgSAG5VEe2wNaja8kBvcQ" name="title" label="Title" iconName="text_fields" col="8" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_4RYWMG5VEe2wNaja8kBvcQ" name="status" label="Status" iconName="list" col="2" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -683,15 +683,15 @@
         <inherited xmi:id="_AHilwIXyEe2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_a0UhY32iEe2LTNnGda5kaw" target="_s7U-wHW6Ee2LTNnGda5kaw"/>
-      <form xmi:id="_a0UhZH2iEe2LTNnGda5kaw" name="District_Form" label="Create district" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_a0UhZH2iEe2LTNnGda5kaw" name="District_Form" label="District Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_dMRsQH4bEe2j59SYy0JH0Q" name="name" label="Name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0UhYX2iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </form>
-      <table xmi:id="_a0UhZX2iEe2LTNnGda5kaw" name="District_Table" label="Districts" rowsPerPage="10">
+      <table xmi:id="_a0UhZX2iEe2LTNnGda5kaw" name="District_Table" label="District Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_1ZdVoIX1Ee2kLcMqsIbMgQ" name="county" label="County" iconName="text_fields" visible="true" sort="NONE" dataFeature="_fJB9UIXxEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_1ZcukIX1Ee2kLcMqsIbMgQ" name="city" label="City" iconName="text_fields" visible="true" sort="NONE" dataFeature="_pHXOsIXxEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_dMVWoH4bEe2j59SYy0JH0Q" name="name" label="District name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0UhYX2iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0UhZn2iEe2LTNnGda5kaw" name="District_View" label="District" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_AHgwkIXyEe2kLcMqsIbMgQ">
+      <view xmi:id="_a0UhZn2iEe2LTNnGda5kaw" name="District_View_Edit" label="District View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_AHgwkIXyEe2kLcMqsIbMgQ">
         <components xsi:type="ui:DataField" xmi:id="_dMOo8H4bEe2j59SYy0JH0Q" name="name" label="District name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0UhYX2iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </view>
     </elements>
@@ -757,15 +757,15 @@
         <input xmi:id="_1qwNIIycEe2VSOmaAz6G9Q" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_1qu_AIycEe2VSOmaAz6G9Q"/>
       </operations>
-      <form xmi:id="_qCj_UGksEe25ONJ3V89cVA" name="Issue_Form" label="Create Issue" iconName="ticket-confirmation" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-      <table xmi:id="_qCtwUGksEe25ONJ3V89cVA" name="Issue_Table" label="Issues" iconName="ticket-confirmation" rowsPerPage="10">
+      <form xmi:id="_qCj_UGksEe25ONJ3V89cVA" name="Issue_Form" label="Issue Form" iconName="ticket-confirmation" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_qCtwUGksEe25ONJ3V89cVA" name="Issue_Table" label="Issue Table" iconName="ticket-confirmation" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_BwJHkGkwEe25ONJ3V89cVA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_BxQh4GkwEe25ONJ3V89cVA" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_Bvkf0GkwEe25ONJ3V89cVA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_xJ-K4Nu_Ee2Bgcx6em3jZg" name="numberOfDebates" label="Debates" iconName="wechat" visible="true" sort="NONE" dataFeature="_mz8yQNu_Ee2Bgcx6em3jZg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_27dsIG5VEe2wNaja8kBvcQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_qCa1YGksEe25ONJ3V89cVA" name="Issue_View" label="View / Edit Issue" iconName="ticket-confirmation" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_qCa1YGksEe25ONJ3V89cVA" name="Issue_View_Edit" label="Issue View / Edit" iconName="ticket-confirmation" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_wB_RsG47Ee2siJt-xjHAyw" name="issue" label="Issue" iconName="clipboard" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:TabularReferenceField" xmi:id="_FHpVENvSEe2Bgcx6em3jZg" name="issueType" label="Issue Type" iconName="folder-open" col="8" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_V_8twNu4Ee2Bgcx6em3jZg" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
             <columns xsi:type="ui:DataColumn" xmi:id="_FHp8IdvSEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg"/>
@@ -840,19 +840,19 @@
         <inherited xmi:id="_p79BAGksEe25ONJ3V89cVA"/>
       </attributes>
       <mapping xmi:id="_p5-rEGksEe25ONJ3V89cVA" target="_4hFkkGkPEe25ONJ3V89cVA"/>
-      <form xmi:id="_p5sXMGksEe25ONJ3V89cVA" name="Attachment_Form" label="Create Attachment" iconName="attachment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_p5sXMGksEe25ONJ3V89cVA" name="IssueAttachment_Form" label="IssueAttachment Form" iconName="attachment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:Group" xmi:id="_jr9sAG5CEe2Q6M99rsfqSQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_Rd_fsG5CEe2Q6M99rsfqSQ" name="type" label="Type" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p7lNkGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_Rd7OQG5CEe2Q6M99rsfqSQ" name="link" label="Link" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p6HN8GksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_Rd9qgG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p6zKcGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         </components>
       </form>
-      <table xmi:id="_p51hIGksEe25ONJ3V89cVA" name="Attachment_Table" label="Attachments" iconName="attachment" rowsPerPage="10">
+      <table xmi:id="_p51hIGksEe25ONJ3V89cVA" name="IssueAttachment_Table" label="IssueAttachment Table" iconName="attachment" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_Rd71UG5CEe2Q6M99rsfqSQ" name="link" label="Link" iconName="text_fields" visible="true" sort="NONE" dataFeature="_p6HN8GksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_Rd-RkG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" visible="true" sort="NONE" dataFeature="_p6zKcGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_ReAt0G5CEe2Q6M99rsfqSQ" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_p7lNkGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_p5jNQGksEe25ONJ3V89cVA" name="Attachment_View" label="View / Edit Attachment" iconName="attachment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_p5jNQGksEe25ONJ3V89cVA" name="IssueAttachment_View_Edit" label="IssueAttachment View / Edit" iconName="attachment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_XJwIoG5CEe2Q6M99rsfqSQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_Rd-4oG5CEe2Q6M99rsfqSQ" name="type" label="Type" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p7lNkGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_Rd8cYG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p6zKcGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -874,18 +874,18 @@
         <inherited xmi:id="_qKqLYGksEe25ONJ3V89cVA"/>
       </attributes>
       <mapping xmi:id="_qJfGsGksEe25ONJ3V89cVA" target="_K7jW8GkfEe25ONJ3V89cVA"/>
-      <form xmi:id="_qJLksGksEe25ONJ3V89cVA" name="Category_Form" label="Create Category" iconName="file-tree" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_qJLksGksEe25ONJ3V89cVA" name="IssueCategory_Form" label="IssueCategory Form" iconName="file-tree" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_T0LtQG49Ee2Q6M99rsfqSQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_qJnCgGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_T0Rz4G49Ee2Q6M99rsfqSQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_qKOtkGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_8svcEIdgEe2kLcMqsIbMgQ" name="owner" label="Owner" iconName="account" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qUWS4GksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
           <columns xsi:type="ui:DataColumn" xmi:id="_OLt-8IdiEe2kLcMqsIbMgQ" name="representation" label="Representation" iconName="text_fields" visible="true" sort="NONE" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ"/>
         </components>
       </form>
-      <table xmi:id="_qJVVsGksEe25ONJ3V89cVA" name="Category_Table" label="Categories" iconName="file-tree" rowsPerPage="10">
+      <table xmi:id="_qJVVsGksEe25ONJ3V89cVA" name="IssueCategory_Table" label="IssueCategory Table" iconName="file-tree" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_T0OJgG49Ee2Q6M99rsfqSQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qJnCgGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T0TpEG49Ee2Q6M99rsfqSQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qKOtkGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_qJBzsGksEe25ONJ3V89cVA" name="Category_View" label="View / Edit Category" iconName="file-tree" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_qJBzsGksEe25ONJ3V89cVA" name="IssueCategory_View_Edit" label="IssueCategory View / Edit" iconName="file-tree" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_T0J4EG49Ee2Q6M99rsfqSQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_qJnCgGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_T0QlwG49Ee2Q6M99rsfqSQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_qKOtkGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_8sinwIdgEe2kLcMqsIbMgQ" name="owner" label="Owner" iconName="account" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qUWS4GksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10">
@@ -911,9 +911,9 @@
         <inherited xmi:id="_g_lZsId6Ee2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_a3_JUId6Ee2kLcMqsIbMgQ" target="_jjCdUGkPEe25ONJ3V89cVA"/>
-      <form xmi:id="_TDZysId6Ee2kLcMqsIbMgQ" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-      <table xmi:id="_TDf5UId6Ee2kLcMqsIbMgQ" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10"/>
-      <view xmi:id="_TDTsEId6Ee2kLcMqsIbMgQ" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+      <form xmi:id="_TDZysId6Ee2kLcMqsIbMgQ" name="IssueDebate_Form" label="IssueDebate Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_TDf5UId6Ee2kLcMqsIbMgQ" name="IssueDebate_Table" label="IssueDebate Table" rowsPerPage="10"/>
+      <view xmi:id="_TDTsEId6Ee2kLcMqsIbMgQ" name="IssueDebate_View_Edit" label="IssueDebate View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_J4ArkNu4Ee2Bgcx6em3jZg" name="IssueType" createable="false" updateable="false" deleteable="false">
       <attributes xsi:type="structure:DataMember" xmi:id="_R2x48Nu4Ee2Bgcx6em3jZg" name="description" dataType="_7D8NzGkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_wigDkNuxEe2Bgcx6em3jZg" getterExpression="" identifier="false" memberType="MAPPED">
@@ -929,19 +929,19 @@
         <inherited xmi:id="_vOIZMNvTEe2Bgcx6em3jZg"/>
       </attributes>
       <mapping xmi:id="_PMrqMNu4Ee2Bgcx6em3jZg" target="_q7APkNuxEe2Bgcx6em3jZg"/>
-      <form xmi:id="_J4WCwNu4Ee2Bgcx6em3jZg" name="IssueType_Form" label="Create Issue Type" iconName="folder-open" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_J4WCwNu4Ee2Bgcx6em3jZg" name="IssueType_Form" label="IssueType Form" iconName="folder-open" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:Group" xmi:id="_19au8NvDEe2Bgcx6em3jZg" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_03iE8dvDEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_xWzhcOMcEe2Bgcx6em3jZg" name="voteType" label="VoteType" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_KsdXkOMcEe2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_03iE8NvDEe2Bgcx6em3jZg" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_R2x48Nu4Ee2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         </components>
       </form>
-      <table xmi:id="_J4eloNu4Ee2Bgcx6em3jZg" name="IssueType_Table" label="Issue Types" iconName="folder-open" rowsPerPage="10">
+      <table xmi:id="_J4eloNu4Ee2Bgcx6em3jZg" name="IssueType_Table" label="IssueType Table" iconName="folder-open" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_DaKn8dvEEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_mCUjMOMhEe2Bgcx6em3jZg" name="voteType" label="Default vote type" iconName="list" visible="true" sort="NONE" dataFeature="_KsdXkOMcEe2Bgcx6em3jZg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DaKn8NvEEe2Bgcx6em3jZg" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_R2x48Nu4Ee2Bgcx6em3jZg"/>
       </table>
-      <view xmi:id="_J4MRwNu4Ee2Bgcx6em3jZg" name="IssueType_View" label="Issue Type View/Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_J4MRwNu4Ee2Bgcx6em3jZg" name="IssueType_View_Edit" label="IssueType View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_m1l0MNvDEe2Bgcx6em3jZg" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_g2oicdvDEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_XP9UYOMcEe2Bgcx6em3jZg" name="voteType" label="VoteType" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_KsdXkOMcEe2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -998,7 +998,7 @@
         <input xmi:id="_TlnJ0YgoEe2u0fVmwtP5bA" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_TlnJ0ogoEe2u0fVmwtP5bA"/>
       </operations>
-      <form xmi:id="_qLaZUGksEe25ONJ3V89cVA" name="Pro_Form" label="Create Pro" iconName="sticker-plus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_qLaZUGksEe25ONJ3V89cVA" name="Pro_Form" label="Pro Form" iconName="sticker-plus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_C9esgG5WEe2wNaja8kBvcQ" name="createdByName" label="CreatedByName" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_17TzgG5REe2Q6M99rsfqSQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3nwskH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TOw6sH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3n7rsH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TO2aQH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1043,7 +1043,7 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_ikLbQIrjEe2VSOmaAz6G9Q" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
         </components>
       </form>
-      <table xmi:id="_qLrfEGksEe25ONJ3V89cVA" name="Pro_Table" label="Pros" iconName="sticker-plus" rowsPerPage="10">
+      <table xmi:id="_qLrfEGksEe25ONJ3V89cVA" name="Pro_Table" label="Pro Table" iconName="sticker-plus" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_C9hIwG5WEe2wNaja8kBvcQ" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_17TzgG5REe2Q6M99rsfqSQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3n0-AH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_TOw6sH2hEe2LTNnGda5kaw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3n_WEH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO2aQH2hEe2LTNnGda5kaw"/>
@@ -1051,7 +1051,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_eJb8QIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_eJg0wIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
       </table>
-      <view xmi:id="_qLQBQGksEe25ONJ3V89cVA" name="Pro_View" label="View / Edit Pro" iconName="sticker-plus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_qLQBQGksEe25ONJ3V89cVA" name="Pro_View_Edit" label="Pro View / Edit" iconName="sticker-plus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_OUB-QIfiEe2u0fVmwtP5bA" name="pro" label="Pro" iconName="chat-plus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_3oDAcH4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" col="6" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TO8g4H2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_3ntCMH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TOw6sH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1131,7 +1131,7 @@
         <input xmi:id="_RhjkgI4UEe29qs15q2b6yw" lower="1" upper="1" target="_LEKjoH5YEe2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_RhiWYI4UEe29qs15q2b6yw"/>
       </operations>
-      <form xmi:id="_-dl4wH4XEe2cB7_PsKXsHQ" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_-dl4wH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_Form" label="RatingVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_DZSukIXrEe2kLcMqsIbMgQ" name="minRateValue" label="MinRateValue" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_DZY1MIXrEe2kLcMqsIbMgQ" name="maxRateValue" label="MaxRateValue" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_DZfi4IXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-eROMH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1143,7 +1143,7 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_DaCVcIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_1F3Js26HEe2wNaja8kBvcQ"/>
         </components>
       </form>
-      <table xmi:id="_-dsmcH4XEe2cB7_PsKXsHQ" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+      <table xmi:id="_-dsmcH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_Table" label="RatingVoteDefinition Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_DZVK0IXrEe2kLcMqsIbMgQ" name="minRateValue" label="MinRateValue" iconName="dialpad" visible="true" sort="NONE" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZbRcIXrEe2kLcMqsIbMgQ" name="maxRateValue" label="MaxRateValue" iconName="dialpad" visible="true" sort="NONE" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZhYEIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-eROMH4XEe2cB7_PsKXsHQ"/>
@@ -1152,7 +1152,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_DZzr8IXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-ezZsH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZ5ykIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-e-_4H4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_DZQSUIXrEe2kLcMqsIbMgQ" name="minRateValue" label="MinRateValue" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_DZXAAIXrEe2kLcMqsIbMgQ" name="maxRateValue" label="MaxRateValue" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_DZdGoIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-eROMH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1186,21 +1186,21 @@
         <input xmi:id="_IqQQgH5ZEe2kLcMqsIbMgQ" lower="1" upper="1" target="_Xwdl4G6bEe2wNaja8kBvcQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="DERIVED" rangeExpression="self.voteSelections"/>
         <inherited xmi:id="__FumQH5YEe2kLcMqsIbMgQ"/>
       </operations>
-      <form xmi:id="_-cNYsH4XEe2cB7_PsKXsHQ" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_-cNYsH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_Form" label="SelectAnswerVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_A-oqAIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-cdQUH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A-36kIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-co2gH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A_GkEIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-c0csH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A_VNkIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-dAp8H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A_j3EIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-dMQIH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </form>
-      <table xmi:id="_-cUGYH4XEe2cB7_PsKXsHQ" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+      <table xmi:id="_-cUGYH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_Table" label="SelectAnswerVoteDefinition Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_A-uJkIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-cdQUH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A-8zEIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_-co2gH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A_LckIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-c0csH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A_aGEIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-dAp8H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A_rL0IXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-dMQIH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-cGrAH4XEe2cB7_PsKXsHQ" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_-cGrAH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_A-jKcIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-cdQUH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A-zCEIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-co2gH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A_BrkIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-c0csH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1220,18 +1220,18 @@
         <inherited xmi:id="_p-eJgGksEe25ONJ3V89cVA"/>
       </attributes>
       <mapping xmi:id="_p9TE0GksEe25ONJ3V89cVA" target="_H7Q58GkYEe25ONJ3V89cVA"/>
-      <form xmi:id="_p9AJ4GksEe25ONJ3V89cVA" name="Vote_Form" label="Create Vote" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_p9AJ4GksEe25ONJ3V89cVA" name="SimpleVote_Form" label="SimpleVote Form" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:Group" xmi:id="_5-_pMG5CEe2Q6M99rsfqSQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_VQSXUGk5Ee25ONJ3V89cVA" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p9bnsGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_VQXP0Gk5Ee25ONJ3V89cVA" name="type" label="Type" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p-OR4GksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         </components>
         <components xsi:type="ui:Group" xmi:id="_7txfMG5CEe2Q6M99rsfqSQ" name="group_2" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE"/>
       </form>
-      <table xmi:id="_p9JT0GksEe25ONJ3V89cVA" name="Vote_Table" label="Votes" iconName="vote" rowsPerPage="10">
+      <table xmi:id="_p9JT0GksEe25ONJ3V89cVA" name="SimpleVote_Table" label="SimpleVote Table" iconName="vote" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_VQUMgGk5Ee25ONJ3V89cVA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_p9bnsGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_VQZFAGk5Ee25ONJ3V89cVA" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_p-OR4GksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_p81x0GksEe25ONJ3V89cVA" name="Vote_View" label="Create / View Vote" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_p81x0GksEe25ONJ3V89cVA" name="SimpleVote_View_Edit" label="SimpleVote View / Edit" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_GLaiwG5DEe2Q6M99rsfqSQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_VQQiIGk5Ee25ONJ3V89cVA" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p9bnsGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_VQWBsGk5Ee25ONJ3V89cVA" name="type" label="Type" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p-OR4GksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1286,7 +1286,7 @@
         <inherited xmi:id="_QruTAIdhEe2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_p2B_MGksEe25ONJ3V89cVA" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-      <form xmi:id="_p1wSYGksEe25ONJ3V89cVA" name="User_Form" label="Create User" iconName="account" layout="VERTICAL" horizontal="CENTER" vertical="CENTER" frame="false">
+      <form xmi:id="_p1wSYGksEe25ONJ3V89cVA" name="User_Form" label="User Form" iconName="account" layout="VERTICAL" horizontal="CENTER" vertical="CENTER" frame="false">
         <components xsi:type="ui:Group" xmi:id="_j3ajUGk6Ee25ONJ3V89cVA" name="security" label="Security" iconName="security" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_erqjwH4NEe2cB7_PsKXsHQ" name="userName" label="Username" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_B8tj8GkwEe25ONJ3V89cVA" name="isAdmin" label="Has admin access" iconName="check_box" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p4NJcGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1333,7 +1333,7 @@
           </components>
         </components>
       </form>
-      <table xmi:id="_p141QGksEe25ONJ3V89cVA" name="User_Table" label="Users" iconName="account" rowsPerPage="10">
+      <table xmi:id="_p141QGksEe25ONJ3V89cVA" name="User_Table" label="User Table" iconName="account" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_ertAAH4NEe2cB7_PsKXsHQ" name="userName" label="Username" iconName="text_fields" visible="true" sort="NONE" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_B86YQGkwEe25ONJ3V89cVA" name="isAdmin" label="Has admin access" iconName="check_box" visible="true" sort="NONE" dataFeature="_p4NJcGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_B6R7AGkwEe25ONJ3V89cVA" name="firstName" label="First name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_p2JT8GksEe25ONJ3V89cVA"/>
@@ -1342,7 +1342,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_B8MmkGkwEe25ONJ3V89cVA" name="email" label="Email" iconName="text_fields" visible="true" sort="NONE" dataFeature="_p3jCIGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_B9mUwGkwEe25ONJ3V89cVA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_p4zmYGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_p1nIcGksEe25ONJ3V89cVA" name="User_View" label="View / Edit User" iconName="account" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_p1nIcGksEe25ONJ3V89cVA" name="User_View_Edit" label="User View / Edit" iconName="account" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_oUYE0IXsEe2kLcMqsIbMgQ" name="Security" label="Security" iconName="security" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_erlrQH4NEe2cB7_PsKXsHQ" name="userName" label="Username" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_B8apAGkwEe25ONJ3V89cVA" name="isAdmin" label="Has admin access" iconName="check_box" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p4NJcGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1463,7 +1463,7 @@
         <input xmi:id="_7fYJ8I4XEe29qs15q2b6yw" lower="1" upper="1" target="_-1U_0HWyEe2LTNnGda5kaw" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_7fW70I4XEe29qs15q2b6yw"/>
       </operations>
-      <form xmi:id="_-gL5wH4XEe2cB7_PsKXsHQ" name="VoteDefinitiom_Form" label="Create Vote Definition" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_-gL5wH4XEe2cB7_PsKXsHQ" name="VoteDefinition_Form" label="VoteDefinition Form" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_T5VWYI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_T5dSMI4jEe29qs15q2b6yw" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_T5l1EI4jEe29qs15q2b6yw" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1480,7 +1480,7 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_bmQB8I4nEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
         </components>
       </form>
-      <table xmi:id="_-gSncH4XEe2cB7_PsKXsHQ" name="VoteDefinition_Table" label="Vote Definitions" iconName="vote" rowsPerPage="10">
+      <table xmi:id="_-gSncH4XEe2cB7_PsKXsHQ" name="VoteDefinition_Table" label="VoteDefinition Table" iconName="vote" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_OOx5YOR9Ee20cv3f2msZXg" name="voteType" label="VoteType" iconName="list" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T5YZsI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_OOwEMOR9Ee20cv3f2msZXg" name="numberOfVotes" label="NumberOfVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
@@ -1489,7 +1489,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_T58aYI4jEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T5o4YI4jEe29qs15q2b6yw" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-gFzIH4XEe2cB7_PsKXsHQ" name="VoteDefinition_View" label="View / Edit Vote Definition" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_-gFzIH4XEe2cB7_PsKXsHQ" name="VoteDefinition_View_Edit" label="VoteDefinition View / Edit" iconName="vote" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_3IYooI4kEe29qs15q2b6yw" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_T5STEI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_T5260I4jEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1542,8 +1542,8 @@
         <inherited xmi:id="_0O2BEOSGEe20cv3f2msZXg"/>
       </attributes>
       <mapping xmi:id="_32cmcORxEe2Bgcx6em3jZg" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
-      <form xmi:id="_zJUI8ORxEe2Bgcx6em3jZg" name="VoteEntry_Form" label="Create Vote Entry" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-      <table xmi:id="_zJZogORxEe2Bgcx6em3jZg" name="VoteEntry_Table" label="Vote Entries" rowsPerPage="10">
+      <form xmi:id="_zJUI8ORxEe2Bgcx6em3jZg" name="VoteEntry_Form" label="VoteEntry Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_zJZogORxEe2Bgcx6em3jZg" name="VoteEntry_Table" label="VoteEntry Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_-W2L0OSGEe20cv3f2msZXg" name="userName" label="UserName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_0O0y8OSGEe20cv3f2msZXg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_C6UMcOSGEe20cv3f2msZXg" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_eL6L0OR6Ee20cv3f2msZXg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_C6VakOSGEe20cv3f2msZXg" name="voteTitle" label="VoteTitle" iconName="text_fields" visible="true" sort="NONE" dataFeature="_p6DYgOR7Ee20cv3f2msZXg"/>
@@ -1551,7 +1551,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_C6UzgeSGEe20cv3f2msZXg" name="issueTitle" label="IssueTitle" iconName="text_fields" visible="true" sort="NONE" dataFeature="_DGC8UOR7Ee20cv3f2msZXg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_C6UzguSGEe20cv3f2msZXg" name="voteStatus" label="VoteStatus" iconName="list" visible="true" sort="NONE" dataFeature="_wU8_YOR7Ee20cv3f2msZXg"/>
       </table>
-      <view xmi:id="_zJOpYORxEe2Bgcx6em3jZg" name="VoteEntry_View" label="View / Edit Vote Definition" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+      <view xmi:id="_zJOpYORxEe2Bgcx6em3jZg" name="VoteEntry_View_Edit" label="VoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-apScX4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition" createable="false" updateable="false" deleteable="false">
       <attributes xsi:type="structure:DataMember" xmi:id="_-bGlcH4XEe2cB7_PsKXsHQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="MAPPED">
@@ -1574,21 +1574,21 @@
         <input xmi:id="_gxx6sH4YEe2cB7_PsKXsHQ" lower="1" upper="1" target="_-1U_0HWyEe2LTNnGda5kaw" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY"/>
         <inherited xmi:id="_gxxToH4YEe2cB7_PsKXsHQ"/>
       </operations>
-      <form xmi:id="_-a2t0H4XEe2cB7_PsKXsHQ" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_-a2t0H4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_Form" label="YesNoAbstainVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_A9CukIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bGlcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A9TNQIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bRkkH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A9zjkIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bdx0H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A-DbMIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bow8H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A-TS0IXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </form>
-      <table xmi:id="_-a9bgH4XEe2cB7_PsKXsHQ" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+      <table xmi:id="_-a9bgH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_Table" label="YesNoAbstainVoteDefinition Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_A9IOIIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-bGlcH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A9Ys0IXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_-bRkkH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A95DIIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-bdx0H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A-I6wIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-bow8H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A-b1sIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_A89PAIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bGlcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A9NtsIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bRkkH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A9uEAIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bdx0H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1618,21 +1618,21 @@
         <input xmi:id="_fNgEgH4YEe2cB7_PsKXsHQ" lower="1" upper="1" target="_-1R8gHWyEe2LTNnGda5kaw" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
         <inherited xmi:id="_fNfdcH4YEe2cB7_PsKXsHQ"/>
       </operations>
-      <form xmi:id="_-Zs3QH4XEe2cB7_PsKXsHQ" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+      <form xmi:id="_-Zs3QH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_Form" label="YesNoVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
         <components xsi:type="ui:DataField" xmi:id="_A7pAYIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A76tMIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A8OPMIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A8et4IXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A8vMkIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </form>
-      <table xmi:id="_-Zy94H4XEe2cB7_PsKXsHQ" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+      <table xmi:id="_-Zy94H4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_Table" label="YesNoVoteDefinition Table" rowsPerPage="10">
         <columns xsi:type="ui:DataColumn" xmi:id="_A7uf8IXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A7_lsIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A8TuwIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A8kNcIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A80sIIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_A7hEkIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A71NoIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_A8IvoIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -1816,7 +1816,7 @@
     </elements>
   </elements>
   <elements xsi:type="namespace:Package" xmi:id="_7D8NwWkNEe25ONJ3V89cVA" name="types">
-    <elements xsi:type="type:BinaryType" xmi:id="_4spe4GkQEe25ONJ3V89cVA" name="Binary" mimeTypes="_lWRgEGkQEe25ONJ3V89cVA _qDcZ0GkQEe25ONJ3V89cVA" maxFileSize="0"/>
+    <elements xsi:type="type:BinaryType" xmi:id="_4spe4GkQEe25ONJ3V89cVA" name="Binary" mimeTypes="_lWRgEGkQEe25ONJ3V89cVA" maxFileSize="0"/>
     <elements xsi:type="type:BooleanType" xmi:id="_7D8Nx2kNEe25ONJ3V89cVA" name="Boolean"/>
     <elements xsi:type="type:DateType" xmi:id="_7D8NyGkNEe25ONJ3V89cVA" name="Date"/>
     <elements xsi:type="type:NumericType" xmi:id="_7D8NxWkNEe25ONJ3V89cVA" name="Double" precision="15" scale="4"/>
@@ -1839,9 +1839,9 @@
       <inherited xmi:id="_qeoS0HW6Ee2LTNnGda5kaw"/>
     </attributes>
     <mapping xmi:id="_knLXQHW6Ee2LTNnGda5kaw" target="_knKwMHW6Ee2LTNnGda5kaw"/>
-    <form xmi:id="_kndEEHW6Ee2LTNnGda5kaw" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_knkY0HW6Ee2LTNnGda5kaw" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_knVvUHW6Ee2LTNnGda5kaw" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_kndEEHW6Ee2LTNnGda5kaw" name="City_Form" label="City Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_knkY0HW6Ee2LTNnGda5kaw" name="City_Table" label="City Table" rowsPerPage="10"/>
+    <view xmi:id="_knVvUHW6Ee2LTNnGda5kaw" name="City_View_Edit" label="City View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_2N6EMGkTEe25ONJ3V89cVA" name="Comment" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ycp_IGkeEe25ONJ3V89cVA" lower="0" upper="-1" target="_H7Q58GkYEe25ONJ3V89cVA" name="votes" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="COMPOSITION" memberType="STORED" rangeType="ANY" binding="_ycp_IGkeEe25ONJ3V89cVA" getterExpression="">
@@ -1863,9 +1863,9 @@
     <operations xmi:id="_dZMi0H2rEe27Ga2Ojs4Fgg" name="voteDown" customImplementation="false" body="var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any();&#xA;var edemokracia::types::Integer count =  this.votes!filter(v | v.user.userName == user.userName)!count();&#xA;&#xA;if (count == 0) {&#xA;    this.votes += new edemokracia::SimpleVote(user = user, type = edemokracia::SimpleVoteType#DOWN);&#xA;}&#xA;&#xA;&#xA;" stateful="true" operationType="INSTANCE" binding="" initializer="false">
       <inherited xmi:id="_dZNJ4H2rEe27Ga2Ojs4Fgg"/>
     </operations>
-    <form xmi:id="_2OBY8GkTEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_2OD1MGkTEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_2N_jwGkTEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_2OBY8GkTEe25ONJ3V89cVA" name="Comment_Form" label="Comment Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_2OD1MGkTEe25ONJ3V89cVA" name="Comment_Table" label="Comment Table" rowsPerPage="10"/>
+    <view xmi:id="_2N_jwGkTEe25ONJ3V89cVA" name="Comment_View_Edit" label="Comment View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_5yNG0GkSEe25ONJ3V89cVA" name="Con" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_rQwx4IrYEe2u0fVmwtP5bA" lower="0" upper="-1" target="_2N6EMGkTEe25ONJ3V89cVA" name="comments" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="COMPOSITION" memberType="STORED" rangeType="ANY" binding="_rQwx4IrYEe2u0fVmwtP5bA" getterExpression="">
@@ -1907,9 +1907,9 @@
       <input xmi:id="_UH-FcYgnEe2u0fVmwtP5bA" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_UH-FcognEe2u0fVmwtP5bA"/>
     </operations>
-    <form xmi:id="_5yUbkGkSEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_5yWQwGkSEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_5yR_UGkSEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_5yUbkGkSEe25ONJ3V89cVA" name="Con_Form" label="Con Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_5yWQwGkSEe25ONJ3V89cVA" name="Con_Table" label="Con Table" rowsPerPage="10"/>
+    <view xmi:id="_5yR_UGkSEe25ONJ3V89cVA" name="Con_View_Edit" label="Con View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_uBoOUH2jEe2LTNnGda5kaw" name="County" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_xk7V8H2jEe2LTNnGda5kaw" lower="0" upper="-1" target="_knKwMHW6Ee2LTNnGda5kaw" name="cities" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="COMPOSITION" memberType="STORED" rangeType="ANY" binding="_xk7V8H2jEe2LTNnGda5kaw" getterExpression="">
@@ -1919,9 +1919,9 @@
       <inherited xmi:id="_wKeKIX2jEe2LTNnGda5kaw"/>
     </attributes>
     <mapping xmi:id="_uBo1YH2jEe2LTNnGda5kaw" target="_uBoOUH2jEe2LTNnGda5kaw"/>
-    <form xmi:id="_uB8-cH2jEe2LTNnGda5kaw" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_uCCeAH2jEe2LTNnGda5kaw" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_uB230H2jEe2LTNnGda5kaw" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_uB8-cH2jEe2LTNnGda5kaw" name="County_Form" label="County Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_uCCeAH2jEe2LTNnGda5kaw" name="County_Table" label="County Table" rowsPerPage="10"/>
+    <view xmi:id="_uB230H2jEe2LTNnGda5kaw" name="County_View_Edit" label="County View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_jjCdUGkPEe25ONJ3V89cVA" name="Debate" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_wdgIoGkPEe25ONJ3V89cVA" lower="0" upper="1" target="_GDYW0GkOEe25ONJ3V89cVA" name="issue" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" partner="_wdeTcGkPEe25ONJ3V89cVA" primary="false">
@@ -1968,18 +1968,18 @@
       <input xmi:id="_GklRAIe7Ee2kLcMqsIbMgQ" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_BIHBQIe7Ee2kLcMqsIbMgQ"/>
     </operations>
-    <form xmi:id="_jjJyEGkPEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_jjMOUGkPEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_jjHV0GkPEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_jjJyEGkPEe25ONJ3V89cVA" name="Debate_Form" label="Debate Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_jjMOUGkPEe25ONJ3V89cVA" name="Debate_Table" label="Debate Table" rowsPerPage="10"/>
+    <view xmi:id="_jjHV0GkPEe25ONJ3V89cVA" name="Debate_View_Edit" label="Debate View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_s7U-wHW6Ee2LTNnGda5kaw" name="District" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_vOLLIHW6Ee2LTNnGda5kaw" name="name" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_vOLLIHW6Ee2LTNnGda5kaw" getterExpression="" identifier="false" memberType="STORED">
       <inherited xmi:id="_vONnYHW6Ee2LTNnGda5kaw"/>
     </attributes>
     <mapping xmi:id="_s7Vl0HW6Ee2LTNnGda5kaw" target="_s7U-wHW6Ee2LTNnGda5kaw"/>
-    <form xmi:id="_s7mEgHW6Ee2LTNnGda5kaw" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_s7syMHW6Ee2LTNnGda5kaw" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_s7evwHW6Ee2LTNnGda5kaw" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_s7mEgHW6Ee2LTNnGda5kaw" name="District_Form" label="District Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_s7syMHW6Ee2LTNnGda5kaw" name="District_Table" label="District Table" rowsPerPage="10"/>
+    <view xmi:id="_s7evwHW6Ee2LTNnGda5kaw" name="District_View_Edit" label="District View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_GDYW0GkOEe25ONJ3V89cVA" name="Issue" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_wdeTcGkPEe25ONJ3V89cVA" lower="0" upper="-1" target="_jjCdUGkPEe25ONJ3V89cVA" name="debates" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" partner="_wdgIoGkPEe25ONJ3V89cVA" primary="true">
@@ -2037,9 +2037,9 @@
       <input xmi:id="_rZdjgYycEe2VSOmaAz6G9Q" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_rZdjgoycEe2VSOmaAz6G9Q"/>
     </operations>
-    <form xmi:id="_GDj9AGkOEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_GDoOcGkOEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_GDfrkGkOEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_GDj9AGkOEe25ONJ3V89cVA" name="Issue_Form" label="Issue Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_GDoOcGkOEe25ONJ3V89cVA" name="Issue_Table" label="Issue Table" rowsPerPage="10"/>
+    <view xmi:id="_GDfrkGkOEe25ONJ3V89cVA" name="Issue_View_Edit" label="Issue View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_4hFkkGkPEe25ONJ3V89cVA" name="IssueAttachment" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_eCxdQGkQEe25ONJ3V89cVA" name="link" dataType="_7D8NzWkNEe25ONJ3V89cVA" defaultExpression="" binding="_eCxdQGkQEe25ONJ3V89cVA" getterExpression="" identifier="false" memberType="STORED">
@@ -2052,9 +2052,9 @@
       <inherited xmi:id="_7mBGcGkVEe25ONJ3V89cVA"/>
     </attributes>
     <mapping xmi:id="_4hGLoGkPEe25ONJ3V89cVA" target="_4hFkkGkPEe25ONJ3V89cVA"/>
-    <form xmi:id="_4hM5UGkPEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_4hPVkGkPEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_4hKdEGkPEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_4hM5UGkPEe25ONJ3V89cVA" name="IssueAttachment_Form" label="IssueAttachment Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_4hPVkGkPEe25ONJ3V89cVA" name="IssueAttachment_Table" label="IssueAttachment Table" rowsPerPage="10"/>
+    <view xmi:id="_4hKdEGkPEe25ONJ3V89cVA" name="IssueAttachment_View_Edit" label="IssueAttachment View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_K7jW8GkfEe25ONJ3V89cVA" name="IssueCategory" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_RvjaUGkfEe25ONJ3V89cVA" lower="0" upper="-1" target="_K7jW8GkfEe25ONJ3V89cVA" name="subcategories" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="COMPOSITION" memberType="STORED" rangeType="ANY" binding="_RvjaUGkfEe25ONJ3V89cVA" getterExpression="">
@@ -2070,9 +2070,9 @@
       <inherited xmi:id="_PfZVkGkfEe25ONJ3V89cVA"/>
     </attributes>
     <mapping xmi:id="_K7j-AGkfEe25ONJ3V89cVA" target="_K7jW8GkfEe25ONJ3V89cVA"/>
-    <form xmi:id="_K7qrsGkfEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_K7tH8GkfEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_K7o2gGkfEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_K7qrsGkfEe25ONJ3V89cVA" name="IssueCategory_Form" label="IssueCategory Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_K7tH8GkfEe25ONJ3V89cVA" name="IssueCategory_Table" label="IssueCategory Table" rowsPerPage="10"/>
+    <view xmi:id="_K7o2gGkfEe25ONJ3V89cVA" name="IssueCategory_View_Edit" label="IssueCategory View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_q7APkNuxEe2Bgcx6em3jZg" name="IssueType" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_uCwqsNuxEe2Bgcx6em3jZg" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_uCwqsNuxEe2Bgcx6em3jZg" getterExpression="" identifier="false" memberType="STORED">
@@ -2085,9 +2085,9 @@
       <inherited xmi:id="_-8UxYOMbEe2Bgcx6em3jZg"/>
     </attributes>
     <mapping xmi:id="_q7KAkNuxEe2Bgcx6em3jZg" target="_q7APkNuxEe2Bgcx6em3jZg"/>
-    <form xmi:id="_q70u8NuxEe2Bgcx6em3jZg" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_q8AVINuxEe2Bgcx6em3jZg" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_q7jpMNuxEe2Bgcx6em3jZg" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_q70u8NuxEe2Bgcx6em3jZg" name="IssueType_Form" label="IssueType Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_q8AVINuxEe2Bgcx6em3jZg" name="IssueType_Table" label="IssueType Table" rowsPerPage="10"/>
+    <view xmi:id="_q7jpMNuxEe2Bgcx6em3jZg" name="IssueType_View_Edit" label="IssueType View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_3Z7A0GkSEe25ONJ3V89cVA" name="Pro" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_n1GjUIrYEe2u0fVmwtP5bA" lower="0" upper="-1" target="_2N6EMGkTEe25ONJ3V89cVA" name="comments" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="COMPOSITION" memberType="STORED" rangeType="ANY" binding="_n1GjUIrYEe2u0fVmwtP5bA" getterExpression="">
@@ -2129,9 +2129,9 @@
       <input xmi:id="_4VOZ4Ie7Ee2kLcMqsIbMgQ" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_zlmpEIe7Ee2kLcMqsIbMgQ"/>
     </operations>
-    <form xmi:id="_3aBugGkSEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_3aDjsGkSEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_3Z_5UGkSEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_3aBugGkSEe25ONJ3V89cVA" name="Pro_Form" label="Pro Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_3aDjsGkSEe25ONJ3V89cVA" name="Pro_Table" label="Pro Table" rowsPerPage="10"/>
+    <view xmi:id="_3Z_5UGkSEe25ONJ3V89cVA" name="Pro_View_Edit" label="Pro View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_FKa1oG6MEe2wNaja8kBvcQ" name="RatingVoteDefinition" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_seo_kHW2Ee2LTNnGda5kaw" name="minRateValue" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" binding="_seo_kHW2Ee2LTNnGda5kaw" getterExpression="" identifier="false" memberType="STORED">
@@ -2142,9 +2142,9 @@
     </attributes>
     <generalizations xmi:id="_Z4VPIG6MEe2wNaja8kBvcQ" target="_0n43QG5mEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_FKbcsG6MEe2wNaja8kBvcQ" target="_FKa1oG6MEe2wNaja8kBvcQ"/>
-    <form xmi:id="_FKr7YG6MEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_FKxa8G6MEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_FKjYgG6MEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_FKr7YG6MEe2wNaja8kBvcQ" name="RatingVoteDefinition_Form" label="RatingVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_FKxa8G6MEe2wNaja8kBvcQ" name="RatingVoteDefinition_Table" label="RatingVoteDefinition Table" rowsPerPage="10"/>
+    <view xmi:id="_FKjYgG6MEe2wNaja8kBvcQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_V230wG6gEe2wNaja8kBvcQ" name="RatingVoteEntry" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_dR4hgHW2Ee2LTNnGda5kaw" name="value" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" binding="_dR4hgHW2Ee2LTNnGda5kaw" getterExpression="" identifier="false" memberType="STORED">
@@ -2152,9 +2152,9 @@
     </attributes>
     <generalizations xmi:id="_k2l8YG6gEe2wNaja8kBvcQ" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_V25p8G6gEe2wNaja8kBvcQ" target="_V230wG6gEe2wNaja8kBvcQ"/>
-    <form xmi:id="_V3F3MG6gEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_V3KIoG6gEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_V3A-sG6gEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_V3F3MG6gEe2wNaja8kBvcQ" name="RatingVoteEntry_Form" label="RatingVoteEntry Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_V3KIoG6gEe2wNaja8kBvcQ" name="RatingVoteEntry_Table" label="RatingVoteEntry Table" rowsPerPage="10"/>
+    <view xmi:id="_V3A-sG6gEe2wNaja8kBvcQ" name="RatingVoteEntry_View_Edit" label="RatingVoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_-PRocG6LEe2wNaja8kBvcQ" name="SelectAnswerVoteDefinition" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_seKHgG6cEe2wNaja8kBvcQ" lower="0" upper="-1" target="_Xwdl4G6bEe2wNaja8kBvcQ" name="voteSelections" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="COMPOSITION" memberType="STORED" rangeType="ANY" binding="_seKHgG6cEe2wNaja8kBvcQ" getterExpression="">
@@ -2162,9 +2162,9 @@
     </relations>
     <generalizations xmi:id="_VYUnoG6MEe2wNaja8kBvcQ" target="_0n43QG5mEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_-PS2kG6LEe2wNaja8kBvcQ" target="_-PRocG6LEe2wNaja8kBvcQ"/>
-    <form xmi:id="_-PnmsG6LEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_-PtGQG6LEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_-PhgEG6LEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_-PnmsG6LEe2wNaja8kBvcQ" name="SelectAnswerVoteDefinition_Form" label="SelectAnswerVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_-PtGQG6LEe2wNaja8kBvcQ" name="SelectAnswerVoteDefinition_Table" label="SelectAnswerVoteDefinition Table" rowsPerPage="10"/>
+    <view xmi:id="_-PhgEG6LEe2wNaja8kBvcQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_QmC0UG6gEe2wNaja8kBvcQ" name="SelectAnswerVoteEntry" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_fvDlYG6hEe2wNaja8kBvcQ" lower="1" upper="1" target="_Xwdl4G6bEe2wNaja8kBvcQ" name="value" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" binding="_fvDlYG6hEe2wNaja8kBvcQ" getterExpression="">
@@ -2172,9 +2172,9 @@
     </relations>
     <generalizations xmi:id="_ji0nYG6gEe2wNaja8kBvcQ" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_QmECcG6gEe2wNaja8kBvcQ" target="_QmC0UG6gEe2wNaja8kBvcQ"/>
-    <form xmi:id="_QmPBkG6gEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_QmTTAG6gEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_QmKwIG6gEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_QmPBkG6gEe2wNaja8kBvcQ" name="SelectAnswerVoteEntry_Form" label="SelectAnswerVoteEntry Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_QmTTAG6gEe2wNaja8kBvcQ" name="SelectAnswerVoteEntry_Table" label="SelectAnswerVoteEntry Table" rowsPerPage="10"/>
+    <view xmi:id="_QmKwIG6gEe2wNaja8kBvcQ" name="SelectAnswerVoteEntry_View_Edit" label="SelectAnswerVoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_Xwdl4G6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_ca44MG6cEe2wNaja8kBvcQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_ca44MG6cEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="STORED">
@@ -2184,12 +2184,12 @@
       <inherited xmi:id="_e9L10G6cEe2wNaja8kBvcQ"/>
     </attributes>
     <mapping xmi:id="_Xwe0AG6bEe2wNaja8kBvcQ" target="_Xwdl4G6bEe2wNaja8kBvcQ"/>
-    <form xmi:id="_XwtdgG6bEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_Xwy9EG6bEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10">
+    <form xmi:id="_XwtdgG6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_Form" label="SelectAnswerVoteSelection Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_Xwy9EG6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_Table" label="SelectAnswerVoteSelection Table" rowsPerPage="10">
       <columns xsi:type="ui:DataColumn" xmi:id="_3BKsUai9Ee2w1v3ZEBj6HA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_ca44MG6cEe2wNaja8kBvcQ"/>
       <columns xsi:type="ui:DataColumn" xmi:id="_3BKsUKi9Ee2w1v3ZEBj6HA" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_e9LOwG6cEe2wNaja8kBvcQ"/>
     </table>
-    <view xmi:id="_XwnW4G6bEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <view xmi:id="_XwnW4G6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_View_Edit" label="SelectAnswerVoteSelection View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_H7Q58GkYEe25ONJ3V89cVA" name="SimpleVote" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_gil1AWkYEe25ONJ3V89cVA" lower="0" upper="1" target="_BuSFMGkWEe25ONJ3V89cVA" name="user" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" partner="_gilN8GkYEe25ONJ3V89cVA" primary="false">
@@ -2202,9 +2202,9 @@
       <inherited xmi:id="_27MOsGkYEe25ONJ3V89cVA"/>
     </attributes>
     <mapping xmi:id="_H7RhAGkYEe25ONJ3V89cVA" target="_H7Q58GkYEe25ONJ3V89cVA"/>
-    <form xmi:id="_H7XnoGkYEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_H7Zc0GkYEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_H7VycGkYEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_H7XnoGkYEe25ONJ3V89cVA" name="SimpleVote_Form" label="SimpleVote Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_H7Zc0GkYEe25ONJ3V89cVA" name="SimpleVote_Table" label="SimpleVote Table" rowsPerPage="10"/>
+    <view xmi:id="_H7VycGkYEe25ONJ3V89cVA" name="SimpleVote_View_Edit" label="SimpleVote View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_BuSFMGkWEe25ONJ3V89cVA" name="User" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_gilN8GkYEe25ONJ3V89cVA" lower="0" upper="-1" target="_H7Q58GkYEe25ONJ3V89cVA" name="votes" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" partner="_gil1AWkYEe25ONJ3V89cVA" primary="true">
@@ -2250,9 +2250,9 @@
       <inherited xmi:id="_7XOVIGkYEe25ONJ3V89cVA"/>
     </attributes>
     <mapping xmi:id="_BuSFMWkWEe25ONJ3V89cVA" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-    <form xmi:id="_BuYL0GkWEe25ONJ3V89cVA" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_BuaBAGkWEe25ONJ3V89cVA" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_BuWWoGkWEe25ONJ3V89cVA" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_BuYL0GkWEe25ONJ3V89cVA" name="User_Form" label="User Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_BuaBAGkWEe25ONJ3V89cVA" name="User_Table" label="User Table" rowsPerPage="10"/>
+    <view xmi:id="_BuWWoGkWEe25ONJ3V89cVA" name="User_View_Edit" label="User View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_0n43QG5mEe2wNaja8kBvcQ" name="VoteDefinition" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_KFusgG6hEe2wNaja8kBvcQ" lower="0" upper="-1" target="_1F3JsG6HEe2wNaja8kBvcQ" name="voteEntries" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" partner="_KFrCIG6hEe2wNaja8kBvcQ" primary="false">
@@ -2302,9 +2302,9 @@
       <input xmi:id="_HbnH4Y4XEe29qs15q2b6yw" lower="1" upper="1" target="_LEKjoH5YEe2kLcMqsIbMgQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_HbnH4o4XEe29qs15q2b6yw"/>
     </operations>
-    <form xmi:id="_0oKkEG5mEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_0oTG8G5mEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_0oFEgG5mEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_0oKkEG5mEe2wNaja8kBvcQ" name="VoteDefinition_Form" label="VoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_0oTG8G5mEe2wNaja8kBvcQ" name="VoteDefinition_Table" label="VoteDefinition Table" rowsPerPage="10"/>
+    <view xmi:id="_0oFEgG5mEe2wNaja8kBvcQ" name="VoteDefinition_View_Edit" label="VoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_1F3JsG6HEe2wNaja8kBvcQ" name="VoteEntry" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_5-GhoG6gEe2wNaja8kBvcQ" lower="1" upper="1" target="_BuSFMGkWEe25ONJ3V89cVA" name="user" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" binding="_5-GhoG6gEe2wNaja8kBvcQ" getterExpression="">
@@ -2317,16 +2317,16 @@
       <inherited xmi:id="_1F3JtG6HEe2wNaja8kBvcQ"/>
     </attributes>
     <mapping xmi:id="_1F3Jt26HEe2wNaja8kBvcQ" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
-    <form xmi:id="_1F3JuG6HEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_1F3JuW6HEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_1F3Jum6HEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_1F3JuG6HEe2wNaja8kBvcQ" name="VoteEntry_Form" label="VoteEntry Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_1F3JuW6HEe2wNaja8kBvcQ" name="VoteEntry_Table" label="VoteEntry Table" rowsPerPage="10"/>
+    <view xmi:id="_1F3Jum6HEe2wNaja8kBvcQ" name="VoteEntry_View_Edit" label="VoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_4Aej4G6LEe2wNaja8kBvcQ" name="YesNoAbstainVoteDefinition" createable="true" updateable="true" deleteable="true">
     <generalizations xmi:id="_SVnEkG6MEe2wNaja8kBvcQ" target="_0n43QG5mEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_4AfyAG6LEe2wNaja8kBvcQ" target="_4Aej4G6LEe2wNaja8kBvcQ"/>
-    <form xmi:id="_4AtNYG6LEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_4Ays8G6LEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_4Ant0G6LEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_4AtNYG6LEe2wNaja8kBvcQ" name="YesNoAbstainVoteDefinition_Form" label="YesNoAbstainVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_4Ays8G6LEe2wNaja8kBvcQ" name="YesNoAbstainVoteDefinition_Table" label="YesNoAbstainVoteDefinition Table" rowsPerPage="10"/>
+    <view xmi:id="_4Ant0G6LEe2wNaja8kBvcQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_Kb9QoG6gEe2wNaja8kBvcQ" name="YesNoAbstainVoteEntry" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_hlUsoHW2Ee2LTNnGda5kaw" name="value" dataType="_ON5DcG6bEe2wNaja8kBvcQ" defaultExpression="" binding="_hlUsoHW2Ee2LTNnGda5kaw" getterExpression="" identifier="false" memberType="STORED">
@@ -2334,16 +2334,16 @@
     </attributes>
     <generalizations xmi:id="_iUnu4G6gEe2wNaja8kBvcQ" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_Kb9QoW6gEe2wNaja8kBvcQ" target="_Kb9QoG6gEe2wNaja8kBvcQ"/>
-    <form xmi:id="_Kb9Qom6gEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_Kb9Qo26gEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_Kb9QpG6gEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_Kb9Qom6gEe2wNaja8kBvcQ" name="YesNoAbstainVoteEntry_Form" label="YesNoAbstainVoteEntry Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_Kb9Qo26gEe2wNaja8kBvcQ" name="YesNoAbstainVoteEntry_Table" label="YesNoAbstainVoteEntry Table" rowsPerPage="10"/>
+    <view xmi:id="_Kb9QpG6gEe2wNaja8kBvcQ" name="YesNoAbstainVoteEntry_View_Edit" label="YesNoAbstainVoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_tA1hUG6dEe2wNaja8kBvcQ" name="YesNoVoteDefinition" createable="true" updateable="true" deleteable="true">
     <generalizations xmi:id="_tA1hUW6dEe2wNaja8kBvcQ" target="_0n43QG5mEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_tA1hUm6dEe2wNaja8kBvcQ" target="_tA1hUG6dEe2wNaja8kBvcQ"/>
-    <form xmi:id="_tA1hU26dEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_tA1hVG6dEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_tA1hVW6dEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_tA1hU26dEe2wNaja8kBvcQ" name="YesNoVoteDefinition_Form" label="YesNoVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_tA1hVG6dEe2wNaja8kBvcQ" name="YesNoVoteDefinition_Table" label="YesNoVoteDefinition Table" rowsPerPage="10"/>
+    <view xmi:id="_tA1hVW6dEe2wNaja8kBvcQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_GJOQIG6gEe2wNaja8kBvcQ" name="YesNoVoteEntry" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_ljqKcHW2Ee2LTNnGda5kaw" name="value" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" binding="_ljqKcHW2Ee2LTNnGda5kaw" getterExpression="" identifier="false" memberType="STORED">
@@ -2351,9 +2351,9 @@
     </attributes>
     <generalizations xmi:id="_bU3ugG6gEe2wNaja8kBvcQ" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_GJO3MG6gEe2wNaja8kBvcQ" target="_GJOQIG6gEe2wNaja8kBvcQ"/>
-    <form xmi:id="_GJjnUG6gEe2wNaja8kBvcQ" name="Entity_Form" label="Entity Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_GJn4wG6gEe2wNaja8kBvcQ" name="Entity_Table" label="Entity Table" rowsPerPage="10"/>
-    <view xmi:id="_GJeu0G6gEe2wNaja8kBvcQ" name="Entity_View" label="Entity View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_GJjnUG6gEe2wNaja8kBvcQ" name="YesNoVoteEntry_Form" label="YesNoVoteEntry Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_GJn4wG6gEe2wNaja8kBvcQ" name="YesNoVoteEntry_Table" label="YesNoVoteEntry Table" rowsPerPage="10"/>
+    <view xmi:id="_GJeu0G6gEe2wNaja8kBvcQ" name="YesNoVoteEntry_View_Edit" label="YesNoVoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_NGvTUG6JEe2wNaja8kBvcQ" name="CloseDebateInput" createable="false" updateable="false" deleteable="false">
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_OjiZsOSDEe20cv3f2msZXg" lower="0" upper="-1" target="_5jKXMOSCEe20cv3f2msZXg" name="answers" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="TRANSIENT" rangeType="ANY" getterExpression="">
@@ -2371,7 +2371,7 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_meSj8H78Ee2kLcMqsIbMgQ" name="closeAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_meUZIH78Ee2kLcMqsIbMgQ"/>
     </attributes>
-    <form xmi:id="_NG8HoG6JEe2wNaja8kBvcQ" name="CloseDebate_Form" label="Close debate" iconName="note-check" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_NG8HoG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Form" label="CloseDebateInput Form" iconName="note-check" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
       <components xsi:type="ui:Group" xmi:id="_-U_QAIfTEe2u0fVmwtP5bA" name="debate" label="Close debate" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_yfDhAH5VEe2kLcMqsIbMgQ" name="voteType" label="VoteType" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_QG62gHMNEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_uZqe8IfXEe2u0fVmwtP5bA" name="closeAt" label="Vote close at" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_meSj8H78Ee2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -2385,10 +2385,10 @@
         </components>
       </components>
     </form>
-    <table xmi:id="_NHAZEG6JEe2wNaja8kBvcQ" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+    <table xmi:id="_NHAZEG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Table" label="CloseDebateInput Table" rowsPerPage="10">
       <columns xsi:type="ui:DataColumn" xmi:id="_yfMD4H5VEe2kLcMqsIbMgQ" name="voteType" label="VoteType" iconName="list" visible="true" sort="NONE" dataFeature="_QG62gHMNEe2wNaja8kBvcQ"/>
     </table>
-    <view xmi:id="_NG3PIG6JEe2wNaja8kBvcQ" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+    <view xmi:id="_NG3PIG6JEe2wNaja8kBvcQ" name="CloseDebateInput_View_Edit" label="CloseDebateInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
       <components xsi:type="ui:DataField" xmi:id="_ye8zUH5VEe2kLcMqsIbMgQ" name="voteType" label="VoteType" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_QG62gHMNEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
     </view>
   </elements>
@@ -2402,7 +2402,7 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_PIVskHW5Ee2LTNnGda5kaw" name="description" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_PIW6sHW5Ee2LTNnGda5kaw"/>
     </attributes>
-    <form xmi:id="_GavqUHW5Ee2LTNnGda5kaw" name="CreateArgumentInput_Form" label="Add argument" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_GavqUHW5Ee2LTNnGda5kaw" name="CreateArgumentInput_Form" label="CreateArgumentInput Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
       <components xsi:type="ui:Group" xmi:id="_h6ID0IfREe2u0fVmwtP5bA" name="group" label="Add argument" iconName="account-voice" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_3m5J4H4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" col="8" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_NRm0cHW5Ee2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3mux0H4bEe2j59SYy0JH0Q" name="type" label="Type" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_ak7rsHW5Ee2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -2413,19 +2413,19 @@
         <components xsi:type="ui:ActionButton" xmi:id="_DqRvIIfTEe2u0fVmwtP5bA" name="cancel" label="cancel" iconName="close-circle-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="CANCEL"/>
       </components>
     </form>
-    <table xmi:id="_Ga4NMHW5Ee2LTNnGda5kaw" name="CreateArgumentInput_Table" label="TransferObject Table" rowsPerPage="10">
+    <table xmi:id="_Ga4NMHW5Ee2LTNnGda5kaw" name="CreateArgumentInput_Table" label="CreateArgumentInput Table" rowsPerPage="10">
       <columns xsi:type="ui:DataColumn" xmi:id="_3mycMH4bEe2j59SYy0JH0Q" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_ak7rsHW5Ee2LTNnGda5kaw"/>
       <columns xsi:type="ui:DataColumn" xmi:id="_3m8NMH4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_NRm0cHW5Ee2LTNnGda5kaw"/>
       <columns xsi:type="ui:DataColumn" xmi:id="_3nF-MH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_PIVskHW5Ee2LTNnGda5kaw"/>
     </table>
-    <view xmi:id="_GamgYHW5Ee2LTNnGda5kaw" name="CreateArgumentInput_View" label="CreateArgumentInput View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <view xmi:id="_GamgYHW5Ee2LTNnGda5kaw" name="CreateArgumentInput_View_Edit" label="CreateArgumentInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="CreateCommentInput" createable="false" updateable="false" deleteable="false">
     <attributes xsi:type="structure:DataMember" xmi:id="_s6NaAIe5Ee2kLcMqsIbMgQ" name="comment" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_s6NaAYe5Ee2kLcMqsIbMgQ"/>
     </attributes>
-    <form xmi:id="_kYYi4Ie5Ee2kLcMqsIbMgQ" name="CreateCommentInput_Form" label="Add comment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
-      <components xsi:type="ui:Group" xmi:id="_QjzvsIe6Ee2kLcMqsIbMgQ" name="comment" label="Add comment" iconName="forum" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
+    <form xmi:id="_kYYi4Ie5Ee2kLcMqsIbMgQ" name="CreateCommentInput_Form" label="CreateCommentInput Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" dialogSize="MD">
+      <components xsi:type="ui:Group" xmi:id="_QjzvsIe6Ee2kLcMqsIbMgQ" name="comment" label="" iconName="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_a5DsQIe6Ee2kLcMqsIbMgQ" name="comment" label="Comment" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_s6NaAIe5Ee2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </components>
       <components xsi:type="ui:Group" xmi:id="_4fOhEIfUEe2u0fVmwtP5bA" name="buttons" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -2433,8 +2433,8 @@
         <components xsi:type="ui:ActionButton" xmi:id="_B0lt8IfVEe2u0fVmwtP5bA" name="cancel" label="Cancel" iconName="close-circle-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="SUBMIT"/>
       </components>
     </form>
-    <table xmi:id="_kYeCcIe5Ee2kLcMqsIbMgQ" name="CreateCommentInput_Table" label="TransferObject Table" rowsPerPage="10"/>
-    <view xmi:id="_kYTqYIe5Ee2kLcMqsIbMgQ" name="CreateCommentInput_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <table xmi:id="_kYeCcIe5Ee2kLcMqsIbMgQ" name="CreateCommentInput_Table" label="CreateCommentInput Table" rowsPerPage="10"/>
+    <view xmi:id="_kYTqYIe5Ee2kLcMqsIbMgQ" name="CreateCommentInput_View_Edit" label="CreateCommentInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_-V8woHW8Ee2LTNnGda5kaw" name="CreateDebateInput" createable="false" updateable="false" deleteable="false">
     <attributes xsi:type="structure:DataMember" xmi:id="_Dtv7wHW9Ee2LTNnGda5kaw" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
@@ -2446,8 +2446,8 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_Y5rsIH4PEe2cB7_PsKXsHQ" name="closeAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_Y5uvcH4PEe2cB7_PsKXsHQ"/>
     </attributes>
-    <form xmi:id="_-WSH0HW8Ee2LTNnGda5kaw" name="CreateDebateInput_Form" label="Create debate" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
-      <components xsi:type="ui:Group" xmi:id="_Ovl3gIejEe2kLcMqsIbMgQ" name="debate" label="Create debate" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
+    <form xmi:id="_-WSH0HW8Ee2LTNnGda5kaw" name="CreateDebateInput_Form" label="CreateDebateInput Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" dialogSize="MD">
+      <components xsi:type="ui:Group" xmi:id="_Ovl3gIejEe2kLcMqsIbMgQ" name="debate" label="" iconName="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_ydvSYH5VEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="8" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_Dtv7wHW9Ee2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_yertkH5VEe2kLcMqsIbMgQ" name="closeAt" label="Close at" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_Y5rsIH4PEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_yeTTEH5VEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_FpEY8HW9Ee2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -2457,12 +2457,12 @@
         <components xsi:type="ui:ActionButton" xmi:id="_Qu8DoIekEe2kLcMqsIbMgQ" name="cancel" label="Cancel" iconName="close-circle-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="CANCEL"/>
       </components>
     </form>
-    <table xmi:id="_-WXnYHW8Ee2LTNnGda5kaw" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10">
+    <table xmi:id="_-WXnYHW8Ee2LTNnGda5kaw" name="CreateDebateInput_Table" label="CreateDebateInput Table" rowsPerPage="10">
       <columns xsi:type="ui:DataColumn" xmi:id="_yd6RgH5VEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_Dtv7wHW9Ee2LTNnGda5kaw"/>
       <columns xsi:type="ui:DataColumn" xmi:id="_yecdAH5VEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_FpEY8HW9Ee2LTNnGda5kaw"/>
       <columns xsi:type="ui:DataColumn" xmi:id="_ye03gH5VEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_Y5rsIH4PEe2cB7_PsKXsHQ"/>
     </table>
-    <view xmi:id="_-WMoQHW8Ee2LTNnGda5kaw" name="CreateDebateInput_View" label="Create debate" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <view xmi:id="_-WMoQHW8Ee2LTNnGda5kaw" name="CreateDebateInput_View_Edit" label="CreateDebateInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_j7q00I1jEe2J66C5CrhpQw" name="Initializer" createable="false" updateable="false" deleteable="false">
     <mapping xmi:id="_y3O1MI1jEe2J66C5CrhpQw" target="_BuSFMGkWEe25ONJ3V89cVA"/>
@@ -2478,19 +2478,19 @@
     <operations xmi:id="_rP62ANu5Ee2Bgcx6em3jZg" name="initIssueTypes" customImplementation="false" body="&#xA;var edemokracia::IssueType think_about = edemokracia::IssueType!filter(c | c.title == &quot;Gondok gondolkodni&quot;)!any();&#xA;if (think_about!isUndefined()) {&#xA;&#x9;think_about = new edemokracia::IssueType(title = &quot;Gondok gondolkodni&quot;, description = &quot;Gondok gondolkodni&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType lets_do_it = edemokracia::IssueType!filter(c | c.title == &quot;Csináljuk meg&quot;)!any();&#xA;if (lets_do_it!isUndefined()) {&#xA;&#x9;lets_do_it = new edemokracia::IssueType(title = &quot;Csináljuk meg&quot;, description = &quot;Csináljuk meg&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType help = edemokracia::IssueType!filter(c | c.title == &quot;Segítsünk&quot;)!any();&#xA;if (help!isUndefined()) {&#xA;&#x9;help = new edemokracia::IssueType(title = &quot;Segítsünk&quot;, description = &quot;Segítsünk&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType decide = edemokracia::IssueType!filter(c | c.title == &quot;Döntsük el&quot;)!any();&#xA;if (decide!isUndefined()) {&#xA;&#x9;decide = new edemokracia::IssueType(title = &quot;Döntsük el&quot;, description = &quot;Döntsük el&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType select = edemokracia::IssueType!filter(c | c.title == &quot;Válasszuk ki&quot;)!any();&#xA;if (select!isUndefined()) {&#xA;&#x9;select = new edemokracia::IssueType(title = &quot;Válasszuk ki&quot;, description = &quot;Válasszuk ki&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType bring_together = edemokracia::IssueType!filter(c | c.title == &quot;Hozzuk össze&quot;)!any();&#xA;if (bring_together!isUndefined()) {&#xA;&#x9;bring_together = new edemokracia::IssueType(title = &quot;Hozzuk össze&quot;, description = &quot;Hozzuk össze&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType support = edemokracia::IssueType!filter(c | c.title == &quot;Képviseljük / támogassuk&quot;)!any();&#xA;if (support!isUndefined()) {&#xA;&#x9;support = new edemokracia::IssueType(title = &quot;Képviseljük / támogassuk&quot;, description = &quot;Képviseljük / támogassuk&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueType dont_let = edemokracia::IssueType!filter(c | c.title == &quot;Ne hagyjuk&quot;)!any();&#xA;if (dont_let!isUndefined()) {&#xA;&#x9;dont_let = new edemokracia::IssueType(title = &quot;Ne hagyjuk&quot;, description = &quot;Ne hagyjuk&quot;);&#xA;}&#xA;" stateful="true" operationType="STATIC" binding="" initializer="true">
       <inherited xmi:id="_rP62Adu5Ee2Bgcx6em3jZg"/>
     </operations>
-    <form xmi:id="_j76scI1jEe2J66C5CrhpQw" name="TransferObject_Form" label="TransferObject Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
-    <table xmi:id="_j8BaII1jEe2J66C5CrhpQw" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10"/>
-    <view xmi:id="_j7z-wI1jEe2J66C5CrhpQw" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <form xmi:id="_j76scI1jEe2J66C5CrhpQw" name="Initializer_Form" label="Initializer Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+    <table xmi:id="_j8BaII1jEe2J66C5CrhpQw" name="Initializer_Table" label="Initializer Table" rowsPerPage="10"/>
+    <view xmi:id="_j7z-wI1jEe2J66C5CrhpQw" name="Initializer_View_Edit" label="Initializer View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_LEKjoH5YEe2kLcMqsIbMgQ" name="RatingVoteInput" createable="false" updateable="false" deleteable="false">
     <attributes xsi:type="structure:DataMember" xmi:id="_LEKjoX5YEe2kLcMqsIbMgQ" name="value" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_LEKjon5YEe2kLcMqsIbMgQ"/>
     </attributes>
-    <form xmi:id="_LEKjo35YEe2kLcMqsIbMgQ" name="RatingVoteInput_Form" label="Select Rate" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_LEKjo35YEe2kLcMqsIbMgQ" name="RatingVoteInput_Form" label="RatingVoteInput Form" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
       <components xsi:type="ui:DataField" xmi:id="_UNECcOSNEe20cv3f2msZXg" name="value" label="Vote rate" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_LEKjoX5YEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
     </form>
     <table xmi:id="_LEKjpH5YEe2kLcMqsIbMgQ" name="RatingVoteInput_Table" label="RatingVoteInput Table" iconName="vote-outline" rowsPerPage="10"/>
-    <view xmi:id="_LEKjpX5YEe2kLcMqsIbMgQ" name="TransferObject_View" label="RatingVoteInput View" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <view xmi:id="_LEKjpX5YEe2kLcMqsIbMgQ" name="RatingVoteInput_View_Edit" label="RatingVoteInput View / Edit" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_5jKXMOSCEe20cv3f2msZXg" name="SelectAnswerInput" createable="false" updateable="false" deleteable="false">
     <attributes xsi:type="structure:DataMember" xmi:id="_DOGygOSDEe20cv3f2msZXg" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
@@ -2499,17 +2499,17 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_HgIBUOSDEe20cv3f2msZXg" name="description" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_HgJPcOSDEe20cv3f2msZXg"/>
     </attributes>
-    <form xmi:id="_5jaO0OSCEe20cv3f2msZXg" name="SelectAnswer_Form" label="Create select answer" iconName="list-box" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_5jaO0OSCEe20cv3f2msZXg" name="SelectAnswerInput_Form" label="SelectAnswerInput Form" iconName="list-box" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
       <components xsi:type="ui:Group" xmi:id="_bYo5sOTMEe2aFrahRIThWQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_d8XasOTMEe2aFrahRIThWQ" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_DOGygOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_d8WzoOTMEe2aFrahRIThWQ" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_HgIBUOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </components>
     </form>
-    <table xmi:id="_5jhjkOSCEe20cv3f2msZXg" name="SelectAnswerInput_Table" label="Select answers" iconName="list-box" rowsPerPage="10">
+    <table xmi:id="_5jhjkOSCEe20cv3f2msZXg" name="SelectAnswerInput_Table" label="SelectAnswerInput Table" iconName="list-box" rowsPerPage="10">
       <columns xsi:type="ui:DataColumn" xmi:id="_5ZnPceTLEe2aFrahRIThWQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_DOGygOSDEe20cv3f2msZXg"/>
       <columns xsi:type="ui:DataColumn" xmi:id="_5ZnPcOTLEe2aFrahRIThWQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_HgIBUOSDEe20cv3f2msZXg"/>
     </table>
-    <view xmi:id="_5jThIOSCEe20cv3f2msZXg" name="SelectAnswers_View" label="View / Edit select answer" iconName="list-box" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+    <view xmi:id="_5jThIOSCEe20cv3f2msZXg" name="SelectAnswerInput_View_Edit" label="SelectAnswerInput View / Edit" iconName="list-box" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
       <components xsi:type="ui:Group" xmi:id="_-8FZgOTLEe2aFrahRIThWQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_LZ6ooOTLEe2aFrahRIThWQ" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_DOGygOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_LZ6BkOTLEe2aFrahRIThWQ" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_HgIBUOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -2520,21 +2520,21 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_-1U_0XWyEe2LTNnGda5kaw" name="value" dataType="_ON5DcG6bEe2wNaja8kBvcQ" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_-1U_0nWyEe2LTNnGda5kaw"/>
     </attributes>
-    <form xmi:id="_-1U_03WyEe2LTNnGda5kaw" name="YesNoAbstainVoteInput_Form" label="Vote Yes / No / Abstain" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_-1U_03WyEe2LTNnGda5kaw" name="YesNoAbstainVoteInput_Form" label="YesNoAbstainVoteInput Form" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
       <components xsi:type="ui:DataField" xmi:id="_6ISHYOSLEe20cv3f2msZXg" name="value" label="Vote" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-1U_0XWyEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
     </form>
-    <table xmi:id="_-1U_1HWyEe2LTNnGda5kaw" name="YesNoAbstain_Table" label="YesNoAbstain Table" rowsPerPage="10"/>
-    <view xmi:id="_-1U_1XWyEe2LTNnGda5kaw" name="YesNoAbstain_View" label="YesNoAbstain View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <table xmi:id="_-1U_1HWyEe2LTNnGda5kaw" name="YesNoAbstainVoteInput_Table" label="YesNoAbstainVoteInput Table" rowsPerPage="10"/>
+    <view xmi:id="_-1U_1XWyEe2LTNnGda5kaw" name="YesNoAbstainVoteInput_View_Edit" label="YesNoAbstainVoteInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_-1R8gHWyEe2LTNnGda5kaw" name="YesNoVoteInput" createable="false" updateable="false" deleteable="false">
     <attributes xsi:type="structure:DataMember" xmi:id="_-1R8gXWyEe2LTNnGda5kaw" name="value" dataType="_2E9NMG6dEe2wNaja8kBvcQ" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_-1R8gnWyEe2LTNnGda5kaw"/>
     </attributes>
-    <form xmi:id="_-1R8g3WyEe2LTNnGda5kaw" name="YesNoVoteInput_Form" label="Vote Yes / No" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_-1R8g3WyEe2LTNnGda5kaw" name="YesNoVoteInput_Form" label="YesNoVoteInput Form" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
       <components xsi:type="ui:DataField" xmi:id="_HrXDYKlbEe2kkPT1Lcj30A" name="value" label="Vote" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-1R8gXWyEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
     </form>
-    <table xmi:id="_-1R8hHWyEe2LTNnGda5kaw" name="TransferObject_Table" label="TransferObject Table" rowsPerPage="10"/>
-    <view xmi:id="_-1R8hXWyEe2LTNnGda5kaw" name="TransferObject_View" label="TransferObject View" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    <table xmi:id="_-1R8hHWyEe2LTNnGda5kaw" name="YesNoVoteInput_Table" label="YesNoVoteInput Table" rowsPerPage="10"/>
+    <view xmi:id="_-1R8hXWyEe2LTNnGda5kaw" name="YesNoVoteInput_View_Edit" label="YesNoVoteInput View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="type:EnumerationType" xmi:id="_FDJW8GkQEe25ONJ3V89cVA" name="AttachmentType">
     <members xmi:id="_GyGMEGkQEe25ONJ3V89cVA" name="LINK" ordinal="1"/>
@@ -2599,6 +2599,5 @@
   </elements>
   <annotations xmi:id="_7D81XmkNEe25ONJ3V89cVA" name="dashboard" className="hu.blackbelt.judo.meta.esm.accesspoint.Access" elements="_GgaEAIyPEe2VSOmaAz6G9Q"/>
   <annotations xmi:id="_7D81X2kNEe25ONJ3V89cVA" name="profile" className="hu.blackbelt.judo.meta.esm.accesspoint.Access"/>
-  <mimeTypes xmi:id="_lWRgEGkQEe25ONJ3V89cVA" type="image" subType="*"/>
-  <mimeTypes xmi:id="_qDcZ0GkQEe25ONJ3V89cVA" type="video" subType="*"/>
+  <mimeTypes xmi:id="_lWRgEGkQEe25ONJ3V89cVA" type="*" subType="*"/>
 </namespace:Model>

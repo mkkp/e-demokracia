@@ -140,7 +140,7 @@ export function AdminVoteDefinitionVoteRatingForm({
     },
     [data],
   );
-  const title: string = t('RatingVoteInputForm', { defaultValue: 'Select Rate' });
+  const title: string = t('RatingVoteInputForm', { defaultValue: 'RatingVoteInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

@@ -140,7 +140,7 @@ export function CreateSubArgumentForm({ successCallback, cancel, owner }: Create
     },
     [data],
   );
-  const title: string = t('CreateArgumentInputForm', { defaultValue: 'Add argument' });
+  const title: string = t('CreateArgumentInputForm', { defaultValue: 'CreateArgumentInput Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

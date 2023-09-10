@@ -159,7 +159,7 @@ export default function AdminProConsView() {
   const adminConCreateSubArgumentAction = useAdminConCreateSubArgumentAction();
   const adminConCreateCommentAction = useAdminConCreateCommentAction();
 
-  const title: string = t('admin.ConView', { defaultValue: 'View / Edit Con' });
+  const title: string = t('admin.ConView', { defaultValue: 'Con View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -272,14 +272,14 @@ export default function AdminProConsView() {
               justifyContent="flex-start"
             >
               <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapper">
+                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConLabel"
+                            id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperConLabel"
                             variant="h6"
                             component="h1"
                           >
@@ -290,7 +290,7 @@ export default function AdminProConsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperCon"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperCon"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -301,7 +301,7 @@ export default function AdminProConsView() {
                             <TextField
                               required={true}
                               name="title"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConTitle"
+                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperConTitle"
                               label={t('admin.ConView.title', { defaultValue: 'Title' }) as string}
                               value={data.title ?? ''}
                               className={clsx({
@@ -337,7 +337,7 @@ export default function AdminProConsView() {
                               })}
                               slotProps={{
                                 textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConCreated',
+                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperConCreated',
                                   required: true,
                                   helperText: validation.get('created'),
                                   error: !!validation.get('created'),
@@ -394,7 +394,7 @@ export default function AdminProConsView() {
                             <TextField
                               required={true}
                               name="description"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConDescription"
+                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperConDescription"
                               label={t('admin.ConView.description', { defaultValue: 'Description' }) as string}
                               value={data.description ?? ''}
                               className={clsx({
@@ -447,7 +447,7 @@ export default function AdminProConsView() {
                             <NumericInput
                               required={false}
                               name="upVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConUpVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperConUpVotes"
                               label={t('admin.ConView.upVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.upVotes ?? ''}
@@ -497,7 +497,7 @@ export default function AdminProConsView() {
                             <NumericInput
                               required={false}
                               name="downVotes"
-                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewConLabelWrapperConDownVotes"
+                              id="NumericInputedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditConLabelWrapperConDownVotes"
                               label={t('admin.ConView.downVotes', { defaultValue: '' }) as string}
                               customInput={TextField}
                               value={data.downVotes ?? ''}
@@ -542,13 +542,13 @@ export default function AdminProConsView() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBar"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBar"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArguments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArguments',
                       name: 'admin.ConView.arguments',
                       label: t('admin.ConView.arguments', { defaultValue: 'Arguments' }) as string,
                       disabled: isLoading,
@@ -557,7 +557,7 @@ export default function AdminProConsView() {
                       nestedDataKeys: ['cons', 'pros'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarComments',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarComments',
                       name: 'admin.ConView.comments',
                       label: t('admin.ConView.comments', { defaultValue: 'Comments' }) as string,
                       disabled: isLoading,
@@ -569,7 +569,7 @@ export default function AdminProConsView() {
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArguments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArguments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -578,7 +578,7 @@ export default function AdminProConsView() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -614,7 +614,7 @@ export default function AdminProConsView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsProsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -625,7 +625,7 @@ export default function AdminProConsView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -636,7 +636,7 @@ export default function AdminProConsView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsProsLabelWrapperPros"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsProsLabelWrapperPros"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -658,7 +658,7 @@ export default function AdminProConsView() {
 
                       <Grid item xs={12} sm={12} md={6.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -669,7 +669,7 @@ export default function AdminProConsView() {
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                               <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
+                                id="LabeledemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
                                 variant="h6"
                                 component="h1"
                               >
@@ -680,7 +680,7 @@ export default function AdminProConsView() {
 
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarArgumentsArgumentsConsLabelWrapperCons"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarArgumentsArgumentsConsLabelWrapperCons"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -704,7 +704,7 @@ export default function AdminProConsView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsComments"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsComments"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -713,7 +713,7 @@ export default function AdminProConsView() {
                     >
                       <Grid item xs={12} sm={12} md={4.0}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsActions"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsActions"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -749,7 +749,7 @@ export default function AdminProConsView() {
 
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -758,7 +758,7 @@ export default function AdminProConsView() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewTabBarCommentsCommentsCommentsLabelWrapperComments"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminProConsViewDefaultConViewEditTabBarCommentsCommentsCommentsLabelWrapperComments"
                               container
                               direction="column"
                               alignItems="stretch"

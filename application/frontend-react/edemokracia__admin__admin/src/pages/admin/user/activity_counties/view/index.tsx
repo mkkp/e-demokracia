@@ -238,7 +238,7 @@ export default function AdminUserActivityCountiesView() {
                 <TextField
                   required={true}
                   name="name"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewName"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewEditName"
                   label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
                   value={data.name ?? ''}
                   className={clsx({
@@ -266,7 +266,7 @@ export default function AdminUserActivityCountiesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewCitiesLabelWrapper"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewEditCitiesLabelWrapper"
                   container
                   direction="column"
                   alignItems="stretch"
@@ -277,7 +277,7 @@ export default function AdminUserActivityCountiesView() {
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="city" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewCitiesLabelWrapperCitiesLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewEditCitiesLabelWrapperCitiesLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -288,7 +288,7 @@ export default function AdminUserActivityCountiesView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="TableedemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewCitiesLabelWrapperCities"
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminUserActivityCountiesViewDefaultCountyViewEditCitiesLabelWrapperCities"
                       container
                       direction="column"
                       alignItems="stretch"

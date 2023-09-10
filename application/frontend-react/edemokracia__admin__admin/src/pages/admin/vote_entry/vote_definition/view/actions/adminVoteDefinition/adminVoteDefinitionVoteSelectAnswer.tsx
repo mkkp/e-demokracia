@@ -113,14 +113,14 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
 
     const filterOptions: FilterOption[] = [
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerEntityTableTitleFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerSelectAnswerVoteSelectionTableTitleFilter',
         attributeName: 'title',
         label: t('SelectAnswerVoteSelectionTable.input.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerEntityTableDescriptionFilter',
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerSelectAnswerVoteSelectionTableDescriptionFilter',
         attributeName: 'description',
         label: t('SelectAnswerVoteSelectionTable.input.description', { defaultValue: 'Description' }) as string,
         filterType: FilterType.string,

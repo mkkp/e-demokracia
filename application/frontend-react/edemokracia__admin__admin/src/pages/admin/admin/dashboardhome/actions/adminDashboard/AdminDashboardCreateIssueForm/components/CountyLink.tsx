@@ -109,14 +109,14 @@ export function CountyLink(props: CountyLinkProps) {
 
   const countyRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCountyRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCountyRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.CreateIssueInputForm.county.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCountyNameFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCountyNameFilter',
       attributeName: 'name',
       label: t('admin.CreateIssueInputForm.county.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -138,7 +138,7 @@ export function CountyLink(props: CountyLinkProps) {
   return (
     <AggregationInput
       name="county"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueLabelWrapperIssueCounty"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormIssueCounty"
       label={t('admin.CreateIssueInputForm.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '', ownerData.county?.name?.toString() ?? '']}
       ownerData={ownerData}

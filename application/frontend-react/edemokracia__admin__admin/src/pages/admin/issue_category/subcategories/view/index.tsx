@@ -142,7 +142,7 @@ export default function AdminIssueCategorySubcategoriesView() {
   const postRefreshAction: AdminIssueCategorySubcategoriesViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const title: string = t('admin.IssueCategoryView', { defaultValue: 'View / Edit Category' });
+  const title: string = t('admin.IssueCategoryView', { defaultValue: 'IssueCategory View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -258,7 +258,7 @@ export default function AdminIssueCategorySubcategoriesView() {
                 <TextField
                   required={true}
                   name="title"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewTitle"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditTitle"
                   label={t('admin.IssueCategoryView.title', { defaultValue: 'Title' }) as string}
                   value={data.title ?? ''}
                   className={clsx({
@@ -288,7 +288,7 @@ export default function AdminIssueCategorySubcategoriesView() {
                 <TextField
                   required={true}
                   name="description"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewDescription"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditDescription"
                   label={t('admin.IssueCategoryView.description', { defaultValue: 'Description' }) as string}
                   value={data.description ?? ''}
                   className={clsx({
@@ -330,7 +330,7 @@ export default function AdminIssueCategorySubcategoriesView() {
 
               <Grid item xs={12} sm={12}>
                 <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapper"
+                  id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapper"
                   container
                   direction="column"
                   alignItems="stretch"
@@ -341,7 +341,7 @@ export default function AdminIssueCategorySubcategoriesView() {
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategoriesLabel"
+                        id="LabeledemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategoriesLabel"
                         variant="h6"
                         component="h1"
                       >
@@ -352,7 +352,7 @@ export default function AdminIssueCategorySubcategoriesView() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultCategoryViewSubcategoriesLabelWrapperSubcategories"
+                      id="TableedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategoriesViewDefaultIssueCategoryViewEditSubcategoriesLabelWrapperSubcategories"
                       container
                       direction="column"
                       alignItems="stretch"

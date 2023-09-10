@@ -133,7 +133,7 @@ export function PageCreateCountiesForm({ successCallback, cancel }: PageCreateCo
     },
     [data],
   );
-  const title: string = t('admin.CountyForm', { defaultValue: 'Create county' });
+  const title: string = t('admin.CountyForm', { defaultValue: 'County Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;

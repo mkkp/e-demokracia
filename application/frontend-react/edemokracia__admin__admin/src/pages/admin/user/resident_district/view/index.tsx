@@ -236,7 +236,7 @@ export default function AdminUserResidentDistrictView() {
                 <TextField
                   required={true}
                   name="name"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserResidentDistrictViewDefaultDistrictViewName"
+                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserResidentDistrictViewDefaultDistrictViewEditName"
                   label={t('admin.DistrictView.name', { defaultValue: 'District name' }) as string}
                   value={data.name ?? ''}
                   className={clsx({

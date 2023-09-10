@@ -21,7 +21,7 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 
 import { PageActions } from './components/PageActions';
-import { Vote_TableTable } from './components/Vote_TableTable';
+import { SimpleVote_TableTable } from './components/SimpleVote_TableTable';
 
 /**
  * Name: edemokracia::admin::Pro.votes#Table
@@ -34,7 +34,7 @@ export default function AdminProVotesTable() {
   const { signedIdentifier } = useParams();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.SimpleVoteTable', { defaultValue: 'Votes' });
+  const title: string = t('admin.SimpleVoteTable', { defaultValue: 'SimpleVote Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();
@@ -52,7 +52,7 @@ export default function AdminProVotesTable() {
               <Grid item xs={12}>
                 <Card>
                   <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminProVotesTable-data-grid">
-                    <Vote_TableTable
+                    <SimpleVote_TableTable
                       ref={tableRef}
                       ownerData={{ __signedIdentifier: signedIdentifier! }}
                       isOwnerLoading={isLoading}

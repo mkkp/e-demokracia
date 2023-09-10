@@ -147,7 +147,7 @@ export default function AdminAdminDashboardhomeDashboard() {
   const adminDashboardCreateIssueAction = useAdminDashboardCreateIssueAction();
   const adminDashboardCreateUserAction = useAdminDashboardCreateUserAction();
 
-  const title: string = t('edemokracia.admin.Admin.dashboardhome.Dashboard', { defaultValue: 'Dashboard' });
+  const title: string = t('edemokracia.admin.Admin.dashboardhome.Dashboard', { defaultValue: 'Dashboard View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -251,7 +251,7 @@ export default function AdminAdminDashboardhomeDashboard() {
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center">
                   <Grid item>
-                    <Typography id="FormattededemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewWelcome">
+                    <Typography id="FormattededemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditWelcome">
                       {data.welcome}
                     </Typography>
                   </Grid>
@@ -262,7 +262,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                 <Grid container spacing={2}>
                   <Grid item>
                     <LoadingButton
-                      id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewActionGroupCreateIssue"
+                      id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditActionGroupCreateIssue"
                       loading={isLoading}
                       startIcon={<MdiIcon path="ticket-confirmation" />}
                       loadingPosition="start"
@@ -286,7 +286,7 @@ export default function AdminAdminDashboardhomeDashboard() {
 
                   <Grid item>
                     <LoadingButton
-                      id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewActionGroupCreateUser"
+                      id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditActionGroupCreateUser"
                       loading={isLoading}
                       startIcon={<MdiIcon path="account" />}
                       loadingPosition="start"
@@ -312,13 +312,13 @@ export default function AdminAdminDashboardhomeDashboard() {
 
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBar"
+                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBar"
                   ownerData={data}
                   validation={validation}
                   orientation='horizontal'
                   childTabs={[
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissues',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissues',
                       name: 'edemokracia.admin.Admin.dashboardhome.Dashboard.myissues',
                       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.myissues', {
                         defaultValue: 'My issues',
@@ -329,7 +329,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                       nestedDataKeys: ['issues'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMydebates',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMydebates',
                       name: 'edemokracia.admin.Admin.dashboardhome.Dashboard.mydebates',
                       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.mydebates', {
                         defaultValue: 'My debates',
@@ -340,7 +340,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                       nestedDataKeys: ['debates'],
                     },
                     {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotes',
+                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotes',
                       name: 'edemokracia.admin.Admin.dashboardhome.Dashboard.myvotes',
                       label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.myvotes', {
                         defaultValue: 'My votes',
@@ -354,7 +354,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissues"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissues"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -363,7 +363,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -372,7 +372,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyissuesMyissuesIssuesLabelWrapperIssues"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -396,7 +396,7 @@ export default function AdminAdminDashboardhomeDashboard() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMydebatesMydebates"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMydebatesMydebates"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -405,7 +405,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMydebatesMydebatesDebatesLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMydebatesMydebatesDebatesLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -414,7 +414,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMydebatesMydebatesDebatesLabelWrapperDebates"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMydebatesMydebatesDebatesLabelWrapperDebates"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -438,7 +438,7 @@ export default function AdminAdminDashboardhomeDashboard() {
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotes"
+                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotes"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -447,7 +447,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapper"
+                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapper"
                           container
                           direction="column"
                           alignItems="stretch"
@@ -456,7 +456,7 @@ export default function AdminAdminDashboardhomeDashboard() {
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries"
+                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries"
                               container
                               direction="column"
                               alignItems="stretch"

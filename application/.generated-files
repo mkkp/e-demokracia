@@ -19,7 +19,7 @@ docker/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,d444054c34deafa82e300e986847c41b
 frontend-react/model/pom.xml,d72a1389311834292e7dab60363eb4e9
-frontend-react/pom.xml,02c7eb523b3cf9f08869d0e7f421157a
+frontend-react/pom.xml,55f4ae07da1218c71cd41e63c261aa02
 internal/pom.xml,a954ddcb6ee521bf1616cf02552e9880
 judo.properties,9e50a015d78737c49302671b85206c68
 judo.sh,753a07e575f1ca37d58958f160400c03

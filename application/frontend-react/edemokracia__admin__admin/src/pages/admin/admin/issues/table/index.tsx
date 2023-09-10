@@ -34,7 +34,7 @@ export default function AdminAdminIssuesTable() {
   const { t } = useTranslation();
   const { locale: l10nLocale } = useL10N();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const title: string = t('admin.IssueTable', { defaultValue: 'Issues' });
+  const title: string = t('admin.IssueTable', { defaultValue: 'Issue Table' });
 
   const handleFetchData = async () => {
     tableRef.current?.fetchData();

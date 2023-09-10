@@ -113,7 +113,7 @@ export function CountyLink(props: CountyLinkProps) {
 
   const countyRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAreaAreaCountyRepresentationFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAreaAreaCountyRepresentationFilter',
       attributeName: 'representation',
       label: t('admin.IssueView.county.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
@@ -137,7 +137,7 @@ export function CountyLink(props: CountyLinkProps) {
   return (
     <AggregationInput
       name="county"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewOtherAreaAreaCounty"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueOutputDefaultIssueViewEditOtherAreaAreaCounty"
       label={t('admin.IssueView.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '']}
       ownerData={ownerData}

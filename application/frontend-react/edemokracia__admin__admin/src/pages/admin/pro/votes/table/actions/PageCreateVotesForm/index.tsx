@@ -144,7 +144,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
     },
     [data],
   );
-  const title: string = t('admin.SimpleVoteForm', { defaultValue: 'Create Vote' });
+  const title: string = t('admin.SimpleVoteForm', { defaultValue: 'SimpleVote Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
@@ -222,7 +222,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
         <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
           <Grid item xs={12} sm={12}>
             <Grid
-              id="FlexedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultVoteFormGroup"
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultSimpleVoteFormGroup"
               container
               direction="row"
               alignItems="flex-start"
@@ -240,7 +240,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
                   autoFocus
                   slotProps={{
                     textField: {
-                      id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultVoteFormGroupCreated',
+                      id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultSimpleVoteFormGroupCreated',
                       required: true,
                       helperText: validation.get('created'),
                       error: !!validation.get('created'),
@@ -283,7 +283,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
                 <TextField
                   required={true}
                   name="type"
-                  id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultVoteFormGroupType"
+                  id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultSimpleVoteFormGroupType"
                   label={t('admin.SimpleVoteForm.type', { defaultValue: 'Type' }) as string}
                   value={data.type || ''}
                   className={clsx({
@@ -320,7 +320,7 @@ export function PageCreateVotesForm({ successCallback, cancel, owner }: PageCrea
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="FlexedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultVoteFormGroup2"
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminProVotesCreateDefaultSimpleVoteFormGroup2"
               container
               direction="row"
               alignItems="flex-start"

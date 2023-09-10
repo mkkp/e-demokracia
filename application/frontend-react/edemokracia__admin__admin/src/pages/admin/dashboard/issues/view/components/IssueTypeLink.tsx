@@ -125,14 +125,14 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
 
   const issueTypeRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueIssueTypeTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewEditIssueLabelWrapperIssueIssueTypeTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueView.issueType.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueIssueTypeDescriptionFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewEditIssueLabelWrapperIssueIssueTypeDescriptionFilter',
       attributeName: 'description',
       label: t('admin.IssueView.issueType.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -156,7 +156,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
   return (
     <AggregationInput
       name="issueType"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewIssueLabelWrapperIssueIssueType"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesViewDefaultIssueViewEditIssueLabelWrapperIssueIssueType"
       label={t('admin.IssueView.issueType', { defaultValue: 'Issue Type' }) as string}
       labelList={[ownerData.issueType?.title?.toString() ?? '', ownerData.issueType?.description?.toString() ?? '']}
       ownerData={ownerData}

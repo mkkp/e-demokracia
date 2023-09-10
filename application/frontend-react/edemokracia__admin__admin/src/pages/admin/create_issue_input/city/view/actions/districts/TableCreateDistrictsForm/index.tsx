@@ -142,7 +142,7 @@ export function TableCreateDistrictsForm({ successCallback, cancel, owner }: Tab
     },
     [data],
   );
-  const title: string = t('admin.DistrictForm', { defaultValue: 'Create district' });
+  const title: string = t('admin.DistrictForm', { defaultValue: 'District Form' });
 
   const isFormUpdateable = useCallback(() => {
     return true;
