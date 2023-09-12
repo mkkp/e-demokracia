@@ -1306,7 +1306,7 @@
 README.md,93783bae55185a0aca90b2f940d39e44
 index.html,fab19ef963e120b79a5044c8d044ceed
 package.json,020721161b3422c07c66c28b47771894
-pnpm-lock.yaml,c5f571d6bd01a45af7816e16b21dfc02
+pnpm-lock.yaml,726920e2cd92b26634f66f0e02553e48
 public/android-chrome-192x192.png,875e4c13e440df55ffdb8b67562353f7
 public/android-chrome-512x512.png,98869f9fd88a36faa2a41658fd5e6d91
 public/apple-touch-icon.png,8dc20d1fcd5cc3414afad6603d0a31ab
@@ -1315,7 +1315,7 @@ public/favicon-16x16.png,07d4a9035e87e12daeeaa07a7b0fc3b1
 public/favicon-32x32.png,16007d7b6ccc973a3d8e5e303919c012
 public/favicon.ico,17b33863654ecc54cddeece199c4ee97
 public/i18n/application_default.json,2219d6ce9225318fb7221d5028e645c8
-public/i18n/application_hu-HU.json,f5c1d1c67f07f3bd685e158525ba2876
+public/i18n/application_hu-HU.json,cb4bf7530475d037b9bc73170db15595
 public/i18n/system_default.json,26cf6d796178b484a6d3dd6ad4dfb4cc
 public/i18n/system_en-US.json,26cf6d796178b484a6d3dd6ad4dfb4cc
 public/i18n/system_hu-HU.json,d9a665abb903f6a9a1fe50e54f27f494
