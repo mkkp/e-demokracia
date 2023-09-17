@@ -6,10 +6,16 @@
 // Template name: actor/src/hooks/useHeroProps.ts
 // Template file: actor/src/hooks/useHeroProps.ts.hbs
 
-import type { HeroProps } from '../components-api';
 import { getUser } from '../auth';
 
-export function useHeroProps(): HeroProps {
+export interface UseHeroProps {
+  imgSrc: string;
+  actorName: string;
+  preferredUsername?: string;
+  email?: string;
+}
+
+export function useHeroProps(): UseHeroProps {
   const { profile } = getUser();
 
   return {

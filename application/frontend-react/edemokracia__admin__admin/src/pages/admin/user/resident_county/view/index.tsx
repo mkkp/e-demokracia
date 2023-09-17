@@ -37,7 +37,7 @@ import {
   booleanToStringSelect,
 } from '~/utilities';
 import { useConfirmationBeforeChange } from '~/hooks';
-import { toastConfig, dividerHeight } from '~/config';
+import { toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -223,94 +223,92 @@ export default function AdminUserResidentCountyView() {
           submit={submit}
         />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid
-              className="relation-page-data"
-              container
-              spacing={2}
-              direction="column"
-              alignItems="stretch"
-              justifyContent="flex-start"
-            >
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required={true}
-                  name="name"
-                  id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditName"
-                  label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
-                  value={data.name ?? ''}
-                  className={clsx({
-                    'JUDO-viewMode': !editMode,
-                    'JUDO-required': true,
-                  })}
-                  disabled={isLoading}
-                  error={!!validation.get('name')}
-                  helperText={validation.get('name')}
-                  onChange={(event) => {
-                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                    storeDiff('name', realValue);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    readOnly: false || !isFormUpdateable(),
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MdiIcon path="text_fields" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid
+            className="relation-page-data"
+            container
+            spacing={2}
+            direction="column"
+            alignItems="stretch"
+            justifyContent="flex-start"
+          >
+            <Grid item xs={12} sm={12}>
+              <TextField
+                required={true}
+                name="name"
+                id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditName"
+                label={t('admin.CountyView.name', { defaultValue: 'County name' }) as string}
+                value={data.name ?? ''}
+                className={clsx({
+                  'JUDO-viewMode': !editMode,
+                  'JUDO-required': true,
+                })}
+                disabled={isLoading}
+                error={!!validation.get('name')}
+                helperText={validation.get('name')}
+                onChange={(event) => {
+                  const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                  storeDiff('name', realValue);
+                }}
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  readOnly: false || !isFormUpdateable(),
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MdiIcon path="text_fields" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="FlexedemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditCitiesLabelWrapper"
-                  container
-                  direction="column"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="city" sx={{ marginRight: 1 }} />
-                      <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditCitiesLabelWrapperCitiesLabel"
-                        variant="h6"
-                        component="h1"
-                      >
-                        {t('admin.CountyView.cities.Label', { defaultValue: 'Cities' })}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="TableedemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditCitiesLabelWrapperCities"
-                      container
-                      direction="column"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
+            <Grid item xs={12} sm={12}>
+              <Grid
+                id="FlexedemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditCitiesLabelWrapper"
+                container
+                direction="column"
+                alignItems="stretch"
+                justifyContent="flex-start"
+                spacing={2}
+              >
+                <Grid item xs={12} sm={12}>
+                  <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                    <MdiIcon path="city" sx={{ marginRight: 1 }} />
+                    <Typography
+                      id="LabeledemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditCitiesLabelWrapperCitiesLabel"
+                      variant="h5"
+                      component="h1"
                     >
-                      <CitiesTable
-                        isOwnerLoading={isLoading}
-                        validation={validation}
-                        fetchOwnerData={fetchData}
-                        ownerData={data}
-                        editMode={editMode}
-                        isFormUpdateable={isFormUpdateable}
-                        storeDiff={storeDiff}
-                      />
-                    </Grid>
+                      {t('admin.CountyView.cities.Label', { defaultValue: 'Cities' })}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="TableedemokraciaAdminAdminEdemokraciaAdminUserResidentCountyViewDefaultCountyViewEditCitiesLabelWrapperCities"
+                    container
+                    direction="column"
+                    alignItems="stretch"
+                    justifyContent="flex-start"
+                  >
+                    <CitiesTable
+                      isOwnerLoading={isLoading}
+                      validation={validation}
+                      fetchOwnerData={fetchData}
+                      ownerData={data}
+                      editMode={editMode}
+                      isFormUpdateable={isFormUpdateable}
+                      storeDiff={storeDiff}
+                    />
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+          </Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

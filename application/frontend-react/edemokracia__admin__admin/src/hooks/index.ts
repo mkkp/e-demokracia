@@ -6,7 +6,10 @@
 // Template name: actor/src/hooks/index.ts
 // Template file: actor/src/hooks/index.ts.hbs
 
+export * from './ConfigContext';
+export * from './useConfig';
 export * from './useDataStore';
 export * from './useHeroProps';
+export * from './useLocalStorage';
 export * from './useLogoProps';
 export * from './useNavigationConfirmation';

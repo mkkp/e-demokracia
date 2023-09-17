@@ -10,8 +10,6 @@ export * from './ApplicationSelector';
 export * from './CustomBreadcrumb';
 export * from './CustomTablePagination';
 export * from './DropdownButton';
-export * from './Hero';
-export * from './Logo';
 export * from './MdiIcon';
 export * from './ModeledTabs';
 export * from './PageHeader';

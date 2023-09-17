@@ -9,19 +9,28 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  AdminProParentQueryCustomizer,
+  AdminProParent,
   AdminCon,
+  AdminDebateParentStored,
+  AdminConParentQueryCustomizer,
   AdminConStored,
+  AdminProParentStored,
   AdminUserStored,
   AdminPro,
   AdminUserQueryCustomizer,
   AdminSimpleVote,
+  AdminDebateParentQueryCustomizer,
   AdminCommentQueryCustomizer,
+  AdminConParentStored,
   AdminSimpleVoteQueryCustomizer,
   AdminProQueryCustomizer,
   AdminProStored,
   AdminConQueryCustomizer,
   AdminComment,
   AdminUser,
+  AdminDebateParent,
+  AdminConParent,
   AdminCommentStored,
   AdminSimpleVoteStored,
 } from '../data-api';

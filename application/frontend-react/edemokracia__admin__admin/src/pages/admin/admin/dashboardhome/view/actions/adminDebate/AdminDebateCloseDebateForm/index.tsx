@@ -70,7 +70,7 @@ import {
   stringToBooleanSelect,
   booleanToStringSelect,
 } from '~/utilities';
-import { toastConfig, dividerHeight } from '~/config';
+import { toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
@@ -225,7 +225,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                       <Typography
                         id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormDebateLabelWrapperDebateLabel"
-                        variant="h6"
+                        variant="h5"
                         component="h1"
                       >
                         {t('CloseDebateInputForm.debate.Label', { defaultValue: 'Close debate' })}
@@ -434,7 +434,7 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                       <MdiIcon path="clipboard-list-outline" sx={{ marginRight: 1 }} />
                       <Typography
                         id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupLabel"
-                        variant="h6"
+                        variant="h5"
                         component="h1"
                       >
                         {t('CloseDebateInputForm.group.Label', { defaultValue: 'Seletable answers' })}

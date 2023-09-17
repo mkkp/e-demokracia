@@ -45,25 +45,23 @@ export default function AdminAdminCategoriesTable() {
       <PageHeader title={title}>
         <PageActions fetchData={handleFetchData} isLoading={isLoading} />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Card>
-                  <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTable-data-grid">
-                    <IssueCategory_TableTable
-                      ref={tableRef}
-                      isOwnerLoading={isLoading}
-                      setIsOwnerLoading={setIsLoading}
-                    />
-                  </CardContent>
-                </Card>
-              </Grid>
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Card>
+                <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminCategoriesTable-data-grid">
+                  <IssueCategory_TableTable
+                    ref={tableRef}
+                    isOwnerLoading={isLoading}
+                    setIsOwnerLoading={setIsLoading}
+                  />
+                </CardContent>
+              </Card>
             </Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+          </Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

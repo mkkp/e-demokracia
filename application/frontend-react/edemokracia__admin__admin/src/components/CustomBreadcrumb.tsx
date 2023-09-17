@@ -11,6 +11,7 @@ import { useState, useContext, createContext, useMemo, useEffect, useCallback } 
 import type { ReactNode } from 'react';
 import { useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
 import type { To } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { routeToDashboard } from '~/routes';
 import { MdiIcon } from './MdiIcon';
 import { StackableDialogProvider } from './dialog/StackableDialogProvider';
@@ -149,11 +150,13 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
 
 export const CustomBreadcrumb = () => {
   const breadcrumbItems = useContext(BreadcrumbContextState);
+  const { back, isBackDisabled } = useJudoNavigation();
+  const { t } = useTranslation();
 
   return (
-    <Breadcrumbs id="application-breadcrumb" maxItems={2} separator=">">
-      <Link component={RouterLink} to={routeToDashboard()}>
-        <MdiIcon path="home" />
+    <Breadcrumbs id="application-breadcrumb" maxItems={5} separator="/">
+      <Link component={RouterLink} to={routeToDashboard()} sx={{ textDecoration: 'none' }}>
+        <Typography>{t('judo.breadcrumb.home', { defaultValue: 'Home' })}</Typography>
       </Link>
       {breadcrumbItems.map(({ label, key }, index) => {
         return (

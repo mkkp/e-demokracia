@@ -6,11 +6,16 @@
 // Template name: actor/src/hooks/useLogoProps.ts
 // Template file: actor/src/hooks/useLogoProps.ts.hbs
 
-import type { LogoProps } from '../components-api';
+export interface UseLogoProps {
+  subTitle: string;
+  imgSrc: string;
+  iconSrc: string;
+}
 
-export function useLogoProps(): LogoProps {
+export function useLogoProps(): UseLogoProps {
   return {
     imgSrc: 'mkkp-logo.png',
-    subTitle: 'Edemokracia',
+    iconSrc: 'judo-icon.webp',
+    subTitle: 'edemokracia',
   };
 }

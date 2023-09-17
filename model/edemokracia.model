@@ -166,6 +166,15 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_bu1o0IgqEe2u0fVmwtP5bA" lower="0" upper="-1" target="_p-1882ksEe25ONJ3V89cVA" name="comments" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.comments">
         <inherited xmi:id="_bu5TMIgqEe2u0fVmwtP5bA"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_DA1iYFVcEe6uPON95HTfyQ" lower="0" upper="1" target="_6dFRQFVeEe6uPON95HTfyQ" name="parentDebate" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self!container(edemokracia::Debate)">
+        <inherited xmi:id="_DA7pAFVcEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_PvyhQFVcEe6uPON95HTfyQ" lower="0" upper="1" target="_VIEHUFV5Ee6uPON95HTfyQ" name="parentCon" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self!container(edemokracia::Con)">
+        <inherited xmi:id="_Pv4n4FVcEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ybSP8FVcEe6uPON95HTfyQ" lower="0" upper="1" target="_MgYf0FV5Ee6uPON95HTfyQ" name="parentPro" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self!container(edemokracia::Pro)">
+        <inherited xmi:id="_ybXvgFVcEe6uPON95HTfyQ"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_1M9fwG5REe2Q6M99rsfqSQ" name="createdByName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.firstName + &quot; &quot; + self.createdBy.lastName" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_1M9fwW5REe2Q6M99rsfqSQ"/>
       </attributes>
@@ -965,6 +974,15 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_rpr78IgqEe2u0fVmwtP5bA" lower="0" upper="-1" target="_p-1882ksEe25ONJ3V89cVA" name="comments" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.comments">
         <inherited xmi:id="_rptxIIgqEe2u0fVmwtP5bA"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_56nkwFVbEe6uPON95HTfyQ" lower="0" upper="1" target="_6dFRQFVeEe6uPON95HTfyQ" name="parentDebate" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self!container(edemokracia::Debate)">
+        <inherited xmi:id="_56uScFVbEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_XV0egFVcEe6uPON95HTfyQ" lower="0" upper="1" target="_MgYf0FV5Ee6uPON95HTfyQ" name="parentPro" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self!container(edemokracia::Pro)">
+        <inherited xmi:id="_XV6lIFVcEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_4icbcFVcEe6uPON95HTfyQ" lower="0" upper="1" target="_VIEHUFV5Ee6uPON95HTfyQ" name="parentCon" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self!container(edemokracia::Con)">
+        <inherited xmi:id="_4igs4FVcEe6uPON95HTfyQ"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_17TzgG5REe2Q6M99rsfqSQ" name="createdByName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.firstName + &quot; &quot; + self.createdBy.lastName" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_17TzgW5REe2Q6M99rsfqSQ"/>
       </attributes>
@@ -1640,6 +1658,24 @@
         <components xsi:type="ui:DataField" xmi:id="_A8ptAIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:OperationForm" xmi:id="_A85koIXrEe2kLcMqsIbMgQ" name="vote" label="Vote" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="vote"/>
       </view>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_6dFRQFVeEe6uPON95HTfyQ" name="DebateParent" createable="false" updateable="false" deleteable="false">
+      <mapping xmi:id="_7pgpUFV4Ee6uPON95HTfyQ" target="_jjCdUGkPEe25ONJ3V89cVA"/>
+      <form xmi:id="_6dGfYFVeEe6uPON95HTfyQ" name="DebateParent_Form" label="DebateParent Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_6dHtgFVeEe6uPON95HTfyQ" name="DebateParent_Table" label="DebateParent Table" rowsPerPage="10"/>
+      <view xmi:id="_6dF4UFVeEe6uPON95HTfyQ" name="DebateParent_View_Edit" label="DebateParent View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_MgYf0FV5Ee6uPON95HTfyQ" name="ProParent" createable="false" updateable="false" deleteable="false">
+      <mapping xmi:id="_PIRvIFV5Ee6uPON95HTfyQ" target="_3Z7A0GkSEe25ONJ3V89cVA"/>
+      <form xmi:id="_MgaVAFV5Ee6uPON95HTfyQ" name="ProParent_Form" label="ProParent Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_Mga8EFV5Ee6uPON95HTfyQ" name="ProParent_Table" label="ProParent Table" rowsPerPage="10"/>
+      <view xmi:id="_MgZG4FV5Ee6uPON95HTfyQ" name="ProParent_View_Edit" label="ProParent View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_VIEHUFV5Ee6uPON95HTfyQ" name="ConParent" createable="false" updateable="false" deleteable="false">
+      <mapping xmi:id="_XJNfsFV5Ee6uPON95HTfyQ" target="_5yNG0GkSEe25ONJ3V89cVA"/>
+      <form xmi:id="_VIGjkFV5Ee6uPON95HTfyQ" name="ConParent_Form" label="ConParent Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
+      <table xmi:id="_VIHxsFV5Ee6uPON95HTfyQ" name="ConParent_Table" label="ConParent Table" rowsPerPage="10"/>
+      <view xmi:id="_VIEuYFV5Ee6uPON95HTfyQ" name="ConParent_View_Edit" label="ConParent View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
     </elements>
   </elements>
   <elements xsi:type="namespace:Package" xmi:id="_7D8Nz2kNEe25ONJ3V89cVA" name="measures">

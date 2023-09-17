@@ -8,23 +8,32 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
+  AdminProParent,
+  AdminProParentQueryCustomizer,
   AdminCon,
-  AdminConStored,
-  AdminUserStored,
-  AdminPro,
-  AdminUserQueryCustomizer,
+  AdminConParentQueryCustomizer,
   AdminSimpleVote,
+  AdminDebateParentQueryCustomizer,
   AdminCommentQueryCustomizer,
-  AdminSimpleVoteQueryCustomizer,
-  AdminProStored,
+  AdminConParentStored,
   AdminProQueryCustomizer,
   CreateCommentInput,
-  AdminConQueryCustomizer,
   AdminComment,
   AdminUser,
   CreateArgumentInput,
-  AdminCommentStored,
+  AdminConParent,
   AdminSimpleVoteStored,
+  AdminDebateParentStored,
+  AdminConStored,
+  AdminProParentStored,
+  AdminUserStored,
+  AdminPro,
+  AdminUserQueryCustomizer,
+  AdminSimpleVoteQueryCustomizer,
+  AdminProStored,
+  AdminConQueryCustomizer,
+  AdminDebateParent,
+  AdminCommentStored,
 } from '../data-api';
 
 /**
@@ -86,6 +95,36 @@ export interface AdminProServiceForClass {
     owner?: JudoIdentifiable<AdminPro> | AdminPro,
     queryCustomizer?: AdminCommentQueryCustomizer,
   ): Promise<Array<AdminCommentStored>>;
+
+  getParentDebate(
+    target: JudoIdentifiable<AdminPro>,
+    queryCustomizer?: AdminDebateParentQueryCustomizer,
+  ): Promise<AdminDebateParentStored>;
+
+  getRangeForParentDebate(
+    owner?: JudoIdentifiable<AdminPro> | AdminPro,
+    queryCustomizer?: AdminDebateParentQueryCustomizer,
+  ): Promise<Array<AdminDebateParentStored>>;
+
+  getParentPro(
+    target: JudoIdentifiable<AdminPro>,
+    queryCustomizer?: AdminProParentQueryCustomizer,
+  ): Promise<AdminProParentStored>;
+
+  getRangeForParentPro(
+    owner?: JudoIdentifiable<AdminPro> | AdminPro,
+    queryCustomizer?: AdminProParentQueryCustomizer,
+  ): Promise<Array<AdminProParentStored>>;
+
+  getParentCon(
+    target: JudoIdentifiable<AdminPro>,
+    queryCustomizer?: AdminConParentQueryCustomizer,
+  ): Promise<AdminConParentStored>;
+
+  getRangeForParentCon(
+    owner?: JudoIdentifiable<AdminPro> | AdminPro,
+    queryCustomizer?: AdminConParentQueryCustomizer,
+  ): Promise<Array<AdminConParentStored>>;
 
   createSubArgument(owner: JudoIdentifiable<AdminPro>, target: CreateArgumentInput): Promise<void>;
 

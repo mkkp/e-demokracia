@@ -6,7 +6,7 @@
 // Template name: actor/src/components/dialog/PageDialog.tsx
 // Template file: actor/src/components/dialog/PageDialog.tsx.hbs
 
-import { Dialog, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { Dialog, DialogContent, DialogActions, Button } from '@mui/material';
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { SlideUpTransition } from '~/theme/animations';
@@ -36,11 +36,7 @@ export const PageDialog = ({ page, open, handleClose, resolve }: PageDialogProps
 
   return (
     <Dialog open={open} onClose={ok} scroll="paper" TransitionComponent={SlideUpTransition}>
-      <DialogContent dividers={true}>
-        <DialogContentText ref={descriptionElementRef} tabIndex={-1}>
-          {page}
-        </DialogContentText>
-      </DialogContent>
+      <DialogContent dividers={true}>{page}</DialogContent>
       <DialogActions>
         <Button onClick={ok}>Ok</Button>
       </DialogActions>

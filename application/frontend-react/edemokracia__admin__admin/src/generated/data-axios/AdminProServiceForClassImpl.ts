@@ -9,23 +9,32 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  AdminProParent,
+  AdminProParentQueryCustomizer,
   AdminCon,
-  AdminConStored,
-  AdminUserStored,
-  AdminPro,
-  AdminUserQueryCustomizer,
+  AdminConParentQueryCustomizer,
   AdminSimpleVote,
+  AdminDebateParentQueryCustomizer,
   AdminCommentQueryCustomizer,
-  AdminSimpleVoteQueryCustomizer,
-  AdminProStored,
+  AdminConParentStored,
   AdminProQueryCustomizer,
   CreateCommentInput,
-  AdminConQueryCustomizer,
   AdminComment,
   AdminUser,
   CreateArgumentInput,
-  AdminCommentStored,
+  AdminConParent,
   AdminSimpleVoteStored,
+  AdminDebateParentStored,
+  AdminConStored,
+  AdminProParentStored,
+  AdminUserStored,
+  AdminPro,
+  AdminUserQueryCustomizer,
+  AdminSimpleVoteQueryCustomizer,
+  AdminProStored,
+  AdminConQueryCustomizer,
+  AdminDebateParent,
+  AdminCommentStored,
 } from '../data-api';
 import type { AdminProServiceForClass } from '../data-service';
 
@@ -233,6 +242,105 @@ export class AdminProServiceForClassImpl extends JudoAxiosService implements Adm
     queryCustomizer?: AdminCommentQueryCustomizer,
   ): Promise<Array<AdminCommentStored>> {
     const path = '/admin/Pro/comments/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getParentDebate(
+    target: JudoIdentifiable<AdminPro>,
+    queryCustomizer?: AdminDebateParentQueryCustomizer,
+  ): Promise<AdminDebateParentStored> {
+    const path = '/admin/Pro/parentDebate/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForParentDebate(
+    owner?: JudoIdentifiable<AdminPro> | AdminPro,
+    queryCustomizer?: AdminDebateParentQueryCustomizer,
+  ): Promise<Array<AdminDebateParentStored>> {
+    const path = '/admin/Pro/parentDebate/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getParentPro(
+    target: JudoIdentifiable<AdminPro>,
+    queryCustomizer?: AdminProParentQueryCustomizer,
+  ): Promise<AdminProParentStored> {
+    const path = '/admin/Pro/parentPro/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForParentPro(
+    owner?: JudoIdentifiable<AdminPro> | AdminPro,
+    queryCustomizer?: AdminProParentQueryCustomizer,
+  ): Promise<Array<AdminProParentStored>> {
+    const path = '/admin/Pro/parentPro/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getParentCon(
+    target: JudoIdentifiable<AdminPro>,
+    queryCustomizer?: AdminConParentQueryCustomizer,
+  ): Promise<AdminConParentStored> {
+    const path = '/admin/Pro/parentCon/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForParentCon(
+    owner?: JudoIdentifiable<AdminPro> | AdminPro,
+    queryCustomizer?: AdminConParentQueryCustomizer,
+  ): Promise<Array<AdminConParentStored>> {
+    const path = '/admin/Pro/parentCon/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

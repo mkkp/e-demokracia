@@ -13,15 +13,9 @@ import { SnackbarProvider, closeSnackbar } from 'notistack';
 import { BreadcrumbProvider, MdiIcon } from './components';
 import { DialogProvider } from './components/dialog';
 import { Layout } from './layout';
-import { menuItems } from './menu-items';
-import { useHeroProps, useLogoProps } from './hooks';
 import { PrincipalProvider } from './auth';
 
 function App() {
-  const [drawerWidth] = useState<number>(300);
-  const heroProps = useHeroProps();
-  const logoProps = useLogoProps();
-
   return (
     <PrincipalProvider>
       <SnackbarProvider
@@ -38,7 +32,7 @@ function App() {
       >
         <DialogProvider>
           <BreadcrumbProvider>
-            <Layout items={menuItems} drawerWidth={drawerWidth} logo={logoProps} hero={heroProps} />
+            <Layout />
           </BreadcrumbProvider>
         </DialogProvider>
       </SnackbarProvider>

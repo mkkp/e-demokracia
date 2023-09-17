@@ -7,7 +7,7 @@
 // Template file: actor/src/config/table.ts.hbs
 
 import type { DataGridProps, GridColDef } from '@mui/x-data-grid';
-import { density } from '../theme';
+import { density } from '../theme/density';
 
 export const baseColumnConfig: Partial<GridColDef<any>> = {
   groupable: false,

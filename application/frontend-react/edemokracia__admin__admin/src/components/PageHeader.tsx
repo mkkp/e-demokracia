@@ -6,7 +6,7 @@
 // Template name: actor/src/components/PageHeader.tsx
 // Template file: actor/src/components/PageHeader.tsx.hbs
 
-import { AppBar, Toolbar, Grid, Typography, Divider, Container } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useJudoNavigation } from './CustomBreadcrumb';
@@ -24,26 +24,17 @@ export const PageHeader = ({ title, children }: PageHeaderProps) => {
   }, [title]);
 
   return (
-    <>
-      <AppBar component="div" position="sticky" elevation={0}>
-        <Toolbar>
-          <Container component="main" maxWidth="xl">
-            <Grid container alignItems="center" justifyContent="space-between" spacing={1}>
-              <Grid item>
-                <Typography id="application-page-header-title" component="span" color="text.primary" variant="h5">
-                  {title}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Grid container direction="row" alignItems="center" spacing={1}>
-                  {children}
-                </Grid>
-              </Grid>
-            </Grid>
-          </Container>
-        </Toolbar>
-        <Divider />
-      </AppBar>
-    </>
+    <Grid container alignItems="center" justifyContent="space-between" spacing={1}>
+      <Grid item>
+        <Typography id="application-page-header-title" component="span" color="text.primary" variant="h3">
+          {title}
+        </Typography>
+      </Grid>
+      <Grid item>
+        <Grid container direction="row" alignItems="center" spacing={1}>
+          {children}
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };

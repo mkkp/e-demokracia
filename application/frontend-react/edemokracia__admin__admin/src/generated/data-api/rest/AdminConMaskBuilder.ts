@@ -8,7 +8,10 @@
 
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
+  AdminConParentAttributes,
   AdminCommentAttributes,
+  AdminDebateParentAttributes,
+  AdminProParentAttributes,
   AdminProAttributes,
   AdminUserAttributes,
   AdminConAttributes,
@@ -24,11 +27,17 @@ import {
   AdminUserActivityDistrictsMaskBuilder,
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
+import {} from './AdminConParentMaskBuilder';
+import {} from './AdminDebateParentMaskBuilder';
+import {} from './AdminProParentMaskBuilder';
 import {
   AdminProCreatedByMaskBuilder,
   AdminProProsMaskBuilder,
   AdminProConsMaskBuilder,
   AdminProCommentsMaskBuilder,
+  AdminProParentDebateMaskBuilder,
+  AdminProParentProMaskBuilder,
+  AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
 
 export class AdminConCreatedByMaskBuilder extends RelationMaskBuilder {
@@ -54,6 +63,9 @@ export class AdminConConsMaskBuilder extends RelationMaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
+      | AdminConParentDebateMaskBuilder
+      | AdminConParentConMaskBuilder
+      | AdminConParentProMaskBuilder
     >,
   ) {
     super('cons', props);
@@ -67,6 +79,9 @@ export class AdminConProsMaskBuilder extends RelationMaskBuilder {
       | AdminProProsMaskBuilder
       | AdminProConsMaskBuilder
       | AdminProCommentsMaskBuilder
+      | AdminProParentDebateMaskBuilder
+      | AdminProParentProMaskBuilder
+      | AdminProParentConMaskBuilder
     >,
   ) {
     super('pros', props);
@@ -75,6 +90,21 @@ export class AdminConProsMaskBuilder extends RelationMaskBuilder {
 export class AdminConCommentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<AdminCommentAttributes | AdminCommentCreatedByMaskBuilder>) {
     super('comments', props);
+  }
+}
+export class AdminConParentDebateMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminDebateParentAttributes>) {
+    super('parentDebate', props);
+  }
+}
+export class AdminConParentConMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminConParentAttributes>) {
+    super('parentCon', props);
+  }
+}
+export class AdminConParentProMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminProParentAttributes>) {
+    super('parentPro', props);
   }
 }
 
@@ -86,6 +116,9 @@ export class AdminConMaskBuilder extends MaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
+      | AdminConParentDebateMaskBuilder
+      | AdminConParentConMaskBuilder
+      | AdminConParentProMaskBuilder
     >,
   ) {
     super(props);

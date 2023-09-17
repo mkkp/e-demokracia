@@ -2,6 +2,7 @@
     "translation": {
         "judo.security.login": "Belépés",
         "judo.security.logout": "Kilépés",
+        "judo.breadcrumb.home": "Főoldal",
         "judo.action.create.success": "Sikeres létrehozás",
         "judo.action.delete.success": "Sikeres törlés",
         "judo.action.save.success": "Változások elmentve",
@@ -85,6 +86,7 @@
         "judo.component.Table.ContextMenu.filterBy": "Szűrés a kiválasztott érték alapján",
         "judo.component.Table.ContextMenu.excludeBy": "Kizárás a kiválasztott érték alapján",
         "judo.applications.available_applications": "Választható alkalmazások",
+        "judo.applications.change": "Alkalmazás váltás",
         "judo.error.error": "Hiba",
         "judo.error.internal-server-error": "Belső alkalmazás hiba történt",
         "judo.error.technical": "Azonosítatlan hiba történt. Kérjük lépjen kapcsolatba a rendszer üzemeltetőivel!",

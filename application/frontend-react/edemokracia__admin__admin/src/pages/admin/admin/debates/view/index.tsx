@@ -49,7 +49,7 @@ import {
   booleanToStringSelect,
 } from '~/utilities';
 import { useConfirmationBeforeChange } from '~/hooks';
-import { toastConfig, dividerHeight } from '~/config';
+import { toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -280,527 +280,521 @@ export default function AdminAdminDebatesView() {
           deleteData={deleteData}
         />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid
-              className="access-page-data"
-              container
-              spacing={2}
-              direction="column"
-              alignItems="stretch"
-              justifyContent="flex-start"
-            >
-              <Grid item xs={12} sm={12}>
-                <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapper">
-                  <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                      <Grid item xs={12} sm={12}>
-                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                          <Typography
-                            id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateLabel"
-                            variant="h6"
-                            component="h1"
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid
+            className="access-page-data"
+            container
+            spacing={2}
+            direction="column"
+            alignItems="stretch"
+            justifyContent="flex-start"
+          >
+            <Grid item xs={12} sm={12}>
+              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapper">
+                <CardContent>
+                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid item xs={12} sm={12}>
+                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                        <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
+                        <Typography
+                          id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateLabel"
+                          variant="h5"
+                          component="h1"
+                        >
+                          {t('admin.DebateView.debate.Label', { defaultValue: 'Debate' })}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebate"
+                        container
+                        direction="row"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12} md={8.0}>
+                          <TextField
+                            required={true}
+                            name="title"
+                            id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateTitle"
+                            label={t('admin.DebateView.title', { defaultValue: 'Title' }) as string}
+                            value={data.title ?? ''}
+                            className={clsx({
+                              'JUDO-viewMode': !editMode,
+                              'JUDO-required': true,
+                            })}
+                            disabled={isLoading}
+                            error={!!validation.get('title')}
+                            helperText={validation.get('title')}
+                            onChange={(event) => {
+                              const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                              storeDiff('title', realValue);
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                              readOnly: false || !isFormUpdateable(),
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <MdiIcon path="text_fields" />
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={2.0}>
+                          <TextField
+                            required={true}
+                            name="status"
+                            id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateStatus"
+                            label={t('admin.DebateView.status', { defaultValue: 'Status' }) as string}
+                            value={data.status || ''}
+                            className={clsx({
+                              'JUDO-viewMode': !editMode,
+                              'JUDO-required': true,
+                            })}
+                            disabled={isLoading}
+                            error={!!validation.get('status')}
+                            helperText={validation.get('status')}
+                            onChange={(event) => {
+                              storeDiff('status', event.target.value);
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                              readOnly: false || !isFormUpdateable(),
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <MdiIcon path="list" />
+                                </InputAdornment>
+                              ),
+                            }}
+                            select
                           >
-                            {t('admin.DebateView.debate.Label', { defaultValue: 'Debate' })}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebate"
-                          container
-                          direction="row"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12} md={8.0}>
-                            <TextField
-                              required={true}
-                              name="title"
-                              id="TextInputedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateTitle"
-                              label={t('admin.DebateView.title', { defaultValue: 'Title' }) as string}
-                              value={data.title ?? ''}
-                              className={clsx({
-                                'JUDO-viewMode': !editMode,
-                                'JUDO-required': true,
-                              })}
-                              disabled={isLoading}
-                              error={!!validation.get('title')}
-                              helperText={validation.get('title')}
-                              onChange={(event) => {
-                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                                storeDiff('title', realValue);
-                              }}
-                              InputLabelProps={{ shrink: true }}
-                              InputProps={{
-                                readOnly: false || !isFormUpdateable(),
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="text_fields" />
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12} md={2.0}>
-                            <TextField
-                              required={true}
-                              name="status"
-                              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateStatus"
-                              label={t('admin.DebateView.status', { defaultValue: 'Status' }) as string}
-                              value={data.status || ''}
-                              className={clsx({
-                                'JUDO-viewMode': !editMode,
-                                'JUDO-required': true,
-                              })}
-                              disabled={isLoading}
-                              error={!!validation.get('status')}
-                              helperText={validation.get('status')}
-                              onChange={(event) => {
-                                storeDiff('status', event.target.value);
-                              }}
-                              InputLabelProps={{ shrink: true }}
-                              InputProps={{
-                                readOnly: false || !isFormUpdateable(),
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="list" />
-                                  </InputAdornment>
-                                ),
-                              }}
-                              select
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusCREATED"
+                              value={'CREATED'}
                             >
-                              <MenuItem
-                                id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusCREATED"
-                                value={'CREATED'}
-                              >
-                                {t('enumerations.EdemokraciaDebateStatus.CREATED', { defaultValue: 'CREATED' })}
-                              </MenuItem>
-                              <MenuItem
-                                id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusPENDING"
-                                value={'PENDING'}
-                              >
-                                {t('enumerations.EdemokraciaDebateStatus.PENDING', { defaultValue: 'PENDING' })}
-                              </MenuItem>
-                              <MenuItem
-                                id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusACTIVE"
-                                value={'ACTIVE'}
-                              >
-                                {t('enumerations.EdemokraciaDebateStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                              </MenuItem>
-                              <MenuItem
-                                id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusCLOSED"
-                                value={'CLOSED'}
-                              >
-                                {t('enumerations.EdemokraciaDebateStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                              </MenuItem>
-                            </TextField>
-                          </Grid>
+                              {t('enumerations.EdemokraciaDebateStatus.CREATED', { defaultValue: 'CREATED' })}
+                            </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusPENDING"
+                              value={'PENDING'}
+                            >
+                              {t('enumerations.EdemokraciaDebateStatus.PENDING', { defaultValue: 'PENDING' })}
+                            </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusACTIVE"
+                              value={'ACTIVE'}
+                            >
+                              {t('enumerations.EdemokraciaDebateStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
+                            </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusCLOSED"
+                              value={'CLOSED'}
+                            >
+                              {t('enumerations.EdemokraciaDebateStatus.CLOSED', { defaultValue: 'CLOSED' })}
+                            </MenuItem>
+                          </TextField>
+                        </Grid>
 
-                          <Grid item xs={12} sm={12} md={2.0}>
-                            <DateTimePicker
-                              ampm={false}
-                              ampmInClock={false}
-                              className={clsx({
-                                'JUDO-viewMode': !editMode,
-                                'JUDO-required': true,
-                              })}
-                              slotProps={{
-                                textField: {
-                                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateCloseAt',
-                                  required: true,
-                                  helperText: validation.get('closeAt'),
-                                  error: !!validation.get('closeAt'),
-                                  InputProps: {
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <MdiIcon path="schedule" />
-                                      </InputAdornment>
-                                    ),
-                                  },
+                        <Grid item xs={12} sm={12} md={2.0}>
+                          <DateTimePicker
+                            ampm={false}
+                            ampmInClock={false}
+                            className={clsx({
+                              'JUDO-viewMode': !editMode,
+                              'JUDO-required': true,
+                            })}
+                            slotProps={{
+                              textField: {
+                                id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateCloseAt',
+                                required: true,
+                                helperText: validation.get('closeAt'),
+                                error: !!validation.get('closeAt'),
+                                InputProps: {
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <MdiIcon path="schedule" />
+                                    </InputAdornment>
+                                  ),
                                 },
-                              }}
-                              onError={(newError: DateTimeValidationError, value: any) => {
-                                // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                                setValidation((prevValidation) => {
-                                  const copy = new Map<keyof AdminDebate, string>(prevValidation);
-                                  copy.set(
-                                    'closeAt',
-                                    newError === 'invalidDate'
-                                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                          defaultValue: 'Value does not match the pattern requirements.',
-                                        }) as string)
-                                      : '',
-                                  );
-                                  return copy;
-                                });
-                              }}
-                              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                              label={t('admin.DebateView.closeAt', { defaultValue: 'Close at' }) as string}
-                              value={serviceDateToUiDate(data.closeAt ?? null)}
-                              readOnly={false || !isFormUpdateable()}
-                              disabled={isLoading}
-                              onChange={(newValue: Date) => {
-                                storeDiff('closeAt', newValue);
-                              }}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12} md={8.0}>
-                            <IssueLink
-                              ownerData={data}
-                              readOnly={true || !isFormUpdateable()}
-                              disabled={isLoading}
-                              editMode={editMode}
-                              fetchOwnerData={fetchData}
-                              onChange={(value: AdminIssue | AdminIssueStored | null) => {
-                                storeDiff('issue', value);
-                              }}
-                              validation={validation}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12} md={4.0}>
-                            <CreatedByLink
-                              ownerData={data}
-                              readOnly={true || !isFormUpdateable()}
-                              disabled={isLoading}
-                              editMode={editMode}
-                              fetchOwnerData={fetchData}
-                              onChange={(value: AdminUser | AdminUserStored | null) => {
-                                storeDiff('createdBy', value);
-                              }}
-                              validation={validation}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12}>
-                            <TextField
-                              required={true}
-                              name="description"
-                              id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateDescription"
-                              label={t('admin.DebateView.description', { defaultValue: 'Description' }) as string}
-                              value={data.description ?? ''}
-                              className={clsx({
-                                'JUDO-viewMode': !editMode,
-                                'JUDO-required': true,
-                              })}
-                              disabled={isLoading}
-                              multiline
-                              minRows={4.0}
-                              error={!!validation.get('description')}
-                              helperText={validation.get('description')}
-                              onChange={(event) => {
-                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                                storeDiff('description', realValue);
-                              }}
-                              InputLabelProps={{ shrink: true }}
-                              InputProps={{
-                                readOnly: false || !isFormUpdateable(),
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="text_fields" />
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12}>
-                            <VoteDefinitionLink
-                              ownerData={data}
-                              readOnly={true || !isFormUpdateable()}
-                              disabled={isLoading}
-                              editMode={editMode}
-                              fetchOwnerData={fetchData}
-                              onChange={(value: AdminVoteDefinition | AdminVoteDefinitionStored | null) => {
-                                storeDiff('voteDefinition', value);
-                              }}
-                              validation={validation}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12} md={4.0}>
-                            <LoadingButton
-                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateButtonCallOperation"
-                              loading={isLoading}
-                              variant={undefined}
-                              startIcon={<MdiIcon path="wechat" />}
-                              loadingPosition="start"
-                              onClick={async () => {
-                                try {
-                                  setIsLoading(true);
-                                  await adminDebateCloseDebateAction(data, () => fetchData());
-                                } finally {
-                                  setIsLoading(false);
-                                }
-                              }}
-                              disabled={editMode}
-                            >
-                              <span>
-                                {t('admin.DebateView.closeDebate.ButtonCallOperation', {
-                                  defaultValue: 'Close debate',
-                                })}
-                              </span>
-                            </LoadingButton>
-                          </Grid>
+                              },
+                            }}
+                            onError={(newError: DateTimeValidationError, value: any) => {
+                              // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                              setValidation((prevValidation) => {
+                                const copy = new Map<keyof AdminDebate, string>(prevValidation);
+                                copy.set(
+                                  'closeAt',
+                                  newError === 'invalidDate'
+                                    ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                        defaultValue: 'Value does not match the pattern requirements.',
+                                      }) as string)
+                                    : '',
+                                );
+                                return copy;
+                              });
+                            }}
+                            views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                            label={t('admin.DebateView.closeAt', { defaultValue: 'Close at' }) as string}
+                            value={serviceDateToUiDate(data.closeAt ?? null)}
+                            readOnly={false || !isFormUpdateable()}
+                            disabled={isLoading}
+                            onChange={(newValue: Date) => {
+                              storeDiff('closeAt', newValue);
+                            }}
+                          />
                         </Grid>
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
 
-              <Grid container item xs={12} sm={12}>
-                <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBar"
-                  ownerData={data}
-                  validation={validation}
-                  orientation='horizontal'
-                  childTabs={[
-                    {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArguments',
-                      name: 'admin.DebateView.arguments',
-                      label: t('admin.DebateView.arguments', { defaultValue: 'Arguments' }) as string,
-                      disabled: isLoading,
-                      hidden: false,
-                      icon: 'account-voice',
-                      nestedDataKeys: ['cons', 'pros'],
-                    },
-                    {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarComments',
-                      name: 'admin.DebateView.comments',
-                      label: t('admin.DebateView.comments', { defaultValue: 'Comments' }) as string,
-                      disabled: isLoading,
-                      hidden: false,
-                      icon: 'comment-text-multiple',
-                      nestedDataKeys: ['comments'],
-                    },
-                  ]}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArguments"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsActions"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12} md={4.0}>
-                            <LoadingButton
-                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCreateArgumentButtonCallOperation"
-                              loading={isLoading}
-                              variant={undefined}
-                              startIcon={<MdiIcon path="account-voice" />}
-                              loadingPosition="start"
-                              onClick={async () => {
-                                try {
-                                  setIsLoading(true);
-                                  await adminDebateCreateArgumentAction(data, () => fetchData());
-                                } finally {
-                                  setIsLoading(false);
-                                }
-                              }}
-                              disabled={editMode}
-                            >
-                              <span>
-                                {t('admin.DebateView.createArgument.ButtonCallOperation', {
-                                  defaultValue: 'Add argument',
-                                })}
-                              </span>
-                            </LoadingButton>
-                          </Grid>
+                        <Grid item xs={12} sm={12} md={8.0}>
+                          <IssueLink
+                            ownerData={data}
+                            readOnly={true || !isFormUpdateable()}
+                            disabled={isLoading}
+                            editMode={editMode}
+                            fetchOwnerData={fetchData}
+                            onChange={(value: AdminIssue | AdminIssueStored | null) => {
+                              storeDiff('issue', value);
+                            }}
+                            validation={validation}
+                          />
                         </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12} md={6.0}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
-                                variant="h6"
-                                component="h1"
-                              >
-                                {t('admin.DebateView.pros.Label', { defaultValue: 'Pro' })}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapperPros"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <ProsTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                fetchOwnerData={fetchData}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <CreatedByLink
+                            ownerData={data}
+                            readOnly={true || !isFormUpdateable()}
+                            disabled={isLoading}
+                            editMode={editMode}
+                            fetchOwnerData={fetchData}
+                            onChange={(value: AdminUser | AdminUserStored | null) => {
+                              storeDiff('createdBy', value);
+                            }}
+                            validation={validation}
+                          />
                         </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12} md={6.0}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
-                                variant="h6"
-                                component="h1"
-                              >
-                                {t('admin.DebateView.cons.Label', { defaultValue: 'Contra' })}
-                              </Typography>
-                            </Grid>
-                          </Grid>
+                        <Grid item xs={12} sm={12}>
+                          <TextField
+                            required={true}
+                            name="description"
+                            id="TextAreaedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditDebateLabelWrapperDebateDescription"
+                            label={t('admin.DebateView.description', { defaultValue: 'Description' }) as string}
+                            value={data.description ?? ''}
+                            className={clsx({
+                              'JUDO-viewMode': !editMode,
+                              'JUDO-required': true,
+                            })}
+                            disabled={isLoading}
+                            multiline
+                            minRows={4.0}
+                            error={!!validation.get('description')}
+                            helperText={validation.get('description')}
+                            onChange={(event) => {
+                              const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                              storeDiff('description', realValue);
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                              readOnly: false || !isFormUpdateable(),
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <MdiIcon path="text_fields" />
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
 
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapperCons"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <ConsTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                fetchOwnerData={fetchData}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
+                        <Grid item xs={12} sm={12}>
+                          <VoteDefinitionLink
+                            ownerData={data}
+                            readOnly={true || !isFormUpdateable()}
+                            disabled={isLoading}
+                            editMode={editMode}
+                            fetchOwnerData={fetchData}
+                            onChange={(value: AdminVoteDefinition | AdminVoteDefinitionStored | null) => {
+                              storeDiff('voteDefinition', value);
+                            }}
+                            validation={validation}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <LoadingButton
+                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateButtonCallOperation"
+                            loading={isLoading}
+                            variant={undefined}
+                            startIcon={<MdiIcon path="wechat" />}
+                            loadingPosition="start"
+                            onClick={async () => {
+                              try {
+                                setIsLoading(true);
+                                await adminDebateCloseDebateAction(data, () => fetchData());
+                              } finally {
+                                setIsLoading(false);
+                              }
+                            }}
+                            disabled={editMode}
+                          >
+                            <span>
+                              {t('admin.DebateView.closeDebate.ButtonCallOperation', { defaultValue: 'Close debate' })}
+                            </span>
+                          </LoadingButton>
                         </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsComments"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsCommentsActions"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12} md={4.0}>
-                            <LoadingButton
-                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCreateCommentButtonCallOperation"
-                              loading={isLoading}
-                              variant={undefined}
-                              startIcon={<MdiIcon path="comment-text-multiple" />}
-                              loadingPosition="start"
-                              onClick={async () => {
-                                try {
-                                  setIsLoading(true);
-                                  await adminDebateCreateCommentAction(data, () => fetchData());
-                                } finally {
-                                  setIsLoading(false);
-                                }
-                              }}
-                              disabled={editMode}
-                            >
-                              <span>
-                                {t('admin.DebateView.createComment.ButtonCallOperation', {
-                                  defaultValue: 'Add comment',
-                                })}
-                              </span>
-                            </LoadingButton>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsCommentsCommentsLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsCommentsCommentsLabelWrapperComments"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <CommentsTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                fetchOwnerData={fetchData}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </ModeledTabs>
-              </Grid>
+                </CardContent>
+              </Card>
             </Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+
+            <Grid container item xs={12} sm={12}>
+              <ModeledTabs
+                id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBar"
+                ownerData={data}
+                validation={validation}
+                orientation='horizontal'
+                childTabs={[
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArguments',
+                    name: 'admin.DebateView.arguments',
+                    label: t('admin.DebateView.arguments', { defaultValue: 'Arguments' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    icon: 'account-voice',
+                    nestedDataKeys: ['cons', 'pros'],
+                  },
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarComments',
+                    name: 'admin.DebateView.comments',
+                    label: t('admin.DebateView.comments', { defaultValue: 'Comments' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    icon: 'comment-text-multiple',
+                    nestedDataKeys: ['comments'],
+                  },
+                ]}
+              >
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArguments"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsActions"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <LoadingButton
+                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCreateArgumentButtonCallOperation"
+                            loading={isLoading}
+                            variant={undefined}
+                            startIcon={<MdiIcon path="account-voice" />}
+                            loadingPosition="start"
+                            onClick={async () => {
+                              try {
+                                setIsLoading(true);
+                                await adminDebateCreateArgumentAction(data, () => fetchData());
+                              } finally {
+                                setIsLoading(false);
+                              }
+                            }}
+                            disabled={editMode}
+                          >
+                            <span>
+                              {t('admin.DebateView.createArgument.ButtonCallOperation', {
+                                defaultValue: 'Add argument',
+                              })}
+                            </span>
+                          </LoadingButton>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} md={6.0}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapper"
+                        container
+                        direction="column"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                            <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
+                            <Typography
+                              id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapperProsLabel"
+                              variant="h5"
+                              component="h1"
+                            >
+                              {t('admin.DebateView.pros.Label', { defaultValue: 'Pro' })}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsProsLabelWrapperPros"
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                          >
+                            <ProsTable
+                              isOwnerLoading={isLoading}
+                              validation={validation}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} md={6.0}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapper"
+                        container
+                        direction="column"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                            <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
+                            <Typography
+                              id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapperConsLabel"
+                              variant="h5"
+                              component="h1"
+                            >
+                              {t('admin.DebateView.cons.Label', { defaultValue: 'Contra' })}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarArgumentsArgumentsConsLabelWrapperCons"
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                          >
+                            <ConsTable
+                              isOwnerLoading={isLoading}
+                              validation={validation}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsComments"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsCommentsActions"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <LoadingButton
+                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewEdemokraciaAdminAdminEdemokraciaAdminDebateCreateCommentButtonCallOperation"
+                            loading={isLoading}
+                            variant={undefined}
+                            startIcon={<MdiIcon path="comment-text-multiple" />}
+                            loadingPosition="start"
+                            onClick={async () => {
+                              try {
+                                setIsLoading(true);
+                                await adminDebateCreateCommentAction(data, () => fetchData());
+                              } finally {
+                                setIsLoading(false);
+                              }
+                            }}
+                            disabled={editMode}
+                          >
+                            <span>
+                              {t('admin.DebateView.createComment.ButtonCallOperation', { defaultValue: 'Add comment' })}
+                            </span>
+                          </LoadingButton>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsCommentsCommentsLabelWrapper"
+                        container
+                        direction="column"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDebatesViewDefaultDebateViewEditTabBarCommentsCommentsCommentsLabelWrapperComments"
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                          >
+                            <CommentsTable
+                              isOwnerLoading={isLoading}
+                              validation={validation}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </ModeledTabs>
+            </Grid>
+          </Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

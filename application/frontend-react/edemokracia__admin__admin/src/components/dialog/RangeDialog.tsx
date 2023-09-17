@@ -6,15 +6,7 @@
 // Template name: actor/src/components/dialog/RangeDialog.tsx
 // Template file: actor/src/components/dialog/RangeDialog.tsx.hbs
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  Typography,
-} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
 import type {
   GridSortModel,
   GridFilterModel,
@@ -180,8 +172,14 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
       }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
-      return {
+      const strippedQueryCustomizer: U = {
         ...prevQueryCustomizer,
+      };
+      if (!!strippedQueryCustomizer._seek) {
+        delete strippedQueryCustomizer._seek.lastItem;
+      }
+      return {
+        ...strippedQueryCustomizer,
         _orderBy,
       };
     });
@@ -274,110 +272,108 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
         {t('judo.modal.range.label', { defaultValue: 'Select' }) as string}
       </DialogTitle>
       <DialogContent id={`${id}-data-grid`} dividers={true}>
-        <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>
-          <StripedDataGrid
-            sx={
-              single
-                ? {
-                    // overflow: 'hidden',
-                    display: 'grid',
-                    '.MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer': {
-                      display: 'none',
-                    },
-                  }
-                : {
-                    // overflow: 'hidden',
-                    display: 'grid',
-                  }
-            }
-            slotProps={{
-              filterPanel: {
-                logicOperators: [GridLogicOperator.And],
-              },
-            }}
-            {...serverTableConfig}
-            pageSizeOptions={[10]}
-            getRowId={(row: T) => row.__identifier as GridRowId}
-            loading={isLoading}
-            rows={data}
-            rowCount={rowCount}
-            getRowClassName={(params: GridRowClassNameParams) => {
-              return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
-            }}
-            sortModel={sortModel}
-            onSortModelChange={handleSortModelChange}
-            checkboxSelection
-            onRowSelectionModelChange={!single ? handleOnSelection : handleSingleOnSelection}
-            isRowSelectable={handleIsRowSelectable}
-            rowSelectionModel={selectionModel}
-            hideFooterSelectedRowCount={single}
-            columns={columns}
-            keepNonExistentRowsSelected
-            components={{
-              Toolbar: () => (
-                <GridToolbarContainer>
-                  <Button
-                    id={`${id}-set-filters`}
-                    variant="text"
-                    startIcon={<MdiIcon path="filter" />}
-                    onClick={async () => {
-                      const newFilters = await openFilterDialog('TODO', filterOptions, filters);
+        <StripedDataGrid
+          sx={
+            single
+              ? {
+                  // overflow: 'hidden',
+                  display: 'grid',
+                  '.MuiDataGrid-columnHeaderCheckbox .MuiDataGrid-columnHeaderTitleContainer': {
+                    display: 'none',
+                  },
+                }
+              : {
+                  // overflow: 'hidden',
+                  display: 'grid',
+                }
+          }
+          slotProps={{
+            filterPanel: {
+              logicOperators: [GridLogicOperator.And],
+            },
+          }}
+          {...serverTableConfig}
+          pageSizeOptions={[10]}
+          getRowId={(row: T) => row.__identifier as GridRowId}
+          loading={isLoading}
+          rows={data}
+          rowCount={rowCount}
+          getRowClassName={(params: GridRowClassNameParams) => {
+            return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
+          }}
+          sortModel={sortModel}
+          onSortModelChange={handleSortModelChange}
+          checkboxSelection
+          onRowSelectionModelChange={!single ? handleOnSelection : handleSingleOnSelection}
+          isRowSelectable={handleIsRowSelectable}
+          rowSelectionModel={selectionModel}
+          hideFooterSelectedRowCount={single}
+          columns={columns}
+          keepNonExistentRowsSelected
+          components={{
+            Toolbar: () => (
+              <GridToolbarContainer>
+                <Button
+                  id={`${id}-set-filters`}
+                  variant="text"
+                  startIcon={<MdiIcon path="filter" />}
+                  onClick={async () => {
+                    const newFilters = await openFilterDialog('TODO', filterOptions, filters);
 
-                      if (newFilters) {
-                        handleFiltersChange(newFilters);
+                    if (newFilters) {
+                      handleFiltersChange(newFilters);
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('judo.modal.range.set-filters', { defaultValue: 'Set filters' }) as string}{' '}
+                  {filters.length !== 0 ? '(' + filters.length + ')' : ''}
+                </Button>
+                {createTrigger && (
+                  <Button
+                    id={`${id}-create`}
+                    variant="text"
+                    startIcon={<MdiIcon path="file_document_plus" />}
+                    onClick={async () => {
+                      try {
+                        const result = await createTrigger();
+                        if (result) {
+                          handleClose();
+                          resolve({
+                            value: result,
+                            resolveSource: 'create',
+                          });
+                        }
+                      } catch (error) {
+                        console.error(error);
                       }
                     }}
-                    disabled={isLoading}
+                    disabled={isLoading || editMode}
                   >
-                    {t('judo.modal.range.set-filters', { defaultValue: 'Set filters' }) as string}{' '}
-                    {filters.length !== 0 ? '(' + filters.length + ')' : ''}
+                    {t('judo.pages.table.create', { defaultValue: 'Create' })}
                   </Button>
-                  {createTrigger && (
-                    <Button
-                      id={`${id}-create`}
-                      variant="text"
-                      startIcon={<MdiIcon path="file_document_plus" />}
-                      onClick={async () => {
-                        try {
-                          const result = await createTrigger();
-                          if (result) {
-                            handleClose();
-                            resolve({
-                              value: result,
-                              resolveSource: 'create',
-                            });
-                          }
-                        } catch (error) {
-                          console.error(error);
-                        }
-                      }}
-                      disabled={isLoading || editMode}
-                    >
-                      {t('judo.pages.table.create', { defaultValue: 'Create' })}
-                    </Button>
-                  )}
-                  <div>{/* Placeholder */}</div>
-                </GridToolbarContainer>
-              ),
-              Pagination: () => (
-                <CustomTablePagination
-                  pageChange={handlePageChange}
-                  isNextButtonEnabled={isNextButtonEnabled}
-                  page={page}
-                  setPage={setPage}
-                  rowPerPage={rangeDialogConfig.numberOfElements}
-                />
-              ),
-            }}
-          />
-          {editMode && createTrigger && (
-            <Typography sx={{ fontStyle: 'italic' }}>
-              {t('judo.modal.range.create-blocked-edit-mode', {
-                defaultValue: 'Creating new elements is disabled because you have unsaved changes',
-              })}
-            </Typography>
-          )}
-        </DialogContentText>
+                )}
+                <div>{/* Placeholder */}</div>
+              </GridToolbarContainer>
+            ),
+            Pagination: () => (
+              <CustomTablePagination
+                pageChange={handlePageChange}
+                isNextButtonEnabled={isNextButtonEnabled}
+                page={page}
+                setPage={setPage}
+                rowPerPage={rangeDialogConfig.numberOfElements}
+              />
+            ),
+          }}
+        />
+        {editMode && createTrigger && (
+          <Typography sx={{ fontStyle: 'italic' }}>
+            {t('judo.modal.range.create-blocked-edit-mode', {
+              defaultValue: 'Creating new elements is disabled because you have unsaved changes',
+            })}
+          </Typography>
+        )}
       </DialogContent>
       <DialogActions>
         <Button id={`${id}-action-cancel`} variant="text" onClick={cancel}>

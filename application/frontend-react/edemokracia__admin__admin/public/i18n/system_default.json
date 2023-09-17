@@ -2,6 +2,7 @@
     "translation": {
         "judo.security.login": "Login",
         "judo.security.logout": "Logout",
+        "judo.breadcrumb.home": "Home",
         "judo.action.create.success": "Create successful",
         "judo.action.delete.success": "Delete successful",
         "judo.action.save.success": "Changes saved",
@@ -75,6 +76,7 @@
         "judo.component.Table.ContextMenu.filterBy": "Filter based on the selected value",
         "judo.component.Table.ContextMenu.excludeBy": "Exclude based on the selected value",
         "judo.applications.available_applications": "Available applications",
+        "judo.applications.change": "Switch Application",
         "judo.modal.filter.lessThan": "lessThan",
         "judo.modal.filter.greaterThan": "greaterThan",
         "judo.modal.filter.lessOrEqual": "lessOrEqual",

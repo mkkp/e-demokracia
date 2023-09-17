@@ -37,7 +37,7 @@ import {
   booleanToStringSelect,
 } from '~/utilities';
 import { useConfirmationBeforeChange } from '~/hooks';
-import { toastConfig, dividerHeight } from '~/config';
+import { toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -186,20 +186,18 @@ export default function AdminIssueCreatedebateOutput() {
           isLoading={isLoading}
         />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid
-              className="operation-output-page-data"
-              container
-              spacing={2}
-              direction="column"
-              alignItems="stretch"
-              justifyContent="flex-start"
-            ></Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid
+            className="operation-output-page-data"
+            container
+            spacing={2}
+            direction="column"
+            alignItems="stretch"
+            justifyContent="flex-start"
+          ></Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

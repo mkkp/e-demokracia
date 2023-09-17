@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { GridToolbarContainer, GridToolbarFilterButton } from '@mui/x-data-grid';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import { baseColumnConfig, baseTableConfig, toastConfig, dividerHeight } from '~/config';
+import { baseColumnConfig, baseTableConfig, toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
@@ -360,8 +360,14 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
       }));
 
     setQueryCustomizer((prevQueryCustomizer) => {
-      return {
+      const strippedQueryCustomizer: AdminDebateQueryCustomizer = {
         ...prevQueryCustomizer,
+      };
+      if (!!strippedQueryCustomizer._seek) {
+        delete strippedQueryCustomizer._seek.lastItem;
+      }
+      return {
+        ...strippedQueryCustomizer,
         _orderBy,
       };
     });

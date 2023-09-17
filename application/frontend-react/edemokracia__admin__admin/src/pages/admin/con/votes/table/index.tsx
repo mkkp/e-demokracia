@@ -45,26 +45,24 @@ export default function AdminConVotesTable() {
       <PageHeader title={title}>
         <PageActions fetchData={handleFetchData} isLoading={isLoading} signedIdentifier={signedIdentifier} />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Card>
-                  <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminConVotesTable-data-grid">
-                    <SimpleVote_TableTable
-                      ref={tableRef}
-                      ownerData={{ __signedIdentifier: signedIdentifier! }}
-                      isOwnerLoading={isLoading}
-                      setIsOwnerLoading={setIsLoading}
-                    />
-                  </CardContent>
-                </Card>
-              </Grid>
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Card>
+                <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminConVotesTable-data-grid">
+                  <SimpleVote_TableTable
+                    ref={tableRef}
+                    ownerData={{ __signedIdentifier: signedIdentifier! }}
+                    isOwnerLoading={isLoading}
+                    setIsOwnerLoading={setIsLoading}
+                  />
+                </CardContent>
+              </Card>
             </Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+          </Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

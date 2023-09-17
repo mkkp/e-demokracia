@@ -23,6 +23,9 @@ import {
   AdminConConsMaskBuilder,
   AdminConProsMaskBuilder,
   AdminConCommentsMaskBuilder,
+  AdminConParentDebateMaskBuilder,
+  AdminConParentConMaskBuilder,
+  AdminConParentProMaskBuilder,
 } from './AdminConMaskBuilder';
 import {
   AdminUserActivityCountiesMaskBuilder,
@@ -49,6 +52,9 @@ import {
   AdminProProsMaskBuilder,
   AdminProConsMaskBuilder,
   AdminProCommentsMaskBuilder,
+  AdminProParentDebateMaskBuilder,
+  AdminProParentProMaskBuilder,
+  AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
 import {} from './AdminVoteDefinitionMaskBuilder';
 
@@ -99,6 +105,9 @@ export class AdminDebateConsMaskBuilder extends RelationMaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
+      | AdminConParentDebateMaskBuilder
+      | AdminConParentConMaskBuilder
+      | AdminConParentProMaskBuilder
     >,
   ) {
     super('cons', props);
@@ -112,6 +121,9 @@ export class AdminDebateProsMaskBuilder extends RelationMaskBuilder {
       | AdminProProsMaskBuilder
       | AdminProConsMaskBuilder
       | AdminProCommentsMaskBuilder
+      | AdminProParentDebateMaskBuilder
+      | AdminProParentProMaskBuilder
+      | AdminProParentConMaskBuilder
     >,
   ) {
     super('pros', props);

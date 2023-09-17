@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230907_040740_39a6c873_develop" version="1.0.0.20230912_105254_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230907_040740_39a6c873_develop" version="1.0.0.20230917_184820_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -165,6 +165,15 @@
       </relations>
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_bu1o0IgqEe2u0fVmwtP5bA" target="_p-1882ksEe25ONJ3V89cVA" name="comments" targetDefinedCRUD="true" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self.comments">
         <inherited xmi:id="_bu5TMIgqEe2u0fVmwtP5bA"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_DA1iYFVcEe6uPON95HTfyQ" upper="1" target="_6dFRQFVeEe6uPON95HTfyQ" name="parentDebate" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self!container(edemokracia::Debate)">
+        <inherited xmi:id="_DA7pAFVcEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_PvyhQFVcEe6uPON95HTfyQ" upper="1" target="_VIEHUFV5Ee6uPON95HTfyQ" name="parentCon" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self!container(edemokracia::Con)">
+        <inherited xmi:id="_Pv4n4FVcEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ybSP8FVcEe6uPON95HTfyQ" upper="1" target="_MgYf0FV5Ee6uPON95HTfyQ" name="parentPro" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self!container(edemokracia::Pro)">
+        <inherited xmi:id="_ybXvgFVcEe6uPON95HTfyQ"/>
       </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_1M9fwG5REe2Q6M99rsfqSQ" name="createdByName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.firstName + &quot; &quot; + self.createdBy.lastName" memberType="DERIVED">
         <inherited xmi:id="_1M9fwW5REe2Q6M99rsfqSQ"/>
@@ -965,6 +974,15 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_rpr78IgqEe2u0fVmwtP5bA" target="_p-1882ksEe25ONJ3V89cVA" name="comments" targetDefinedCRUD="true" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self.comments">
         <inherited xmi:id="_rptxIIgqEe2u0fVmwtP5bA"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_56nkwFVbEe6uPON95HTfyQ" upper="1" target="_6dFRQFVeEe6uPON95HTfyQ" name="parentDebate" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self!container(edemokracia::Debate)">
+        <inherited xmi:id="_56uScFVbEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_XV0egFVcEe6uPON95HTfyQ" upper="1" target="_MgYf0FV5Ee6uPON95HTfyQ" name="parentPro" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self!container(edemokracia::Pro)">
+        <inherited xmi:id="_XV6lIFVcEe6uPON95HTfyQ"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_4icbcFVcEe6uPON95HTfyQ" upper="1" target="_VIEHUFV5Ee6uPON95HTfyQ" name="parentCon" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self!container(edemokracia::Con)">
+        <inherited xmi:id="_4igs4FVcEe6uPON95HTfyQ"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_17TzgG5REe2Q6M99rsfqSQ" name="createdByName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.firstName + &quot; &quot; + self.createdBy.lastName" memberType="DERIVED">
         <inherited xmi:id="_17TzgW5REe2Q6M99rsfqSQ"/>
       </attributes>
@@ -1640,6 +1658,24 @@
         <components xsi:type="ui:DataField" xmi:id="_A8ptAIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
         <components xsi:type="ui:OperationForm" xmi:id="_A85koIXrEe2kLcMqsIbMgQ" name="vote" label="Vote" iconName="chevron_right" operation="vote"/>
       </view>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_6dFRQFVeEe6uPON95HTfyQ" name="DebateParent">
+      <mapping xmi:id="_7pgpUFV4Ee6uPON95HTfyQ" target="_jjCdUGkPEe25ONJ3V89cVA"/>
+      <form xmi:id="_6dGfYFVeEe6uPON95HTfyQ" name="DebateParent_Form" label="DebateParent Form" layout="VERTICAL"/>
+      <table xmi:id="_6dHtgFVeEe6uPON95HTfyQ" name="DebateParent_Table" label="DebateParent Table"/>
+      <view xmi:id="_6dF4UFVeEe6uPON95HTfyQ" name="DebateParent_View_Edit" label="DebateParent View / Edit" layout="VERTICAL"/>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_MgYf0FV5Ee6uPON95HTfyQ" name="ProParent">
+      <mapping xmi:id="_PIRvIFV5Ee6uPON95HTfyQ" target="_3Z7A0GkSEe25ONJ3V89cVA"/>
+      <form xmi:id="_MgaVAFV5Ee6uPON95HTfyQ" name="ProParent_Form" label="ProParent Form" layout="VERTICAL"/>
+      <table xmi:id="_Mga8EFV5Ee6uPON95HTfyQ" name="ProParent_Table" label="ProParent Table"/>
+      <view xmi:id="_MgZG4FV5Ee6uPON95HTfyQ" name="ProParent_View_Edit" label="ProParent View / Edit" layout="VERTICAL"/>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_VIEHUFV5Ee6uPON95HTfyQ" name="ConParent">
+      <mapping xmi:id="_XJNfsFV5Ee6uPON95HTfyQ" target="_5yNG0GkSEe25ONJ3V89cVA"/>
+      <form xmi:id="_VIGjkFV5Ee6uPON95HTfyQ" name="ConParent_Form" label="ConParent Form" layout="VERTICAL"/>
+      <table xmi:id="_VIHxsFV5Ee6uPON95HTfyQ" name="ConParent_Table" label="ConParent Table"/>
+      <view xmi:id="_VIEuYFV5Ee6uPON95HTfyQ" name="ConParent_View_Edit" label="ConParent View / Edit" layout="VERTICAL"/>
     </elements>
   </elements>
   <elements xsi:type="namespace:Package" xmi:id="_7D8Nz2kNEe25ONJ3V89cVA" name="measures">

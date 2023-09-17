@@ -8,7 +8,7 @@
 
 import { Button, ButtonGroup } from '@mui/material';
 import type { TFunction } from 'i18next';
-import type { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import type { GridColDef, GridRowParams } from '@mui/x-data-grid';
 import type { ColumnActionsProvider, ColumnsActionsOptions, TableRowAction } from '../../utilities';
 import { exists } from '../../utilities';
 import { DropdownButton } from '../DropdownButton';
@@ -52,19 +52,17 @@ const standaloneActions: ColumnActionsProvider<unknown> = (
       headerName: t('judo.pages.table.column.actions.standalone', { defaultValue: 'Actions' }) as string,
       align: 'center',
       type: 'actions',
-      renderCell: (params: GridRenderCellParams) => {
-        return (
-          <Button
-            id={id}
-            variant="text"
-            startIcon={action.icon}
-            disabled={action.disabled ? action.disabled(params.row) : false}
-            onClick={() => action.action(params.row)}
-          >
-            {(options?.showLabel ?? true) && action.label}
-          </Button>
-        );
-      },
+      getActions: (params: GridRowParams) => [
+        <Button
+          id={id}
+          variant="text"
+          startIcon={action.icon}
+          disabled={action.disabled ? action.disabled(params.row) : false}
+          onClick={() => action.action(params.row)}
+        >
+          {(options?.showLabel ?? true) && action.label}
+        </Button>,
+      ],
     };
   });
 };
@@ -84,26 +82,24 @@ const dropdownActions: ColumnActionsProvider<unknown> = (
       headerName: t('judo.pages.table.column.actions.dropdown', { defaultValue: 'Additional Actions' }) as string,
       align: 'center',
       type: 'actions',
-      renderCell: (params: GridRenderCellParams) => {
-        return (
-          <DropdownButton
-            id={id}
-            variant="text"
-            showDropdownIcon={false}
-            menuItems={actions.map((action) => {
-              return {
-                id: action.id,
-                label: action.label,
-                startIcon: action.icon,
-                onClick: () => action.action(params.row),
-                disabled: action.disabled ? action.disabled(params.row) : false,
-              };
-            })}
-          >
-            <MdiIcon path="dots-horizontal" />
-          </DropdownButton>
-        );
-      },
+      getActions: (params: GridRowParams) => [
+        <DropdownButton
+          id={id}
+          variant="text"
+          showDropdownIcon={false}
+          menuItems={actions.map((action) => {
+            return {
+              id: action.id,
+              label: action.label,
+              startIcon: action.icon,
+              onClick: () => action.action(params.row),
+              disabled: action.disabled ? action.disabled(params.row) : false,
+            };
+          })}
+        >
+          <MdiIcon path="dots-horizontal" />
+        </DropdownButton>,
+      ],
     },
   ];
 };

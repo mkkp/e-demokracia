@@ -69,7 +69,7 @@ import {
   stringToBooleanSelect,
   booleanToStringSelect,
 } from '~/utilities';
-import { toastConfig, dividerHeight } from '~/config';
+import { toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
@@ -216,7 +216,7 @@ export function AdminConCreateSubArgumentForm({ successCallback, cancel, owner }
                       <MdiIcon path="account-voice" sx={{ marginRight: 1 }} />
                       <Typography
                         id="LabeledemokraciaAdminAdminEdemokraciaAdminConCreateSubArgumentInputDefaultCreateArgumentInputFormGroupLabelWrapperGroupLabel"
-                        variant="h6"
+                        variant="h5"
                         component="h1"
                       >
                         {t('CreateArgumentInputForm.group.Label', { defaultValue: 'Add argument' })}

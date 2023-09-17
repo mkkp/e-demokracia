@@ -37,7 +37,7 @@ import {
   booleanToStringSelect,
 } from '~/utilities';
 import { useConfirmationBeforeChange } from '~/hooks';
-import { toastConfig, dividerHeight } from '~/config';
+import { toastConfig, DIVIDER_HEIGHT } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } from '~/custom';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -237,238 +237,236 @@ export default function AdminAdminDashboardhomeView() {
           isLoading={isLoading}
         />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid
-              className="access-page-data"
-              container
-              spacing={2}
-              direction="column"
-              alignItems="stretch"
-              justifyContent="flex-start"
-            >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center">
-                  <Grid item>
-                    <Typography id="FormattededemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditWelcome">
-                      {data.welcome}
-                    </Typography>
-                  </Grid>
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid
+            className="access-page-data"
+            container
+            spacing={2}
+            direction="column"
+            alignItems="stretch"
+            justifyContent="flex-start"
+          >
+            <Grid item xs={12} sm={12}>
+              <Grid container direction="row" alignItems="center">
+                <Grid item>
+                  <Typography id="FormattededemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditWelcome">
+                    {data.welcome}
+                  </Typography>
                 </Grid>
-              </Grid>
-
-              <Grid item xs={12}>
-                <Grid container spacing={2}>
-                  <Grid item>
-                    <LoadingButton
-                      id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditActionGroupCreateIssue"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="ticket-confirmation" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        try {
-                          setIsLoading(true);
-                          await adminDashboardCreateIssueAction(() => fetchData());
-                        } finally {
-                          setIsLoading(false);
-                        }
-                      }}
-                      disabled={editMode}
-                    >
-                      <span>{t('admin.DashboardView.actionGroup.createIssue', { defaultValue: 'Create issue' })}</span>
-                    </LoadingButton>
-                  </Grid>
-
-                  <Grid item>
-                    <LoadingButton
-                      id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditActionGroupCreateUser"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="account" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        try {
-                          setIsLoading(true);
-                          await adminDashboardCreateUserAction(() => fetchData());
-                        } finally {
-                          setIsLoading(false);
-                        }
-                      }}
-                      disabled={editMode}
-                    >
-                      <span>{t('admin.DashboardView.actionGroup.createUser', { defaultValue: 'Create user' })}</span>
-                    </LoadingButton>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid container item xs={12} sm={12}>
-                <ModeledTabs
-                  id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBar"
-                  ownerData={data}
-                  validation={validation}
-                  orientation='horizontal'
-                  childTabs={[
-                    {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissues',
-                      name: 'admin.DashboardView.myissues',
-                      label: t('admin.DashboardView.myissues', { defaultValue: 'My issues' }) as string,
-                      disabled: isLoading,
-                      hidden: false,
-                      icon: 'ticket-account',
-                      nestedDataKeys: ['issues'],
-                    },
-                    {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebates',
-                      name: 'admin.DashboardView.mydebates',
-                      label: t('admin.DashboardView.mydebates', { defaultValue: 'My debates' }) as string,
-                      disabled: isLoading,
-                      hidden: false,
-                      icon: 'wechat',
-                      nestedDataKeys: ['debates'],
-                    },
-                    {
-                      id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotes',
-                      name: 'admin.DashboardView.myvotes',
-                      label: t('admin.DashboardView.myvotes', { defaultValue: 'My votes' }) as string,
-                      disabled: isLoading,
-                      hidden: false,
-                      icon: 'vote-outline',
-                      nestedDataKeys: ['voteEntries'],
-                    },
-                  ]}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissuesMyissues"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <IssuesTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                fetchOwnerData={fetchData}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebatesMydebates"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebatesMydebatesDebatesLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebatesMydebatesDebatesLabelWrapperDebates"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <DebatesTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                fetchOwnerData={fetchData}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotes"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <VoteEntriesTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                fetchOwnerData={fetchData}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </ModeledTabs>
               </Grid>
             </Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <LoadingButton
+                    id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditActionGroupCreateIssue"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="ticket-confirmation" />}
+                    loadingPosition="start"
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        await adminDashboardCreateIssueAction(() => fetchData());
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    disabled={editMode}
+                  >
+                    <span>{t('admin.DashboardView.actionGroup.createIssue', { defaultValue: 'Create issue' })}</span>
+                  </LoadingButton>
+                </Grid>
+
+                <Grid item>
+                  <LoadingButton
+                    id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditActionGroupCreateUser"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="account" />}
+                    loadingPosition="start"
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        await adminDashboardCreateUserAction(() => fetchData());
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    disabled={editMode}
+                  >
+                    <span>{t('admin.DashboardView.actionGroup.createUser', { defaultValue: 'Create user' })}</span>
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid container item xs={12} sm={12}>
+              <ModeledTabs
+                id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBar"
+                ownerData={data}
+                validation={validation}
+                orientation='horizontal'
+                childTabs={[
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissues',
+                    name: 'admin.DashboardView.myissues',
+                    label: t('admin.DashboardView.myissues', { defaultValue: 'My issues' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    icon: 'ticket-account',
+                    nestedDataKeys: ['issues'],
+                  },
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebates',
+                    name: 'admin.DashboardView.mydebates',
+                    label: t('admin.DashboardView.mydebates', { defaultValue: 'My debates' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    icon: 'wechat',
+                    nestedDataKeys: ['debates'],
+                  },
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotes',
+                    name: 'admin.DashboardView.myvotes',
+                    label: t('admin.DashboardView.myvotes', { defaultValue: 'My votes' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    icon: 'vote-outline',
+                    nestedDataKeys: ['voteEntries'],
+                  },
+                ]}
+              >
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissuesMyissues"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapper"
+                        container
+                        direction="column"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues"
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                          >
+                            <IssuesTable
+                              isOwnerLoading={isLoading}
+                              validation={validation}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebatesMydebates"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebatesMydebatesDebatesLabelWrapper"
+                        container
+                        direction="column"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebatesMydebatesDebatesLabelWrapperDebates"
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                          >
+                            <DebatesTable
+                              isOwnerLoading={isLoading}
+                              validation={validation}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotes"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapper"
+                        container
+                        direction="column"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries"
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                          >
+                            <VoteEntriesTable
+                              isOwnerLoading={isLoading}
+                              validation={validation}
+                              fetchOwnerData={fetchData}
+                              ownerData={data}
+                              editMode={editMode}
+                              isFormUpdateable={isFormUpdateable}
+                              storeDiff={storeDiff}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </ModeledTabs>
+            </Grid>
+          </Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

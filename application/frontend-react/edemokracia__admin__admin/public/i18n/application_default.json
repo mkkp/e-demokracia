@@ -478,7 +478,7 @@
         "admin.VoteEntryTable.voteEntries.userName": "UserName",
         "admin.VoteEntryTable.voteEntries.voteStatus": "VoteStatus",
         "admin.VoteEntryTable.voteEntries.voteTitle": "VoteTitle",
-        "application.model.name": "Edemokracia",
+        "application.model.name": "edemokracia",
         "edemokracia.admin.Admin.dashboardhome.Dashboard": "Dashboard View / Edit",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.actionGroup.createIssue": "Create issue",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.actionGroup.createUser": "Create user",

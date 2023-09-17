@@ -45,21 +45,19 @@ export default function AdminAdminDebatesTable() {
       <PageHeader title={title}>
         <PageActions fetchData={handleFetchData} isLoading={isLoading} />
       </PageHeader>
-      <Container component="main" maxWidth="xl">
-        <PageContainerTransition>
-          <Box sx={mainContainerPadding}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Card>
-                  <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTable-data-grid">
-                    <Debate_TableTable ref={tableRef} isOwnerLoading={isLoading} setIsOwnerLoading={setIsLoading} />
-                  </CardContent>
-                </Card>
-              </Grid>
+      <PageContainerTransition>
+        <Box sx={mainContainerPadding}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Card>
+                <CardContent id="PageDefinitionedemokraciaAdminAdminEdemokraciaAdminAdminDebatesTable-data-grid">
+                  <Debate_TableTable ref={tableRef} isOwnerLoading={isLoading} setIsOwnerLoading={setIsLoading} />
+                </CardContent>
+              </Card>
             </Grid>
-          </Box>
-        </PageContainerTransition>
-      </Container>
+          </Grid>
+        </Box>
+      </PageContainerTransition>
     </>
   );
 }

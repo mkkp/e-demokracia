@@ -10,7 +10,6 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button,
   Slide,
@@ -256,7 +255,7 @@ const FilterInput = ({ filter, setFilterValue, valueId }: FilterInputProps) => {
               <TextField
                 className={valueId}
                 label={filter.filterOption.label ?? filter.filterOption.attributeName}
-                value={filter.filterBy.value}
+                value={filter.filterBy.value ?? ''}
                 onChange={(event) => setFilterValue(filter, event.target.value)}
                 InputProps={{
                   startAdornment: (
@@ -413,60 +412,58 @@ export const FilterDialog = ({ id, filters, filterOptions, resolve, open, handle
         </Typography>
       </DialogTitle>
       <DialogContent dividers={true}>
-        <DialogContentText id="scroll-dialog-description" ref={descriptionElementRef} tabIndex={-1}>
-          <Container component="main" maxWidth="xs">
-            <Box sx={mainContainerPadding}>
-              <Grid container spacing={2}>
-                {tempFilters.map((filter) => (
-                  <FilterRow
-                    id={filter.id}
-                    key={filter.id}
-                    filter={filter}
-                    closeHandler={filterCloseHandler}
-                    setFilterOperator={updateFilterOperator}
-                    setFilterValue={updateFilterValue}
-                  />
-                ))}
-                <Grid item container>
-                  <DropdownButton
-                    id={`${id}-dropdown`}
-                    fullWidth={true}
-                    showDropdownIcon={false}
-                    menuItems={filterOptions.map((filterOption) => {
-                      return {
-                        id: filterOption.id,
-                        label: filterOption.label ?? filterOption.attributeName,
-                        onClick: () =>
-                          setTempFilters((prevTempFilters) => [
-                            ...prevTempFilters,
-                            {
-                              id:
-                                filterOption.id +
-                                prevTempFilters.filter((e) => e.filterOption.label == filterOption.label).length,
-                              operationId: `${filterOption.id}-operation`,
-                              valueId: `${filterOption.id}-value`,
-                              filterOption: {
-                                id: `${filterOption.id}-option`,
-                                attributeName: filterOption.attributeName,
-                                label: filterOption.label,
-                                filterType: filterOption.filterType,
-                                enumValues: filterOption.enumValues,
-                              },
-                              filterBy: {
-                                operator: getDefaultOperator(filterOption.filterType),
-                              },
+        <Container component="main" maxWidth="xs">
+          <Box sx={mainContainerPadding}>
+            <Grid container spacing={2}>
+              {tempFilters.map((filter) => (
+                <FilterRow
+                  id={filter.id}
+                  key={filter.id}
+                  filter={filter}
+                  closeHandler={filterCloseHandler}
+                  setFilterOperator={updateFilterOperator}
+                  setFilterValue={updateFilterValue}
+                />
+              ))}
+              <Grid item container>
+                <DropdownButton
+                  id={`${id}-dropdown`}
+                  fullWidth={true}
+                  showDropdownIcon={false}
+                  menuItems={filterOptions.map((filterOption) => {
+                    return {
+                      id: filterOption.id,
+                      label: filterOption.label ?? filterOption.attributeName,
+                      onClick: () =>
+                        setTempFilters((prevTempFilters) => [
+                          ...prevTempFilters,
+                          {
+                            id:
+                              filterOption.id +
+                              prevTempFilters.filter((e) => e.filterOption.label == filterOption.label).length,
+                            operationId: `${filterOption.id}-operation`,
+                            valueId: `${filterOption.id}-value`,
+                            filterOption: {
+                              id: `${filterOption.id}-option`,
+                              attributeName: filterOption.attributeName,
+                              label: filterOption.label,
+                              filterType: filterOption.filterType,
+                              enumValues: filterOption.enumValues,
                             },
-                          ]),
-                      };
-                    })}
-                  >
-                    {t('judo.modal.filter.add-new-filter', { defaultValue: 'Add new filter' }) as string}
-                  </DropdownButton>
-                </Grid>
+                            filterBy: {
+                              operator: getDefaultOperator(filterOption.filterType),
+                            },
+                          },
+                        ]),
+                    };
+                  })}
+                >
+                  {t('judo.modal.filter.add-new-filter', { defaultValue: 'Add new filter' }) as string}
+                </DropdownButton>
               </Grid>
-            </Box>
-          </Container>
-        </DialogContentText>
+            </Grid>
+          </Box>
+        </Container>
       </DialogContent>
       <DialogActions>
         <Button id={`${id}-action-cancel`} fullWidth variant="outlined" onClick={cancel}>

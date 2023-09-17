@@ -9,7 +9,7 @@
 import { createTheme } from '@mui/material';
 // You can add extra imports by overriding the `actor/src/theme/palette.ts.extra-imports.fragment.hbs` file
 
-export const paletteTheme = createTheme({
+export const paletteThemeLight = createTheme({
   palette: {
     mode: 'light',
     primary: {
@@ -31,4 +31,27 @@ export const paletteTheme = createTheme({
     // You can add extra palette attributes by overriding the `actor/src/theme/palette.ts.extra-palette-attributes.fragment.hbs` file
   },
   // You can add extra theme attributes by overriding the `actor/src/theme/palette.ts.extra-attributes.fragment.hbs` file
+});
+
+// WIP
+export const paletteThemeDark = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#3c4dcc',
+    },
+    secondary: {
+      main: '#E7501DFF',
+    },
+    text: {
+      primary: '#d9d9d9',
+      secondary: '#646464',
+    },
+    background: {
+      default: '#2a2a2a',
+    },
+    subtitleColor: {
+      main: '#8C8C8C',
+    },
+  },
 });

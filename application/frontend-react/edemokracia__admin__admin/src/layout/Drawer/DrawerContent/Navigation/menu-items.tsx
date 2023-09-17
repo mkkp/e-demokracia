@@ -2,88 +2,99 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: <actor>
-// Path expression: 'src/menu-items.tsx'
-// Template name: actor/src/menu-items.tsx
-// Template file: actor/src/menu-items.tsx.hbs
+// Path expression: 'src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx'
+// Template name: actor/src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx
+// Template file: actor/src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx.hbs
 
-import type { MenuItem } from './components-api';
+import { NavItemType } from './NavItem';
 
-export const menuItems: MenuItem[] = [
+export const menus: NavItemType[] = [
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminDashboardhomeNavigationItem',
-    to: 'admin/admin/dashboardhome/view/:signedIdentifier',
+    type: 'item',
+    url: 'admin/admin/dashboardhome/view/:signedIdentifier',
     icon: 'home',
-    label: 'Dashboard',
-    items: [],
+    title: 'Dashboard',
+    children: [],
   },
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminUsersNavigationItem',
-    to: 'admin/admin/users/table',
+    type: 'item',
+    url: 'admin/admin/users/table',
     icon: 'account',
-    label: 'Users',
-    items: [],
+    title: 'Users',
+    children: [],
   },
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupBasicDataMenu',
+    type: 'group',
     icon: 'toy-brick',
-    label: 'Basic data',
-    items: [
+    title: 'Basic data',
+    children: [
       {
         id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupBasicDataMenuEdemokraciaAdminAdminCategoriesNavigationItem',
-        to: 'admin/admin/categories/table',
+        type: 'item',
+        url: 'admin/admin/categories/table',
         icon: 'file-tree',
-        label: 'Categories',
-        items: [],
+        title: 'Categories',
+        children: [],
       },
       {
         id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupBasicDataMenuEdemokraciaAdminAdminCountiesNavigationItem',
-        to: 'admin/admin/counties/table',
+        type: 'item',
+        url: 'admin/admin/counties/table',
         icon: 'map',
-        label: 'Counties',
-        items: [],
+        title: 'Counties',
+        children: [],
       },
       {
         id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupBasicDataMenuEdemokraciaAdminAdminIssueTypesNavigationItem',
-        to: 'admin/admin/issue_types/table',
+        type: 'item',
+        url: 'admin/admin/issue_types/table',
         icon: 'folder-open',
-        label: 'Issue Types',
-        items: [],
+        title: 'Issue Types',
+        children: [],
       },
     ],
   },
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupIssuesAndDebates',
+    type: 'group',
     icon: 'texture',
-    label: 'Issues, Debates',
-    items: [
+    title: 'Issues, Debates',
+    children: [
       {
         id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupIssuesAndDebatesEdemokraciaAdminAdminIssuesNavigationItem',
-        to: 'admin/admin/issues/table',
+        type: 'item',
+        url: 'admin/admin/issues/table',
         icon: 'ticket-confirmation',
-        label: 'Issues',
-        items: [],
+        title: 'Issues',
+        children: [],
       },
       {
         id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupIssuesAndDebatesEdemokraciaAdminAdminDebatesNavigationItem',
-        to: 'admin/admin/debates/table',
+        type: 'item',
+        url: 'admin/admin/debates/table',
         icon: 'wechat',
-        label: 'Debates',
-        items: [],
+        title: 'Debates',
+        children: [],
       },
     ],
   },
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminVoteDefinitionsNavigationItem',
-    to: 'admin/admin/vote_definitions/table',
+    type: 'item',
+    url: 'admin/admin/vote_definitions/table',
     icon: 'vote',
-    label: 'Votes',
-    items: [],
+    title: 'Votes',
+    children: [],
   },
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminVoteEntriesNavigationItem',
-    to: 'admin/admin/vote_entries/table',
+    type: 'item',
+    url: 'admin/admin/vote_entries/table',
     icon: 'vote-outline',
-    label: 'Vote Entries',
-    items: [],
+    title: 'Vote Entries',
+    children: [],
   },
 ];
