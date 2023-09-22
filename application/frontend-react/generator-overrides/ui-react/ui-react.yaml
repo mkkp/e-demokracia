@@ -5,9 +5,21 @@ templates:
   
   - name: actor/public/logo512.png
     exclude: true
+
+  - name: actor/public/judo-color-logo.png
+    exclude: true
+
+  - name: actor/public/judo-icon.webp
+    exclude: true
   
   - name: actor/public/mkkp-logo.png
     pathExpression: "'public/mkkp-logo.png'"
     templateName: actor/public/mkkp-logo.png
+    applicationBased: true
+    copy: true
+
+  - name: actor/public/mkkp-circle-96x96.webp
+    pathExpression: "'public/mkkp-circle-96x96.webp'"
+    templateName: actor/public/mkkp-circle-96x96.webp
     applicationBased: true
     copy: true
