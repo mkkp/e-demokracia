@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -90,6 +91,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const openCRUDDialog = useCRUDDialog();
 
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filters`;
@@ -102,6 +104,13 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     pageSize: 10,
     page: 0,
   });
+
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<AdminVoteEntryStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
+  }, [selectionModel]);
 
   const [voteEntriesSortModel, setVoteEntriesSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
 
@@ -172,7 +181,9 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
       filterable: false && true,
       sortable: false,
       valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        return t(`enumerations.EdemokraciaVoteStatus.${value}`, { defaultValue: value });
+        if (value !== undefined && value !== null) {
+          return t(`enumerations.EdemokraciaVoteStatus.${value}`, { defaultValue: value });
+        }
       },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
@@ -336,6 +347,11 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         sortModel={voteEntriesSortModel}
         onSortModelChange={(newModel: GridSortModel) => {
           setVoteEntriesSortModel(newModel);

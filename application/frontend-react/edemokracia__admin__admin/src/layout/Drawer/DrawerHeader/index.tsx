@@ -34,9 +34,10 @@ export const DrawerHeader = ({ open }: DrawerHeaderProps) => {
         paddingTop: isHorizontal ? { xs: '10px', lg: '0' } : '8px',
         paddingBottom: isHorizontal ? { xs: '18px', lg: '0' } : '8px',
         paddingLeft: isHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
+        paddingRight: isHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
       }}
     >
-      <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: 35 }} />
+      <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: open ? 'auto' : 35 }} />
     </DrawerHeaderStyled>
   );
 };

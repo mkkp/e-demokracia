@@ -6,7 +6,8 @@
 // Template name: actor/src/utilities/table.ts
 // Template file: actor/src/utilities/table.ts.hbs
 
-import type { GridSortModel, GridFilterModel } from '@mui/x-data-grid';
+import type { MutableRefObject } from 'react';
+import type { GridSortModel, GridFilterModel, GridRowSelectionModel } from '@mui/x-data-grid';
 import type { JudoStored } from '@judo/data-api-common';
 import type { Filter } from '../components-api';
 
@@ -37,4 +38,30 @@ export const isRowSelectable = <T extends JudoStored<T>>(
   // This case is for single aggregations, because users can unset the element in edit mode but would not be able to
   // re-set them if we checked the backend response above (since the removal might not be persisted yet).
   return true;
+};
+
+export const getUpdatedRowsSelected = <T extends JudoStored<any>>(
+  selectedRows: MutableRefObject<T[]>,
+  data: T[],
+  selectionModel: GridRowSelectionModel,
+): T[] => {
+  const newSelectedRows: T[] = [];
+  // our source of truth is the `selectionModel`
+  for (const selection of selectionModel) {
+    const prevItem = selectedRows.current.find((r) => r.__identifier === selection);
+    if (prevItem) {
+      // we already have the item in our `selectedRows`, so keep it
+      newSelectedRows.push(prevItem);
+    } else {
+      // `selection` is a new key, we need to look up the row data in our `data`
+      const newItem = data.find((r) => r.__identifier === selection);
+      if (newItem) {
+        // and add it if found
+        newSelectedRows.push(newItem);
+      }
+    }
+  }
+
+  // since we created a new whitelist of selections, removed selections are left out
+  return newSelectedRows;
 };

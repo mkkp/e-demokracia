@@ -8,6 +8,7 @@
 
 export * from './ConfigContext';
 export * from './useConfig';
+export * from './useCRUDDialog';
 export * from './useDataStore';
 export * from './useHeroProps';
 export * from './useLocalStorage';

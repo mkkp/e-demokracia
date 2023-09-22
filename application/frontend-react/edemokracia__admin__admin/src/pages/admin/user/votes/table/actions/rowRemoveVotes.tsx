@@ -24,6 +24,7 @@ export type RowRemoveVotesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
   selected: AdminSimpleVoteStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
 ) => Promise<void>;
 
 export const useRowRemoveVotesAction: RowRemoveVotesAction = () => {
@@ -36,6 +37,7 @@ export const useRowRemoveVotesAction: RowRemoveVotesAction = () => {
     owner: JudoIdentifiable<AdminUser>,
     selected: AdminSimpleVoteStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
   ) {
     try {
       await adminUserServiceForClassImpl.removeVotes(
@@ -45,7 +47,11 @@ export const useRowRemoveVotesAction: RowRemoveVotesAction = () => {
 
       successCallback();
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

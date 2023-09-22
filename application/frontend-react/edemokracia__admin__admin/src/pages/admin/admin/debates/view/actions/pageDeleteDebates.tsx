@@ -17,7 +17,12 @@ import { toastConfig } from '~/config';
 import { AdminDebate, AdminDebateQueryCustomizer, AdminDebateStored } from '~/generated/data-api';
 import { adminAdminServiceForDebatesImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
 
-export type PageDeleteDebatesAction = () => (selected: AdminDebateStored, successCallback: () => void) => Promise<void>;
+export type PageDeleteDebatesAction = () => (
+  selected: AdminDebateStored,
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const usePageDeleteDebatesAction: PageDeleteDebatesAction = () => {
   const { t } = useTranslation();
@@ -27,26 +32,39 @@ export const usePageDeleteDebatesAction: PageDeleteDebatesAction = () => {
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=RowDeleteAction))`,
   );
 
-  return async function pageDeleteDebatesAction(selected: AdminDebateStored, successCallback: () => void) {
+  return async function pageDeleteDebatesAction(
+    selected: AdminDebateStored,
+    successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
+  ) {
     try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
 
       if (confirmed) {
         await adminDebateServiceForClassImpl.delete(selected);
-        enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        if (!silentMode) {
+          enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
+            variant: 'success',
+            ...toastConfig.success,
+          });
+        }
         successCallback();
       }
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

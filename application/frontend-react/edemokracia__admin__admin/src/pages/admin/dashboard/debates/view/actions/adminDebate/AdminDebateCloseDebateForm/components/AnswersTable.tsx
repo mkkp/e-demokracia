@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/actions/actionForm/components/table.tsx
 // Template file: actor/src/pages/actions/actionForm/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -86,6 +87,13 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<SelectAnswerInputStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, ownerData?.answers ?? [], selectionModel);
+  }, [selectionModel]);
 
   const [answersSortModel, setAnswersSortModel] = useState<GridSortModel>([]);
 
@@ -151,6 +159,10 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
     },
   ];
 
+  const isBulkRemoveAvailable: () => boolean = useCallback(() => {
+    return !!selectionModel.length && true && !false && isFormUpdateable();
+  }, [ownerData, selectionModel]);
+
   return (
     <>
       <StripedDataGrid
@@ -182,6 +194,11 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
           ),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         sortModel={answersSortModel}
         onSortModelChange={(newModel: GridSortModel) => {
           setAnswersSortModel(newModel);
@@ -196,7 +213,7 @@ export const AnswersTable = forwardRef<RefreshableTable, AnswersTableProps>((pro
                 onClick={async () => {
                   storeDiff('answers', []);
                 }}
-                disabled={isOwnerLoading || false || !isFormUpdateable()}
+                disabled={isOwnerLoading || false || !isFormUpdateable() || !ownerData?.answers?.length}
               >
                 {t('judo.pages.table.clear', { defaultValue: 'Clear' })}
               </Button>

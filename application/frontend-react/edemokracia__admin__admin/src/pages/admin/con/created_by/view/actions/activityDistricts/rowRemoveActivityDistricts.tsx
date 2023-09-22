@@ -24,6 +24,7 @@ export type RowRemoveActivityDistrictsAction = () => (
   owner: JudoIdentifiable<AdminUser>,
   selected: AdminDistrictStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
 ) => Promise<void>;
 
 export const useRowRemoveActivityDistrictsAction: RowRemoveActivityDistrictsAction = () => {
@@ -36,6 +37,7 @@ export const useRowRemoveActivityDistrictsAction: RowRemoveActivityDistrictsActi
     owner: JudoIdentifiable<AdminUser>,
     selected: AdminDistrictStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
   ) {
     try {
       await adminUserServiceForClassImpl.removeActivityDistricts(
@@ -45,7 +47,11 @@ export const useRowRemoveActivityDistrictsAction: RowRemoveActivityDistrictsActi
 
       successCallback();
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

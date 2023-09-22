@@ -129,7 +129,7 @@ export function DropdownButton({
                             menuItem.onClick();
                           }}
                         >
-                          <ListItemIcon sx={{ minWidth: '0 !important' }}>{menuItem.startIcon}</ListItemIcon>
+                          <ListItemIcon sx={{ minWidth: '0 !important', mr: 1 }}>{menuItem.startIcon}</ListItemIcon>
                           <ListItemText>{menuItem.label}</ListItemText>
                         </MenuItem>
                       );

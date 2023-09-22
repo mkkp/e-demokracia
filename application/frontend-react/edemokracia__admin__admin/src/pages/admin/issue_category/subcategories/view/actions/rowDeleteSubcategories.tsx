@@ -24,6 +24,8 @@ export type RowDeleteSubcategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssueCategory>,
   selected: AdminIssueCategoryStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useRowDeleteSubcategoriesAction: RowDeleteSubcategoriesAction = () => {
@@ -38,26 +40,36 @@ export const useRowDeleteSubcategoriesAction: RowDeleteSubcategoriesAction = () 
     owner: JudoIdentifiable<AdminIssueCategory>,
     selected: AdminIssueCategoryStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
   ) {
     try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
 
       if (confirmed) {
         await adminIssueCategoryServiceForClassImpl.delete(selected);
-        enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        if (!silentMode) {
+          enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
+            variant: 'success',
+            ...toastConfig.success,
+          });
+        }
         successCallback();
       }
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

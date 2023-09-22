@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -98,6 +99,7 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const openCRUDDialog = useCRUDDialog();
 
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminSimpleVoteUserViewDefaultUserViewEditAreasLabelWrapperAreasActivityActivityDistrictsActivityDistrictsActivityDistrictsLabelWrapperActivityDistricts-${ownerData.__identifier}-filters`;
@@ -110,6 +112,13 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
     pageSize: 10,
     page: 0,
   });
+
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<AdminDistrictStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
+  }, [selectionModel]);
 
   const [activityDistrictsSortModel, setActivityDistrictsSortModel] = useState<GridSortModel>([
     { field: 'representation', sort: null },
@@ -192,6 +201,26 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
     }
   };
 
+  const bulkRemoveSelected = useCallback(() => {
+    openCRUDDialog<AdminDistrictStored>({
+      dialogTitle: t('judo.dialogs.crud-bulk.remove.title', { defaultValue: 'Remove selected items' }),
+      itemTitleFn: (item) => item.representation!,
+      selectedItems: selectedRows.current,
+      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+        await rowRemoveActivityDistrictsAction(ownerData, item, successHandler, errorHandler);
+      },
+      onClose: (needsRefresh) => {
+        if (needsRefresh) {
+          fetchOwnerData();
+          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
+        }
+      },
+    });
+  }, []);
+  const isBulkRemoveAvailable: () => boolean = useCallback(() => {
+    return !!selectionModel.length && true && isFormUpdateable() && !false;
+  }, [ownerData, selectionModel]);
+
   useEffect(() => {
     if (ownerData?.__identifier) {
       const storedFilters = getItemParsed<Filter[]>(filtersKey);
@@ -243,6 +272,11 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         onRowClick={(params: GridRowParams<AdminDistrictStored>) => {
           if (!editMode) {
             rowViewActivityDistrictsAction(ownerData, params.row, () => fetchOwnerData());
@@ -313,6 +347,20 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
+              {isBulkRemoveAvailable() ? (
+                <Button
+                  disabled={isOwnerLoading}
+                  variant="text"
+                  startIcon={<MdiIcon path="link-off" />}
+                  onClick={() => {
+                    const newList = data.filter((e) => !selectionModel.find((s) => s === e.__identifier));
+                    storeDiff('activityDistricts', newList);
+                    setSelectionModel([]);
+                  }}
+                >
+                  {t('judo.pages.table.remove.selected', { defaultValue: 'Remove' })}
+                </Button>
+              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

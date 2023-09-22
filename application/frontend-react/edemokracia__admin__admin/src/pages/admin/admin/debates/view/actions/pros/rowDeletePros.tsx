@@ -27,6 +27,8 @@ export type RowDeleteProsAction = () => (
   owner: JudoIdentifiable<AdminDebate>,
   selected: AdminProStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useRowDeleteProsAction: RowDeleteProsAction = () => {
@@ -41,26 +43,36 @@ export const useRowDeleteProsAction: RowDeleteProsAction = () => {
     owner: JudoIdentifiable<AdminDebate>,
     selected: AdminProStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
   ) {
     try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
 
       if (confirmed) {
         await adminProServiceForClassImpl.delete(selected);
-        enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        if (!silentMode) {
+          enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
+            variant: 'success',
+            ...toastConfig.success,
+          });
+        }
         successCallback();
       }
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

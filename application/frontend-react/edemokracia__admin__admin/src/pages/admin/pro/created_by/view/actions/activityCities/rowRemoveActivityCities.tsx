@@ -18,6 +18,7 @@ export type RowRemoveActivityCitiesAction = () => (
   owner: JudoIdentifiable<AdminUser>,
   selected: AdminCityStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
 ) => Promise<void>;
 
 export const useRowRemoveActivityCitiesAction: RowRemoveActivityCitiesAction = () => {
@@ -30,6 +31,7 @@ export const useRowRemoveActivityCitiesAction: RowRemoveActivityCitiesAction = (
     owner: JudoIdentifiable<AdminUser>,
     selected: AdminCityStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
   ) {
     try {
       await adminUserServiceForClassImpl.removeActivityCities(
@@ -39,7 +41,11 @@ export const useRowRemoveActivityCitiesAction: RowRemoveActivityCitiesAction = (
 
       successCallback();
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

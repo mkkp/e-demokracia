@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -101,6 +102,7 @@ export const ConsTable = (props: ConsTableProps) => {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const openCRUDDialog = useCRUDDialog();
 
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDebateProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filters`;
@@ -113,6 +115,13 @@ export const ConsTable = (props: ConsTableProps) => {
     pageSize: 10,
     page: 0,
   });
+
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<AdminConStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
+  }, [selectionModel]);
 
   const [consSortModel, setConsSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
 
@@ -273,6 +282,27 @@ export const ConsTable = (props: ConsTableProps) => {
     }
   };
 
+  const bulkDeleteSelected = useCallback(() => {
+    openCRUDDialog<AdminConStored>({
+      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
+      itemTitleFn: (item) => item.title!,
+      selectedItems: selectedRows.current,
+      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+        await rowDeleteConsAction(ownerData, item, successHandler, errorHandler, true);
+      },
+      onClose: (needsRefresh) => {
+        if (needsRefresh) {
+          fetchOwnerData();
+          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
+        }
+      },
+    });
+  }, []);
+  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
+    // every row has the same `__deleteable` flag
+    return !!selectionModel.length && true && isFormUpdateable() && !true && !!data[0]?.__deleteable;
+  }, [ownerData, data, selectionModel]);
+
   useEffect(() => {
     if (ownerData?.__identifier) {
       const storedFilters = getItemParsed<Filter[]>(filtersKey);
@@ -320,6 +350,11 @@ export const ConsTable = (props: ConsTableProps) => {
           }),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         onRowClick={(params: GridRowParams<AdminConStored>) => {
           if (!editMode) {
             rowViewConsAction(ownerData, params.row, () => fetchOwnerData());
@@ -350,6 +385,16 @@ export const ConsTable = (props: ConsTableProps) => {
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
+              {isBulkDeleteAvailable() ? (
+                <Button
+                  disabled={isOwnerLoading || editMode}
+                  variant="text"
+                  startIcon={<MdiIcon path="delete-forever" />}
+                  onClick={bulkDeleteSelected}
+                >
+                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
+                </Button>
+              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

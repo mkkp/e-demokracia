@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -87,6 +88,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
   );
+  const openCRUDDialog = useCRUDDialog();
 
   const [data, setData] = useState<GridRowModel<AdminVoteDefinitionStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
@@ -118,6 +120,13 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<AdminVoteDefinitionStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
+  }, [selectionModel]);
+
   useEffect(() => {
     setItemStringified(filtersKey, filters);
   }, [filters]);
@@ -139,7 +148,9 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       filterable: false && true,
       sortable: false,
       valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        return t(`enumerations.EdemokraciaVoteType.${value}`, { defaultValue: value });
+        if (value !== undefined && value !== null) {
+          return t(`enumerations.EdemokraciaVoteType.${value}`, { defaultValue: value });
+        }
       },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
@@ -206,7 +217,9 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       filterable: false && true,
       sortable: false,
       valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        return t(`enumerations.EdemokraciaVoteStatus.${value}`, { defaultValue: value });
+        if (value !== undefined && value !== null) {
+          return t(`enumerations.EdemokraciaVoteStatus.${value}`, { defaultValue: value });
+        }
       },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
@@ -427,6 +440,28 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
     },
   ];
 
+  const bulkDeleteSelected = useCallback(() => {
+    openCRUDDialog<AdminVoteDefinitionStored>({
+      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
+      itemTitleFn: (item) => item.title!,
+      selectedItems: selectedRows.current,
+      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+        await rowDeleteVoteDefinitionsAction(item, successHandler, errorHandler, true);
+      },
+      onClose: (needsRefresh) => {
+        if (needsRefresh) {
+          fetchData();
+          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
+        }
+      },
+      // autoCloseOnSuccess: true,
+    });
+  }, []);
+  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
+    // every row has the same `__deleteable` flag
+    return !!selectionModel.length && !false && !!data[0]?.__deleteable;
+  }, [data, selectionModel]);
+
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
     setFilters(newFilters);
@@ -550,6 +585,12 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
           ),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
+        keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminVoteDefinitionStored>) =>
           rowViewVoteDefinitionsAction(params.row, () => fetchData())
         }
@@ -574,6 +615,16 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
+              {isBulkDeleteAvailable() ? (
+                <Button
+                  disabled={isOwnerLoading}
+                  variant="text"
+                  startIcon={<MdiIcon path="delete-forever" />}
+                  onClick={bulkDeleteSelected}
+                >
+                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
+                </Button>
+              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

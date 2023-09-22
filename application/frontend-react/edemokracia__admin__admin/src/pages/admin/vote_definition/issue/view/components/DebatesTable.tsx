@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -112,6 +113,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const openCRUDDialog = useCRUDDialog();
 
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates-${ownerData.__identifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates-${ownerData.__identifier}-filters`;
@@ -124,6 +126,13 @@ export const DebatesTable = (props: DebatesTableProps) => {
     pageSize: 10,
     page: 0,
   });
+
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<AdminIssueDebateStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
+  }, [selectionModel]);
 
   const [debatesSortModel, setDebatesSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
 
@@ -139,7 +148,9 @@ export const DebatesTable = (props: DebatesTableProps) => {
       filterable: false && true,
       sortable: false,
       valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        return t(`enumerations.EdemokraciaDebateStatus.${value}`, { defaultValue: value });
+        if (value !== undefined && value !== null) {
+          return t(`enumerations.EdemokraciaDebateStatus.${value}`, { defaultValue: value });
+        }
       },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
@@ -333,6 +344,11 @@ export const DebatesTable = (props: DebatesTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         sortModel={debatesSortModel}
         onSortModelChange={(newModel: GridSortModel) => {
           setDebatesSortModel(newModel);

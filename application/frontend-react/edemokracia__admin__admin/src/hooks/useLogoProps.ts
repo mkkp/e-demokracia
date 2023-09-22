@@ -15,7 +15,7 @@ export interface UseLogoProps {
 export function useLogoProps(): UseLogoProps {
   return {
     imgSrc: 'mkkp-logo.png',
-    iconSrc: 'judo-icon.webp',
+    iconSrc: 'mkkp-circle-96x96.webp',
     subTitle: 'edemokracia',
   };
 }

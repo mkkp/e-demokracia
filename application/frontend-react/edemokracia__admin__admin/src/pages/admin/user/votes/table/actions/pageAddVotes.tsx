@@ -94,7 +94,9 @@ export const usePageAddVotesAction: PageAddVotesAction = () => {
         filterable: false && true,
         sortable: false,
         valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          return t(`enumerations.EdemokraciaSimpleVoteType.${value}`, { defaultValue: value });
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.EdemokraciaSimpleVoteType.${value}`, { defaultValue: value });
+          }
         },
         description: t('judo.pages.table.column.not-sortable', {
           defaultValue: 'This column is not sortable.',

@@ -24,6 +24,7 @@ export type RowRemoveCategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssue>,
   selected: AdminIssueCategoryStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
 ) => Promise<void>;
 
 export const useRowRemoveCategoriesAction: RowRemoveCategoriesAction = () => {
@@ -36,6 +37,7 @@ export const useRowRemoveCategoriesAction: RowRemoveCategoriesAction = () => {
     owner: JudoIdentifiable<AdminIssue>,
     selected: AdminIssueCategoryStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
   ) {
     try {
       await adminIssueServiceForClassImpl.removeCategories(
@@ -45,7 +47,11 @@ export const useRowRemoveCategoriesAction: RowRemoveCategoriesAction = () => {
 
       successCallback();
     } catch (error) {
-      handleActionError(error);
+      if (errorCallback) {
+        errorCallback(error);
+      } else {
+        handleActionError(error);
+      }
     }
   };
 };

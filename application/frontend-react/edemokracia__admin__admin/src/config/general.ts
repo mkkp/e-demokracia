@@ -16,12 +16,17 @@ export const generalToastConfig: OptionsObject = {
   },
 };
 
-export const toastConfig: OptionsObject & { success: OptionsObject; error: OptionsObject } = {
+export const toastConfig: OptionsObject & { success: OptionsObject; warning: OptionsObject; error: OptionsObject } = {
   ...generalToastConfig,
   success: {
     ...generalToastConfig,
     autoHideDuration: 2500,
     variant: 'success',
+  },
+  warning: {
+    ...generalToastConfig,
+    autoHideDuration: 2500,
+    variant: 'warning',
   },
   error: {
     ...generalToastConfig,

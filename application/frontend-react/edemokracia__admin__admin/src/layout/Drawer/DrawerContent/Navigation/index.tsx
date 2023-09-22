@@ -54,7 +54,7 @@ export const Navigation = () => {
     const filteredMenus: NavItemType[] = [];
     handlerMenuItems(menus, filteredMenus);
     setMenuItems(filteredMenus);
-  }, []);
+  }, [principal]);
 
   const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
 

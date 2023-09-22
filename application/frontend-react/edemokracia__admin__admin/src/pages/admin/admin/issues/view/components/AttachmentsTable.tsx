@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
 
-import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef } from 'react';
+import { useEffect, useState, useImperativeHandle, useMemo, useRef, forwardRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -33,7 +33,7 @@ import { useFilterDialog, useRangeDialog } from '~/components/dialog';
 import { columnsActionCalculator } from '~/components/table';
 import { FilterOption, FilterType, Filter } from '~/components-api';
 import type { PersistedTableData, RefreshableTable, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
+import { useDataStore, useCRUDDialog } from '~/hooks';
 import {
   decodeToken,
   fileHandling,
@@ -45,6 +45,7 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
+  getUpdatedRowsSelected,
 } from '~/utilities';
 import { useL10N } from '~/l10n/l10n-context';
 import { ContextMenu, StripedDataGrid } from '~/components/table';
@@ -116,6 +117,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const openCRUDDialog = useCRUDDialog();
 
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminIssuesViewDefaultIssueViewEditOtherAttachmentsAttachmentsAttachmentsLabelWrapperAttachments-${ownerData.__identifier}-filters`;
@@ -128,6 +130,13 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
     pageSize: 10,
     page: 0,
   });
+
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
+  const selectedRows = useRef<AdminIssueAttachmentStored[]>([]);
+
+  useEffect(() => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
+  }, [selectionModel]);
 
   const [attachmentsSortModel, setAttachmentsSortModel] = useState<GridSortModel>([{ field: 'link', sort: null }]);
 
@@ -197,7 +206,9 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
       filterable: false && true,
       sortable: false,
       valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        return t(`enumerations.EdemokraciaAttachmentType.${value}`, { defaultValue: value });
+        if (value !== undefined && value !== null) {
+          return t(`enumerations.EdemokraciaAttachmentType.${value}`, { defaultValue: value });
+        }
       },
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
@@ -281,6 +292,27 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
     }
   };
 
+  const bulkDeleteSelected = useCallback(() => {
+    openCRUDDialog<AdminIssueAttachmentStored>({
+      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
+      itemTitleFn: (item) => item.link!,
+      selectedItems: selectedRows.current,
+      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+        await rowDeleteAttachmentsAction(ownerData, item, successHandler, errorHandler, true);
+      },
+      onClose: (needsRefresh) => {
+        if (needsRefresh) {
+          fetchOwnerData();
+          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
+        }
+      },
+    });
+  }, []);
+  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
+    // every row has the same `__deleteable` flag
+    return !!selectionModel.length && true && isFormUpdateable() && !false && !!data[0]?.__deleteable;
+  }, [ownerData, data, selectionModel]);
+
   useEffect(() => {
     if (ownerData?.__identifier) {
       const storedFilters = getItemParsed<Filter[]>(filtersKey);
@@ -332,6 +364,11 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         onRowClick={(params: GridRowParams<AdminIssueAttachmentStored>) => {
           if (!editMode) {
             rowViewAttachmentsAction(ownerData, params.row, () => fetchOwnerData());
@@ -375,6 +412,16 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
+              {isBulkDeleteAvailable() ? (
+                <Button
+                  disabled={isOwnerLoading || editMode}
+                  variant="text"
+                  startIcon={<MdiIcon path="delete-forever" />}
+                  onClick={bulkDeleteSelected}
+                >
+                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
+                </Button>
+              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

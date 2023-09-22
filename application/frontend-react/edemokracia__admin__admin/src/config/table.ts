@@ -26,7 +26,6 @@ export const baseTableConfig: Partial<DataGridProps<any>> = {
 
 export const serverTableConfig: Partial<DataGridProps<any>> = {
   ...baseTableConfig,
-  sortingOrder: ['asc', 'desc'],
   sortingMode: 'server',
   paginationMode: 'server',
 };
