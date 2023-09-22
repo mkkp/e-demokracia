@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230907_040740_39a6c873_develop" version="1.0.0.20230922_212936_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230922_231711_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -805,7 +805,7 @@
           <tabs xmi:id="_x23N8Id8Ee2kLcMqsIbMgQ" name="attachments" label="Attachments" iconName="paperclip" col="12" row="10">
             <components xsi:type="ui:TabularReferenceField" xmi:id="_6kmaIId8Ee2kLcMqsIbMgQ" name="attachments" label="" iconName="" col="12" row="10" relationFeature="_qXz2kGksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="true">
               <columns xsi:type="ui:DataColumn" xmi:id="_6kmaIYd8Ee2kLcMqsIbMgQ" name="link" label="Link" iconName="text_fields" dataFeature="_p6HN8GksEe25ONJ3V89cVA"/>
-              <columns xsi:type="ui:DataColumn" xmi:id="_6knBMId8Ee2kLcMqsIbMgQ" name="file" label="File" iconName="file-document-outline" dataFeature="_p6zKcGksEe25ONJ3V89cVA"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_6knBMId8Ee2kLcMqsIbMgQ" name="file" label="File" iconName="file-document-outline" dataFeature="_p6zKcGksEe25ONJ3V89cVA" width="500px"/>
               <columns xsi:type="ui:DataColumn" xmi:id="_6knBMYd8Ee2kLcMqsIbMgQ" name="type" label="Type" iconName="list" dataFeature="_p7lNkGksEe25ONJ3V89cVA"/>
             </components>
           </tabs>
@@ -858,7 +858,7 @@
       </form>
       <table xmi:id="_p51hIGksEe25ONJ3V89cVA" name="IssueAttachment_Table" label="IssueAttachment Table" iconName="attachment">
         <columns xsi:type="ui:DataColumn" xmi:id="_Rd71UG5CEe2Q6M99rsfqSQ" name="link" label="Link" iconName="text_fields" dataFeature="_p6HN8GksEe25ONJ3V89cVA"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_Rd-RkG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" dataFeature="_p6zKcGksEe25ONJ3V89cVA"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_Rd-RkG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" dataFeature="_p6zKcGksEe25ONJ3V89cVA" width="300px"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_ReAt0G5CEe2Q6M99rsfqSQ" name="type" label="Type" iconName="list" dataFeature="_p7lNkGksEe25ONJ3V89cVA"/>
       </table>
       <view xmi:id="_p5jNQGksEe25ONJ3V89cVA" name="IssueAttachment_View_Edit" label="IssueAttachment View / Edit" iconName="attachment" layout="VERTICAL">

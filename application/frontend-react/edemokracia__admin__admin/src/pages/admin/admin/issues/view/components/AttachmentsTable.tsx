@@ -157,7 +157,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
       headerName: t('admin.IssueView.attachments.file', { defaultValue: 'File' }) as string,
       headerClassName: 'data-grid-column-header',
 
-      width: 230,
+      width: 500,
       type: 'string',
       filterable: false && false,
       sortable: false,
