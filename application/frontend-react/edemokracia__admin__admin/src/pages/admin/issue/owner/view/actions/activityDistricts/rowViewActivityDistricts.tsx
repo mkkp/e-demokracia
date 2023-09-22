@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminUserActivityDistrictsView } from '~/routes';
+import AdminAdminView from '~/pages/admin/user/activity_districts/view/index';
 
 export const ROW_VIEW_ACTIVITY_DISTRICTS_ACTION_INTERFACE_KEY = 'RowViewActivityDistrictsAction';
 export type RowViewActivityDistrictsAction = () => (
@@ -41,7 +41,23 @@ export const useRowViewActivityDistrictsAction: RowViewActivityDistrictsAction =
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminDistrictStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminUserActivityDistrictsView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

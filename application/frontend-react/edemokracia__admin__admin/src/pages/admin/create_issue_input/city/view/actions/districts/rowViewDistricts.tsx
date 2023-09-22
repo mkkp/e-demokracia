@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getActionsForPages(#application)
+// Factory expression: #getActionsForViewDialogs(#application)
 // Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminCityDistrictsView } from '~/routes';
+import AdminAdminView from '~/pages/admin/city/districts/view/index';
 
 export const ROW_VIEW_DISTRICTS_ACTION_INTERFACE_KEY = 'RowViewDistrictsAction';
 export type RowViewDistrictsAction = () => (
@@ -41,7 +41,23 @@ export const useRowViewDistrictsAction: RowViewDistrictsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminCity>, entry: AdminDistrictStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminCityDistrictsView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminUserActivityCountiesView } from '~/routes';
+import AdminAdminView from '~/pages/admin/user/activity_counties/view/index';
 
 export const ROW_VIEW_ACTIVITY_COUNTIES_ACTION_INTERFACE_KEY = 'RowViewActivityCountiesAction';
 export type RowViewActivityCountiesAction = () => (
@@ -41,7 +41,23 @@ export const useRowViewActivityCountiesAction: RowViewActivityCountiesAction = (
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCountyStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminUserActivityCountiesView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

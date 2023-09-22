@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getActionFormsForPages(#application)
+// Factory expression: #getActionFormsForViewDialogs(#application)
 // Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionFormPathSuffix(#self)+'/index.tsx'
 // Template name: actor/src/pages/actions/actionForm.tsx
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
@@ -9,7 +9,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getActionFormsForPages(#application)
+// Factory expression: #getActionFormsForViewDialogs(#application)
 // Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionFormPathSuffix(#self)+'/index.tsx'
 // Template name: actor/src/pages/actions/actionForm.tsx
 // Template file: actor/src/pages/actions/actionForm.tsx.hbs
@@ -73,7 +73,7 @@ import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } fro
 import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
 import { clsx } from 'clsx';
-import { routeToAdminCityDistrictsView } from '~/routes';
+import AdminAdminView from '~/pages/admin/city/districts/view/index';
 
 import {
   AdminCity,
@@ -294,7 +294,24 @@ export function TableCreateDistrictsForm({ successCallback, cancel, owner }: Tab
 
                         if (result) {
                           successCallback(result);
-                          navigate(routeToAdminCityDistrictsView(result.__signedIdentifier));
+                          createDialog({
+                            fullWidth: true,
+                            maxWidth: 'md',
+                            onClose: (event: object, reason: string) => {
+                              if (reason !== 'backdropClick') {
+                                closeDialog();
+                              }
+                            },
+                            children: (
+                              <AdminAdminView
+                                successCallback={() => {
+                                  successCallback(result, true);
+                                }}
+                                cancel={closeDialog}
+                                entry={result}
+                              />
+                            ),
+                          });
                         }
                       }}
                       disabled={isLoading}

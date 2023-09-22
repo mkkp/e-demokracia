@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getPagesForRouting(#application)
+// Factory expression: #getViewDialogs(#application)
 // Path expression: #pageIndexPath(#self)
-// Template name: actor/src/pages/index.tsx
-// Template file: actor/src/pages/index.tsx.hbs
+// Template name: actor/src/pages/dialogs/index.tsx
+// Template file: actor/src/pages/dialogs/index.tsx.hbs
 // Page name: edemokracia::admin::User.residentDistrict#View
 // Page owner name: edemokracia::admin::Admin
 // Page DataElement name: residentDistrict
@@ -45,6 +45,8 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 import { clsx } from 'clsx';
 
+import { IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { useConfirmDialog } from '~/components/dialog';
 import {
   AdminDistrict,
   AdminDistrictQueryCustomizer,
@@ -52,21 +54,24 @@ import {
   AdminUser,
   AdminUserStored,
 } from '~/generated/data-api';
-import { adminUserServiceForClassImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
+import { adminDistrictServiceForClassImpl } from '~/generated/data-axios';
 import {} from './actions';
 
-import { PageActions } from './components/PageActions';
+export interface AdminAdminViewProps {
+  entry: AdminDistrictStored;
+  successCallback: () => void;
+  cancel: () => void;
+}
 
-export type AdminUserResidentDistrictViewPostRefreshAction = (
+export type AdminAdminViewPostRefreshAction = (
   data: AdminDistrictStored,
   storeDiff: (attributeName: keyof AdminDistrictStored, value: any) => void,
   setEditMode: Dispatch<SetStateAction<boolean>>,
   setValidation: Dispatch<SetStateAction<Map<keyof AdminDistrict, string>>>,
 ) => Promise<void>;
 
-export const ADMIN_USER_RESIDENT_DISTRICT_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
-  'AdminUserResidentDistrictViewPostRefreshHook';
-export type AdminUserResidentDistrictViewPostRefreshHook = () => AdminUserResidentDistrictViewPostRefreshAction;
+export const ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminViewPostRefreshHook';
+export type AdminAdminViewPostRefreshHook = () => AdminAdminViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::User.residentDistrict#View
@@ -74,25 +79,26 @@ export type AdminUserResidentDistrictViewPostRefreshHook = () => AdminUserReside
  * Type: View
  * Edit Mode Available: true
  **/
-export default function AdminUserResidentDistrictView() {
+export default function AdminAdminView(props: AdminAdminViewProps) {
+  const { entry, successCallback, cancel } = props;
+
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { signedIdentifier } = useParams();
-
-  const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const { enqueueSnackbar } = useSnackbar();
+  const { openConfirmDialog } = useConfirmDialog();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
   );
   const handleUpdateError = useErrorHandler<AdminDistrict>(
-    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminUserResidentDistrictView))`,
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminAdminView))`,
   );
-  const { enqueueSnackbar } = useSnackbar();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<AdminDistrictStored>({} as unknown as AdminDistrictStored);
+  const [data, setData] = useState<AdminDistrictStored>(entry ? { ...entry } : ({} as unknown as AdminDistrictStored));
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminDistrictStored, any>>(
     {} as unknown as Record<keyof AdminDistrictStored, any>,
   );
@@ -129,11 +135,10 @@ export default function AdminUserResidentDistrictView() {
     _mask: '{name,representation}',
   };
 
-  const { service: postRefreshHook } = useTrackService<AdminUserResidentDistrictViewPostRefreshHook>(
-    `(${OBJECTCLASS}=${ADMIN_USER_RESIDENT_DISTRICT_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  const { service: postRefreshHook } = useTrackService<AdminAdminViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
   );
-  const postRefreshAction: AdminUserResidentDistrictViewPostRefreshAction | undefined =
-    postRefreshHook && postRefreshHook();
+  const postRefreshAction: AdminAdminViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
@@ -157,7 +162,7 @@ export default function AdminUserResidentDistrictView() {
 
     try {
       const res = await adminDistrictServiceForClassImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminDistrict>,
+        { __signedIdentifier: entry.__signedIdentifier } as JudoIdentifiable<AdminDistrict>,
         processQueryCustomizer(queryCustomizer),
       );
 
@@ -195,6 +200,7 @@ export default function AdminUserResidentDistrictView() {
           ...toastConfig.success,
         });
         setValidation(new Map<keyof AdminDistrict, string>());
+        successCallback();
         await fetchData();
         setEditMode(false);
       }
@@ -211,58 +217,120 @@ export default function AdminUserResidentDistrictView() {
 
   return (
     <>
-      <PageHeader title={title}>
-        <PageActions
-          data={data}
-          fetchData={fetchData}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          isLoading={isLoading}
-          submit={submit}
-        />
-      </PageHeader>
-      <PageContainerTransition>
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="relation-page-data"
-            container
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <TextField
-                required={true}
-                name="name"
-                id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserResidentDistrictViewDefaultDistrictViewEditName"
-                label={t('admin.DistrictView.name', { defaultValue: 'District name' }) as string}
-                value={data.name ?? ''}
-                className={clsx({
-                  'JUDO-viewMode': !editMode,
-                  'JUDO-required': true,
-                })}
-                disabled={isLoading}
-                error={!!validation.get('name')}
-                helperText={validation.get('name')}
-                onChange={(event) => {
-                  const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                  storeDiff('name', realValue);
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  readOnly: false || !isFormUpdateable(),
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdiIcon path="text_fields" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
+      <DialogTitle>
+        {title}
+        <IconButton
+          id="AdminAdminView-dialog-close"
+          aria-label="close"
+          onClick={() => {
+            cancel();
+            if (!editMode) {
+              successCallback();
+            }
+          }}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <MdiIcon path="close" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="name"
+              id="TextInputedemokraciaAdminAdminEdemokraciaAdminUserResidentDistrictViewDefaultDistrictViewEditName"
+              label={t('admin.DistrictView.name', { defaultValue: 'District name' }) as string}
+              value={data.name ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('name')}
+              helperText={validation.get('name')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('name', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Grid>
-        </Box>
-      </PageContainerTransition>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Grid className="page-action" item>
+          <Button
+            id="AdminAdminView-dialog-close"
+            variant="text"
+            onClick={() => {
+              cancel();
+              if (!editMode) {
+                successCallback();
+              }
+            }}
+            disabled={isLoading}
+          >
+            {t('judo.pages.close', { defaultValue: 'Close' })}
+          </Button>
+        </Grid>
+
+        {editMode && isFormUpdateable() && (
+          <Grid className="page-action" item>
+            <Button
+              id="page-action-edit-cancel"
+              variant="outlined"
+              startIcon={<MdiIcon path="cancel" />}
+              onClick={() => {
+                setEditMode(false);
+                fetchData();
+              }}
+              disabled={isLoading}
+            >
+              {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
+            </Button>
+          </Grid>
+        )}
+        {editMode && isFormUpdateable() && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              id="page-action-edit-save"
+              startIcon={<MdiIcon path="content-save" />}
+              onClick={() => submit()}
+            >
+              <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {!editMode && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              id="page-action-refresh"
+              startIcon={<MdiIcon path="refresh" />}
+              onClick={() => fetchData()}
+            >
+              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+      </DialogActions>
     </>
   );
 }

@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminUserActivityCitiesView } from '~/routes';
+import AdminAdminView from '~/pages/admin/user/activity_cities/view/index';
 
 export const ROW_VIEW_ACTIVITY_CITIES_ACTION_INTERFACE_KEY = 'RowViewActivityCitiesAction';
 export type RowViewActivityCitiesAction = () => (
@@ -41,7 +41,23 @@ export const useRowViewActivityCitiesAction: RowViewActivityCitiesAction = () =>
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminCityStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminUserActivityCitiesView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

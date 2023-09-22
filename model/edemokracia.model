@@ -72,7 +72,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_IgwWoIX2Ee2kLcMqsIbMgQ" name="county" label="County" iconName="text_fields" visible="true" sort="NONE" dataFeature="_XCNnMIXxEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_dL7uAH4bEe2j59SYy0JH0Q" name="name" label="City name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0Xks32iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0XkuH2iEe2LTNnGda5kaw" name="City_View_Edit" label="City View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_0F3joIXxEe2kLcMqsIbMgQ">
+      <view xmi:id="_a0XkuH2iEe2LTNnGda5kaw" name="City_View_Edit" label="City View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_0F3joIXxEe2kLcMqsIbMgQ" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:DataField" xmi:id="_dL1nYH4bEe2j59SYy0JH0Q" name="name" label="City name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0Xks32iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cLC8gIXhEe2kLcMqsIbMgQ" name="districts" label="Districts" iconName="home-city" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" relationFeature="_a0XksX2iEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_cLEKoIXhEe2kLcMqsIbMgQ" name="name" label="Name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0UhYX2iEe2LTNnGda5kaw"/>
@@ -328,7 +328,7 @@
       <table xmi:id="_a0aoB32iEe2LTNnGda5kaw" name="County_Table" label="County Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
         <columns xsi:type="ui:DataColumn" xmi:id="_dLheUH4bEe2j59SYy0JH0Q" name="name" label="Name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0aoA32iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0aoCH2iEe2LTNnGda5kaw" name="County_View_Edit" label="County View / Edit" iconName="map" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_NdiWgIXyEe2kLcMqsIbMgQ">
+      <view xmi:id="_a0aoCH2iEe2LTNnGda5kaw" name="County_View_Edit" label="County View / Edit" iconName="map" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_NdiWgIXyEe2kLcMqsIbMgQ" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:DataField" xmi:id="_dLSNwH4bEe2j59SYy0JH0Q" name="name" label="County name" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0aoA32iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cK7AsIXhEe2kLcMqsIbMgQ" name="cities" label="Cities" iconName="city" col="12" stretch="NONE" row="8" fit="LOOSE" onBlur="false" relationFeature="_23Z_YH2nEe27Ga2Ojs4Fgg" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_cK9c8IXhEe2kLcMqsIbMgQ" name="name" label="Name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0Xks32iEe2LTNnGda5kaw"/>
@@ -700,7 +700,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_1ZcukIX1Ee2kLcMqsIbMgQ" name="city" label="City" iconName="text_fields" visible="true" sort="NONE" dataFeature="_pHXOsIXxEe2kLcMqsIbMgQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_dMVWoH4bEe2j59SYy0JH0Q" name="name" label="District name" iconName="text_fields" visible="true" sort="NONE" dataFeature="_a0UhYX2iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0UhZn2iEe2LTNnGda5kaw" name="District_View_Edit" label="District View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_AHgwkIXyEe2kLcMqsIbMgQ">
+      <view xmi:id="_a0UhZn2iEe2LTNnGda5kaw" name="District_View_Edit" label="District View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="ATTRIBUTE" titleAttribute="_AHgwkIXyEe2kLcMqsIbMgQ" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:DataField" xmi:id="_dMOo8H4bEe2j59SYy0JH0Q" name="name" label="District name" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_a0UhYX2iEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
       </view>
     </elements>

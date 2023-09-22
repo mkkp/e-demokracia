@@ -57,21 +57,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_COUNTIES_VIEW_INTERFACE_KEY = 'AdminAdminCountiesViewRoute';
-export const routeToAdminAdminCountiesView = (signedIdentifier: string): string =>
-  'admin/admin/counties/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminCountiesView = lazy(() => import('./pages/admin/admin/counties/view/index'));
-
-routes.push({
-  path: 'admin/admin/counties/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_COUNTIES_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminCountiesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_DASHBOARD_INTERFACE_KEY = 'DashboardRoute';
 export const routeToDashboard = (): string => '';
 const DashboardRoute = lazy(() => import('./pages/admin/admin/dashboardhome/index'));
@@ -261,21 +246,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_CITY_DISTRICTS_VIEW_INTERFACE_KEY = 'AdminCityDistrictsViewRoute';
-export const routeToAdminCityDistrictsView = (signedIdentifier: string): string =>
-  'admin/city/districts/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCityDistrictsView = lazy(() => import('./pages/admin/city/districts/view/index'));
-
-routes.push({
-  path: 'admin/city/districts/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CITY_DISTRICTS_VIEW_INTERFACE_KEY})`}>
-        <AdminCityDistrictsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_COMMENT_CREATED_BY_VIEW_INTERFACE_KEY = 'AdminCommentCreatedByViewRoute';
 export const routeToAdminCommentCreatedByView = (signedIdentifier: string): string =>
   'admin/comment/created_by/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -407,66 +377,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CON_VOTES_VIEW_INTERFACE_KEY})`}>
         <AdminConVotesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_COUNTY_CITIES_VIEW_INTERFACE_KEY = 'AdminCountyCitiesViewRoute';
-export const routeToAdminCountyCitiesView = (signedIdentifier: string): string =>
-  'admin/county/cities/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCountyCitiesView = lazy(() => import('./pages/admin/county/cities/view/index'));
-
-routes.push({
-  path: 'admin/county/cities/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_COUNTY_CITIES_VIEW_INTERFACE_KEY})`}>
-        <AdminCountyCitiesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_CREATE_ISSUE_INPUT_CITY_VIEW_INTERFACE_KEY = 'AdminCreateIssueInputCityViewRoute';
-export const routeToAdminCreateIssueInputCityView = (signedIdentifier: string): string =>
-  'admin/create_issue_input/city/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCreateIssueInputCityView = lazy(() => import('./pages/admin/create_issue_input/city/view/index'));
-
-routes.push({
-  path: 'admin/create_issue_input/city/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CREATE_ISSUE_INPUT_CITY_VIEW_INTERFACE_KEY})`}>
-        <AdminCreateIssueInputCityView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_CREATE_ISSUE_INPUT_COUNTY_VIEW_INTERFACE_KEY = 'AdminCreateIssueInputCountyViewRoute';
-export const routeToAdminCreateIssueInputCountyView = (signedIdentifier: string): string =>
-  'admin/create_issue_input/county/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCreateIssueInputCountyView = lazy(() => import('./pages/admin/create_issue_input/county/view/index'));
-
-routes.push({
-  path: 'admin/create_issue_input/county/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CREATE_ISSUE_INPUT_COUNTY_VIEW_INTERFACE_KEY})`}>
-        <AdminCreateIssueInputCountyView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_CREATE_ISSUE_INPUT_DISTRICT_VIEW_INTERFACE_KEY = 'AdminCreateIssueInputDistrictViewRoute';
-export const routeToAdminCreateIssueInputDistrictView = (signedIdentifier: string): string =>
-  'admin/create_issue_input/district/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCreateIssueInputDistrictView = lazy(() => import('./pages/admin/create_issue_input/district/view/index'));
-
-routes.push({
-  path: 'admin/create_issue_input/district/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CREATE_ISSUE_INPUT_DISTRICT_VIEW_INTERFACE_KEY})`}>
-        <AdminCreateIssueInputDistrictView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -681,21 +591,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ISSUE_CITY_VIEW_INTERFACE_KEY = 'AdminIssueCityViewRoute';
-export const routeToAdminIssueCityView = (signedIdentifier: string): string =>
-  'admin/issue/city/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueCityView = lazy(() => import('./pages/admin/issue/city/view/index'));
-
-routes.push({
-  path: 'admin/issue/city/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CITY_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueCityView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_ISSUE_COMMENTS_VIEW_INTERFACE_KEY = 'AdminIssueCommentsViewRoute';
 export const routeToAdminIssueCommentsView = (signedIdentifier: string): string =>
   'admin/issue/comments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -707,21 +602,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_COMMENTS_VIEW_INTERFACE_KEY})`}>
         <AdminIssueCommentsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ISSUE_COUNTY_VIEW_INTERFACE_KEY = 'AdminIssueCountyViewRoute';
-export const routeToAdminIssueCountyView = (signedIdentifier: string): string =>
-  'admin/issue/county/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueCountyView = lazy(() => import('./pages/admin/issue/county/view/index'));
-
-routes.push({
-  path: 'admin/issue/county/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_COUNTY_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueCountyView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -752,21 +632,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CREATED_BY_VIEW_INTERFACE_KEY})`}>
         <AdminIssueCreatedByView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ISSUE_DISTRICT_VIEW_INTERFACE_KEY = 'AdminIssueDistrictViewRoute';
-export const routeToAdminIssueDistrictView = (signedIdentifier: string): string =>
-  'admin/issue/district/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueDistrictView = lazy(() => import('./pages/admin/issue/district/view/index'));
-
-routes.push({
-  path: 'admin/issue/district/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_DISTRICT_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueDistrictView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -932,96 +797,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_SIMPLE_VOTE_USER_VIEW_INTERFACE_KEY})`}>
         <AdminSimpleVoteUserView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_USER_ACTIVITY_CITIES_VIEW_INTERFACE_KEY = 'AdminUserActivityCitiesViewRoute';
-export const routeToAdminUserActivityCitiesView = (signedIdentifier: string): string =>
-  'admin/user/activity_cities/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminUserActivityCitiesView = lazy(() => import('./pages/admin/user/activity_cities/view/index'));
-
-routes.push({
-  path: 'admin/user/activity_cities/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ACTIVITY_CITIES_VIEW_INTERFACE_KEY})`}>
-        <AdminUserActivityCitiesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_USER_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY = 'AdminUserActivityCountiesViewRoute';
-export const routeToAdminUserActivityCountiesView = (signedIdentifier: string): string =>
-  'admin/user/activity_counties/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminUserActivityCountiesView = lazy(() => import('./pages/admin/user/activity_counties/view/index'));
-
-routes.push({
-  path: 'admin/user/activity_counties/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY})`}>
-        <AdminUserActivityCountiesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_USER_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY = 'AdminUserActivityDistrictsViewRoute';
-export const routeToAdminUserActivityDistrictsView = (signedIdentifier: string): string =>
-  'admin/user/activity_districts/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminUserActivityDistrictsView = lazy(() => import('./pages/admin/user/activity_districts/view/index'));
-
-routes.push({
-  path: 'admin/user/activity_districts/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY})`}>
-        <AdminUserActivityDistrictsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_USER_RESIDENT_CITY_VIEW_INTERFACE_KEY = 'AdminUserResidentCityViewRoute';
-export const routeToAdminUserResidentCityView = (signedIdentifier: string): string =>
-  'admin/user/resident_city/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminUserResidentCityView = lazy(() => import('./pages/admin/user/resident_city/view/index'));
-
-routes.push({
-  path: 'admin/user/resident_city/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_RESIDENT_CITY_VIEW_INTERFACE_KEY})`}>
-        <AdminUserResidentCityView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_USER_RESIDENT_COUNTY_VIEW_INTERFACE_KEY = 'AdminUserResidentCountyViewRoute';
-export const routeToAdminUserResidentCountyView = (signedIdentifier: string): string =>
-  'admin/user/resident_county/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminUserResidentCountyView = lazy(() => import('./pages/admin/user/resident_county/view/index'));
-
-routes.push({
-  path: 'admin/user/resident_county/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_RESIDENT_COUNTY_VIEW_INTERFACE_KEY})`}>
-        <AdminUserResidentCountyView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_USER_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY = 'AdminUserResidentDistrictViewRoute';
-export const routeToAdminUserResidentDistrictView = (signedIdentifier: string): string =>
-  'admin/user/resident_district/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminUserResidentDistrictView = lazy(() => import('./pages/admin/user/resident_district/view/index'));
-
-routes.push({
-  path: 'admin/user/resident_district/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY})`}>
-        <AdminUserResidentDistrictView />
       </ComponentProxy>
     </Suspense>
   ),

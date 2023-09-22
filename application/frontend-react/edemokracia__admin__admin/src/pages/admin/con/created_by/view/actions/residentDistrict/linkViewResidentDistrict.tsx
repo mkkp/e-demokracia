@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminUserResidentDistrictView } from '~/routes';
+import AdminAdminView from '~/pages/admin/user/resident_district/view/index';
 
 export const LINK_VIEW_RESIDENT_DISTRICT_ACTION_INTERFACE_KEY = 'LinkViewResidentDistrictAction';
 export type LinkViewResidentDistrictAction = () => (
@@ -41,7 +41,23 @@ export const useLinkViewResidentDistrictAction: LinkViewResidentDistrictAction =
   }
 
   return async function (owner: JudoIdentifiable<AdminUser>, entry: AdminDistrictStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminUserResidentDistrictView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getPagesForRouting(#application)
+// Factory expression: #getViewDialogs(#application)
 // Path expression: #pageIndexPath(#self)
-// Template name: actor/src/pages/index.tsx
-// Template file: actor/src/pages/index.tsx.hbs
+// Template name: actor/src/pages/dialogs/index.tsx
+// Template file: actor/src/pages/dialogs/index.tsx.hbs
 // Page name: edemokracia::admin::CreateIssueInput.city#View
 // Page owner name: edemokracia::admin::Admin
 // Page DataElement name: city
@@ -45,6 +45,8 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 import { clsx } from 'clsx';
 
+import { IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { useConfirmDialog } from '~/components/dialog';
 import {
   AdminCity,
   AdminCityQueryCustomizer,
@@ -55,22 +57,26 @@ import {
   AdminDistrictQueryCustomizer,
   AdminDistrictStored,
 } from '~/generated/data-api';
-import { adminCreateIssueInputServiceForClassImpl, adminCityServiceForClassImpl } from '~/generated/data-axios';
+import { adminCityServiceForClassImpl } from '~/generated/data-axios';
 import {} from './actions';
 
-import { PageActions } from './components/PageActions';
 import { DistrictsTable } from './components/DistrictsTable';
 
-export type AdminCreateIssueInputCityViewPostRefreshAction = (
+export interface AdminAdminViewProps {
+  entry: AdminCityStored;
+  successCallback: () => void;
+  cancel: () => void;
+}
+
+export type AdminAdminViewPostRefreshAction = (
   data: AdminCityStored,
   storeDiff: (attributeName: keyof AdminCityStored, value: any) => void,
   setEditMode: Dispatch<SetStateAction<boolean>>,
   setValidation: Dispatch<SetStateAction<Map<keyof AdminCity, string>>>,
 ) => Promise<void>;
 
-export const ADMIN_CREATE_ISSUE_INPUT_CITY_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
-  'AdminCreateIssueInputCityViewPostRefreshHook';
-export type AdminCreateIssueInputCityViewPostRefreshHook = () => AdminCreateIssueInputCityViewPostRefreshAction;
+export const ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminViewPostRefreshHook';
+export type AdminAdminViewPostRefreshHook = () => AdminAdminViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::CreateIssueInput.city#View
@@ -78,22 +84,23 @@ export type AdminCreateIssueInputCityViewPostRefreshHook = () => AdminCreateIssu
  * Type: View
  * Edit Mode Available: false
  **/
-export default function AdminCreateIssueInputCityView() {
+export default function AdminAdminView(props: AdminAdminViewProps) {
+  const { entry, successCallback, cancel } = props;
+
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { signedIdentifier } = useParams();
-
-  const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const { enqueueSnackbar } = useSnackbar();
+  const { openConfirmDialog } = useConfirmDialog();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
   );
-  const { enqueueSnackbar } = useSnackbar();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<AdminCityStored>({} as unknown as AdminCityStored);
+  const [data, setData] = useState<AdminCityStored>(entry ? { ...entry } : ({} as unknown as AdminCityStored));
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminCityStored, any>>(
     {} as unknown as Record<keyof AdminCityStored, any>,
   );
@@ -128,20 +135,19 @@ export default function AdminCreateIssueInputCityView() {
     _mask: '{name,representation,districts{name}}',
   };
 
-  const { service: postRefreshHook } = useTrackService<AdminCreateIssueInputCityViewPostRefreshHook>(
-    `(${OBJECTCLASS}=${ADMIN_CREATE_ISSUE_INPUT_CITY_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  const { service: postRefreshHook } = useTrackService<AdminAdminViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
   );
-  const postRefreshAction: AdminCreateIssueInputCityViewPostRefreshAction | undefined =
-    postRefreshHook && postRefreshHook();
+  const postRefreshAction: AdminAdminViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = data.representation as string;
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return false;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
-    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false;
   }, [data]);
 
   useConfirmationBeforeChange(
@@ -156,7 +162,7 @@ export default function AdminCreateIssueInputCityView() {
 
     try {
       const res = await adminCityServiceForClassImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminCity>,
+        { __signedIdentifier: entry.__signedIdentifier } as JudoIdentifiable<AdminCity>,
         processQueryCustomizer(queryCustomizer),
       );
 
@@ -188,101 +194,135 @@ export default function AdminCreateIssueInputCityView() {
 
   return (
     <>
-      <PageHeader title={title}>
-        <PageActions
-          data={data}
-          fetchData={fetchData}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          isLoading={isLoading}
-        />
-      </PageHeader>
-      <PageContainerTransition>
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="relation-page-data"
-            container
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <TextField
-                required={true}
-                name="name"
-                id="TextInputedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditName"
-                label={t('admin.CityView.name', { defaultValue: 'City name' }) as string}
-                value={data.name ?? ''}
-                className={clsx({
-                  'JUDO-viewMode': !editMode,
-                  'JUDO-required': true,
-                })}
-                disabled={isLoading}
-                error={!!validation.get('name')}
-                helperText={validation.get('name')}
-                onChange={(event) => {
-                  const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                  storeDiff('name', realValue);
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  readOnly: false || !isFormUpdateable(),
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdiIcon path="text_fields" />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Grid>
+      <DialogTitle>
+        {title}
+        <IconButton
+          id="AdminAdminView-dialog-close"
+          aria-label="close"
+          onClick={() => {
+            cancel();
+            if (!editMode) {
+              successCallback();
+            }
+          }}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <MdiIcon path="close" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="name"
+              id="TextInputedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditName"
+              label={t('admin.CityView.name', { defaultValue: 'City name' }) as string}
+              value={data.name ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('name')}
+              helperText={validation.get('name')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('name', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="FlexedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditDistrictsLabelWrapper"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                <Grid item xs={12} sm={12}>
-                  <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
-                    <Typography
-                      id="LabeledemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditDistrictsLabelWrapperDistrictsLabel"
-                      variant="h5"
-                      component="h1"
-                    >
-                      {t('admin.CityView.districts.Label', { defaultValue: 'Districts' })}
-                    </Typography>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="TableedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditDistrictsLabelWrapperDistricts"
-                    container
-                    direction="column"
-                    alignItems="stretch"
-                    justifyContent="flex-start"
+          <Grid item xs={12} sm={12}>
+            <Grid
+              id="FlexedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditDistrictsLabelWrapper"
+              container
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12}>
+                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                  <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
+                  <Typography
+                    id="LabeledemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditDistrictsLabelWrapperDistrictsLabel"
+                    variant="h5"
+                    component="h1"
                   >
-                    <DistrictsTable
-                      isOwnerLoading={isLoading}
-                      validation={validation}
-                      fetchOwnerData={fetchData}
-                      ownerData={data}
-                      editMode={editMode}
-                      isFormUpdateable={isFormUpdateable}
-                      storeDiff={storeDiff}
-                    />
-                  </Grid>
+                    {t('admin.CityView.districts.Label', { defaultValue: 'Districts' })}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="TableedemokraciaAdminAdminEdemokraciaAdminCreateIssueInputCityViewDefaultCityViewEditDistrictsLabelWrapperDistricts"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <DistrictsTable
+                    isOwnerLoading={isLoading}
+                    validation={validation}
+                    fetchOwnerData={fetchData}
+                    ownerData={data}
+                    editMode={editMode}
+                    isFormUpdateable={isFormUpdateable}
+                    storeDiff={storeDiff}
+                  />
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Box>
-      </PageContainerTransition>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Grid className="page-action" item>
+          <Button
+            id="AdminAdminView-dialog-close"
+            variant="text"
+            onClick={() => {
+              cancel();
+              if (!editMode) {
+                successCallback();
+              }
+            }}
+            disabled={isLoading}
+          >
+            {t('judo.pages.close', { defaultValue: 'Close' })}
+          </Button>
+        </Grid>
+
+        {!editMode && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              id="page-action-refresh"
+              startIcon={<MdiIcon path="refresh" />}
+              onClick={() => fetchData()}
+            >
+              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+      </DialogActions>
     </>
   );
 }
