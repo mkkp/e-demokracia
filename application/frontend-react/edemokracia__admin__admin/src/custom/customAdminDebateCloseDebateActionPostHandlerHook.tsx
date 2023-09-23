@@ -26,20 +26,27 @@ const customAdminDebateCloseDebateActionPostHandlerHook: AdminDebateCloseDebateA
   const { navigate } = useJudoNavigation();
 
   return async (ownerCallback: () => void, result?: AdminVoteDefinitionStored) => {
-    // 1. Retrieve result identifier
-    const resultId = result!.__identifier;
+    const id = result!.__identifier;
+    const entityType = result!.__entityType;
 
-    // 2. Retrieve signedIdentifier from access
     const idAccessFilterCustomizer: any = {
-      _identifier: resultId,
+      _identifier: id,
     };
 
-    const res = await adminAdminServiceForVoteDefinitionsImpl.listVoteDefinitions(
-      processQueryCustomizer(idAccessFilterCustomizer),
-    );
-
-    // 3. Open view page in access
-    navigate(routeToAdminAdminVoteDefinitionsView(res[0].__signedIdentifier));
-    //  navigate(routeToAdminAdminYesNoVoteDefinitionsView(entry.__signedIdentifier));
+    if (entityType == 'edemokracia.YesNoVoteDefinition') {
+      // Retrieve signedIdentifier from access
+      const res = await adminAdminServiceForYesNoVoteDefinitionsImpl.listYesNoVoteDefinitions(
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
+      // Open view page in access
+      navigate(routeToAdminAdminYesNoVoteDefinitionsView(res[0].__signedIdentifier));
+    } else {
+      // Retrieve signedIdentifier from access
+      const res = await adminAdminServiceForVoteDefinitionsImpl.listVoteDefinitions(
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
+      // Open view page in access
+      navigate(routeToAdminAdminVoteDefinitionsView(res[0].__signedIdentifier));
+    }
   };
 };

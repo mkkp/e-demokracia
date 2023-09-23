@@ -329,7 +329,7 @@
 /src/pages/admin/admin/yes_no_vote_definitions/view/components/PageActions.tsx,6bcfe3cb7fe09713fb12ac699ce2d24d
 /src/pages/admin/admin/yes_no_vote_definitions/view/components/UserVoteEntryLink.tsx,9dc921ebd9a391291a01fe4b25fc6afa
 /src/pages/admin/admin/yes_no_vote_definitions/view/components/VoteEntriesTable.tsx,cb5a06dcb4ef21ca590174f07aca24f6
-/src/pages/admin/admin/yes_no_vote_definitions/view/index.tsx,d6f7330fd3de28a1c7aa418d9bec5d53
+/src/pages/admin/admin/yes_no_vote_definitions/view/index.tsx,b3a0007db43f7c9b8cb00888c8961c27
 /src/pages/admin/city/districts/view/actions/index.tsx,1f488c5c9e25d989f967938735462a5d
 /src/pages/admin/city/districts/view/actions/pageDeleteDistricts.tsx,30f64d1084dd8e21558f457f8bdd06fc
 /src/pages/admin/city/districts/view/actions/pageRefreshDistricts.tsx,c3155f90de161f11434f75ce8350a473
@@ -876,7 +876,7 @@
 /src/pages/admin/debate/yes_no_vote_definition/view/components/PageActions.tsx,45e269b07fd5a9aa5133eaf8c96c34d0
 /src/pages/admin/debate/yes_no_vote_definition/view/components/UserVoteEntryLink.tsx,124e141f814a0782cf788b2d203dbfe8
 /src/pages/admin/debate/yes_no_vote_definition/view/components/VoteEntriesTable.tsx,4b2522258c22820aa237a8dce98fc3aa
-/src/pages/admin/debate/yes_no_vote_definition/view/index.tsx,8ee2dc6774e7246f95e3f9dc58eb9e52
+/src/pages/admin/debate/yes_no_vote_definition/view/index.tsx,42db497c0e9a99c7547696e56f6f56a8
 /src/pages/admin/issue/attachments/view/actions/index.tsx,d7469bfa3a9711751c54736ddf971f3c
 /src/pages/admin/issue/attachments/view/actions/pageDeleteAttachments.tsx,71d5a79a815f71110dca422a68396d81
 /src/pages/admin/issue/attachments/view/actions/pageRefreshAttachments.tsx,f46d19cce5ed857273368968eac34abd
@@ -1716,7 +1716,7 @@ public/browserconfig.xml,a493ba0aa0b8ec8068d786d7248bb92c
 public/favicon-16x16.png,07d4a9035e87e12daeeaa07a7b0fc3b1
 public/favicon-32x32.png,16007d7b6ccc973a3d8e5e303919c012
 public/favicon.ico,17b33863654ecc54cddeece199c4ee97
-public/i18n/application_default.json,f82525e2ef7b7f7968000c09719161d6
+public/i18n/application_default.json,92b4dd400ca514829ac42ddc1a448c50
 public/i18n/application_hu-HU.json,ac794a0d6ba5833d71c08c177aa55ecf
 public/i18n/system_default.json,3ac4e93a7df7e9ce0462b47d85e70d99
 public/i18n/system_en-US.json,3ac4e93a7df7e9ce0462b47d85e70d99
@@ -1785,7 +1785,7 @@ src/config/general.ts,96ffa327cde6ed0d60e31c9b9952bb4b
 src/config/index.ts,a64dfab3ae1c5ecd6f63c5385db70a14
 src/config/layout.ts,707bfc463075b67ad8983aa8972c87cb
 src/config/table.ts,290083e29eca234a508fecd16dea48e0
-src/custom/application-customizer.tsx,a252c52fe2830c5ef3977d49e8961b08
+src/custom/application-customizer.tsx,cb5da1ec6bf1a2a396e51a0da7d87cee
 src/custom/custom-element-types.ts,8e3a3daa2f0e6fffc66fa75db2c3c8c6
 src/custom/index.tsx,143c111448792e9793f22980413a4b47
 src/custom/interfaces.ts,d78c9a876239cca27dbc138511935fca
@@ -1808,7 +1808,7 @@ src/layout/Drawer/DrawerContent/Navigation/NavCollapse.tsx,d415e68154c410c6f2362
 src/layout/Drawer/DrawerContent/Navigation/NavGroup.tsx,1f37d694e914440dbbf21b3f73dba405
 src/layout/Drawer/DrawerContent/Navigation/NavItem.tsx,5a94a96225c24fe753544ba125347cab
 src/layout/Drawer/DrawerContent/Navigation/index.tsx,694cf4a897bdf98f4765cd11b1e8b352
-src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx,f041e5a724b5e95446560e51d60c3247
+src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx,18618499fb2277efca1da2e8d8284704
 src/layout/Drawer/DrawerContent/SimpleBar.tsx,1dfca1cb68a4bdce0a5e537a74994477
 src/layout/Drawer/DrawerContent/index.tsx,96fb1ff7505980669596955db5f78277
 src/layout/Drawer/DrawerHeader/DrawerHeaderStyled.tsx,86e22ca8cd0e2d71c47689de1a233738

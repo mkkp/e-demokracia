@@ -95,14 +95,6 @@ export const menus: NavItemType[] = [
         title: 'Votes',
         children: [],
       },
-      {
-        id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupVoteDefinitionMenuEdemokraciaAdminAdminYesNoVoteDefinitionsNavigationItem',
-        type: 'item',
-        url: 'admin/admin/yes_no_vote_definitions/table',
-        icon: 'checkbox-outline',
-        title: 'Yes / No Votes',
-        children: [],
-      },
     ],
   },
   {

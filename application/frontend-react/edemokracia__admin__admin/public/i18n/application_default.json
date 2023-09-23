@@ -614,7 +614,6 @@
         "menuTree.Users": "Users",
         "menuTree.Vote Definitions": "Vote Definitions",
         "menuTree.Vote Entries": "Vote Entries",
-        "menuTree.Votes": "Votes",
-        "menuTree.Yes / No Votes": "Yes / No Votes"
+        "menuTree.Votes": "Votes"
     }
 }

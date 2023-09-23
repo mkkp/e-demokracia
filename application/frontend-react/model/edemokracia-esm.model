@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230923_225658_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230924_014838_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -25,7 +25,7 @@
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_l9dMQJEaEe29qs15q2b6yw" name="Vote_Menu" label="Votes" iconName="vote" menuGroup="_I-NHQFoTEe6_67aMO2jOsw" access="_l9Zh4JEaEe29qs15q2b6yw"/>
       <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_I-NHQFoTEe6_67aMO2jOsw" name="VoteDefinition_Menu" label="Vote Definitions" iconName="vote" menuItems="_l9dMQJEaEe29qs15q2b6yw _zCyjYFoTEe6_67aMO2jOsw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_0CXbYORyEe2Bgcx6em3jZg" name="Vote_Entries_Menu" label="Vote Entries" iconName="vote-outline" access="_0CUYEORyEe2Bgcx6em3jZg"/>
-      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_zCyjYFoTEe6_67aMO2jOsw" name="YesNoVoteDefinitions_Menu" label="Yes / No Votes" iconName="checkbox-outline" menuGroup="_I-NHQFoTEe6_67aMO2jOsw" access="_zCZh0FoTEe6_67aMO2jOsw"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_zCyjYFoTEe6_67aMO2jOsw" name="YesNoVoteDefinitions_Menu" label="Yes / No Votes" iconName="checkbox-outline" hidden="true" menuGroup="_I-NHQFoTEe6_67aMO2jOsw" access="_zCZh0FoTEe6_67aMO2jOsw"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_ndA8kGkwEe25ONJ3V89cVA" name="AdminPrincipalUser" actorType="_jUnLgGkqEe25ONJ3V89cVA">
       <attributes xsi:type="structure:DataMember" xmi:id="_TzJu8H8GEe2kLcMqsIbMgQ" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_vX4k8G5gEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
@@ -1725,26 +1725,28 @@
       </table>
       <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" dialogSize="LG">
         <components xsi:type="ui:Group" xmi:id="_ULRSEFoSEe6_67aMO2jOsw" name="VoteEntryBase" frame="true" col="12">
-          <components xsi:type="ui:DataField" xmi:id="_ULRSEVoSEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" col="12" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ"/>
-          <components xsi:type="ui:DataField" xmi:id="_ULRSEloSEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
-          <components xsi:type="ui:DataField" xmi:id="_ULRSE1oSEe6_67aMO2jOsw" name="status" label="Status" iconName="list" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ"/>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_ULRSFFoSEe6_67aMO2jOsw" name="debate" label="Debate" iconName="wechat" col="3" relationFeature="_JjusoFoHEe6_67aMO2jOsw" targetDefinedTabular="false">
-            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSFVoSEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_7FHekG5UEe2wNaja8kBvcQ"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSFloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" dataFeature="_7FMXEG5UEe2wNaja8kBvcQ"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSF1oSEe6_67aMO2jOsw" name="status" label="Status" iconName="list" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSGFoSEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
+          <components xsi:type="ui:Group" xmi:id="_X8gKkFprEe6_67aMO2jOsw" name="virtual" col="12">
+            <components xsi:type="ui:DataField" xmi:id="_ULRSEVoSEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" col="12" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ"/>
+            <components xsi:type="ui:DataField" xmi:id="_ULRSEloSEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
+            <components xsi:type="ui:DataField" xmi:id="_ULRSE1oSEe6_67aMO2jOsw" name="status" label="Status" iconName="list" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ"/>
+            <components xsi:type="ui:TabularReferenceField" xmi:id="_ULRSFFoSEe6_67aMO2jOsw" name="debate" label="Debate" iconName="wechat" col="6" relationFeature="_JjusoFoHEe6_67aMO2jOsw" targetDefinedTabular="false">
+              <columns xsi:type="ui:DataColumn" xmi:id="_ULRSFVoSEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_7FHekG5UEe2wNaja8kBvcQ"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_ULRSFloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" dataFeature="_7FMXEG5UEe2wNaja8kBvcQ"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_ULRSF1oSEe6_67aMO2jOsw" name="status" label="Status" iconName="list" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_ULRSGFoSEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
+            </components>
+            <components xsi:type="ui:TabularReferenceField" xmi:id="_C5_asFoWEe6_67aMO2jOsw" name="issue" label="Issue" iconName="ticket-confirmation" col="6" relationFeature="_fBcycFoHEe6_67aMO2jOsw" targetDefinedTabular="false" representationComponent="button">
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6Ao0FoWEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6BP4FoWEe6_67aMO2jOsw" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6B28FoWEe6_67aMO2jOsw" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6B28VoWEe6_67aMO2jOsw" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6CeAFoWEe6_67aMO2jOsw" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6DFEFoWEe6_67aMO2jOsw" name="numberOfDebates" label="NumberOfDebates" iconName="numeric" dataFeature="_mz8yQNu_Ee2Bgcx6em3jZg"/>
+              <columns xsi:type="ui:DataColumn" xmi:id="_C6DFEVoWEe6_67aMO2jOsw" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+            </components>
+            <components xsi:type="ui:DataField" xmi:id="_ULRSGVoSEe6_67aMO2jOsw" name="created" label="Created" iconName="schedule" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ"/>
+            <components xsi:type="ui:DataField" xmi:id="_ULRSGloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" col="12" row="4" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" textMultiLine="true"/>
           </components>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_C5_asFoWEe6_67aMO2jOsw" name="issue" label="Issue" iconName="ticket-confirmation" col="3" relationFeature="_fBcycFoHEe6_67aMO2jOsw" targetDefinedTabular="false" representationComponent="button">
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6Ao0FoWEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6BP4FoWEe6_67aMO2jOsw" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6B28FoWEe6_67aMO2jOsw" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6B28VoWEe6_67aMO2jOsw" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6CeAFoWEe6_67aMO2jOsw" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6DFEFoWEe6_67aMO2jOsw" name="numberOfDebates" label="NumberOfDebates" iconName="numeric" dataFeature="_mz8yQNu_Ee2Bgcx6em3jZg"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_C6DFEVoWEe6_67aMO2jOsw" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-          </components>
-          <components xsi:type="ui:DataField" xmi:id="_ULRSGVoSEe6_67aMO2jOsw" name="created" label="Created" iconName="schedule" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ"/>
-          <components xsi:type="ui:DataField" xmi:id="_ULRSGloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" col="12" row="4" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" textMultiLine="true"/>
         </components>
         <components xsi:type="ui:Group" xmi:id="_Ud1NcFotEe6_67aMO2jOsw" name="TakeVote" label="Take vote" frame="true" col="12" hiddenBy="_cjpQQFooEe6_67aMO2jOsw">
           <components xsi:type="ui:OperationForm" xmi:id="_eMuv8FoSEe6_67aMO2jOsw" name="vote" label="Take a vote" iconName="vote" col="12" fit="TIGHT" enabledBy="_spEpcFotEe6_67aMO2jOsw" operation="vote"/>

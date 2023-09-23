@@ -24,11 +24,11 @@ const customAdminDashboardCreateIssueActionPostHandlerHook: AdminDashboardCreate
 
   return async (ownerCallback: () => void, result?: AdminIssueStored) => {
     // 1. Retrieve result identifier
-    const resultId = result!.__identifier;
+    const id = result!.__identifier;
 
     // 2. Retrieve signedIdentifier from access
     const idAccessFilterCustomizer: any = {
-      _identifier: resultId,
+      _identifier: id,
     };
     const res = await adminAdminServiceForIssuesImpl.listIssues(processQueryCustomizer(idAccessFilterCustomizer));
 
