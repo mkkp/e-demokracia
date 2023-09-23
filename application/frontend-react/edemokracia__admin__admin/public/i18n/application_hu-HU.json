@@ -472,7 +472,7 @@
         "admin.VoteDefinitionView.voteYesNoAbstain.ButtonCallOperation": "Igen / Nem / Tartózkódás",
         "admin.VoteDefinitionView.yesnoabstainvote": "Igen / Nem / Tartózkódás",
         "admin.VoteDefinitionView.yesnovote": "Igen / Nem",
-        "admin.VoteEntryTable": "Szavazatok",
+        "admin.VoteEntryTable": "Leadott szavazatok",
         "admin.VoteEntryTable.voteEntries.created": "Létrehozva",
         "admin.VoteEntryTable.voteEntries.debateTitle": "Vita megnevezése",
         "admin.VoteEntryTable.voteEntries.issueTitle": "Ügy megnevezése",
@@ -502,7 +502,7 @@
         "edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title": "Megnevezés",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.mydebates": "Vitáim",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.myissues": "Ügyeim",
-        "edemokracia.admin.Admin.dashboardhome.Dashboard.myvotes": "Szavazataim",
+        "edemokracia.admin.Admin.dashboardhome.Dashboard.myvotes": "Leadott szavazataim",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries": "",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.created": "Létrehozva",
         "edemokracia.admin.Admin.dashboardhome.Dashboard.voteEntries.debateTitle": "Vita megnevezése",
@@ -554,7 +554,7 @@
         "menuTree.Issues": "Ügyek",
         "menuTree.Issues, Debates": "Ügyek, viták",
         "menuTree.Users": "Felhasználók",
-        "menuTree.Vote Entries": "Szavazások",
-        "menuTree.Votes": "Szavazatok"
+        "menuTree.Vote Entries": "Leadott szavazatok",
+        "menuTree.Votes": "Szavazások"
     }
 }

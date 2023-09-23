@@ -528,6 +528,9 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_VIETAI4mEe29qs15q2b6yw" lower="0" upper="1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="voteDefinition" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.debateVote">
         <inherited xmi:id="_VIGvQI4mEe29qs15q2b6yw"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_Wzt8AFoHEe6_67aMO2jOsw" lower="0" upper="1" target="_-Ze00H4XEe2cB7_PsKXsHQ" name="yesNoVoteDefinition" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.debateVote!asType(edemokracia::YesNoVoteDefinition)">
+        <inherited xmi:id="_W0A28FoHEe6_67aMO2jOsw"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_7FHekG5UEe2wNaja8kBvcQ" name="closeAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_Ay-H8GkgEe25ONJ3V89cVA" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_7FJ60G5UEe2wNaja8kBvcQ"/>
       </attributes>
@@ -1616,6 +1619,12 @@
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-Ze00H4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition" createable="false" updateable="false" deleteable="false">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_JjusoFoHEe6_67aMO2jOsw" lower="0" upper="1" target="_qFjB42ksEe25ONJ3V89cVA" name="debate" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_u9whUFoLEe6_67aMO2jOsw" getterExpression="self.debate">
+        <inherited xmi:id="_JkCOoFoHEe6_67aMO2jOsw"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_fBcycFoHEe6_67aMO2jOsw" lower="0" upper="1" target="_qCREY2ksEe25ONJ3V89cVA" name="issue" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_3hvfIFoMEe6_67aMO2jOsw" getterExpression="self.issue">
+        <inherited xmi:id="_fBhq8FoHEe6_67aMO2jOsw"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_-Z65sH4XEe2cB7_PsKXsHQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_-Z99AH4XEe2cB7_PsKXsHQ"/>
       </attributes>
@@ -2293,6 +2302,12 @@
   <elements xsi:type="structure:EntityType" xmi:id="_0n43QG5mEe2wNaja8kBvcQ" name="VoteDefinition" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_KFusgG6hEe2wNaja8kBvcQ" lower="0" upper="-1" target="_1F3JsG6HEe2wNaja8kBvcQ" name="voteEntries" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="STORED" rangeType="ANY" partner="_KFrCIG6hEe2wNaja8kBvcQ" primary="false">
       <inherited xmi:id="_KFwhsG6hEe2wNaja8kBvcQ"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_u9whUFoLEe6_67aMO2jOsw" lower="0" upper="1" target="_jjCdUGkPEe25ONJ3V89cVA" name="debate" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="DERIVED" rangeType="ANY" binding="_u9whUFoLEe6_67aMO2jOsw" getterExpression="self!container(edemokracia::Debate)">
+      <inherited xmi:id="_u-dr8FoLEe6_67aMO2jOsw"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_3hvfIFoMEe6_67aMO2jOsw" lower="0" upper="1" target="_GDYW0GkOEe25ONJ3V89cVA" name="issue" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="DERIVED" rangeType="ANY" binding="_3hvfIFoMEe6_67aMO2jOsw" getterExpression="self.debate.issue">
+      <inherited xmi:id="_3h7FUFoMEe6_67aMO2jOsw"/>
     </relations>
     <attributes xsi:type="structure:DataMember" xmi:id="_rQEeYG6JEe2wNaja8kBvcQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="STORED">
       <inherited xmi:id="_rQEeYW6JEe2wNaja8kBvcQ"/>

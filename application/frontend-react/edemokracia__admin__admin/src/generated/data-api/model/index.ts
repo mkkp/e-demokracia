@@ -68,3 +68,4 @@ export * from './AdminSimpleVote';
 export * from './AdminUser';
 export * from './AdminVoteDefinition';
 export * from './AdminVoteEntry';
+export * from './AdminYesNoVoteDefinition';

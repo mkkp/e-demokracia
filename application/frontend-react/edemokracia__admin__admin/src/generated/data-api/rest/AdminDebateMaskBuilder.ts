@@ -8,6 +8,7 @@
 
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
+  AdminYesNoVoteDefinitionAttributes,
   AdminCommentAttributes,
   AdminIssueAttributes,
   AdminVoteDefinitionAttributes,
@@ -57,6 +58,7 @@ import {
   AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
 import {} from './AdminVoteDefinitionMaskBuilder';
+import {} from './AdminYesNoVoteDefinitionMaskBuilder';
 
 export class AdminDebateIssueMaskBuilder extends RelationMaskBuilder {
   constructor(
@@ -134,6 +136,11 @@ export class AdminDebateVoteDefinitionMaskBuilder extends RelationMaskBuilder {
     super('voteDefinition', props);
   }
 }
+export class AdminDebateYesNoVoteDefinitionMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminYesNoVoteDefinitionAttributes>) {
+    super('yesNoVoteDefinition', props);
+  }
+}
 
 export class AdminDebateMaskBuilder extends MaskBuilder {
   constructor(
@@ -145,6 +152,7 @@ export class AdminDebateMaskBuilder extends MaskBuilder {
       | AdminDebateConsMaskBuilder
       | AdminDebateProsMaskBuilder
       | AdminDebateVoteDefinitionMaskBuilder
+      | AdminDebateYesNoVoteDefinitionMaskBuilder
     >,
   ) {
     super(props);

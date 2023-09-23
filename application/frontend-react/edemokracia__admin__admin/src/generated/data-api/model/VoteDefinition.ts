@@ -7,7 +7,9 @@
 // Template file: model/class.ts.hbs
 
 import type { JudoStored } from '@judo/data-api-common';
+import { DebateStored } from './Debate';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
+import { IssueStored } from './Issue';
 import { VoteEntryStored } from './VoteEntry';
 
 export interface VoteDefinition {
@@ -22,6 +24,8 @@ export interface VoteDefinition {
   isRatingType?: null | boolean;
 
   voteEntries?: null | Array<VoteEntryStored>;
+  debate?: null | DebateStored;
+  issue?: null | IssueStored;
 }
 export type VoteDefinitionAttributes =
   | 'title'
@@ -34,6 +38,6 @@ export type VoteDefinitionAttributes =
   | 'isSelectAnswerType'
   | 'isRatingType';
 
-export type VoteDefinitionRelations = 'voteEntries';
+export type VoteDefinitionRelations = 'voteEntries' | 'debate' | 'issue';
 
 export interface VoteDefinitionStored extends JudoStored<VoteDefinition>, VoteDefinition {}

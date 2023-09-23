@@ -8,15 +8,21 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  VoteEntryStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  SelectAnswerVoteSelectionStored,
+  DebateQueryCustomizer,
+  Issue,
   VoteEntry,
   VoteDefinitionQueryCustomizer,
-  VoteDefinition,
   VoteEntryQueryCustomizer,
   VoteDefinitionStored,
   SelectAnswerVoteSelection,
+  VoteEntryStored,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  IssueQueryCustomizer,
+  IssueStored,
+  Debate,
+  DebateStored,
+  VoteDefinition,
 } from '../data-api';
 
 /**

@@ -9,18 +9,24 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  VoteEntryStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
   RatingVoteInput,
-  SelectAnswerVoteSelectionStored,
+  DebateQueryCustomizer,
+  Issue,
   VoteDefinitionQueryCustomizer,
   VoteEntry,
   YesNoAbstainVoteInput,
-  VoteDefinition,
   VoteEntryQueryCustomizer,
-  YesNoVoteInput,
   VoteDefinitionStored,
   SelectAnswerVoteSelection,
+  VoteEntryStored,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  IssueQueryCustomizer,
+  IssueStored,
+  Debate,
+  DebateStored,
+  VoteDefinition,
+  YesNoVoteInput,
 } from '../data-api';
 import type { VoteDefinitionServiceForClass } from '../data-service';
 
@@ -96,6 +102,72 @@ export class VoteDefinitionServiceForClassImpl extends JudoAxiosService implemen
     queryCustomizer?: VoteEntryQueryCustomizer,
   ): Promise<Array<VoteEntryStored>> {
     const path = '/VoteDefinition/voteEntries/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getDebate(
+    target: JudoIdentifiable<VoteDefinition>,
+    queryCustomizer?: DebateQueryCustomizer,
+  ): Promise<DebateStored> {
+    const path = '/VoteDefinition/debate/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForDebate(
+    owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
+    queryCustomizer?: DebateQueryCustomizer,
+  ): Promise<Array<DebateStored>> {
+    const path = '/VoteDefinition/debate/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getIssue(
+    target: JudoIdentifiable<VoteDefinition>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<IssueStored> {
+    const path = '/VoteDefinition/issue/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssue(
+    owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/VoteDefinition/issue/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

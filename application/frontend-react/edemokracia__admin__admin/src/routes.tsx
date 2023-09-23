@@ -561,6 +561,21 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_DEBATE_YES_NO_VOTE_DEFINITION_VIEW_INTERFACE_KEY = 'AdminDebateYesNoVoteDefinitionViewRoute';
+export const routeToAdminDebateYesNoVoteDefinitionView = (signedIdentifier: string): string =>
+  'admin/debate/yes_no_vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDebateYesNoVoteDefinitionView = lazy(() => import('./pages/admin/debate/yes_no_vote_definition/view/index'));
+
+routes.push({
+  path: 'admin/debate/yes_no_vote_definition/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DEBATE_YES_NO_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}>
+        <AdminDebateYesNoVoteDefinitionView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_ISSUE_ATTACHMENTS_VIEW_INTERFACE_KEY = 'AdminIssueAttachmentsViewRoute';
 export const routeToAdminIssueAttachmentsView = (signedIdentifier: string): string =>
   'admin/issue/attachments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -872,6 +887,36 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_VOTE_ENTRY_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}>
         <AdminVoteEntryVoteDefinitionView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_YES_NO_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY = 'AdminYesNoVoteDefinitionDebateViewRoute';
+export const routeToAdminYesNoVoteDefinitionDebateView = (signedIdentifier: string): string =>
+  'admin/yes_no_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminYesNoVoteDefinitionDebateView = lazy(() => import('./pages/admin/yes_no_vote_definition/debate/view/index'));
+
+routes.push({
+  path: 'admin/yes_no_vote_definition/debate/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}>
+        <AdminYesNoVoteDefinitionDebateView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_YES_NO_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY = 'AdminYesNoVoteDefinitionIssueViewRoute';
+export const routeToAdminYesNoVoteDefinitionIssueView = (signedIdentifier: string): string =>
+  'admin/yes_no_vote_definition/issue/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminYesNoVoteDefinitionIssueView = lazy(() => import('./pages/admin/yes_no_vote_definition/issue/view/index'));
+
+routes.push({
+  path: 'admin/yes_no_vote_definition/issue/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}>
+        <AdminYesNoVoteDefinitionIssueView />
       </ComponentProxy>
     </Suspense>
   ),

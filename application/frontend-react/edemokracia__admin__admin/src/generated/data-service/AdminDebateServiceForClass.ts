@@ -10,6 +10,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   AdminCon,
   AdminIssueStored,
+  AdminYesNoVoteDefinition,
   AdminCommentQueryCustomizer,
   VoteDefinitionStored,
   AdminIssueQueryCustomizer,
@@ -22,10 +23,12 @@ import {
   CloseDebateInput,
   AdminDebateQueryCustomizer,
   AdminVoteDefinitionQueryCustomizer,
+  AdminYesNoVoteDefinitionStored,
   AdminConStored,
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminYesNoVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   AdminProStored,
   AdminDebate,
@@ -107,6 +110,16 @@ export interface AdminDebateServiceForClass {
     owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
     queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminVoteDefinitionStored>>;
+
+  getYesNoVoteDefinition(
+    target: JudoIdentifiable<AdminDebate>,
+    queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
+  ): Promise<AdminYesNoVoteDefinitionStored>;
+
+  getRangeForYesNoVoteDefinition(
+    owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
+    queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminYesNoVoteDefinitionStored>>;
 
   closeDebate(owner: JudoIdentifiable<AdminDebate>, target: CloseDebateInput): Promise<VoteDefinitionStored>;
 

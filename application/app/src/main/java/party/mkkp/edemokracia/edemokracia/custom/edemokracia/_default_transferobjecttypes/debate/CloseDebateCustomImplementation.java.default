@@ -42,6 +42,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 		status = edemokracia::VoteStatus#CREATED		
  * 	);
  * 	
+ * 
  * 	for (answer in input.answers) {
  * 		var edemokracia::SelectAnswerVoteSelection voteSelection = new edemokracia::SelectAnswerVoteSelection(
  * 			title = answer.title,

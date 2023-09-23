@@ -358,19 +358,6 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
               </Grid>
 
               <Grid item xs={12} sm={12} md={4.0}>
-                <CityLink
-                  ownerData={data}
-                  readOnly={false || !isFormUpdateable()}
-                  disabled={isLoading}
-                  editMode={editMode}
-                  onChange={(value: AdminCity | AdminCityStored | null) => {
-                    storeDiff('city', value);
-                  }}
-                  validation={validation}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12} md={4.0}>
                 <CountyLink
                   ownerData={data}
                   readOnly={false || !isFormUpdateable()}
@@ -378,6 +365,19 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
                   editMode={editMode}
                   onChange={(value: AdminCounty | AdminCountyStored | null) => {
                     storeDiff('county', value);
+                  }}
+                  validation={validation}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={4.0}>
+                <CityLink
+                  ownerData={data}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  editMode={editMode}
+                  onChange={(value: AdminCity | AdminCityStored | null) => {
+                    storeDiff('city', value);
                   }}
                   validation={validation}
                 />

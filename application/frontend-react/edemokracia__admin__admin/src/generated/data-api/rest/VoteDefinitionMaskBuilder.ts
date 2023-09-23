@@ -7,7 +7,7 @@
 // Template file: rest/mask.ts.hbs
 
 import { MaskBuilder } from './MaskBuilder';
-import { VoteEntryAttributes, VoteDefinitionAttributes } from '../model';
+import { IssueAttributes, VoteEntryAttributes, VoteDefinitionAttributes, DebateAttributes } from '../model';
 
 export class VoteDefinitionMaskBuilder extends MaskBuilder {
   constructor(protected props: Array<VoteDefinitionAttributes>) {

@@ -8,12 +8,15 @@
 
 import {
   AdminVoteDefinitionQueryCustomizer,
+  AdminYesNoVoteDefinitionStored,
   AdminCon,
   AdminIssueStored,
   AdminConStored,
+  AdminYesNoVoteDefinition,
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminYesNoVoteDefinitionQueryCustomizer,
   AdminCommentQueryCustomizer,
   AdminIssueQueryCustomizer,
   AdminVoteDefinitionStored,

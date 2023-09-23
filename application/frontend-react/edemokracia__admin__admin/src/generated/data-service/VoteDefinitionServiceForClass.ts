@@ -8,18 +8,24 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  VoteEntryStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
   RatingVoteInput,
-  SelectAnswerVoteSelectionStored,
+  DebateQueryCustomizer,
+  Issue,
   VoteDefinitionQueryCustomizer,
   VoteEntry,
   YesNoAbstainVoteInput,
-  VoteDefinition,
   VoteEntryQueryCustomizer,
-  YesNoVoteInput,
   VoteDefinitionStored,
   SelectAnswerVoteSelection,
+  VoteEntryStored,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  IssueQueryCustomizer,
+  IssueStored,
+  Debate,
+  DebateStored,
+  VoteDefinition,
+  YesNoVoteInput,
 } from '../data-api';
 
 /**
@@ -44,6 +50,20 @@ export interface VoteDefinitionServiceForClass {
     owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
     queryCustomizer?: VoteEntryQueryCustomizer,
   ): Promise<Array<VoteEntryStored>>;
+
+  getDebate(target: JudoIdentifiable<VoteDefinition>, queryCustomizer?: DebateQueryCustomizer): Promise<DebateStored>;
+
+  getRangeForDebate(
+    owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
+    queryCustomizer?: DebateQueryCustomizer,
+  ): Promise<Array<DebateStored>>;
+
+  getIssue(target: JudoIdentifiable<VoteDefinition>, queryCustomizer?: IssueQueryCustomizer): Promise<IssueStored>;
+
+  getRangeForIssue(
+    owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
 
   voteYesNo(owner: JudoIdentifiable<VoteDefinition>, target: YesNoVoteInput): Promise<void>;
 

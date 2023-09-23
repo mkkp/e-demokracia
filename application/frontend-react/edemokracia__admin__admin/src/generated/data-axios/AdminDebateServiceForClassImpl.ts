@@ -11,6 +11,7 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   AdminCon,
   AdminIssueStored,
+  AdminYesNoVoteDefinition,
   AdminCommentQueryCustomizer,
   VoteDefinitionStored,
   AdminIssueQueryCustomizer,
@@ -23,10 +24,12 @@ import type {
   CloseDebateInput,
   AdminDebateQueryCustomizer,
   AdminVoteDefinitionQueryCustomizer,
+  AdminYesNoVoteDefinitionStored,
   AdminConStored,
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminYesNoVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   AdminProStored,
   AdminDebate,
@@ -274,6 +277,39 @@ export class AdminDebateServiceForClassImpl extends JudoAxiosService implements 
     queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminVoteDefinitionStored>> {
     const path = '/admin/Debate/voteDefinition/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getYesNoVoteDefinition(
+    target: JudoIdentifiable<AdminDebate>,
+    queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
+  ): Promise<AdminYesNoVoteDefinitionStored> {
+    const path = '/admin/Debate/yesNoVoteDefinition/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForYesNoVoteDefinition(
+    owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
+    queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminYesNoVoteDefinitionStored>> {
+    const path = '/admin/Debate/yesNoVoteDefinition/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
