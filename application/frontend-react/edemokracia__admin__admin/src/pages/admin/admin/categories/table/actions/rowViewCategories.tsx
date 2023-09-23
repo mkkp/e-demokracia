@@ -17,7 +17,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminAdminCategoriesView } from '~/routes';
+import AdminAdminView from '~/pages/admin/admin/categories/view/index';
 
 export const ROW_VIEW_CATEGORIES_ACTION_INTERFACE_KEY = 'RowViewCategoriesAction';
 export type RowViewCategoriesAction = () => (
@@ -38,7 +38,23 @@ export const useRowViewCategoriesAction: RowViewCategoriesAction = () => {
   }
 
   return async function (entry: AdminIssueCategoryStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminAdminCategoriesView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

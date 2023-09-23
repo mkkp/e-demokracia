@@ -878,7 +878,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_Rd-RkG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" visible="true" sort="NONE" dataFeature="_p6zKcGksEe25ONJ3V89cVA" width="300px"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_ReAt0G5CEe2Q6M99rsfqSQ" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_p7lNkGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_p5jNQGksEe25ONJ3V89cVA" name="IssueAttachment_View_Edit" label="IssueAttachment View / Edit" iconName="attachment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_p5jNQGksEe25ONJ3V89cVA" name="IssueAttachment_View_Edit" label="IssueAttachment View / Edit" iconName="attachment" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" openInDialog="true" dialogSize="LG">
         <components xsi:type="ui:Group" xmi:id="_XJwIoG5CEe2Q6M99rsfqSQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_Rd-4oG5CEe2Q6M99rsfqSQ" name="type" label="Type" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p7lNkGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_Rd8cYG5CEe2Q6M99rsfqSQ" name="file" label="File" iconName="file-document-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_p6zKcGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
@@ -911,7 +911,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_T0OJgG49Ee2Q6M99rsfqSQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qJnCgGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T0TpEG49Ee2Q6M99rsfqSQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qKOtkGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_qJBzsGksEe25ONJ3V89cVA" name="IssueCategory_View_Edit" label="IssueCategory View / Edit" iconName="file-tree" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_qJBzsGksEe25ONJ3V89cVA" name="IssueCategory_View_Edit" label="IssueCategory View / Edit" iconName="file-tree" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:DataField" xmi:id="_T0J4EG49Ee2Q6M99rsfqSQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_qJnCgGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_T0QlwG49Ee2Q6M99rsfqSQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_qKOtkGksEe25ONJ3V89cVA" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_8sinwIdgEe2kLcMqsIbMgQ" name="owner" label="Owner" iconName="account" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qUWS4GksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -967,7 +967,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_mCUjMOMhEe2Bgcx6em3jZg" name="voteType" label="Default vote type" iconName="list" visible="true" sort="NONE" dataFeature="_KsdXkOMcEe2Bgcx6em3jZg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DaKn8NvEEe2Bgcx6em3jZg" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_R2x48Nu4Ee2Bgcx6em3jZg"/>
       </table>
-      <view xmi:id="_J4MRwNu4Ee2Bgcx6em3jZg" name="IssueType_View_Edit" label="IssueType View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_J4MRwNu4Ee2Bgcx6em3jZg" name="IssueType_View_Edit" label="IssueType View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:Group" xmi:id="_m1l0MNvDEe2Bgcx6em3jZg" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:DataField" xmi:id="_g2oicdvDEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_XP9UYOMcEe2Bgcx6em3jZg" name="voteType" label="VoteType" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_KsdXkOMcEe2Bgcx6em3jZg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>

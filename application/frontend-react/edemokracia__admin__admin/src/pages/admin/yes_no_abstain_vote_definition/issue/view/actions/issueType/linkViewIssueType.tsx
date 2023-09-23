@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminIssueIssueTypeView } from '~/routes';
+import AdminAdminView from '~/pages/admin/issue/issue_type/view/index';
 
 export const LINK_VIEW_ISSUE_TYPE_ACTION_INTERFACE_KEY = 'LinkViewIssueTypeAction';
 export type LinkViewIssueTypeAction = () => (
@@ -45,7 +45,23 @@ export const useLinkViewIssueTypeAction: LinkViewIssueTypeAction = () => {
     entry: AdminIssueTypeStored,
     successCallback: () => void,
   ) {
-    closeAllDialogs();
-    navigate(routeToAdminIssueIssueTypeView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

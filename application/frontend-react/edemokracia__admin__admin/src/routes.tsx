@@ -28,21 +28,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_CATEGORIES_VIEW_INTERFACE_KEY = 'AdminAdminCategoriesViewRoute';
-export const routeToAdminAdminCategoriesView = (signedIdentifier: string): string =>
-  'admin/admin/categories/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminCategoriesView = lazy(() => import('./pages/admin/admin/categories/view/index'));
-
-routes.push({
-  path: 'admin/admin/categories/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_CATEGORIES_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminCategoriesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_ADMIN_COUNTIES_TABLE_INTERFACE_KEY = 'AdminAdminCountiesTableRoute';
 export const routeToAdminAdminCountiesTable = (): string => 'admin/admin/counties/table';
 const AdminAdminCountiesTable = lazy(() => import('./pages/admin/admin/counties/table/index'));
@@ -126,21 +111,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ISSUE_TYPES_TABLE_INTERFACE_KEY})`}>
         <AdminAdminIssueTypesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_ISSUE_TYPES_VIEW_INTERFACE_KEY = 'AdminAdminIssueTypesViewRoute';
-export const routeToAdminAdminIssueTypesView = (signedIdentifier: string): string =>
-  'admin/admin/issue_types/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminIssueTypesView = lazy(() => import('./pages/admin/admin/issue_types/view/index'));
-
-routes.push({
-  path: 'admin/admin/issue_types/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ISSUE_TYPES_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminIssueTypesView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -412,21 +382,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_CREATE_ISSUE_INPUT_ISSUE_TYPE_VIEW_INTERFACE_KEY = 'AdminCreateIssueInputIssueTypeViewRoute';
-export const routeToAdminCreateIssueInputIssueTypeView = (signedIdentifier: string): string =>
-  'admin/create_issue_input/issue_type/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCreateIssueInputIssueTypeView = lazy(() => import('./pages/admin/create_issue_input/issue_type/view/index'));
-
-routes.push({
-  path: 'admin/create_issue_input/issue_type/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CREATE_ISSUE_INPUT_ISSUE_TYPE_VIEW_INTERFACE_KEY})`}>
-        <AdminCreateIssueInputIssueTypeView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_INTERFACE_KEY = 'AdminDashboardCreateissueOutputRoute';
 export const routeToAdminDashboardCreateissueOutput = (signedIdentifier: string): string =>
   'admin/dashboard/createissue/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -664,36 +619,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ISSUE_ATTACHMENTS_VIEW_INTERFACE_KEY = 'AdminIssueAttachmentsViewRoute';
-export const routeToAdminIssueAttachmentsView = (signedIdentifier: string): string =>
-  'admin/issue/attachments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueAttachmentsView = lazy(() => import('./pages/admin/issue/attachments/view/index'));
-
-routes.push({
-  path: 'admin/issue/attachments/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_ATTACHMENTS_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueAttachmentsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ISSUE_CATEGORIES_VIEW_INTERFACE_KEY = 'AdminIssueCategoriesViewRoute';
-export const routeToAdminIssueCategoriesView = (signedIdentifier: string): string =>
-  'admin/issue/categories/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueCategoriesView = lazy(() => import('./pages/admin/issue/categories/view/index'));
-
-routes.push({
-  path: 'admin/issue/categories/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CATEGORIES_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueCategoriesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_ISSUE_COMMENTS_VIEW_INTERFACE_KEY = 'AdminIssueCommentsViewRoute';
 export const routeToAdminIssueCommentsView = (signedIdentifier: string): string =>
   'admin/issue/comments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -739,21 +664,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ISSUE_ISSUE_TYPE_VIEW_INTERFACE_KEY = 'AdminIssueIssueTypeViewRoute';
-export const routeToAdminIssueIssueTypeView = (signedIdentifier: string): string =>
-  'admin/issue/issue_type/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueIssueTypeView = lazy(() => import('./pages/admin/issue/issue_type/view/index'));
-
-routes.push({
-  path: 'admin/issue/issue_type/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_ISSUE_TYPE_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueIssueTypeView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_ISSUE_OWNER_VIEW_INTERFACE_KEY = 'AdminIssueOwnerViewRoute';
 export const routeToAdminIssueOwnerView = (signedIdentifier: string): string =>
   'admin/issue/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -780,21 +690,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CATEGORY_OWNER_VIEW_INTERFACE_KEY})`}>
         <AdminIssueCategoryOwnerView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ISSUE_CATEGORY_SUBCATEGORIES_VIEW_INTERFACE_KEY = 'AdminIssueCategorySubcategoriesViewRoute';
-export const routeToAdminIssueCategorySubcategoriesView = (signedIdentifier: string): string =>
-  'admin/issue_category/subcategories/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueCategorySubcategoriesView = lazy(() => import('./pages/admin/issue_category/subcategories/view/index'));
-
-routes.push({
-  path: 'admin/issue_category/subcategories/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CATEGORY_SUBCATEGORIES_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueCategorySubcategoriesView />
       </ComponentProxy>
     </Suspense>
   ),

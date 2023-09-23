@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getActionsForPages(#application)
+// Factory expression: #getActionsForViewDialogs(#application)
 // Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
@@ -17,7 +17,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminIssueCategorySubcategoriesView } from '~/routes';
+import AdminAdminView from '~/pages/admin/issue_category/subcategories/view/index';
 
 export const ROW_VIEW_SUBCATEGORIES_ACTION_INTERFACE_KEY = 'RowViewSubcategoriesAction';
 export type RowViewSubcategoriesAction = () => (
@@ -43,7 +43,23 @@ export const useRowViewSubcategoriesAction: RowViewSubcategoriesAction = () => {
     entry: AdminIssueCategoryStored,
     successCallback: () => void,
   ) {
-    closeAllDialogs();
-    navigate(routeToAdminIssueCategorySubcategoriesView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

@@ -73,7 +73,7 @@ import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } fro
 import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
 import { clsx } from 'clsx';
-import { routeToAdminAdminCategoriesView } from '~/routes';
+import AdminAdminView from '~/pages/admin/admin/categories/view/index';
 
 import {
   AdminIssueCategory,
@@ -339,7 +339,24 @@ export function PageCreateCategoriesForm({ successCallback, cancel }: PageCreate
 
                         if (result) {
                           successCallback(result);
-                          navigate(routeToAdminAdminCategoriesView(result.__signedIdentifier));
+                          createDialog({
+                            fullWidth: true,
+                            maxWidth: 'md',
+                            onClose: (event: object, reason: string) => {
+                              if (reason !== 'backdropClick') {
+                                closeDialog();
+                              }
+                            },
+                            children: (
+                              <AdminAdminView
+                                successCallback={() => {
+                                  successCallback(result, true);
+                                }}
+                                cancel={closeDialog}
+                                entry={result}
+                              />
+                            ),
+                          });
                         }
                       }}
                       disabled={isLoading}

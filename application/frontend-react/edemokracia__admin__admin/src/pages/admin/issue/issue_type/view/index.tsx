@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getPagesForRouting(#application)
+// Factory expression: #getViewDialogs(#application)
 // Path expression: #pageIndexPath(#self)
-// Template name: actor/src/pages/index.tsx
-// Template file: actor/src/pages/index.tsx.hbs
+// Template name: actor/src/pages/dialogs/index.tsx
+// Template file: actor/src/pages/dialogs/index.tsx.hbs
 // Page name: edemokracia::admin::Issue.issueType#View
 // Page owner name: edemokracia::admin::Admin
 // Page DataElement name: issueType
@@ -45,6 +45,8 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 import { clsx } from 'clsx';
 
+import { IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { useConfirmDialog } from '~/components/dialog';
 import {
   AdminIssue,
   AdminIssueStored,
@@ -53,20 +55,24 @@ import {
   AdminIssueTypeStored,
   EdemokraciaVoteType,
 } from '~/generated/data-api';
-import { adminIssueServiceForClassImpl, adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
+import { adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
 import {} from './actions';
 
-import { PageActions } from './components/PageActions';
+export interface AdminAdminViewProps {
+  entry: AdminIssueTypeStored;
+  successCallback: () => void;
+  cancel: () => void;
+}
 
-export type AdminIssueIssueTypeViewPostRefreshAction = (
+export type AdminAdminViewPostRefreshAction = (
   data: AdminIssueTypeStored,
   storeDiff: (attributeName: keyof AdminIssueTypeStored, value: any) => void,
   setEditMode: Dispatch<SetStateAction<boolean>>,
   setValidation: Dispatch<SetStateAction<Map<keyof AdminIssueType, string>>>,
 ) => Promise<void>;
 
-export const ADMIN_ISSUE_ISSUE_TYPE_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminIssueIssueTypeViewPostRefreshHook';
-export type AdminIssueIssueTypeViewPostRefreshHook = () => AdminIssueIssueTypeViewPostRefreshAction;
+export const ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminViewPostRefreshHook';
+export type AdminAdminViewPostRefreshHook = () => AdminAdminViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::Issue.issueType#View
@@ -74,22 +80,25 @@ export type AdminIssueIssueTypeViewPostRefreshHook = () => AdminIssueIssueTypeVi
  * Type: View
  * Edit Mode Available: false
  **/
-export default function AdminIssueIssueTypeView() {
+export default function AdminAdminView(props: AdminAdminViewProps) {
+  const { entry, successCallback, cancel } = props;
+
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { signedIdentifier } = useParams();
-
-  const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const { enqueueSnackbar } = useSnackbar();
+  const { openConfirmDialog } = useConfirmDialog();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
   );
-  const { enqueueSnackbar } = useSnackbar();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<AdminIssueTypeStored>({} as unknown as AdminIssueTypeStored);
+  const [data, setData] = useState<AdminIssueTypeStored>(
+    entry ? { ...entry } : ({} as unknown as AdminIssueTypeStored),
+  );
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminIssueTypeStored, any>>(
     {} as unknown as Record<keyof AdminIssueTypeStored, any>,
   );
@@ -126,19 +135,19 @@ export default function AdminIssueIssueTypeView() {
     _mask: '{title,voteType,description}',
   };
 
-  const { service: postRefreshHook } = useTrackService<AdminIssueIssueTypeViewPostRefreshHook>(
-    `(${OBJECTCLASS}=${ADMIN_ISSUE_ISSUE_TYPE_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  const { service: postRefreshHook } = useTrackService<AdminAdminViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
   );
-  const postRefreshAction: AdminIssueIssueTypeViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
+  const postRefreshAction: AdminAdminViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = t('admin.IssueTypeView', { defaultValue: 'IssueType View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return false;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
-    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false;
   }, [data]);
 
   useConfirmationBeforeChange(
@@ -153,7 +162,7 @@ export default function AdminIssueIssueTypeView() {
 
     try {
       const res = await adminIssueTypeServiceForClassImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminIssueType>,
+        { __signedIdentifier: entry.__signedIdentifier } as JudoIdentifiable<AdminIssueType>,
         processQueryCustomizer(queryCustomizer),
       );
 
@@ -185,152 +194,183 @@ export default function AdminIssueIssueTypeView() {
 
   return (
     <>
-      <PageHeader title={title}>
-        <PageActions
-          data={data}
-          fetchData={fetchData}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          isLoading={isLoading}
-        />
-      </PageHeader>
-      <PageContainerTransition>
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="relation-page-data"
-            container
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroup">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <TextField
-                        required={true}
-                        name="title"
-                        id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroupTitle"
-                        label={t('admin.IssueTypeView.title', { defaultValue: 'Title' }) as string}
-                        value={data.title ?? ''}
-                        className={clsx({
-                          'JUDO-viewMode': !editMode,
-                          'JUDO-required': true,
-                        })}
-                        disabled={isLoading}
-                        error={!!validation.get('title')}
-                        helperText={validation.get('title')}
-                        onChange={(event) => {
-                          const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                          storeDiff('title', realValue);
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          readOnly: false || !isFormUpdateable(),
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MdiIcon path="text_fields" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <TextField
-                        required={false}
-                        name="voteType"
-                        id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroupVoteType"
-                        label={t('admin.IssueTypeView.voteType', { defaultValue: 'VoteType' }) as string}
-                        value={data.voteType || ''}
-                        className={clsx({
-                          'JUDO-viewMode': !editMode,
-                          'JUDO-required': false,
-                        })}
-                        disabled={isLoading}
-                        error={!!validation.get('voteType')}
-                        helperText={validation.get('voteType')}
-                        onChange={(event) => {
-                          storeDiff('voteType', event.target.value);
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          readOnly: false || !isFormUpdateable(),
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MdiIcon path="list" />
-                            </InputAdornment>
-                          ),
-                        }}
-                        select
-                      >
-                        <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeYESNO" value={'YES_NO'}>
-                          {t('enumerations.EdemokraciaVoteType.YES_NO', { defaultValue: 'YES_NO' })}
-                        </MenuItem>
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeYESNOABSTAIN"
-                          value={'YES_NO_ABSTAIN'}
-                        >
-                          {t('enumerations.EdemokraciaVoteType.YES_NO_ABSTAIN', { defaultValue: 'YES_NO_ABSTAIN' })}
-                        </MenuItem>
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeSELECTANSWER"
-                          value={'SELECT_ANSWER'}
-                        >
-                          {t('enumerations.EdemokraciaVoteType.SELECT_ANSWER', { defaultValue: 'SELECT_ANSWER' })}
-                        </MenuItem>
-                        <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeRATE" value={'RATE'}>
-                          {t('enumerations.EdemokraciaVoteType.RATE', { defaultValue: 'RATE' })}
-                        </MenuItem>
-                        <MenuItem
-                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeNOVOTE"
-                          value={'NO_VOTE'}
-                        >
-                          {t('enumerations.EdemokraciaVoteType.NO_VOTE', { defaultValue: 'NO_VOTE' })}
-                        </MenuItem>
-                      </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <TextField
-                        required={true}
-                        name="description"
-                        id="TextAreaedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroupDescription"
-                        label={t('admin.IssueTypeView.description', { defaultValue: 'Description' }) as string}
-                        value={data.description ?? ''}
-                        className={clsx({
-                          'JUDO-viewMode': !editMode,
-                          'JUDO-required': true,
-                        })}
-                        disabled={isLoading}
-                        multiline
-                        minRows={4.0}
-                        error={!!validation.get('description')}
-                        helperText={validation.get('description')}
-                        onChange={(event) => {
-                          const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                          storeDiff('description', realValue);
-                        }}
-                        InputLabelProps={{ shrink: true }}
-                        InputProps={{
-                          readOnly: false || !isFormUpdateable(),
-                          startAdornment: (
-                            <InputAdornment position="start">
-                              <MdiIcon path="text_fields" />
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
-                    </Grid>
+      <DialogTitle>
+        {title}
+        <IconButton
+          id="AdminAdminView-dialog-close"
+          aria-label="close"
+          onClick={() => {
+            cancel();
+            if (!editMode) {
+              successCallback();
+            }
+          }}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <MdiIcon path="close" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+          <Grid item xs={12} sm={12}>
+            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroup">
+              <CardContent>
+                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="title"
+                      id="TextInputedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroupTitle"
+                      label={t('admin.IssueTypeView.title', { defaultValue: 'Title' }) as string}
+                      value={data.title ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('title')}
+                      helperText={validation.get('title')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('title', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
                   </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={false}
+                      name="voteType"
+                      id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroupVoteType"
+                      label={t('admin.IssueTypeView.voteType', { defaultValue: 'VoteType' }) as string}
+                      value={data.voteType || ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': false,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('voteType')}
+                      helperText={validation.get('voteType')}
+                      onChange={(event) => {
+                        storeDiff('voteType', event.target.value);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="list" />
+                          </InputAdornment>
+                        ),
+                      }}
+                      select
+                    >
+                      <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeYESNO" value={'YES_NO'}>
+                        {t('enumerations.EdemokraciaVoteType.YES_NO', { defaultValue: 'YES_NO' })}
+                      </MenuItem>
+                      <MenuItem
+                        id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeYESNOABSTAIN"
+                        value={'YES_NO_ABSTAIN'}
+                      >
+                        {t('enumerations.EdemokraciaVoteType.YES_NO_ABSTAIN', { defaultValue: 'YES_NO_ABSTAIN' })}
+                      </MenuItem>
+                      <MenuItem
+                        id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeSELECTANSWER"
+                        value={'SELECT_ANSWER'}
+                      >
+                        {t('enumerations.EdemokraciaVoteType.SELECT_ANSWER', { defaultValue: 'SELECT_ANSWER' })}
+                      </MenuItem>
+                      <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeRATE" value={'RATE'}>
+                        {t('enumerations.EdemokraciaVoteType.RATE', { defaultValue: 'RATE' })}
+                      </MenuItem>
+                      <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteTypeNOVOTE" value={'NO_VOTE'}>
+                        {t('enumerations.EdemokraciaVoteType.NO_VOTE', { defaultValue: 'NO_VOTE' })}
+                      </MenuItem>
+                    </TextField>
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="description"
+                      id="TextAreaedemokraciaAdminAdminEdemokraciaAdminIssueIssueTypeViewDefaultIssueTypeViewEditGroupDescription"
+                      label={t('admin.IssueTypeView.description', { defaultValue: 'Description' }) as string}
+                      value={data.description ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      multiline
+                      minRows={4.0}
+                      error={!!validation.get('description')}
+                      helperText={validation.get('description')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('description', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
           </Grid>
-        </Box>
-      </PageContainerTransition>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Grid className="page-action" item>
+          <Button
+            id="AdminAdminView-dialog-close"
+            variant="text"
+            onClick={() => {
+              cancel();
+              if (!editMode) {
+                successCallback();
+              }
+            }}
+            disabled={isLoading}
+          >
+            {t('judo.pages.close', { defaultValue: 'Close' })}
+          </Button>
+        </Grid>
+
+        {!editMode && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              id="page-action-refresh"
+              startIcon={<MdiIcon path="refresh" />}
+              onClick={() => fetchData()}
+            >
+              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+      </DialogActions>
     </>
   );
 }

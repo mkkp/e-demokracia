@@ -73,7 +73,7 @@ import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY, CustomFormVisualElementProps } fro
 import { PageContainerTransition } from '~/theme/animations';
 import { useL10N } from '~/l10n/l10n-context';
 import { clsx } from 'clsx';
-import { routeToAdminIssueAttachmentsView } from '~/routes';
+import AdminAdminView from '~/pages/admin/issue/attachments/view/index';
 
 import {
   AdminIssue,
@@ -375,7 +375,24 @@ export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: T
 
                         if (result) {
                           successCallback(result);
-                          navigate(routeToAdminIssueAttachmentsView(result.__signedIdentifier));
+                          createDialog({
+                            fullWidth: true,
+                            maxWidth: 'lg',
+                            onClose: (event: object, reason: string) => {
+                              if (reason !== 'backdropClick') {
+                                closeDialog();
+                              }
+                            },
+                            children: (
+                              <AdminAdminView
+                                successCallback={() => {
+                                  successCallback(result, true);
+                                }}
+                                cancel={closeDialog}
+                                entry={result}
+                              />
+                            ),
+                          });
                         }
                       }}
                       disabled={isLoading}

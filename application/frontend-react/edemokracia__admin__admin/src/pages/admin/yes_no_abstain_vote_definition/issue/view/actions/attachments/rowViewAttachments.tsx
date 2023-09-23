@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminIssueAttachmentsView } from '~/routes';
+import AdminAdminView from '~/pages/admin/issue/attachments/view/index';
 
 export const ROW_VIEW_ATTACHMENTS_ACTION_INTERFACE_KEY = 'RowViewAttachmentsAction';
 export type RowViewAttachmentsAction = () => (
@@ -45,7 +45,23 @@ export const useRowViewAttachmentsAction: RowViewAttachmentsAction = () => {
     entry: AdminIssueAttachmentStored,
     successCallback: () => void,
   ) {
-    closeAllDialogs();
-    navigate(routeToAdminIssueAttachmentsView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'lg',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };
