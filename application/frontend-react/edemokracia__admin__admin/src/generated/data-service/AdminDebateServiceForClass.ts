@@ -21,6 +21,7 @@ import {
   AdminDebateStored,
   AdminUser,
   CreateArgumentInput,
+  AdminSelectAnswerVoteDefinitionQueryCustomizer,
   CloseDebateInput,
   AdminDebateQueryCustomizer,
   AdminVoteDefinitionQueryCustomizer,
@@ -36,10 +37,12 @@ import {
   AdminYesNoAbstainVoteDefinition,
   AdminRatingVoteDefinition,
   AdminProStored,
+  AdminSelectAnswerVoteDefinitionStored,
   AdminDebate,
   AdminIssue,
   AdminConQueryCustomizer,
   AdminVoteDefinition,
+  AdminSelectAnswerVoteDefinition,
   AdminCommentStored,
   AdminYesNoAbstainVoteDefinitionStored,
 } from '../data-api';
@@ -146,6 +149,16 @@ export interface AdminDebateServiceForClass {
     owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
     queryCustomizer?: AdminRatingVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminRatingVoteDefinitionStored>>;
+
+  getSelectAnswerVoteDefinition(
+    target: JudoIdentifiable<AdminDebate>,
+    queryCustomizer?: AdminSelectAnswerVoteDefinitionQueryCustomizer,
+  ): Promise<AdminSelectAnswerVoteDefinitionStored>;
+
+  getRangeForSelectAnswerVoteDefinition(
+    owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
+    queryCustomizer?: AdminSelectAnswerVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteDefinitionStored>>;
 
   closeDebate(owner: JudoIdentifiable<AdminDebate>, target: CloseDebateInput): Promise<VoteDefinitionStored>;
 

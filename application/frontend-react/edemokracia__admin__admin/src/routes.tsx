@@ -594,6 +594,26 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_DEBATE_SELECT_ANSWER_VOTE_DEFINITION_VIEW_INTERFACE_KEY =
+  'AdminDebateSelectAnswerVoteDefinitionViewRoute';
+export const routeToAdminDebateSelectAnswerVoteDefinitionView = (signedIdentifier: string): string =>
+  'admin/debate/select_answer_vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDebateSelectAnswerVoteDefinitionView = lazy(
+  () => import('./pages/admin/debate/select_answer_vote_definition/view/index'),
+);
+
+routes.push({
+  path: 'admin/debate/select_answer_vote_definition/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DEBATE_SELECT_ANSWER_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminDebateSelectAnswerVoteDefinitionView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_DEBATE_VOTE_DEFINITION_VIEW_INTERFACE_KEY = 'AdminDebateVoteDefinitionViewRoute';
 export const routeToAdminDebateVoteDefinitionView = (signedIdentifier: string): string =>
   'admin/debate/vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -897,6 +917,44 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_RATING_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}>
         <AdminRatingVoteDefinitionIssueView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_SELECT_ANSWER_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY =
+  'AdminSelectAnswerVoteDefinitionDebateViewRoute';
+export const routeToAdminSelectAnswerVoteDefinitionDebateView = (signedIdentifier: string): string =>
+  'admin/select_answer_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminSelectAnswerVoteDefinitionDebateView = lazy(
+  () => import('./pages/admin/select_answer_vote_definition/debate/view/index'),
+);
+
+routes.push({
+  path: 'admin/select_answer_vote_definition/debate/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_SELECT_ANSWER_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminSelectAnswerVoteDefinitionDebateView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_SELECT_ANSWER_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY =
+  'AdminSelectAnswerVoteDefinitionIssueViewRoute';
+export const routeToAdminSelectAnswerVoteDefinitionIssueView = (signedIdentifier: string): string =>
+  'admin/select_answer_vote_definition/issue/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminSelectAnswerVoteDefinitionIssueView = lazy(
+  () => import('./pages/admin/select_answer_vote_definition/issue/view/index'),
+);
+
+routes.push({
+  path: 'admin/select_answer_vote_definition/issue/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_SELECT_ANSWER_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}>
+        <AdminSelectAnswerVoteDefinitionIssueView />
       </ComponentProxy>
     </Suspense>
   ),

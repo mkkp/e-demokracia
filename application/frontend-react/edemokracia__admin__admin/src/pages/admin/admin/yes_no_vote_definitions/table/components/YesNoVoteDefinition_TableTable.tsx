@@ -60,7 +60,6 @@ import { adminAdminServiceForYesNoVoteDefinitionsImpl } from '~/generated/data-a
 import {
   usePageFilterYesNoVoteDefinitionsAction,
   usePageRefreshYesNoVoteDefinitionsAction,
-  useRowDeleteYesNoVoteDefinitionsAction,
   useRowViewYesNoVoteDefinitionsAction,
   useAdminYesNoVoteDefinitionTakeBackVoteAction,
   useAdminYesNoVoteDefinitionVoteAction,
@@ -294,7 +293,6 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
       10,
     );
     const pageRefreshYesNoVoteDefinitionsAction = usePageRefreshYesNoVoteDefinitionsAction();
-    const rowDeleteYesNoVoteDefinitionsAction = useRowDeleteYesNoVoteDefinitionsAction();
     const rowViewYesNoVoteDefinitionsAction = useRowViewYesNoVoteDefinitionsAction();
     const adminYesNoVoteDefinitionTakeBackVoteAction = useAdminYesNoVoteDefinitionTakeBackVoteAction();
     const adminYesNoVoteDefinitionVoteAction = useAdminYesNoVoteDefinitionVoteAction();
@@ -341,14 +339,6 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
 
     const rowActions: TableRowAction<AdminYesNoVoteDefinitionStored>[] = [
       {
-        id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsRowDelete',
-        label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-        icon: <MdiIcon path="delete_forever" />,
-        action: async (row: AdminYesNoVoteDefinitionStored) =>
-          rowDeleteYesNoVoteDefinitionsAction(row, () => fetchData()),
-        disabled: (row: AdminYesNoVoteDefinitionStored) => !row.__deleteable,
-      },
-      {
         id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionVoteButtonCallOperation',
         label: t('admin.YesNoVoteDefinitionTable.yesNoVoteDefinitions.vote.ButtonCallOperation', {
           defaultValue: 'Take a vote',
@@ -367,28 +357,6 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
           adminYesNoVoteDefinitionTakeBackVoteAction(row, () => fetchData()),
       },
     ];
-
-    const bulkDeleteSelected = useCallback(() => {
-      openCRUDDialog<AdminYesNoVoteDefinitionStored>({
-        dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
-        itemTitleFn: (item) => item.title!,
-        selectedItems: selectedRows.current,
-        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-          await rowDeleteYesNoVoteDefinitionsAction(item, successHandler, errorHandler, true);
-        },
-        onClose: (needsRefresh) => {
-          if (needsRefresh) {
-            fetchData();
-            setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
-          }
-        },
-        // autoCloseOnSuccess: true,
-      });
-    }, []);
-    const isBulkDeleteAvailable: () => boolean = useCallback(() => {
-      // every row has the same `__deleteable` flag
-      return !!selectionModel.length && !false && !!data[0]?.__deleteable;
-    }, [data, selectionModel]);
 
     const handleFiltersChange = (newFilters: Filter[]) => {
       setPage(0);
@@ -543,16 +511,6 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
                   {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                     (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
                 </Button>
-                {isBulkDeleteAvailable() ? (
-                  <Button
-                    disabled={isOwnerLoading}
-                    variant="text"
-                    startIcon={<MdiIcon path="delete-forever" />}
-                    onClick={bulkDeleteSelected}
-                  >
-                    {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
-                  </Button>
-                ) : null}
                 <div>{/* Placeholder */}</div>
               </GridToolbarContainer>
             ),

@@ -12,6 +12,7 @@ import { AdminConStored } from './AdminCon';
 import { AdminIssueStored } from './AdminIssue';
 import { AdminProStored } from './AdminPro';
 import { AdminRatingVoteDefinitionStored } from './AdminRatingVoteDefinition';
+import { AdminSelectAnswerVoteDefinitionStored } from './AdminSelectAnswerVoteDefinition';
 import { AdminUserStored } from './AdminUser';
 import { AdminVoteDefinitionStored } from './AdminVoteDefinition';
 import { AdminYesNoAbstainVoteDefinitionStored } from './AdminYesNoAbstainVoteDefinition';
@@ -36,6 +37,7 @@ export interface AdminDebate {
   yesNoVoteDefinition?: null | AdminYesNoVoteDefinitionStored;
   yesNoAbstainVoteDefinition?: null | AdminYesNoAbstainVoteDefinitionStored;
   ratingVoteDefinition?: null | AdminRatingVoteDefinitionStored;
+  selectAnswerVoteDefinition?: null | AdminSelectAnswerVoteDefinitionStored;
 }
 export type AdminDebateAttributes =
   | 'closeAt'
@@ -55,6 +57,7 @@ export type AdminDebateRelations =
   | 'voteDefinition'
   | 'yesNoVoteDefinition'
   | 'yesNoAbstainVoteDefinition'
-  | 'ratingVoteDefinition';
+  | 'ratingVoteDefinition'
+  | 'selectAnswerVoteDefinition';
 
 export interface AdminDebateStored extends JudoStored<AdminDebate>, AdminDebate {}

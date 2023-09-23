@@ -105,8 +105,8 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
   const [data, setData] = useState<GridRowModel<AdminYesNoVoteEntryStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -199,7 +199,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
 
   const voteEntriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntriesValueFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntriesValueFilter',
       attributeName: 'value',
       label: t('admin.YesNoVoteDefinitionView.voteEntries.value', { defaultValue: 'Value' }) as string,
       filterType: FilterType.enumeration,
@@ -207,14 +207,14 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
       label: t('admin.YesNoVoteDefinitionView.voteEntries.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntriesCreatedByFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntriesCreatedByFilter',
       attributeName: 'createdBy',
       label: t('admin.YesNoVoteDefinitionView.voteEntries.createdBy', { defaultValue: 'CreatedBy' }) as string,
       filterType: FilterType.string,
@@ -246,7 +246,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntriesValueFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntriesValueFilter',
       attributeName: 'value',
       label: t('admin.YesNoVoteDefinitionView.voteEntries.value', { defaultValue: 'Value' }) as string,
       filterType: FilterType.enumeration,
@@ -254,14 +254,14 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
       label: t('admin.YesNoVoteDefinitionView.voteEntries.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntriesCreatedByFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminDebateYesNoVoteDefinitionViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntriesCreatedByFilter',
       attributeName: 'createdBy',
       label: t('admin.YesNoVoteDefinitionView.voteEntries.createdBy', { defaultValue: 'CreatedBy' }) as string,
       filterType: FilterType.string,

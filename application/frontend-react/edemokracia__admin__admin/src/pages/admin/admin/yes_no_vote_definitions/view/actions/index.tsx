@@ -9,7 +9,6 @@ export * from './issue/buttonNavigateIssue';
 export * from './pageRefreshYesNoVoteDefinitions';
 export * from './voteEntries/rowViewVoteEntries';
 export * from './debate/buttonNavigateDebate';
-export * from './pageDeleteYesNoVoteDefinitions';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/tableActionVoteEntries';
 export * from './adminYesNoVoteDefinition/adminYesNoVoteDefinitionTakeBackVote';

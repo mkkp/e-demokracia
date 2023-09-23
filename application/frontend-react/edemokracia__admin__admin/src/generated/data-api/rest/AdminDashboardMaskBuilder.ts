@@ -24,6 +24,7 @@ import {
   AdminDebateYesNoVoteDefinitionMaskBuilder,
   AdminDebateYesNoAbstainVoteDefinitionMaskBuilder,
   AdminDebateRatingVoteDefinitionMaskBuilder,
+  AdminDebateSelectAnswerVoteDefinitionMaskBuilder,
 } from './AdminDebateMaskBuilder';
 import {
   AdminIssueAttachmentsMaskBuilder,
@@ -71,6 +72,7 @@ export class AdminDashboardDebatesMaskBuilder extends RelationMaskBuilder {
       | AdminDebateYesNoVoteDefinitionMaskBuilder
       | AdminDebateYesNoAbstainVoteDefinitionMaskBuilder
       | AdminDebateRatingVoteDefinitionMaskBuilder
+      | AdminDebateSelectAnswerVoteDefinitionMaskBuilder
     >,
   ) {
     super('debates', props);

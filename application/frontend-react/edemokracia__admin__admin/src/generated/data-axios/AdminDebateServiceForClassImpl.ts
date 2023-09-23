@@ -22,6 +22,7 @@ import type {
   AdminDebateStored,
   AdminUser,
   CreateArgumentInput,
+  AdminSelectAnswerVoteDefinitionQueryCustomizer,
   CloseDebateInput,
   AdminDebateQueryCustomizer,
   AdminVoteDefinitionQueryCustomizer,
@@ -37,10 +38,12 @@ import type {
   AdminYesNoAbstainVoteDefinition,
   AdminRatingVoteDefinition,
   AdminProStored,
+  AdminSelectAnswerVoteDefinitionStored,
   AdminDebate,
   AdminIssue,
   AdminConQueryCustomizer,
   AdminVoteDefinition,
+  AdminSelectAnswerVoteDefinition,
   AdminCommentStored,
   AdminYesNoAbstainVoteDefinitionStored,
 } from '../data-api';
@@ -382,6 +385,39 @@ export class AdminDebateServiceForClassImpl extends JudoAxiosService implements 
     queryCustomizer?: AdminRatingVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminRatingVoteDefinitionStored>> {
     const path = '/admin/Debate/ratingVoteDefinition/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getSelectAnswerVoteDefinition(
+    target: JudoIdentifiable<AdminDebate>,
+    queryCustomizer?: AdminSelectAnswerVoteDefinitionQueryCustomizer,
+  ): Promise<AdminSelectAnswerVoteDefinitionStored> {
+    const path = '/admin/Debate/selectAnswerVoteDefinition/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForSelectAnswerVoteDefinition(
+    owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
+    queryCustomizer?: AdminSelectAnswerVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteDefinitionStored>> {
+    const path = '/admin/Debate/selectAnswerVoteDefinition/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

@@ -9,6 +9,7 @@
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   AdminYesNoVoteDefinitionAttributes,
+  AdminSelectAnswerVoteDefinitionAttributes,
   AdminCommentAttributes,
   AdminIssueAttributes,
   AdminVoteDefinitionAttributes,
@@ -60,6 +61,7 @@ import {
   AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
 import { AdminRatingVoteDefinitionVoteEntriesMaskBuilder } from './AdminRatingVoteDefinitionMaskBuilder';
+import {} from './AdminSelectAnswerVoteDefinitionMaskBuilder';
 import {} from './AdminVoteDefinitionMaskBuilder';
 import {} from './AdminYesNoAbstainVoteDefinitionMaskBuilder';
 import {} from './AdminYesNoVoteDefinitionMaskBuilder';
@@ -157,6 +159,11 @@ export class AdminDebateRatingVoteDefinitionMaskBuilder extends RelationMaskBuil
     super('ratingVoteDefinition', props);
   }
 }
+export class AdminDebateSelectAnswerVoteDefinitionMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminSelectAnswerVoteDefinitionAttributes>) {
+    super('selectAnswerVoteDefinition', props);
+  }
+}
 
 export class AdminDebateMaskBuilder extends MaskBuilder {
   constructor(
@@ -171,6 +178,7 @@ export class AdminDebateMaskBuilder extends MaskBuilder {
       | AdminDebateYesNoVoteDefinitionMaskBuilder
       | AdminDebateYesNoAbstainVoteDefinitionMaskBuilder
       | AdminDebateRatingVoteDefinitionMaskBuilder
+      | AdminDebateSelectAnswerVoteDefinitionMaskBuilder
     >,
   ) {
     super(props);

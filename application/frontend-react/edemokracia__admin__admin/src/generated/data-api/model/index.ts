@@ -64,6 +64,7 @@ export * from './AdminIssueType';
 export * from './AdminPro';
 export * from './AdminProParent';
 export * from './AdminRatingVoteDefinition';
+export * from './AdminSelectAnswerVoteDefinition';
 export * from './AdminSimpleVote';
 export * from './AdminUser';
 export * from './AdminVoteDefinition';

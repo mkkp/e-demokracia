@@ -12,7 +12,7 @@
       <accesses xmi:id="_l9Zh4JEaEe29qs15q2b6yw" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="voteDefinitions" createable="false" updateable="true" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
       <accesses xmi:id="_-T3OwNu-Ee2Bgcx6em3jZg" lower="0" upper="-1" target="_J4ArkNu4Ee2Bgcx6em3jZg" name="issueTypes" createable="true" updateable="true" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
       <accesses xmi:id="_0CUYEORyEe2Bgcx6em3jZg" lower="0" upper="-1" target="_zJIiwORxEe2Bgcx6em3jZg" name="voteEntries" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" accessType="ALL"/>
-      <accesses xmi:id="_zCZh0FoTEe6_67aMO2jOsw" lower="0" upper="-1" target="_-Ze00H4XEe2cB7_PsKXsHQ" name="yesNoVoteDefinitions" createable="false" updateable="true" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
+      <accesses xmi:id="_zCZh0FoTEe6_67aMO2jOsw" lower="0" upper="-1" target="_-Ze00H4XEe2cB7_PsKXsHQ" name="yesNoVoteDefinitions" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" accessType="ALL"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_GgcgQIyPEe2VSOmaAz6G9Q" name="dashboard" label="Dashboard" iconName="home" hidden="false" access="_GgaEAIyPEe2VSOmaAz6G9Q"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_hvYWQGkuEe25ONJ3V89cVA" name="Users_Menu" label="Users" iconName="account" hidden="false" access="_hvVS8GkuEe25ONJ3V89cVA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_vW3EUG4rEe2siJt-xjHAyw" name="Categories_Menu" label="Categories" iconName="file-tree" hidden="false" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_vWzZ8G4rEe2siJt-xjHAyw"/>
@@ -386,10 +386,6 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_TXlMQdvXEe2Bgcx6em3jZg" name="city" label="City" iconName="text_fields" visible="true" sort="NONE" dataFeature="_pHXOsIXxEe2kLcMqsIbMgQ"/>
           </components>
         </components>
-        <components xsi:type="ui:Group" xmi:id="_dXyFUI1IEe2VSOmaAz6G9Q" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionButton" xmi:id="_JVkUMI1IEe2VSOmaAz6G9Q" name="ok" label="OK" iconName="check" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="SUBMIT"/>
-          <components xsi:type="ui:ActionButton" xmi:id="_XsmEII1IEe2VSOmaAz6G9Q" name="cancel" label="Cancel" iconName="close-circle-outline" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" action="CANCEL"/>
-        </components>
       </form>
       <table xmi:id="_oCuj8IeIEe2kLcMqsIbMgQ" name="CreateIssueInput_Table" label="CreateIssueInput Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
         <columns xsi:type="ui:DataColumn" xmi:id="_DelsAI1DEe2VSOmaAz6G9Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_E2dOAIeJEe2kLcMqsIbMgQ"/>
@@ -539,6 +535,9 @@
       </relations>
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_xawisFogEe6_67aMO2jOsw" lower="0" upper="1" target="_-dYdYn4XEe2cB7_PsKXsHQ" name="ratingVoteDefinition" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.debateVote!asType(edemokracia::RatingVoteDefinition)">
         <inherited xmi:id="_xa5FkFogEe6_67aMO2jOsw"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_xhAQoFpMEe6_67aMO2jOsw" lower="0" upper="1" target="_-b_9Un4XEe2cB7_PsKXsHQ" name="selectAnswerVoteDefinition" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.debateVote!asType(edemokracia::SelectAnswerVoteDefinition)">
+        <inherited xmi:id="_xhQvUFpMEe6_67aMO2jOsw"/>
       </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_7FHekG5UEe2wNaja8kBvcQ" name="closeAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_Ay-H8GkgEe25ONJ3V89cVA" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_7FJ60G5UEe2wNaja8kBvcQ"/>
@@ -1205,6 +1204,12 @@
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-b_9Un4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition" createable="false" updateable="false" deleteable="false">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ec-mEFpMEe6_67aMO2jOsw" lower="0" upper="1" target="_qFjB42ksEe25ONJ3V89cVA" name="debate" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_u9whUFoLEe6_67aMO2jOsw" getterExpression="">
+        <inherited xmi:id="_edRhAFpMEe6_67aMO2jOsw"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_iPXSkFpMEe6_67aMO2jOsw" lower="0" upper="1" target="_qCREY2ksEe25ONJ3V89cVA" name="issue" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_3hvfIFoMEe6_67aMO2jOsw" getterExpression="">
+        <inherited xmi:id="_iPz-gFpMEe6_67aMO2jOsw"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_-cdQUH4XEe2cB7_PsKXsHQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_-ciI0H4XEe2cB7_PsKXsHQ"/>
       </attributes>
@@ -1741,24 +1746,22 @@
           <components xsi:type="ui:DataField" xmi:id="_ULRSGVoSEe6_67aMO2jOsw" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_ULRSGloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         </components>
-        <components xsi:type="ui:TabBar" xmi:id="_e2cAAFotEe6_67aMO2jOsw" name="tabBar" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <tabs xmi:id="_Ud1NcFotEe6_67aMO2jOsw" name="TakeVote" label="Take vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_cjpQQFooEe6_67aMO2jOsw">
-            <components xsi:type="ui:OperationForm" xmi:id="_eMuv8FoSEe6_67aMO2jOsw" name="vote" label="Take a vote" iconName="vote" col="12" stretch="NONE" row="1" fit="TIGHT" enabledBy="_spEpcFotEe6_67aMO2jOsw" onBlur="false" operation="vote"/>
-          </tabs>
-          <tabs xmi:id="_K-cscFouEe6_67aMO2jOsw" name="userVote" label="My vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_spEpcFotEe6_67aMO2jOsw">
-            <components xsi:type="ui:TabularReferenceField" xmi:id="_h4NScFouEe6_67aMO2jOsw" name="userVoteEntry" label="Value" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_5gsq4FonEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
-              <columns xsi:type="ui:DataColumn" xmi:id="_h4OgkVouEe6_67aMO2jOsw" name="value" label="Value" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_TpQW4FoiEe6_67aMO2jOsw"/>
-              <columns xsi:type="ui:DataColumn" xmi:id="_h4OgkFouEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_TpDikFoiEe6_67aMO2jOsw"/>
-            </components>
-            <components xsi:type="ui:OperationForm" xmi:id="_--H4sFouEe6_67aMO2jOsw" name="takeBackVote" label="TakeBackVote" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" enabledBy="_cjpQQFooEe6_67aMO2jOsw" onBlur="false" operation="takeBackVote"/>
-          </tabs>
-          <tabs xmi:id="_a8b9sFovEe6_67aMO2jOsw" name="entries" label="Entries" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-            <components xsi:type="ui:TabularReferenceField" xmi:id="_jimiQFovEe6_67aMO2jOsw" name="voteEntries" label="" iconName="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_j_gXIFojEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
-              <columns xsi:type="ui:DataColumn" xmi:id="_jinwYFovEe6_67aMO2jOsw" name="value" label="Value" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_TpQW4FoiEe6_67aMO2jOsw"/>
-              <columns xsi:type="ui:DataColumn" xmi:id="_jinJUFovEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_TpDikFoiEe6_67aMO2jOsw"/>
-              <columns xsi:type="ui:DataColumn" xmi:id="_zorYgFowEe6_67aMO2jOsw" name="createdBy" label="CreatedBy" iconName="format-size" visible="true" sort="NONE" dataFeature="_PuqoQFowEe6_67aMO2jOsw"/>
-            </components>
-          </tabs>
+        <components xsi:type="ui:Group" xmi:id="_Ud1NcFotEe6_67aMO2jOsw" name="TakeVote" label="Take vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_cjpQQFooEe6_67aMO2jOsw">
+          <components xsi:type="ui:OperationForm" xmi:id="_eMuv8FoSEe6_67aMO2jOsw" name="vote" label="Take a vote" iconName="vote" col="12" stretch="NONE" row="1" fit="TIGHT" enabledBy="_spEpcFotEe6_67aMO2jOsw" onBlur="false" operation="vote"/>
+        </components>
+        <components xsi:type="ui:Group" xmi:id="_K-cscFouEe6_67aMO2jOsw" name="userVote" label="My vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_spEpcFotEe6_67aMO2jOsw">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_h4NScFouEe6_67aMO2jOsw" name="userVoteEntry" label="Value" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_5gsq4FonEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_h4OgkVouEe6_67aMO2jOsw" name="value" label="Value" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_TpQW4FoiEe6_67aMO2jOsw"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_h4OgkFouEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_TpDikFoiEe6_67aMO2jOsw"/>
+          </components>
+          <components xsi:type="ui:OperationForm" xmi:id="_--H4sFouEe6_67aMO2jOsw" name="takeBackVote" label="TakeBackVote" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" enabledBy="_cjpQQFooEe6_67aMO2jOsw" onBlur="false" operation="takeBackVote"/>
+        </components>
+        <components xsi:type="ui:Group" xmi:id="_a8b9sFovEe6_67aMO2jOsw" name="entries" label="Entries" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_jimiQFovEe6_67aMO2jOsw" name="voteEntries" label="" iconName="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_j_gXIFojEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_jinwYFovEe6_67aMO2jOsw" name="value" label="Value" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_TpQW4FoiEe6_67aMO2jOsw"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_jinJUFovEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_TpDikFoiEe6_67aMO2jOsw"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_zorYgFowEe6_67aMO2jOsw" name="createdBy" label="CreatedBy" iconName="format-size" visible="true" sort="NONE" dataFeature="_PuqoQFowEe6_67aMO2jOsw"/>
+          </components>
         </components>
       </view>
     </elements>

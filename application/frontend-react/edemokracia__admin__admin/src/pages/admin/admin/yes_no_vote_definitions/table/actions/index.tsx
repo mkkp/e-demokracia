@@ -11,4 +11,3 @@ export * from './pageRefreshYesNoVoteDefinitions';
 export * from './adminYesNoVoteDefinition/adminYesNoVoteDefinitionTakeBackVote';
 export * from './pageFilterYesNoVoteDefinitions';
 export * from './rowViewYesNoVoteDefinitions';
-export * from './rowDeleteYesNoVoteDefinitions';

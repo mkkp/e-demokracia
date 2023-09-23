@@ -15,32 +15,33 @@ import { useErrorHandler, ERROR_PROCESSOR_HOOK_INTERFACE_KEY } from '~/utilities
 import { useConfirmDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
 import {
-  AdminYesNoVoteDefinition,
-  AdminYesNoVoteDefinitionQueryCustomizer,
-  AdminYesNoVoteDefinitionStored,
+  AdminCon,
+  AdminConQueryCustomizer,
+  AdminConStored,
+  AdminDebate,
+  AdminDebateStored,
 } from '~/generated/data-api';
-import {
-  adminAdminServiceForYesNoVoteDefinitionsImpl,
-  adminYesNoVoteDefinitionServiceForClassImpl,
-} from '~/generated/data-axios';
+import { adminDebateServiceForConsImpl, adminConServiceForClassImpl } from '~/generated/data-axios';
 
-export type RowDeleteYesNoVoteDefinitionsAction = () => (
-  selected: AdminYesNoVoteDefinitionStored,
+export type RowDeleteConsAction = () => (
+  owner: JudoIdentifiable<AdminDebate>,
+  selected: AdminConStored,
   successCallback: () => void,
   errorCallback?: (error: any) => void,
   silentMode?: boolean,
 ) => Promise<void>;
 
-export const useRowDeleteYesNoVoteDefinitionsAction: RowDeleteYesNoVoteDefinitionsAction = () => {
+export const useRowDeleteConsAction: RowDeleteConsAction = () => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const { openConfirmDialog } = useConfirmDialog();
-  const handleActionError = useErrorHandler(
+  const handleActionError = useErrorHandler<JudoIdentifiable<AdminDebate>>(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=RowDeleteAction))`,
   );
 
-  return async function rowDeleteYesNoVoteDefinitionsAction(
-    selected: AdminYesNoVoteDefinitionStored,
+  return async function rowDeleteConsAction(
+    owner: JudoIdentifiable<AdminDebate>,
+    selected: AdminConStored,
     successCallback: () => void,
     errorCallback?: (error: any) => void,
     silentMode?: boolean,
@@ -57,7 +58,7 @@ export const useRowDeleteYesNoVoteDefinitionsAction: RowDeleteYesNoVoteDefinitio
         : true;
 
       if (confirmed) {
-        await adminYesNoVoteDefinitionServiceForClassImpl.delete(selected);
+        await adminConServiceForClassImpl.delete(selected);
         if (!silentMode) {
           enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
             variant: 'success',

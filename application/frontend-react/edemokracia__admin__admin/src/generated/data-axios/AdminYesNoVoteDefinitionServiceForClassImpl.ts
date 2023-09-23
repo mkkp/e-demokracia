@@ -50,32 +50,6 @@ export class AdminYesNoVoteDefinitionServiceForClassImpl
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async delete(target: JudoIdentifiable<AdminYesNoVoteDefinition>): Promise<void> {
-    const path = '/admin/YesNoVoteDefinition/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async update(target: Partial<AdminYesNoVoteDefinitionStored>): Promise<AdminYesNoVoteDefinitionStored> {
-    const path = '/admin/YesNoVoteDefinition/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getDebate(

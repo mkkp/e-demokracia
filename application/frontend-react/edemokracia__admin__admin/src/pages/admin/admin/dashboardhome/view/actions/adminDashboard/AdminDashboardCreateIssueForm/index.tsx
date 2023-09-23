@@ -397,21 +397,6 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
               </Grid>
             </Grid>
           </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <Grid
-              id="FlexedemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueInputDefaultCreateIssueInputFormGroup"
-              container
-              direction="row"
-              alignItems="flex-start"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12} sm={12} md={4.0}></Grid>
-
-              <Grid item xs={12} sm={12} md={4.0}></Grid>
-            </Grid>
-          </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
@@ -420,9 +405,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
           variant="text"
           onClick={() => cancel()}
           disabled={isLoading}
-          startIcon={<MdiIcon path="close-circle-outline" />}
+          startIcon={<MdiIcon path="close-thick" />}
         >
-          {t('admin.CreateIssueInputForm.input.ButtonBack', { defaultValue: 'Cancel' }) as string}
+          {t('judo.pages.cancel', { defaultValue: 'Cancel' }) as string}
         </Button>
         <LoadingButton
           loading={isLoading}
@@ -430,9 +415,9 @@ export function AdminDashboardCreateIssueForm({ successCallback, cancel }: Admin
           id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewEdemokraciaAdminAdminEdemokraciaAdminDashboardCreateIssueButtonCallOperation-action-form-action-submit"
           variant="contained"
           onClick={() => submit()}
-          startIcon={<MdiIcon path="check" />}
+          startIcon={<MdiIcon path="check-bold" />}
         >
-          <span>{t('admin.CreateIssueInputForm.input.ButtonSaveInput', { defaultValue: 'OK' }) as string}</span>
+          <span>{t('judo.pages.submit', { defaultValue: 'Submit' }) as string}</span>
         </LoadingButton>
       </DialogActions>
     </>
