@@ -8,6 +8,7 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
+  AdminRatingVoteDefinitionStored,
   AdminCon,
   AdminIssueStored,
   AdminYesNoVoteDefinition,
@@ -25,14 +26,19 @@ import {
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminRatingVoteDefinitionQueryCustomizer,
   AdminYesNoVoteDefinitionQueryCustomizer,
+  AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
+  AdminYesNoAbstainVoteDefinition,
+  AdminRatingVoteDefinition,
   AdminProStored,
   AdminDebate,
   AdminIssue,
   AdminConQueryCustomizer,
   AdminVoteDefinition,
   AdminCommentStored,
+  AdminYesNoAbstainVoteDefinitionStored,
 } from '../data-api';
 
 /**

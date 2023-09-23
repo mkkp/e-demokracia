@@ -18,9 +18,9 @@ import { AdminAdminServiceForIssuesImpl } from './AdminAdminServiceForIssuesImpl
 import { AdminAdminServiceForUsersImpl } from './AdminAdminServiceForUsersImpl';
 import { AdminAdminServiceForVoteDefinitionsImpl } from './AdminAdminServiceForVoteDefinitionsImpl';
 import { AdminAdminServiceForVoteEntriesImpl } from './AdminAdminServiceForVoteEntriesImpl';
+import { AdminAdminServiceForYesNoVoteDefinitionsImpl } from './AdminAdminServiceForYesNoVoteDefinitionsImpl';
 
 import { CityServiceForDistrictsImpl } from './CityServiceForDistrictsImpl';
-import { CloseDebateInputServiceForAnswersImpl } from './CloseDebateInputServiceForAnswersImpl';
 import { CommentServiceForCreatedByImpl } from './CommentServiceForCreatedByImpl';
 import { CommentServiceForVotesImpl } from './CommentServiceForVotesImpl';
 import { ConServiceForCommentsImpl } from './ConServiceForCommentsImpl';
@@ -62,6 +62,7 @@ import { UserServiceForResidentDistrictImpl } from './UserServiceForResidentDist
 import { UserServiceForVotesImpl } from './UserServiceForVotesImpl';
 import { VoteDefinitionServiceForDebateImpl } from './VoteDefinitionServiceForDebateImpl';
 import { VoteDefinitionServiceForIssueImpl } from './VoteDefinitionServiceForIssueImpl';
+import { VoteDefinitionServiceForUserVoteEntryImpl } from './VoteDefinitionServiceForUserVoteEntryImpl';
 import { VoteDefinitionServiceForVoteEntriesImpl } from './VoteDefinitionServiceForVoteEntriesImpl';
 import { VoteEntryServiceForUserImpl } from './VoteEntryServiceForUserImpl';
 import { VoteEntryServiceForVoteDefinitionImpl } from './VoteEntryServiceForVoteDefinitionImpl';
@@ -89,7 +90,9 @@ import { AdminDebateServiceForConsImpl } from './AdminDebateServiceForConsImpl';
 import { AdminDebateServiceForCreatedByImpl } from './AdminDebateServiceForCreatedByImpl';
 import { AdminDebateServiceForIssueImpl } from './AdminDebateServiceForIssueImpl';
 import { AdminDebateServiceForProsImpl } from './AdminDebateServiceForProsImpl';
+import { AdminDebateServiceForRatingVoteDefinitionImpl } from './AdminDebateServiceForRatingVoteDefinitionImpl';
 import { AdminDebateServiceForVoteDefinitionImpl } from './AdminDebateServiceForVoteDefinitionImpl';
+import { AdminDebateServiceForYesNoAbstainVoteDefinitionImpl } from './AdminDebateServiceForYesNoAbstainVoteDefinitionImpl';
 import { AdminDebateServiceForYesNoVoteDefinitionImpl } from './AdminDebateServiceForYesNoVoteDefinitionImpl';
 import { AdminIssueServiceForAttachmentsImpl } from './AdminIssueServiceForAttachmentsImpl';
 import { AdminIssueServiceForCategoriesImpl } from './AdminIssueServiceForCategoriesImpl';
@@ -111,6 +114,9 @@ import { AdminProServiceForParentDebateImpl } from './AdminProServiceForParentDe
 import { AdminProServiceForParentProImpl } from './AdminProServiceForParentProImpl';
 import { AdminProServiceForProsImpl } from './AdminProServiceForProsImpl';
 import { AdminProServiceForVotesImpl } from './AdminProServiceForVotesImpl';
+import { AdminRatingVoteDefinitionServiceForDebateImpl } from './AdminRatingVoteDefinitionServiceForDebateImpl';
+import { AdminRatingVoteDefinitionServiceForIssueImpl } from './AdminRatingVoteDefinitionServiceForIssueImpl';
+import { AdminRatingVoteDefinitionServiceForVoteEntriesImpl } from './AdminRatingVoteDefinitionServiceForVoteEntriesImpl';
 import { AdminSimpleVoteServiceForUserImpl } from './AdminSimpleVoteServiceForUserImpl';
 import { AdminUserServiceForActivityCitiesImpl } from './AdminUserServiceForActivityCitiesImpl';
 import { AdminUserServiceForActivityCountiesImpl } from './AdminUserServiceForActivityCountiesImpl';
@@ -122,8 +128,13 @@ import { AdminUserServiceForVotesImpl } from './AdminUserServiceForVotesImpl';
 import { AdminVoteDefinitionServiceForDebateImpl } from './AdminVoteDefinitionServiceForDebateImpl';
 import { AdminVoteDefinitionServiceForIssueImpl } from './AdminVoteDefinitionServiceForIssueImpl';
 import { AdminVoteEntryServiceForVoteDefinitionImpl } from './AdminVoteEntryServiceForVoteDefinitionImpl';
+import { AdminYesNoAbstainVoteDefinitionServiceForDebateImpl } from './AdminYesNoAbstainVoteDefinitionServiceForDebateImpl';
+import { AdminYesNoAbstainVoteDefinitionServiceForIssueImpl } from './AdminYesNoAbstainVoteDefinitionServiceForIssueImpl';
 import { AdminYesNoVoteDefinitionServiceForDebateImpl } from './AdminYesNoVoteDefinitionServiceForDebateImpl';
 import { AdminYesNoVoteDefinitionServiceForIssueImpl } from './AdminYesNoVoteDefinitionServiceForIssueImpl';
+import { AdminYesNoVoteDefinitionServiceForUserVoteEntryImpl } from './AdminYesNoVoteDefinitionServiceForUserVoteEntryImpl';
+import { AdminYesNoVoteDefinitionServiceForVoteEntriesImpl } from './AdminYesNoVoteDefinitionServiceForVoteEntriesImpl';
+import { AdminYesNoVoteEntryServiceForUserImpl } from './AdminYesNoVoteEntryServiceForUserImpl';
 
 import { CityServiceForClassImpl } from './CityServiceForClassImpl';
 import { CloseDebateInputServiceForClassImpl } from './CloseDebateInputServiceForClassImpl';
@@ -141,7 +152,6 @@ import { IssueCategoryServiceForClassImpl } from './IssueCategoryServiceForClass
 import { IssueTypeServiceForClassImpl } from './IssueTypeServiceForClassImpl';
 import { ProServiceForClassImpl } from './ProServiceForClassImpl';
 import { RatingVoteInputServiceForClassImpl } from './RatingVoteInputServiceForClassImpl';
-import { SelectAnswerInputServiceForClassImpl } from './SelectAnswerInputServiceForClassImpl';
 import { SelectAnswerVoteSelectionServiceForClassImpl } from './SelectAnswerVoteSelectionServiceForClassImpl';
 import { SimpleVoteServiceForClassImpl } from './SimpleVoteServiceForClassImpl';
 import { UserServiceForClassImpl } from './UserServiceForClassImpl';
@@ -168,11 +178,14 @@ import { AdminIssueDebateServiceForClassImpl } from './AdminIssueDebateServiceFo
 import { AdminIssueTypeServiceForClassImpl } from './AdminIssueTypeServiceForClassImpl';
 import { AdminProServiceForClassImpl } from './AdminProServiceForClassImpl';
 import { AdminProParentServiceForClassImpl } from './AdminProParentServiceForClassImpl';
+import { AdminRatingVoteDefinitionServiceForClassImpl } from './AdminRatingVoteDefinitionServiceForClassImpl';
 import { AdminSimpleVoteServiceForClassImpl } from './AdminSimpleVoteServiceForClassImpl';
 import { AdminUserServiceForClassImpl } from './AdminUserServiceForClassImpl';
 import { AdminVoteDefinitionServiceForClassImpl } from './AdminVoteDefinitionServiceForClassImpl';
 import { AdminVoteEntryServiceForClassImpl } from './AdminVoteEntryServiceForClassImpl';
+import { AdminYesNoAbstainVoteDefinitionServiceForClassImpl } from './AdminYesNoAbstainVoteDefinitionServiceForClassImpl';
 import { AdminYesNoVoteDefinitionServiceForClassImpl } from './AdminYesNoVoteDefinitionServiceForClassImpl';
+import { AdminYesNoVoteEntryServiceForClassImpl } from './AdminYesNoVoteEntryServiceForClassImpl';
 
 export const accessServiceImpl = new AccessServiceImpl(judoAxiosProvider);
 
@@ -185,9 +198,11 @@ export const adminAdminServiceForIssuesImpl = new AdminAdminServiceForIssuesImpl
 export const adminAdminServiceForUsersImpl = new AdminAdminServiceForUsersImpl(judoAxiosProvider);
 export const adminAdminServiceForVoteDefinitionsImpl = new AdminAdminServiceForVoteDefinitionsImpl(judoAxiosProvider);
 export const adminAdminServiceForVoteEntriesImpl = new AdminAdminServiceForVoteEntriesImpl(judoAxiosProvider);
+export const adminAdminServiceForYesNoVoteDefinitionsImpl = new AdminAdminServiceForYesNoVoteDefinitionsImpl(
+  judoAxiosProvider,
+);
 
 export const cityServiceForDistrictsImpl = new CityServiceForDistrictsImpl(judoAxiosProvider);
-export const closeDebateInputServiceForAnswersImpl = new CloseDebateInputServiceForAnswersImpl(judoAxiosProvider);
 export const commentServiceForCreatedByImpl = new CommentServiceForCreatedByImpl(judoAxiosProvider);
 export const commentServiceForVotesImpl = new CommentServiceForVotesImpl(judoAxiosProvider);
 export const conServiceForCommentsImpl = new ConServiceForCommentsImpl(judoAxiosProvider);
@@ -229,6 +244,9 @@ export const userServiceForResidentDistrictImpl = new UserServiceForResidentDist
 export const userServiceForVotesImpl = new UserServiceForVotesImpl(judoAxiosProvider);
 export const voteDefinitionServiceForDebateImpl = new VoteDefinitionServiceForDebateImpl(judoAxiosProvider);
 export const voteDefinitionServiceForIssueImpl = new VoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const voteDefinitionServiceForUserVoteEntryImpl = new VoteDefinitionServiceForUserVoteEntryImpl(
+  judoAxiosProvider,
+);
 export const voteDefinitionServiceForVoteEntriesImpl = new VoteDefinitionServiceForVoteEntriesImpl(judoAxiosProvider);
 export const voteEntryServiceForUserImpl = new VoteEntryServiceForUserImpl(judoAxiosProvider);
 export const voteEntryServiceForVoteDefinitionImpl = new VoteEntryServiceForVoteDefinitionImpl(judoAxiosProvider);
@@ -262,7 +280,12 @@ export const adminDebateServiceForConsImpl = new AdminDebateServiceForConsImpl(j
 export const adminDebateServiceForCreatedByImpl = new AdminDebateServiceForCreatedByImpl(judoAxiosProvider);
 export const adminDebateServiceForIssueImpl = new AdminDebateServiceForIssueImpl(judoAxiosProvider);
 export const adminDebateServiceForProsImpl = new AdminDebateServiceForProsImpl(judoAxiosProvider);
+export const adminDebateServiceForRatingVoteDefinitionImpl = new AdminDebateServiceForRatingVoteDefinitionImpl(
+  judoAxiosProvider,
+);
 export const adminDebateServiceForVoteDefinitionImpl = new AdminDebateServiceForVoteDefinitionImpl(judoAxiosProvider);
+export const adminDebateServiceForYesNoAbstainVoteDefinitionImpl =
+  new AdminDebateServiceForYesNoAbstainVoteDefinitionImpl(judoAxiosProvider);
 export const adminDebateServiceForYesNoVoteDefinitionImpl = new AdminDebateServiceForYesNoVoteDefinitionImpl(
   judoAxiosProvider,
 );
@@ -288,6 +311,14 @@ export const adminProServiceForParentDebateImpl = new AdminProServiceForParentDe
 export const adminProServiceForParentProImpl = new AdminProServiceForParentProImpl(judoAxiosProvider);
 export const adminProServiceForProsImpl = new AdminProServiceForProsImpl(judoAxiosProvider);
 export const adminProServiceForVotesImpl = new AdminProServiceForVotesImpl(judoAxiosProvider);
+export const adminRatingVoteDefinitionServiceForDebateImpl = new AdminRatingVoteDefinitionServiceForDebateImpl(
+  judoAxiosProvider,
+);
+export const adminRatingVoteDefinitionServiceForIssueImpl = new AdminRatingVoteDefinitionServiceForIssueImpl(
+  judoAxiosProvider,
+);
+export const adminRatingVoteDefinitionServiceForVoteEntriesImpl =
+  new AdminRatingVoteDefinitionServiceForVoteEntriesImpl(judoAxiosProvider);
 export const adminSimpleVoteServiceForUserImpl = new AdminSimpleVoteServiceForUserImpl(judoAxiosProvider);
 export const adminUserServiceForActivityCitiesImpl = new AdminUserServiceForActivityCitiesImpl(judoAxiosProvider);
 export const adminUserServiceForActivityCountiesImpl = new AdminUserServiceForActivityCountiesImpl(judoAxiosProvider);
@@ -301,12 +332,22 @@ export const adminVoteDefinitionServiceForIssueImpl = new AdminVoteDefinitionSer
 export const adminVoteEntryServiceForVoteDefinitionImpl = new AdminVoteEntryServiceForVoteDefinitionImpl(
   judoAxiosProvider,
 );
+export const adminYesNoAbstainVoteDefinitionServiceForDebateImpl =
+  new AdminYesNoAbstainVoteDefinitionServiceForDebateImpl(judoAxiosProvider);
+export const adminYesNoAbstainVoteDefinitionServiceForIssueImpl =
+  new AdminYesNoAbstainVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
 export const adminYesNoVoteDefinitionServiceForDebateImpl = new AdminYesNoVoteDefinitionServiceForDebateImpl(
   judoAxiosProvider,
 );
 export const adminYesNoVoteDefinitionServiceForIssueImpl = new AdminYesNoVoteDefinitionServiceForIssueImpl(
   judoAxiosProvider,
 );
+export const adminYesNoVoteDefinitionServiceForUserVoteEntryImpl =
+  new AdminYesNoVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
+export const adminYesNoVoteDefinitionServiceForVoteEntriesImpl = new AdminYesNoVoteDefinitionServiceForVoteEntriesImpl(
+  judoAxiosProvider,
+);
+export const adminYesNoVoteEntryServiceForUserImpl = new AdminYesNoVoteEntryServiceForUserImpl(judoAxiosProvider);
 
 export const cityServiceForClassImpl = new CityServiceForClassImpl(judoAxiosProvider);
 export const closeDebateInputServiceForClassImpl = new CloseDebateInputServiceForClassImpl(judoAxiosProvider);
@@ -324,7 +365,6 @@ export const issueCategoryServiceForClassImpl = new IssueCategoryServiceForClass
 export const issueTypeServiceForClassImpl = new IssueTypeServiceForClassImpl(judoAxiosProvider);
 export const proServiceForClassImpl = new ProServiceForClassImpl(judoAxiosProvider);
 export const ratingVoteInputServiceForClassImpl = new RatingVoteInputServiceForClassImpl(judoAxiosProvider);
-export const selectAnswerInputServiceForClassImpl = new SelectAnswerInputServiceForClassImpl(judoAxiosProvider);
 export const selectAnswerVoteSelectionServiceForClassImpl = new SelectAnswerVoteSelectionServiceForClassImpl(
   judoAxiosProvider,
 );
@@ -355,10 +395,16 @@ export const adminIssueDebateServiceForClassImpl = new AdminIssueDebateServiceFo
 export const adminIssueTypeServiceForClassImpl = new AdminIssueTypeServiceForClassImpl(judoAxiosProvider);
 export const adminProServiceForClassImpl = new AdminProServiceForClassImpl(judoAxiosProvider);
 export const adminProParentServiceForClassImpl = new AdminProParentServiceForClassImpl(judoAxiosProvider);
+export const adminRatingVoteDefinitionServiceForClassImpl = new AdminRatingVoteDefinitionServiceForClassImpl(
+  judoAxiosProvider,
+);
 export const adminSimpleVoteServiceForClassImpl = new AdminSimpleVoteServiceForClassImpl(judoAxiosProvider);
 export const adminUserServiceForClassImpl = new AdminUserServiceForClassImpl(judoAxiosProvider);
 export const adminVoteDefinitionServiceForClassImpl = new AdminVoteDefinitionServiceForClassImpl(judoAxiosProvider);
 export const adminVoteEntryServiceForClassImpl = new AdminVoteEntryServiceForClassImpl(judoAxiosProvider);
+export const adminYesNoAbstainVoteDefinitionServiceForClassImpl =
+  new AdminYesNoAbstainVoteDefinitionServiceForClassImpl(judoAxiosProvider);
 export const adminYesNoVoteDefinitionServiceForClassImpl = new AdminYesNoVoteDefinitionServiceForClassImpl(
   judoAxiosProvider,
 );
+export const adminYesNoVoteEntryServiceForClassImpl = new AdminYesNoVoteEntryServiceForClassImpl(judoAxiosProvider);

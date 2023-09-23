@@ -6,19 +6,11 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
-import { CloseDebateInputAttributes, SelectAnswerInputAttributes } from '../model';
-
-import {} from './SelectAnswerInputMaskBuilder';
-
-export class CloseDebateInputAnswersMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<SelectAnswerInputAttributes>) {
-    super('answers', props);
-  }
-}
+import { MaskBuilder } from './MaskBuilder';
+import { CloseDebateInputAttributes } from '../model';
 
 export class CloseDebateInputMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<CloseDebateInputAttributes | CloseDebateInputAnswersMaskBuilder>) {
+  constructor(protected props: Array<CloseDebateInputAttributes>) {
     super(props);
   }
 }

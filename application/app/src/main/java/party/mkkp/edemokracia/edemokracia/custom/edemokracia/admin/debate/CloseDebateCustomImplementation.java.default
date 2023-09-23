@@ -16,6 +16,10 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.admin.debate;
  * 
  * var edemokracia::VoteDefinition voteDef;
  * 
+ * if (this.status == edemokracia::DebateStatus#CLOSED) {
+ * 	return voteDef;
+ * }
+ * 
  * if (input.voteType == edemokracia::VoteTypeOnCloseDebate#YES_NO) {
  * 	voteDef = new edemokracia::YesNoVoteDefinition(
  * 		title = input.title, 
@@ -41,16 +45,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.admin.debate;
  * 		closeAt = input.closeAt,
  * 		status = edemokracia::VoteStatus#CREATED		
  * 	);
- * 	
- * 
- * 	for (answer in input.answers) {
- * 		var edemokracia::SelectAnswerVoteSelection voteSelection = new edemokracia::SelectAnswerVoteSelection(
- * 			title = answer.title,
- * 			description = answer.description
- * 		);
- * 		selectVoteDef.voteSelections += voteSelection;
- * 	}
- * 	
+ * 		
  * 	voteDef = selectVoteDef;
  * }
  * 

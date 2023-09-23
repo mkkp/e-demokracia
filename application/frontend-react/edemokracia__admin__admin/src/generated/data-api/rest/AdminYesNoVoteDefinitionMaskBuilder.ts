@@ -7,7 +7,12 @@
 // Template file: rest/mask.ts.hbs
 
 import { MaskBuilder } from './MaskBuilder';
-import { AdminYesNoVoteDefinitionAttributes, AdminIssueAttributes, AdminDebateAttributes } from '../model';
+import {
+  AdminYesNoVoteDefinitionAttributes,
+  AdminIssueAttributes,
+  AdminDebateAttributes,
+  AdminYesNoVoteEntryAttributes,
+} from '../model';
 
 export class AdminYesNoVoteDefinitionMaskBuilder extends MaskBuilder {
   constructor(protected props: Array<AdminYesNoVoteDefinitionAttributes>) {

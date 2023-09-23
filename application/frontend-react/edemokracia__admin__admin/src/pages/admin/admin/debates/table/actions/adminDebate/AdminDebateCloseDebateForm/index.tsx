@@ -84,16 +84,11 @@ import {
   CloseDebateInputQueryCustomizer,
   CloseDebateInputStored,
   EdemokraciaVoteTypeOnCloseDebate,
-  SelectAnswerInput,
-  SelectAnswerInputQueryCustomizer,
-  SelectAnswerInputStored,
   VoteDefinition,
   VoteDefinitionQueryCustomizer,
   VoteDefinitionStored,
 } from '~/generated/data-api';
 import { closeDebateInputServiceForClassImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
-
-import { AnswersTable } from './components/AnswersTable';
 
 export interface AdminDebateCloseDebateFormProps {
   successCallback: (result?: VoteDefinitionStored) => void;
@@ -415,68 +410,6 @@ export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: A
                             ),
                           }}
                         />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapper">
-              <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
-                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="clipboard-list-outline" sx={{ marginRight: 1 }} />
-                      <Typography
-                        id="LabeledemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupLabel"
-                        variant="h5"
-                        component="h1"
-                      >
-                        {t('CloseDebateInputForm.group.Label', { defaultValue: 'Seletable answers' })}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroup"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupAnswersLabelWrapper"
-                          container
-                          direction="column"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="TableedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateInputDefaultCloseDebateInputFormGroupLabelWrapperGroupAnswersLabelWrapperAnswers"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <AnswersTable
-                                isOwnerLoading={isLoading}
-                                validation={validation}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                storeDiff={storeDiff}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>

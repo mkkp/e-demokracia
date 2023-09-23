@@ -9,6 +9,7 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  AdminRatingVoteDefinitionStored,
   AdminCon,
   AdminIssueStored,
   AdminYesNoVoteDefinition,
@@ -26,14 +27,19 @@ import type {
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminRatingVoteDefinitionQueryCustomizer,
   AdminYesNoVoteDefinitionQueryCustomizer,
+  AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
+  AdminYesNoAbstainVoteDefinition,
+  AdminRatingVoteDefinition,
   AdminProStored,
   AdminDebate,
   AdminIssue,
   AdminConQueryCustomizer,
   AdminVoteDefinition,
   AdminCommentStored,
+  AdminYesNoAbstainVoteDefinitionStored,
 } from '../data-api';
 import type { AdminDashboardServiceForDebates } from '../data-service';
 

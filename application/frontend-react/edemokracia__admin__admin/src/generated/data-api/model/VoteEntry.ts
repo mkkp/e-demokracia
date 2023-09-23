@@ -12,11 +12,12 @@ import { VoteDefinitionStored } from './VoteDefinition';
 
 export interface VoteEntry {
   created: Date;
+  createdBy?: null | string;
 
   user: UserStored;
   voteDefinition: VoteDefinitionStored;
 }
-export type VoteEntryAttributes = 'created';
+export type VoteEntryAttributes = 'created' | 'createdBy';
 
 export type VoteEntryRelations = 'user' | 'voteDefinition';
 

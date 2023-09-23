@@ -76,7 +76,7 @@ export const useAdminVoteDefinitionVoteYesNoAction: AdminVoteDefinitionVoteYesNo
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
   const title: string = t('admin.VoteDefinitionTable.voteDefinitions.voteYesNo.ButtonCallOperation', {
-    defaultValue: 'Vote',
+    defaultValue: 'Take a vote',
   });
   const { service: customPostHandler } = useTrackService<AdminVoteDefinitionVoteYesNoActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_VOTE_DEFINITION_VOTE_YES_NO_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,

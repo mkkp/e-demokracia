@@ -78,7 +78,7 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
   const title: string = t('admin.VoteDefinitionView.voteSelectAnswer.ButtonCallOperation', {
-    defaultValue: 'VoteSelectAnswer',
+    defaultValue: 'Take a vote',
   });
   const { service: customPostHandler } = useTrackService<AdminVoteDefinitionVoteSelectAnswerActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_VOTE_DEFINITION_VOTE_SELECT_ANSWER_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,

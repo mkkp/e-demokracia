@@ -10,6 +10,9 @@ import {
   AdminYesNoVoteDefinition,
   AdminYesNoVoteDefinitionQueryCustomizer,
   AdminYesNoVoteDefinitionStored,
+  AdminYesNoVoteEntry,
+  AdminYesNoVoteEntryQueryCustomizer,
+  AdminYesNoVoteEntryStored,
   EdemokraciaVoteStatus,
 } from '~/generated/data-api';
 import { usePageRefreshYesNoVoteDefinitionAction } from '../actions';

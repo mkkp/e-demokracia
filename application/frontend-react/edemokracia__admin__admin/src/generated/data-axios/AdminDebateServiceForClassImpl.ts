@@ -9,6 +9,7 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  AdminRatingVoteDefinitionStored,
   AdminCon,
   AdminIssueStored,
   AdminYesNoVoteDefinition,
@@ -29,14 +30,19 @@ import type {
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminRatingVoteDefinitionQueryCustomizer,
   AdminYesNoVoteDefinitionQueryCustomizer,
+  AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
+  AdminYesNoAbstainVoteDefinition,
+  AdminRatingVoteDefinition,
   AdminProStored,
   AdminDebate,
   AdminIssue,
   AdminConQueryCustomizer,
   AdminVoteDefinition,
   AdminCommentStored,
+  AdminYesNoAbstainVoteDefinitionStored,
 } from '../data-api';
 import type { AdminDebateServiceForClass } from '../data-service';
 
@@ -310,6 +316,72 @@ export class AdminDebateServiceForClassImpl extends JudoAxiosService implements 
     queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminYesNoVoteDefinitionStored>> {
     const path = '/admin/Debate/yesNoVoteDefinition/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getYesNoAbstainVoteDefinition(
+    target: JudoIdentifiable<AdminDebate>,
+    queryCustomizer?: AdminYesNoAbstainVoteDefinitionQueryCustomizer,
+  ): Promise<AdminYesNoAbstainVoteDefinitionStored> {
+    const path = '/admin/Debate/yesNoAbstainVoteDefinition/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForYesNoAbstainVoteDefinition(
+    owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
+    queryCustomizer?: AdminYesNoAbstainVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminYesNoAbstainVoteDefinitionStored>> {
+    const path = '/admin/Debate/yesNoAbstainVoteDefinition/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRatingVoteDefinition(
+    target: JudoIdentifiable<AdminDebate>,
+    queryCustomizer?: AdminRatingVoteDefinitionQueryCustomizer,
+  ): Promise<AdminRatingVoteDefinitionStored> {
+    const path = '/admin/Debate/ratingVoteDefinition/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForRatingVoteDefinition(
+    owner?: JudoIdentifiable<AdminDebate> | AdminDebate,
+    queryCustomizer?: AdminRatingVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteDefinitionStored>> {
+    const path = '/admin/Debate/ratingVoteDefinition/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

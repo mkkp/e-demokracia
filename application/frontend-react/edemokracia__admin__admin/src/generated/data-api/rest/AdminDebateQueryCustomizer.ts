@@ -9,6 +9,7 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminDebate } from '../model/AdminDebate';
 
+import { FilterByBoolean } from './FilterByBoolean';
 import { FilterByDebateStatus } from './FilterByDebateStatus';
 import { FilterByString } from './FilterByString';
 import { FilterByText } from './FilterByText';
@@ -20,4 +21,6 @@ export interface AdminDebateQueryCustomizer extends QueryCustomizer<AdminDebate>
   status?: Array<FilterByDebateStatus>;
   title?: Array<FilterByString>;
   issueTitle?: Array<FilterByString>;
+  isClosed?: Array<FilterByBoolean>;
+  isNotClosed?: Array<FilterByBoolean>;
 }

@@ -82,12 +82,28 @@ export const menus: NavItemType[] = [
     ],
   },
   {
-    id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminVoteDefinitionsNavigationItem',
-    type: 'item',
-    url: 'admin/admin/vote_definitions/table',
+    id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupVoteDefinitionMenu',
+    type: 'group',
     icon: 'vote',
-    title: 'Votes',
-    children: [],
+    title: 'Vote Definitions',
+    children: [
+      {
+        id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupVoteDefinitionMenuEdemokraciaAdminAdminVoteDefinitionsNavigationItem',
+        type: 'item',
+        url: 'admin/admin/vote_definitions/table',
+        icon: 'vote',
+        title: 'Votes',
+        children: [],
+      },
+      {
+        id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupVoteDefinitionMenuEdemokraciaAdminAdminYesNoVoteDefinitionsNavigationItem',
+        type: 'item',
+        url: 'admin/admin/yes_no_vote_definitions/table',
+        icon: 'checkbox-outline',
+        title: 'Yes / No Votes',
+        children: [],
+      },
+    ],
   },
   {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminVoteEntriesNavigationItem',

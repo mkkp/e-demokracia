@@ -74,7 +74,7 @@ export const useAdminVoteDefinitionVoteRatingAction: AdminVoteDefinitionVoteRati
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', { defaultValue: 'VoteRating' });
+  const title: string = t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', { defaultValue: 'Take a vote' });
   const { service: customPostHandler } = useTrackService<AdminVoteDefinitionVoteRatingActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_VOTE_DEFINITION_VOTE_RATING_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );

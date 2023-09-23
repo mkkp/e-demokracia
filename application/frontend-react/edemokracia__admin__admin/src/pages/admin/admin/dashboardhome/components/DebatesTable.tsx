@@ -232,7 +232,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
   ];
 
   const debatesInitialQueryCustomizer: AdminDebateQueryCustomizer = {
-    _mask: '{title,issueTitle,closeAt,status}',
+    _mask: '{title,issueTitle,closeAt,status,isNotClosed}',
     _orderBy: debatesSortModel.length
       ? [
           {
@@ -265,7 +265,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
       }) as string,
       icon: <MdiIcon path="wechat" />,
       action: async (row: AdminDebateStored) => adminDebateCloseDebateAction(row, () => fetchOwnerData()),
-      disabled: (row: AdminDebateStored) => editMode,
+      disabled: (row: AdminDebateStored) => !row.isNotClosed || editMode,
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDebateCreateArgumentButtonCallOperation',
@@ -274,7 +274,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
       }) as string,
       icon: <MdiIcon path="account-voice" />,
       action: async (row: AdminDebateStored) => adminDebateCreateArgumentAction(row, () => fetchOwnerData()),
-      disabled: (row: AdminDebateStored) => editMode,
+      disabled: (row: AdminDebateStored) => !row.isNotClosed || editMode,
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDebateCreateCommentButtonCallOperation',
@@ -283,7 +283,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
       }) as string,
       icon: <MdiIcon path="comment-text-multiple" />,
       action: async (row: AdminDebateStored) => adminDebateCreateCommentAction(row, () => fetchOwnerData()),
-      disabled: (row: AdminDebateStored) => editMode,
+      disabled: (row: AdminDebateStored) => !row.isNotClosed || editMode,
     },
   ];
 

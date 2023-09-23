@@ -177,6 +177,39 @@ export class VoteDefinitionServiceForClassImpl extends JudoAxiosService implemen
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getUserVoteEntry(
+    target: JudoIdentifiable<VoteDefinition>,
+    queryCustomizer?: VoteEntryQueryCustomizer,
+  ): Promise<VoteEntryStored> {
+    const path = '/VoteDefinition/userVoteEntry/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
+    queryCustomizer?: VoteEntryQueryCustomizer,
+  ): Promise<Array<VoteEntryStored>> {
+    const path = '/VoteDefinition/userVoteEntry/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -237,6 +270,19 @@ export class VoteDefinitionServiceForClassImpl extends JudoAxiosService implemen
   async voteRating(owner: JudoIdentifiable<VoteDefinition>, target: RatingVoteInput): Promise<void> {
     const path = '/VoteDefinition/voteRating';
     const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async takeBackVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void> {
+    const path = '/VoteDefinition/takeBackVote';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
       },

@@ -12,5 +12,6 @@ export * from './pageRefreshVoteDefinition';
 export * from './adminVoteDefinition/AdminVoteDefinitionVoteRatingForm';
 export * from './adminVoteDefinition/adminVoteDefinitionVoteRating';
 export * from './adminVoteDefinition/adminVoteDefinitionVoteSelectAnswer';
+export * from './issue/buttonNavigateIssue';
 export * from './adminVoteDefinition/AdminVoteDefinitionVoteYesNoAbstainForm';
 export * from './adminVoteDefinition/adminVoteDefinitionVoteYesNoAbstain';

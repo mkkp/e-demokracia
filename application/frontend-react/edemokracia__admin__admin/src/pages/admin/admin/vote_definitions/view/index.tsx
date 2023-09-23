@@ -59,6 +59,7 @@ import {
 } from '~/generated/data-axios';
 import {
   useButtonNavigateDebateAction,
+  useButtonNavigateIssueAction,
   useAdminVoteDefinitionVoteYesNoAction,
   useAdminVoteDefinitionVoteYesNoAbstainAction,
   useAdminVoteDefinitionVoteSelectAnswerAction,
@@ -155,6 +156,7 @@ export default function AdminAdminVoteDefinitionsView() {
     postRefreshHook && postRefreshHook();
 
   const buttonNavigateDebateAction = useButtonNavigateDebateAction();
+  const buttonNavigateIssueAction = useButtonNavigateIssueAction();
   const adminVoteDefinitionVoteYesNoAction = useAdminVoteDefinitionVoteYesNoAction();
   const adminVoteDefinitionVoteYesNoAbstainAction = useAdminVoteDefinitionVoteYesNoAbstainAction();
   const adminVoteDefinitionVoteSelectAnswerAction = useAdminVoteDefinitionVoteSelectAnswerAction();
@@ -428,6 +430,24 @@ export default function AdminAdminVoteDefinitionsView() {
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
+                      <AssociationButton
+                        id="NavigationToPageActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueButtonNavigate"
+                        variant={undefined}
+                        editMode={editMode}
+                        navigateAction={(target) => buttonNavigateIssueAction(data, target)}
+                        owner={data}
+                        fetchCall={async (owner: JudoIdentifiable<any>) =>
+                          adminVoteDefinitionServiceForClassImpl.getIssue(owner, {
+                            _mask: '{}',
+                          })
+                        }
+                      >
+                        {t('admin.VoteDefinitionView.issue.ButtonNavigate', { defaultValue: 'Issue' })}
+                        <MdiIcon path="arrow-right" />
+                      </AssociationButton>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
                       <DateTimePicker
                         ampm={false}
                         ampmInClock={false}
@@ -573,7 +593,7 @@ export default function AdminAdminVoteDefinitionsView() {
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoButtonCallOperation"
                             loading={isLoading}
                             variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
+                            startIcon={<MdiIcon path="vote" />}
                             loadingPosition="start"
                             onClick={async () => {
                               try {
@@ -586,7 +606,9 @@ export default function AdminAdminVoteDefinitionsView() {
                             disabled={!data.isYesNoType || editMode}
                           >
                             <span>
-                              {t('admin.VoteDefinitionView.voteYesNo.ButtonCallOperation', { defaultValue: 'Vote' })}
+                              {t('admin.VoteDefinitionView.voteYesNo.ButtonCallOperation', {
+                                defaultValue: 'Take a vote',
+                              })}
                             </span>
                           </LoadingButton>
                         </Grid>
@@ -611,7 +633,7 @@ export default function AdminAdminVoteDefinitionsView() {
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoAbstainButtonCallOperation"
                             loading={isLoading}
                             variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
+                            startIcon={<MdiIcon path="vote" />}
                             loadingPosition="start"
                             onClick={async () => {
                               try {
@@ -625,7 +647,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           >
                             <span>
                               {t('admin.VoteDefinitionView.voteYesNoAbstain.ButtonCallOperation', {
-                                defaultValue: 'VoteYesNoAbstain',
+                                defaultValue: 'Take a vote',
                               })}
                             </span>
                           </LoadingButton>
@@ -651,7 +673,7 @@ export default function AdminAdminVoteDefinitionsView() {
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerButtonCallOperation"
                             loading={isLoading}
                             variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
+                            startIcon={<MdiIcon path="vote" />}
                             loadingPosition="start"
                             onClick={async () => {
                               try {
@@ -665,7 +687,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           >
                             <span>
                               {t('admin.VoteDefinitionView.voteSelectAnswer.ButtonCallOperation', {
-                                defaultValue: 'VoteSelectAnswer',
+                                defaultValue: 'Take a vote',
                               })}
                             </span>
                           </LoadingButton>
@@ -691,7 +713,7 @@ export default function AdminAdminVoteDefinitionsView() {
                             id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteRatingButtonCallOperation"
                             loading={isLoading}
                             variant={undefined}
-                            startIcon={<MdiIcon path="chevron_right" />}
+                            startIcon={<MdiIcon path="vote" />}
                             loadingPosition="start"
                             onClick={async () => {
                               try {
@@ -705,7 +727,7 @@ export default function AdminAdminVoteDefinitionsView() {
                           >
                             <span>
                               {t('admin.VoteDefinitionView.voteRating.ButtonCallOperation', {
-                                defaultValue: 'VoteRating',
+                                defaultValue: 'Take a vote',
                               })}
                             </span>
                           </LoadingButton>

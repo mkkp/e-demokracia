@@ -65,6 +65,16 @@ export interface VoteDefinitionServiceForClass {
     queryCustomizer?: IssueQueryCustomizer,
   ): Promise<Array<IssueStored>>;
 
+  getUserVoteEntry(
+    target: JudoIdentifiable<VoteDefinition>,
+    queryCustomizer?: VoteEntryQueryCustomizer,
+  ): Promise<VoteEntryStored>;
+
+  getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<VoteDefinition> | VoteDefinition,
+    queryCustomizer?: VoteEntryQueryCustomizer,
+  ): Promise<Array<VoteEntryStored>>;
+
   voteYesNo(owner: JudoIdentifiable<VoteDefinition>, target: YesNoVoteInput): Promise<void>;
 
   voteYesNoAbstain(owner: JudoIdentifiable<VoteDefinition>, target: YesNoAbstainVoteInput): Promise<void>;
@@ -76,4 +86,6 @@ export interface VoteDefinitionServiceForClass {
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
   voteRating(owner: JudoIdentifiable<VoteDefinition>, target: RatingVoteInput): Promise<void>;
+
+  takeBackVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
 }

@@ -8,13 +8,16 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  AdminIssueQueryCustomizer,
+  AdminYesNoVoteEntryStored,
   AdminYesNoVoteDefinitionStored,
-  AdminDebate,
-  AdminIssue,
   AdminYesNoVoteDefinition,
   AdminIssueStored,
   AdminYesNoVoteDefinitionQueryCustomizer,
+  AdminYesNoVoteEntryQueryCustomizer,
+  AdminIssueQueryCustomizer,
+  AdminDebate,
+  AdminIssue,
+  AdminYesNoVoteEntry,
   AdminDebateStored,
   YesNoVoteInput,
   AdminDebateQueryCustomizer,
@@ -28,6 +31,10 @@ export interface AdminYesNoVoteDefinitionServiceForClass {
     target: JudoIdentifiable<AdminYesNoVoteDefinition>,
     queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
   ): Promise<AdminYesNoVoteDefinitionStored>;
+
+  delete(target: JudoIdentifiable<AdminYesNoVoteDefinition>): Promise<void>;
+
+  update(target: Partial<AdminYesNoVoteDefinitionStored>): Promise<AdminYesNoVoteDefinitionStored>;
 
   getDebate(
     target: JudoIdentifiable<AdminYesNoVoteDefinition>,
@@ -49,5 +56,27 @@ export interface AdminYesNoVoteDefinitionServiceForClass {
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
+  getVoteEntries(
+    target: JudoIdentifiable<AdminYesNoVoteDefinition>,
+    queryCustomizer?: AdminYesNoVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminYesNoVoteEntryStored>>;
+
+  getRangeForVoteEntries(
+    owner?: JudoIdentifiable<AdminYesNoVoteDefinition> | AdminYesNoVoteDefinition,
+    queryCustomizer?: AdminYesNoVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminYesNoVoteEntryStored>>;
+
+  getUserVoteEntry(
+    target: JudoIdentifiable<AdminYesNoVoteDefinition>,
+    queryCustomizer?: AdminYesNoVoteEntryQueryCustomizer,
+  ): Promise<AdminYesNoVoteEntryStored>;
+
+  getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<AdminYesNoVoteDefinition> | AdminYesNoVoteDefinition,
+    queryCustomizer?: AdminYesNoVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminYesNoVoteEntryStored>>;
+
   vote(owner: JudoIdentifiable<AdminYesNoVoteDefinition>, target: YesNoVoteInput): Promise<void>;
+
+  takeBackVote(owner: JudoIdentifiable<AdminYesNoVoteDefinition>): Promise<void>;
 }

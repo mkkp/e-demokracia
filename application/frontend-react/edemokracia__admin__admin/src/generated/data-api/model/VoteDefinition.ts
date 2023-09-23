@@ -26,6 +26,7 @@ export interface VoteDefinition {
   voteEntries?: null | Array<VoteEntryStored>;
   debate?: null | DebateStored;
   issue?: null | IssueStored;
+  userVoteEntry?: null | VoteEntryStored;
 }
 export type VoteDefinitionAttributes =
   | 'title'
@@ -38,6 +39,6 @@ export type VoteDefinitionAttributes =
   | 'isSelectAnswerType'
   | 'isRatingType';
 
-export type VoteDefinitionRelations = 'voteEntries' | 'debate' | 'issue';
+export type VoteDefinitionRelations = 'voteEntries' | 'debate' | 'issue' | 'userVoteEntry';
 
 export interface VoteDefinitionStored extends JudoStored<VoteDefinition>, VoteDefinition {}

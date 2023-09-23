@@ -407,35 +407,35 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoButtonCallOperation',
       label: t('admin.VoteDefinitionTable.voteDefinitions.voteYesNo.ButtonCallOperation', {
-        defaultValue: 'Vote',
+        defaultValue: 'Take a vote',
       }) as string,
-      icon: <MdiIcon path="chevron_right" />,
+      icon: <MdiIcon path="vote" />,
       action: async (row: AdminVoteDefinitionStored) => adminVoteDefinitionVoteYesNoAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteYesNoAbstainButtonCallOperation',
       label: t('admin.VoteDefinitionTable.voteDefinitions.voteYesNoAbstain.ButtonCallOperation', {
-        defaultValue: 'VoteYesNoAbstain',
+        defaultValue: 'Take a vote',
       }) as string,
-      icon: <MdiIcon path="chevron_right" />,
+      icon: <MdiIcon path="vote" />,
       action: async (row: AdminVoteDefinitionStored) =>
         adminVoteDefinitionVoteYesNoAbstainAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerButtonCallOperation',
       label: t('admin.VoteDefinitionTable.voteDefinitions.voteSelectAnswer.ButtonCallOperation', {
-        defaultValue: 'VoteSelectAnswer',
+        defaultValue: 'Take a vote',
       }) as string,
-      icon: <MdiIcon path="chevron_right" />,
+      icon: <MdiIcon path="vote" />,
       action: async (row: AdminVoteDefinitionStored) =>
         adminVoteDefinitionVoteSelectAnswerAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteRatingButtonCallOperation',
       label: t('admin.VoteDefinitionTable.voteDefinitions.voteRating.ButtonCallOperation', {
-        defaultValue: 'VoteRating',
+        defaultValue: 'Take a vote',
       }) as string,
-      icon: <MdiIcon path="chevron_right" />,
+      icon: <MdiIcon path="vote" />,
       action: async (row: AdminVoteDefinitionStored) => adminVoteDefinitionVoteRatingAction(row, () => fetchData()),
     },
   ];

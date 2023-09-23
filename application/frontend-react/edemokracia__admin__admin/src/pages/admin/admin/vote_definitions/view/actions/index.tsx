@@ -7,6 +7,7 @@
 // Template file: actor/src/pages/actions/index.tsx.hbs
 export * from './adminVoteDefinition/AdminVoteDefinitionVoteYesNoAbstainForm';
 export * from './adminVoteDefinition/adminVoteDefinitionVoteYesNoAbstain';
+export * from './issue/buttonNavigateIssue';
 export * from './pageRefreshVoteDefinitions';
 export * from './pageDeleteVoteDefinitions';
 export * from './adminVoteDefinition/AdminVoteDefinitionVoteYesNoForm';

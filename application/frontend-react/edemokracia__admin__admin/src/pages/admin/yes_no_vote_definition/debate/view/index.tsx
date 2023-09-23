@@ -164,7 +164,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
 
   const queryCustomizer: AdminDebateQueryCustomizer = {
     _mask:
-      '{title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
+      '{title,status,closeAt,description,isNotClosed,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminYesNoVoteDefinitionDebateViewPostRefreshHook>(
@@ -499,7 +499,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                                 setIsLoading(false);
                               }
                             }}
-                            disabled={editMode}
+                            disabled={!data.isNotClosed || editMode}
                           >
                             <span>
                               {t('admin.DebateView.closeDebate.ButtonCallOperation', { defaultValue: 'Close debate' })}
@@ -573,7 +573,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                                 setIsLoading(false);
                               }
                             }}
-                            disabled={editMode}
+                            disabled={!data.isNotClosed || editMode}
                           >
                             <span>
                               {t('admin.DebateView.createArgument.ButtonCallOperation', {
@@ -708,7 +708,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                                 setIsLoading(false);
                               }
                             }}
-                            disabled={editMode}
+                            disabled={!data.isNotClosed || editMode}
                           >
                             <span>
                               {t('admin.DebateView.createComment.ButtonCallOperation', { defaultValue: 'Add comment' })}

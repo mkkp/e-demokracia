@@ -54,9 +54,6 @@ import {
   CloseDebateInputQueryCustomizer,
   CloseDebateInputStored,
   EdemokraciaVoteTypeOnCloseDebate,
-  SelectAnswerInput,
-  SelectAnswerInputQueryCustomizer,
-  SelectAnswerInputStored,
   VoteDefinition,
   VoteDefinitionQueryCustomizer,
   VoteDefinitionStored,
@@ -98,7 +95,7 @@ export const useAdminDebateCloseDebateAction: AdminDebateCloseDebateAction = () 
   return async function adminDebateCloseDebateAction(owner: AdminDebateStored, successCallback: () => void) {
     createDialog({
       fullWidth: true,
-      maxWidth: 'xs',
+      maxWidth: 'md',
       onClose: (event: object, reason: string) => {
         if (reason !== 'backdropClick') {
           closeDialog();
