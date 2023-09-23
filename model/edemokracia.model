@@ -12,6 +12,7 @@
       <accesses xmi:id="_l9Zh4JEaEe29qs15q2b6yw" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="voteDefinitions" createable="false" updateable="true" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
       <accesses xmi:id="_-T3OwNu-Ee2Bgcx6em3jZg" lower="0" upper="-1" target="_J4ArkNu4Ee2Bgcx6em3jZg" name="issueTypes" createable="true" updateable="true" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
       <accesses xmi:id="_0CUYEORyEe2Bgcx6em3jZg" lower="0" upper="-1" target="_zJIiwORxEe2Bgcx6em3jZg" name="voteEntries" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" accessType="ALL"/>
+      <accesses xmi:id="_zCZh0FoTEe6_67aMO2jOsw" lower="0" upper="-1" target="_-Ze00H4XEe2cB7_PsKXsHQ" name="yesNoVoteDefinitions" createable="false" updateable="true" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_GgcgQIyPEe2VSOmaAz6G9Q" name="dashboard" label="Dashboard" iconName="home" hidden="false" access="_GgaEAIyPEe2VSOmaAz6G9Q"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_hvYWQGkuEe25ONJ3V89cVA" name="Users_Menu" label="Users" iconName="account" hidden="false" access="_hvVS8GkuEe25ONJ3V89cVA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_vW3EUG4rEe2siJt-xjHAyw" name="Categories_Menu" label="Categories" iconName="file-tree" hidden="false" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_vWzZ8G4rEe2siJt-xjHAyw"/>
@@ -21,8 +22,10 @@
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_-T8HQNu-Ee2Bgcx6em3jZg" name="IssueType_Menu" label="Issue Types" iconName="folder-open" hidden="false" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_-T3OwNu-Ee2Bgcx6em3jZg"/>
       <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_KI3mAIeNEe2kLcMqsIbMgQ" name="Issues_and_Debates" label="Issues, Debates" hidden="false" menuItems="_iuDUYId_Ee2kLcMqsIbMgQ ___DQ0IehEe2kLcMqsIbMgQ"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="___DQ0IehEe2kLcMqsIbMgQ" name="Debate_Menu" label="Debates" iconName="wechat" hidden="false" menuGroup="_KI3mAIeNEe2kLcMqsIbMgQ" access="___A0kIehEe2kLcMqsIbMgQ"/>
-      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_l9dMQJEaEe29qs15q2b6yw" name="Vote_Menu" label="Votes" iconName="vote" hidden="false" access="_l9Zh4JEaEe29qs15q2b6yw"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_l9dMQJEaEe29qs15q2b6yw" name="Vote_Menu" label="Votes" iconName="vote" hidden="false" menuGroup="_I-NHQFoTEe6_67aMO2jOsw" access="_l9Zh4JEaEe29qs15q2b6yw"/>
+      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_I-NHQFoTEe6_67aMO2jOsw" name="VoteDefinition_Menu" label="Vote Definitions" iconName="vote" hidden="false" menuItems="_l9dMQJEaEe29qs15q2b6yw _zCyjYFoTEe6_67aMO2jOsw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_0CXbYORyEe2Bgcx6em3jZg" name="Vote_Entries_Menu" label="Vote Entries" iconName="vote-outline" hidden="false" access="_0CUYEORyEe2Bgcx6em3jZg"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_zCyjYFoTEe6_67aMO2jOsw" name="YesNoVoteDefinitions_Menu" label="Yes/ No Votes" iconName="format-list-check" hidden="false" menuGroup="_I-NHQFoTEe6_67aMO2jOsw" access="_zCZh0FoTEe6_67aMO2jOsw"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_ndA8kGkwEe25ONJ3V89cVA" name="AdminPrincipalUser" createable="false" updateable="false" deleteable="false" actorType="_jUnLgGkqEe25ONJ3V89cVA">
       <attributes xsi:type="structure:DataMember" xmi:id="_TzJu8H8GEe2kLcMqsIbMgQ" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_vX4k8G5gEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="MAPPED">
@@ -530,6 +533,9 @@
       </relations>
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_Wzt8AFoHEe6_67aMO2jOsw" lower="0" upper="1" target="_-Ze00H4XEe2cB7_PsKXsHQ" name="yesNoVoteDefinition" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.debateVote!asType(edemokracia::YesNoVoteDefinition)">
         <inherited xmi:id="_W0A28FoHEe6_67aMO2jOsw"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_k5YpoFocEe6_67aMO2jOsw" lower="0" upper="1" target="_-apScX4XEe2cB7_PsKXsHQ" name="yesNoAbstainVoteDefinition" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" rangeType="ANY" getterExpression="self.debateVote!asType(edemokracia::YesNoAbstainVoteDefinition)">
+        <inherited xmi:id="_k5q9gFocEe6_67aMO2jOsw"/>
       </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_7FHekG5UEe2wNaja8kBvcQ" name="closeAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_Ay-H8GkgEe25ONJ3V89cVA" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_7FJ60G5UEe2wNaja8kBvcQ"/>
@@ -1515,27 +1521,36 @@
           <components xsi:type="ui:DataField" xmi:id="_T5STEI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_T5260I4jEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_T5rUoI4jEe29qs15q2b6yw" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_bl1yQI4nEe29qs15q2b6yw" name="debate" label="Debate" iconName="table_rows" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_E2xOwI4mEe29qs15q2b6yw" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_bl1yQI4nEe29qs15q2b6yw" name="debate" label="Debate" iconName="wechat" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_E2xOwI4mEe29qs15q2b6yw" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
             <columns xsi:type="ui:DataColumn" xmi:id="_bl4OgI4nEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_7FHekG5UEe2wNaja8kBvcQ"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_bl7R0I4nEe29qs15q2b6yw" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FMXEG5UEe2wNaja8kBvcQ"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_bl-VII4nEe29qs15q2b6yw" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_bmBYcI4nEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
+          </components>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_mQ0lYFoWEe6_67aMO2jOsw" name="issue" label="Issue" iconName="ticket-confirmation" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_S75mQORxEe2Bgcx6em3jZg" targetDefinedTabular="false" smallTable="false" representationComponent="button" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ6E8FoWEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ6E8VoWEe6_67aMO2jOsw" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ6sAFoWEe6_67aMO2jOsw" name="description" label="Description" iconName="format-size" visible="true" sort="NONE" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ76IFoWEe6_67aMO2jOsw" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ76IVoWEe6_67aMO2jOsw" name="representation" label="Representation" iconName="format-size" visible="true" sort="NONE" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ8hMFoWEe6_67aMO2jOsw" name="numberOfDebates" label="NumberOfDebates" iconName="numeric" visible="true" sort="NONE" dataFeature="_mz8yQNu_Ee2Bgcx6em3jZg"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_mQ9IQFoWEe6_67aMO2jOsw" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
           </components>
           <components xsi:type="ui:DataField" xmi:id="_T5a18I4jEe29qs15q2b6yw" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:DataField" xmi:id="_T5jY0I4jEe29qs15q2b6yw" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         </components>
         <components xsi:type="ui:TabBar" xmi:id="_i6xVQI4jEe29qs15q2b6yw" name="tabBar" col="12" stretch="NONE" row="1" fit="LOOSE">
           <tabs xmi:id="_kxgNYI4jEe29qs15q2b6yw" name="yesnovote" label="Yes / No vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw" enabledBy="_nvFY0I4jEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T6ChAI4jEe29qs15q2b6yw" name="voteYesNo" label="Vote" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw" enabledBy="_nvFY0I4jEe29qs15q2b6yw" onBlur="false" operation="voteYesNo"/>
+            <components xsi:type="ui:OperationForm" xmi:id="_T6ChAI4jEe29qs15q2b6yw" name="voteYesNo" label="Take a vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_Tt0bMI4pEe29qs15q2b6yw" enabledBy="_nvFY0I4jEe29qs15q2b6yw" onBlur="false" operation="voteYesNo"/>
           </tabs>
           <tabs xmi:id="_z_MfkI4jEe29qs15q2b6yw" name="yesnoabstainvote" label="Yes / No / Abstain vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_DT-e8I4pEe29qs15q2b6yw" enabledBy="_nu-rII4jEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T6DvII4jEe29qs15q2b6yw" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_DT-e8I4pEe29qs15q2b6yw" enabledBy="_nu-rII4jEe29qs15q2b6yw" onBlur="false" operation="voteYesNoAbstain"/>
+            <components xsi:type="ui:OperationForm" xmi:id="_T6DvII4jEe29qs15q2b6yw" name="voteYesNoAbstain" label="Take a vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_DT-e8I4pEe29qs15q2b6yw" enabledBy="_nu-rII4jEe29qs15q2b6yw" onBlur="false" operation="voteYesNoAbstain"/>
           </tabs>
           <tabs xmi:id="_1tyvYI4jEe29qs15q2b6yw" name="selectanswervote" label="Select answer vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_zbgxcI4oEe29qs15q2b6yw" enabledBy="_nu2vUI4jEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T6Ar0I4jEe29qs15q2b6yw" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_zbgxcI4oEe29qs15q2b6yw" enabledBy="_nu2vUI4jEe29qs15q2b6yw" onBlur="false" operation="voteSelectAnswer"/>
+            <components xsi:type="ui:OperationForm" xmi:id="_T6Ar0I4jEe29qs15q2b6yw" name="voteSelectAnswer" label="Take a vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_zbgxcI4oEe29qs15q2b6yw" enabledBy="_nu2vUI4jEe29qs15q2b6yw" onBlur="false" operation="voteSelectAnswer"/>
           </tabs>
           <tabs xmi:id="_31NH0I4jEe29qs15q2b6yw" name="ratingvote" label="Rating vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_maoVEI4oEe29qs15q2b6yw" enabledBy="_nuvakI4jEe29qs15q2b6yw">
-            <components xsi:type="ui:OperationForm" xmi:id="_T5_dsI4jEe29qs15q2b6yw" name="voteRating" label="VoteRating" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_maoVEI4oEe29qs15q2b6yw" enabledBy="_nuvakI4jEe29qs15q2b6yw" onBlur="false" operation="voteRating"/>
+            <components xsi:type="ui:OperationForm" xmi:id="_T5_dsI4jEe29qs15q2b6yw" name="voteRating" label="Take a vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_maoVEI4oEe29qs15q2b6yw" enabledBy="_nuvakI4jEe29qs15q2b6yw" onBlur="false" operation="voteRating"/>
           </tabs>
         </components>
       </view>
@@ -1575,6 +1590,12 @@
       <view xmi:id="_zJOpYORxEe2Bgcx6em3jZg" name="VoteEntry_View_Edit" label="VoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-apScX4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition" createable="false" updateable="false" deleteable="false">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_FldeQFodEe6_67aMO2jOsw" lower="0" upper="1" target="_qFjB42ksEe25ONJ3V89cVA" name="debate" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_u9whUFoLEe6_67aMO2jOsw" getterExpression="">
+        <inherited xmi:id="_Fljk4FodEe6_67aMO2jOsw"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_J49TwFodEe6_67aMO2jOsw" lower="0" upper="1" target="_qCREY2ksEe25ONJ3V89cVA" name="issue" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_3hvfIFoMEe6_67aMO2jOsw" getterExpression="">
+        <inherited xmi:id="_J5KIEFodEe6_67aMO2jOsw"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_-bGlcH4XEe2cB7_PsKXsHQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_-bK24H4XEe2cB7_PsKXsHQ"/>
       </attributes>
@@ -1610,12 +1631,29 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A-b1sIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ"/>
       </table>
       <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-        <components xsi:type="ui:DataField" xmi:id="_A89PAIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bGlcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A9NtsIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bRkkH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A9uEAIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bdx0H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A9-isIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bow8H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A-NzQIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_A-guMIXrEe2kLcMqsIbMgQ" name="vote" label="Vote" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="vote"/>
+        <components xsi:type="ui:Group" xmi:id="_aYaIwFodEe6_67aMO2jOsw" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
+          <components xsi:type="ui:DataField" xmi:id="_aYaIwVodEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bGlcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_aYaIwlodEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_aYaIw1odEe6_67aMO2jOsw" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bow8H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_aYaIxFodEe6_67aMO2jOsw" name="debate" label="Debate" iconName="wechat" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_FldeQFodEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIxVodEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_7FHekG5UEe2wNaja8kBvcQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIxlodEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FMXEG5UEe2wNaja8kBvcQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIx1odEe6_67aMO2jOsw" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIyFodEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
+          </components>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_aYaIyVodEe6_67aMO2jOsw" name="issue" label="Issue" iconName="ticket-confirmation" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_J49TwFodEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="button" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIylodEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIy1odEe6_67aMO2jOsw" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIzFodEe6_67aMO2jOsw" name="description" label="Description" iconName="format-size" visible="true" sort="NONE" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIzVodEe6_67aMO2jOsw" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIzlodEe6_67aMO2jOsw" name="representation" label="Representation" iconName="format-size" visible="true" sort="NONE" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaIz1odEe6_67aMO2jOsw" name="numberOfDebates" label="NumberOfDebates" iconName="numeric" visible="true" sort="NONE" dataFeature="_mz8yQNu_Ee2Bgcx6em3jZg"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_aYaI0FodEe6_67aMO2jOsw" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+          </components>
+          <components xsi:type="ui:DataField" xmi:id="_aYaI0VodEe6_67aMO2jOsw" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-bRkkH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_aYaI0lodEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_-bdx0H4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:OperationForm" xmi:id="_aYaI01odEe6_67aMO2jOsw" name="vote" label="Take a vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="vote"/>
+        </components>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-Ze00H4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition" createable="false" updateable="false" deleteable="false">
@@ -1660,12 +1698,29 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A80sIIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
       </table>
       <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-        <components xsi:type="ui:DataField" xmi:id="_A7hEkIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A71NoIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A8IvoIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A8YnQIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_A8ptAIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_A85koIXrEe2kLcMqsIbMgQ" name="vote" label="Vote" iconName="chevron_right" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="vote"/>
+        <components xsi:type="ui:Group" xmi:id="_ULRSEFoSEe6_67aMO2jOsw" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
+          <components xsi:type="ui:DataField" xmi:id="_ULRSEVoSEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-Z65sH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_ULRSEloSEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_ULRSE1oSEe6_67aMO2jOsw" name="status" label="Status" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_ULRSFFoSEe6_67aMO2jOsw" name="debate" label="Debate" iconName="wechat" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_JjusoFoHEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSFVoSEe6_67aMO2jOsw" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_7FHekG5UEe2wNaja8kBvcQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSFloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FMXEG5UEe2wNaja8kBvcQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSF1oSEe6_67aMO2jOsw" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_7FRPkG5UEe2wNaja8kBvcQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_ULRSGFoSEe6_67aMO2jOsw" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
+          </components>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_C5_asFoWEe6_67aMO2jOsw" name="issue" label="Issue" iconName="ticket-confirmation" col="3" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_fBcycFoHEe6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="button" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6Ao0FoWEe6_67aMO2jOsw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6BP4FoWEe6_67aMO2jOsw" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6B28FoWEe6_67aMO2jOsw" name="description" label="Description" iconName="format-size" visible="true" sort="NONE" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6B28VoWEe6_67aMO2jOsw" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6CeAFoWEe6_67aMO2jOsw" name="representation" label="Representation" iconName="format-size" visible="true" sort="NONE" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6DFEFoWEe6_67aMO2jOsw" name="numberOfDebates" label="NumberOfDebates" iconName="numeric" visible="true" sort="NONE" dataFeature="_mz8yQNu_Ee2Bgcx6em3jZg"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_C6DFEVoWEe6_67aMO2jOsw" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+          </components>
+          <components xsi:type="ui:DataField" xmi:id="_ULRSGVoSEe6_67aMO2jOsw" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-aCOcH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_ULRSGloSEe6_67aMO2jOsw" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_-aKKQH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:OperationForm" xmi:id="_eMuv8FoSEe6_67aMO2jOsw" name="vote" label="Take a vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="vote"/>
+        </components>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_6dFRQFVeEe6uPON95HTfyQ" name="DebateParent" createable="false" updateable="false" deleteable="false">
@@ -2000,7 +2055,7 @@
       <inherited xmi:id="_Ay_9IGkgEe25ONJ3V89cVA"/>
     </attributes>
     <mapping xmi:id="_jjDEYGkPEe25ONJ3V89cVA" target="_jjCdUGkPEe25ONJ3V89cVA"/>
-    <operations xmi:id="_e_vckG6GEe2wNaja8kBvcQ" name="closeDebate" customImplementation="false" body="var edemokracia::VoteDefinition voteDef;&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#YES_NO) {&#xA;&#x9;voteDef = new edemokracia::YesNoVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#xA;&#x9;);&#xA;}&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#YES_NO_ABSTAIN) {&#xA;&#x9;voteDef = new edemokracia::YesNoAbstainVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#x9;&#x9;&#xA;&#x9;);&#xA;}&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#SELECT_ANSWER) {&#xA;&#x9;var edemokracia::SelectAnswerVoteDefinition selectVoteDef = new edemokracia::SelectAnswerVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#x9;&#x9;&#xA;&#x9;);&#xA;&#x9;&#xA;&#xA;&#x9;for (answer in input.answers) {&#xA;&#x9;&#x9;var edemokracia::SelectAnswerVoteSelection voteSelection = new edemokracia::SelectAnswerVoteSelection(&#xA;&#x9;&#x9;&#x9;title = answer.title,&#xA;&#x9;&#x9;&#x9;description = answer.description&#xA;&#x9;&#x9;);&#xA;&#x9;&#x9;selectVoteDef.voteSelections += voteSelection;&#xA;&#x9;}&#xA;&#x9;&#xA;&#x9;voteDef = selectVoteDef;&#xA;}&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#RATE) {&#xA;&#x9;voteDef = new edemokracia::RatingVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#x9;&#x9;&#xA;&#x9;);&#xA;}&#xA;&#xA;this.debateVote = voteDef;&#xA;&#xA;this.status = edemokracia::DebateStatus#CLOSED;&#xA;&#xA;return voteDef;&#xA; " stateful="true" operationType="INSTANCE" binding="" initializer="false">
+    <operations xmi:id="_e_vckG6GEe2wNaja8kBvcQ" name="closeDebate" customImplementation="false" body="var edemokracia::VoteDefinition voteDef;&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#YES_NO) {&#xA;&#x9;voteDef = new edemokracia::YesNoVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#xA;&#x9;);&#xA;}&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#YES_NO_ABSTAIN) {&#xA;&#x9;voteDef = new edemokracia::YesNoAbstainVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#x9;&#x9;&#xA;&#x9;);&#xA;}&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#SELECT_ANSWER) {&#xA;&#x9;var edemokracia::SelectAnswerVoteDefinition selectVoteDef = new edemokracia::SelectAnswerVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#x9;&#x9;&#xA;&#x9;);&#xA;&#x9;&#x9;&#xA;&#x9;voteDef = selectVoteDef;&#xA;}&#xA;&#xA;if (input.voteType == edemokracia::VoteTypeOnCloseDebate#RATE) {&#xA;&#x9;voteDef = new edemokracia::RatingVoteDefinition(&#xA;&#x9;&#x9;title = input.title, &#xA;&#x9;&#x9;description = input.description,&#xA;&#x9;&#x9;closeAt = input.closeAt,&#xA;&#x9;&#x9;status = edemokracia::VoteStatus#CREATED&#x9;&#x9;&#xA;&#x9;);&#xA;}&#xA;&#xA;this.debateVote = voteDef;&#xA;&#xA;this.status = edemokracia::DebateStatus#CLOSED;&#xA;&#xA;return voteDef;&#xA; " stateful="true" operationType="INSTANCE" binding="" initializer="false">
       <input xmi:id="_dymMoG6JEe2wNaja8kBvcQ" lower="1" upper="1" target="_NGvTUG6JEe2wNaja8kBvcQ" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <output xmi:id="_lAy4sG6JEe2wNaja8kBvcQ" lower="1" upper="1" target="_0n43QG5mEe2wNaja8kBvcQ" name="output" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" rangeType="ANY"/>
       <inherited xmi:id="_e_wqsG6GEe2wNaja8kBvcQ"/>
@@ -2407,9 +2462,6 @@
     <view xmi:id="_GJeu0G6gEe2wNaja8kBvcQ" name="YesNoVoteEntry_View_Edit" label="YesNoVoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_NGvTUG6JEe2wNaja8kBvcQ" name="CloseDebateInput" createable="false" updateable="false" deleteable="false">
-    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_OjiZsOSDEe20cv3f2msZXg" lower="0" upper="-1" target="_5jKXMOSCEe20cv3f2msZXg" name="answers" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="TRANSIENT" rangeType="ANY" getterExpression="">
-      <inherited xmi:id="_OjldAOSDEe20cv3f2msZXg"/>
-    </relations>
     <attributes xsi:type="structure:DataMember" xmi:id="_QG62gHMNEe2wNaja8kBvcQ" name="voteType" dataType="_6eNosHMMEe2wNaja8kBvcQ" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_QG950HMNEe2wNaja8kBvcQ"/>
     </attributes>
@@ -2422,18 +2474,12 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_meSj8H78Ee2kLcMqsIbMgQ" name="closeAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
       <inherited xmi:id="_meUZIH78Ee2kLcMqsIbMgQ"/>
     </attributes>
-    <form xmi:id="_NG8HoG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Form" label="CloseDebateInput Form" iconName="note-check" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
+    <form xmi:id="_NG8HoG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Form" label="CloseDebateInput Form" iconName="note-check" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" dialogSize="MD">
       <components xsi:type="ui:Group" xmi:id="_-U_QAIfTEe2u0fVmwtP5bA" name="debate" label="Close debate" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
         <components xsi:type="ui:DataField" xmi:id="_yfDhAH5VEe2kLcMqsIbMgQ" name="voteType" label="VoteType" iconName="list" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_QG62gHMNEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_uZqe8IfXEe2u0fVmwtP5bA" name="closeAt" label="Vote close at" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_meSj8H78Ee2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_uZrGAYfXEe2u0fVmwtP5bA" name="title" label="Vote title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_eJ0MUH78Ee2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_uZrGAIfXEe2u0fVmwtP5bA" name="description" label="Vote description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_iraIMH78Ee2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-      </components>
-      <components xsi:type="ui:Group" xmi:id="_oxM04OSNEe20cv3f2msZXg" name="group" label="Seletable answers" iconName="clipboard-list-outline" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
-        <components xsi:type="ui:TabularReferenceField" xmi:id="_J5sfwOSOEe20cv3f2msZXg" name="answers" label="" iconName="" col="12" stretch="NONE" row="5" fit="LOOSE" onBlur="false" relationFeature="_OjiZsOSDEe20cv3f2msZXg" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
-          <columns xsi:type="ui:DataColumn" xmi:id="_J5tG0OSOEe20cv3f2msZXg" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_DOGygOSDEe20cv3f2msZXg"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_J5tG0eSOEe20cv3f2msZXg" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_HgIBUOSDEe20cv3f2msZXg"/>
-        </components>
       </components>
     </form>
     <table xmi:id="_NHAZEG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Table" label="CloseDebateInput Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -2542,30 +2588,6 @@
     </form>
     <table xmi:id="_LEKjpH5YEe2kLcMqsIbMgQ" name="RatingVoteInput_Table" label="RatingVoteInput Table" iconName="vote-outline" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0"/>
     <view xmi:id="_LEKjpX5YEe2kLcMqsIbMgQ" name="RatingVoteInput_View_Edit" label="RatingVoteInput View / Edit" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
-  </elements>
-  <elements xsi:type="structure:TransferObjectType" xmi:id="_5jKXMOSCEe20cv3f2msZXg" name="SelectAnswerInput" createable="false" updateable="false" deleteable="false">
-    <attributes xsi:type="structure:DataMember" xmi:id="_DOGygOSDEe20cv3f2msZXg" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
-      <inherited xmi:id="_DOJ10OSDEe20cv3f2msZXg"/>
-    </attributes>
-    <attributes xsi:type="structure:DataMember" xmi:id="_HgIBUOSDEe20cv3f2msZXg" name="description" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
-      <inherited xmi:id="_HgJPcOSDEe20cv3f2msZXg"/>
-    </attributes>
-    <form xmi:id="_5jaO0OSCEe20cv3f2msZXg" name="SelectAnswerInput_Form" label="SelectAnswerInput Form" iconName="list-box" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
-      <components xsi:type="ui:Group" xmi:id="_bYo5sOTMEe2aFrahRIThWQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
-        <components xsi:type="ui:DataField" xmi:id="_d8XasOTMEe2aFrahRIThWQ" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_DOGygOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_d8WzoOTMEe2aFrahRIThWQ" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_HgIBUOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-      </components>
-    </form>
-    <table xmi:id="_5jhjkOSCEe20cv3f2msZXg" name="SelectAnswerInput_Table" label="SelectAnswerInput Table" iconName="list-box" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
-      <columns xsi:type="ui:DataColumn" xmi:id="_5ZnPceTLEe2aFrahRIThWQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_DOGygOSDEe20cv3f2msZXg"/>
-      <columns xsi:type="ui:DataColumn" xmi:id="_5ZnPcOTLEe2aFrahRIThWQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_HgIBUOSDEe20cv3f2msZXg"/>
-    </table>
-    <view xmi:id="_5jThIOSCEe20cv3f2msZXg" name="SelectAnswerInput_View_Edit" label="SelectAnswerInput View / Edit" iconName="list-box" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-      <components xsi:type="ui:Group" xmi:id="_-8FZgOTLEe2aFrahRIThWQ" name="group" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
-        <components xsi:type="ui:DataField" xmi:id="_LZ6ooOTLEe2aFrahRIThWQ" name="title" label="Title" iconName="text_fields" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_DOGygOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_LZ6BkOTLEe2aFrahRIThWQ" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_HgIBUOSDEe20cv3f2msZXg" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-      </components>
-    </view>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_-1U_0HWyEe2LTNnGda5kaw" name="YesNoAbstainVoteInput" createable="false" updateable="false" deleteable="false">
     <attributes xsi:type="structure:DataMember" xmi:id="_-1U_0XWyEe2LTNnGda5kaw" name="value" dataType="_ON5DcG6bEe2wNaja8kBvcQ" defaultExpression="" getterExpression="" identifier="false" memberType="TRANSIENT">
