@@ -13,7 +13,7 @@
 import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
+import { Box, Container, Grid, Button, Card, CardContent, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -57,10 +57,10 @@ import { adminAdminServiceForUserIssueImpl, adminUserIssuesServiceForClassImpl }
 import { useAdminUserIssuesCreateIssueAction } from './actions';
 
 import { PageActions } from './components/PageActions';
+import { ActiveIssuesGlobalTable } from './components/ActiveIssuesGlobalTable';
 import { ActiveIssuesInActivityCitiesTable } from './components/ActiveIssuesInActivityCitiesTable';
 import { ActiveIssuesInActivityCountiesTable } from './components/ActiveIssuesInActivityCountiesTable';
 import { ActiveIssuesInActivityDistrictsTable } from './components/ActiveIssuesInActivityDistrictsTable';
-import { ActiveIssuesGlobalTable } from './components/ActiveIssuesGlobalTable';
 import { ActiveIssuesInResidentCityTable } from './components/ActiveIssuesInResidentCityTable';
 import { ActiveIssuesInResidentCountyTable } from './components/ActiveIssuesInResidentCountyTable';
 import { ActiveIssuesInResidentDistrictTable } from './components/ActiveIssuesInResidentDistrictTable';
@@ -294,6 +294,16 @@ export default function AdminAdminUserIssueView() {
                         nestedDataKeys: ['ownedIssues'],
                       },
                       {
+                        id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssues',
+                        name: 'admin.UserIssuesView.activeGlobalIssues',
+                        label: t('admin.UserIssuesView.activeGlobalIssues', {
+                          defaultValue: 'Active global issues',
+                        }) as string,
+                        disabled: isLoading,
+                        hidden: false,
+                        nestedDataKeys: ['activeIssuesGlobal'],
+                      },
+                      {
                         id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityArea',
                         name: 'admin.UserIssuesView.activeIssuesByActivityArea',
                         label: t('admin.UserIssuesView.activeIssuesByActivityArea', {
@@ -305,7 +315,6 @@ export default function AdminAdminUserIssueView() {
                           'activeIssuesInActivityCities',
                           'activeIssuesInActivityCounties',
                           'activeIssuesInActivityDistricts',
-                          'activeIssuesGlobal',
                         ],
                       },
                       {
@@ -369,6 +378,83 @@ export default function AdminAdminUserIssueView() {
 
                     <Grid item xs={12} sm={12}>
                       <Grid
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssues"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <Grid
+                            id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapper"
+                            container
+                            direction="column"
+                            alignItems="flex-start"
+                            justifyContent="flex-start"
+                            spacing={2}
+                          >
+                            <Grid item xs={12} sm={12}>
+                              <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                                <Typography
+                                  id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalLabel"
+                                  variant="h5"
+                                  component="h1"
+                                >
+                                  {t('admin.UserIssuesView.activeGlobal.Label', { defaultValue: 'Global' })}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+
+                            <Grid item xs={12} sm={12}>
+                              <Grid
+                                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobal"
+                                container
+                                direction="row"
+                                alignItems="stretch"
+                                justifyContent="flex-start"
+                                spacing={2}
+                              >
+                                <Grid item xs={12} sm={12}>
+                                  <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapper"
+                                    container
+                                    direction="column"
+                                    alignItems="stretch"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
+                                      <Grid
+                                        id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobal"
+                                        container
+                                        direction="column"
+                                        alignItems="stretch"
+                                        justifyContent="flex-start"
+                                      >
+                                        <ActiveIssuesGlobalTable
+                                          isOwnerLoading={isLoading}
+                                          validation={validation}
+                                          fetchOwnerData={fetchData}
+                                          refreshCounter={refreshCounter}
+                                          ownerData={data}
+                                          editMode={editMode}
+                                          isFormUpdateable={isFormUpdateable}
+                                          storeDiff={storeDiff}
+                                        />
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                      <Grid
                         id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityArea"
                         container
                         direction="row"
@@ -383,14 +469,6 @@ export default function AdminAdminUserIssueView() {
                             validation={validation}
                             orientation='vertical'
                             childTabs={[
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobal',
-                                name: 'admin.UserIssuesView.activeGlobal',
-                                label: t('admin.UserIssuesView.activeGlobal', { defaultValue: 'Global' }) as string,
-                                disabled: isLoading,
-                                hidden: false,
-                                nestedDataKeys: ['activeIssuesGlobal'],
-                              },
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveByActivityInCounty',
                                 name: 'admin.UserIssuesView.activeByActivityInCounty',
@@ -423,49 +501,6 @@ export default function AdminAdminUserIssueView() {
                               },
                             ]}
                           >
-                            <Grid item xs={12} sm={12}>
-                              <Grid
-                                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobal"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              >
-                                <Grid item xs={12} sm={12}>
-                                  <Grid
-                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapper"
-                                    container
-                                    direction="column"
-                                    alignItems="stretch"
-                                    justifyContent="flex-start"
-                                    spacing={2}
-                                  >
-                                    <Grid item xs={12} sm={12}>
-                                      <Grid
-                                        id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobal"
-                                        container
-                                        direction="column"
-                                        alignItems="stretch"
-                                        justifyContent="flex-start"
-                                      >
-                                        <ActiveIssuesGlobalTable
-                                          isOwnerLoading={isLoading}
-                                          validation={validation}
-                                          fetchOwnerData={fetchData}
-                                          refreshCounter={refreshCounter}
-                                          ownerData={data}
-                                          editMode={editMode}
-                                          isFormUpdateable={isFormUpdateable}
-                                          storeDiff={storeDiff}
-                                        />
-                                      </Grid>
-                                    </Grid>
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-                            </Grid>
-
                             <Grid item xs={12} sm={12}>
                               <Grid
                                 id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveByActivityInCounty"
@@ -613,7 +648,7 @@ export default function AdminAdminUserIssueView() {
                             id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBar"
                             ownerData={data}
                             validation={validation}
-                            orientation='horizontal'
+                            orientation='vertical'
                             childTabs={[
                               {
                                 id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBarActiveByResidentInCounty',
@@ -733,7 +768,7 @@ export default function AdminAdminUserIssueView() {
                               </Grid>
                             </Grid>
 
-                            <Grid item xs={12} sm={12} md={4.0}>
+                            <Grid item xs={12} sm={12}>
                               <Grid
                                 id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBarActiveByResidentInDistrictActiveByResidentInDistrict"
                                 container

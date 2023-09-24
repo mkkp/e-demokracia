@@ -321,7 +321,7 @@
 /src/pages/admin/admin/user_issue/view/actions/ownedIssues/tableActionOwnedIssues.tsx,214511533ee9234f3b085aa396d2adb6
 /src/pages/admin/admin/user_issue/view/actions/ownedIssues/tableRefreshRelationOwnedIssues.tsx,bf01a7f5d66790ae3fddf9f5c695d07b
 /src/pages/admin/admin/user_issue/view/actions/pageRefreshUserIssue.tsx,1d38c1cd6094f726228e978d631f7696
-/src/pages/admin/admin/user_issue/view/components/ActiveIssuesGlobalTable.tsx,71f766ca27adc44c28ac4db50cc237a6
+/src/pages/admin/admin/user_issue/view/components/ActiveIssuesGlobalTable.tsx,57b91278c361d51b2fe80f3d832ba776
 /src/pages/admin/admin/user_issue/view/components/ActiveIssuesInActivityCitiesTable.tsx,9f9c4c37afa1430e17e2e53095ce19ef
 /src/pages/admin/admin/user_issue/view/components/ActiveIssuesInActivityCountiesTable.tsx,e8770c55f3383057bda102dd7fc57d54
 /src/pages/admin/admin/user_issue/view/components/ActiveIssuesInActivityDistrictsTable.tsx,2b5d68dfb0efdf90565346c61cfed4b8
@@ -330,7 +330,7 @@
 /src/pages/admin/admin/user_issue/view/components/ActiveIssuesInResidentDistrictTable.tsx,0d848d28ddaa0dcdf17f76a8d092838e
 /src/pages/admin/admin/user_issue/view/components/OwnedIssuesTable.tsx,4074e0bebb0b080c2356ee1ed199ceec
 /src/pages/admin/admin/user_issue/view/components/PageActions.tsx,02c71931f4343d62d578b28816d85343
-/src/pages/admin/admin/user_issue/view/index.tsx,f77647cd34d9ae6fd6f27cd420144f9f
+/src/pages/admin/admin/user_issue/view/index.tsx,5c543642d71faf9a9b666fbd29a0ca4a
 /src/pages/admin/admin/user_open_issues/table/actions/adminIssue/AdminIssueCreateCommentForm/index.tsx,ead6000ac342d6f08c14265dbdb190cf
 /src/pages/admin/admin/user_open_issues/table/actions/adminIssue/AdminIssueCreateDebateForm/index.tsx,ba98dc25734d18951292b1187dfa065c
 /src/pages/admin/admin/user_open_issues/table/actions/adminIssue/adminIssueCreateComment.tsx,c1bca441ff4c2269633ffe4c870abc8b
@@ -2347,7 +2347,7 @@ public/browserconfig.xml,a493ba0aa0b8ec8068d786d7248bb92c
 public/favicon-16x16.png,07d4a9035e87e12daeeaa07a7b0fc3b1
 public/favicon-32x32.png,16007d7b6ccc973a3d8e5e303919c012
 public/favicon.ico,17b33863654ecc54cddeece199c4ee97
-public/i18n/application_default.json,e879e8fd172162cbe873e69016835a21
+public/i18n/application_default.json,55501b33324e116279916dd47dab1145
 public/i18n/application_hu-HU.json,ac794a0d6ba5833d71c08c177aa55ecf
 public/i18n/system_default.json,3ac4e93a7df7e9ce0462b47d85e70d99
 public/i18n/system_en-US.json,3ac4e93a7df7e9ce0462b47d85e70d99

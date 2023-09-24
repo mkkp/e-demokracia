@@ -101,8 +101,8 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
   const [data, setData] = useState<GridRowModel<AdminIssueStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobal-${ownerData.__signedIdentifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobal-${ownerData.__signedIdentifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobal-${ownerData.__signedIdentifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobal-${ownerData.__signedIdentifier}-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -229,7 +229,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
 
   const activeIssuesGlobalRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalScopeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalScopeFilter',
       attributeName: 'scope',
       label: t('admin.UserIssuesView.activeIssuesGlobal.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -237,21 +237,21 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalTitleFilter',
       attributeName: 'title',
       label: t('admin.UserIssuesView.activeIssuesGlobal.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalCreatedFilter',
       attributeName: 'created',
       label: t('admin.UserIssuesView.activeIssuesGlobal.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalNumberOfDebatesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalNumberOfDebatesFilter',
       attributeName: 'numberOfDebates',
       label: t('admin.UserIssuesView.activeIssuesGlobal.numberOfDebates', {
         defaultValue: 'NumberOfDebates',
@@ -260,7 +260,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalStatusFilter',
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesGlobal.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -295,7 +295,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalScopeFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalScopeFilter',
       attributeName: 'scope',
       label: t('admin.UserIssuesView.activeIssuesGlobal.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -303,21 +303,21 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalTitleFilter',
       attributeName: 'title',
       label: t('admin.UserIssuesView.activeIssuesGlobal.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalCreatedFilter',
       attributeName: 'created',
       label: t('admin.UserIssuesView.activeIssuesGlobal.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalNumberOfDebatesFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalNumberOfDebatesFilter',
       attributeName: 'numberOfDebates',
       label: t('admin.UserIssuesView.activeIssuesGlobal.numberOfDebates', {
         defaultValue: 'NumberOfDebates',
@@ -326,7 +326,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByActivityAreaActiveIssuesByActivityAreaTabBarActiveGlobalActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssueViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalStatusFilter',
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesGlobal.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
