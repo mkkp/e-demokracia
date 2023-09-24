@@ -12,6 +12,8 @@ import type {
   CityQueryCustomizer,
   Issue,
   CityStored,
+  IssueQueryCustomizer,
+  IssueStored,
   City,
   CountyQueryCustomizer,
   County,

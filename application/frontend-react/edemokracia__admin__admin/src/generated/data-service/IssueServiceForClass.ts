@@ -10,8 +10,8 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   CommentStored,
   Issue,
-  User,
   IssueCategory,
+  User,
   IssueCategoryStored,
   CreateDebateInput,
   DistrictStored,
@@ -65,13 +65,6 @@ export interface IssueServiceForClass {
     queryCustomizer?: IssueAttachmentQueryCustomizer,
   ): Promise<Array<IssueAttachmentStored>>;
 
-  getOwner(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored>;
-
-  getRangeForOwner(
-    owner?: JudoIdentifiable<Issue> | Issue,
-    queryCustomizer?: UserQueryCustomizer,
-  ): Promise<Array<UserStored>>;
-
   getCategories(
     target: JudoIdentifiable<Issue>,
     queryCustomizer?: IssueCategoryQueryCustomizer,
@@ -88,13 +81,6 @@ export interface IssueServiceForClass {
     owner?: JudoIdentifiable<Issue> | Issue,
     queryCustomizer?: CommentQueryCustomizer,
   ): Promise<Array<CommentStored>>;
-
-  getCreatedBy(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored>;
-
-  getRangeForCreatedBy(
-    owner?: JudoIdentifiable<Issue> | Issue,
-    queryCustomizer?: UserQueryCustomizer,
-  ): Promise<Array<UserStored>>;
 
   getIssueType(target: JudoIdentifiable<Issue>, queryCustomizer?: IssueTypeQueryCustomizer): Promise<IssueTypeStored>;
 
@@ -123,6 +109,20 @@ export interface IssueServiceForClass {
     owner?: JudoIdentifiable<Issue> | Issue,
     queryCustomizer?: CityQueryCustomizer,
   ): Promise<Array<CityStored>>;
+
+  getOwner(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored>;
+
+  getRangeForOwner(
+    owner?: JudoIdentifiable<Issue> | Issue,
+    queryCustomizer?: UserQueryCustomizer,
+  ): Promise<Array<UserStored>>;
+
+  getCreatedBy(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored>;
+
+  getRangeForCreatedBy(
+    owner?: JudoIdentifiable<Issue> | Issue,
+    queryCustomizer?: UserQueryCustomizer,
+  ): Promise<Array<UserStored>>;
 
   createDebate(owner: JudoIdentifiable<Issue>, target: CreateDebateInput): Promise<DebateStored>;
 

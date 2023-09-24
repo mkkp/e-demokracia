@@ -5,8 +5,7 @@
 // Path expression: #actionsIndexPath(#self)
 // Template name: actor/src/pages/actions/index.tsx
 // Template file: actor/src/pages/actions/index.tsx.hbs
-export * from './issues/rowDeleteIssues';
-export * from './issues/rowViewIssues';
+export * from './issuesOwned/rowViewIssuesOwned';
 export * from './adminDebate/AdminDebateCloseDebateForm';
 export * from './adminDebate/adminDebateCloseDebate';
 export * from './adminIssue/AdminIssueCreateDebateForm';
@@ -15,6 +14,7 @@ export * from './adminIssue/AdminIssueCreateCommentForm';
 export * from './adminIssue/adminIssueCreateComment';
 export * from './adminDebate/AdminDebateCreateArgumentForm';
 export * from './adminDebate/adminDebateCreateArgument';
+export * from './issuesOwned/rowDeleteIssuesOwned';
 export * from './debates/rowViewDebates';
 export * from './adminDashboard/AdminDashboardCreateIssueForm';
 export * from './adminDashboard/adminDashboardCreateIssue';

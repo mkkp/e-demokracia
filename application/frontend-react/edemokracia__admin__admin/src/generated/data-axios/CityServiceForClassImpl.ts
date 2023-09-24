@@ -11,6 +11,9 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   CityQueryCustomizer,
   CityStored,
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
   DistrictStored,
   City,
   District,
@@ -61,6 +64,36 @@ export class CityServiceForClassImpl extends JudoAxiosService implements CitySer
     queryCustomizer?: DistrictQueryCustomizer,
   ): Promise<Array<DistrictStored>> {
     const path = '/City/districts/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getIssues(target: JudoIdentifiable<City>, queryCustomizer?: IssueQueryCustomizer): Promise<Array<IssueStored>> {
+    const path = '/City/issues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssues(
+    owner?: JudoIdentifiable<City> | City,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/City/issues/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

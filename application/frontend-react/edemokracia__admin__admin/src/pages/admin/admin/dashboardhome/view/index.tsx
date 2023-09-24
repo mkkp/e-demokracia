@@ -135,7 +135,7 @@ export default function AdminAdminDashboardhomeView() {
 
   const queryCustomizer: AdminDashboardQueryCustomizer = {
     _mask:
-      '{welcome,issues{title,created,status,numberOfDebates},debates{title,issueTitle,closeAt,status,isNotClosed},voteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
+      '{welcome,issuesOwned{title,created,status,numberOfDebates},debates{title,issueTitle,closeAt,status,isNotClosed},voteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminDashboardhomeViewPostRefreshHook>(
@@ -315,7 +315,7 @@ export default function AdminAdminDashboardhomeView() {
                     disabled: isLoading,
                     hidden: false,
                     icon: 'ticket-account',
-                    nestedDataKeys: ['issues'],
+                    nestedDataKeys: ['issuesOwned'],
                   },
                   {
                     id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeViewDefaultDashboardViewEditTabBarMydebates',

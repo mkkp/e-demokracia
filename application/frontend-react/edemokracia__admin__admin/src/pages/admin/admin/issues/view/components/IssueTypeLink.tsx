@@ -70,6 +70,7 @@ import {
   AdminUser,
   AdminUserQueryCustomizer,
   AdminUserStored,
+  EdemokraciaIssueScope,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
   _StringOperation,

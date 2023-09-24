@@ -8,7 +8,15 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import type { DistrictStored, City, DistrictQueryCustomizer, District } from '../data-api';
+import type {
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
+  DistrictStored,
+  City,
+  DistrictQueryCustomizer,
+  District,
+} from '../data-api';
 import type { CityServiceForDistricts } from '../data-service';
 
 /**

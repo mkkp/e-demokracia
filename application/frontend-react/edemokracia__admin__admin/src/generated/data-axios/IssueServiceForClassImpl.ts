@@ -11,8 +11,8 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   CommentStored,
   Issue,
-  User,
   IssueCategory,
+  User,
   IssueCategoryStored,
   CreateDebateInput,
   DistrictStored,
@@ -131,36 +131,6 @@ export class IssueServiceForClassImpl extends JudoAxiosService implements IssueS
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getOwner(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored> {
-    const path = '/Issue/owner/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForOwner(
-    owner?: JudoIdentifiable<Issue> | Issue,
-    queryCustomizer?: UserQueryCustomizer,
-  ): Promise<Array<UserStored>> {
-    const path = '/Issue/owner/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
   async getCategories(
     target: JudoIdentifiable<Issue>,
     queryCustomizer?: IssueCategoryQueryCustomizer,
@@ -216,36 +186,6 @@ export class IssueServiceForClassImpl extends JudoAxiosService implements IssueS
     queryCustomizer?: CommentQueryCustomizer,
   ): Promise<Array<CommentStored>> {
     const path = '/Issue/comments/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getCreatedBy(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored> {
-    const path = '/Issue/createdBy/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForCreatedBy(
-    owner?: JudoIdentifiable<Issue> | Issue,
-    queryCustomizer?: UserQueryCustomizer,
-  ): Promise<Array<UserStored>> {
-    const path = '/Issue/createdBy/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
@@ -372,6 +312,66 @@ export class IssueServiceForClassImpl extends JudoAxiosService implements IssueS
     queryCustomizer?: CityQueryCustomizer,
   ): Promise<Array<CityStored>> {
     const path = '/Issue/city/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getOwner(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored> {
+    const path = '/Issue/owner/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwner(
+    owner?: JudoIdentifiable<Issue> | Issue,
+    queryCustomizer?: UserQueryCustomizer,
+  ): Promise<Array<UserStored>> {
+    const path = '/Issue/owner/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getCreatedBy(target: JudoIdentifiable<Issue>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored> {
+    const path = '/Issue/createdBy/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForCreatedBy(
+    owner?: JudoIdentifiable<Issue> | Issue,
+    queryCustomizer?: UserQueryCustomizer,
+  ): Promise<Array<UserStored>> {
+    const path = '/Issue/createdBy/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

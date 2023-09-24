@@ -18,6 +18,8 @@ import {
   CityQueryCustomizer,
   CityStored,
   UserQueryCustomizer,
+  IssueQueryCustomizer,
+  IssueStored,
   UserStored,
   SimpleVoteStored,
   DistrictQueryCustomizer,

@@ -7,7 +7,7 @@
 // Template file: rest/mask.ts.hbs
 
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
-import { CountyAttributes, CityAttributes } from '../model';
+import { CountyAttributes, CityAttributes, IssueAttributes } from '../model';
 
 import { CityDistrictsMaskBuilder } from './CityMaskBuilder';
 

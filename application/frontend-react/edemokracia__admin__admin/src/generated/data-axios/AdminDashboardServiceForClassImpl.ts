@@ -51,11 +51,11 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getIssues(
+  async getIssuesOwned(
     target: JudoIdentifiable<AdminDashboard>,
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>> {
-    const path = '/admin/Dashboard/issues/~list';
+    const path = '/admin/Dashboard/issuesOwned/~list';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -68,11 +68,11 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForIssues(
+  async getRangeForIssuesOwned(
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>> {
-    const path = '/admin/Dashboard/issues/~range';
+    const path = '/admin/Dashboard/issuesOwned/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

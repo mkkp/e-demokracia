@@ -12,6 +12,7 @@ import { CommentStored } from './Comment';
 import { CountyStored } from './County';
 import { DebateStored } from './Debate';
 import { DistrictStored } from './District';
+import { EdemokraciaIssueScope } from './EdemokraciaIssueScope';
 import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
 import { EdemokraciaVoteType } from './EdemokraciaVoteType';
 import { IssueAttachmentStored } from './IssueAttachment';
@@ -25,30 +26,31 @@ export interface Issue {
   description: string;
   status: EdemokraciaIssueStatus;
   defaultVoteType?: null | EdemokraciaVoteType;
+  scope?: null | EdemokraciaIssueScope;
 
   debates?: null | Array<DebateStored>;
   attachments?: null | Array<IssueAttachmentStored>;
-  owner?: null | UserStored;
   categories?: null | Array<IssueCategoryStored>;
   comments?: null | Array<CommentStored>;
-  createdBy?: null | UserStored;
   issueType?: null | IssueTypeStored;
   county?: null | CountyStored;
   district?: null | DistrictStored;
   city?: null | CityStored;
+  owner?: null | UserStored;
+  createdBy?: null | UserStored;
 }
-export type IssueAttributes = 'created' | 'title' | 'description' | 'status' | 'defaultVoteType';
+export type IssueAttributes = 'created' | 'title' | 'description' | 'status' | 'defaultVoteType' | 'scope';
 
 export type IssueRelations =
   | 'debates'
   | 'attachments'
-  | 'owner'
   | 'categories'
   | 'comments'
-  | 'createdBy'
   | 'issueType'
   | 'county'
   | 'district'
-  | 'city';
+  | 'city'
+  | 'owner'
+  | 'createdBy';
 
 export interface IssueStored extends JudoStored<Issue>, Issue {}

@@ -83,9 +83,10 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.createDebate.ButtonCallOperation', {
-    defaultValue: 'Create debate',
-  });
+  const title: string = t(
+    'edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.createDebate.ButtonCallOperation',
+    { defaultValue: 'Create debate' },
+  );
   const { service: customPostHandler } = useTrackService<AdminIssueCreateDebateActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_ISSUE_CREATE_DEBATE_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );

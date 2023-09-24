@@ -10,6 +10,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   SimpleVote,
   User,
+  Issue,
   DistrictStored,
   City,
   County,
@@ -17,6 +18,8 @@ import {
   CityQueryCustomizer,
   CityStored,
   UserQueryCustomizer,
+  IssueQueryCustomizer,
+  IssueStored,
   Debate,
   UserStored,
   SimpleVoteStored,

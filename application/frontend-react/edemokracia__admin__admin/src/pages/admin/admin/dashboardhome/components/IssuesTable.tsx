@@ -69,8 +69,8 @@ import {
 import { adminDashboardServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshDashboardhomeAction,
-  useRowDeleteIssuesAction,
-  useRowViewIssuesAction,
+  useRowDeleteIssuesOwnedAction,
+  useRowViewIssuesOwnedAction,
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
 } from '../actions';
@@ -101,7 +101,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues-${ownerData.__identifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssues-${ownerData.__identifier}-filters`;
-  const [issuesFilterModel, setIssuesFilterModel] = useState<GridFilterModel>(
+  const [issuesOwnedFilterModel, setIssuesOwnedFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
@@ -118,13 +118,13 @@ export const IssuesTable = (props: IssuesTableProps) => {
     selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
   }, [selectionModel]);
 
-  const [issuesSortModel, setIssuesSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [issuesOwnedSortModel, setIssuesOwnedSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
 
-  const issuesColumns: GridColDef<AdminIssueStored>[] = [
+  const issuesOwnedColumns: GridColDef<AdminIssueStored>[] = [
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', {
+      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -136,7 +136,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', {
+      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -163,7 +163,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', {
+      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -184,7 +184,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'numberOfDebates',
-      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
+      headerName: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.numberOfDebates', {
         defaultValue: 'Debates',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -198,25 +198,31 @@ export const IssuesTable = (props: IssuesTableProps) => {
     },
   ];
 
-  const issuesRangeFilterOptions: FilterOption[] = [
+  const issuesOwnedRangeFilterOptions: FilterOption[] = [
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
       attributeName: 'title',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', { defaultValue: 'Title' }) as string,
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.title', {
+        defaultValue: 'Title',
+      }) as string,
       filterType: FilterType.string,
     },
 
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
       attributeName: 'created',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', { defaultValue: 'Created' }) as string,
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.created', {
+        defaultValue: 'Created',
+      }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
       attributeName: 'status',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', { defaultValue: 'Status' }) as string,
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.status', {
+        defaultValue: 'Status',
+      }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
     },
@@ -224,42 +230,42 @@ export const IssuesTable = (props: IssuesTableProps) => {
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
       attributeName: 'numberOfDebates',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.numberOfDebates', {
         defaultValue: 'Debates',
       }) as string,
       filterType: FilterType.numeric,
     },
   ];
 
-  const issuesInitialQueryCustomizer: AdminIssueQueryCustomizer = {
+  const issuesOwnedInitialQueryCustomizer: AdminIssueQueryCustomizer = {
     _mask: '{title,created,status,numberOfDebates}',
-    _orderBy: issuesSortModel.length
+    _orderBy: issuesOwnedSortModel.length
       ? [
           {
-            attribute: issuesSortModel[0].field,
-            descending: issuesSortModel[0].sort === 'desc',
+            attribute: issuesOwnedSortModel[0].field,
+            descending: issuesOwnedSortModel[0].sort === 'desc',
           },
         ]
       : [],
   };
 
   const pageRefreshDashboardhomeAction = usePageRefreshDashboardhomeAction();
-  const rowDeleteIssuesAction = useRowDeleteIssuesAction();
-  const rowViewIssuesAction = useRowViewIssuesAction();
+  const rowDeleteIssuesOwnedAction = useRowDeleteIssuesOwnedAction();
+  const rowViewIssuesOwnedAction = useRowViewIssuesOwnedAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
 
-  const issuesRowActions: TableRowAction<AdminIssueStored>[] = [
+  const issuesOwnedRowActions: TableRowAction<AdminIssueStored>[] = [
     {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDashboardIssuesRowDelete',
+      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDashboardIssuesOwnedRowDelete',
       label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminIssueStored) => rowDeleteIssuesAction(ownerData, row, () => fetchOwnerData()),
+      action: async (row: AdminIssueStored) => rowDeleteIssuesOwnedAction(ownerData, row, () => fetchOwnerData()),
       disabled: (row: AdminIssueStored) => editMode || !row.__deleteable,
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardEdemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateButtonCallOperation',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.createDebate.ButtonCallOperation', {
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.createDebate.ButtonCallOperation', {
         defaultValue: 'Create debate',
       }) as string,
       icon: <MdiIcon path="wechat" />,
@@ -268,7 +274,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardEdemokraciaAdminAdminEdemokraciaAdminIssueCreateCommentButtonCallOperation',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.createComment.ButtonCallOperation', {
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.createComment.ButtonCallOperation', {
         defaultValue: 'Add comment',
       }) as string,
       icon: <MdiIcon path="comment-text-multiple" />,
@@ -281,21 +287,27 @@ export const IssuesTable = (props: IssuesTableProps) => {
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesTitleFilter',
       attributeName: 'title',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.title', { defaultValue: 'Title' }) as string,
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.title', {
+        defaultValue: 'Title',
+      }) as string,
       filterType: FilterType.string,
     },
 
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesCreatedFilter',
       attributeName: 'created',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.created', { defaultValue: 'Created' }) as string,
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.created', {
+        defaultValue: 'Created',
+      }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesStatusFilter',
       attributeName: 'status',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.status', { defaultValue: 'Status' }) as string,
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.status', {
+        defaultValue: 'Status',
+      }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
     },
@@ -303,7 +315,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardhomeDashboardDefaultDashboardViewEditTabBarMyissuesMyissuesIssuesLabelWrapperIssuesNumberOfDebatesFilter',
       attributeName: 'numberOfDebates',
-      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issues.numberOfDebates', {
+      label: t('edemokracia.admin.Admin.dashboardhome.Dashboard.issuesOwned.numberOfDebates', {
         defaultValue: 'Debates',
       }) as string,
       filterType: FilterType.numeric,
@@ -329,7 +341,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
       itemTitleFn: (item) => item.title!,
       selectedItems: selectedRows.current,
       action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-        await rowDeleteIssuesAction(ownerData, item, successHandler, errorHandler, true);
+        await rowDeleteIssuesOwnedAction(ownerData, item, successHandler, errorHandler, true);
       },
       onClose: (needsRefresh) => {
         if (needsRefresh) {
@@ -341,7 +353,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
   }, []);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {
     // every row has the same `__deleteable` flag
-    return !!selectionModel.length && true && isFormUpdateable() && !true && !!data[0]?.__deleteable;
+    return !!selectionModel.length && true && isFormUpdateable() && !false && !!data[0]?.__deleteable;
   }, [ownerData, data, selectionModel]);
 
   useEffect(() => {
@@ -353,15 +365,15 @@ export const IssuesTable = (props: IssuesTableProps) => {
 
       const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
       if (storedFilterModel !== null) {
-        setIssuesFilterModel(storedFilterModel);
+        setIssuesOwnedFilterModel(storedFilterModel);
       }
     }
   }, [ownerData]);
 
   useEffect(() => {
-    const newData = applyInMemoryFilters<AdminIssueStored>(filters, ownerData?.issues ?? []);
+    const newData = applyInMemoryFilters<AdminIssueStored>(filters, ownerData?.issuesOwned ?? []);
     setData(newData);
-  }, [ownerData?.issues, filters]);
+  }, [ownerData?.issuesOwned, filters]);
 
   return (
     <>
@@ -371,7 +383,8 @@ export const IssuesTable = (props: IssuesTableProps) => {
         sx={{
           // overflow: 'hidden',
           display: 'grid',
-          border: (theme) => (props.validation.has('issues') ? `2px solid ${theme.palette.error.main}` : undefined),
+          border: (theme) =>
+            props.validation.has('issuesOwned') ? `2px solid ${theme.palette.error.main}` : undefined,
         }}
         slotProps={{
           filterPanel: {
@@ -385,10 +398,10 @@ export const IssuesTable = (props: IssuesTableProps) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
         columns={[
-          ...issuesColumns,
+          ...issuesOwnedColumns,
           ...columnsActionCalculator(
-            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardIssues',
-            issuesRowActions,
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesOwned',
+            issuesOwnedRowActions,
             t,
             { shownActions: 2 },
           ),
@@ -401,12 +414,12 @@ export const IssuesTable = (props: IssuesTableProps) => {
         }}
         onRowClick={(params: GridRowParams<AdminIssueStored>) => {
           if (!editMode) {
-            rowViewIssuesAction(ownerData, params.row, () => fetchOwnerData());
+            rowViewIssuesOwnedAction(ownerData, params.row, () => fetchOwnerData());
           }
         }}
-        sortModel={issuesSortModel}
+        sortModel={issuesOwnedSortModel}
         onSortModelChange={(newModel: GridSortModel) => {
-          setIssuesSortModel(newModel);
+          setIssuesOwnedSortModel(newModel);
         }}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
@@ -444,7 +457,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
           ),
         }}
       />
-      {props.validation.has('issues') && (
+      {props.validation.has('issuesOwned') && (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -455,7 +468,7 @@ export const IssuesTable = (props: IssuesTableProps) => {
           }}
         >
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
-          <Typography>{props.validation.get('issues')}</Typography>
+          <Typography>{props.validation.get('issuesOwned')}</Typography>
         </Box>
       )}
     </>

@@ -7,10 +7,15 @@
 // Template file: model/class.ts.hbs
 
 import type { JudoStored } from '@judo/data-api-common';
+import { IssueStored } from './Issue';
 
 export interface District {
   name: string;
+
+  issues?: null | Array<IssueStored>;
 }
 export type DistrictAttributes = 'name';
+
+export type DistrictRelations = 'issues';
 
 export interface DistrictStored extends JudoStored<District>, District {}

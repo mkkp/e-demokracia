@@ -83,6 +83,7 @@ import {
   AdminUser,
   AdminUserQueryCustomizer,
   AdminUserStored,
+  EdemokraciaIssueScope,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
 } from '~/generated/data-api';

@@ -10,6 +10,9 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   CityQueryCustomizer,
   CityStored,
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
   DistrictStored,
   City,
   County,

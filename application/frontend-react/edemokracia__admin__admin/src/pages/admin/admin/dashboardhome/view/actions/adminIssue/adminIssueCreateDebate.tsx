@@ -83,7 +83,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('admin.DashboardView.issues.createDebate.ButtonCallOperation', {
+  const title: string = t('admin.DashboardView.issuesOwned.createDebate.ButtonCallOperation', {
     defaultValue: 'Create debate',
   });
   const { service: customPostHandler } = useTrackService<AdminIssueCreateDebateActionPostHandlerHook>(

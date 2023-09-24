@@ -9,6 +9,7 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { Issue } from '../model/Issue';
 
+import { FilterByIssueScope } from './FilterByIssueScope';
 import { FilterByIssueStatus } from './FilterByIssueStatus';
 import { FilterByString } from './FilterByString';
 import { FilterByText } from './FilterByText';
@@ -21,4 +22,5 @@ export interface IssueQueryCustomizer extends QueryCustomizer<Issue> {
   description?: Array<FilterByText>;
   status?: Array<FilterByIssueStatus>;
   defaultVoteType?: Array<FilterByVoteType>;
+  scope?: Array<FilterByIssueScope>;
 }

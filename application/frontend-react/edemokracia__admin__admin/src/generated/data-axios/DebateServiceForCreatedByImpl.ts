@@ -11,6 +11,7 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   SimpleVote,
   User,
+  Issue,
   DistrictStored,
   City,
   County,
@@ -18,6 +19,8 @@ import type {
   CityQueryCustomizer,
   CityStored,
   UserQueryCustomizer,
+  IssueQueryCustomizer,
+  IssueStored,
   Debate,
   UserStored,
   SimpleVoteStored,

@@ -34,12 +34,12 @@ export interface AdminDashboardServiceForClass {
     queryCustomizer?: AdminDashboardQueryCustomizer,
   ): Promise<AdminDashboardStored>;
 
-  getIssues(
+  getIssuesOwned(
     target: JudoIdentifiable<AdminDashboard>,
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
-  getRangeForIssues(
+  getRangeForIssuesOwned(
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;

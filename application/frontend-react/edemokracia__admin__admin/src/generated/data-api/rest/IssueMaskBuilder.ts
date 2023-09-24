@@ -16,8 +16,8 @@ import {
   IssueAttributes,
   DebateAttributes,
   IssueAttachmentAttributes,
-  UserAttributes,
   IssueCategoryAttributes,
+  UserAttributes,
 } from '../model';
 
 import {} from './IssueAttachmentMaskBuilder';

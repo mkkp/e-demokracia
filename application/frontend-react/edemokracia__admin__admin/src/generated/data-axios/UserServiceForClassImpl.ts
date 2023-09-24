@@ -11,6 +11,7 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   SimpleVote,
   User,
+  Issue,
   DistrictStored,
   City,
   County,
@@ -18,6 +19,8 @@ import type {
   CityQueryCustomizer,
   CityStored,
   UserQueryCustomizer,
+  IssueQueryCustomizer,
+  IssueStored,
   UserStored,
   SimpleVoteStored,
   District,
@@ -265,6 +268,369 @@ export class UserServiceForClassImpl extends JudoAxiosService implements UserSer
     queryCustomizer?: CountyQueryCustomizer,
   ): Promise<Array<CountyStored>> {
     const path = '/User/activityCounties/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getFavoriteIssues(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/favoriteIssues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForFavoriteIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/favoriteIssues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getActiveIssuesInActivityCities(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInActivityCities/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveIssuesInActivityCities(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInActivityCities/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getOwnedIssues(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/ownedIssues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwnedIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/ownedIssues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getCreatedIssues(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/createdIssues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForCreatedIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/createdIssues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getOwnedPendingIssues(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/ownedPendingIssues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwnedPendingIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/ownedPendingIssues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getActiveIssuesInActivityCounties(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInActivityCounties/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveIssuesInActivityCounties(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInActivityCounties/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getAcitveIssuesInActivityDistricts(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/acitveIssuesInActivityDistricts/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForAcitveIssuesInActivityDistricts(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/acitveIssuesInActivityDistricts/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getActiveIssuesGlobal(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesGlobal/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveIssuesGlobal(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesGlobal/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getActiveIssuesInResidentDistrict(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInResidentDistrict/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveIssuesInResidentDistrict(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInResidentDistrict/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getActiveIssuesInResidentCity(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInResidentCity/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveIssuesInResidentCity(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInResidentCity/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getActiveIssuesInResidentCounty(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInResidentCounty/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveIssuesInResidentCounty(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/User/activeIssuesInResidentCounty/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

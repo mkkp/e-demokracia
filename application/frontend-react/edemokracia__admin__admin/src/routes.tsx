@@ -144,6 +144,79 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_ADMIN_USER_CREATED_ISSUES_TABLE_INTERFACE_KEY = 'AdminAdminUserCreatedIssuesTableRoute';
+export const routeToAdminAdminUserCreatedIssuesTable = (): string => 'admin/admin/user_created_issues/table';
+const AdminAdminUserCreatedIssuesTable = lazy(() => import('./pages/admin/admin/user_created_issues/table/index'));
+
+routes.push({
+  path: 'admin/admin/user_created_issues/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_CREATED_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminUserCreatedIssuesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_CREATED_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminUserCreatedIssuesViewRoute';
+export const routeToAdminAdminUserCreatedIssuesView = (signedIdentifier: string): string =>
+  'admin/admin/user_created_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserCreatedIssuesView = lazy(() => import('./pages/admin/admin/user_created_issues/view/index'));
+
+routes.push({
+  path: 'admin/admin/user_created_issues/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_CREATED_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserCreatedIssuesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_ISSUE_VIEW_INTERFACE_KEY = 'AdminAdminUserIssueViewRoute';
+export const routeToAdminAdminUserIssueView = (signedIdentifier: string): string =>
+  'admin/admin/user_issue/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserIssueView = lazy(() => import('./pages/admin/admin/user_issue/view/index'));
+
+routes.push({
+  path: 'admin/admin/user_issue/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_ISSUE_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserIssueView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_TABLE_INTERFACE_KEY = 'AdminAdminUserOpenIssuesTableRoute';
+export const routeToAdminAdminUserOpenIssuesTable = (): string => 'admin/admin/user_open_issues/table';
+const AdminAdminUserOpenIssuesTable = lazy(() => import('./pages/admin/admin/user_open_issues/table/index'));
+
+routes.push({
+  path: 'admin/admin/user_open_issues/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminUserOpenIssuesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminUserOpenIssuesViewRoute';
+export const routeToAdminAdminUserOpenIssuesView = (signedIdentifier: string): string =>
+  'admin/admin/user_open_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserOpenIssuesView = lazy(() => import('./pages/admin/admin/user_open_issues/view/index'));
+
+routes.push({
+  path: 'admin/admin/user_open_issues/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserOpenIssuesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_ADMIN_USERS_TABLE_INTERFACE_KEY = 'AdminAdminUsersTableRoute';
 export const routeToAdminAdminUsersTable = (): string => 'admin/admin/users/table';
 const AdminAdminUsersTable = lazy(() => import('./pages/admin/admin/users/table/index'));
@@ -427,17 +500,17 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_DASHBOARD_ISSUES_VIEW_INTERFACE_KEY = 'AdminDashboardIssuesViewRoute';
-export const routeToAdminDashboardIssuesView = (signedIdentifier: string): string =>
-  'admin/dashboard/issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminDashboardIssuesView = lazy(() => import('./pages/admin/dashboard/issues/view/index'));
+export const ROUTE_ADMIN_DASHBOARD_ISSUES_OWNED_VIEW_INTERFACE_KEY = 'AdminDashboardIssuesOwnedViewRoute';
+export const routeToAdminDashboardIssuesOwnedView = (signedIdentifier: string): string =>
+  'admin/dashboard/issues_owned/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardIssuesOwnedView = lazy(() => import('./pages/admin/dashboard/issues_owned/view/index'));
 
 routes.push({
-  path: 'admin/dashboard/issues/view/:signedIdentifier',
+  path: 'admin/dashboard/issues_owned/view/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_ISSUES_VIEW_INTERFACE_KEY})`}>
-        <AdminDashboardIssuesView />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_ISSUES_OWNED_VIEW_INTERFACE_KEY})`}>
+        <AdminDashboardIssuesOwnedView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -895,6 +968,363 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTES_VIEW_INTERFACE_KEY})`}>
         <AdminUserVotesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_GLOBAL_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesGlobalTableRoute';
+export const routeToAdminUserIssuesActiveIssuesGlobalTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_global/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserIssuesActiveIssuesGlobalTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_global/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_global/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_GLOBAL_TABLE_INTERFACE_KEY})`}>
+        <AdminUserIssuesActiveIssuesGlobalTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_GLOBAL_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesGlobalViewRoute';
+export const routeToAdminUserIssuesActiveIssuesGlobalView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_global/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserIssuesActiveIssuesGlobalView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_global/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_global/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_GLOBAL_VIEW_INTERFACE_KEY})`}>
+        <AdminUserIssuesActiveIssuesGlobalView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInActivityCitiesTableRoute';
+export const routeToAdminUserIssuesActiveIssuesInActivityCitiesTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_activity_cities/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInActivityCitiesTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_activity_cities/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_activity_cities/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInActivityCitiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInActivityCitiesViewRoute';
+export const routeToAdminUserIssuesActiveIssuesInActivityCitiesView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_activity_cities/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInActivityCitiesView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_activity_cities/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_activity_cities/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInActivityCitiesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInActivityCountiesTableRoute';
+export const routeToAdminUserIssuesActiveIssuesInActivityCountiesTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_activity_counties/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInActivityCountiesTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_activity_counties/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_activity_counties/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInActivityCountiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInActivityCountiesViewRoute';
+export const routeToAdminUserIssuesActiveIssuesInActivityCountiesView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_activity_counties/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInActivityCountiesView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_activity_counties/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_activity_counties/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInActivityCountiesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInActivityDistrictsTableRoute';
+export const routeToAdminUserIssuesActiveIssuesInActivityDistrictsTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_activity_districts/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInActivityDistrictsTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_activity_districts/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_activity_districts/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInActivityDistrictsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInActivityDistrictsViewRoute';
+export const routeToAdminUserIssuesActiveIssuesInActivityDistrictsView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_activity_districts/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInActivityDistrictsView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_activity_districts/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_activity_districts/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInActivityDistrictsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInResidentCityTableRoute';
+export const routeToAdminUserIssuesActiveIssuesInResidentCityTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_resident_city/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInResidentCityTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_resident_city/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_resident_city/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInResidentCityTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInResidentCityViewRoute';
+export const routeToAdminUserIssuesActiveIssuesInResidentCityView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_resident_city/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInResidentCityView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_resident_city/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_resident_city/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInResidentCityView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInResidentCountyTableRoute';
+export const routeToAdminUserIssuesActiveIssuesInResidentCountyTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_resident_county/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInResidentCountyTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_resident_county/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_resident_county/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInResidentCountyTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInResidentCountyViewRoute';
+export const routeToAdminUserIssuesActiveIssuesInResidentCountyView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_resident_county/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInResidentCountyView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_resident_county/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_resident_county/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInResidentCountyView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInResidentDistrictTableRoute';
+export const routeToAdminUserIssuesActiveIssuesInResidentDistrictTable = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_resident_district/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInResidentDistrictTable = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_resident_district/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_resident_district/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInResidentDistrictTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY =
+  'AdminUserIssuesActiveIssuesInResidentDistrictViewRoute';
+export const routeToAdminUserIssuesActiveIssuesInResidentDistrictView = (signedIdentifier: string): string =>
+  'admin/user_issues/active_issues_in_resident_district/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserIssuesActiveIssuesInResidentDistrictView = lazy(
+  () => import('./pages/admin/user_issues/active_issues_in_resident_district/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_issues/active_issues_in_resident_district/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_ACTIVE_ISSUES_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserIssuesActiveIssuesInResidentDistrictView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USERISSUES_CREATEISSUE_OUTPUT_INTERFACE_KEY = 'AdminUserissuesCreateissueOutputRoute';
+export const routeToAdminUserissuesCreateissueOutput = (signedIdentifier: string): string =>
+  'admin/userissues/createissue/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserissuesCreateissueOutput = lazy(() => import('./pages/admin/userissues/createissue/output/index'));
+
+routes.push({
+  path: 'admin/userissues/createissue/output/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USERISSUES_CREATEISSUE_OUTPUT_INTERFACE_KEY})`}>
+        <AdminUserissuesCreateissueOutput />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_OWNED_ISSUES_TABLE_INTERFACE_KEY = 'AdminUserIssuesOwnedIssuesTableRoute';
+export const routeToAdminUserIssuesOwnedIssuesTable = (signedIdentifier: string): string =>
+  'admin/user_issues/owned_issues/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserIssuesOwnedIssuesTable = lazy(() => import('./pages/admin/user_issues/owned_issues/table/index'));
+
+routes.push({
+  path: 'admin/user_issues/owned_issues/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_OWNED_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminUserIssuesOwnedIssuesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_ISSUES_OWNED_ISSUES_VIEW_INTERFACE_KEY = 'AdminUserIssuesOwnedIssuesViewRoute';
+export const routeToAdminUserIssuesOwnedIssuesView = (signedIdentifier: string): string =>
+  'admin/user_issues/owned_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserIssuesOwnedIssuesView = lazy(() => import('./pages/admin/user_issues/owned_issues/view/index'));
+
+routes.push({
+  path: 'admin/user_issues/owned_issues/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_ISSUES_OWNED_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminUserIssuesOwnedIssuesView />
       </ComponentProxy>
     </Suspense>
   ),

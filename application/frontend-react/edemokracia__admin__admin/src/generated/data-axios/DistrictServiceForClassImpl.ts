@@ -8,7 +8,14 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
-import type { DistrictStored, District, DistrictQueryCustomizer } from '../data-api';
+import type {
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
+  DistrictStored,
+  District,
+  DistrictQueryCustomizer,
+} from '../data-api';
 import type { DistrictServiceForClass } from '../data-service';
 
 /**
@@ -27,6 +34,39 @@ export class DistrictServiceForClassImpl extends JudoAxiosService implements Dis
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,
       },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getIssues(
+    target: JudoIdentifiable<District>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/District/issues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssues(
+    owner?: JudoIdentifiable<District> | District,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>> {
+    const path = '/District/issues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;

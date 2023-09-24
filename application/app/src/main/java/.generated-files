@@ -57,6 +57,7 @@
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/pro/VoteUpCustomImplementation.java.default,e38ae0cff0ca7e3e63ded0aa394e0391
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/ratingvotedefinition/VoteCustomImplementation.java.default,046204fa6cecd1c84793535c3b7e5f4c
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/selectanswervotedefinition/VoteCustomImplementation.java.default,973b78109c828748aa4183f279faf22a
+/party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/userissues/CreateIssueCustomImplementation.java.default,e233a381e2c31d0506a76c4417f657d0
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/votedefinition/VoteRatingCustomImplementation.java.default,27a7d23d28a72debbd8f52b34103eb16
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/votedefinition/VoteSelectAnswerCustomImplementation.java.default,b38d16cdddc8c8cd0a737d6fe0910314
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/admin/votedefinition/VoteYesNoAbstainCustomImplementation.java.default,83fb1870bae8bfb649ec1cc9b01df015

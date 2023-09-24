@@ -19,6 +19,8 @@ import type {
   CityQueryCustomizer,
   CityStored,
   UserQueryCustomizer,
+  IssueQueryCustomizer,
+  IssueStored,
   UserStored,
   SimpleVoteStored,
   DistrictQueryCustomizer,

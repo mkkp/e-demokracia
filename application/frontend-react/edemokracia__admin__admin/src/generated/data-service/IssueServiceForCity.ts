@@ -11,6 +11,8 @@ import {
   CityQueryCustomizer,
   Issue,
   CityStored,
+  IssueQueryCustomizer,
+  IssueStored,
   DistrictStored,
   City,
   DistrictQueryCustomizer,

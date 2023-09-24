@@ -7,11 +7,25 @@
 // Template file: data-service/classService.ts.hbs
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { DistrictStored, District, DistrictQueryCustomizer } from '../data-api';
+import {
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
+  DistrictStored,
+  District,
+  DistrictQueryCustomizer,
+} from '../data-api';
 
 /**
  * Class Service for District
  */
 export interface DistrictServiceForClass {
   refresh(target: JudoIdentifiable<District>, queryCustomizer?: DistrictQueryCustomizer): Promise<DistrictStored>;
+
+  getIssues(target: JudoIdentifiable<District>, queryCustomizer?: IssueQueryCustomizer): Promise<Array<IssueStored>>;
+
+  getRangeForIssues(
+    owner?: JudoIdentifiable<District> | District,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
 }

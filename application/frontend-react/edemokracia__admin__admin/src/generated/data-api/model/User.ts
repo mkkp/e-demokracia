@@ -10,6 +10,7 @@ import type { JudoStored } from '@judo/data-api-common';
 import { CityStored } from './City';
 import { CountyStored } from './County';
 import { DistrictStored } from './District';
+import { IssueStored } from './Issue';
 import { SimpleVoteStored } from './SimpleVote';
 
 export interface User {
@@ -28,6 +29,17 @@ export interface User {
   activityDistricts?: null | Array<DistrictStored>;
   residentCounty?: null | CountyStored;
   activityCounties?: null | Array<CountyStored>;
+  favoriteIssues?: null | Array<IssueStored>;
+  activeIssuesInActivityCities?: null | Array<IssueStored>;
+  ownedIssues?: null | Array<IssueStored>;
+  createdIssues?: null | Array<IssueStored>;
+  ownedPendingIssues?: null | Array<IssueStored>;
+  activeIssuesInActivityCounties?: null | Array<IssueStored>;
+  acitveIssuesInActivityDistricts?: null | Array<IssueStored>;
+  activeIssuesGlobal?: null | Array<IssueStored>;
+  activeIssuesInResidentDistrict?: null | Array<IssueStored>;
+  activeIssuesInResidentCity?: null | Array<IssueStored>;
+  activeIssuesInResidentCounty?: null | Array<IssueStored>;
 }
 export type UserAttributes = 'userName' | 'firstName' | 'lastName' | 'phone' | 'email' | 'isAdmin' | 'created';
 
@@ -38,6 +50,17 @@ export type UserRelations =
   | 'residentDistrict'
   | 'activityDistricts'
   | 'residentCounty'
-  | 'activityCounties';
+  | 'activityCounties'
+  | 'favoriteIssues'
+  | 'activeIssuesInActivityCities'
+  | 'ownedIssues'
+  | 'createdIssues'
+  | 'ownedPendingIssues'
+  | 'activeIssuesInActivityCounties'
+  | 'acitveIssuesInActivityDistricts'
+  | 'activeIssuesGlobal'
+  | 'activeIssuesInResidentDistrict'
+  | 'activeIssuesInResidentCity'
+  | 'activeIssuesInResidentCounty';
 
 export interface UserStored extends JudoStored<User>, User {}

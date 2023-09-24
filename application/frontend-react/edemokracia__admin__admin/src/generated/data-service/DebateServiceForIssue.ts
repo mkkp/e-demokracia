@@ -10,8 +10,8 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   CommentStored,
   Issue,
-  User,
   IssueCategory,
+  User,
   IssueCategoryStored,
   DistrictStored,
   County,

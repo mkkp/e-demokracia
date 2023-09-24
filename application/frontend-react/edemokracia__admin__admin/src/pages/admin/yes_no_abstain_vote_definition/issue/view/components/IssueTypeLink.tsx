@@ -72,6 +72,7 @@ import {
   AdminUserStored,
   AdminYesNoAbstainVoteDefinition,
   AdminYesNoAbstainVoteDefinitionStored,
+  EdemokraciaIssueScope,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
   _StringOperation,

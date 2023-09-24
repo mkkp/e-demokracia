@@ -37,6 +37,7 @@ import {
   AdminUserStored,
   AdminYesNoAbstainVoteDefinition,
   AdminYesNoAbstainVoteDefinitionStored,
+  EdemokraciaIssueScope,
   EdemokraciaIssueStatus,
   EdemokraciaVoteType,
 } from '~/generated/data-api';

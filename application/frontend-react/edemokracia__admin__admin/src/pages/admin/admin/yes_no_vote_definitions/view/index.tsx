@@ -13,18 +13,7 @@
 import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, MenuItem, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -73,8 +62,8 @@ import {
 import {
   useButtonNavigateDebateAction,
   useButtonNavigateIssueAction,
-  useAdminYesNoVoteDefinitionVoteAction,
   useAdminYesNoVoteDefinitionTakeBackVoteAction,
+  useAdminYesNoVoteDefinitionVoteAction,
 } from './actions';
 
 import { PageActions } from './components/PageActions';
@@ -154,7 +143,7 @@ export default function AdminAdminYesNoVoteDefinitionsView() {
 
   const queryCustomizer: AdminYesNoVoteDefinitionQueryCustomizer = {
     _mask:
-      '{title,closeAt,status,created,description,userHasVoteEntry,userHasNoVoteEntry,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
+      '{title,closeAt,status,created,description,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminYesNoVoteDefinitionsViewPostRefreshHook>(
@@ -165,8 +154,8 @@ export default function AdminAdminYesNoVoteDefinitionsView() {
 
   const buttonNavigateDebateAction = useButtonNavigateDebateAction();
   const buttonNavigateIssueAction = useButtonNavigateIssueAction();
-  const adminYesNoVoteDefinitionVoteAction = useAdminYesNoVoteDefinitionVoteAction();
   const adminYesNoVoteDefinitionTakeBackVoteAction = useAdminYesNoVoteDefinitionTakeBackVoteAction();
+  const adminYesNoVoteDefinitionVoteAction = useAdminYesNoVoteDefinitionVoteAction();
 
   const title: string = t('admin.YesNoVoteDefinitionView', { defaultValue: 'YesNoVoteDefinition View / Edit' });
 
@@ -513,32 +502,93 @@ export default function AdminAdminYesNoVoteDefinitionsView() {
               </Card>
             </Grid>
 
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTakeVoteLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTakeVoteLabelWrapperTakeVoteLabel"
-                          variant="h5"
-                          component="h1"
-                        >
-                          {t('admin.YesNoVoteDefinitionView.TakeVote.Label', { defaultValue: 'Take vote' })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
+            <Grid container item xs={12} sm={12}>
+              <ModeledTabs
+                id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBar"
+                ownerData={data}
+                validation={validation}
+                orientation='horizontal'
+                childTabs={[
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarUserVote',
+                    name: 'admin.YesNoVoteDefinitionView.userVote',
+                    label: t('admin.YesNoVoteDefinitionView.userVote', { defaultValue: 'My vote' }) as string,
+                    disabled: isLoading,
+                    hidden: data.userHasNoVoteEntry,
+                    nestedDataKeys: ['userVoteEntry'],
+                  },
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarTakeVote',
+                    name: 'admin.YesNoVoteDefinitionView.TakeVote',
+                    label: t('admin.YesNoVoteDefinitionView.TakeVote', { defaultValue: 'Take vote' }) as string,
+                    disabled: isLoading,
+                    hidden: data.userHasVoteEntry,
+                    nestedDataKeys: [],
+                  },
+                  {
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarEntries',
+                    name: 'admin.YesNoVoteDefinitionView.entries',
+                    label: t('admin.YesNoVoteDefinitionView.entries', { defaultValue: 'Entries' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    nestedDataKeys: ['voteEntries'],
+                  },
+                ]}
+              >
+                {!data.userHasNoVoteEntry && (
+                  <Grid item xs={12} sm={12}>
+                    <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarUserVoteUserVote">
+                      <CardContent>
+                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                          <Grid item xs={12} sm={12}>
+                            <UserVoteEntryLink
+                              ownerData={data}
+                              readOnly={true || !isFormUpdateable()}
+                              disabled={isLoading}
+                              editMode={editMode}
+                              fetchOwnerData={fetchData}
+                              onChange={(value: AdminYesNoVoteEntry | AdminYesNoVoteEntryStored | null) => {
+                                storeDiff('userVoteEntry', value);
+                              }}
+                              validation={validation}
+                            />
+                          </Grid>
 
-                    {!data.userHasVoteEntry && (
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTakeVoteLabelWrapperTakeVote"
-                          container
-                          direction="row"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
+                          <Grid item xs={12} sm={12}>
+                            <LoadingButton
+                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionTakeBackVoteButtonCallOperation"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="delete" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                try {
+                                  setIsLoading(true);
+                                  await adminYesNoVoteDefinitionTakeBackVoteAction(data, () => fetchData());
+                                } finally {
+                                  setIsLoading(false);
+                                }
+                              }}
+                              disabled={!data.userHasVoteEntry || editMode}
+                            >
+                              <span>
+                                {t('admin.YesNoVoteDefinitionView.takeBackVote.ButtonCallOperation', {
+                                  defaultValue: 'TakeBackVote',
+                                })}
+                              </span>
+                            </LoadingButton>
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                )}
+
+                {!data.userHasVoteEntry && (
+                  <Grid item xs={12} sm={12}>
+                    <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarTakeVoteTakeVote">
+                      <CardContent>
+                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <LoadingButton
                               id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionVoteButtonCallOperation"
@@ -564,118 +614,23 @@ export default function AdminAdminYesNoVoteDefinitionsView() {
                             </LoadingButton>
                           </Grid>
                         </Grid>
-                      </Grid>
-                    )}
+                      </CardContent>
+                    </Card>
                   </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditUserVoteLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <Typography
-                          id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditUserVoteLabelWrapperUserVoteLabel"
-                          variant="h5"
-                          component="h1"
-                        >
-                          {t('admin.YesNoVoteDefinitionView.userVote.Label', { defaultValue: 'My vote' })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    {!data.userHasNoVoteEntry && (
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditUserVoteLabelWrapperUserVote"
-                          container
-                          direction="row"
-                          alignItems="stretch"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12} md={4.0}>
-                            <UserVoteEntryLink
-                              ownerData={data}
-                              readOnly={true || !isFormUpdateable()}
-                              disabled={isLoading}
-                              editMode={editMode}
-                              fetchOwnerData={fetchData}
-                              onChange={(value: AdminYesNoVoteEntry | AdminYesNoVoteEntryStored | null) => {
-                                storeDiff('userVoteEntry', value);
-                              }}
-                              validation={validation}
-                            />
-                          </Grid>
-
-                          <Grid item xs={12} sm={12} md={4.0}>
-                            <LoadingButton
-                              id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionTakeBackVoteButtonCallOperation"
-                              loading={isLoading}
-                              variant={undefined}
-                              startIcon={<MdiIcon path="delete" />}
-                              loadingPosition="start"
-                              onClick={async () => {
-                                try {
-                                  setIsLoading(true);
-                                  await adminYesNoVoteDefinitionTakeBackVoteAction(data, () => fetchData());
-                                } finally {
-                                  setIsLoading(false);
-                                }
-                              }}
-                              disabled={!data.userHasVoteEntry || editMode}
-                            >
-                              <span>
-                                {t('admin.YesNoVoteDefinitionView.takeBackVote.ButtonCallOperation', {
-                                  defaultValue: 'TakeBackVote',
-                                })}
-                              </span>
-                            </LoadingButton>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    )}
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapper"
-                container
-                direction="column"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                <Grid item xs={12} sm={12}>
-                  <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                    <Typography
-                      id="LabeledemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesLabel"
-                      variant="h5"
-                      component="h1"
-                    >
-                      {t('admin.YesNoVoteDefinitionView.entries.Label', { defaultValue: 'Entries' })}
-                    </Typography>
-                  </Grid>
-                </Grid>
+                )}
 
                 <Grid item xs={12} sm={12}>
                   <Grid
-                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntries"
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntries"
                     container
                     direction="row"
-                    alignItems="stretch"
+                    alignItems="flex-start"
                     justifyContent="flex-start"
                     spacing={2}
                   >
                     <Grid item xs={12} sm={12}>
                       <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapper"
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapper"
                         container
                         direction="column"
                         alignItems="stretch"
@@ -684,7 +639,7 @@ export default function AdminAdminYesNoVoteDefinitionsView() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid
-                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditEntriesLabelWrapperEntriesVoteEntriesLabelWrapperVoteEntries"
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarEntriesEntriesVoteEntriesLabelWrapperVoteEntries"
                             container
                             direction="column"
                             alignItems="stretch"
@@ -706,7 +661,7 @@ export default function AdminAdminYesNoVoteDefinitionsView() {
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
+              </ModeledTabs>
             </Grid>
           </Grid>
         </Box>

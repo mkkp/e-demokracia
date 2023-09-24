@@ -40,7 +40,7 @@ import {
 } from './AdminIssueMaskBuilder';
 import {} from './AdminVoteEntryMaskBuilder';
 
-export class AdminDashboardIssuesMaskBuilder extends RelationMaskBuilder {
+export class AdminDashboardIssuesOwnedMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | AdminIssueAttributes
@@ -56,7 +56,7 @@ export class AdminDashboardIssuesMaskBuilder extends RelationMaskBuilder {
       | AdminIssueDistrictMaskBuilder
     >,
   ) {
-    super('issues', props);
+    super('issuesOwned', props);
   }
 }
 export class AdminDashboardDebatesMaskBuilder extends RelationMaskBuilder {
@@ -88,7 +88,7 @@ export class AdminDashboardMaskBuilder extends MaskBuilder {
   constructor(
     protected props: Array<
       | AdminDashboardAttributes
-      | AdminDashboardIssuesMaskBuilder
+      | AdminDashboardIssuesOwnedMaskBuilder
       | AdminDashboardDebatesMaskBuilder
       | AdminDashboardVoteEntriesMaskBuilder
     >,

@@ -102,7 +102,7 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
     const [queryCustomizer, setQueryCustomizer] = useState<AdminYesNoVoteDefinitionQueryCustomizer>({
-      _mask: '{title,created,description,status,closeAt,userHasNoVoteEntry,userHasVoteEntry}',
+      _mask: '{title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
       _seek: {
         limit: 10 + 1,
       },
@@ -274,7 +274,7 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
     ];
 
     const yesNoVoteDefinitionsInitialQueryCustomizer: AdminYesNoVoteDefinitionQueryCustomizer = {
-      _mask: '{title,created,description,status,closeAt,userHasNoVoteEntry,userHasVoteEntry}',
+      _mask: '{title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
       _orderBy: yesNoVoteDefinitionsSortModel.length
         ? [
             {
@@ -339,15 +339,6 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
 
     const rowActions: TableRowAction<AdminYesNoVoteDefinitionStored>[] = [
       {
-        id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionVoteButtonCallOperation',
-        label: t('admin.YesNoVoteDefinitionTable.yesNoVoteDefinitions.vote.ButtonCallOperation', {
-          defaultValue: 'Take a vote',
-        }) as string,
-        icon: <MdiIcon path="vote" />,
-        action: async (row: AdminYesNoVoteDefinitionStored) =>
-          adminYesNoVoteDefinitionVoteAction(row, () => fetchData()),
-      },
-      {
         id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionTakeBackVoteButtonCallOperation',
         label: t('admin.YesNoVoteDefinitionTable.yesNoVoteDefinitions.takeBackVote.ButtonCallOperation', {
           defaultValue: 'TakeBackVote',
@@ -355,6 +346,15 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
         icon: <MdiIcon path="delete" />,
         action: async (row: AdminYesNoVoteDefinitionStored) =>
           adminYesNoVoteDefinitionTakeBackVoteAction(row, () => fetchData()),
+      },
+      {
+        id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsTableEdemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionVoteButtonCallOperation',
+        label: t('admin.YesNoVoteDefinitionTable.yesNoVoteDefinitions.vote.ButtonCallOperation', {
+          defaultValue: 'Take a vote',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        action: async (row: AdminYesNoVoteDefinitionStored) =>
+          adminYesNoVoteDefinitionVoteAction(row, () => fetchData()),
       },
     ];
 

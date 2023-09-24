@@ -97,7 +97,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-    _mask: '{title,status,created,numberOfDebates,description}',
+    _mask: '{scope,title,status,created,numberOfDebates,description}',
     _seek: {
       limit: 10 + 1,
     },
@@ -129,6 +129,25 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const issuesSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
   const issuesColumns: GridColDef<AdminIssueStored>[] = [
+    {
+      ...baseColumnConfig,
+      field: 'scope',
+      headerName: t('admin.IssueTable.issues.scope', { defaultValue: 'Scope' }) as string,
+      headerClassName: 'data-grid-column-header',
+
+      width: 170,
+      type: 'singleSelect',
+      filterable: false && true,
+      sortable: false,
+      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+        if (value !== undefined && value !== null) {
+          return t(`enumerations.EdemokraciaIssueScope.${value}`, { defaultValue: value });
+        }
+      },
+      description: t('judo.pages.table.column.not-sortable', {
+        defaultValue: 'This column is not sortable.',
+      }) as string,
+    },
     {
       ...baseColumnConfig,
       field: 'title',
@@ -210,6 +229,14 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
 
   const issuesRangeFilterOptions: FilterOption[] = [
     {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssuesTableDefaultIssuesIssueTableScopeFilter',
+      attributeName: 'scope',
+      label: t('admin.IssueTable.issues.scope', { defaultValue: 'Scope' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
+    },
+
+    {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssuesTableDefaultIssuesIssueTableTitleFilter',
       attributeName: 'title',
       label: t('admin.IssueTable.issues.title', { defaultValue: 'Title' }) as string,
@@ -247,7 +274,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   ];
 
   const issuesInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-    _mask: '{title,status,created,numberOfDebates,description}',
+    _mask: '{scope,title,status,created,numberOfDebates,description}',
     _orderBy: issuesSortModel.length
       ? [
           {
@@ -272,6 +299,14 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
 
   const filterOptions: FilterOption[] = [
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssuesTableDefaultIssuesIssueTableScopeFilter',
+      attributeName: 'scope',
+      label: t('admin.IssueTable.issues.scope', { defaultValue: 'Scope' }) as string,
+      filterType: FilterType.enumeration,
+      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
+    },
+
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminIssuesTableDefaultIssuesIssueTableTitleFilter',
       attributeName: 'title',

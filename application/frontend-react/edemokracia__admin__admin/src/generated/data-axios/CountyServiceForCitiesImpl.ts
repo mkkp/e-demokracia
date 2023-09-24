@@ -11,6 +11,9 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   CityQueryCustomizer,
   CityStored,
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
   DistrictStored,
   City,
   County,

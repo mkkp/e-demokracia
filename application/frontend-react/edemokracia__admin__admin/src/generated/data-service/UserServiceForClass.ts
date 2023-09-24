@@ -10,6 +10,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   SimpleVote,
   User,
+  Issue,
   DistrictStored,
   City,
   County,
@@ -17,6 +18,8 @@ import {
   CityQueryCustomizer,
   CityStored,
   UserQueryCustomizer,
+  IssueQueryCustomizer,
+  IssueStored,
   UserStored,
   SimpleVoteStored,
   District,
@@ -91,4 +94,108 @@ export interface UserServiceForClass {
     owner?: JudoIdentifiable<User> | User,
     queryCustomizer?: CountyQueryCustomizer,
   ): Promise<Array<CountyStored>>;
+
+  getFavoriteIssues(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForFavoriteIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getActiveIssuesInActivityCities(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForActiveIssuesInActivityCities(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getOwnedIssues(target: JudoIdentifiable<User>, queryCustomizer?: IssueQueryCustomizer): Promise<Array<IssueStored>>;
+
+  getRangeForOwnedIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getCreatedIssues(target: JudoIdentifiable<User>, queryCustomizer?: IssueQueryCustomizer): Promise<Array<IssueStored>>;
+
+  getRangeForCreatedIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getOwnedPendingIssues(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForOwnedPendingIssues(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getActiveIssuesInActivityCounties(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForActiveIssuesInActivityCounties(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getAcitveIssuesInActivityDistricts(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForAcitveIssuesInActivityDistricts(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getActiveIssuesGlobal(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForActiveIssuesGlobal(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getActiveIssuesInResidentDistrict(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForActiveIssuesInResidentDistrict(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getActiveIssuesInResidentCity(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForActiveIssuesInResidentCity(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getActiveIssuesInResidentCounty(
+    target: JudoIdentifiable<User>,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
+
+  getRangeForActiveIssuesInResidentCounty(
+    owner?: JudoIdentifiable<User> | User,
+    queryCustomizer?: IssueQueryCustomizer,
+  ): Promise<Array<IssueStored>>;
 }

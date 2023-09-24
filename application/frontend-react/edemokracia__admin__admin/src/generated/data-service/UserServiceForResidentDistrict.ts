@@ -7,7 +7,15 @@
 // Template file: data-service/relationService.ts.hbs
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { User, DistrictStored, DistrictQueryCustomizer, District } from '../data-api';
+import {
+  User,
+  Issue,
+  IssueQueryCustomizer,
+  IssueStored,
+  DistrictStored,
+  DistrictQueryCustomizer,
+  District,
+} from '../data-api';
 
 /**
  * Relation Service for User.residentDistrict

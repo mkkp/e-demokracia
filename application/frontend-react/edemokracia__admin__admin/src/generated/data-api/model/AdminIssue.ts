@@ -16,6 +16,7 @@ import { AdminIssueCategoryStored } from './AdminIssueCategory';
 import { AdminIssueDebateStored } from './AdminIssueDebate';
 import { AdminIssueTypeStored } from './AdminIssueType';
 import { AdminUserStored } from './AdminUser';
+import { EdemokraciaIssueScope } from './EdemokraciaIssueScope';
 import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
 import { EdemokraciaVoteType } from './EdemokraciaVoteType';
 
@@ -27,6 +28,7 @@ export interface AdminIssue {
   representation?: null | string;
   numberOfDebates?: null | number;
   defaultVoteType?: null | EdemokraciaVoteType;
+  scope?: null | EdemokraciaIssueScope;
 
   attachments?: null | Array<AdminIssueAttachmentStored>;
   owner?: null | AdminUserStored;
@@ -46,7 +48,8 @@ export type AdminIssueAttributes =
   | 'status'
   | 'representation'
   | 'numberOfDebates'
-  | 'defaultVoteType';
+  | 'defaultVoteType'
+  | 'scope';
 
 export type AdminIssueRelations =
   | 'attachments'

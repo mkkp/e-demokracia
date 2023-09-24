@@ -11,8 +11,8 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   CommentStored,
   Issue,
-  User,
   IssueCategory,
+  User,
   IssueCategoryStored,
   DistrictStored,
   County,

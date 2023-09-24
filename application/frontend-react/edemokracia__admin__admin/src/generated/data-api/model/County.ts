@@ -8,14 +8,16 @@
 
 import type { JudoStored } from '@judo/data-api-common';
 import { CityStored } from './City';
+import { IssueStored } from './Issue';
 
 export interface County {
   name: string;
 
   cities?: null | Array<CityStored>;
+  issues?: null | Array<IssueStored>;
 }
 export type CountyAttributes = 'name';
 
-export type CountyRelations = 'cities';
+export type CountyRelations = 'cities' | 'issues';
 
 export interface CountyStored extends JudoStored<County>, County {}
