@@ -469,7 +469,7 @@
 /src/pages/admin/admin/yes_no_vote_definitions/table/actions/pageRefreshYesNoVoteDefinitions.tsx,7b478d7f240088814a88a06c13ffd376
 /src/pages/admin/admin/yes_no_vote_definitions/table/actions/rowViewYesNoVoteDefinitions.tsx,ccc2076a75ae549bd350cf39e08a15bd
 /src/pages/admin/admin/yes_no_vote_definitions/table/components/PageActions.tsx,ef3a09c44ea9cc844e0d855088ae5b1a
-/src/pages/admin/admin/yes_no_vote_definitions/table/components/YesNoVoteDefinition_TableTable.tsx,27dee2e3472f239d1b828bd1816ebcdc
+/src/pages/admin/admin/yes_no_vote_definitions/table/components/YesNoVoteDefinition_TableTable.tsx,b8884dd2f8b45013b2f6627488de617a
 /src/pages/admin/admin/yes_no_vote_definitions/table/index.tsx,db4411c1bc5aceda047f7ca63d784c39
 /src/pages/admin/admin/yes_no_vote_definitions/view/actions/adminYesNoVoteDefinition/AdminYesNoVoteDefinitionVoteForm/index.tsx,c9f7428528291a174897bd4e50731d1e
 /src/pages/admin/admin/yes_no_vote_definitions/view/actions/adminYesNoVoteDefinition/adminYesNoVoteDefinitionTakeBackVote.tsx,de0882718286e506a19bd69f36d23c36
@@ -483,9 +483,9 @@
 /src/pages/admin/admin/yes_no_vote_definitions/view/actions/voteEntries/tableActionVoteEntries.tsx,51139fe3f66b0658052a545046e4a768
 /src/pages/admin/admin/yes_no_vote_definitions/view/actions/voteEntries/tableRefreshRelationVoteEntries.tsx,46b8771a7c4a9774661ffda442c7d84b
 /src/pages/admin/admin/yes_no_vote_definitions/view/components/PageActions.tsx,6bcfe3cb7fe09713fb12ac699ce2d24d
-/src/pages/admin/admin/yes_no_vote_definitions/view/components/UserVoteEntryLink.tsx,fcfe0128df40a7f84972efa94394f996
-/src/pages/admin/admin/yes_no_vote_definitions/view/components/VoteEntriesTable.tsx,cb5a06dcb4ef21ca590174f07aca24f6
-/src/pages/admin/admin/yes_no_vote_definitions/view/index.tsx,be2ea50129ce8baa8b47531741fd042c
+/src/pages/admin/admin/yes_no_vote_definitions/view/components/UserVoteEntryLink.tsx,3e65513d357840f4828f75b676240e2b
+/src/pages/admin/admin/yes_no_vote_definitions/view/components/VoteEntriesTable.tsx,087ed1c1a71dc82b269a1cea02c4ed91
+/src/pages/admin/admin/yes_no_vote_definitions/view/index.tsx,6eb3acfb89a33ed52a37d51be61f2f0c
 /src/pages/admin/city/districts/view/actions/index.tsx,1f488c5c9e25d989f967938735462a5d
 /src/pages/admin/city/districts/view/actions/pageDeleteDistricts.tsx,30f64d1084dd8e21558f457f8bdd06fc
 /src/pages/admin/city/districts/view/actions/pageRefreshDistricts.tsx,c3155f90de161f11434f75ce8350a473
@@ -1054,9 +1054,9 @@
 /src/pages/admin/debate/yes_no_vote_definition/view/actions/voteEntries/tableActionVoteEntries.tsx,51139fe3f66b0658052a545046e4a768
 /src/pages/admin/debate/yes_no_vote_definition/view/actions/voteEntries/tableRefreshRelationVoteEntries.tsx,46b8771a7c4a9774661ffda442c7d84b
 /src/pages/admin/debate/yes_no_vote_definition/view/components/PageActions.tsx,45e269b07fd5a9aa5133eaf8c96c34d0
-/src/pages/admin/debate/yes_no_vote_definition/view/components/UserVoteEntryLink.tsx,3c56f0e221a440bcc2eab6f61b296d20
-/src/pages/admin/debate/yes_no_vote_definition/view/components/VoteEntriesTable.tsx,4b2522258c22820aa237a8dce98fc3aa
-/src/pages/admin/debate/yes_no_vote_definition/view/index.tsx,358833eebe8b838f64ab0e8bca7658b5
+/src/pages/admin/debate/yes_no_vote_definition/view/components/UserVoteEntryLink.tsx,af17a95f574eae40cd2ad95a66794657
+/src/pages/admin/debate/yes_no_vote_definition/view/components/VoteEntriesTable.tsx,aa160e6d1bbd9ccb43921f942d25e8dc
+/src/pages/admin/debate/yes_no_vote_definition/view/index.tsx,eb61829bf314e96548d23a8307264803
 /src/pages/admin/issue/attachments/view/actions/index.tsx,d7469bfa3a9711751c54736ddf971f3c
 /src/pages/admin/issue/attachments/view/actions/pageDeleteAttachments.tsx,71d5a79a815f71110dca422a68396d81
 /src/pages/admin/issue/attachments/view/actions/pageRefreshAttachments.tsx,f46d19cce5ed857273368968eac34abd
@@ -2479,7 +2479,7 @@ public/browserconfig.xml,a493ba0aa0b8ec8068d786d7248bb92c
 public/favicon-16x16.png,07d4a9035e87e12daeeaa07a7b0fc3b1
 public/favicon-32x32.png,16007d7b6ccc973a3d8e5e303919c012
 public/favicon.ico,17b33863654ecc54cddeece199c4ee97
-public/i18n/application_default.json,f25f40a5da2dc1acf236513d5c41057a
+public/i18n/application_default.json,af37bd1a559fa64b938581ee12e07e39
 public/i18n/application_hu-HU.json,ac794a0d6ba5833d71c08c177aa55ecf
 public/i18n/system_default.json,3ac4e93a7df7e9ce0462b47d85e70d99
 public/i18n/system_en-US.json,3ac4e93a7df7e9ce0462b47d85e70d99

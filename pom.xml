@@ -10,6 +10,10 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <judo-channel>develop</judo-channel>
         <judo-version>1.0.0.20230921_045909_9d883157_develop</judo-version>
 
@@ -48,6 +52,32 @@
                     <groupId>hu.blackbelt.judo.meta</groupId>
                     <artifactId>judo-esm-generator-maven-plugin</artifactId>
                     <version>${judo-meta-esm-version-defined}</version>
+                </plugin>
+
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+				    <groupId>org.eclipse.m2e</groupId>
+				    <artifactId>lifecycle-mapping</artifactId>
+				    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+				                        <groupId>hu.blackbelt.judo.tatami</groupId>
+				                        <artifactId>judo-tatami-workflow-maven-plugin</artifactId>
+                                        <versionRange>[1,)</versionRange>
+                                        <goals>
+                                            <goal>default-workflow</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -95,7 +125,6 @@
                                     <goal>default-workflow</goal>
                                 </goals>
                                 <configuration>
-                                    <modelName>${project.artifactId}</modelName>
                                     <destination>${basedir}/target/classes/model</destination>
                                     <esm>${basedir}/model/${project.artifactId}.model</esm>
                                     <modelVersion>${project.version}</modelVersion>
@@ -423,4 +452,20 @@
             </releases>
         </repository>
     </repositories>
+
+	<pluginRepositories>
+        <pluginRepository>
+            <id>judo-ng</id>
+            <url>https://nexus.judo.technology/repository/maven-judong</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+	</pluginRepositories>
+
+
+
 </project>

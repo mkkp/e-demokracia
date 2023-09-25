@@ -81,7 +81,7 @@ export function UserVoteEntryLink(props: UserVoteEntryLinkProps) {
   return (
     <AggregationInput
       name="userVoteEntry"
-      id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntry"
+      id="LinkedemokraciaAdminAdminEdemokraciaAdminAdminYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditTabBarUserVoteUserVoteVirtualForUserVoteUserVoteEntry"
       label={t('admin.YesNoVoteDefinitionView.userVoteEntry', { defaultValue: 'Value' }) as string}
       labelList={[ownerData.userVoteEntry?.value?.toString() ?? '', ownerData.userVoteEntry?.created?.toString() ?? '']}
       ownerData={ownerData}
