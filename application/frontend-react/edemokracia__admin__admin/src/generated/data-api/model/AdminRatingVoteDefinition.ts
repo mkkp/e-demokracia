@@ -9,32 +9,37 @@
 import type { JudoStored } from '@judo/data-api-common';
 import { AdminDebateStored } from './AdminDebate';
 import { AdminIssueStored } from './AdminIssue';
+import { AdminRatingVoteEntryStored } from './AdminRatingVoteEntry';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
-import { VoteEntryStored } from './VoteEntry';
 
 export interface AdminRatingVoteDefinition {
-  minRateValue?: null | number;
-  maxRateValue?: null | number;
   title: string;
   created: Date;
   description: string;
   status: EdemokraciaVoteStatus;
   closeAt: Date;
+  maxRateValue?: null | number;
+  minRateValue?: null | number;
+  userHasVoteEntry?: null | boolean;
+  userHasNoVoteEntry?: null | boolean;
 
-  voteEntries?: null | Array<VoteEntryStored>;
   debate?: null | AdminDebateStored;
   issue?: null | AdminIssueStored;
+  voteEntries?: null | Array<AdminRatingVoteEntryStored>;
+  userVoteEntry?: null | AdminRatingVoteEntryStored;
 }
 export type AdminRatingVoteDefinitionAttributes =
-  | 'minRateValue'
-  | 'maxRateValue'
   | 'title'
   | 'created'
   | 'description'
   | 'status'
-  | 'closeAt';
+  | 'closeAt'
+  | 'maxRateValue'
+  | 'minRateValue'
+  | 'userHasVoteEntry'
+  | 'userHasNoVoteEntry';
 
-export type AdminRatingVoteDefinitionRelations = 'voteEntries' | 'debate' | 'issue';
+export type AdminRatingVoteDefinitionRelations = 'debate' | 'issue' | 'voteEntries' | 'userVoteEntry';
 
 export interface AdminRatingVoteDefinitionStored
   extends JudoStored<AdminRatingVoteDefinition>,

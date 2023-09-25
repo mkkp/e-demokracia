@@ -28,16 +28,6 @@ export class VoteEntryServiceForClassImpl extends JudoAxiosService implements Vo
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<VoteEntry> {
-    const path = '/VoteEntry/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
   async refresh(
     target: JudoIdentifiable<VoteEntry>,
     queryCustomizer?: VoteEntryQueryCustomizer,
@@ -46,32 +36,6 @@ export class VoteEntryServiceForClassImpl extends JudoAxiosService implements Vo
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async delete(target: JudoIdentifiable<VoteEntry>): Promise<void> {
-    const path = '/VoteEntry/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async update(target: Partial<VoteEntryStored>): Promise<VoteEntryStored> {
-    const path = '/VoteEntry/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
     });
 
@@ -109,18 +73,6 @@ export class VoteEntryServiceForClassImpl extends JudoAxiosService implements Vo
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async setUser(target: JudoIdentifiable<VoteEntry>, selected: JudoIdentifiable<User>): Promise<void> {
-    const path = '/VoteEntry/~update/user/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getVoteDefinition(
@@ -151,20 +103,5 @@ export class VoteEntryServiceForClassImpl extends JudoAxiosService implements Vo
     });
 
     return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async setVoteDefinition(
-    target: JudoIdentifiable<VoteEntry>,
-    selected: JudoIdentifiable<VoteDefinition>,
-  ): Promise<void> {
-    const path = '/VoteEntry/~update/voteDefinition/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
   }
 }

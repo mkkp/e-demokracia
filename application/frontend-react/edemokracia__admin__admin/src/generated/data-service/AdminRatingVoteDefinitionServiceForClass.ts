@@ -10,16 +10,16 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   RatingVoteInput,
   AdminRatingVoteDefinitionStored,
-  VoteEntry,
   AdminIssueStored,
+  AdminRatingVoteEntryQueryCustomizer,
   AdminRatingVoteDefinitionQueryCustomizer,
-  VoteEntryQueryCustomizer,
-  VoteEntryStored,
   AdminRatingVoteDefinition,
   AdminIssueQueryCustomizer,
   AdminDebate,
   AdminIssue,
+  AdminRatingVoteEntryStored,
   AdminDebateStored,
+  AdminRatingVoteEntry,
   AdminDebateQueryCustomizer,
 } from '../data-api';
 
@@ -31,16 +31,6 @@ export interface AdminRatingVoteDefinitionServiceForClass {
     target: JudoIdentifiable<AdminRatingVoteDefinition>,
     queryCustomizer?: AdminRatingVoteDefinitionQueryCustomizer,
   ): Promise<AdminRatingVoteDefinitionStored>;
-
-  getVoteEntries(
-    target: JudoIdentifiable<AdminRatingVoteDefinition>,
-    queryCustomizer?: VoteEntryQueryCustomizer,
-  ): Promise<Array<VoteEntryStored>>;
-
-  getRangeForVoteEntries(
-    owner?: JudoIdentifiable<AdminRatingVoteDefinition> | AdminRatingVoteDefinition,
-    queryCustomizer?: VoteEntryQueryCustomizer,
-  ): Promise<Array<VoteEntryStored>>;
 
   getDebate(
     target: JudoIdentifiable<AdminRatingVoteDefinition>,
@@ -62,5 +52,27 @@ export interface AdminRatingVoteDefinitionServiceForClass {
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
+  getVoteEntries(
+    target: JudoIdentifiable<AdminRatingVoteDefinition>,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteEntryStored>>;
+
+  getRangeForVoteEntries(
+    owner?: JudoIdentifiable<AdminRatingVoteDefinition> | AdminRatingVoteDefinition,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteEntryStored>>;
+
+  getUserVoteEntry(
+    target: JudoIdentifiable<AdminRatingVoteDefinition>,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<AdminRatingVoteEntryStored>;
+
+  getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<AdminRatingVoteDefinition> | AdminRatingVoteDefinition,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteEntryStored>>;
+
   vote(owner: JudoIdentifiable<AdminRatingVoteDefinition>, target: RatingVoteInput): Promise<void>;
+
+  takeBackVote(owner: JudoIdentifiable<AdminRatingVoteDefinition>): Promise<void>;
 }

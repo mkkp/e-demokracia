@@ -8,17 +8,23 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
+  AdminSelectAnswerVoteEntryStored,
+  AdminSelectAnswerVoteEntry,
+  AdminSelectAnswerVoteSelectionQueryCustomizer,
+  AdminIssueStored,
+  AdminSelectAnswerVoteSelection,
+  AdminSelectAnswerVoteEntryQueryCustomizer,
+  AdminSelectAnswerVoteSelectionStored,
+  SelectAnswerVoteSelection,
   SelectAnswerVoteSelectionQueryCustomizer,
   AdminIssueQueryCustomizer,
   AdminSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
   AdminDebate,
   AdminIssue,
-  AdminIssueStored,
   AdminSelectAnswerVoteDefinition,
   AdminDebateStored,
   AdminSelectAnswerVoteDefinitionQueryCustomizer,
-  SelectAnswerVoteSelection,
   AdminDebateQueryCustomizer,
 } from '../data-api';
 
@@ -51,10 +57,41 @@ export interface AdminSelectAnswerVoteDefinitionServiceForClass {
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
+  getVoteEntries(
+    target: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    queryCustomizer?: AdminSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteEntryStored>>;
+
+  getRangeForVoteEntries(
+    owner?: JudoIdentifiable<AdminSelectAnswerVoteDefinition> | AdminSelectAnswerVoteDefinition,
+    queryCustomizer?: AdminSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteEntryStored>>;
+
+  getUserVoteEntry(
+    target: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    queryCustomizer?: AdminSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<AdminSelectAnswerVoteEntryStored>;
+
+  getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<AdminSelectAnswerVoteDefinition> | AdminSelectAnswerVoteDefinition,
+    queryCustomizer?: AdminSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteEntryStored>>;
+
+  getVoteSelections(
+    target: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    queryCustomizer?: AdminSelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteSelectionStored>>;
+
+  getRangeForVoteSelections(
+    owner?: JudoIdentifiable<AdminSelectAnswerVoteDefinition> | AdminSelectAnswerVoteDefinition,
+    queryCustomizer?: AdminSelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<Array<AdminSelectAnswerVoteSelectionStored>>;
+
   vote(owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>, target: SelectAnswerVoteSelection): Promise<void>;
 
   getRangeForVote(
     owner?: AdminSelectAnswerVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
+  takeBackVote(owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>): Promise<void>;
 }

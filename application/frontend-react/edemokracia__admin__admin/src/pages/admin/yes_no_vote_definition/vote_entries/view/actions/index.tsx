@@ -5,5 +5,5 @@
 // Path expression: #actionsIndexPath(#self)
 // Template name: actor/src/pages/actions/index.tsx
 // Template file: actor/src/pages/actions/index.tsx.hbs
-export * from './user/linkViewUser';
+export * from './owner/linkViewOwner';
 export * from './pageRefreshVoteEntries';

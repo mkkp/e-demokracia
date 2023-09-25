@@ -9,17 +9,17 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  VoteEntryStored,
   AdminRatingVoteDefinition,
   AdminIssueQueryCustomizer,
   AdminDebate,
   AdminRatingVoteDefinitionStored,
-  VoteEntry,
   AdminIssue,
   AdminIssueStored,
+  AdminRatingVoteEntryQueryCustomizer,
+  AdminRatingVoteEntryStored,
   AdminRatingVoteDefinitionQueryCustomizer,
   AdminDebateStored,
-  VoteEntryQueryCustomizer,
+  AdminRatingVoteEntry,
   AdminDebateQueryCustomizer,
 } from '../data-api';
 import type { AdminDebateServiceForRatingVoteDefinition } from '../data-service';

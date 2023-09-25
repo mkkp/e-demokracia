@@ -138,7 +138,7 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
   );
 
   const queryCustomizer: AdminYesNoVoteEntryQueryCustomizer = {
-    _mask: '{created,value,createdBy,user{representation}}',
+    _mask: '{created,value,createdBy,owner{representation}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminViewPostRefreshHook>(
@@ -317,7 +317,7 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
               editMode={editMode}
               fetchOwnerData={fetchData}
               onChange={(value: AdminUser | AdminUserStored | null) => {
-                storeDiff('user', value);
+                storeDiff('owner', value);
               }}
               validation={validation}
             />

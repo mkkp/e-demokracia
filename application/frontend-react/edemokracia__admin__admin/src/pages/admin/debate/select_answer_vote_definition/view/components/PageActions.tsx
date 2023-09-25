@@ -10,6 +10,12 @@ import {
   AdminSelectAnswerVoteDefinition,
   AdminSelectAnswerVoteDefinitionQueryCustomizer,
   AdminSelectAnswerVoteDefinitionStored,
+  AdminSelectAnswerVoteEntry,
+  AdminSelectAnswerVoteEntryQueryCustomizer,
+  AdminSelectAnswerVoteEntryStored,
+  AdminSelectAnswerVoteSelection,
+  AdminSelectAnswerVoteSelectionQueryCustomizer,
+  AdminSelectAnswerVoteSelectionStored,
   EdemokraciaVoteStatus,
 } from '~/generated/data-api';
 import { usePageRefreshSelectAnswerVoteDefinitionAction } from '../actions';

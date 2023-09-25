@@ -11,9 +11,12 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   AdminYesNoAbstainVoteDefinition,
   AdminIssueQueryCustomizer,
+  AdminYesNoAbstainVoteEntry,
   AdminDebate,
   AdminIssue,
   AdminIssueStored,
+  AdminYesNoAbstainVoteEntryQueryCustomizer,
+  AdminYesNoAbstainVoteEntryStored,
   AdminDebateStored,
   AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminYesNoAbstainVoteDefinitionStored,

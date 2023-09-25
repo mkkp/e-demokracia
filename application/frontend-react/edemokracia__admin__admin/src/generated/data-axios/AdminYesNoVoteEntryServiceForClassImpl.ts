@@ -45,11 +45,11 @@ export class AdminYesNoVoteEntryServiceForClassImpl
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getUser(
+  async getOwner(
     target: JudoIdentifiable<AdminYesNoVoteEntry>,
     queryCustomizer?: AdminUserQueryCustomizer,
   ): Promise<AdminUserStored> {
-    const path = '/admin/YesNoVoteEntry/user/~get';
+    const path = '/admin/YesNoVoteEntry/owner/~get';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -62,11 +62,11 @@ export class AdminYesNoVoteEntryServiceForClassImpl
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForUser(
+  async getRangeForOwner(
     owner?: JudoIdentifiable<AdminYesNoVoteEntry> | AdminYesNoVoteEntry,
     queryCustomizer?: AdminUserQueryCustomizer,
   ): Promise<Array<AdminUserStored>> {
-    const path = '/admin/YesNoVoteEntry/user/~range';
+    const path = '/admin/YesNoVoteEntry/owner/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

@@ -6,11 +6,39 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder } from './MaskBuilder';
-import { AdminSelectAnswerVoteDefinitionAttributes, AdminIssueAttributes, AdminDebateAttributes } from '../model';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
+import {
+  AdminSelectAnswerVoteSelectionAttributes,
+  AdminSelectAnswerVoteDefinitionAttributes,
+  AdminIssueAttributes,
+  AdminDebateAttributes,
+  AdminSelectAnswerVoteEntryAttributes,
+} from '../model';
+
+import { AdminSelectAnswerVoteEntryValueMaskBuilder } from './AdminSelectAnswerVoteEntryMaskBuilder';
+import {} from './AdminSelectAnswerVoteSelectionMaskBuilder';
+
+export class AdminSelectAnswerVoteDefinitionUserVoteEntryMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<AdminSelectAnswerVoteEntryAttributes | AdminSelectAnswerVoteEntryValueMaskBuilder>,
+  ) {
+    super('userVoteEntry', props);
+  }
+}
+export class AdminSelectAnswerVoteDefinitionVoteSelectionsMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminSelectAnswerVoteSelectionAttributes>) {
+    super('voteSelections', props);
+  }
+}
 
 export class AdminSelectAnswerVoteDefinitionMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<AdminSelectAnswerVoteDefinitionAttributes>) {
+  constructor(
+    protected props: Array<
+      | AdminSelectAnswerVoteDefinitionAttributes
+      | AdminSelectAnswerVoteDefinitionUserVoteEntryMaskBuilder
+      | AdminSelectAnswerVoteDefinitionVoteSelectionsMaskBuilder
+    >,
+  ) {
     super(props);
   }
 }

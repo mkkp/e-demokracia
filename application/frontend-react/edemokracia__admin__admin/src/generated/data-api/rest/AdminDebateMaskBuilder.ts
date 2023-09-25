@@ -60,11 +60,14 @@ import {
   AdminProParentProMaskBuilder,
   AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
-import { AdminRatingVoteDefinitionVoteEntriesMaskBuilder } from './AdminRatingVoteDefinitionMaskBuilder';
-import {} from './AdminSelectAnswerVoteDefinitionMaskBuilder';
+import { AdminRatingVoteDefinitionUserVoteEntryMaskBuilder } from './AdminRatingVoteDefinitionMaskBuilder';
+import {
+  AdminSelectAnswerVoteDefinitionUserVoteEntryMaskBuilder,
+  AdminSelectAnswerVoteDefinitionVoteSelectionsMaskBuilder,
+} from './AdminSelectAnswerVoteDefinitionMaskBuilder';
 import {} from './AdminVoteDefinitionMaskBuilder';
-import {} from './AdminYesNoAbstainVoteDefinitionMaskBuilder';
-import {} from './AdminYesNoVoteDefinitionMaskBuilder';
+import { AdminYesNoAbstainVoteDefinitionUserVoteEntryMaskBuilder } from './AdminYesNoAbstainVoteDefinitionMaskBuilder';
+import { AdminYesNoVoteDefinitionUserVoteEntryMaskBuilder } from './AdminYesNoVoteDefinitionMaskBuilder';
 
 export class AdminDebateIssueMaskBuilder extends RelationMaskBuilder {
   constructor(
@@ -143,24 +146,36 @@ export class AdminDebateVoteDefinitionMaskBuilder extends RelationMaskBuilder {
   }
 }
 export class AdminDebateYesNoVoteDefinitionMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<AdminYesNoVoteDefinitionAttributes>) {
+  constructor(
+    protected props: Array<AdminYesNoVoteDefinitionAttributes | AdminYesNoVoteDefinitionUserVoteEntryMaskBuilder>,
+  ) {
     super('yesNoVoteDefinition', props);
   }
 }
 export class AdminDebateYesNoAbstainVoteDefinitionMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<AdminYesNoAbstainVoteDefinitionAttributes>) {
+  constructor(
+    protected props: Array<
+      AdminYesNoAbstainVoteDefinitionAttributes | AdminYesNoAbstainVoteDefinitionUserVoteEntryMaskBuilder
+    >,
+  ) {
     super('yesNoAbstainVoteDefinition', props);
   }
 }
 export class AdminDebateRatingVoteDefinitionMaskBuilder extends RelationMaskBuilder {
   constructor(
-    protected props: Array<AdminRatingVoteDefinitionAttributes | AdminRatingVoteDefinitionVoteEntriesMaskBuilder>,
+    protected props: Array<AdminRatingVoteDefinitionAttributes | AdminRatingVoteDefinitionUserVoteEntryMaskBuilder>,
   ) {
     super('ratingVoteDefinition', props);
   }
 }
 export class AdminDebateSelectAnswerVoteDefinitionMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<AdminSelectAnswerVoteDefinitionAttributes>) {
+  constructor(
+    protected props: Array<
+      | AdminSelectAnswerVoteDefinitionAttributes
+      | AdminSelectAnswerVoteDefinitionUserVoteEntryMaskBuilder
+      | AdminSelectAnswerVoteDefinitionVoteSelectionsMaskBuilder
+    >,
+  ) {
     super('selectAnswerVoteDefinition', props);
   }
 }

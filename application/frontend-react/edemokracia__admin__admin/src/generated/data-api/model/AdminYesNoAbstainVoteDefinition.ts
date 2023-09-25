@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 import { AdminDebateStored } from './AdminDebate';
 import { AdminIssueStored } from './AdminIssue';
+import { AdminYesNoAbstainVoteEntryStored } from './AdminYesNoAbstainVoteEntry';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
 
 export interface AdminYesNoAbstainVoteDefinition {
@@ -17,13 +18,24 @@ export interface AdminYesNoAbstainVoteDefinition {
   description: string;
   status: EdemokraciaVoteStatus;
   closeAt: Date;
+  userHasVoteEntry?: null | boolean;
+  userHasNoVoteEntry?: null | boolean;
 
   debate?: null | AdminDebateStored;
   issue?: null | AdminIssueStored;
+  voteEntries?: null | Array<AdminYesNoAbstainVoteEntryStored>;
+  userVoteEntry?: null | AdminYesNoAbstainVoteEntryStored;
 }
-export type AdminYesNoAbstainVoteDefinitionAttributes = 'title' | 'created' | 'description' | 'status' | 'closeAt';
+export type AdminYesNoAbstainVoteDefinitionAttributes =
+  | 'title'
+  | 'created'
+  | 'description'
+  | 'status'
+  | 'closeAt'
+  | 'userHasVoteEntry'
+  | 'userHasNoVoteEntry';
 
-export type AdminYesNoAbstainVoteDefinitionRelations = 'debate' | 'issue';
+export type AdminYesNoAbstainVoteDefinitionRelations = 'debate' | 'issue' | 'voteEntries' | 'userVoteEntry';
 
 export interface AdminYesNoAbstainVoteDefinitionStored
   extends JudoStored<AdminYesNoAbstainVoteDefinition>,

@@ -9,6 +9,8 @@
 import type { JudoStored } from '@judo/data-api-common';
 import { AdminDebateStored } from './AdminDebate';
 import { AdminIssueStored } from './AdminIssue';
+import { AdminSelectAnswerVoteEntryStored } from './AdminSelectAnswerVoteEntry';
+import { AdminSelectAnswerVoteSelectionStored } from './AdminSelectAnswerVoteSelection';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
 
 export interface AdminSelectAnswerVoteDefinition {
@@ -17,13 +19,30 @@ export interface AdminSelectAnswerVoteDefinition {
   description: string;
   status: EdemokraciaVoteStatus;
   closeAt: Date;
+  userHasVoteEntry?: null | boolean;
+  userHasNoVoteEntry?: null | boolean;
 
   debate?: null | AdminDebateStored;
   issue?: null | AdminIssueStored;
+  voteEntries?: null | Array<AdminSelectAnswerVoteEntryStored>;
+  userVoteEntry?: null | AdminSelectAnswerVoteEntryStored;
+  voteSelections?: null | Array<AdminSelectAnswerVoteSelectionStored>;
 }
-export type AdminSelectAnswerVoteDefinitionAttributes = 'title' | 'created' | 'description' | 'status' | 'closeAt';
+export type AdminSelectAnswerVoteDefinitionAttributes =
+  | 'title'
+  | 'created'
+  | 'description'
+  | 'status'
+  | 'closeAt'
+  | 'userHasVoteEntry'
+  | 'userHasNoVoteEntry';
 
-export type AdminSelectAnswerVoteDefinitionRelations = 'debate' | 'issue';
+export type AdminSelectAnswerVoteDefinitionRelations =
+  | 'debate'
+  | 'issue'
+  | 'voteEntries'
+  | 'userVoteEntry'
+  | 'voteSelections';
 
 export interface AdminSelectAnswerVoteDefinitionStored
   extends JudoStored<AdminSelectAnswerVoteDefinition>,

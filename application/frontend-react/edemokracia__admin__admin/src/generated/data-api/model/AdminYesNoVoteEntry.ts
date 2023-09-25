@@ -15,10 +15,10 @@ export interface AdminYesNoVoteEntry {
   value: EdemokraciaYesNoVoteValue;
   createdBy?: null | string;
 
-  user: AdminUserStored;
+  owner: AdminUserStored;
 }
 export type AdminYesNoVoteEntryAttributes = 'created' | 'value' | 'createdBy';
 
-export type AdminYesNoVoteEntryRelations = 'user';
+export type AdminYesNoVoteEntryRelations = 'owner';
 
 export interface AdminYesNoVoteEntryStored extends JudoStored<AdminYesNoVoteEntry>, AdminYesNoVoteEntry {}

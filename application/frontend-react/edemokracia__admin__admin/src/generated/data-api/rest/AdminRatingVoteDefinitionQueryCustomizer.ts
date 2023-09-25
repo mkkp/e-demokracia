@@ -9,6 +9,7 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminRatingVoteDefinition } from '../model/AdminRatingVoteDefinition';
 
+import { FilterByBoolean } from './FilterByBoolean';
 import { FilterByInteger } from './FilterByInteger';
 import { FilterByString } from './FilterByString';
 import { FilterByText } from './FilterByText';
@@ -16,11 +17,13 @@ import { FilterByTimestamp } from './FilterByTimestamp';
 import { FilterByVoteStatus } from './FilterByVoteStatus';
 
 export interface AdminRatingVoteDefinitionQueryCustomizer extends QueryCustomizer<AdminRatingVoteDefinition> {
-  minRateValue?: Array<FilterByInteger>;
-  maxRateValue?: Array<FilterByInteger>;
   title?: Array<FilterByString>;
   created?: Array<FilterByTimestamp>;
   description?: Array<FilterByText>;
   status?: Array<FilterByVoteStatus>;
   closeAt?: Array<FilterByTimestamp>;
+  maxRateValue?: Array<FilterByInteger>;
+  minRateValue?: Array<FilterByInteger>;
+  userHasVoteEntry?: Array<FilterByBoolean>;
+  userHasNoVoteEntry?: Array<FilterByBoolean>;
 }

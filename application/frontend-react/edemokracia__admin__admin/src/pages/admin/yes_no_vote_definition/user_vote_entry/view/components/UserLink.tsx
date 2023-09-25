@@ -53,7 +53,7 @@ import {
 } from '~/generated/data-api';
 import { adminYesNoVoteEntryServiceForClassImpl, adminUserServiceForClassImpl } from '~/generated/data-axios';
 
-import { useLinkViewUserAction } from '../actions';
+import { useLinkViewOwnerAction } from '../actions';
 
 export interface UserLinkProps {
   ownerData: AdminYesNoVoteEntryStored;
@@ -73,13 +73,13 @@ export function UserLink(props: UserLinkProps) {
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
 
-  const userSortModel: GridSortModel = [{ field: 'representation', sort: null }];
+  const ownerSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
-  const userColumns: GridColDef<AdminUserStored>[] = [
+  const ownerColumns: GridColDef<AdminUserStored>[] = [
     {
       ...baseColumnConfig,
       field: 'representation',
-      headerName: t('admin.YesNoVoteEntryView.user.representation', { defaultValue: 'Representation' }) as string,
+      headerName: t('admin.YesNoVoteEntryView.owner.representation', { defaultValue: 'Representation' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -88,49 +88,49 @@ export function UserLink(props: UserLinkProps) {
     },
   ];
 
-  const userRangeFilterOptions: FilterOption[] = [
+  const ownerRangeFilterOptions: FilterOption[] = [
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionUserVoteEntryViewDefaultYesNoVoteEntryViewEditUserRepresentationFilter',
       attributeName: 'representation',
-      label: t('admin.YesNoVoteEntryView.user.representation', { defaultValue: 'Representation' }) as string,
+      label: t('admin.YesNoVoteEntryView.owner.representation', { defaultValue: 'Representation' }) as string,
       filterType: FilterType.string,
     },
   ];
 
-  const userInitialQueryCustomizer: AdminUserQueryCustomizer = {
+  const ownerInitialQueryCustomizer: AdminUserQueryCustomizer = {
     _mask: '{representation}',
-    _orderBy: userSortModel.length
+    _orderBy: ownerSortModel.length
       ? [
           {
-            attribute: userSortModel[0].field,
-            descending: userSortModel[0].sort === 'desc',
+            attribute: ownerSortModel[0].field,
+            descending: ownerSortModel[0].sort === 'desc',
           },
         ]
       : [],
   };
 
-  const linkViewUserAction = useLinkViewUserAction();
+  const linkViewOwnerAction = useLinkViewOwnerAction();
 
   return (
     <AggregationInput
-      name="user"
+      name="owner"
       id="LinkedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionUserVoteEntryViewDefaultYesNoVoteEntryViewEditUser"
       required={true}
-      label={t('admin.YesNoVoteEntryView.user', { defaultValue: 'User' }) as string}
-      labelList={[ownerData.user?.representation?.toString() ?? '']}
+      label={t('admin.YesNoVoteEntryView.owner', { defaultValue: 'User' }) as string}
+      labelList={[ownerData.owner?.representation?.toString() ?? '']}
       ownerData={ownerData}
-      error={!!validation.get('user')}
-      helperText={validation.get('user')}
+      error={!!validation.get('owner')}
+      helperText={validation.get('owner')}
       icon={<MdiIcon path="account" />}
       disabled={disabled}
       readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
-      onAutoCompleteSelect={(user) => {
-        // storeDiff('user', user);
-        onChange(user as AdminUserStored);
+      onAutoCompleteSelect={(owner) => {
+        // storeDiff('owner', owner);
+        onChange(owner as AdminUserStored);
       }}
-      onView={async () => linkViewUserAction(ownerData, ownerData?.user!, () => fetchOwnerData())}
+      onView={async () => linkViewOwnerAction(ownerData, ownerData?.owner!, () => fetchOwnerData())}
     />
   );
 }

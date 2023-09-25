@@ -27,26 +27,4 @@ export interface VoteDefinitionServiceForVoteEntries {
     owner: JudoIdentifiable<VoteDefinition>,
     queryCustomizer?: VoteEntryQueryCustomizer,
   ): Promise<Array<VoteEntryStored>>;
-
-  getRangeForUser(
-    owner: JudoIdentifiable<VoteDefinition>,
-    queryCustomizer: UserQueryCustomizer,
-  ): Promise<Array<UserStored>>;
-
-  setUser(
-    owner: JudoIdentifiable<VoteDefinition>,
-    target: JudoIdentifiable<User>,
-    selected: JudoIdentifiable<User>,
-  ): Promise<void>;
-
-  getRangeForVoteDefinition(
-    owner: JudoIdentifiable<VoteDefinition>,
-    queryCustomizer: VoteDefinitionQueryCustomizer,
-  ): Promise<Array<VoteDefinitionStored>>;
-
-  setVoteDefinition(
-    owner: JudoIdentifiable<VoteDefinition>,
-    target: JudoIdentifiable<VoteDefinition>,
-    selected: JudoIdentifiable<VoteDefinition>,
-  ): Promise<void>;
 }

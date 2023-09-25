@@ -18,7 +18,7 @@ import {
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
 
-export class AdminYesNoVoteEntryUserMaskBuilder extends RelationMaskBuilder {
+export class AdminYesNoVoteEntryOwnerMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | AdminUserAttributes
@@ -30,12 +30,12 @@ export class AdminYesNoVoteEntryUserMaskBuilder extends RelationMaskBuilder {
       | AdminUserResidentDistrictMaskBuilder
     >,
   ) {
-    super('user', props);
+    super('owner', props);
   }
 }
 
 export class AdminYesNoVoteEntryMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<AdminYesNoVoteEntryAttributes | AdminYesNoVoteEntryUserMaskBuilder>) {
+  constructor(protected props: Array<AdminYesNoVoteEntryAttributes | AdminYesNoVoteEntryOwnerMaskBuilder>) {
     super(props);
   }
 }

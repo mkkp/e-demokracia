@@ -9,6 +9,7 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminSelectAnswerVoteDefinition } from '../model/AdminSelectAnswerVoteDefinition';
 
+import { FilterByBoolean } from './FilterByBoolean';
 import { FilterByString } from './FilterByString';
 import { FilterByText } from './FilterByText';
 import { FilterByTimestamp } from './FilterByTimestamp';
@@ -21,4 +22,6 @@ export interface AdminSelectAnswerVoteDefinitionQueryCustomizer
   description?: Array<FilterByText>;
   status?: Array<FilterByVoteStatus>;
   closeAt?: Array<FilterByTimestamp>;
+  userHasVoteEntry?: Array<FilterByBoolean>;
+  userHasNoVoteEntry?: Array<FilterByBoolean>;
 }

@@ -25,12 +25,12 @@ export interface AdminYesNoVoteEntryServiceForClass {
     queryCustomizer?: AdminYesNoVoteEntryQueryCustomizer,
   ): Promise<AdminYesNoVoteEntryStored>;
 
-  getUser(
+  getOwner(
     target: JudoIdentifiable<AdminYesNoVoteEntry>,
     queryCustomizer?: AdminUserQueryCustomizer,
   ): Promise<AdminUserStored>;
 
-  getRangeForUser(
+  getRangeForOwner(
     owner?: JudoIdentifiable<AdminYesNoVoteEntry> | AdminYesNoVoteEntry,
     queryCustomizer?: AdminUserQueryCustomizer,
   ): Promise<Array<AdminUserStored>>;

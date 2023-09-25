@@ -11,16 +11,16 @@ import { JudoAxiosService } from './JudoAxiosService';
 import type {
   RatingVoteInput,
   AdminRatingVoteDefinitionStored,
-  VoteEntry,
   AdminIssueStored,
+  AdminRatingVoteEntryQueryCustomizer,
   AdminRatingVoteDefinitionQueryCustomizer,
-  VoteEntryQueryCustomizer,
-  VoteEntryStored,
   AdminRatingVoteDefinition,
   AdminIssueQueryCustomizer,
   AdminDebate,
   AdminIssue,
+  AdminRatingVoteEntryStored,
   AdminDebateStored,
+  AdminRatingVoteEntry,
   AdminDebateQueryCustomizer,
 } from '../data-api';
 import type { AdminRatingVoteDefinitionServiceForClass } from '../data-service';
@@ -44,39 +44,6 @@ export class AdminRatingVoteDefinitionServiceForClassImpl
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,
       },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getVoteEntries(
-    target: JudoIdentifiable<AdminRatingVoteDefinition>,
-    queryCustomizer?: VoteEntryQueryCustomizer,
-  ): Promise<Array<VoteEntryStored>> {
-    const path = '/admin/RatingVoteDefinition/voteEntries/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForVoteEntries(
-    owner?: JudoIdentifiable<AdminRatingVoteDefinition> | AdminRatingVoteDefinition,
-    queryCustomizer?: VoteEntryQueryCustomizer,
-  ): Promise<Array<VoteEntryStored>> {
-    const path = '/admin/RatingVoteDefinition/voteEntries/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;
@@ -149,12 +116,91 @@ export class AdminRatingVoteDefinitionServiceForClassImpl
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getVoteEntries(
+    target: JudoIdentifiable<AdminRatingVoteDefinition>,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteEntryStored>> {
+    const path = '/admin/RatingVoteDefinition/voteEntries/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForVoteEntries(
+    owner?: JudoIdentifiable<AdminRatingVoteDefinition> | AdminRatingVoteDefinition,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteEntryStored>> {
+    const path = '/admin/RatingVoteDefinition/voteEntries/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getUserVoteEntry(
+    target: JudoIdentifiable<AdminRatingVoteDefinition>,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<AdminRatingVoteEntryStored> {
+    const path = '/admin/RatingVoteDefinition/userVoteEntry/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<AdminRatingVoteDefinition> | AdminRatingVoteDefinition,
+    queryCustomizer?: AdminRatingVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminRatingVoteEntryStored>> {
+    const path = '/admin/RatingVoteDefinition/userVoteEntry/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
   async vote(owner: JudoIdentifiable<AdminRatingVoteDefinition>, target: RatingVoteInput): Promise<void> {
     const path = '/admin/RatingVoteDefinition/vote';
     const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async takeBackVote(owner: JudoIdentifiable<AdminRatingVoteDefinition>): Promise<void> {
+    const path = '/admin/RatingVoteDefinition/takeBackVote';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
       },

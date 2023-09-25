@@ -8,15 +8,18 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
+  AdminIssueStored,
+  AdminYesNoAbstainVoteEntryQueryCustomizer,
+  YesNoAbstainVoteInput,
+  AdminYesNoAbstainVoteEntryStored,
+  AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminYesNoAbstainVoteDefinition,
   AdminIssueQueryCustomizer,
+  AdminYesNoAbstainVoteEntry,
   AdminDebate,
   AdminIssue,
-  AdminIssueStored,
-  YesNoAbstainVoteInput,
   AdminDebateStored,
   AdminYesNoAbstainVoteDefinitionStored,
-  AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminDebateQueryCustomizer,
 } from '../data-api';
 
@@ -49,5 +52,27 @@ export interface AdminYesNoAbstainVoteDefinitionServiceForClass {
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
+  getVoteEntries(
+    target: JudoIdentifiable<AdminYesNoAbstainVoteDefinition>,
+    queryCustomizer?: AdminYesNoAbstainVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminYesNoAbstainVoteEntryStored>>;
+
+  getRangeForVoteEntries(
+    owner?: JudoIdentifiable<AdminYesNoAbstainVoteDefinition> | AdminYesNoAbstainVoteDefinition,
+    queryCustomizer?: AdminYesNoAbstainVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminYesNoAbstainVoteEntryStored>>;
+
+  getUserVoteEntry(
+    target: JudoIdentifiable<AdminYesNoAbstainVoteDefinition>,
+    queryCustomizer?: AdminYesNoAbstainVoteEntryQueryCustomizer,
+  ): Promise<AdminYesNoAbstainVoteEntryStored>;
+
+  getRangeForUserVoteEntry(
+    owner?: JudoIdentifiable<AdminYesNoAbstainVoteDefinition> | AdminYesNoAbstainVoteDefinition,
+    queryCustomizer?: AdminYesNoAbstainVoteEntryQueryCustomizer,
+  ): Promise<Array<AdminYesNoAbstainVoteEntryStored>>;
+
   vote(owner: JudoIdentifiable<AdminYesNoAbstainVoteDefinition>, target: YesNoAbstainVoteInput): Promise<void>;
+
+  takeBackVote(owner: JudoIdentifiable<AdminYesNoAbstainVoteDefinition>): Promise<void>;
 }

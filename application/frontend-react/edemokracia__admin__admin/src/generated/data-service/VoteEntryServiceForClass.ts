@@ -23,13 +23,7 @@ import {
  * Class Service for VoteEntry
  */
 export interface VoteEntryServiceForClass {
-  getTemplate(): Promise<VoteEntry>;
-
   refresh(target: JudoIdentifiable<VoteEntry>, queryCustomizer?: VoteEntryQueryCustomizer): Promise<VoteEntryStored>;
-
-  delete(target: JudoIdentifiable<VoteEntry>): Promise<void>;
-
-  update(target: Partial<VoteEntryStored>): Promise<VoteEntryStored>;
 
   getUser(target: JudoIdentifiable<VoteEntry>, queryCustomizer?: UserQueryCustomizer): Promise<UserStored>;
 
@@ -37,8 +31,6 @@ export interface VoteEntryServiceForClass {
     owner?: JudoIdentifiable<VoteEntry> | VoteEntry,
     queryCustomizer?: UserQueryCustomizer,
   ): Promise<Array<UserStored>>;
-
-  setUser(target: JudoIdentifiable<VoteEntry>, selected: JudoIdentifiable<User>): Promise<void>;
 
   getVoteDefinition(
     target: JudoIdentifiable<VoteEntry>,
@@ -49,6 +41,4 @@ export interface VoteEntryServiceForClass {
     owner?: JudoIdentifiable<VoteEntry> | VoteEntry,
     queryCustomizer?: VoteDefinitionQueryCustomizer,
   ): Promise<Array<VoteDefinitionStored>>;
-
-  setVoteDefinition(target: JudoIdentifiable<VoteEntry>, selected: JudoIdentifiable<VoteDefinition>): Promise<void>;
 }

@@ -9,6 +9,7 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminYesNoAbstainVoteDefinition } from '../model/AdminYesNoAbstainVoteDefinition';
 
+import { FilterByBoolean } from './FilterByBoolean';
 import { FilterByString } from './FilterByString';
 import { FilterByText } from './FilterByText';
 import { FilterByTimestamp } from './FilterByTimestamp';
@@ -21,4 +22,6 @@ export interface AdminYesNoAbstainVoteDefinitionQueryCustomizer
   description?: Array<FilterByText>;
   status?: Array<FilterByVoteStatus>;
   closeAt?: Array<FilterByTimestamp>;
+  userHasVoteEntry?: Array<FilterByBoolean>;
+  userHasNoVoteEntry?: Array<FilterByBoolean>;
 }

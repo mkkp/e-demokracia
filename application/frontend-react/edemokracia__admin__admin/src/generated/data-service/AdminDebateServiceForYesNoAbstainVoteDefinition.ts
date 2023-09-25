@@ -10,9 +10,12 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   AdminYesNoAbstainVoteDefinition,
   AdminIssueQueryCustomizer,
+  AdminYesNoAbstainVoteEntry,
   AdminDebate,
   AdminIssue,
   AdminIssueStored,
+  AdminYesNoAbstainVoteEntryQueryCustomizer,
+  AdminYesNoAbstainVoteEntryStored,
   AdminDebateStored,
   AdminYesNoAbstainVoteDefinitionQueryCustomizer,
   AdminYesNoAbstainVoteDefinitionStored,

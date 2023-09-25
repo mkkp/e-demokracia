@@ -6,4 +6,4 @@
 // Template name: actor/src/pages/actions/index.tsx
 // Template file: actor/src/pages/actions/index.tsx.hbs
 export * from './pageRefreshUserVoteEntry';
-export * from './user/linkViewUser';
+export * from './owner/linkViewOwner';

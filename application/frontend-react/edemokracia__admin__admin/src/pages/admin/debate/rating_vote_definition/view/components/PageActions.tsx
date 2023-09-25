@@ -10,6 +10,9 @@ import {
   AdminRatingVoteDefinition,
   AdminRatingVoteDefinitionQueryCustomizer,
   AdminRatingVoteDefinitionStored,
+  AdminRatingVoteEntry,
+  AdminRatingVoteEntryQueryCustomizer,
+  AdminRatingVoteEntryStored,
   EdemokraciaVoteStatus,
 } from '~/generated/data-api';
 import { usePageRefreshRatingVoteDefinitionAction } from '../actions';

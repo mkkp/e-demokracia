@@ -11,20 +11,20 @@ import {
   AdminIssueAttributes,
   AdminDebateAttributes,
   AdminRatingVoteDefinitionAttributes,
-  VoteEntryAttributes,
+  AdminRatingVoteEntryAttributes,
 } from '../model';
 
-import {} from './VoteEntryMaskBuilder';
+import {} from './AdminRatingVoteEntryMaskBuilder';
 
-export class AdminRatingVoteDefinitionVoteEntriesMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<VoteEntryAttributes>) {
-    super('voteEntries', props);
+export class AdminRatingVoteDefinitionUserVoteEntryMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<AdminRatingVoteEntryAttributes>) {
+    super('userVoteEntry', props);
   }
 }
 
 export class AdminRatingVoteDefinitionMaskBuilder extends MaskBuilder {
   constructor(
-    protected props: Array<AdminRatingVoteDefinitionAttributes | AdminRatingVoteDefinitionVoteEntriesMaskBuilder>,
+    protected props: Array<AdminRatingVoteDefinitionAttributes | AdminRatingVoteDefinitionUserVoteEntryMaskBuilder>,
   ) {
     super(props);
   }

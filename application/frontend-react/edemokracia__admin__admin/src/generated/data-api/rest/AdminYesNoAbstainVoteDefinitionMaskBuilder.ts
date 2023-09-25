@@ -6,11 +6,30 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder } from './MaskBuilder';
-import { AdminIssueAttributes, AdminDebateAttributes, AdminYesNoAbstainVoteDefinitionAttributes } from '../model';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
+import {
+  AdminIssueAttributes,
+  AdminDebateAttributes,
+  AdminYesNoAbstainVoteDefinitionAttributes,
+  AdminYesNoAbstainVoteEntryAttributes,
+} from '../model';
+
+import { AdminYesNoAbstainVoteEntryOwnerMaskBuilder } from './AdminYesNoAbstainVoteEntryMaskBuilder';
+
+export class AdminYesNoAbstainVoteDefinitionUserVoteEntryMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<AdminYesNoAbstainVoteEntryAttributes | AdminYesNoAbstainVoteEntryOwnerMaskBuilder>,
+  ) {
+    super('userVoteEntry', props);
+  }
+}
 
 export class AdminYesNoAbstainVoteDefinitionMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<AdminYesNoAbstainVoteDefinitionAttributes>) {
+  constructor(
+    protected props: Array<
+      AdminYesNoAbstainVoteDefinitionAttributes | AdminYesNoAbstainVoteDefinitionUserVoteEntryMaskBuilder
+    >,
+  ) {
     super(props);
   }
 }
