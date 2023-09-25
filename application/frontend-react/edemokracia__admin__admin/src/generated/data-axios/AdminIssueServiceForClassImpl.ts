@@ -24,7 +24,6 @@ import type {
   CreateCommentInput,
   AdminIssueCategory,
   AdminComment,
-  DebateStored,
   AdminUser,
   AdminCountyStored,
   AdminCityStored,
@@ -36,6 +35,7 @@ import type {
   AdminIssueDebateStored,
   AdminIssueAttachmentQueryCustomizer,
   AdminIssueAttachment,
+  CreateDebateOutputDebateReferenceStored,
   AdminIssue,
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
@@ -590,7 +590,10 @@ export class AdminIssueServiceForClassImpl extends JudoAxiosService implements A
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createDebate(owner: JudoIdentifiable<AdminIssue>, target: CreateDebateInput): Promise<DebateStored> {
+  async createDebate(
+    owner: JudoIdentifiable<AdminIssue>,
+    target: CreateDebateInput,
+  ): Promise<CreateDebateOutputDebateReferenceStored> {
     const path = '/admin/Issue/createDebate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {

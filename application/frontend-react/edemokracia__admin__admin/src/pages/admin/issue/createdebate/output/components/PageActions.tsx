@@ -4,11 +4,15 @@ import { Button, Grid } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
-import { Debate, DebateQueryCustomizer, DebateStored, EdemokraciaDebateStatus } from '~/generated/data-api';
+import {
+  CreateDebateOutputDebateReference,
+  CreateDebateOutputDebateReferenceQueryCustomizer,
+  CreateDebateOutputDebateReferenceStored,
+} from '~/generated/data-api';
 import { usePageRefreshOutputAction } from '../actions';
 
 export interface PageActionsProps {
-  data: DebateStored;
+  data: CreateDebateOutputDebateReferenceStored;
   editMode: boolean;
   setEditMode: (mode: boolean) => void;
   isLoading: boolean;

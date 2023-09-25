@@ -45,17 +45,21 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 import { clsx } from 'clsx';
 
-import { Debate, DebateQueryCustomizer, DebateStored, EdemokraciaDebateStatus } from '~/generated/data-api';
-import { debateServiceForClassImpl } from '~/generated/data-axios';
+import {
+  CreateDebateOutputDebateReference,
+  CreateDebateOutputDebateReferenceQueryCustomizer,
+  CreateDebateOutputDebateReferenceStored,
+} from '~/generated/data-api';
+import { createDebateOutputDebateReferenceServiceForClassImpl } from '~/generated/data-axios';
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
 
 export type AdminIssueCreatedebateOutputPostRefreshAction = (
-  data: DebateStored,
-  storeDiff: (attributeName: keyof DebateStored, value: any) => void,
+  data: CreateDebateOutputDebateReferenceStored,
+  storeDiff: (attributeName: keyof CreateDebateOutputDebateReferenceStored, value: any) => void,
   setEditMode: Dispatch<SetStateAction<boolean>>,
-  setValidation: Dispatch<SetStateAction<Map<keyof Debate, string>>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof CreateDebateOutputDebateReference, string>>>,
 ) => Promise<void>;
 
 export const ADMIN_ISSUE_CREATEDEBATE_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY =
@@ -82,38 +86,20 @@ export default function AdminIssueCreatedebateOutput() {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<DebateStored>({} as unknown as DebateStored);
-  const [payloadDiff, setPayloadDiff] = useState<Record<keyof DebateStored, any>>(
-    {} as unknown as Record<keyof DebateStored, any>,
+  const [data, setData] = useState<CreateDebateOutputDebateReferenceStored>(
+    {} as unknown as CreateDebateOutputDebateReferenceStored,
+  );
+  const [payloadDiff, setPayloadDiff] = useState<Record<keyof CreateDebateOutputDebateReferenceStored, any>>(
+    {} as unknown as Record<keyof CreateDebateOutputDebateReferenceStored, any>,
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const storeDiff: (attributeName: keyof DebateStored, value: any) => void = useCallback(
-    (attributeName: keyof DebateStored, value: any) => {
-      const dateTypes: string[] = [];
-      const dateTimeTypes: string[] = ['closeAt'];
-      const timeTypes: string[] = [];
-      if (dateTypes.includes(attributeName as string)) {
-        payloadDiff[attributeName] = uiDateToServiceDate(value);
-      } else if (dateTimeTypes.includes(attributeName as string)) {
-        payloadDiff[attributeName] = value;
-      } else if (timeTypes.includes(attributeName as string)) {
-        payloadDiff[attributeName] = uiTimeToServiceTime(value);
-      } else {
-        payloadDiff[attributeName] = value;
-      }
-      setData((prevData) => ({
-        ...prevData,
-        [attributeName]: value,
-      }));
-      if (!editMode) {
-        setEditMode(true);
-      }
-    },
+  const storeDiff: (attributeName: keyof CreateDebateOutputDebateReferenceStored, value: any) => void = useCallback(
+    (attributeName: keyof CreateDebateOutputDebateReferenceStored, value: any) => {},
     [data],
   );
-  const [validation, setValidation] = useState<Map<keyof Debate, string>>(new Map());
+  const [validation, setValidation] = useState<Map<keyof CreateDebateOutputDebateReference, string>>(new Map());
 
-  const queryCustomizer: DebateQueryCustomizer = {
+  const queryCustomizer: CreateDebateOutputDebateReferenceQueryCustomizer = {
     _mask: '{}',
   };
 
@@ -123,7 +109,9 @@ export default function AdminIssueCreatedebateOutput() {
   const postRefreshAction: AdminIssueCreatedebateOutputPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const title: string = t('DebateView', { defaultValue: 'Debate View / Edit' });
+  const title: string = t('CreateDebateOutputDebateReferenceView', {
+    defaultValue: 'CreateDebateOutputDebateReference View / Edit',
+  });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -144,8 +132,8 @@ export default function AdminIssueCreatedebateOutput() {
     setIsLoading(true);
 
     try {
-      const res = await debateServiceForClassImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<Debate>,
+      const res = await createDebateOutputDebateReferenceServiceForClassImpl.refresh(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<CreateDebateOutputDebateReference>,
         processQueryCustomizer(queryCustomizer),
       );
 
@@ -155,7 +143,7 @@ export default function AdminIssueCreatedebateOutput() {
         __signedIdentifier: res.__signedIdentifier,
         __version: res.__version,
         __entityType: res.__entityType,
-      } as Record<keyof DebateStored, any>);
+      } as Record<keyof CreateDebateOutputDebateReferenceStored, any>);
       if (postRefreshAction) {
         try {
           await postRefreshAction(res, storeDiff, setEditMode, setValidation);

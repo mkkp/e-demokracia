@@ -82,14 +82,14 @@ import {
   CreateDebateInput,
   CreateDebateInputQueryCustomizer,
   CreateDebateInputStored,
-  Debate,
-  DebateQueryCustomizer,
-  DebateStored,
+  CreateDebateOutputDebateReference,
+  CreateDebateOutputDebateReferenceQueryCustomizer,
+  CreateDebateOutputDebateReferenceStored,
 } from '~/generated/data-api';
 import { createDebateInputServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 
 export interface AdminIssueCreateDebateFormProps {
-  successCallback: (result?: DebateStored) => void;
+  successCallback: (result?: CreateDebateOutputDebateReferenceStored) => void;
   cancel: () => void;
   owner: AdminIssueStored;
 }

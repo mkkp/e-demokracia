@@ -73,7 +73,7 @@ export type AdminCommentVotesViewPostRefreshHook = () => AdminCommentVotesViewPo
  * Name: edemokracia::admin::Comment.votes#View
  * Is Access: false
  * Type: View
- * Edit Mode Available: true
+ * Edit Mode Available: false
  **/
 export default function AdminCommentVotesView() {
   const { t } = useTranslation();
@@ -86,12 +86,6 @@ export default function AdminCommentVotesView() {
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
-  );
-  const handleUpdateError = useErrorHandler<AdminSimpleVote>(
-    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminCommentVotesView))`,
-  );
-  const handleDeleteError = useErrorHandler<AdminSimpleVote>(
-    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Delete)(component=AdminCommentVotesView))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -141,11 +135,11 @@ export default function AdminCommentVotesView() {
   const title: string = t('admin.SimpleVoteView', { defaultValue: 'SimpleVote View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
-    return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
   useConfirmationBeforeChange(
@@ -186,42 +180,6 @@ export default function AdminCommentVotesView() {
     }
   }
 
-  async function submit() {
-    setIsLoading(true);
-
-    try {
-      const res = await adminSimpleVoteServiceForClassImpl.update(payloadDiff);
-
-      if (res) {
-        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
-        setValidation(new Map<keyof AdminSimpleVote, string>());
-        await fetchData();
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleUpdateError(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  async function deleteData() {
-    setIsLoading(true);
-
-    try {
-      await adminSimpleVoteServiceForClassImpl.delete(data);
-
-      back();
-    } catch (error) {
-      handleDeleteError(error, undefined, data);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -235,8 +193,6 @@ export default function AdminCommentVotesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
-          submit={submit}
-          deleteData={deleteData}
         />
       </PageHeader>
       <PageContainerTransition>

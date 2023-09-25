@@ -32,6 +32,8 @@ export interface AdminRatingVoteDefinitionServiceForClass {
     queryCustomizer?: AdminRatingVoteDefinitionQueryCustomizer,
   ): Promise<AdminRatingVoteDefinitionStored>;
 
+  update(target: Partial<AdminRatingVoteDefinitionStored>): Promise<AdminRatingVoteDefinitionStored>;
+
   getDebate(
     target: JudoIdentifiable<AdminRatingVoteDefinition>,
     queryCustomizer?: AdminDebateQueryCustomizer,

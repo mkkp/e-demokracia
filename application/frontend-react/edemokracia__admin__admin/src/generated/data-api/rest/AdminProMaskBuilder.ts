@@ -10,7 +10,6 @@ import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   AdminConParentAttributes,
   AdminCommentAttributes,
-  AdminDebateParentAttributes,
   AdminProParentAttributes,
   AdminProAttributes,
   AdminUserAttributes,
@@ -24,7 +23,6 @@ import {
   AdminConConsMaskBuilder,
   AdminConProsMaskBuilder,
   AdminConCommentsMaskBuilder,
-  AdminConParentDebateMaskBuilder,
   AdminConParentConMaskBuilder,
   AdminConParentProMaskBuilder,
 } from './AdminConMaskBuilder';
@@ -37,7 +35,6 @@ import {
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
 import {} from './AdminConParentMaskBuilder';
-import {} from './AdminDebateParentMaskBuilder';
 import {} from './AdminProParentMaskBuilder';
 
 export class AdminProCreatedByMaskBuilder extends RelationMaskBuilder {
@@ -63,7 +60,6 @@ export class AdminProProsMaskBuilder extends RelationMaskBuilder {
       | AdminProProsMaskBuilder
       | AdminProConsMaskBuilder
       | AdminProCommentsMaskBuilder
-      | AdminProParentDebateMaskBuilder
       | AdminProParentProMaskBuilder
       | AdminProParentConMaskBuilder
     >,
@@ -79,7 +75,6 @@ export class AdminProConsMaskBuilder extends RelationMaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
-      | AdminConParentDebateMaskBuilder
       | AdminConParentConMaskBuilder
       | AdminConParentProMaskBuilder
     >,
@@ -90,11 +85,6 @@ export class AdminProConsMaskBuilder extends RelationMaskBuilder {
 export class AdminProCommentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<AdminCommentAttributes | AdminCommentCreatedByMaskBuilder>) {
     super('comments', props);
-  }
-}
-export class AdminProParentDebateMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<AdminDebateParentAttributes>) {
-    super('parentDebate', props);
   }
 }
 export class AdminProParentProMaskBuilder extends RelationMaskBuilder {
@@ -116,7 +106,6 @@ export class AdminProMaskBuilder extends MaskBuilder {
       | AdminProProsMaskBuilder
       | AdminProConsMaskBuilder
       | AdminProCommentsMaskBuilder
-      | AdminProParentDebateMaskBuilder
       | AdminProParentProMaskBuilder
       | AdminProParentConMaskBuilder
     >,

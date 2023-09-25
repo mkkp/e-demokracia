@@ -85,15 +85,15 @@ import {
   CloseDebateInput,
   CloseDebateInputQueryCustomizer,
   CloseDebateInputStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReferenceStored,
   EdemokraciaVoteTypeOnCloseDebate,
-  VoteDefinition,
-  VoteDefinitionQueryCustomizer,
-  VoteDefinitionStored,
 } from '~/generated/data-api';
 import { closeDebateInputServiceForClassImpl, adminDebateServiceForClassImpl } from '~/generated/data-axios';
 
 export interface AdminDebateCloseDebateFormProps {
-  successCallback: (result?: VoteDefinitionStored) => void;
+  successCallback: (result?: CloseDebateOutputVoteDefinitionReferenceStored) => void;
   cancel: () => void;
   owner: AdminDebateStored;
 }

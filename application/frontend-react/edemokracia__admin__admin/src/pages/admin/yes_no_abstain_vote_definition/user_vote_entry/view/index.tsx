@@ -1,10 +1,10 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getPagesForRouting(#application)
+// Factory expression: #getViewDialogs(#application)
 // Path expression: #pageIndexPath(#self)
-// Template name: actor/src/pages/index.tsx
-// Template file: actor/src/pages/index.tsx.hbs
+// Template name: actor/src/pages/dialogs/index.tsx
+// Template file: actor/src/pages/dialogs/index.tsx.hbs
 // Page name: edemokracia::admin::YesNoAbstainVoteDefinition.userVoteEntry#View
 // Page owner name: edemokracia::admin::Admin
 // Page DataElement name: userVoteEntry
@@ -46,6 +46,8 @@ import { mainContainerPadding } from '~/theme';
 import { PageContainerTransition } from '~/theme/animations';
 import { clsx } from 'clsx';
 
+import { IconButton, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import { useConfirmDialog } from '~/components/dialog';
 import {
   AdminUser,
   AdminUserQueryCustomizer,
@@ -57,26 +59,26 @@ import {
   AdminYesNoAbstainVoteEntryStored,
   EdemokraciaYesNoAbstainVoteValue,
 } from '~/generated/data-api';
-import {
-  adminYesNoAbstainVoteDefinitionServiceForClassImpl,
-  adminYesNoAbstainVoteEntryServiceForClassImpl,
-} from '~/generated/data-axios';
+import { adminYesNoAbstainVoteEntryServiceForClassImpl } from '~/generated/data-axios';
 import {} from './actions';
 
-import { PageActions } from './components/PageActions';
 import { UserLink } from './components/UserLink';
 
-export type AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshAction = (
+export interface AdminAdminViewProps {
+  entry: AdminYesNoAbstainVoteEntryStored;
+  successCallback: () => void;
+  cancel: () => void;
+}
+
+export type AdminAdminViewPostRefreshAction = (
   data: AdminYesNoAbstainVoteEntryStored,
   storeDiff: (attributeName: keyof AdminYesNoAbstainVoteEntryStored, value: any) => void,
   setEditMode: Dispatch<SetStateAction<boolean>>,
   setValidation: Dispatch<SetStateAction<Map<keyof AdminYesNoAbstainVoteEntry, string>>>,
 ) => Promise<void>;
 
-export const ADMIN_YES_NO_ABSTAIN_VOTE_DEFINITION_USER_VOTE_ENTRY_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY =
-  'AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshHook';
-export type AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshHook =
-  () => AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshAction;
+export const ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY = 'AdminAdminViewPostRefreshHook';
+export type AdminAdminViewPostRefreshHook = () => AdminAdminViewPostRefreshAction;
 
 /**
  * Name: edemokracia::admin::YesNoAbstainVoteDefinition.userVoteEntry#View
@@ -84,22 +86,25 @@ export type AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshHook =
  * Type: View
  * Edit Mode Available: false
  **/
-export default function AdminYesNoAbstainVoteDefinitionUserVoteEntryView() {
+export default function AdminAdminView(props: AdminAdminViewProps) {
+  const { entry, successCallback, cancel } = props;
+
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { signedIdentifier } = useParams();
-
-  const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const { enqueueSnackbar } = useSnackbar();
+  const { openConfirmDialog } = useConfirmDialog();
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
   );
-  const { enqueueSnackbar } = useSnackbar();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<AdminYesNoAbstainVoteEntryStored>({} as unknown as AdminYesNoAbstainVoteEntryStored);
+  const [data, setData] = useState<AdminYesNoAbstainVoteEntryStored>(
+    entry ? { ...entry } : ({} as unknown as AdminYesNoAbstainVoteEntryStored),
+  );
   const [payloadDiff, setPayloadDiff] = useState<Record<keyof AdminYesNoAbstainVoteEntryStored, any>>(
     {} as unknown as Record<keyof AdminYesNoAbstainVoteEntryStored, any>,
   );
@@ -136,20 +141,19 @@ export default function AdminYesNoAbstainVoteDefinitionUserVoteEntryView() {
     _mask: '{created,value,createdBy,owner{representation}}',
   };
 
-  const { service: postRefreshHook } = useTrackService<AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshHook>(
-    `(${OBJECTCLASS}=${ADMIN_YES_NO_ABSTAIN_VOTE_DEFINITION_USER_VOTE_ENTRY_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
+  const { service: postRefreshHook } = useTrackService<AdminAdminViewPostRefreshHook>(
+    `(${OBJECTCLASS}=${ADMIN_ADMIN_VIEW_POST_REFRESH_HOOK_INTERFACE_KEY})`,
   );
-  const postRefreshAction: AdminYesNoAbstainVoteDefinitionUserVoteEntryViewPostRefreshAction | undefined =
-    postRefreshHook && postRefreshHook();
+  const postRefreshAction: AdminAdminViewPostRefreshAction | undefined = postRefreshHook && postRefreshHook();
 
   const title: string = t('admin.YesNoAbstainVoteEntryView', { defaultValue: 'YesNoAbstainVoteEntry View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return false;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
-    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false;
   }, [data]);
 
   useConfirmationBeforeChange(
@@ -164,7 +168,7 @@ export default function AdminYesNoAbstainVoteDefinitionUserVoteEntryView() {
 
     try {
       const res = await adminYesNoAbstainVoteEntryServiceForClassImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminYesNoAbstainVoteEntry>,
+        { __signedIdentifier: entry.__signedIdentifier } as JudoIdentifiable<AdminYesNoAbstainVoteEntry>,
         processQueryCustomizer(queryCustomizer),
       );
 
@@ -196,133 +200,167 @@ export default function AdminYesNoAbstainVoteDefinitionUserVoteEntryView() {
 
   return (
     <>
-      <PageHeader title={title}>
-        <PageActions
-          data={data}
-          fetchData={fetchData}
-          editMode={editMode}
-          setEditMode={setEditMode}
-          isLoading={isLoading}
-        />
-      </PageHeader>
-      <PageContainerTransition>
-        <Box sx={mainContainerPadding}>
-          <Grid
-            className="relation-page-data"
-            container
-            spacing={2}
-            direction="column"
-            alignItems="stretch"
-            justifyContent="flex-start"
-          >
-            <Grid item xs={12} sm={12}>
-              <DateTimePicker
-                ampm={false}
-                ampmInClock={false}
-                className={clsx({
-                  'JUDO-viewMode': !editMode,
-                  'JUDO-required': true,
-                })}
-                slotProps={{
-                  textField: {
-                    id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminYesNoAbstainVoteDefinitionUserVoteEntryViewDefaultYesNoAbstainVoteEntryViewEditCreated',
-                    required: true,
-                    helperText: validation.get('created'),
-                    error: !!validation.get('created'),
-                    InputProps: {
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <MdiIcon path="calendar-clock" />
-                        </InputAdornment>
-                      ),
-                    },
+      <DialogTitle>
+        {title}
+        <IconButton
+          id="AdminAdminView-dialog-close"
+          aria-label="close"
+          onClick={() => {
+            cancel();
+            if (!editMode) {
+              successCallback();
+            }
+          }}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <MdiIcon path="close" />
+        </IconButton>
+      </DialogTitle>
+      <DialogContent dividers>
+        <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+          <Grid item xs={12} sm={12}>
+            <DateTimePicker
+              ampm={false}
+              ampmInClock={false}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              slotProps={{
+                textField: {
+                  id: 'DateTimeInputedemokraciaAdminAdminEdemokraciaAdminYesNoAbstainVoteDefinitionUserVoteEntryViewDefaultYesNoAbstainVoteEntryViewEditCreated',
+                  required: true,
+                  helperText: validation.get('created'),
+                  error: !!validation.get('created'),
+                  InputProps: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="calendar-clock" />
+                      </InputAdornment>
+                    ),
                   },
-                }}
-                onError={(newError: DateTimeValidationError, value: any) => {
-                  // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                  setValidation((prevValidation) => {
-                    const copy = new Map<keyof AdminYesNoAbstainVoteEntry, string>(prevValidation);
-                    copy.set(
-                      'created',
-                      newError === 'invalidDate'
-                        ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                            defaultValue: 'Value does not match the pattern requirements.',
-                          }) as string)
-                        : '',
-                    );
-                    return copy;
-                  });
-                }}
-                views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                label={t('admin.YesNoAbstainVoteEntryView.created', { defaultValue: 'Created' }) as string}
-                value={serviceDateToUiDate(data.created ?? null)}
-                readOnly={false || !isFormUpdateable()}
-                disabled={isLoading}
-                onChange={(newValue: Date) => {
-                  storeDiff('created', newValue);
-                }}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <TextField
-                required={true}
-                name="value"
-                id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminYesNoAbstainVoteDefinitionUserVoteEntryViewDefaultYesNoAbstainVoteEntryViewEditValue"
-                label={t('admin.YesNoAbstainVoteEntryView.value', { defaultValue: 'Value' }) as string}
-                value={data.value || ''}
-                className={clsx({
-                  'JUDO-viewMode': !editMode,
-                  'JUDO-required': true,
-                })}
-                disabled={isLoading}
-                error={!!validation.get('value')}
-                helperText={validation.get('value')}
-                onChange={(event) => {
-                  storeDiff('value', event.target.value);
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  readOnly: false || !isFormUpdateable(),
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <MdiIcon path="format-list-numbered" />
-                    </InputAdornment>
-                  ),
-                }}
-                select
-              >
-                <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaYesNoAbstainVoteValueYES" value={'YES'}>
-                  {t('enumerations.EdemokraciaYesNoAbstainVoteValue.YES', { defaultValue: 'YES' })}
-                </MenuItem>
-                <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaYesNoAbstainVoteValueNO" value={'NO'}>
-                  {t('enumerations.EdemokraciaYesNoAbstainVoteValue.NO', { defaultValue: 'NO' })}
-                </MenuItem>
-                <MenuItem
-                  id="EnumerationMemberedemokraciaAdminAdminEdemokraciaYesNoAbstainVoteValueABSTAIN"
-                  value={'ABSTAIN'}
-                >
-                  {t('enumerations.EdemokraciaYesNoAbstainVoteValue.ABSTAIN', { defaultValue: 'ABSTAIN' })}
-                </MenuItem>
-              </TextField>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <UserLink
-                ownerData={data}
-                readOnly={false || !isFormUpdateable()}
-                disabled={isLoading}
-                editMode={editMode}
-                fetchOwnerData={fetchData}
-                onChange={(value: AdminUser | AdminUserStored | null) => {
-                  storeDiff('owner', value);
-                }}
-                validation={validation}
-              />
-            </Grid>
+                },
+              }}
+              onError={(newError: DateTimeValidationError, value: any) => {
+                // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                setValidation((prevValidation) => {
+                  const copy = new Map<keyof AdminYesNoAbstainVoteEntry, string>(prevValidation);
+                  copy.set(
+                    'created',
+                    newError === 'invalidDate'
+                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                          defaultValue: 'Value does not match the pattern requirements.',
+                        }) as string)
+                      : '',
+                  );
+                  return copy;
+                });
+              }}
+              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+              label={t('admin.YesNoAbstainVoteEntryView.created', { defaultValue: 'Created' }) as string}
+              value={serviceDateToUiDate(data.created ?? null)}
+              readOnly={false || !isFormUpdateable()}
+              disabled={isLoading}
+              onChange={(newValue: Date) => {
+                storeDiff('created', newValue);
+              }}
+            />
           </Grid>
-        </Box>
-      </PageContainerTransition>
+
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="value"
+              id="EnumerationComboedemokraciaAdminAdminEdemokraciaAdminYesNoAbstainVoteDefinitionUserVoteEntryViewDefaultYesNoAbstainVoteEntryViewEditValue"
+              label={t('admin.YesNoAbstainVoteEntryView.value', { defaultValue: 'Value' }) as string}
+              value={data.value || ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('value')}
+              helperText={validation.get('value')}
+              onChange={(event) => {
+                storeDiff('value', event.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="format-list-numbered" />
+                  </InputAdornment>
+                ),
+              }}
+              select
+            >
+              <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaYesNoAbstainVoteValueYES" value={'YES'}>
+                {t('enumerations.EdemokraciaYesNoAbstainVoteValue.YES', { defaultValue: 'YES' })}
+              </MenuItem>
+              <MenuItem id="EnumerationMemberedemokraciaAdminAdminEdemokraciaYesNoAbstainVoteValueNO" value={'NO'}>
+                {t('enumerations.EdemokraciaYesNoAbstainVoteValue.NO', { defaultValue: 'NO' })}
+              </MenuItem>
+              <MenuItem
+                id="EnumerationMemberedemokraciaAdminAdminEdemokraciaYesNoAbstainVoteValueABSTAIN"
+                value={'ABSTAIN'}
+              >
+                {t('enumerations.EdemokraciaYesNoAbstainVoteValue.ABSTAIN', { defaultValue: 'ABSTAIN' })}
+              </MenuItem>
+            </TextField>
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <UserLink
+              ownerData={data}
+              readOnly={false || !isFormUpdateable()}
+              disabled={isLoading}
+              editMode={editMode}
+              fetchOwnerData={fetchData}
+              onChange={(value: AdminUser | AdminUserStored | null) => {
+                storeDiff('owner', value);
+              }}
+              validation={validation}
+            />
+          </Grid>
+        </Grid>
+      </DialogContent>
+      <DialogActions>
+        <Grid className="page-action" item>
+          <Button
+            id="AdminAdminView-dialog-close"
+            variant="text"
+            onClick={() => {
+              cancel();
+              if (!editMode) {
+                successCallback();
+              }
+            }}
+            disabled={isLoading}
+          >
+            {t('judo.pages.close', { defaultValue: 'Close' })}
+          </Button>
+        </Grid>
+
+        {!editMode && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              id="page-action-refresh"
+              startIcon={<MdiIcon path="refresh" />}
+              onClick={() => fetchData()}
+            >
+              <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+      </DialogActions>
     </>
   );
 }

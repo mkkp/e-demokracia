@@ -59,13 +59,7 @@ import {
   AdminSimpleVoteStored,
 } from '~/generated/data-api';
 import { adminProServiceForClassImpl, adminSimpleVoteServiceForClassImpl } from '~/generated/data-axios';
-import {
-  usePageCreateVotesAction,
-  usePageFilterVotesAction,
-  usePageRefreshVotesAction,
-  useRowDeleteVotesAction,
-  useRowViewVotesAction,
-} from '../actions';
+import { usePageFilterVotesAction, usePageRefreshVotesAction, useRowViewVotesAction } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
 export const ADMIN_PRO_VOTES_TABLE_SIMPLE_VOTE_TABLE = 'AdminProVotesTableSimpleVote_Table';
@@ -219,10 +213,8 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
       : [],
   };
 
-  const pageCreateVotesAction = usePageCreateVotesAction();
   const pageFilterVotesAction = usePageFilterVotesAction(setFilters, setPage, setQueryCustomizer, openFilterDialog, 10);
   const pageRefreshVotesAction = usePageRefreshVotesAction();
-  const rowDeleteVotesAction = useRowDeleteVotesAction();
   const rowViewVotesAction = useRowViewVotesAction();
 
   const filterOptions: FilterOption[] = [
@@ -242,37 +234,7 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
     },
   ];
 
-  const rowActions: TableRowAction<AdminSimpleVoteStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminProVotesTableEdemokraciaAdminAdminEdemokraciaAdminProVotesRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: AdminSimpleVoteStored) => rowDeleteVotesAction(ownerData, row, () => fetchData()),
-      disabled: (row: AdminSimpleVoteStored) => !row.__deleteable,
-    },
-  ];
-
-  const bulkDeleteSelected = useCallback(() => {
-    openCRUDDialog<AdminSimpleVoteStored>({
-      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
-      itemTitleFn: (item) => t('judo.placeholder', { defaultValue: 'placeholder' }) as string,
-      selectedItems: selectedRows.current,
-      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-        await rowDeleteVotesAction(ownerData, item, successHandler, errorHandler, true);
-      },
-      onClose: (needsRefresh) => {
-        if (needsRefresh) {
-          fetchData();
-          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
-        }
-      },
-      // autoCloseOnSuccess: true,
-    });
-  }, []);
-  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
-    // every row has the same `__deleteable` flag
-    return !!selectionModel.length && !false && !!data[0]?.__deleteable;
-  }, [data, selectionModel]);
+  const rowActions: TableRowAction<AdminSimpleVoteStored>[] = [];
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -422,16 +384,6 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
-              {isBulkDeleteAvailable() ? (
-                <Button
-                  disabled={isOwnerLoading}
-                  variant="text"
-                  startIcon={<MdiIcon path="delete-forever" />}
-                  onClick={bulkDeleteSelected}
-                >
-                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
-                </Button>
-              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

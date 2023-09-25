@@ -1,0 +1,50 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getAccessRelationsTypes(#application)
+// Path expression: 'data-service/'+#serviceRelationName(#self)+'.ts'
+// Template name: accessRelationService.ts.hbs
+// Template file: data-service/accessRelationService.ts.hbs
+
+import {
+  AdminRatingVoteDefinitionStored,
+  AdminCon,
+  AdminIssueStored,
+  AdminYesNoVoteDefinition,
+  AdminCommentQueryCustomizer,
+  AdminIssueQueryCustomizer,
+  AdminProQueryCustomizer,
+  AdminComment,
+  AdminDebateStored,
+  AdminUser,
+  AdminSelectAnswerVoteDefinitionQueryCustomizer,
+  AdminDebateQueryCustomizer,
+  AdminVoteDefinitionQueryCustomizer,
+  AdminYesNoVoteDefinitionStored,
+  AdminConStored,
+  AdminUserStored,
+  AdminUserQueryCustomizer,
+  AdminPro,
+  AdminRatingVoteDefinitionQueryCustomizer,
+  AdminYesNoVoteDefinitionQueryCustomizer,
+  AdminYesNoAbstainVoteDefinitionQueryCustomizer,
+  AdminVoteDefinitionStored,
+  AdminYesNoAbstainVoteDefinition,
+  AdminRatingVoteDefinition,
+  AdminProStored,
+  AdminSelectAnswerVoteDefinitionStored,
+  AdminDebate,
+  AdminIssue,
+  AdminConQueryCustomizer,
+  AdminVoteDefinition,
+  AdminSelectAnswerVoteDefinition,
+  AdminCommentStored,
+  AdminYesNoAbstainVoteDefinitionStored,
+} from '../data-api';
+
+/**
+ * Access Relation Service for AdminAdmin.adminDebates
+ */
+export interface AdminAdminServiceForAdminDebates {
+  listAdminDebates(queryCustomizer?: AdminDebateQueryCustomizer): Promise<Array<AdminDebateStored>>;
+}

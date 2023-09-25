@@ -14,37 +14,212 @@ import { ComponentProxy } from '@pandino/react-hooks';
 
 let routes: Array<{ path: string; element: ReactElement; exact?: boolean }> = [];
 
-export const ROUTE_ADMIN_ADMIN_CATEGORIES_TABLE_INTERFACE_KEY = 'AdminAdminCategoriesTableRoute';
-export const routeToAdminAdminCategoriesTable = (): string => 'admin/admin/categories/table';
-const AdminAdminCategoriesTable = lazy(() => import('./pages/admin/admin/categories/table/index'));
+export const ROUTE_ADMIN_ADMIN_ACTIVE_ISSUES_TABLE_INTERFACE_KEY = 'AdminAdminActiveIssuesTableRoute';
+export const routeToAdminAdminActiveIssuesTable = (): string => 'admin/admin/active_issues/table';
+const AdminAdminActiveIssuesTable = lazy(() => import('./pages/admin/admin/active_issues/table/index'));
 
 routes.push({
-  path: 'admin/admin/categories/table',
+  path: 'admin/admin/active_issues/table',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_CATEGORIES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminCategoriesTable />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ACTIVE_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminActiveIssuesTable />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_COUNTIES_TABLE_INTERFACE_KEY = 'AdminAdminCountiesTableRoute';
-export const routeToAdminAdminCountiesTable = (): string => 'admin/admin/counties/table';
-const AdminAdminCountiesTable = lazy(() => import('./pages/admin/admin/counties/table/index'));
+export const ROUTE_ADMIN_ADMIN_ACTIVE_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminActiveIssuesViewRoute';
+export const routeToAdminAdminActiveIssuesView = (signedIdentifier: string): string =>
+  'admin/admin/active_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminActiveIssuesView = lazy(() => import('./pages/admin/admin/active_issues/view/index'));
 
 routes.push({
-  path: 'admin/admin/counties/table',
+  path: 'admin/admin/active_issues/view/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_COUNTIES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminCountiesTable />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ACTIVE_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminActiveIssuesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_CATEGORIES_TABLE_INTERFACE_KEY = 'AdminAdminAdminCategoriesTableRoute';
+export const routeToAdminAdminAdminCategoriesTable = (): string => 'admin/admin/admin_categories/table';
+const AdminAdminAdminCategoriesTable = lazy(() => import('./pages/admin/admin/admin_categories/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_categories/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_CATEGORIES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminCategoriesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_COUNTIES_TABLE_INTERFACE_KEY = 'AdminAdminAdminCountiesTableRoute';
+export const routeToAdminAdminAdminCountiesTable = (): string => 'admin/admin/admin_counties/table';
+const AdminAdminAdminCountiesTable = lazy(() => import('./pages/admin/admin/admin_counties/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_counties/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_COUNTIES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminCountiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_DEBATES_TABLE_INTERFACE_KEY = 'AdminAdminAdminDebatesTableRoute';
+export const routeToAdminAdminAdminDebatesTable = (): string => 'admin/admin/admin_debates/table';
+const AdminAdminAdminDebatesTable = lazy(() => import('./pages/admin/admin/admin_debates/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_debates/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_DEBATES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminDebatesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_DEBATES_VIEW_INTERFACE_KEY = 'AdminAdminAdminDebatesViewRoute';
+export const routeToAdminAdminAdminDebatesView = (signedIdentifier: string): string =>
+  'admin/admin/admin_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminAdminDebatesView = lazy(() => import('./pages/admin/admin/admin_debates/view/index'));
+
+routes.push({
+  path: 'admin/admin/admin_debates/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_DEBATES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminAdminDebatesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_ISSUE_TYPES_TABLE_INTERFACE_KEY = 'AdminAdminAdminIssueTypesTableRoute';
+export const routeToAdminAdminAdminIssueTypesTable = (): string => 'admin/admin/admin_issue_types/table';
+const AdminAdminAdminIssueTypesTable = lazy(() => import('./pages/admin/admin/admin_issue_types/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_issue_types/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_ISSUE_TYPES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminIssueTypesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_ISSUES_TABLE_INTERFACE_KEY = 'AdminAdminAdminIssuesTableRoute';
+export const routeToAdminAdminAdminIssuesTable = (): string => 'admin/admin/admin_issues/table';
+const AdminAdminAdminIssuesTable = lazy(() => import('./pages/admin/admin/admin_issues/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_issues/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminIssuesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminAdminIssuesViewRoute';
+export const routeToAdminAdminAdminIssuesView = (signedIdentifier: string): string =>
+  'admin/admin/admin_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminAdminIssuesView = lazy(() => import('./pages/admin/admin/admin_issues/view/index'));
+
+routes.push({
+  path: 'admin/admin/admin_issues/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminAdminIssuesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_USER_MANAGER_VIEW_INTERFACE_KEY = 'AdminAdminAdminUserManagerViewRoute';
+export const routeToAdminAdminAdminUserManagerView = (signedIdentifier: string): string =>
+  'admin/admin/admin_user_manager/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminAdminUserManagerView = lazy(() => import('./pages/admin/admin/admin_user_manager/view/index'));
+
+routes.push({
+  path: 'admin/admin/admin_user_manager/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_USER_MANAGER_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminAdminUserManagerView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_USERS_TABLE_INTERFACE_KEY = 'AdminAdminAdminUsersTableRoute';
+export const routeToAdminAdminAdminUsersTable = (): string => 'admin/admin/admin_users/table';
+const AdminAdminAdminUsersTable = lazy(() => import('./pages/admin/admin/admin_users/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_users/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_USERS_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminUsersTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY = 'AdminAdminAdminVoteDefinitionsTableRoute';
+export const routeToAdminAdminAdminVoteDefinitionsTable = (): string => 'admin/admin/admin_vote_definitions/table';
+const AdminAdminAdminVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/admin/admin_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/admin/admin_vote_definitions/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY = 'AdminAdminAdminVoteDefinitionsViewRoute';
+export const routeToAdminAdminAdminVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/admin/admin_vote_definitions/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminAdminVoteDefinitionsView = lazy(() => import('./pages/admin/admin/admin_vote_definitions/view/index'));
+
+routes.push({
+  path: 'admin/admin/admin_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminAdminVoteDefinitionsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_ADMIN_VOTE_ENTRIES_TABLE_INTERFACE_KEY = 'AdminAdminAdminVoteEntriesTableRoute';
+export const routeToAdminAdminAdminVoteEntriesTable = (): string => 'admin/admin/admin_vote_entries/table';
+const AdminAdminAdminVoteEntriesTable = lazy(() => import('./pages/admin/admin/admin_vote_entries/table/index'));
+
+routes.push({
+  path: 'admin/admin/admin_vote_entries/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ADMIN_VOTE_ENTRIES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminAdminVoteEntriesTable />
       </ComponentProxy>
     </Suspense>
   ),
 });
 export const ROUTE_DASHBOARD_INTERFACE_KEY = 'DashboardRoute';
 export const routeToDashboard = (): string => '';
-const DashboardRoute = lazy(() => import('./pages/admin/admin/dashboardhome/index'));
+const DashboardRoute = lazy(() => import('./pages/admin/admin/dashboard_home/index'));
 
 routes.push({
   path: '',
@@ -57,89 +232,17 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_DASHBOARDHOME_VIEW_INTERFACE_KEY = 'AdminAdminDashboardhomeViewRoute';
-export const routeToAdminAdminDashboardhomeView = (signedIdentifier: string): string =>
-  'admin/admin/dashboardhome/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminDashboardhomeView = lazy(() => import('./pages/admin/admin/dashboardhome/view/index'));
+export const ROUTE_ADMIN_ADMIN_DASHBOARD_HOME_VIEW_INTERFACE_KEY = 'AdminAdminDashboardHomeViewRoute';
+export const routeToAdminAdminDashboardHomeView = (signedIdentifier: string): string =>
+  'admin/admin/dashboard_home/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminDashboardHomeView = lazy(() => import('./pages/admin/admin/dashboard_home/view/index'));
 
 routes.push({
-  path: 'admin/admin/dashboardhome/view/:signedIdentifier',
+  path: 'admin/admin/dashboard_home/view/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_DASHBOARDHOME_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminDashboardhomeView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_DEBATES_TABLE_INTERFACE_KEY = 'AdminAdminDebatesTableRoute';
-export const routeToAdminAdminDebatesTable = (): string => 'admin/admin/debates/table';
-const AdminAdminDebatesTable = lazy(() => import('./pages/admin/admin/debates/table/index'));
-
-routes.push({
-  path: 'admin/admin/debates/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_DEBATES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminDebatesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_DEBATES_VIEW_INTERFACE_KEY = 'AdminAdminDebatesViewRoute';
-export const routeToAdminAdminDebatesView = (signedIdentifier: string): string =>
-  'admin/admin/debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminDebatesView = lazy(() => import('./pages/admin/admin/debates/view/index'));
-
-routes.push({
-  path: 'admin/admin/debates/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminDebatesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_ISSUE_TYPES_TABLE_INTERFACE_KEY = 'AdminAdminIssueTypesTableRoute';
-export const routeToAdminAdminIssueTypesTable = (): string => 'admin/admin/issue_types/table';
-const AdminAdminIssueTypesTable = lazy(() => import('./pages/admin/admin/issue_types/table/index'));
-
-routes.push({
-  path: 'admin/admin/issue_types/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ISSUE_TYPES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminIssueTypesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_ISSUES_TABLE_INTERFACE_KEY = 'AdminAdminIssuesTableRoute';
-export const routeToAdminAdminIssuesTable = (): string => 'admin/admin/issues/table';
-const AdminAdminIssuesTable = lazy(() => import('./pages/admin/admin/issues/table/index'));
-
-routes.push({
-  path: 'admin/admin/issues/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ISSUES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminIssuesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminIssuesViewRoute';
-export const routeToAdminAdminIssuesView = (signedIdentifier: string): string =>
-  'admin/admin/issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminIssuesView = lazy(() => import('./pages/admin/admin/issues/view/index'));
-
-routes.push({
-  path: 'admin/admin/issues/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_ISSUES_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminIssuesView />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_DASHBOARD_HOME_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminDashboardHomeView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -173,164 +276,239 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_USER_ISSUE_VIEW_INTERFACE_KEY = 'AdminAdminUserIssueViewRoute';
-export const routeToAdminAdminUserIssueView = (signedIdentifier: string): string =>
-  'admin/admin/user_issue/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminUserIssueView = lazy(() => import('./pages/admin/admin/user_issue/view/index'));
+export const ROUTE_ADMIN_ADMIN_USER_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminUserIssuesViewRoute';
+export const routeToAdminAdminUserIssuesView = (signedIdentifier: string): string =>
+  'admin/admin/user_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserIssuesView = lazy(() => import('./pages/admin/admin/user_issues/view/index'));
 
 routes.push({
-  path: 'admin/admin/user_issue/view/:signedIdentifier',
+  path: 'admin/admin/user_issues/view/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_ISSUE_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminUserIssueView />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserIssuesView />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_TABLE_INTERFACE_KEY = 'AdminAdminUserOpenIssuesTableRoute';
-export const routeToAdminAdminUserOpenIssuesTable = (): string => 'admin/admin/user_open_issues/table';
-const AdminAdminUserOpenIssuesTable = lazy(() => import('./pages/admin/admin/user_open_issues/table/index'));
-
-routes.push({
-  path: 'admin/admin/user_open_issues/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminUserOpenIssuesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminUserOpenIssuesViewRoute';
-export const routeToAdminAdminUserOpenIssuesView = (signedIdentifier: string): string =>
-  'admin/admin/user_open_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminUserOpenIssuesView = lazy(() => import('./pages/admin/admin/user_open_issues/view/index'));
-
-routes.push({
-  path: 'admin/admin/user_open_issues/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OPEN_ISSUES_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminUserOpenIssuesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_USERS_TABLE_INTERFACE_KEY = 'AdminAdminUsersTableRoute';
-export const routeToAdminAdminUsersTable = (): string => 'admin/admin/users/table';
-const AdminAdminUsersTable = lazy(() => import('./pages/admin/admin/users/table/index'));
-
-routes.push({
-  path: 'admin/admin/users/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USERS_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminUsersTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_USERS_VIEW_INTERFACE_KEY = 'AdminAdminUsersViewRoute';
-export const routeToAdminAdminUsersView = (signedIdentifier: string): string =>
-  'admin/admin/users/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminUsersView = lazy(() => import('./pages/admin/admin/users/view/index'));
-
-routes.push({
-  path: 'admin/admin/users/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USERS_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminUsersView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY = 'AdminAdminVoteDefinitionsTableRoute';
-export const routeToAdminAdminVoteDefinitionsTable = (): string => 'admin/admin/vote_definitions/table';
-const AdminAdminVoteDefinitionsTable = lazy(() => import('./pages/admin/admin/vote_definitions/table/index'));
-
-routes.push({
-  path: 'admin/admin/vote_definitions/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminVoteDefinitionsTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY = 'AdminAdminVoteDefinitionsViewRoute';
-export const routeToAdminAdminVoteDefinitionsView = (signedIdentifier: string): string =>
-  'admin/admin/vote_definitions/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminVoteDefinitionsView = lazy(() => import('./pages/admin/admin/vote_definitions/view/index'));
-
-routes.push({
-  path: 'admin/admin/vote_definitions/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminVoteDefinitionsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_VOTE_ENTRIES_TABLE_INTERFACE_KEY = 'AdminAdminVoteEntriesTableRoute';
-export const routeToAdminAdminVoteEntriesTable = (): string => 'admin/admin/vote_entries/table';
-const AdminAdminVoteEntriesTable = lazy(() => import('./pages/admin/admin/vote_entries/table/index'));
-
-routes.push({
-  path: 'admin/admin/vote_entries/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_VOTE_ENTRIES_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminVoteEntriesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ADMIN_YES_NO_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY = 'AdminAdminYesNoVoteDefinitionsTableRoute';
-export const routeToAdminAdminYesNoVoteDefinitionsTable = (): string => 'admin/admin/yes_no_vote_definitions/table';
-const AdminAdminYesNoVoteDefinitionsTable = lazy(
-  () => import('./pages/admin/admin/yes_no_vote_definitions/table/index'),
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_ACTIVE_ISSUES_TABLE_INTERFACE_KEY =
+  'AdminAdminUserOwnedActiveIssuesTableRoute';
+export const routeToAdminAdminUserOwnedActiveIssuesTable = (): string => 'admin/admin/user_owned_active_issues/table';
+const AdminAdminUserOwnedActiveIssuesTable = lazy(
+  () => import('./pages/admin/admin/user_owned_active_issues/table/index'),
 );
 
 routes.push({
-  path: 'admin/admin/yes_no_vote_definitions/table',
+  path: 'admin/admin/user_owned_active_issues/table',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_YES_NO_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}>
-        <AdminAdminYesNoVoteDefinitionsTable />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_ACTIVE_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminUserOwnedActiveIssuesTable />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ADMIN_YES_NO_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY = 'AdminAdminYesNoVoteDefinitionsViewRoute';
-export const routeToAdminAdminYesNoVoteDefinitionsView = (signedIdentifier: string): string =>
-  'admin/admin/yes_no_vote_definitions/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminAdminYesNoVoteDefinitionsView = lazy(() => import('./pages/admin/admin/yes_no_vote_definitions/view/index'));
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_ACTIVE_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminUserOwnedActiveIssuesViewRoute';
+export const routeToAdminAdminUserOwnedActiveIssuesView = (signedIdentifier: string): string =>
+  'admin/admin/user_owned_active_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserOwnedActiveIssuesView = lazy(
+  () => import('./pages/admin/admin/user_owned_active_issues/view/index'),
+);
 
 routes.push({
-  path: 'admin/admin/yes_no_vote_definitions/view/:signedIdentifier',
+  path: 'admin/admin/user_owned_active_issues/view/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_YES_NO_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
-        <AdminAdminYesNoVoteDefinitionsView />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_ACTIVE_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserOwnedActiveIssuesView />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_COMMENT_CREATED_BY_VIEW_INTERFACE_KEY = 'AdminCommentCreatedByViewRoute';
-export const routeToAdminCommentCreatedByView = (signedIdentifier: string): string =>
-  'admin/comment/created_by/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminCommentCreatedByView = lazy(() => import('./pages/admin/comment/created_by/view/index'));
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_RATING_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminAdminUserOwnedRatingVoteDefinitionsTableRoute';
+export const routeToAdminAdminUserOwnedRatingVoteDefinitionsTable = (): string =>
+  'admin/admin/user_owned_rating_vote_definitions/table';
+const AdminAdminUserOwnedRatingVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/admin/user_owned_rating_vote_definitions/table/index'),
+);
 
 routes.push({
-  path: 'admin/comment/created_by/view/:signedIdentifier',
+  path: 'admin/admin/user_owned_rating_vote_definitions/table',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_COMMENT_CREATED_BY_VIEW_INTERFACE_KEY})`}>
-        <AdminCommentCreatedByView />
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_RATING_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedRatingVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_RATING_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminAdminUserOwnedRatingVoteDefinitionsViewRoute';
+export const routeToAdminAdminUserOwnedRatingVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/admin/user_owned_rating_vote_definitions/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminAdminUserOwnedRatingVoteDefinitionsView = lazy(
+  () => import('./pages/admin/admin/user_owned_rating_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_rating_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_RATING_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedRatingVoteDefinitionsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminAdminUserOwnedSelectAnswerVoteDefinitionsTableRoute';
+export const routeToAdminAdminUserOwnedSelectAnswerVoteDefinitionsTable = (): string =>
+  'admin/admin/user_owned_select_answer_vote_definitions/table';
+const AdminAdminUserOwnedSelectAnswerVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/admin/user_owned_select_answer_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_select_answer_vote_definitions/table',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedSelectAnswerVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminAdminUserOwnedSelectAnswerVoteDefinitionsViewRoute';
+export const routeToAdminAdminUserOwnedSelectAnswerVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/admin/user_owned_select_answer_vote_definitions/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminAdminUserOwnedSelectAnswerVoteDefinitionsView = lazy(
+  () => import('./pages/admin/admin/user_owned_select_answer_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_select_answer_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedSelectAnswerVoteDefinitionsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_VOTE_ENTRIES_TABLE_INTERFACE_KEY = 'AdminAdminUserOwnedVoteEntriesTableRoute';
+export const routeToAdminAdminUserOwnedVoteEntriesTable = (): string => 'admin/admin/user_owned_vote_entries/table';
+const AdminAdminUserOwnedVoteEntriesTable = lazy(
+  () => import('./pages/admin/admin/user_owned_vote_entries/table/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_vote_entries/table',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_VOTE_ENTRIES_TABLE_INTERFACE_KEY})`}>
+        <AdminAdminUserOwnedVoteEntriesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminAdminUserOwnedYesNoAbstainVoteDefinitionsTableRoute';
+export const routeToAdminAdminUserOwnedYesNoAbstainVoteDefinitionsTable = (): string =>
+  'admin/admin/user_owned_yes_no_abstain_vote_definitions/table';
+const AdminAdminUserOwnedYesNoAbstainVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/admin/user_owned_yes_no_abstain_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_yes_no_abstain_vote_definitions/table',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedYesNoAbstainVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminAdminUserOwnedYesNoAbstainVoteDefinitionsViewRoute';
+export const routeToAdminAdminUserOwnedYesNoAbstainVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/admin/user_owned_yes_no_abstain_vote_definitions/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminAdminUserOwnedYesNoAbstainVoteDefinitionsView = lazy(
+  () => import('./pages/admin/admin/user_owned_yes_no_abstain_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_yes_no_abstain_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedYesNoAbstainVoteDefinitionsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminAdminUserOwnedYesNoVoteDefinitionsTableRoute';
+export const routeToAdminAdminUserOwnedYesNoVoteDefinitionsTable = (): string =>
+  'admin/admin/user_owned_yes_no_vote_definitions/table';
+const AdminAdminUserOwnedYesNoVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/admin/user_owned_yes_no_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_yes_no_vote_definitions/table',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedYesNoVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminAdminUserOwnedYesNoVoteDefinitionsViewRoute';
+export const routeToAdminAdminUserOwnedYesNoVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/admin/user_owned_yes_no_vote_definitions/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminAdminUserOwnedYesNoVoteDefinitionsView = lazy(
+  () => import('./pages/admin/admin/user_owned_yes_no_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/admin/user_owned_yes_no_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_OWNED_YES_NO_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminAdminUserOwnedYesNoVoteDefinitionsView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -395,21 +573,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_CON_CREATED_BY_VIEW_INTERFACE_KEY = 'AdminConCreatedByViewRoute';
-export const routeToAdminConCreatedByView = (signedIdentifier: string): string =>
-  'admin/con/created_by/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminConCreatedByView = lazy(() => import('./pages/admin/con/created_by/view/index'));
-
-routes.push({
-  path: 'admin/con/created_by/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_CON_CREATED_BY_VIEW_INTERFACE_KEY})`}>
-        <AdminConCreatedByView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_CON_PROS_VIEW_INTERFACE_KEY = 'AdminConProsViewRoute';
 export const routeToAdminConProsView = (signedIdentifier: string): string =>
   'admin/con/pros/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -466,21 +629,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_INTERFACE_KEY})`}>
         <AdminDashboardCreateissueOutput />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_DASHBOARD_CREATEUSER_OUTPUT_INTERFACE_KEY = 'AdminDashboardCreateuserOutputRoute';
-export const routeToAdminDashboardCreateuserOutput = (signedIdentifier: string): string =>
-  'admin/dashboard/createuser/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminDashboardCreateuserOutput = lazy(() => import('./pages/admin/dashboard/createuser/output/index'));
-
-routes.push({
-  path: 'admin/dashboard/createuser/output/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_CREATEUSER_OUTPUT_INTERFACE_KEY})`}>
-        <AdminDashboardCreateuserOutput />
       </ComponentProxy>
     </Suspense>
   ),
@@ -556,21 +704,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DEBATE_CONS_VIEW_INTERFACE_KEY})`}>
         <AdminDebateConsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_DEBATE_CREATED_BY_VIEW_INTERFACE_KEY = 'AdminDebateCreatedByViewRoute';
-export const routeToAdminDebateCreatedByView = (signedIdentifier: string): string =>
-  'admin/debate/created_by/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminDebateCreatedByView = lazy(() => import('./pages/admin/debate/created_by/view/index'));
-
-routes.push({
-  path: 'admin/debate/created_by/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DEBATE_CREATED_BY_VIEW_INTERFACE_KEY})`}>
-        <AdminDebateCreatedByView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -722,51 +855,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_ISSUE_CREATED_BY_VIEW_INTERFACE_KEY = 'AdminIssueCreatedByViewRoute';
-export const routeToAdminIssueCreatedByView = (signedIdentifier: string): string =>
-  'admin/issue/created_by/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueCreatedByView = lazy(() => import('./pages/admin/issue/created_by/view/index'));
-
-routes.push({
-  path: 'admin/issue/created_by/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CREATED_BY_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueCreatedByView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ISSUE_OWNER_VIEW_INTERFACE_KEY = 'AdminIssueOwnerViewRoute';
-export const routeToAdminIssueOwnerView = (signedIdentifier: string): string =>
-  'admin/issue/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueOwnerView = lazy(() => import('./pages/admin/issue/owner/view/index'));
-
-routes.push({
-  path: 'admin/issue/owner/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_OWNER_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueOwnerView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_ISSUE_CATEGORY_OWNER_VIEW_INTERFACE_KEY = 'AdminIssueCategoryOwnerViewRoute';
-export const routeToAdminIssueCategoryOwnerView = (signedIdentifier: string): string =>
-  'admin/issue_category/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminIssueCategoryOwnerView = lazy(() => import('./pages/admin/issue_category/owner/view/index'));
-
-routes.push({
-  path: 'admin/issue_category/owner/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ISSUE_CATEGORY_OWNER_VIEW_INTERFACE_KEY})`}>
-        <AdminIssueCategoryOwnerView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_PRO_COMMENTS_VIEW_INTERFACE_KEY = 'AdminProCommentsViewRoute';
 export const routeToAdminProCommentsView = (signedIdentifier: string): string =>
   'admin/pro/comments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -793,21 +881,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_PRO_CONS_VIEW_INTERFACE_KEY})`}>
         <AdminProConsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_PRO_CREATED_BY_VIEW_INTERFACE_KEY = 'AdminProCreatedByViewRoute';
-export const routeToAdminProCreatedByView = (signedIdentifier: string): string =>
-  'admin/pro/created_by/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminProCreatedByView = lazy(() => import('./pages/admin/pro/created_by/view/index'));
-
-routes.push({
-  path: 'admin/pro/created_by/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_PRO_CREATED_BY_VIEW_INTERFACE_KEY})`}>
-        <AdminProCreatedByView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -889,21 +962,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_RATING_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY = 'AdminRatingVoteEntryOwnerViewRoute';
-export const routeToAdminRatingVoteEntryOwnerView = (signedIdentifier: string): string =>
-  'admin/rating_vote_entry/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminRatingVoteEntryOwnerView = lazy(() => import('./pages/admin/rating_vote_entry/owner/view/index'));
-
-routes.push({
-  path: 'admin/rating_vote_entry/owner/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_RATING_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY})`}>
-        <AdminRatingVoteEntryOwnerView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_SELECT_ANSWER_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY =
   'AdminSelectAnswerVoteDefinitionDebateViewRoute';
 export const routeToAdminSelectAnswerVoteDefinitionDebateView = (signedIdentifier: string): string =>
@@ -938,38 +996,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_SELECT_ANSWER_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}>
         <AdminSelectAnswerVoteDefinitionIssueView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_SELECT_ANSWER_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY = 'AdminSelectAnswerVoteEntryOwnerViewRoute';
-export const routeToAdminSelectAnswerVoteEntryOwnerView = (signedIdentifier: string): string =>
-  'admin/select_answer_vote_entry/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminSelectAnswerVoteEntryOwnerView = lazy(
-  () => import('./pages/admin/select_answer_vote_entry/owner/view/index'),
-);
-
-routes.push({
-  path: 'admin/select_answer_vote_entry/owner/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_SELECT_ANSWER_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY})`}>
-        <AdminSelectAnswerVoteEntryOwnerView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_SIMPLE_VOTE_USER_VIEW_INTERFACE_KEY = 'AdminSimpleVoteUserViewRoute';
-export const routeToAdminSimpleVoteUserView = (signedIdentifier: string): string =>
-  'admin/simple_vote/user/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminSimpleVoteUserView = lazy(() => import('./pages/admin/simple_vote/user/view/index'));
-
-routes.push({
-  path: 'admin/simple_vote/user/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_SIMPLE_VOTE_USER_VIEW_INTERFACE_KEY})`}>
-        <AdminSimpleVoteUserView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -1361,6 +1387,21 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_USER_MANAGER_USERS_TABLE_INTERFACE_KEY = 'AdminUserManagerUsersTableRoute';
+export const routeToAdminUserManagerUsersTable = (signedIdentifier: string): string =>
+  'admin/user_manager/users/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserManagerUsersTable = lazy(() => import('./pages/admin/user_manager/users/table/index'));
+
+routes.push({
+  path: 'admin/user_manager/users/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_MANAGER_USERS_TABLE_INTERFACE_KEY})`}>
+        <AdminUserManagerUsersTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY = 'AdminVoteDefinitionDebateViewRoute';
 export const routeToAdminVoteDefinitionDebateView = (signedIdentifier: string): string =>
   'admin/vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -1446,70 +1487,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_YES_NO_ABSTAIN_VOTE_DEFINITION_USER_VOTE_ENTRY_VIEW_INTERFACE_KEY =
-  'AdminYesNoAbstainVoteDefinitionUserVoteEntryViewRoute';
-export const routeToAdminYesNoAbstainVoteDefinitionUserVoteEntryView = (signedIdentifier: string): string =>
-  'admin/yes_no_abstain_vote_definition/user_vote_entry/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const AdminYesNoAbstainVoteDefinitionUserVoteEntryView = lazy(
-  () => import('./pages/admin/yes_no_abstain_vote_definition/user_vote_entry/view/index'),
-);
-
-routes.push({
-  path: 'admin/yes_no_abstain_vote_definition/user_vote_entry/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_ABSTAIN_VOTE_DEFINITION_USER_VOTE_ENTRY_VIEW_INTERFACE_KEY})`}
-      >
-        <AdminYesNoAbstainVoteDefinitionUserVoteEntryView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_YES_NO_ABSTAIN_VOTE_DEFINITION_VOTE_ENTRIES_VIEW_INTERFACE_KEY =
-  'AdminYesNoAbstainVoteDefinitionVoteEntriesViewRoute';
-export const routeToAdminYesNoAbstainVoteDefinitionVoteEntriesView = (signedIdentifier: string): string =>
-  'admin/yes_no_abstain_vote_definition/vote_entries/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const AdminYesNoAbstainVoteDefinitionVoteEntriesView = lazy(
-  () => import('./pages/admin/yes_no_abstain_vote_definition/vote_entries/view/index'),
-);
-
-routes.push({
-  path: 'admin/yes_no_abstain_vote_definition/vote_entries/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_ABSTAIN_VOTE_DEFINITION_VOTE_ENTRIES_VIEW_INTERFACE_KEY})`}
-      >
-        <AdminYesNoAbstainVoteDefinitionVoteEntriesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_YES_NO_ABSTAIN_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY =
-  'AdminYesNoAbstainVoteEntryOwnerViewRoute';
-export const routeToAdminYesNoAbstainVoteEntryOwnerView = (signedIdentifier: string): string =>
-  'admin/yes_no_abstain_vote_entry/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminYesNoAbstainVoteEntryOwnerView = lazy(
-  () => import('./pages/admin/yes_no_abstain_vote_entry/owner/view/index'),
-);
-
-routes.push({
-  path: 'admin/yes_no_abstain_vote_entry/owner/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_ABSTAIN_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY})`}>
-        <AdminYesNoAbstainVoteEntryOwnerView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_ADMIN_YES_NO_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY = 'AdminYesNoVoteDefinitionDebateViewRoute';
 export const routeToAdminYesNoVoteDefinitionDebateView = (signedIdentifier: string): string =>
   'admin/yes_no_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -1536,21 +1513,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}>
         <AdminYesNoVoteDefinitionIssueView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_ADMIN_YES_NO_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY = 'AdminYesNoVoteEntryOwnerViewRoute';
-export const routeToAdminYesNoVoteEntryOwnerView = (signedIdentifier: string): string =>
-  'admin/yes_no_vote_entry/owner/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminYesNoVoteEntryOwnerView = lazy(() => import('./pages/admin/yes_no_vote_entry/owner/view/index'));
-
-routes.push({
-  path: 'admin/yes_no_vote_entry/owner/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_YES_NO_VOTE_ENTRY_OWNER_VIEW_INTERFACE_KEY})`}>
-        <AdminYesNoVoteEntryOwnerView />
       </ComponentProxy>
     </Suspense>
   ),

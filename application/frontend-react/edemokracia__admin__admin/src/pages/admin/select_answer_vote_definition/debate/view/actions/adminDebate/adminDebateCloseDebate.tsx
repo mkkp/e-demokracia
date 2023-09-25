@@ -53,15 +53,15 @@ import {
   CloseDebateInput,
   CloseDebateInputQueryCustomizer,
   CloseDebateInputStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReferenceStored,
   EdemokraciaVoteTypeOnCloseDebate,
-  VoteDefinition,
-  VoteDefinitionQueryCustomizer,
-  VoteDefinitionStored,
 } from '~/generated/data-api';
 
 export type AdminDebateCloseDebateActionPostHandler = (
   ownerCallback: () => void,
-  result?: VoteDefinitionStored,
+  result?: CloseDebateOutputVoteDefinitionReferenceStored,
 ) => Promise<void>;
 
 export const ADMIN_DEBATE_CLOSE_DEBATE_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY =
@@ -101,7 +101,7 @@ export const useAdminDebateCloseDebateAction: AdminDebateCloseDebateAction = () 
       },
       children: (
         <AdminDebateCloseDebateForm
-          successCallback={(result?: VoteDefinitionStored) => {
+          successCallback={(result?: CloseDebateOutputVoteDefinitionReferenceStored) => {
             closeDialog();
             if (postHandler) {
               postHandler(successCallback, result);

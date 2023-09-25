@@ -5,6 +5,7 @@
 // Path expression: #actionsIndexPath(#self)
 // Template name: actor/src/pages/actions/index.tsx
 // Template file: actor/src/pages/actions/index.tsx.hbs
+export * from './voteEntries/rowViewVoteEntries';
 export * from './adminRatingVoteDefinition/adminRatingVoteDefinitionTakeBackVote';
 export * from './voteEntries/tableActionVoteEntries';
 export * from './debate/buttonNavigateDebate';
@@ -13,3 +14,4 @@ export * from './adminRatingVoteDefinition/AdminRatingVoteDefinitionVoteForm';
 export * from './adminRatingVoteDefinition/adminRatingVoteDefinitionVote';
 export * from './voteEntries/tableRefreshRelationVoteEntries';
 export * from './issue/buttonNavigateIssue';
+export * from './userVoteEntry/linkViewUserVoteEntry';

@@ -59,6 +59,8 @@ import {
   adminSelectAnswerVoteEntryServiceForClassImpl,
 } from '~/generated/data-axios';
 
+import { useLinkViewUserVoteEntryAction } from '../actions';
+
 export interface UserVoteEntryLinkProps {
   ownerData: AdminSelectAnswerVoteDefinitionStored;
   validation: Map<keyof AdminSelectAnswerVoteDefinitionStored, string>;
@@ -78,6 +80,8 @@ export function UserVoteEntryLink(props: UserVoteEntryLinkProps) {
   const { locale: l10nLocale } = useL10N();
 
   const userVoteEntrySortModel: GridSortModel = [{ field: 'valueRepresentation', sort: null }];
+
+  const linkViewUserVoteEntryAction = useLinkViewUserVoteEntryAction();
 
   return (
     <AggregationInput
@@ -100,6 +104,7 @@ export function UserVoteEntryLink(props: UserVoteEntryLinkProps) {
         // storeDiff('userVoteEntry', userVoteEntry);
         onChange(userVoteEntry as AdminSelectAnswerVoteEntryStored);
       }}
+      onView={async () => linkViewUserVoteEntryAction(ownerData, ownerData?.userVoteEntry!, () => fetchOwnerData())}
     />
   );
 }

@@ -12,28 +12,25 @@ import {
   AdminProParentQueryCustomizer,
   AdminCon,
   AdminConParentQueryCustomizer,
-  AdminSimpleVote,
-  AdminDebateParentQueryCustomizer,
-  AdminCommentQueryCustomizer,
-  AdminConParentStored,
-  AdminProQueryCustomizer,
-  CreateCommentInput,
-  AdminComment,
-  AdminUser,
-  CreateArgumentInput,
-  AdminConParent,
-  AdminSimpleVoteStored,
-  AdminDebateParentStored,
   AdminConStored,
   AdminProParentStored,
   AdminUserStored,
   AdminPro,
   AdminUserQueryCustomizer,
+  AdminSimpleVote,
+  AdminCommentQueryCustomizer,
+  AdminConParentStored,
   AdminSimpleVoteQueryCustomizer,
   AdminProStored,
+  AdminProQueryCustomizer,
+  CreateCommentInput,
   AdminConQueryCustomizer,
-  AdminDebateParent,
+  AdminComment,
+  AdminUser,
+  CreateArgumentInput,
+  AdminConParent,
   AdminCommentStored,
+  AdminSimpleVoteStored,
 } from '../data-api';
 
 /**
@@ -95,16 +92,6 @@ export interface AdminProServiceForClass {
     owner?: JudoIdentifiable<AdminPro> | AdminPro,
     queryCustomizer?: AdminCommentQueryCustomizer,
   ): Promise<Array<AdminCommentStored>>;
-
-  getParentDebate(
-    target: JudoIdentifiable<AdminPro>,
-    queryCustomizer?: AdminDebateParentQueryCustomizer,
-  ): Promise<AdminDebateParentStored>;
-
-  getRangeForParentDebate(
-    owner?: JudoIdentifiable<AdminPro> | AdminPro,
-    queryCustomizer?: AdminDebateParentQueryCustomizer,
-  ): Promise<Array<AdminDebateParentStored>>;
 
   getParentPro(
     target: JudoIdentifiable<AdminPro>,

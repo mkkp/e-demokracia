@@ -56,6 +56,8 @@ import {
   adminRatingVoteEntryServiceForClassImpl,
 } from '~/generated/data-axios';
 
+import { useLinkViewUserVoteEntryAction } from '../actions';
+
 export interface UserVoteEntryLinkProps {
   ownerData: AdminRatingVoteDefinitionStored;
   validation: Map<keyof AdminRatingVoteDefinitionStored, string>;
@@ -76,6 +78,8 @@ export function UserVoteEntryLink(props: UserVoteEntryLinkProps) {
 
   const userVoteEntrySortModel: GridSortModel = [{ field: 'created', sort: null }];
 
+  const linkViewUserVoteEntryAction = useLinkViewUserVoteEntryAction();
+
   return (
     <AggregationInput
       name="userVoteEntry"
@@ -94,6 +98,7 @@ export function UserVoteEntryLink(props: UserVoteEntryLinkProps) {
         // storeDiff('userVoteEntry', userVoteEntry);
         onChange(userVoteEntry as AdminRatingVoteEntryStored);
       }}
+      onView={async () => linkViewUserVoteEntryAction(ownerData, ownerData?.userVoteEntry!, () => fetchOwnerData())}
     />
   );
 }

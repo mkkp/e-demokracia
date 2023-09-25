@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminCommentCreatedByView } from '~/routes';
+import AdminAdminView from '~/pages/admin/comment/created_by/view/index';
 
 export const LINK_VIEW_CREATED_BY_ACTION_INTERFACE_KEY = 'LinkViewCreatedByAction';
 export type LinkViewCreatedByAction = () => (
@@ -41,7 +41,23 @@ export const useLinkViewCreatedByAction: LinkViewCreatedByAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminComment>, entry: AdminUserStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminCommentCreatedByView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'lg',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

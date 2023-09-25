@@ -9,6 +9,8 @@ export * from './voteEntries/tableActionVoteEntries';
 export * from './adminSelectAnswerVoteDefinition/adminSelectAnswerVoteDefinitionVote';
 export * from './adminSelectAnswerVoteDefinition/adminSelectAnswerVoteDefinitionTakeBackVote';
 export * from './debate/buttonNavigateDebate';
+export * from './voteEntries/rowViewVoteEntries';
 export * from './pageRefreshSelectAnswerVoteDefinition';
+export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/tableRefreshRelationVoteEntries';
 export * from './issue/buttonNavigateIssue';

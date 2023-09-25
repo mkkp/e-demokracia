@@ -25,6 +25,8 @@ export interface AdminVoteEntryServiceForClass {
     queryCustomizer?: AdminVoteEntryQueryCustomizer,
   ): Promise<AdminVoteEntryStored>;
 
+  delete(target: JudoIdentifiable<AdminVoteEntry>): Promise<void>;
+
   getVoteDefinition(
     target: JudoIdentifiable<AdminVoteEntry>,
     queryCustomizer?: AdminVoteDefinitionQueryCustomizer,

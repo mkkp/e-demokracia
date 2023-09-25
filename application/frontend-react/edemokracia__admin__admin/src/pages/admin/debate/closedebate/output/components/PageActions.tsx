@@ -5,15 +5,14 @@ import { LoadingButton } from '@mui/lab';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import {
-  EdemokraciaVoteStatus,
-  VoteDefinition,
-  VoteDefinitionQueryCustomizer,
-  VoteDefinitionStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/generated/data-api';
 import { usePageRefreshOutputAction } from '../actions';
 
 export interface PageActionsProps {
-  data: VoteDefinitionStored;
+  data: CloseDebateOutputVoteDefinitionReferenceStored;
   editMode: boolean;
   setEditMode: (mode: boolean) => void;
   isLoading: boolean;

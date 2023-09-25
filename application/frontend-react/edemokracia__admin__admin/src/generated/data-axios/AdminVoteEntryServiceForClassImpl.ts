@@ -40,6 +40,18 @@ export class AdminVoteEntryServiceForClassImpl extends JudoAxiosService implemen
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async delete(target: JudoIdentifiable<AdminVoteEntry>): Promise<void> {
+    const path = '/admin/VoteEntry/~delete';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getVoteDefinition(

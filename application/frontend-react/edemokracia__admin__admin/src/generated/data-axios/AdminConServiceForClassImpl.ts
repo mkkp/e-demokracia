@@ -13,28 +13,25 @@ import type {
   AdminProParentQueryCustomizer,
   AdminCon,
   AdminConParentQueryCustomizer,
-  AdminSimpleVote,
-  AdminDebateParentQueryCustomizer,
-  AdminCommentQueryCustomizer,
-  AdminConParentStored,
-  AdminProQueryCustomizer,
-  CreateCommentInput,
-  AdminComment,
-  AdminUser,
-  CreateArgumentInput,
-  AdminConParent,
-  AdminSimpleVoteStored,
-  AdminDebateParentStored,
   AdminConStored,
   AdminProParentStored,
   AdminUserStored,
   AdminUserQueryCustomizer,
   AdminPro,
+  AdminSimpleVote,
+  AdminCommentQueryCustomizer,
+  AdminConParentStored,
   AdminSimpleVoteQueryCustomizer,
   AdminProStored,
+  AdminProQueryCustomizer,
+  CreateCommentInput,
   AdminConQueryCustomizer,
-  AdminDebateParent,
+  AdminComment,
+  AdminUser,
+  CreateArgumentInput,
+  AdminConParent,
   AdminCommentStored,
+  AdminSimpleVoteStored,
 } from '../data-api';
 import type { AdminConServiceForClass } from '../data-service';
 
@@ -242,39 +239,6 @@ export class AdminConServiceForClassImpl extends JudoAxiosService implements Adm
     queryCustomizer?: AdminCommentQueryCustomizer,
   ): Promise<Array<AdminCommentStored>> {
     const path = '/admin/Con/comments/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getParentDebate(
-    target: JudoIdentifiable<AdminCon>,
-    queryCustomizer?: AdminDebateParentQueryCustomizer,
-  ): Promise<AdminDebateParentStored> {
-    const path = '/admin/Con/parentDebate/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForParentDebate(
-    owner?: JudoIdentifiable<AdminCon> | AdminCon,
-    queryCustomizer?: AdminDebateParentQueryCustomizer,
-  ): Promise<Array<AdminDebateParentStored>> {
-    const path = '/admin/Con/parentDebate/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

@@ -8,12 +8,12 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
+  CloseDebateOutputVoteDefinitionReferenceStored,
   AdminRatingVoteDefinitionStored,
   AdminCon,
   AdminIssueStored,
   AdminYesNoVoteDefinition,
   AdminCommentQueryCustomizer,
-  VoteDefinitionStored,
   AdminIssueQueryCustomizer,
   AdminProQueryCustomizer,
   CreateCommentInput,
@@ -160,7 +160,10 @@ export interface AdminDebateServiceForClass {
     queryCustomizer?: AdminSelectAnswerVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminSelectAnswerVoteDefinitionStored>>;
 
-  closeDebate(owner: JudoIdentifiable<AdminDebate>, target: CloseDebateInput): Promise<VoteDefinitionStored>;
+  closeDebate(
+    owner: JudoIdentifiable<AdminDebate>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
 
   createArgument(owner: JudoIdentifiable<AdminDebate>, target: CreateArgumentInput): Promise<void>;
 

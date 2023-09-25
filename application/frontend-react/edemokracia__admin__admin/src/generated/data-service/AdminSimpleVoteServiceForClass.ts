@@ -20,16 +20,10 @@ import {
  * Class Service for AdminSimpleVote
  */
 export interface AdminSimpleVoteServiceForClass {
-  getTemplate(): Promise<AdminSimpleVote>;
-
   refresh(
     target: JudoIdentifiable<AdminSimpleVote>,
     queryCustomizer?: AdminSimpleVoteQueryCustomizer,
   ): Promise<AdminSimpleVoteStored>;
-
-  delete(target: JudoIdentifiable<AdminSimpleVote>): Promise<void>;
-
-  update(target: Partial<AdminSimpleVoteStored>): Promise<AdminSimpleVoteStored>;
 
   getUser(
     target: JudoIdentifiable<AdminSimpleVote>,
@@ -40,8 +34,4 @@ export interface AdminSimpleVoteServiceForClass {
     owner?: JudoIdentifiable<AdminSimpleVote> | AdminSimpleVote,
     queryCustomizer?: AdminUserQueryCustomizer,
   ): Promise<Array<AdminUserStored>>;
-
-  setUser(target: JudoIdentifiable<AdminSimpleVote>, selected: JudoIdentifiable<AdminUser>): Promise<void>;
-
-  unsetUser(target: JudoIdentifiable<AdminSimpleVote>): Promise<void>;
 }

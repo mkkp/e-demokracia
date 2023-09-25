@@ -12,7 +12,7 @@ import {
   AdminSimpleVoteStored,
   EdemokraciaSimpleVoteType,
 } from '~/generated/data-api';
-import { usePageCreateVotesAction, usePageFilterVotesAction, usePageRefreshVotesAction } from '../actions';
+import { usePageFilterVotesAction, usePageRefreshVotesAction } from '../actions';
 
 export interface PageActionsProps {
   isLoading: boolean;
@@ -24,25 +24,10 @@ export function PageActions(props: PageActionsProps) {
   const { isLoading, fetchData, signedIdentifier } = props;
   const { t } = useTranslation();
 
-  const pageCreateVotesAction = usePageCreateVotesAction();
   const pageRefreshVotesAction = usePageRefreshVotesAction();
 
   return (
     <>
-      <Grid className="page-action" item>
-        <Button
-          id="page-action-create"
-          startIcon={<MdiIcon path="file_document_plus" />}
-          onClick={() =>
-            pageCreateVotesAction({ __signedIdentifier: signedIdentifier } as JudoIdentifiable<AdminComment>, () =>
-              fetchData(),
-            )
-          }
-          disabled={isLoading}
-        >
-          {t('judo.pages.table.create', { defaultValue: 'Create' })}
-        </Button>
-      </Grid>
       <Grid className="page-action" item>
         <LoadingButton
           loading={isLoading}

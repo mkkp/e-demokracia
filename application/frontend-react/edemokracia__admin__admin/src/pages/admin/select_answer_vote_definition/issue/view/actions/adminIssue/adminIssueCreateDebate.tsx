@@ -53,14 +53,14 @@ import {
   CreateDebateInput,
   CreateDebateInputQueryCustomizer,
   CreateDebateInputStored,
-  Debate,
-  DebateQueryCustomizer,
-  DebateStored,
+  CreateDebateOutputDebateReference,
+  CreateDebateOutputDebateReferenceQueryCustomizer,
+  CreateDebateOutputDebateReferenceStored,
 } from '~/generated/data-api';
 
 export type AdminIssueCreateDebateActionPostHandler = (
   ownerCallback: () => void,
-  result?: DebateStored,
+  result?: CreateDebateOutputDebateReferenceStored,
 ) => Promise<void>;
 
 export const ADMIN_ISSUE_CREATE_DEBATE_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY =
@@ -100,7 +100,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
       },
       children: (
         <AdminIssueCreateDebateForm
-          successCallback={(result?: DebateStored) => {
+          successCallback={(result?: CreateDebateOutputDebateReferenceStored) => {
             closeDialog();
             if (postHandler) {
               postHandler(successCallback, result);

@@ -37,6 +37,8 @@ export interface AdminSelectAnswerVoteDefinitionServiceForClass {
     queryCustomizer?: AdminSelectAnswerVoteDefinitionQueryCustomizer,
   ): Promise<AdminSelectAnswerVoteDefinitionStored>;
 
+  update(target: Partial<AdminSelectAnswerVoteDefinitionStored>): Promise<AdminSelectAnswerVoteDefinitionStored>;
+
   getDebate(
     target: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
     queryCustomizer?: AdminDebateQueryCustomizer,

@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminIssueOwnerView } from '~/routes';
+import AdminAdminView from '~/pages/admin/issue/owner/view/index';
 
 export const LINK_VIEW_OWNER_ACTION_INTERFACE_KEY = 'LinkViewOwnerAction';
 export type LinkViewOwnerAction = () => (
@@ -41,7 +41,23 @@ export const useLinkViewOwnerAction: LinkViewOwnerAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<AdminIssue>, entry: AdminUserStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToAdminIssueOwnerView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'lg',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

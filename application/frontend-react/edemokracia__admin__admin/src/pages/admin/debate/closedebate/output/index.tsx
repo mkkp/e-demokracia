@@ -46,21 +46,20 @@ import { PageContainerTransition } from '~/theme/animations';
 import { clsx } from 'clsx';
 
 import {
-  EdemokraciaVoteStatus,
-  VoteDefinition,
-  VoteDefinitionQueryCustomizer,
-  VoteDefinitionStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/generated/data-api';
-import { voteDefinitionServiceForClassImpl } from '~/generated/data-axios';
+import { closeDebateOutputVoteDefinitionReferenceServiceForClassImpl } from '~/generated/data-axios';
 import {} from './actions';
 
 import { PageActions } from './components/PageActions';
 
 export type AdminDebateClosedebateOutputPostRefreshAction = (
-  data: VoteDefinitionStored,
-  storeDiff: (attributeName: keyof VoteDefinitionStored, value: any) => void,
+  data: CloseDebateOutputVoteDefinitionReferenceStored,
+  storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReferenceStored, value: any) => void,
   setEditMode: Dispatch<SetStateAction<boolean>>,
-  setValidation: Dispatch<SetStateAction<Map<keyof VoteDefinition, string>>>,
+  setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>,
 ) => Promise<void>;
 
 export const ADMIN_DEBATE_CLOSEDEBATE_OUTPUT_POST_REFRESH_HOOK_INTERFACE_KEY =
@@ -87,42 +86,18 @@ export default function AdminDebateClosedebateOutput() {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<VoteDefinitionStored>({} as unknown as VoteDefinitionStored);
-  const [payloadDiff, setPayloadDiff] = useState<Record<keyof VoteDefinitionStored, any>>(
-    {} as unknown as Record<keyof VoteDefinitionStored, any>,
+  const [data, setData] = useState<CloseDebateOutputVoteDefinitionReferenceStored>(
+    {} as unknown as CloseDebateOutputVoteDefinitionReferenceStored,
+  );
+  const [payloadDiff, setPayloadDiff] = useState<Record<keyof CloseDebateOutputVoteDefinitionReferenceStored, any>>(
+    {} as unknown as Record<keyof CloseDebateOutputVoteDefinitionReferenceStored, any>,
   );
   const [editMode, setEditMode] = useState<boolean>(false);
-  const storeDiff: (attributeName: keyof VoteDefinitionStored, value: any) => void = useCallback(
-    (attributeName: keyof VoteDefinitionStored, value: any) => {
-      const dateTypes: string[] = [];
-      const dateTimeTypes: string[] = [
-        'closeAt',
+  const storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReferenceStored, value: any) => void =
+    useCallback((attributeName: keyof CloseDebateOutputVoteDefinitionReferenceStored, value: any) => {}, [data]);
+  const [validation, setValidation] = useState<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>(new Map());
 
-        'created',
-      ];
-      const timeTypes: string[] = [];
-      if (dateTypes.includes(attributeName as string)) {
-        payloadDiff[attributeName] = uiDateToServiceDate(value);
-      } else if (dateTimeTypes.includes(attributeName as string)) {
-        payloadDiff[attributeName] = value;
-      } else if (timeTypes.includes(attributeName as string)) {
-        payloadDiff[attributeName] = uiTimeToServiceTime(value);
-      } else {
-        payloadDiff[attributeName] = value;
-      }
-      setData((prevData) => ({
-        ...prevData,
-        [attributeName]: value,
-      }));
-      if (!editMode) {
-        setEditMode(true);
-      }
-    },
-    [data],
-  );
-  const [validation, setValidation] = useState<Map<keyof VoteDefinition, string>>(new Map());
-
-  const queryCustomizer: VoteDefinitionQueryCustomizer = {
+  const queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
     _mask: '{}',
   };
 
@@ -132,7 +107,9 @@ export default function AdminDebateClosedebateOutput() {
   const postRefreshAction: AdminDebateClosedebateOutputPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const title: string = t('VoteDefinitionView', { defaultValue: 'VoteDefinition View / Edit' });
+  const title: string = t('CloseDebateOutputVoteDefinitionReferenceView', {
+    defaultValue: 'CloseDebateOutputVoteDefinitionReference View / Edit',
+  });
 
   const isFormUpdateable = useCallback(() => {
     return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
@@ -153,8 +130,8 @@ export default function AdminDebateClosedebateOutput() {
     setIsLoading(true);
 
     try {
-      const res = await voteDefinitionServiceForClassImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<VoteDefinition>,
+      const res = await closeDebateOutputVoteDefinitionReferenceServiceForClassImpl.refresh(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<CloseDebateOutputVoteDefinitionReference>,
         processQueryCustomizer(queryCustomizer),
       );
 
@@ -164,7 +141,7 @@ export default function AdminDebateClosedebateOutput() {
         __signedIdentifier: res.__signedIdentifier,
         __version: res.__version,
         __entityType: res.__entityType,
-      } as Record<keyof VoteDefinitionStored, any>);
+      } as Record<keyof CloseDebateOutputVoteDefinitionReferenceStored, any>);
       if (postRefreshAction) {
         try {
           await postRefreshAction(res, storeDiff, setEditMode, setValidation);

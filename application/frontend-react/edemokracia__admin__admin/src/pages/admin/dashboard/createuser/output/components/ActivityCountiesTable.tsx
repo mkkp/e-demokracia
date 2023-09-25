@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getTablesForPages(#application)
+// Factory expression: #getTablesForViewDialogs(#application)
 // Path expression: #pagePath(#self.pageDefinition)+'components/'+#tableComponentName(#self)+'.tsx'
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
@@ -77,7 +77,7 @@ import {
 import { applyInMemoryFilters } from '~/utilities';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
-export const ADMIN_DASHBOARD_CREATEUSER_OUTPUT_ACTIVITY_COUNTIES = 'AdminDashboardCreateuserOutputActivityCounties';
+export const ADMIN_ADMIN_OPERATION_OUTPUT_ACTIVITY_COUNTIES = 'AdminAdminOperationOutputActivityCounties';
 
 export interface ActivityCountiesTableProps {
   ownerData: AdminUserStored;

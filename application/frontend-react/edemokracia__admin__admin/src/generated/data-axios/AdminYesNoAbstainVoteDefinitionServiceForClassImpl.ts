@@ -50,6 +50,20 @@ export class AdminYesNoAbstainVoteDefinitionServiceForClassImpl
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async update(target: Partial<AdminYesNoAbstainVoteDefinitionStored>): Promise<AdminYesNoAbstainVoteDefinitionStored> {
+    const path = '/admin/YesNoAbstainVoteDefinition/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getDebate(

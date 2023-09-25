@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getLinksForPages(#application)
+// Factory expression: #getLinksForViewDialogs(#application)
 // Path expression: #pagePath(#self.pageDefinition)+'components/'+#linkComponentName(#self)+'.tsx'
 // Template name: actor/src/pages/components/link.tsx
 // Template file: actor/src/pages/components/link.tsx.hbs

@@ -27,7 +27,6 @@ import {
   AdminConConsMaskBuilder,
   AdminConProsMaskBuilder,
   AdminConCommentsMaskBuilder,
-  AdminConParentDebateMaskBuilder,
   AdminConParentConMaskBuilder,
   AdminConParentProMaskBuilder,
 } from './AdminConMaskBuilder';
@@ -56,7 +55,6 @@ import {
   AdminProProsMaskBuilder,
   AdminProConsMaskBuilder,
   AdminProCommentsMaskBuilder,
-  AdminProParentDebateMaskBuilder,
   AdminProParentProMaskBuilder,
   AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
@@ -116,7 +114,6 @@ export class AdminDebateConsMaskBuilder extends RelationMaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
-      | AdminConParentDebateMaskBuilder
       | AdminConParentConMaskBuilder
       | AdminConParentProMaskBuilder
     >,
@@ -132,7 +129,6 @@ export class AdminDebateProsMaskBuilder extends RelationMaskBuilder {
       | AdminProProsMaskBuilder
       | AdminProConsMaskBuilder
       | AdminProCommentsMaskBuilder
-      | AdminProParentDebateMaskBuilder
       | AdminProParentProMaskBuilder
       | AdminProParentConMaskBuilder
     >,

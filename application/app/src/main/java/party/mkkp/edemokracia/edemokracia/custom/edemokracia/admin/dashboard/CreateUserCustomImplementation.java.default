@@ -19,7 +19,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.admin.dashboard;
  * var edemokracia::admin::AdminPrincipalUser user = edemokracia::admin::AdminPrincipalUser!filter(u | u.userName == input.userName)!any();
  * 
  * if (user!isUndefined()) {
- * 	new edemokracia::admin::AdminPrincipalUser(
+ * 	user = new edemokracia::admin::AdminPrincipalUser(
  * 	    userName = input.userName,
  * 	    email = input.email,
  * 	    lastName = input.lastName,

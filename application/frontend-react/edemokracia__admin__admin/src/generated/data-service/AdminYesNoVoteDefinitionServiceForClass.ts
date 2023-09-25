@@ -32,6 +32,8 @@ export interface AdminYesNoVoteDefinitionServiceForClass {
     queryCustomizer?: AdminYesNoVoteDefinitionQueryCustomizer,
   ): Promise<AdminYesNoVoteDefinitionStored>;
 
+  update(target: Partial<AdminYesNoVoteDefinitionStored>): Promise<AdminYesNoVoteDefinitionStored>;
+
   getDebate(
     target: JudoIdentifiable<AdminYesNoVoteDefinition>,
     queryCustomizer?: AdminDebateQueryCustomizer,

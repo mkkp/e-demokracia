@@ -10,7 +10,6 @@ import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   AdminConParentAttributes,
   AdminCommentAttributes,
-  AdminDebateParentAttributes,
   AdminProParentAttributes,
   AdminProAttributes,
   AdminUserAttributes,
@@ -28,14 +27,12 @@ import {
   AdminUserResidentDistrictMaskBuilder,
 } from './AdminUserMaskBuilder';
 import {} from './AdminConParentMaskBuilder';
-import {} from './AdminDebateParentMaskBuilder';
 import {} from './AdminProParentMaskBuilder';
 import {
   AdminProCreatedByMaskBuilder,
   AdminProProsMaskBuilder,
   AdminProConsMaskBuilder,
   AdminProCommentsMaskBuilder,
-  AdminProParentDebateMaskBuilder,
   AdminProParentProMaskBuilder,
   AdminProParentConMaskBuilder,
 } from './AdminProMaskBuilder';
@@ -63,7 +60,6 @@ export class AdminConConsMaskBuilder extends RelationMaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
-      | AdminConParentDebateMaskBuilder
       | AdminConParentConMaskBuilder
       | AdminConParentProMaskBuilder
     >,
@@ -79,7 +75,6 @@ export class AdminConProsMaskBuilder extends RelationMaskBuilder {
       | AdminProProsMaskBuilder
       | AdminProConsMaskBuilder
       | AdminProCommentsMaskBuilder
-      | AdminProParentDebateMaskBuilder
       | AdminProParentProMaskBuilder
       | AdminProParentConMaskBuilder
     >,
@@ -90,11 +85,6 @@ export class AdminConProsMaskBuilder extends RelationMaskBuilder {
 export class AdminConCommentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<AdminCommentAttributes | AdminCommentCreatedByMaskBuilder>) {
     super('comments', props);
-  }
-}
-export class AdminConParentDebateMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<AdminDebateParentAttributes>) {
-    super('parentDebate', props);
   }
 }
 export class AdminConParentConMaskBuilder extends RelationMaskBuilder {
@@ -116,7 +106,6 @@ export class AdminConMaskBuilder extends MaskBuilder {
       | AdminConConsMaskBuilder
       | AdminConProsMaskBuilder
       | AdminConCommentsMaskBuilder
-      | AdminConParentDebateMaskBuilder
       | AdminConParentConMaskBuilder
       | AdminConParentProMaskBuilder
     >,

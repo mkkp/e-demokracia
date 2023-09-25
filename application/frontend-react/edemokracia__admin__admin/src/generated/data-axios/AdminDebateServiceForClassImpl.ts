@@ -9,12 +9,12 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  CloseDebateOutputVoteDefinitionReferenceStored,
   AdminRatingVoteDefinitionStored,
   AdminCon,
   AdminIssueStored,
   AdminYesNoVoteDefinition,
   AdminCommentQueryCustomizer,
-  VoteDefinitionStored,
   AdminIssueQueryCustomizer,
   AdminProQueryCustomizer,
   CreateCommentInput,
@@ -430,7 +430,10 @@ export class AdminDebateServiceForClassImpl extends JudoAxiosService implements 
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeDebate(owner: JudoIdentifiable<AdminDebate>, target: CloseDebateInput): Promise<VoteDefinitionStored> {
+  async closeDebate(
+    owner: JudoIdentifiable<AdminDebate>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored> {
     const path = '/admin/Debate/closeDebate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {

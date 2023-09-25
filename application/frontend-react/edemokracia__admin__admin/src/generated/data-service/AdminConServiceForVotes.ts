@@ -25,17 +25,4 @@ export interface AdminConServiceForVotes {
     owner: JudoIdentifiable<AdminCon>,
     queryCustomizer?: AdminSimpleVoteQueryCustomizer,
   ): Promise<Array<AdminSimpleVoteStored>>;
-
-  getRangeForUser(
-    owner: JudoIdentifiable<AdminCon>,
-    queryCustomizer: AdminUserQueryCustomizer,
-  ): Promise<Array<AdminUserStored>>;
-
-  setUser(
-    owner: JudoIdentifiable<AdminCon>,
-    target: JudoIdentifiable<AdminUser>,
-    selected: JudoIdentifiable<AdminUser>,
-  ): Promise<void>;
-
-  unsetUser(owner: JudoIdentifiable<AdminCon>, target: JudoIdentifiable<AdminUser>): Promise<void>;
 }

@@ -72,6 +72,7 @@ import {
 } from '~/generated/data-axios';
 import {
   usePageRefreshSelectAnswerVoteDefinitionAction,
+  useRowViewVoteEntriesAction,
   useTableActionVoteEntriesAction,
   useTableRefreshRelationVoteEntriesAction,
 } from '../actions';
@@ -233,6 +234,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
   };
 
   const pageRefreshSelectAnswerVoteDefinitionAction = usePageRefreshSelectAnswerVoteDefinitionAction();
+  const rowViewVoteEntriesAction = useRowViewVoteEntriesAction();
   const tableActionVoteEntriesAction = useTableActionVoteEntriesAction(
     setFilters,
     setPage,
@@ -404,6 +406,9 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
           setSelectionModel(newRowSelectionModel);
         }}
         keepNonExistentRowsSelected
+        onRowClick={(params: GridRowParams<AdminSelectAnswerVoteEntryStored>) =>
+          rowViewVoteEntriesAction(ownerData, params.row, () => fetchOwnerData())
+        }
         sortModel={sortModel}
         onSortModelChange={handleSortModelChange}
         components={{

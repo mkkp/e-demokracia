@@ -23,7 +23,6 @@ import {
   CreateCommentInput,
   AdminIssueCategory,
   AdminComment,
-  DebateStored,
   AdminUser,
   AdminCountyStored,
   AdminCityStored,
@@ -35,6 +34,7 @@ import {
   AdminIssueDebateStored,
   AdminIssueAttachmentQueryCustomizer,
   AdminIssueAttachment,
+  CreateDebateOutputDebateReferenceStored,
   AdminIssue,
   AdminIssueType,
   AdminIssueTypeQueryCustomizer,
@@ -182,7 +182,10 @@ export interface AdminIssueServiceForClass {
 
   unsetDistrict(target: JudoIdentifiable<AdminIssue>): Promise<void>;
 
-  createDebate(owner: JudoIdentifiable<AdminIssue>, target: CreateDebateInput): Promise<DebateStored>;
+  createDebate(
+    owner: JudoIdentifiable<AdminIssue>,
+    target: CreateDebateInput,
+  ): Promise<CreateDebateOutputDebateReferenceStored>;
 
   createComment(owner: JudoIdentifiable<AdminIssue>, target: CreateCommentInput): Promise<void>;
 }

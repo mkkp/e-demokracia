@@ -19,7 +19,7 @@ import type {
 } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToAdminYesNoVoteEntryOwnerView } from '~/routes';
+import AdminAdminView from '~/pages/admin/yes_no_vote_entry/owner/view/index';
 
 export const LINK_VIEW_OWNER_ACTION_INTERFACE_KEY = 'LinkViewOwnerAction';
 export type LinkViewOwnerAction = () => (
@@ -45,7 +45,23 @@ export const useLinkViewOwnerAction: LinkViewOwnerAction = () => {
     entry: AdminUserStored,
     successCallback: () => void,
   ) {
-    closeAllDialogs();
-    navigate(routeToAdminYesNoVoteEntryOwnerView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'lg',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <AdminAdminView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };
