@@ -123,7 +123,7 @@ export const OwnedDebatesTable = forwardRef<RefreshableTable, OwnedDebatesTableP
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminDebateQueryCustomizer>({
     _mask:
-      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isNotFavorite,isFavorite}',
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -335,7 +335,7 @@ export const OwnedDebatesTable = forwardRef<RefreshableTable, OwnedDebatesTableP
 
   const ownedDebatesInitialQueryCustomizer: AdminDebateQueryCustomizer = {
     _mask:
-      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isNotFavorite,isFavorite}',
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite}',
     _orderBy: ownedDebatesSortModel.length
       ? [
           {

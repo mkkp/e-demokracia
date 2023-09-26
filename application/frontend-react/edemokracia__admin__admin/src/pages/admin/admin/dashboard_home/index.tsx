@@ -137,7 +137,7 @@ export default function AdminAdminDashboardHomeDashboard() {
 
   const queryCustomizer: AdminDashboardQueryCustomizer = {
     _mask:
-      '{welcome,issuesOwned{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},favoriteIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},ownedDebates{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isNotFavorite,isFavorite},favoriteDebates{title,closeAt,status,issueTitle,isNotClosed,isNotFavorite,isFavorite},voteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
+      '{welcome,issuesOwned{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},favoriteIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},ownedDebates{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite},favoriteDebates{title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite},voteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminDashboardHomeDashboardPostRefreshHook>(
@@ -256,10 +256,6 @@ export default function AdminAdminDashboardHomeDashboard() {
               </Grid>
             </Grid>
 
-            <Grid item xs={12}>
-              <Grid container spacing={2}></Grid>
-            </Grid>
-
             <Grid container item xs={12} sm={12}>
               <ModeledTabs
                 id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelector"
@@ -275,6 +271,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                     }) as string,
                     disabled: isLoading,
                     hidden: false,
+                    icon: 'ticket-confirmation',
                     nestedDataKeys: ['favoriteIssues', 'issuesOwned'],
                   },
                   {
@@ -285,6 +282,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                     }) as string,
                     disabled: isLoading,
                     hidden: false,
+                    icon: 'wechat',
                     nestedDataKeys: ['favoriteDebates', 'ownedDebates'],
                   },
                   {
@@ -295,6 +293,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                     }) as string,
                     disabled: isLoading,
                     hidden: false,
+                    icon: 'vote',
                     nestedDataKeys: ['voteEntries'],
                   },
                 ]}
@@ -323,7 +322,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                             }) as string,
                             disabled: isLoading,
                             hidden: false,
-                            icon: 'ticket-account',
+                            icon: 'account-circle',
                             nestedDataKeys: ['issuesOwned'],
                           },
                           {
@@ -334,6 +333,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                             }) as string,
                             disabled: isLoading,
                             hidden: false,
+                            icon: 'star',
                             nestedDataKeys: ['favoriteIssues'],
                           },
                         ]}
@@ -452,7 +452,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                             }) as string,
                             disabled: isLoading,
                             hidden: false,
-                            icon: 'wechat',
+                            icon: 'account-circle',
                             nestedDataKeys: ['ownedDebates'],
                           },
                           {
@@ -463,6 +463,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                             }) as string,
                             disabled: isLoading,
                             hidden: false,
+                            icon: 'star',
                             nestedDataKeys: ['favoriteDebates'],
                           },
                         ]}

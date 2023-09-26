@@ -102,7 +102,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<AdminIssueStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'countyRepresentation', sort: null }]);
   const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssues-${ownerData.__signedIdentifier}-filterModel`;
   const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssues-${ownerData.__signedIdentifier}-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
@@ -114,7 +114,8 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-    _mask: '{scope,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
+    _mask:
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -136,7 +137,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
     selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
   }, [selectionModel]);
 
-  const ownedIssuesSortModel: GridSortModel = [{ field: 'title', sort: null }];
+  const ownedIssuesSortModel: GridSortModel = [{ field: 'countyRepresentation', sort: null }];
 
   const ownedIssuesColumns: GridColDef<AdminIssueStored>[] = [
     {
@@ -157,6 +158,42 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
       description: t('judo.pages.table.column.not-sortable', {
         defaultValue: 'This column is not sortable.',
       }) as string,
+    },
+    {
+      ...baseColumnConfig,
+      field: 'countyRepresentation',
+      headerName: t('admin.UserIssuesView.ownedIssues.countyRepresentation', {
+        defaultValue: 'CountyRepresentation',
+      }) as string,
+      headerClassName: 'data-grid-column-header',
+
+      width: 230,
+      type: 'string',
+      filterable: false && true,
+    },
+    {
+      ...baseColumnConfig,
+      field: 'cityRepresentation',
+      headerName: t('admin.UserIssuesView.ownedIssues.cityRepresentation', {
+        defaultValue: 'CityRepresentation',
+      }) as string,
+      headerClassName: 'data-grid-column-header',
+
+      width: 230,
+      type: 'string',
+      filterable: false && true,
+    },
+    {
+      ...baseColumnConfig,
+      field: 'districtRepresentation',
+      headerName: t('admin.UserIssuesView.ownedIssues.districtRepresentation', {
+        defaultValue: 'DistrictRepresentation',
+      }) as string,
+      headerClassName: 'data-grid-column-header',
+
+      width: 230,
+      type: 'string',
+      filterable: false && true,
     },
     {
       ...baseColumnConfig,
@@ -237,6 +274,31 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
     },
 
     {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesCountyRepresentationFilter',
+      attributeName: 'countyRepresentation',
+      label: t('admin.UserIssuesView.ownedIssues.countyRepresentation', {
+        defaultValue: 'CountyRepresentation',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesCityRepresentationFilter',
+      attributeName: 'cityRepresentation',
+      label: t('admin.UserIssuesView.ownedIssues.cityRepresentation', { defaultValue: 'CityRepresentation' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesDistrictRepresentationFilter',
+      attributeName: 'districtRepresentation',
+      label: t('admin.UserIssuesView.ownedIssues.districtRepresentation', {
+        defaultValue: 'DistrictRepresentation',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesTitleFilter',
       attributeName: 'title',
       label: t('admin.UserIssuesView.ownedIssues.title', { defaultValue: 'Title' }) as string,
@@ -267,7 +329,8 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   ];
 
   const ownedIssuesInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-    _mask: '{scope,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
+    _mask:
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
     _orderBy: ownedIssuesSortModel.length
       ? [
           {
@@ -300,6 +363,31 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
       label: t('admin.UserIssuesView.ownedIssues.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesCountyRepresentationFilter',
+      attributeName: 'countyRepresentation',
+      label: t('admin.UserIssuesView.ownedIssues.countyRepresentation', {
+        defaultValue: 'CountyRepresentation',
+      }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesCityRepresentationFilter',
+      attributeName: 'cityRepresentation',
+      label: t('admin.UserIssuesView.ownedIssues.cityRepresentation', { defaultValue: 'CityRepresentation' }) as string,
+      filterType: FilterType.string,
+    },
+
+    {
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarOwnedIssuesGroupOwnedIssuesGroupOwnedIssuesLabelWrapperOwnedIssuesDistrictRepresentationFilter',
+      attributeName: 'districtRepresentation',
+      label: t('admin.UserIssuesView.ownedIssues.districtRepresentation', {
+        defaultValue: 'DistrictRepresentation',
+      }) as string,
+      filterType: FilterType.string,
     },
 
     {

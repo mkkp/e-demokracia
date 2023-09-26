@@ -121,7 +121,7 @@ export const FavoriteDebatesTable = forwardRef<RefreshableTable, FavoriteDebates
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminDebateQueryCustomizer>({
-    _mask: '{title,closeAt,status,issueTitle,isNotClosed,isNotFavorite,isFavorite}',
+    _mask: '{title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -244,7 +244,7 @@ export const FavoriteDebatesTable = forwardRef<RefreshableTable, FavoriteDebates
   ];
 
   const favoriteDebatesInitialQueryCustomizer: AdminDebateQueryCustomizer = {
-    _mask: '{title,closeAt,status,issueTitle,isNotClosed,isNotFavorite,isFavorite}',
+    _mask: '{title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite}',
     _orderBy: favoriteDebatesSortModel.length
       ? [
           {

@@ -133,7 +133,7 @@ export default function AdminAdminUserIssuesView() {
 
   const queryCustomizer: AdminUserIssuesQueryCustomizer = {
     _mask:
-      '{userName,ownedIssues{scope,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesGlobal{title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInActivityCounties{countyRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInActivityCities{countyRepresentation,cityRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInActivityDistricts{countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInResidentCounty{title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInResidentCity{countyRepresentation,cityRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInResidentDistrict{countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite}}',
+      '{userName,ownedIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesGlobal{title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInActivityCounties{countyRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInActivityCities{countyRepresentation,cityRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInActivityDistricts{countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInResidentCounty{title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInResidentCity{countyRepresentation,cityRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},activeIssuesInResidentDistrict{countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminUserIssuesViewPostRefreshHook>(
@@ -291,6 +291,7 @@ export default function AdminAdminUserIssuesView() {
                         label: t('admin.UserIssuesView.ownedIssuesGroup', { defaultValue: 'Owned issues' }) as string,
                         disabled: isLoading,
                         hidden: false,
+                        icon: 'account-box',
                         nestedDataKeys: ['ownedIssues'],
                       },
                       {
@@ -301,6 +302,7 @@ export default function AdminAdminUserIssuesView() {
                         }) as string,
                         disabled: isLoading,
                         hidden: false,
+                        icon: 'earth',
                         nestedDataKeys: ['activeIssuesGlobal'],
                       },
                       {
@@ -311,6 +313,7 @@ export default function AdminAdminUserIssuesView() {
                         }) as string,
                         disabled: isLoading,
                         hidden: false,
+                        icon: 'map-search',
                         nestedDataKeys: [
                           'activeIssuesInActivityCities',
                           'activeIssuesInActivityCounties',
@@ -325,6 +328,7 @@ export default function AdminAdminUserIssuesView() {
                         }) as string,
                         disabled: isLoading,
                         hidden: false,
+                        icon: 'home-circle',
                         nestedDataKeys: [
                           'activeIssuesInResidentCity',
                           'activeIssuesInResidentCounty',
@@ -477,6 +481,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'map',
                                 nestedDataKeys: ['activeIssuesInActivityCounties'],
                               },
                               {
@@ -487,6 +492,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'city',
                                 nestedDataKeys: ['activeIssuesInActivityCities'],
                               },
                               {
@@ -497,6 +503,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'home-city',
                                 nestedDataKeys: ['activeIssuesInActivityDistricts'],
                               },
                             ]}
@@ -658,6 +665,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'map',
                                 nestedDataKeys: ['activeIssuesInResidentCounty'],
                               },
                               {
@@ -668,6 +676,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'city',
                                 nestedDataKeys: ['activeIssuesInResidentCity'],
                               },
                               {
@@ -678,6 +687,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'home-city',
                                 nestedDataKeys: ['activeIssuesInResidentDistrict'],
                               },
                             ]}

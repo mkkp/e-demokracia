@@ -25,7 +25,16 @@ export const useTableActionOwnedIssuesAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): TableActionOwnedIssuesAction => {
-  const columnNames = ['scope', 'title', 'created', 'numberOfDebates', 'status'];
+  const columnNames = [
+    'scope',
+    'countyRepresentation',
+    'cityRepresentation',
+    'districtRepresentation',
+    'title',
+    'created',
+    'numberOfDebates',
+    'status',
+  ];
 
   return async function tableActionOwnedIssuesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);

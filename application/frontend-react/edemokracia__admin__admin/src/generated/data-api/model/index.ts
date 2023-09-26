@@ -57,6 +57,7 @@ export * from './AdminSelectAnswerVoteEntry';
 export * from './AdminSelectAnswerVoteSelection';
 export * from './AdminSimpleVote';
 export * from './AdminUser';
+export * from './AdminUserDebates';
 export * from './AdminUserIssues';
 export * from './AdminUserManager';
 export * from './AdminUserProfile';

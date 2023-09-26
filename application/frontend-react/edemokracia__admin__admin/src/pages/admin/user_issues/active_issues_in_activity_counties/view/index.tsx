@@ -280,7 +280,7 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
                   <Grid container spacing={2}>
                     <Grid item>
                       <LoadingButton
-                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInActivityCountiesViewDefaultIssueViewEditActionsActionGroupCreateDebate"
+                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInActivityCountiesViewDefaultIssueViewEditActionsPageActionButtonsCreateDebate"
                         loading={isLoading}
                         startIcon={<MdiIcon path="wechat" />}
                         loadingPosition="start"
@@ -294,14 +294,16 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
                         }}
                         disabled={editMode}
                       >
-                        <span>{t('admin.IssueView.actionGroup.createDebate', { defaultValue: 'Create debate' })}</span>
+                        <span>
+                          {t('admin.IssueView.PageActionButtons.createDebate', { defaultValue: 'Create debate' })}
+                        </span>
                       </LoadingButton>
                     </Grid>
 
                     {!data.isFavorite && (
                       <Grid item>
                         <LoadingButton
-                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInActivityCountiesViewDefaultIssueViewEditActionsActionGroupAddToFavorites"
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInActivityCountiesViewDefaultIssueViewEditActionsPageActionButtonsAddToFavorites"
                           loading={isLoading}
                           startIcon={<MdiIcon path="star-plus" />}
                           loadingPosition="start"
@@ -316,7 +318,9 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
                           disabled={editMode}
                         >
                           <span>
-                            {t('admin.IssueView.actionGroup.addToFavorites', { defaultValue: 'Add to favorites' })}
+                            {t('admin.IssueView.PageActionButtons.addToFavorites', {
+                              defaultValue: 'Add to favorites',
+                            })}
                           </span>
                         </LoadingButton>
                       </Grid>
@@ -324,7 +328,7 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
                     {!data.isNotFavorite && (
                       <Grid item>
                         <LoadingButton
-                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInActivityCountiesViewDefaultIssueViewEditActionsActionGroupRemoveFromFavorites"
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInActivityCountiesViewDefaultIssueViewEditActionsPageActionButtonsRemoveFromFavorites"
                           loading={isLoading}
                           startIcon={<MdiIcon path="star-minus" />}
                           loadingPosition="start"
@@ -339,7 +343,7 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
                           disabled={editMode}
                         >
                           <span>
-                            {t('admin.IssueView.actionGroup.removeFromFavorites', {
+                            {t('admin.IssueView.PageActionButtons.removeFromFavorites', {
                               defaultValue: 'Remove from favorites',
                             })}
                           </span>

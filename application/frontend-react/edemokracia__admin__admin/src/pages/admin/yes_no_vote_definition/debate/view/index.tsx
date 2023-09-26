@@ -167,7 +167,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
 
   const queryCustomizer: AdminDebateQueryCustomizer = {
     _mask:
-      '{isNotClosed,isNotFavorite,isFavorite,title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
+      '{isNotClosed,isFavorite,isNotFavorite,title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminYesNoVoteDefinitionDebateViewPostRefreshHook>(
@@ -268,7 +268,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                   <Grid container spacing={2}>
                     <Grid item>
                       <LoadingButton
-                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionDebateViewDefaultDebateViewEditActionsActionButtonBarCloseDebate"
+                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionDebateViewDefaultDebateViewEditActionsPageActionButtonsCloseDebate"
                         loading={isLoading}
                         startIcon={<MdiIcon path="wechat" />}
                         loadingPosition="start"
@@ -283,15 +283,15 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                         disabled={editMode}
                       >
                         <span>
-                          {t('admin.DebateView.actionButtonBar.closeDebate', { defaultValue: 'Close debate' })}
+                          {t('admin.DebateView.PageActionButtons.closeDebate', { defaultValue: 'Close debate' })}
                         </span>
                       </LoadingButton>
                     </Grid>
 
-                    {!data.isNotFavorite && (
+                    {!data.isFavorite && (
                       <Grid item>
                         <LoadingButton
-                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionDebateViewDefaultDebateViewEditActionsActionButtonBarAddToFavorites"
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionDebateViewDefaultDebateViewEditActionsPageActionButtonsAddToFavorites"
                           loading={isLoading}
                           startIcon={<MdiIcon path="star-plus" />}
                           loadingPosition="start"
@@ -306,15 +306,17 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                           disabled={editMode}
                         >
                           <span>
-                            {t('admin.DebateView.actionButtonBar.addToFavorites', { defaultValue: 'Add to favorites' })}
+                            {t('admin.DebateView.PageActionButtons.addToFavorites', {
+                              defaultValue: 'Add to favorites',
+                            })}
                           </span>
                         </LoadingButton>
                       </Grid>
                     )}
-                    {!data.isFavorite && (
+                    {!data.isNotFavorite && (
                       <Grid item>
                         <LoadingButton
-                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionDebateViewDefaultDebateViewEditActionsActionButtonBarRemoveFromFavorites"
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminYesNoVoteDefinitionDebateViewDefaultDebateViewEditActionsPageActionButtonsRemoveFromFavorites"
                           loading={isLoading}
                           startIcon={<MdiIcon path="star-minus" />}
                           loadingPosition="start"
@@ -329,7 +331,7 @@ export default function AdminYesNoVoteDefinitionDebateView() {
                           disabled={editMode}
                         >
                           <span>
-                            {t('admin.DebateView.actionButtonBar.removeFromFavorites', {
+                            {t('admin.DebateView.PageActionButtons.removeFromFavorites', {
                               defaultValue: 'Remove from favorites',
                             })}
                           </span>

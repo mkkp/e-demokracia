@@ -278,7 +278,7 @@ export default function AdminVoteDefinitionIssueView() {
                   <Grid container spacing={2}>
                     <Grid item>
                       <LoadingButton
-                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditActionsActionGroupCreateDebate"
+                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditActionsPageActionButtonsCreateDebate"
                         loading={isLoading}
                         startIcon={<MdiIcon path="wechat" />}
                         loadingPosition="start"
@@ -292,14 +292,16 @@ export default function AdminVoteDefinitionIssueView() {
                         }}
                         disabled={editMode}
                       >
-                        <span>{t('admin.IssueView.actionGroup.createDebate', { defaultValue: 'Create debate' })}</span>
+                        <span>
+                          {t('admin.IssueView.PageActionButtons.createDebate', { defaultValue: 'Create debate' })}
+                        </span>
                       </LoadingButton>
                     </Grid>
 
                     {!data.isFavorite && (
                       <Grid item>
                         <LoadingButton
-                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditActionsActionGroupAddToFavorites"
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditActionsPageActionButtonsAddToFavorites"
                           loading={isLoading}
                           startIcon={<MdiIcon path="star-plus" />}
                           loadingPosition="start"
@@ -314,7 +316,9 @@ export default function AdminVoteDefinitionIssueView() {
                           disabled={editMode}
                         >
                           <span>
-                            {t('admin.IssueView.actionGroup.addToFavorites', { defaultValue: 'Add to favorites' })}
+                            {t('admin.IssueView.PageActionButtons.addToFavorites', {
+                              defaultValue: 'Add to favorites',
+                            })}
                           </span>
                         </LoadingButton>
                       </Grid>
@@ -322,7 +326,7 @@ export default function AdminVoteDefinitionIssueView() {
                     {!data.isNotFavorite && (
                       <Grid item>
                         <LoadingButton
-                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditActionsActionGroupRemoveFromFavorites"
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionIssueViewDefaultIssueViewEditActionsPageActionButtonsRemoveFromFavorites"
                           loading={isLoading}
                           startIcon={<MdiIcon path="star-minus" />}
                           loadingPosition="start"
@@ -337,7 +341,7 @@ export default function AdminVoteDefinitionIssueView() {
                           disabled={editMode}
                         >
                           <span>
-                            {t('admin.IssueView.actionGroup.removeFromFavorites', {
+                            {t('admin.IssueView.PageActionButtons.removeFromFavorites', {
                               defaultValue: 'Remove from favorites',
                             })}
                           </span>

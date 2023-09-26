@@ -49,6 +49,7 @@ export * from './AdminCreateIssueInputQueryCustomizer';
 export * from './AdminUserProfileQueryCustomizer';
 export * from './AdminUserManagerQueryCustomizer';
 export * from './AdminCreateUserInputQueryCustomizer';
+export * from './AdminUserDebatesQueryCustomizer';
 export * from './AdminAdminPrincipalUserQueryCustomizer';
 
 export * from './AdminUserMaskBuilder';
@@ -94,6 +95,7 @@ export * from './AdminCreateIssueInputMaskBuilder';
 export * from './AdminUserProfileMaskBuilder';
 export * from './AdminUserManagerMaskBuilder';
 export * from './AdminCreateUserInputMaskBuilder';
+export * from './AdminUserDebatesMaskBuilder';
 export * from './AdminAdminPrincipalUserMaskBuilder';
 
 export * from './FilterByString';

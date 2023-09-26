@@ -276,6 +276,21 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_ADMIN_USER_DEBATES_VIEW_INTERFACE_KEY = 'AdminAdminUserDebatesViewRoute';
+export const routeToAdminAdminUserDebatesView = (signedIdentifier: string): string =>
+  'admin/admin/user_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserDebatesView = lazy(() => import('./pages/admin/admin/user_debates/view/index'));
+
+routes.push({
+  path: 'admin/admin/user_debates/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_DEBATES_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserDebatesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_ADMIN_USER_ISSUES_VIEW_INTERFACE_KEY = 'AdminAdminUserIssuesViewRoute';
 export const routeToAdminAdminUserIssuesView = (signedIdentifier: string): string =>
   'admin/admin/user_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -1116,6 +1131,348 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTES_VIEW_INTERFACE_KEY})`}>
         <AdminUserVotesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesGlobalTableRoute';
+export const routeToAdminUserDebatesActiveDebatesGlobalTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_global/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserDebatesActiveDebatesGlobalTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_global/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_global/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_TABLE_INTERFACE_KEY})`}>
+        <AdminUserDebatesActiveDebatesGlobalTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesGlobalViewRoute';
+export const routeToAdminUserDebatesActiveDebatesGlobalView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_global/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserDebatesActiveDebatesGlobalView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_global/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_global/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_VIEW_INTERFACE_KEY})`}>
+        <AdminUserDebatesActiveDebatesGlobalView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInActivityCitiesTableRoute';
+export const routeToAdminUserDebatesActiveDebatesInActivityCitiesTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_activity_cities/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInActivityCitiesTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_activity_cities/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_activity_cities/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInActivityCitiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInActivityCitiesViewRoute';
+export const routeToAdminUserDebatesActiveDebatesInActivityCitiesView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_activity_cities/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInActivityCitiesView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_activity_cities/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_activity_cities/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInActivityCitiesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInActivityCountiesTableRoute';
+export const routeToAdminUserDebatesActiveDebatesInActivityCountiesTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_activity_counties/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInActivityCountiesTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_activity_counties/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_activity_counties/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInActivityCountiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInActivityCountiesViewRoute';
+export const routeToAdminUserDebatesActiveDebatesInActivityCountiesView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_activity_counties/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInActivityCountiesView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_activity_counties/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_activity_counties/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInActivityCountiesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInActivityDistrictsTableRoute';
+export const routeToAdminUserDebatesActiveDebatesInActivityDistrictsTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_activity_districts/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInActivityDistrictsTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_activity_districts/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_activity_districts/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInActivityDistrictsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInActivityDistrictsViewRoute';
+export const routeToAdminUserDebatesActiveDebatesInActivityDistrictsView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_activity_districts/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInActivityDistrictsView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_activity_districts/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_activity_districts/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInActivityDistrictsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInResidentCityTableRoute';
+export const routeToAdminUserDebatesActiveDebatesInResidentCityTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_resident_city/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInResidentCityTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_resident_city/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_resident_city/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInResidentCityTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInResidentCityViewRoute';
+export const routeToAdminUserDebatesActiveDebatesInResidentCityView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_resident_city/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInResidentCityView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_resident_city/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_resident_city/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInResidentCityView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInResidentCountyTableRoute';
+export const routeToAdminUserDebatesActiveDebatesInResidentCountyTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_resident_county/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInResidentCountyTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_resident_county/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_resident_county/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInResidentCountyTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInResidentCountyViewRoute';
+export const routeToAdminUserDebatesActiveDebatesInResidentCountyView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_resident_county/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInResidentCountyView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_resident_county/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_resident_county/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInResidentCountyView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInResidentDistrictTableRoute';
+export const routeToAdminUserDebatesActiveDebatesInResidentDistrictTable = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_resident_district/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInResidentDistrictTable = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_resident_district/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_resident_district/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInResidentDistrictTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY =
+  'AdminUserDebatesActiveDebatesInResidentDistrictViewRoute';
+export const routeToAdminUserDebatesActiveDebatesInResidentDistrictView = (signedIdentifier: string): string =>
+  'admin/user_debates/active_debates_in_resident_district/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserDebatesActiveDebatesInResidentDistrictView = lazy(
+  () => import('./pages/admin/user_debates/active_debates_in_resident_district/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_debates/active_debates_in_resident_district/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserDebatesActiveDebatesInResidentDistrictView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_OWNED_DEBATES_TABLE_INTERFACE_KEY = 'AdminUserDebatesOwnedDebatesTableRoute';
+export const routeToAdminUserDebatesOwnedDebatesTable = (signedIdentifier: string): string =>
+  'admin/user_debates/owned_debates/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserDebatesOwnedDebatesTable = lazy(() => import('./pages/admin/user_debates/owned_debates/table/index'));
+
+routes.push({
+  path: 'admin/user_debates/owned_debates/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_OWNED_DEBATES_TABLE_INTERFACE_KEY})`}>
+        <AdminUserDebatesOwnedDebatesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_DEBATES_OWNED_DEBATES_VIEW_INTERFACE_KEY = 'AdminUserDebatesOwnedDebatesViewRoute';
+export const routeToAdminUserDebatesOwnedDebatesView = (signedIdentifier: string): string =>
+  'admin/user_debates/owned_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminUserDebatesOwnedDebatesView = lazy(() => import('./pages/admin/user_debates/owned_debates/view/index'));
+
+routes.push({
+  path: 'admin/user_debates/owned_debates/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_DEBATES_OWNED_DEBATES_VIEW_INTERFACE_KEY})`}>
+        <AdminUserDebatesOwnedDebatesView />
       </ComponentProxy>
     </Suspense>
   ),

@@ -108,7 +108,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminDebateQueryCustomizer>({
-    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed,isNotFavorite,isFavorite}',
+    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -263,7 +263,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   ];
 
   const ownedDebatesInitialQueryCustomizer: AdminDebateQueryCustomizer = {
-    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed,isNotFavorite,isFavorite}',
+    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed,isFavorite,isNotFavorite}',
     _orderBy: ownedDebatesSortModel.length
       ? [
           {
