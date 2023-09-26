@@ -34,5 +34,7 @@ export * from './owner/linkSetOwner';
 export * from './categories/rowViewCategories';
 export * from './city/linkViewCity';
 export * from './pageRefreshActiveIssuesGlobal';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './city/linkSetCity';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './categories/tableClearCategories';

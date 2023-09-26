@@ -469,4 +469,30 @@ export class AdminDebateServiceForClassImpl extends JudoAxiosService implements 
       },
     });
   }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addToFavorites(owner: JudoIdentifiable<AdminDebate>): Promise<void> {
+    const path = '/admin/Debate/addToFavorites';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavorites(owner: JudoIdentifiable<AdminDebate>): Promise<void> {
+    const path = '/admin/Debate/removeFromFavorites';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
 }

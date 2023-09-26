@@ -63,8 +63,10 @@ import {
 import { adminUserIssuesServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshUserIssuesAction,
+  useAdminIssueAddToFavoritesAction,
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
+  useAdminIssueRemoveFromFavoritesAction,
   useRowViewOwnedIssuesAction,
   useTableActionOwnedIssuesAction,
   useTableRefreshRelationOwnedIssuesAction,
@@ -112,7 +114,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-    _mask: '{scope,title,created,numberOfDebates,status}',
+    _mask: '{scope,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -265,7 +267,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   ];
 
   const ownedIssuesInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-    _mask: '{scope,title,created,numberOfDebates,status}',
+    _mask: '{scope,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
     _orderBy: ownedIssuesSortModel.length
       ? [
           {
@@ -277,8 +279,10 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   };
 
   const pageRefreshUserIssuesAction = usePageRefreshUserIssuesAction();
+  const adminIssueAddToFavoritesAction = useAdminIssueAddToFavoritesAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+  const adminIssueRemoveFromFavoritesAction = useAdminIssueRemoveFromFavoritesAction();
   const rowViewOwnedIssuesAction = useRowViewOwnedIssuesAction();
   const tableActionOwnedIssuesAction = useTableActionOwnedIssuesAction(
     setFilters,
@@ -337,6 +341,28 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
       icon: <MdiIcon path="wechat" />,
       action: async (row: AdminIssueStored) =>
         adminIssueCreateDebateAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueAddToFavoritesButtonCallOperation',
+      label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.addToFavorites.ButtonCallOperation', {
+        defaultValue: 'Add to favorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: AdminIssueStored) =>
+        adminIssueAddToFavoritesAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueRemoveFromFavoritesButtonCallOperation',
+      label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.removeFromFavorites.ButtonCallOperation', {
+        defaultValue: 'Remove from favorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: AdminIssueStored) =>
+        adminIssueRemoveFromFavoritesAction(row, () => {
           fetchOwnerData();
         }),
     },

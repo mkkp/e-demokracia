@@ -8,18 +8,15 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  AdminVoteEntryQueryCustomizer,
-  AdminIssueStored,
-  AdminUserStored,
-  AdminCreateUserInput,
-  AdminVoteEntryStored,
   AdminDashboardQueryCustomizer,
   AdminIssueQueryCustomizer,
   AdminVoteEntry,
-  AdminCreateIssueInput,
   AdminDebate,
   AdminIssue,
+  AdminVoteEntryQueryCustomizer,
+  AdminIssueStored,
   AdminDebateStored,
+  AdminVoteEntryStored,
   AdminDashboardStored,
   AdminDashboard,
   AdminDebateQueryCustomizer,
@@ -44,12 +41,12 @@ export interface AdminDashboardServiceForClass {
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
-  getDebates(
+  getOwnedDebates(
     target: JudoIdentifiable<AdminDashboard>,
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>>;
 
-  getRangeForDebates(
+  getRangeForOwnedDebates(
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>>;
@@ -64,7 +61,23 @@ export interface AdminDashboardServiceForClass {
     queryCustomizer?: AdminVoteEntryQueryCustomizer,
   ): Promise<Array<AdminVoteEntryStored>>;
 
-  createIssue(target: AdminCreateIssueInput): Promise<AdminIssueStored>;
+  getFavoriteDebates(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminDebateQueryCustomizer,
+  ): Promise<Array<AdminDebateStored>>;
 
-  createUser(target: AdminCreateUserInput): Promise<AdminUserStored>;
+  getRangeForFavoriteDebates(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminDebateQueryCustomizer,
+  ): Promise<Array<AdminDebateStored>>;
+
+  getFavoriteIssues(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminIssueQueryCustomizer,
+  ): Promise<Array<AdminIssueStored>>;
+
+  getRangeForFavoriteIssues(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminIssueQueryCustomizer,
+  ): Promise<Array<AdminIssueStored>>;
 }

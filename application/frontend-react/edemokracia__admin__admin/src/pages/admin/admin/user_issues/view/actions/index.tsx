@@ -20,10 +20,12 @@ export * from './activeIssuesInActivityCounties/rowViewActiveIssuesInActivityCou
 export * from './activeIssuesGlobal/rowViewActiveIssuesGlobal';
 export * from './adminIssue/AdminIssueCreateCommentForm';
 export * from './adminIssue/adminIssueCreateComment';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './ownedIssues/rowViewOwnedIssues';
 export * from './adminUserIssues/AdminUserIssuesCreateIssueForm';
 export * from './adminUserIssues/adminUserIssuesCreateIssue';
 export * from './activeIssuesInActivityDistricts/rowViewActiveIssuesInActivityDistricts';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './ownedIssues/tableActionOwnedIssues';
 export * from './activeIssuesInActivityCities/rowViewActiveIssuesInActivityCities';
 export * from './activeIssuesInResidentCounty/tableActionActiveIssuesInResidentCounty';

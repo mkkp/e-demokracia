@@ -68,6 +68,7 @@ import {
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  EdemokraciaIssueScope,
   _StringOperation,
 } from '~/generated/data-api';
 import { adminDebateServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';

@@ -60,8 +60,10 @@ import {
 } from '~/generated/data-api';
 import { adminUserIssuesServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
+  useAdminIssueAddToFavoritesAction,
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
+  useAdminIssueRemoveFromFavoritesAction,
   usePageFilterActiveIssuesInResidentDistrictAction,
   usePageRefreshActiveIssuesInResidentDistrictAction,
   useRowViewActiveIssuesInResidentDistrictAction,
@@ -105,7 +107,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-    _mask: '{scope,title,status,created,numberOfDebates,description}',
+    _mask: '{scope,title,status,created,numberOfDebates,description,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -298,7 +300,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   ];
 
   const activeIssuesInResidentDistrictInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-    _mask: '{scope,title,status,created,numberOfDebates,description}',
+    _mask: '{scope,title,status,created,numberOfDebates,description,isFavorite,isNotFavorite}',
     _orderBy: activeIssuesInResidentDistrictSortModel.length
       ? [
           {
@@ -309,8 +311,10 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       : [],
   };
 
+  const adminIssueAddToFavoritesAction = useAdminIssueAddToFavoritesAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+  const adminIssueRemoveFromFavoritesAction = useAdminIssueRemoveFromFavoritesAction();
   const pageFilterActiveIssuesInResidentDistrictAction = usePageFilterActiveIssuesInResidentDistrictAction(
     setFilters,
     setPage,
@@ -379,6 +383,22 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       }) as string,
       icon: <MdiIcon path="wechat" />,
       action: async (row: AdminIssueStored) => adminIssueCreateDebateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInResidentDistrictTableEdemokraciaAdminAdminEdemokraciaAdminIssueAddToFavoritesButtonCallOperation',
+      label: t('admin.IssueTable.activeIssuesInResidentDistrict.addToFavorites.ButtonCallOperation', {
+        defaultValue: 'Add to favorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: AdminIssueStored) => adminIssueAddToFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInResidentDistrictTableEdemokraciaAdminAdminEdemokraciaAdminIssueRemoveFromFavoritesButtonCallOperation',
+      label: t('admin.IssueTable.activeIssuesInResidentDistrict.removeFromFavorites.ButtonCallOperation', {
+        defaultValue: 'Remove from favorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: AdminIssueStored) => adminIssueRemoveFromFavoritesAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminUserIssuesActiveIssuesInResidentDistrictTableEdemokraciaAdminAdminEdemokraciaAdminIssueCreateCommentButtonCallOperation',

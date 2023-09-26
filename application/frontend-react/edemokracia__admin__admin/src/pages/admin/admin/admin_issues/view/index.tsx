@@ -93,7 +93,12 @@ import {
   EdemokraciaVoteType,
 } from '~/generated/data-api';
 import { adminAdminServiceForAdminIssuesImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
-import { useAdminIssueCreateDebateAction, useAdminIssueCreateCommentAction } from './actions';
+import {
+  useAdminIssueCreateDebateAction,
+  useAdminIssueAddToFavoritesAction,
+  useAdminIssueRemoveFromFavoritesAction,
+  useAdminIssueCreateCommentAction,
+} from './actions';
 
 import { PageActions } from './components/PageActions';
 import { IssueTypeLink } from './components/IssueTypeLink';
@@ -171,7 +176,7 @@ export default function AdminAdminAdminIssuesView() {
 
   const queryCustomizer: AdminIssueQueryCustomizer = {
     _mask:
-      '{defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},debates{status,title,closeAt,description},comments{comment,created,createdByName,upVotes,downVotes}}',
+      '{isFavorite,isNotFavorite,defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},debates{status,title,closeAt,description},comments{comment,created,createdByName,upVotes,downVotes}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminAdminIssuesViewPostRefreshHook>(
@@ -181,6 +186,8 @@ export default function AdminAdminAdminIssuesView() {
     postRefreshHook && postRefreshHook();
 
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+  const adminIssueAddToFavoritesAction = useAdminIssueAddToFavoritesAction();
+  const adminIssueRemoveFromFavoritesAction = useAdminIssueRemoveFromFavoritesAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
 
   const title: string = t('admin.IssueView', { defaultValue: 'Issue View / Edit' });
@@ -256,6 +263,90 @@ export default function AdminAdminAdminIssuesView() {
             alignItems="stretch"
             justifyContent="flex-start"
           >
+            <Grid item xs={12} sm={12}>
+              <Grid
+                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssuesViewDefaultIssueViewEditActions"
+                container
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                spacing={2}
+              >
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    <Grid item>
+                      <LoadingButton
+                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssuesViewDefaultIssueViewEditActionsActionGroupCreateDebate"
+                        loading={isLoading}
+                        startIcon={<MdiIcon path="wechat" />}
+                        loadingPosition="start"
+                        onClick={async () => {
+                          try {
+                            setIsLoading(true);
+                            await adminIssueCreateDebateAction(data, () => fetchData());
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={editMode}
+                      >
+                        <span>{t('admin.IssueView.actionGroup.createDebate', { defaultValue: 'Create debate' })}</span>
+                      </LoadingButton>
+                    </Grid>
+
+                    {!data.isFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssuesViewDefaultIssueViewEditActionsActionGroupAddToFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-plus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await adminIssueAddToFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('admin.IssueView.actionGroup.addToFavorites', { defaultValue: 'Add to favorites' })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isNotFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssuesViewDefaultIssueViewEditActionsActionGroupRemoveFromFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-minus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await adminIssueRemoveFromFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('admin.IssueView.actionGroup.removeFromFavorites', {
+                              defaultValue: 'Remove from favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssuesViewDefaultIssueViewEditIssueLabelWrapper">
                 <CardContent>
@@ -520,29 +611,6 @@ export default function AdminAdminAdminIssuesView() {
                               ),
                             }}
                           />
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueCreateDebateButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="wechat" />}
-                            loadingPosition="start"
-                            onClick={async () => {
-                              try {
-                                setIsLoading(true);
-                                await adminIssueCreateDebateAction(data, () => fetchData());
-                              } finally {
-                                setIsLoading(false);
-                              }
-                            }}
-                            disabled={editMode}
-                          >
-                            <span>
-                              {t('admin.IssueView.createDebate.ButtonCallOperation', { defaultValue: 'Create debate' })}
-                            </span>
-                          </LoadingButton>
                         </Grid>
 
                         <Grid item xs={12} sm={12}>

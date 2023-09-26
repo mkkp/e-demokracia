@@ -82,6 +82,7 @@ import {
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  EdemokraciaIssueScope,
 } from '~/generated/data-api';
 import {
   adminSelectAnswerVoteDefinitionServiceForClassImpl,
@@ -89,6 +90,8 @@ import {
 } from '~/generated/data-axios';
 import {
   useAdminDebateCloseDebateAction,
+  useAdminDebateAddToFavoritesAction,
+  useAdminDebateRemoveFromFavoritesAction,
   useAdminDebateCreateArgumentAction,
   useAdminDebateCreateCommentAction,
 } from './actions';
@@ -167,7 +170,7 @@ export default function AdminSelectAnswerVoteDefinitionDebateView() {
 
   const queryCustomizer: AdminDebateQueryCustomizer = {
     _mask:
-      '{title,status,closeAt,description,isNotClosed,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
+      '{isNotClosed,isNotFavorite,isFavorite,title,status,closeAt,description,issue{representation},createdBy{representation},voteDefinition{title,created,status,closeAt},pros{title,upVotes,downVotes},cons{title,upVotes,downVotes},comments{created,comment,createdByName,upVotes,downVotes}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminSelectAnswerVoteDefinitionDebateViewPostRefreshHook>(
@@ -177,6 +180,8 @@ export default function AdminSelectAnswerVoteDefinitionDebateView() {
     postRefreshHook && postRefreshHook();
 
   const adminDebateCloseDebateAction = useAdminDebateCloseDebateAction();
+  const adminDebateAddToFavoritesAction = useAdminDebateAddToFavoritesAction();
+  const adminDebateRemoveFromFavoritesAction = useAdminDebateRemoveFromFavoritesAction();
   const adminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
   const adminDebateCreateCommentAction = useAdminDebateCreateCommentAction();
 
@@ -253,6 +258,92 @@ export default function AdminSelectAnswerVoteDefinitionDebateView() {
             alignItems="stretch"
             justifyContent="flex-start"
           >
+            <Grid item xs={12} sm={12}>
+              <Grid
+                id="FlexedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionDebateViewDefaultDebateViewEditActions"
+                container
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                spacing={2}
+              >
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    <Grid item>
+                      <LoadingButton
+                        id="ButtonedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionDebateViewDefaultDebateViewEditActionsActionButtonBarCloseDebate"
+                        loading={isLoading}
+                        startIcon={<MdiIcon path="wechat" />}
+                        loadingPosition="start"
+                        onClick={async () => {
+                          try {
+                            setIsLoading(true);
+                            await adminDebateCloseDebateAction(data, () => fetchData());
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={editMode}
+                      >
+                        <span>
+                          {t('admin.DebateView.actionButtonBar.closeDebate', { defaultValue: 'Close debate' })}
+                        </span>
+                      </LoadingButton>
+                    </Grid>
+
+                    {!data.isNotFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionDebateViewDefaultDebateViewEditActionsActionButtonBarAddToFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-plus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await adminDebateAddToFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('admin.DebateView.actionButtonBar.addToFavorites', { defaultValue: 'Add to favorites' })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionDebateViewDefaultDebateViewEditActionsActionButtonBarRemoveFromFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-minus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await adminDebateRemoveFromFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('admin.DebateView.actionButtonBar.removeFromFavorites', {
+                              defaultValue: 'Remove from favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionDebateViewDefaultDebateViewEditDebateLabelWrapper">
                 <CardContent>
@@ -485,29 +576,6 @@ export default function AdminSelectAnswerVoteDefinitionDebateView() {
                             }}
                             validation={validation}
                           />
-                        </Grid>
-
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <LoadingButton
-                            id="CallOperationActionedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionDebateViewEdemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateButtonCallOperation"
-                            loading={isLoading}
-                            variant={undefined}
-                            startIcon={<MdiIcon path="wechat" />}
-                            loadingPosition="start"
-                            onClick={async () => {
-                              try {
-                                setIsLoading(true);
-                                await adminDebateCloseDebateAction(data, () => fetchData());
-                              } finally {
-                                setIsLoading(false);
-                              }
-                            }}
-                            disabled={!data.isNotClosed || editMode}
-                          >
-                            <span>
-                              {t('admin.DebateView.closeDebate.ButtonCallOperation', { defaultValue: 'Close debate' })}
-                            </span>
-                          </LoadingButton>
                         </Grid>
                       </Grid>
                     </Grid>

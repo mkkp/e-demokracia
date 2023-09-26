@@ -18,6 +18,7 @@ import { AdminVoteDefinitionStored } from './AdminVoteDefinition';
 import { AdminYesNoAbstainVoteDefinitionStored } from './AdminYesNoAbstainVoteDefinition';
 import { AdminYesNoVoteDefinitionStored } from './AdminYesNoVoteDefinition';
 import { EdemokraciaDebateStatus } from './EdemokraciaDebateStatus';
+import { EdemokraciaIssueScope } from './EdemokraciaIssueScope';
 
 export interface AdminDebate {
   closeAt: Date;
@@ -27,6 +28,12 @@ export interface AdminDebate {
   issueTitle?: null | string;
   isClosed?: null | boolean;
   isNotClosed?: null | boolean;
+  scope?: null | EdemokraciaIssueScope;
+  districtRepresentation?: null | string;
+  cityRepresentation?: null | string;
+  countyRepresentation?: null | string;
+  isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
 
   issue?: null | AdminIssueStored;
   comments?: null | Array<AdminCommentStored>;
@@ -46,7 +53,13 @@ export type AdminDebateAttributes =
   | 'title'
   | 'issueTitle'
   | 'isClosed'
-  | 'isNotClosed';
+  | 'isNotClosed'
+  | 'scope'
+  | 'districtRepresentation'
+  | 'cityRepresentation'
+  | 'countyRepresentation'
+  | 'isFavorite'
+  | 'isNotFavorite';
 
 export type AdminDebateRelations =
   | 'issue'

@@ -26,6 +26,8 @@ export * from './categories/tableClearCategories';
 export * from './attachments/TableCreateAttachmentsForm';
 export * from './attachments/tableCreateAttachments';
 export * from './comments/rowViewComments';
+export * from './adminIssue/adminIssueAddToFavorites';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './owner/linkViewOwner';
 export * from './attachments/rowDeleteAttachments';
 export * from './issueType/linkSetIssueType';

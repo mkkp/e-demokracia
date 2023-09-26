@@ -616,4 +616,30 @@ export class AdminIssueServiceForClassImpl extends JudoAxiosService implements A
       },
     });
   }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addToFavorites(owner: JudoIdentifiable<AdminIssue>): Promise<void> {
+    const path = '/admin/Issue/addToFavorites';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavorites(owner: JudoIdentifiable<AdminIssue>): Promise<void> {
+    const path = '/admin/Issue/removeFromFavorites';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
 }

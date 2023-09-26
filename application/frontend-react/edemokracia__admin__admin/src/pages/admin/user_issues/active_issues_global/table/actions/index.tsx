@@ -9,6 +9,8 @@ export * from './adminIssue/AdminIssueCreateCommentForm';
 export * from './adminIssue/adminIssueCreateComment';
 export * from './adminIssue/AdminIssueCreateDebateForm';
 export * from './adminIssue/adminIssueCreateDebate';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './pageRefreshActiveIssuesGlobal';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './rowViewActiveIssuesGlobal';
 export * from './pageFilterActiveIssuesGlobal';

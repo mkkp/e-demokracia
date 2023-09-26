@@ -58,9 +58,11 @@ import {
   usePageRefreshAdminDebatesAction,
   useRowDeleteAdminDebatesAction,
   useRowViewAdminDebatesAction,
+  useAdminDebateAddToFavoritesAction,
   useAdminDebateCloseDebateAction,
   useAdminDebateCreateArgumentAction,
   useAdminDebateCreateCommentAction,
+  useAdminDebateRemoveFromFavoritesAction,
 } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
@@ -98,7 +100,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminDebateQueryCustomizer>({
-    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed}',
+    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed,isNotFavorite,isFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -245,7 +247,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   ];
 
   const adminDebatesInitialQueryCustomizer: AdminDebateQueryCustomizer = {
-    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed}',
+    _mask: '{issueTitle,title,status,closeAt,description,isNotClosed,isNotFavorite,isFavorite}',
     _orderBy: adminDebatesSortModel.length
       ? [
           {
@@ -266,9 +268,11 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
   const pageRefreshAdminDebatesAction = usePageRefreshAdminDebatesAction();
   const rowDeleteAdminDebatesAction = useRowDeleteAdminDebatesAction();
   const rowViewAdminDebatesAction = useRowViewAdminDebatesAction();
+  const adminDebateAddToFavoritesAction = useAdminDebateAddToFavoritesAction();
   const adminDebateCloseDebateAction = useAdminDebateCloseDebateAction();
   const adminDebateCreateArgumentAction = useAdminDebateCreateArgumentAction();
   const adminDebateCreateCommentAction = useAdminDebateCreateCommentAction();
+  const adminDebateRemoveFromFavoritesAction = useAdminDebateRemoveFromFavoritesAction();
 
   const filterOptions: FilterOption[] = [
     {
@@ -323,6 +327,22 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
       }) as string,
       icon: <MdiIcon path="wechat" />,
       action: async (row: AdminDebateStored) => adminDebateCloseDebateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminDebateAddToFavoritesButtonCallOperation',
+      label: t('admin.DebateTable.adminDebates.addToFavorites.ButtonCallOperation', {
+        defaultValue: 'Add to favorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: AdminDebateStored) => adminDebateAddToFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminDebateRemoveFromFavoritesButtonCallOperation',
+      label: t('admin.DebateTable.adminDebates.removeFromFavorites.ButtonCallOperation', {
+        defaultValue: 'Remove from favorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: AdminDebateStored) => adminDebateRemoveFromFavoritesAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminAdminDebatesTableEdemokraciaAdminAdminEdemokraciaAdminDebateCreateArgumentButtonCallOperation',

@@ -67,42 +67,67 @@ import {
   AdminVoteEntryStored,
 } from '~/generated/data-api';
 import { adminDashboardServiceForClassImpl, adminVoteEntryServiceForClassImpl } from '~/generated/data-axios';
-import { usePageRefreshDashboardHomeAction } from '../actions';
-import { applyInMemoryFilters } from '~/utilities';
+import {
+  usePageRefreshDashboardHomeAction,
+  useTableActionVoteEntriesAction,
+  useTableRefreshRelationVoteEntriesAction,
+} from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
 export const ADMIN_ADMIN_DASHBOARD_HOME_VIEW_VOTE_ENTRIES = 'AdminAdminDashboardHomeViewVoteEntries';
 
 export interface VoteEntriesTableProps {
-  ownerData: AdminDashboardStored;
+  ownerData: JudoIdentifiable<AdminDashboard>;
   isOwnerLoading: boolean;
   fetchOwnerData: () => Promise<void>;
   editMode: boolean;
   isFormUpdateable: () => boolean;
   storeDiff: (attributeName: keyof AdminDashboardStored, value: any) => void;
+  refreshCounter: number;
   validation: Map<keyof AdminDashboard, string>;
 }
 
-export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
-  const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { openFilterDialog } = useFilterDialog();
-  const { ownerData, isOwnerLoading, editMode, isFormUpdateable, storeDiff, fetchOwnerData } = props;
+export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTableProps>((props, ref) => {
+  const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
+  const { ownerData, isOwnerLoading, fetchOwnerData, editMode, isFormUpdateable, refreshCounter } = props;
   const { t } = useTranslation();
+  const { openFilterDialog } = useFilterDialog();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+  const handleFetchError = useErrorHandler(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
+  );
   const openCRUDDialog = useCRUDDialog();
 
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__identifier}-filters`;
-  const [voteEntriesFilterModel, setVoteEntriesFilterModel] = useState<GridFilterModel>(
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<GridRowModel<AdminVoteEntryStored>[]>([]);
+  const [rowCount, setRowCount] = useState<number>(0);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filters`;
+  const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [data, setData] = useState<AdminVoteEntryStored[]>([]);
-  const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
-    page: 0,
+  const [lastItem, setLastItem] = useState<AdminVoteEntryStored>();
+  const [firstItem, setFirstItem] = useState<AdminVoteEntryStored>();
+  const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(0);
+  const [queryCustomizer, setQueryCustomizer] = useState<AdminVoteEntryQueryCustomizer>({
+    _mask: '{created,issueTitle,debateTitle,voteTitle,voteStatus}',
+    _seek: {
+      limit: 10 + 1,
+    },
+    _orderBy: sortModel.length
+      ? [
+          {
+            attribute: sortModel[0].field,
+            descending: sortModel[0].sort === 'desc',
+          },
+        ]
+      : [],
+    ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -112,7 +137,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
   }, [selectionModel]);
 
-  const [voteEntriesSortModel, setVoteEntriesSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
+  const voteEntriesSortModel: GridSortModel = [{ field: 'created', sort: null }];
 
   const voteEntriesColumns: GridColDef<AdminVoteEntryStored>[] = [
     {
@@ -143,7 +168,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'issueTitle',
-      headerName: t('admin.DashboardView.voteEntries.issueTitle', { defaultValue: 'Issue Title' }) as string,
+      headerName: t('admin.DashboardView.voteEntries.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -153,7 +178,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'debateTitle',
-      headerName: t('admin.DashboardView.voteEntries.debateTitle', { defaultValue: 'Debate Title' }) as string,
+      headerName: t('admin.DashboardView.voteEntries.debateTitle', { defaultValue: 'DebateTitle' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -163,7 +188,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'voteTitle',
-      headerName: t('admin.DashboardView.voteEntries.voteTitle', { defaultValue: 'Vote Title' }) as string,
+      headerName: t('admin.DashboardView.voteEntries.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -173,7 +198,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
     {
       ...baseColumnConfig,
       field: 'voteStatus',
-      headerName: t('admin.DashboardView.voteEntries.voteStatus', { defaultValue: 'Vote Status' }) as string,
+      headerName: t('admin.DashboardView.voteEntries.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -193,37 +218,37 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
 
   const voteEntriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
       label: t('admin.DashboardView.voteEntries.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
       attributeName: 'issueTitle',
-      label: t('admin.DashboardView.voteEntries.issueTitle', { defaultValue: 'Issue Title' }) as string,
+      label: t('admin.DashboardView.voteEntries.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
       attributeName: 'debateTitle',
-      label: t('admin.DashboardView.voteEntries.debateTitle', { defaultValue: 'Debate Title' }) as string,
+      label: t('admin.DashboardView.voteEntries.debateTitle', { defaultValue: 'DebateTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
-      label: t('admin.DashboardView.voteEntries.voteTitle', { defaultValue: 'Vote Title' }) as string,
+      label: t('admin.DashboardView.voteEntries.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
       attributeName: 'voteStatus',
-      label: t('admin.DashboardView.voteEntries.voteStatus', { defaultValue: 'Vote Status' }) as string,
+      label: t('admin.DashboardView.voteEntries.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
     },
@@ -242,78 +267,151 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
   };
 
   const pageRefreshDashboardHomeAction = usePageRefreshDashboardHomeAction();
-
-  const voteEntriesRowActions: TableRowAction<AdminVoteEntryStored>[] = [];
+  const tableActionVoteEntriesAction = useTableActionVoteEntriesAction(
+    setFilters,
+    setPage,
+    setQueryCustomizer,
+    openFilterDialog,
+    10,
+  );
+  const tableRefreshRelationVoteEntriesAction = useTableRefreshRelationVoteEntriesAction();
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
       label: t('admin.DashboardView.voteEntries.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
       attributeName: 'issueTitle',
-      label: t('admin.DashboardView.voteEntries.issueTitle', { defaultValue: 'Issue Title' }) as string,
+      label: t('admin.DashboardView.voteEntries.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
       attributeName: 'debateTitle',
-      label: t('admin.DashboardView.voteEntries.debateTitle', { defaultValue: 'Debate Title' }) as string,
+      label: t('admin.DashboardView.voteEntries.debateTitle', { defaultValue: 'DebateTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
-      label: t('admin.DashboardView.voteEntries.voteTitle', { defaultValue: 'Vote Title' }) as string,
+      label: t('admin.DashboardView.voteEntries.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
       attributeName: 'voteStatus',
-      label: t('admin.DashboardView.voteEntries.voteStatus', { defaultValue: 'Vote Status' }) as string,
+      label: t('admin.DashboardView.voteEntries.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
     },
   ];
 
-  const filter = async (id: string, filterOptions: FilterOption[], filters: Filter[]) => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
+  const rowActions: TableRowAction<AdminVoteEntryStored>[] = [];
 
-    if (Array.isArray(newFilters)) {
-      setPaginationModel((prevState) => ({
-        ...prevState,
-        page: 0,
-      }));
-      setFilters(newFilters);
-      setItemStringified(filtersKey, newFilters);
-    }
+  const handleFiltersChange = (newFilters: Filter[]) => {
+    setPage(0);
+    setFilters(newFilters);
+    setItemStringified(filtersKey, newFilters);
+
+    setQueryCustomizer((prevQueryCustomizer: AdminVoteEntryQueryCustomizer) => {
+      // remove previous filter values, so that we can always start with a clean slate
+      for (const name of voteEntriesColumns.map((c) => c.field)) {
+        delete (prevQueryCustomizer as any)[name];
+      }
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: 10 + 1,
+        },
+        ...mapAllFiltersToQueryCustomizerProperties(newFilters),
+      };
+    });
   };
 
-  useEffect(() => {
-    if (ownerData?.__identifier) {
-      const storedFilters = getItemParsed<Filter[]>(filtersKey);
-      if (storedFilters !== null) {
-        setFilters(storedFilters);
-      }
+  function handleSortModelChange(newModel: GridSortModel) {
+    setPage(0);
+    setSortModel(newModel);
 
-      const storedFilterModel = getItemParsed<GridFilterModel>(filterModelKey);
-      if (storedFilterModel !== null) {
-        setVoteEntriesFilterModel(storedFilterModel);
+    const _orderBy = newModel
+      .filter((m) => m.sort)
+      .map((m) => ({
+        attribute: m.field,
+        descending: m.sort === 'desc',
+      }));
+
+    setQueryCustomizer((prevQueryCustomizer) => {
+      const strippedQueryCustomizer: AdminVoteEntryQueryCustomizer = {
+        ...prevQueryCustomizer,
+      };
+      if (!!strippedQueryCustomizer._seek) {
+        delete strippedQueryCustomizer._seek.lastItem;
+      }
+      return {
+        ...strippedQueryCustomizer,
+        _orderBy,
+      };
+    });
+  }
+
+  async function handlePageChange(isNext: boolean) {
+    setQueryCustomizer((prevQueryCustomizer) => {
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: isNext ? 10 + 1 : 10,
+          reverse: !isNext,
+          lastItem: isNext ? lastItem : firstItem,
+        },
+      };
+    });
+
+    setIsNextButtonEnabled(!isNext);
+  }
+
+  async function fetchData() {
+    if (ownerData && ownerData.__signedIdentifier) {
+      setIsLoading(true);
+
+      try {
+        const res = await adminDashboardServiceForClassImpl.getVoteEntries(
+          ownerData,
+          processQueryCustomizer(queryCustomizer),
+        );
+
+        if (res.length > 10) {
+          setIsNextButtonEnabled(true);
+          res.pop();
+        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+          setIsNextButtonEnabled(false);
+        }
+
+        setData(res);
+        setFirstItem(res[0]);
+        setLastItem(res[res.length - 1]);
+        setRowCount(res.length || 0);
+      } catch (error) {
+        handleFetchError(error);
+      } finally {
+        setIsLoading(false);
       }
     }
-  }, [ownerData]);
+  }
+
+  useImperativeHandle(ref, () => ({
+    fetchData,
+  }));
 
   useEffect(() => {
-    const newData = applyInMemoryFilters<AdminVoteEntryStored>(filters, ownerData?.voteEntries ?? []);
-    setData(newData);
-  }, [ownerData?.voteEntries, filters]);
+    fetchData();
+  }, [queryCustomizer, refreshCounter]);
 
   return (
     <>
@@ -332,7 +430,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
           },
         }}
         getRowId={(row: { __identifier: string }) => row.__identifier}
-        loading={isOwnerLoading}
+        loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
@@ -341,7 +439,7 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
           ...voteEntriesColumns,
           ...columnsActionCalculator(
             'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntries',
-            voteEntriesRowActions,
+            rowActions,
             t,
             { shownActions: 2 },
           ),
@@ -352,33 +450,39 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setSelectionModel(newRowSelectionModel);
         }}
-        sortModel={voteEntriesSortModel}
-        onSortModelChange={(newModel: GridSortModel) => {
-          setVoteEntriesSortModel(newModel);
-        }}
-        paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
+        keepNonExistentRowsSelected
+        sortModel={sortModel}
+        onSortModelChange={handleSortModelChange}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter"
+                id="FilterRelationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewEdemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntriesTableAction"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
-                onClick={() =>
-                  filter(
-                    'TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditTabBarMyvotesMyvotesVoteEntriesLabelWrapperVoteEntries-filter',
+                onClick={() => {
+                  tableActionVoteEntriesAction(
+                    'FilterRelationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewEdemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntriesTableAction-filter',
                     filterOptions,
                     filters,
-                  )
-                }
-                disabled={isOwnerLoading}
+                  );
+                }}
+                disabled={isLoading}
               >
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
+          ),
+          Pagination: () => (
+            <CustomTablePagination
+              pageChange={handlePageChange}
+              isNextButtonEnabled={isNextButtonEnabled}
+              page={page}
+              setPage={setPage}
+              rowPerPage={10}
+            />
           ),
         }}
       />
@@ -398,4 +502,4 @@ export const VoteEntriesTable = (props: VoteEntriesTableProps) => {
       )}
     </>
   );
-};
+});

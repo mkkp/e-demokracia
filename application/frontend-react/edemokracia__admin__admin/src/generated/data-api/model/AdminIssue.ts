@@ -29,6 +29,11 @@ export interface AdminIssue {
   numberOfDebates?: null | number;
   defaultVoteType?: null | EdemokraciaVoteType;
   scope?: null | EdemokraciaIssueScope;
+  countyRepresentation?: null | string;
+  cityRepresentation?: null | string;
+  districtRepresentation?: null | string;
+  isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
 
   attachments?: null | Array<AdminIssueAttachmentStored>;
   owner?: null | AdminUserStored;
@@ -49,7 +54,12 @@ export type AdminIssueAttributes =
   | 'representation'
   | 'numberOfDebates'
   | 'defaultVoteType'
-  | 'scope';
+  | 'scope'
+  | 'countyRepresentation'
+  | 'cityRepresentation'
+  | 'districtRepresentation'
+  | 'isFavorite'
+  | 'isNotFavorite';
 
 export type AdminIssueRelations =
   | 'attachments'

@@ -45,8 +45,10 @@ import { AdminCreateIssueInputServiceForCityImpl } from './AdminCreateIssueInput
 import { AdminCreateIssueInputServiceForCountyImpl } from './AdminCreateIssueInputServiceForCountyImpl';
 import { AdminCreateIssueInputServiceForDistrictImpl } from './AdminCreateIssueInputServiceForDistrictImpl';
 import { AdminCreateIssueInputServiceForIssueTypeImpl } from './AdminCreateIssueInputServiceForIssueTypeImpl';
-import { AdminDashboardServiceForDebatesImpl } from './AdminDashboardServiceForDebatesImpl';
+import { AdminDashboardServiceForFavoriteDebatesImpl } from './AdminDashboardServiceForFavoriteDebatesImpl';
+import { AdminDashboardServiceForFavoriteIssuesImpl } from './AdminDashboardServiceForFavoriteIssuesImpl';
 import { AdminDashboardServiceForIssuesOwnedImpl } from './AdminDashboardServiceForIssuesOwnedImpl';
+import { AdminDashboardServiceForOwnedDebatesImpl } from './AdminDashboardServiceForOwnedDebatesImpl';
 import { AdminDashboardServiceForVoteEntriesImpl } from './AdminDashboardServiceForVoteEntriesImpl';
 import { AdminDebateServiceForCommentsImpl } from './AdminDebateServiceForCommentsImpl';
 import { AdminDebateServiceForConsImpl } from './AdminDebateServiceForConsImpl';
@@ -227,8 +229,14 @@ export const adminCreateIssueInputServiceForDistrictImpl = new AdminCreateIssueI
 export const adminCreateIssueInputServiceForIssueTypeImpl = new AdminCreateIssueInputServiceForIssueTypeImpl(
   judoAxiosProvider,
 );
-export const adminDashboardServiceForDebatesImpl = new AdminDashboardServiceForDebatesImpl(judoAxiosProvider);
+export const adminDashboardServiceForFavoriteDebatesImpl = new AdminDashboardServiceForFavoriteDebatesImpl(
+  judoAxiosProvider,
+);
+export const adminDashboardServiceForFavoriteIssuesImpl = new AdminDashboardServiceForFavoriteIssuesImpl(
+  judoAxiosProvider,
+);
 export const adminDashboardServiceForIssuesOwnedImpl = new AdminDashboardServiceForIssuesOwnedImpl(judoAxiosProvider);
+export const adminDashboardServiceForOwnedDebatesImpl = new AdminDashboardServiceForOwnedDebatesImpl(judoAxiosProvider);
 export const adminDashboardServiceForVoteEntriesImpl = new AdminDashboardServiceForVoteEntriesImpl(judoAxiosProvider);
 export const adminDebateServiceForCommentsImpl = new AdminDebateServiceForCommentsImpl(judoAxiosProvider);
 export const adminDebateServiceForConsImpl = new AdminDebateServiceForConsImpl(judoAxiosProvider);

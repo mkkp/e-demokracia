@@ -618,32 +618,77 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_INTERFACE_KEY = 'AdminDashboardCreateissueOutputRoute';
-export const routeToAdminDashboardCreateissueOutput = (signedIdentifier: string): string =>
-  'admin/dashboard/createissue/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminDashboardCreateissueOutput = lazy(() => import('./pages/admin/dashboard/createissue/output/index'));
+export const ROUTE_ADMIN_DASHBOARD_FAVORITE_DEBATES_TABLE_INTERFACE_KEY = 'AdminDashboardFavoriteDebatesTableRoute';
+export const routeToAdminDashboardFavoriteDebatesTable = (signedIdentifier: string): string =>
+  'admin/dashboard/favorite_debates/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardFavoriteDebatesTable = lazy(() => import('./pages/admin/dashboard/favorite_debates/table/index'));
 
 routes.push({
-  path: 'admin/dashboard/createissue/output/:signedIdentifier',
+  path: 'admin/dashboard/favorite_debates/table/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_CREATEISSUE_OUTPUT_INTERFACE_KEY})`}>
-        <AdminDashboardCreateissueOutput />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_FAVORITE_DEBATES_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardFavoriteDebatesTable />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_DASHBOARD_DEBATES_VIEW_INTERFACE_KEY = 'AdminDashboardDebatesViewRoute';
-export const routeToAdminDashboardDebatesView = (signedIdentifier: string): string =>
-  'admin/dashboard/debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminDashboardDebatesView = lazy(() => import('./pages/admin/dashboard/debates/view/index'));
+export const ROUTE_ADMIN_DASHBOARD_FAVORITE_DEBATES_VIEW_INTERFACE_KEY = 'AdminDashboardFavoriteDebatesViewRoute';
+export const routeToAdminDashboardFavoriteDebatesView = (signedIdentifier: string): string =>
+  'admin/dashboard/favorite_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardFavoriteDebatesView = lazy(() => import('./pages/admin/dashboard/favorite_debates/view/index'));
 
 routes.push({
-  path: 'admin/dashboard/debates/view/:signedIdentifier',
+  path: 'admin/dashboard/favorite_debates/view/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <AdminDashboardDebatesView />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_FAVORITE_DEBATES_VIEW_INTERFACE_KEY})`}>
+        <AdminDashboardFavoriteDebatesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_FAVORITE_ISSUES_TABLE_INTERFACE_KEY = 'AdminDashboardFavoriteIssuesTableRoute';
+export const routeToAdminDashboardFavoriteIssuesTable = (signedIdentifier: string): string =>
+  'admin/dashboard/favorite_issues/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardFavoriteIssuesTable = lazy(() => import('./pages/admin/dashboard/favorite_issues/table/index'));
+
+routes.push({
+  path: 'admin/dashboard/favorite_issues/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_FAVORITE_ISSUES_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardFavoriteIssuesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_FAVORITE_ISSUES_VIEW_INTERFACE_KEY = 'AdminDashboardFavoriteIssuesViewRoute';
+export const routeToAdminDashboardFavoriteIssuesView = (signedIdentifier: string): string =>
+  'admin/dashboard/favorite_issues/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardFavoriteIssuesView = lazy(() => import('./pages/admin/dashboard/favorite_issues/view/index'));
+
+routes.push({
+  path: 'admin/dashboard/favorite_issues/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_FAVORITE_ISSUES_VIEW_INTERFACE_KEY})`}>
+        <AdminDashboardFavoriteIssuesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_ISSUES_OWNED_TABLE_INTERFACE_KEY = 'AdminDashboardIssuesOwnedTableRoute';
+export const routeToAdminDashboardIssuesOwnedTable = (signedIdentifier: string): string =>
+  'admin/dashboard/issues_owned/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardIssuesOwnedTable = lazy(() => import('./pages/admin/dashboard/issues_owned/table/index'));
+
+routes.push({
+  path: 'admin/dashboard/issues_owned/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_ISSUES_OWNED_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardIssuesOwnedTable />
       </ComponentProxy>
     </Suspense>
   ),
@@ -659,6 +704,51 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_ISSUES_OWNED_VIEW_INTERFACE_KEY})`}>
         <AdminDashboardIssuesOwnedView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_OWNED_DEBATES_TABLE_INTERFACE_KEY = 'AdminDashboardOwnedDebatesTableRoute';
+export const routeToAdminDashboardOwnedDebatesTable = (signedIdentifier: string): string =>
+  'admin/dashboard/owned_debates/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardOwnedDebatesTable = lazy(() => import('./pages/admin/dashboard/owned_debates/table/index'));
+
+routes.push({
+  path: 'admin/dashboard/owned_debates/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_OWNED_DEBATES_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardOwnedDebatesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_OWNED_DEBATES_VIEW_INTERFACE_KEY = 'AdminDashboardOwnedDebatesViewRoute';
+export const routeToAdminDashboardOwnedDebatesView = (signedIdentifier: string): string =>
+  'admin/dashboard/owned_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardOwnedDebatesView = lazy(() => import('./pages/admin/dashboard/owned_debates/view/index'));
+
+routes.push({
+  path: 'admin/dashboard/owned_debates/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_OWNED_DEBATES_VIEW_INTERFACE_KEY})`}>
+        <AdminDashboardOwnedDebatesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_VOTE_ENTRIES_TABLE_INTERFACE_KEY = 'AdminDashboardVoteEntriesTableRoute';
+export const routeToAdminDashboardVoteEntriesTable = (signedIdentifier: string): string =>
+  'admin/dashboard/vote_entries/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardVoteEntriesTable = lazy(() => import('./pages/admin/dashboard/vote_entries/table/index'));
+
+routes.push({
+  path: 'admin/dashboard/vote_entries/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_VOTE_ENTRIES_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardVoteEntriesTable />
       </ComponentProxy>
     </Suspense>
   ),

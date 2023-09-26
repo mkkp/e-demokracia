@@ -11,4 +11,6 @@ export * from './adminIssue/AdminIssueCreateDebateForm';
 export * from './adminIssue/adminIssueCreateDebate';
 export * from './rowViewOwnedIssues';
 export * from './pageRefreshOwnedIssues';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './pageFilterOwnedIssues';

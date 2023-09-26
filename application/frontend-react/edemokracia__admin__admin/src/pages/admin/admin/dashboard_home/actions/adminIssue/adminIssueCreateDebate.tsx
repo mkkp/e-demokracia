@@ -86,7 +86,7 @@ export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () 
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
   const title: string = t(
-    'edemokracia.admin.Admin.dashboardHome.Dashboard.issuesOwned.createDebate.ButtonCallOperation',
+    'edemokracia.admin.Admin.dashboardHome.Dashboard.favoriteIssues.createDebate.ButtonCallOperation',
     { defaultValue: 'Create debate' },
   );
   const { service: customPostHandler } = useTrackService<AdminIssueCreateDebateActionPostHandlerHook>(

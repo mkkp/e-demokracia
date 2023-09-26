@@ -8,6 +8,7 @@
 export * from './adminComment/adminCommentVoteUp';
 export * from './issueType/linkViewIssueType';
 export * from './categories/rowRemoveCategories';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './owner/linkViewOwner';
 export * from './attachments/TableCreateAttachmentsForm';
 export * from './attachments/tableCreateAttachments';
@@ -19,6 +20,7 @@ export * from './district/linkUnsetDistrict';
 export * from './owner/linkSetOwner';
 export * from './issueType/linkSetIssueType';
 export * from './city/linkViewCity';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './attachments/rowDeleteAttachments';
 export * from './issueType/linkUnsetIssueType';
 export * from './county/linkSetCounty';

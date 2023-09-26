@@ -29,6 +29,7 @@ import {
   AdminYesNoAbstainVoteDefinition,
   AdminYesNoAbstainVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  EdemokraciaIssueScope,
 } from '~/generated/data-api';
 import { usePageRefreshDebateAction } from '../actions';
 

@@ -79,7 +79,7 @@ export const useAdminIssueCreateCommentAction: AdminIssueCreateCommentAction = (
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
   const title: string = t(
-    'edemokracia.admin.Admin.dashboardHome.Dashboard.issuesOwned.createComment.ButtonCallOperation',
+    'edemokracia.admin.Admin.dashboardHome.Dashboard.favoriteIssues.createComment.ButtonCallOperation',
     { defaultValue: 'Add comment' },
   );
   const { service: customPostHandler } = useTrackService<AdminIssueCreateCommentActionPostHandlerHook>(

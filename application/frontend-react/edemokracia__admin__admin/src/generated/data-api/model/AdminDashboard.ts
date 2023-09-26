@@ -15,11 +15,18 @@ export interface AdminDashboard {
   welcome?: null | string;
 
   issuesOwned?: null | Array<AdminIssueStored>;
-  debates?: null | Array<AdminDebateStored>;
+  ownedDebates?: null | Array<AdminDebateStored>;
   voteEntries?: null | Array<AdminVoteEntryStored>;
+  favoriteDebates?: null | Array<AdminDebateStored>;
+  favoriteIssues?: null | Array<AdminIssueStored>;
 }
 export type AdminDashboardAttributes = 'welcome';
 
-export type AdminDashboardRelations = 'issuesOwned' | 'debates' | 'voteEntries';
+export type AdminDashboardRelations =
+  | 'issuesOwned'
+  | 'ownedDebates'
+  | 'voteEntries'
+  | 'favoriteDebates'
+  | 'favoriteIssues';
 
 export interface AdminDashboardStored extends JudoStored<AdminDashboard>, AdminDashboard {}

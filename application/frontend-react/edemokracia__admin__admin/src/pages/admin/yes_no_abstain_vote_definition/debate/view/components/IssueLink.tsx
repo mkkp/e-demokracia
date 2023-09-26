@@ -68,6 +68,7 @@ import {
   AdminYesNoAbstainVoteDefinition,
   AdminYesNoAbstainVoteDefinitionStored,
   EdemokraciaDebateStatus,
+  EdemokraciaIssueScope,
   _StringOperation,
 } from '~/generated/data-api';
 import { adminDebateServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';

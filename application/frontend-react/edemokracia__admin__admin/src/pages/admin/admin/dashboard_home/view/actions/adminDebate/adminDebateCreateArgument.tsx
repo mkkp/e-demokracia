@@ -79,7 +79,7 @@ export const useAdminDebateCreateArgumentAction: AdminDebateCreateArgumentAction
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('admin.DashboardView.debates.createArgument.ButtonCallOperation', {
+  const title: string = t('admin.DashboardView.favoriteDebates.createArgument.ButtonCallOperation', {
     defaultValue: 'Add argument',
   });
   const { service: customPostHandler } = useTrackService<AdminDebateCreateArgumentActionPostHandlerHook>(

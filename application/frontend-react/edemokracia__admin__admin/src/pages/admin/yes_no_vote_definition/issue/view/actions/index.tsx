@@ -7,6 +7,7 @@
 // Template file: actor/src/pages/actions/index.tsx.hbs
 export * from './city/linkUnsetCity';
 export * from './county/linkViewCounty';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './county/linkSetCounty';
 export * from './issueType/linkSetIssueType';
 export * from './district/linkUnsetDistrict';
@@ -17,6 +18,7 @@ export * from './city/linkViewCity';
 export * from './city/linkSetCity';
 export * from './issueType/linkViewIssueType';
 export * from './categories/tableAddCategories';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './adminIssue/AdminIssueCreateDebateForm';
 export * from './adminIssue/adminIssueCreateDebate';
 export * from './comments/rowViewComments';

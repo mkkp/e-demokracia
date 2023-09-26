@@ -80,7 +80,7 @@ export const useAdminDebateCreateArgumentAction: AdminDebateCreateArgumentAction
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
   const title: string = t(
-    'edemokracia.admin.Admin.dashboardHome.Dashboard.debates.createArgument.ButtonCallOperation',
+    'edemokracia.admin.Admin.dashboardHome.Dashboard.favoriteDebates.createArgument.ButtonCallOperation',
     { defaultValue: 'Add argument' },
   );
   const { service: customPostHandler } = useTrackService<AdminDebateCreateArgumentActionPostHandlerHook>(

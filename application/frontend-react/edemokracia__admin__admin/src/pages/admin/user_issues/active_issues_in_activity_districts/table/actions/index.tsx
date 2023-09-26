@@ -11,4 +11,6 @@ export * from './pageFilterActiveIssuesInActivityDistricts';
 export * from './rowViewActiveIssuesInActivityDistricts';
 export * from './adminIssue/AdminIssueCreateDebateForm';
 export * from './adminIssue/adminIssueCreateDebate';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './pageRefreshActiveIssuesInActivityDistricts';

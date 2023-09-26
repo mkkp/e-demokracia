@@ -9,18 +9,15 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  AdminVoteEntryQueryCustomizer,
-  AdminIssueStored,
-  AdminUserStored,
-  AdminCreateUserInput,
-  AdminVoteEntryStored,
   AdminDashboardQueryCustomizer,
   AdminIssueQueryCustomizer,
   AdminVoteEntry,
-  AdminCreateIssueInput,
   AdminDebate,
   AdminIssue,
+  AdminVoteEntryQueryCustomizer,
+  AdminIssueStored,
   AdminDebateStored,
+  AdminVoteEntryStored,
   AdminDashboardStored,
   AdminDashboard,
   AdminDebateQueryCustomizer,
@@ -84,11 +81,11 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getDebates(
+  async getOwnedDebates(
     target: JudoIdentifiable<AdminDashboard>,
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>> {
-    const path = '/admin/Dashboard/debates/~list';
+    const path = '/admin/Dashboard/ownedDebates/~list';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -101,11 +98,11 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForDebates(
+  async getRangeForOwnedDebates(
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>> {
-    const path = '/admin/Dashboard/debates/~range';
+    const path = '/admin/Dashboard/ownedDebates/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
@@ -148,23 +145,67 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   }
 
   /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async createIssue(target: AdminCreateIssueInput): Promise<AdminIssueStored> {
-    const path = '/admin/Dashboard/createIssue';
-    const response = await this.axios.post(this.getPathForActor(path), target);
+  async getFavoriteDebates(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminDebateQueryCustomizer,
+  ): Promise<Array<AdminDebateStored>> {
+    const path = '/admin/Dashboard/favoriteDebates/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
 
     return response.data;
   }
 
   /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async createUser(target: AdminCreateUserInput): Promise<AdminUserStored> {
-    const path = '/admin/Dashboard/createUser';
-    const response = await this.axios.post(this.getPathForActor(path), target);
+  async getRangeForFavoriteDebates(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminDebateQueryCustomizer,
+  ): Promise<Array<AdminDebateStored>> {
+    const path = '/admin/Dashboard/favoriteDebates/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getFavoriteIssues(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminIssueQueryCustomizer,
+  ): Promise<Array<AdminIssueStored>> {
+    const path = '/admin/Dashboard/favoriteIssues/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForFavoriteIssues(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminIssueQueryCustomizer,
+  ): Promise<Array<AdminIssueStored>> {
+    const path = '/admin/Dashboard/favoriteIssues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
 
     return response.data;
   }

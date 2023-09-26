@@ -86,7 +86,7 @@ export const useAdminDebateCloseDebateAction: AdminDebateCloseDebateAction = () 
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('admin.DashboardView.debates.closeDebate.ButtonCallOperation', {
+  const title: string = t('admin.DashboardView.favoriteDebates.closeDebate.ButtonCallOperation', {
     defaultValue: 'Close debate',
   });
   const { service: customPostHandler } = useTrackService<AdminDebateCloseDebateActionPostHandlerHook>(

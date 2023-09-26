@@ -9,6 +9,7 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminIssue } from '../model/AdminIssue';
 
+import { FilterByBoolean } from './FilterByBoolean';
 import { FilterByInteger } from './FilterByInteger';
 import { FilterByIssueScope } from './FilterByIssueScope';
 import { FilterByIssueStatus } from './FilterByIssueStatus';
@@ -26,4 +27,9 @@ export interface AdminIssueQueryCustomizer extends QueryCustomizer<AdminIssue> {
   numberOfDebates?: Array<FilterByInteger>;
   defaultVoteType?: Array<FilterByVoteType>;
   scope?: Array<FilterByIssueScope>;
+  countyRepresentation?: Array<FilterByString>;
+  cityRepresentation?: Array<FilterByString>;
+  districtRepresentation?: Array<FilterByString>;
+  isFavorite?: Array<FilterByBoolean>;
+  isNotFavorite?: Array<FilterByBoolean>;
 }

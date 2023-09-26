@@ -8,6 +8,7 @@
 export * from './adminComment/adminCommentVoteDown';
 export * from './city/linkViewCity';
 export * from './city/linkSetCity';
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './city/linkUnsetCity';
 export * from './issueType/linkUnsetIssueType';
 export * from './pageRefreshActiveIssuesInResidentCounty';
@@ -20,6 +21,7 @@ export * from './categories/rowRemoveCategories';
 export * from './district/linkUnsetDistrict';
 export * from './categories/tableClearCategories';
 export * from './issueType/linkSetIssueType';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
 export * from './adminIssue/AdminIssueCreateDebateForm';
 export * from './adminIssue/adminIssueCreateDebate';
 export * from './issueType/linkViewIssueType';

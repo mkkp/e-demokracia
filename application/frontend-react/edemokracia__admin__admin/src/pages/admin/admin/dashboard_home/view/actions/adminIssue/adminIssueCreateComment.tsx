@@ -78,7 +78,7 @@ export const useAdminIssueCreateCommentAction: AdminIssueCreateCommentAction = (
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('admin.DashboardView.issuesOwned.createComment.ButtonCallOperation', {
+  const title: string = t('admin.DashboardView.favoriteIssues.createComment.ButtonCallOperation', {
     defaultValue: 'Add comment',
   });
   const { service: customPostHandler } = useTrackService<AdminIssueCreateCommentActionPostHandlerHook>(

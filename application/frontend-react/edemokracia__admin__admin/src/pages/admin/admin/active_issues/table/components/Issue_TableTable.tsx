@@ -57,8 +57,10 @@ import {
   usePageFilterActiveIssuesAction,
   usePageRefreshActiveIssuesAction,
   useRowViewActiveIssuesAction,
+  useAdminIssueAddToFavoritesAction,
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
+  useAdminIssueRemoveFromFavoritesAction,
 } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
@@ -96,7 +98,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-    _mask: '{scope,title,status,created,numberOfDebates,description}',
+    _mask: '{scope,title,status,created,numberOfDebates,description,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -273,7 +275,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   ];
 
   const activeIssuesInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-    _mask: '{scope,title,status,created,numberOfDebates,description}',
+    _mask: '{scope,title,status,created,numberOfDebates,description,isFavorite,isNotFavorite}',
     _orderBy: activeIssuesSortModel.length
       ? [
           {
@@ -293,8 +295,10 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   );
   const pageRefreshActiveIssuesAction = usePageRefreshActiveIssuesAction();
   const rowViewActiveIssuesAction = useRowViewActiveIssuesAction();
+  const adminIssueAddToFavoritesAction = useAdminIssueAddToFavoritesAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+  const adminIssueRemoveFromFavoritesAction = useAdminIssueRemoveFromFavoritesAction();
 
   const filterOptions: FilterOption[] = [
     {
@@ -350,6 +354,22 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       }) as string,
       icon: <MdiIcon path="wechat" />,
       action: async (row: AdminIssueStored) => adminIssueCreateDebateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminActiveIssuesTableEdemokraciaAdminAdminEdemokraciaAdminIssueAddToFavoritesButtonCallOperation',
+      label: t('admin.IssueTable.activeIssues.addToFavorites.ButtonCallOperation', {
+        defaultValue: 'Add to favorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: AdminIssueStored) => adminIssueAddToFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminActiveIssuesTableEdemokraciaAdminAdminEdemokraciaAdminIssueRemoveFromFavoritesButtonCallOperation',
+      label: t('admin.IssueTable.activeIssues.removeFromFavorites.ButtonCallOperation', {
+        defaultValue: 'Remove from favorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: AdminIssueStored) => adminIssueRemoveFromFavoritesAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminActiveIssuesTableEdemokraciaAdminAdminEdemokraciaAdminIssueCreateCommentButtonCallOperation',

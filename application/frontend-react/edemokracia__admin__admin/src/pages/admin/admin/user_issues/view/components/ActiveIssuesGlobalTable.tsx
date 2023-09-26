@@ -63,8 +63,10 @@ import {
 import { adminUserIssuesServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshUserIssuesAction,
+  useAdminIssueAddToFavoritesAction,
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
+  useAdminIssueRemoveFromFavoritesAction,
   useRowViewActiveIssuesGlobalAction,
   useTableActionActiveIssuesGlobalAction,
   useTableRefreshRelationActiveIssuesGlobalAction,
@@ -112,7 +114,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-    _mask: '{scope,title,created,numberOfDebates,status}',
+    _mask: '{title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
     _seek: {
       limit: 10 + 1,
     },
@@ -137,25 +139,6 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
   const activeIssuesGlobalSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
   const activeIssuesGlobalColumns: GridColDef<AdminIssueStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'scope',
-      headerName: t('admin.UserIssuesView.activeIssuesGlobal.scope', { defaultValue: 'Scope' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.EdemokraciaIssueScope.${value}`, { defaultValue: value });
-        }
-      },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
     {
       ...baseColumnConfig,
       field: 'title',
@@ -229,14 +212,6 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
 
   const activeIssuesGlobalRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalScopeFilter',
-      attributeName: 'scope',
-      label: t('admin.UserIssuesView.activeIssuesGlobal.scope', { defaultValue: 'Scope' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-    },
-
-    {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalTitleFilter',
       attributeName: 'title',
       label: t('admin.UserIssuesView.activeIssuesGlobal.title', { defaultValue: 'Title' }) as string,
@@ -269,7 +244,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
   ];
 
   const activeIssuesGlobalInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-    _mask: '{scope,title,created,numberOfDebates,status}',
+    _mask: '{title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
     _orderBy: activeIssuesGlobalSortModel.length
       ? [
           {
@@ -281,8 +256,10 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
   };
 
   const pageRefreshUserIssuesAction = usePageRefreshUserIssuesAction();
+  const adminIssueAddToFavoritesAction = useAdminIssueAddToFavoritesAction();
   const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
   const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+  const adminIssueRemoveFromFavoritesAction = useAdminIssueRemoveFromFavoritesAction();
   const rowViewActiveIssuesGlobalAction = useRowViewActiveIssuesGlobalAction();
   const tableActionActiveIssuesGlobalAction = useTableActionActiveIssuesGlobalAction(
     setFilters,
@@ -294,14 +271,6 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
   const tableRefreshRelationActiveIssuesGlobalAction = useTableRefreshRelationActiveIssuesGlobalAction();
 
   const filterOptions: FilterOption[] = [
-    {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalScopeFilter',
-      attributeName: 'scope',
-      label: t('admin.UserIssuesView.activeIssuesGlobal.scope', { defaultValue: 'Scope' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-    },
-
     {
       id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveGlobalIssuesActiveGlobalIssuesActiveGlobalLabelWrapperActiveGlobalActiveIssuesGlobalLabelWrapperActiveIssuesGlobalTitleFilter',
       attributeName: 'title',
@@ -343,6 +312,28 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
       icon: <MdiIcon path="wechat" />,
       action: async (row: AdminIssueStored) =>
         adminIssueCreateDebateAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueAddToFavoritesButtonCallOperation',
+      label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.addToFavorites.ButtonCallOperation', {
+        defaultValue: 'Add to favorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: AdminIssueStored) =>
+        adminIssueAddToFavoritesAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueRemoveFromFavoritesButtonCallOperation',
+      label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.removeFromFavorites.ButtonCallOperation', {
+        defaultValue: 'Remove from favorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: AdminIssueStored) =>
+        adminIssueRemoveFromFavoritesAction(row, () => {
           fetchOwnerData();
         }),
     },

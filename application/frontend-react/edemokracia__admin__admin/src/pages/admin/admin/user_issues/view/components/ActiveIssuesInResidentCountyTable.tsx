@@ -63,8 +63,10 @@ import {
 import { adminUserIssuesServiceForClassImpl, adminIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshUserIssuesAction,
+  useAdminIssueAddToFavoritesAction,
   useAdminIssueCreateCommentAction,
   useAdminIssueCreateDebateAction,
+  useAdminIssueRemoveFromFavoritesAction,
   useRowViewActiveIssuesInResidentCountyAction,
   useTableActionActiveIssuesInResidentCountyAction,
   useTableRefreshRelationActiveIssuesInResidentCountyAction,
@@ -114,7 +116,7 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
     const [queryCustomizer, setQueryCustomizer] = useState<AdminIssueQueryCustomizer>({
-      _mask: '{scope,title,created,numberOfDebates,status}',
+      _mask: '{title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
       _seek: {
         limit: 10 + 1,
       },
@@ -139,25 +141,6 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
     const activeIssuesInResidentCountySortModel: GridSortModel = [{ field: 'title', sort: null }];
 
     const activeIssuesInResidentCountyColumns: GridColDef<AdminIssueStored>[] = [
-      {
-        ...baseColumnConfig,
-        field: 'scope',
-        headerName: t('admin.UserIssuesView.activeIssuesInResidentCounty.scope', { defaultValue: 'Scope' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'singleSelect',
-        filterable: false && true,
-        sortable: false,
-        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          if (value !== undefined && value !== null) {
-            return t(`enumerations.EdemokraciaIssueScope.${value}`, { defaultValue: value });
-          }
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
       {
         ...baseColumnConfig,
         field: 'title',
@@ -233,14 +216,6 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
 
     const activeIssuesInResidentCountyRangeFilterOptions: FilterOption[] = [
       {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveByResidentInCountyActiveIssuesInResidentCountyLabelWrapperActiveIssuesInResidentCountyScopeFilter',
-        attributeName: 'scope',
-        label: t('admin.UserIssuesView.activeIssuesInResidentCounty.scope', { defaultValue: 'Scope' }) as string,
-        filterType: FilterType.enumeration,
-        enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-      },
-
-      {
         id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveByResidentInCountyActiveIssuesInResidentCountyLabelWrapperActiveIssuesInResidentCountyTitleFilter',
         attributeName: 'title',
         label: t('admin.UserIssuesView.activeIssuesInResidentCounty.title', { defaultValue: 'Title' }) as string,
@@ -273,7 +248,7 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
     ];
 
     const activeIssuesInResidentCountyInitialQueryCustomizer: AdminIssueQueryCustomizer = {
-      _mask: '{scope,title,created,numberOfDebates,status}',
+      _mask: '{title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
       _orderBy: activeIssuesInResidentCountySortModel.length
         ? [
             {
@@ -285,8 +260,10 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
     };
 
     const pageRefreshUserIssuesAction = usePageRefreshUserIssuesAction();
+    const adminIssueAddToFavoritesAction = useAdminIssueAddToFavoritesAction();
     const adminIssueCreateCommentAction = useAdminIssueCreateCommentAction();
     const adminIssueCreateDebateAction = useAdminIssueCreateDebateAction();
+    const adminIssueRemoveFromFavoritesAction = useAdminIssueRemoveFromFavoritesAction();
     const rowViewActiveIssuesInResidentCountyAction = useRowViewActiveIssuesInResidentCountyAction();
     const tableActionActiveIssuesInResidentCountyAction = useTableActionActiveIssuesInResidentCountyAction(
       setFilters,
@@ -299,14 +276,6 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
       useTableRefreshRelationActiveIssuesInResidentCountyAction();
 
     const filterOptions: FilterOption[] = [
-      {
-        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveByResidentInCountyActiveIssuesInResidentCountyLabelWrapperActiveIssuesInResidentCountyScopeFilter',
-        attributeName: 'scope',
-        label: t('admin.UserIssuesView.activeIssuesInResidentCounty.scope', { defaultValue: 'Scope' }) as string,
-        filterType: FilterType.enumeration,
-        enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-      },
-
       {
         id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewDefaultUserIssuesViewEditRootTabBarActiveIssuesByResidentAreaActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveByResidentInCountyActiveIssuesInResidentCountyLabelWrapperActiveIssuesInResidentCountyTitleFilter',
         attributeName: 'title',
@@ -348,6 +317,28 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
         icon: <MdiIcon path="wechat" />,
         action: async (row: AdminIssueStored) =>
           adminIssueCreateDebateAction(row, () => {
+            fetchOwnerData();
+          }),
+      },
+      {
+        id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueAddToFavoritesButtonCallOperation',
+        label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.addToFavorites.ButtonCallOperation', {
+          defaultValue: 'Add to favorites',
+        }) as string,
+        icon: <MdiIcon path="star-plus" />,
+        action: async (row: AdminIssueStored) =>
+          adminIssueAddToFavoritesAction(row, () => {
+            fetchOwnerData();
+          }),
+      },
+      {
+        id: 'CallOperationActionedemokraciaAdminAdminEdemokraciaAdminAdminUserIssuesViewEdemokraciaAdminAdminEdemokraciaAdminIssueRemoveFromFavoritesButtonCallOperation',
+        label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.removeFromFavorites.ButtonCallOperation', {
+          defaultValue: 'Remove from favorites',
+        }) as string,
+        icon: <MdiIcon path="star-minus" />,
+        action: async (row: AdminIssueStored) =>
+          adminIssueRemoveFromFavoritesAction(row, () => {
             fetchOwnerData();
           }),
       },

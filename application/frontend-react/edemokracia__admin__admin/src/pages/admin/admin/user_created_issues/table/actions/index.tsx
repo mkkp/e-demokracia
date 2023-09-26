@@ -5,6 +5,7 @@
 // Path expression: #actionsIndexPath(#self)
 // Template name: actor/src/pages/actions/index.tsx
 // Template file: actor/src/pages/actions/index.tsx.hbs
+export * from './adminIssue/adminIssueAddToFavorites';
 export * from './pageRefreshUserCreatedIssues';
 export * from './rowViewUserCreatedIssues';
 export * from './adminIssue/AdminIssueCreateDebateForm';
@@ -13,3 +14,4 @@ export * from './pageFilterUserCreatedIssues';
 export * from './adminIssue/AdminIssueCreateCommentForm';
 export * from './adminIssue/adminIssueCreateComment';
 export * from './rowDeleteUserCreatedIssues';
+export * from './adminIssue/adminIssueRemoveFromFavorites';

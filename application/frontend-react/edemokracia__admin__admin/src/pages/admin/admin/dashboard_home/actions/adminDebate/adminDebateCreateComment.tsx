@@ -78,9 +78,10 @@ export const useAdminDebateCreateCommentAction: AdminDebateCreateCommentAction =
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Admin.dashboardHome.Dashboard.debates.createComment.ButtonCallOperation', {
-    defaultValue: 'Add comment',
-  });
+  const title: string = t(
+    'edemokracia.admin.Admin.dashboardHome.Dashboard.favoriteDebates.createComment.ButtonCallOperation',
+    { defaultValue: 'Add comment' },
+  );
   const { service: customPostHandler } = useTrackService<AdminDebateCreateCommentActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_DEBATE_CREATE_COMMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );

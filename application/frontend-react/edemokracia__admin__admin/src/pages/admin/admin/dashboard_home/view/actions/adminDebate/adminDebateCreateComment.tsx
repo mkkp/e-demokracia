@@ -78,7 +78,7 @@ export const useAdminDebateCreateCommentAction: AdminDebateCreateCommentAction =
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('admin.DashboardView.debates.createComment.ButtonCallOperation', {
+  const title: string = t('admin.DashboardView.favoriteDebates.createComment.ButtonCallOperation', {
     defaultValue: 'Add comment',
   });
   const { service: customPostHandler } = useTrackService<AdminDebateCreateCommentActionPostHandlerHook>(

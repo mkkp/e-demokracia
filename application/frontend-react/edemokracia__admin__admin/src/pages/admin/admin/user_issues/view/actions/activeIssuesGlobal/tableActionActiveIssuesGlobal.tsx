@@ -25,7 +25,7 @@ export const useTableActionActiveIssuesGlobalAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): TableActionActiveIssuesGlobalAction => {
-  const columnNames = ['scope', 'title', 'created', 'numberOfDebates', 'status'];
+  const columnNames = ['title', 'created', 'numberOfDebates', 'status'];
 
   return async function tableActionActiveIssuesGlobalAction(
     id: string,

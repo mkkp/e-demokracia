@@ -86,9 +86,10 @@ export const useAdminDebateCloseDebateAction: AdminDebateCloseDebateAction = () 
   const { openRangeDialog } = useRangeDialog();
   const [createDialog, closeDialog] = useDialog();
   const { navigate } = useJudoNavigation();
-  const title: string = t('edemokracia.admin.Admin.dashboardHome.Dashboard.debates.closeDebate.ButtonCallOperation', {
-    defaultValue: 'Close debate',
-  });
+  const title: string = t(
+    'edemokracia.admin.Admin.dashboardHome.Dashboard.favoriteDebates.closeDebate.ButtonCallOperation',
+    { defaultValue: 'Close debate' },
+  );
   const { service: customPostHandler } = useTrackService<AdminDebateCloseDebateActionPostHandlerHook>(
     `(${OBJECTCLASS}=${ADMIN_DEBATE_CLOSE_DEBATE_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY})`,
   );

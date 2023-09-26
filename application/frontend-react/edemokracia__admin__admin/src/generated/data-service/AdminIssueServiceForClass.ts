@@ -188,4 +188,8 @@ export interface AdminIssueServiceForClass {
   ): Promise<CreateDebateOutputDebateReferenceStored>;
 
   createComment(owner: JudoIdentifiable<AdminIssue>, target: CreateCommentInput): Promise<void>;
+
+  addToFavorites(owner: JudoIdentifiable<AdminIssue>): Promise<void>;
+
+  removeFromFavorites(owner: JudoIdentifiable<AdminIssue>): Promise<void>;
 }

@@ -12,3 +12,5 @@ export * from './rowViewActiveIssuesInResidentCity';
 export * from './pageRefreshActiveIssuesInResidentCity';
 export * from './adminIssue/AdminIssueCreateCommentForm';
 export * from './adminIssue/adminIssueCreateComment';
+export * from './adminIssue/adminIssueRemoveFromFavorites';
+export * from './adminIssue/adminIssueAddToFavorites';
