@@ -7,10 +7,10 @@
 // Template file: rest/mask.ts.hbs
 
 import { MaskBuilder } from './MaskBuilder';
-import {} from '../model';
+import { CreateDebateOutputDebateReferenceAttributes } from '../model';
 
 export class CreateDebateOutputDebateReferenceMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<any>) {
+  constructor(protected props: Array<CreateDebateOutputDebateReferenceAttributes>) {
     super(props);
   }
 }

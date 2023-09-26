@@ -33,7 +33,7 @@ import {
   adminIssueCategoryServiceForSubcategoriesImpl,
   adminIssueCategoryServiceForClassImpl,
 } from '~/generated/data-axios';
-import { TableCreateSubcategoriesForm } from './TableCreateSubcategoriesForm';
+import TableCreateSubcategoriesForm from './TableCreateSubcategoriesForm';
 
 export type TableCreateSubcategoriesAction = () => (
   owner: JudoIdentifiable<AdminIssueCategory>,

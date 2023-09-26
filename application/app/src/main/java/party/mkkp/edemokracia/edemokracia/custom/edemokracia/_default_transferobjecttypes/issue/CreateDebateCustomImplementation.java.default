@@ -38,7 +38,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.CreateDebate.class)
 public class CreateDebateCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.CreateDebate {
 
-    public party.mkkp.edemokracia.edemokracia.api.edemokracia.createddebatereference.CreatedDebateReference apply(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createdebateinput.CreateDebateInput input)  {
+    public party.mkkp.edemokracia.edemokracia.api.edemokracia.createdebateoutputdebatereference.CreateDebateOutputDebateReference apply(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createdebateinput.CreateDebateInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.issue.CreateDebateExchangeFunctionsComponent");
     }
 

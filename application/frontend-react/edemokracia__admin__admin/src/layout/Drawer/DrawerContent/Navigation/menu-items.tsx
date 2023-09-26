@@ -88,14 +88,6 @@ export const menus: NavItemType[] = [
         children: [],
       },
       {
-        id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupAdministrativeMenuGroupEdemokraciaAdminAdminAdminUsersNavigationItem',
-        type: 'item',
-        url: 'admin/admin/admin_users/table',
-        icon: 'account',
-        title: 'Users',
-        children: [],
-      },
-      {
         id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupAdministrativeMenuGroupEdemokraciaAdminAdminAdminIssuesNavigationItem',
         type: 'item',
         url: 'admin/admin/admin_issues/table',
@@ -126,6 +118,7 @@ export const menus: NavItemType[] = [
     type: 'item',
     icon: 'texture',
     title: 'Techical Accesses Menu Group',
+    hiddenBy: 'isAdmin',
     children: [],
   },
 ];

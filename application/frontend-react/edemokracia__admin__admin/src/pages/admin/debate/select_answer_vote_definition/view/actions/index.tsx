@@ -11,6 +11,7 @@ export * from './adminSelectAnswerVoteDefinition/adminSelectAnswerVoteDefinition
 export * from './debate/buttonNavigateDebate';
 export * from './voteEntries/rowViewVoteEntries';
 export * from './pageRefreshSelectAnswerVoteDefinition';
+export * from './voteSelections/rowViewVoteSelections';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/tableRefreshRelationVoteEntries';
 export * from './issue/buttonNavigateIssue';

@@ -56,6 +56,7 @@ interface RangeDialogProps<T extends JudoStored<T>, U extends QueryCustomizer<T>
   rangeCall: (queryCustomizer: U) => Promise<Array<T>>;
   alreadySelectedItems?: T[];
   initalQueryCustomizer: U;
+  initialFilters?: Filter[];
   filterOptions: FilterOption[];
   createTrigger?: () => Promise<T | undefined>;
   editMode?: boolean;
@@ -72,6 +73,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
   rangeCall,
   alreadySelectedItems,
   initalQueryCustomizer,
+  initialFilters,
   filterOptions,
   createTrigger,
   editMode,
@@ -96,9 +98,10 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
     single ? undefined : [],
   );
   const [selectedItems, setSelectedItems] = useState<T[] | T | undefined>([]);
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const [filters, setFilters] = useState<Filter[]>(initialFilters || []);
   const [queryCustomizer, setQueryCustomizer] = useState<U>({
     ...initalQueryCustomizer,
+    ...mapAllFiltersToQueryCustomizerProperties(filters),
     _seek: {
       limit: rangeDialogConfig.numberOfElements + 1,
     },

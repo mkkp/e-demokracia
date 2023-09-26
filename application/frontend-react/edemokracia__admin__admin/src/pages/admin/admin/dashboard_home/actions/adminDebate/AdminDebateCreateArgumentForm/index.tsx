@@ -94,7 +94,11 @@ export interface AdminDebateCreateArgumentFormProps {
   owner: AdminDebateStored;
 }
 
-export function AdminDebateCreateArgumentForm({ successCallback, cancel, owner }: AdminDebateCreateArgumentFormProps) {
+export default function AdminDebateCreateArgumentForm({
+  successCallback,
+  cancel,
+  owner,
+}: AdminDebateCreateArgumentFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

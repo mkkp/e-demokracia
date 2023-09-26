@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminConCreateCommentForm } from './AdminConCreateCommentForm';
+import AdminConCreateCommentForm from './AdminConCreateCommentForm';
 import {
   AdminCon,
   AdminConQueryCustomizer,
@@ -60,7 +60,12 @@ export const ADMIN_CON_CREATE_COMMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY =
   'AdminConCreateCommentActionPostHandlerHook';
 export type AdminConCreateCommentActionPostHandlerHook = () => AdminConCreateCommentActionPostHandler;
 
-export type AdminConCreateCommentAction = () => (owner: AdminConStored, successCallback: () => void) => Promise<void>;
+export type AdminConCreateCommentAction = () => (
+  owner: AdminConStored,
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useAdminConCreateCommentAction: AdminConCreateCommentAction = () => {
   const { t } = useTranslation();

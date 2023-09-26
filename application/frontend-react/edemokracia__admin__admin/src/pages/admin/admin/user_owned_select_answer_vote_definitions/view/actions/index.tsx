@@ -12,5 +12,6 @@ export * from './adminSelectAnswerVoteDefinition/adminSelectAnswerVoteDefinition
 export * from './adminSelectAnswerVoteDefinition/adminSelectAnswerVoteDefinitionTakeBackVote';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/rowViewVoteEntries';
+export * from './voteSelections/rowViewVoteSelections';
 export * from './issue/buttonNavigateIssue';
 export * from './voteEntries/tableActionVoteEntries';

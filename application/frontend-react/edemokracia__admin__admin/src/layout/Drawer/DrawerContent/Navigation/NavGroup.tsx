@@ -6,8 +6,8 @@
 // Template name: actor/src/layout/Drawer/DrawerContent/Navigation/NavGroup.tsx
 // Template file: actor/src/layout/Drawer/DrawerContent/Navigation/NavGroup.tsx.hbs
 
-import { Fragment, useEffect, useState } from 'react';
-import type { MouseEvent, Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
+import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme, styled } from '@mui/material/styles';
 import {
@@ -24,10 +24,9 @@ import {
 } from '@mui/material';
 import { useConfig } from '~/hooks';
 import { MenuOrientation, ThemeMode } from '~/config';
-import { MdiIcon } from '~/components';
+import { MdiIcon, SimpleBar } from '~/components';
 import { NavItem } from './NavItem';
 import { NavCollapse } from './NavCollapse';
-import { SimpleBar } from '../SimpleBar';
 import { Transitions } from '../../../Transitions';
 import { NavItemType } from './NavItem';
 
@@ -56,50 +55,15 @@ const PopperStyled = styled(Popper)(({ theme }) => ({
 
 export interface NavGroupProps {
   item: NavItemType;
-  lastItem: number;
-  remItems: NavItemType[];
-  lastItemId: string;
-  setSelectedItems: Dispatch<SetStateAction<string | undefined>>;
-  selectedItems: string | undefined;
-  setSelectedLevel: Dispatch<SetStateAction<number>>;
-  selectedLevel: number;
 }
 
-export const NavGroup = ({
-  item,
-  lastItem,
-  remItems,
-  lastItemId,
-  setSelectedItems,
-  selectedItems,
-  setSelectedLevel,
-  selectedLevel,
-}: NavGroupProps) => {
+export const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
-
   const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
-  const selectedID = 'TODO'; // TODO JNG-5207
-
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
-
   const [anchorEl, setAnchorEl] = useState<VirtualElement | (() => VirtualElement) | null | undefined>(null);
-  const [currentItem, setCurrentItem] = useState(item);
-
   const openMini = Boolean(anchorEl);
-
-  useEffect(() => {
-    if (lastItem) {
-      if (item.id === lastItemId) {
-        const localItem: any = { ...item };
-        const elements = remItems.map((ele: NavItemType) => ele.elements);
-        localItem.children = elements.flat(1);
-        setCurrentItem(localItem);
-      } else {
-        setCurrentItem(item);
-      }
-    }
-  }, [item, lastItem, downLG]);
 
   const handleClick = (event: MouseEvent) => {
     if (!openMini) {
@@ -111,95 +75,21 @@ export const NavGroup = ({
     setAnchorEl(null);
   };
 
-  const itemIcon = currentItem?.icon ? (
+  const itemIcon = item?.icon ? (
     <MdiIcon
-      path={currentItem?.icon!}
+      path={item?.icon!}
       sx={{
         fontSize: 20,
         stroke: '1.5',
-        // color: selectedID === currentItem.id ? theme.palette.primary.main : theme.palette.secondary.dark,
         color: theme.palette.primary.main,
       }}
     />
   ) : null;
 
-  const navCollapse = item.children?.map((menuItem, index) => {
-    switch (menuItem.type) {
-      case 'collapse':
-        return (
-          <NavCollapse
-            key={menuItem.id}
-            menu={menuItem}
-            setSelectedItems={setSelectedItems}
-            setSelectedLevel={setSelectedLevel}
-            selectedLevel={selectedLevel}
-            selectedItems={selectedItems}
-            level={1}
-            parentId={currentItem.id!}
-          />
-        );
-      case 'item':
-        return <NavItem key={menuItem.id} item={menuItem} level={1} />;
-      default:
-        return (
-          <Typography key={menuItem.id} variant="h6" color="error" align="center">
-            Fix - Group Collapse or Items
-          </Typography>
-        );
-    }
-  });
-
-  const moreItems = remItems.map((itemRem: NavItemType, i) => (
-    <Fragment key={i}>
-      {itemRem.title && (
-        <Typography variant="caption" sx={{ pl: 2 }}>
-          {t(`menuTree.${itemRem.title}`, { defaultValue: itemRem.title })}
-        </Typography>
-      )}
-      {itemRem?.elements?.map((menu) => {
-        switch (menu.type) {
-          case 'collapse':
-            return (
-              <NavCollapse
-                key={menu.id}
-                menu={menu}
-                level={1}
-                parentId={currentItem.id!}
-                setSelectedItems={setSelectedItems}
-                setSelectedLevel={setSelectedLevel}
-                selectedLevel={selectedLevel}
-                selectedItems={selectedItems}
-              />
-            );
-          case 'item':
-            return <NavItem key={menu.id} item={menu} level={1} />;
-          default:
-            return (
-              <Typography key={menu.id} variant="h6" color="error" align="center">
-                Menu Items Error
-              </Typography>
-            );
-        }
-      })}
-    </Fragment>
-  ));
-
-  // menu list collapse & items
-  const items = currentItem.children?.map((menu) => {
+  const items = item.children?.map((menu) => {
     switch (menu.type) {
       case 'collapse':
-        return (
-          <NavCollapse
-            key={menu.id}
-            menu={menu}
-            level={1}
-            parentId={currentItem.id!}
-            setSelectedItems={setSelectedItems}
-            setSelectedLevel={setSelectedLevel}
-            selectedLevel={selectedLevel}
-            selectedItems={selectedItems}
-          />
-        );
+        return <NavCollapse key={menu.id} menu={menu} level={1} parentId={item.id!} />;
       case 'item':
         return <NavItem key={menu.id} item={menu} level={1} />;
       default:
@@ -227,22 +117,16 @@ export const NavGroup = ({
                 >
                   {t(`menuTree.${item.title}`, { defaultValue: item.title })}
                 </Typography>
-                {item.caption && (
-                  <Typography variant="caption" color="secondary">
-                    {item.caption}
-                  </Typography>
-                )}
               </Box>
             )
           }
           sx={{ mt: !miniDrawer && item.title ? 1.5 : 0, py: 0, zIndex: 0 }}
         >
-          {navCollapse}
+          {items}
         </List>
       ) : (
         <List>
           <ListItemButton
-            selected={selectedID === currentItem.id}
             sx={{
               p: 1,
               my: 0.5,
@@ -259,30 +143,16 @@ export const NavGroup = ({
             onMouseLeave={handleClose}
             aria-describedby={popperId}
           >
-            {itemIcon && (
-              <ListItemIcon sx={{ minWidth: 28 }}>
-                {currentItem.id === lastItemId ? (
-                  <MdiIcon path="chevron-down" sx={{ fontSize: 20, stroke: '1.5' }} />
-                ) : (
-                  itemIcon
-                )}
-              </ListItemIcon>
-            )}
+            {itemIcon && <ListItemIcon sx={{ minWidth: 28 }}>{itemIcon}</ListItemIcon>}
             <ListItemText
               sx={{ mr: 1 }}
               primary={
                 <Typography variant="body1" color={theme.palette.text.primary}>
-                  {currentItem.id === lastItemId
-                    ? t('judo.navigation.more-items', { defaultValue: 'More Items' })
-                    : t(`menuTree.${currentItem.title}`, { defaultValue: currentItem.title })}
+                  {t(`menuTree.${item.title}`, { defaultValue: item.title })}
                 </Typography>
               }
             />
-            {openMini ? (
-              <MdiIcon path="chevron-down" sx={{ fontSize: 16, stroke: '1.5' }} />
-            ) : (
-              <MdiIcon path="chevron-right" sx={{ fontSize: 16, stroke: '1.5' }} />
-            )}
+            <MdiIcon path={openMini ? 'chevron-down' : 'chevron-right'} sx={{ fontSize: 16, stroke: '1.5' }} />
             {anchorEl && (
               <PopperStyled
                 id={popperId}
@@ -311,7 +181,7 @@ export const NavGroup = ({
                             maxHeight: 'calc(100vh - 170px)',
                           }}
                         >
-                          {currentItem.id !== lastItemId ? items : moreItems}
+                          {items}
                         </SimpleBar>
                       </ClickAwayListener>
                     </Paper>

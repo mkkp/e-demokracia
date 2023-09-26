@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminIssueCreateCommentForm } from './AdminIssueCreateCommentForm';
+import AdminIssueCreateCommentForm from './AdminIssueCreateCommentForm';
 import {
   AdminIssue,
   AdminIssueQueryCustomizer,
@@ -63,6 +63,8 @@ export type AdminIssueCreateCommentActionPostHandlerHook = () => AdminIssueCreat
 export type AdminIssueCreateCommentAction = () => (
   owner: AdminIssueStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminIssueCreateCommentAction: AdminIssueCreateCommentAction = () => {

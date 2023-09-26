@@ -59,6 +59,8 @@ export type AdminYesNoVoteDefinitionTakeBackVoteActionPostHandlerHook =
 export type AdminYesNoVoteDefinitionTakeBackVoteAction = () => (
   owner: AdminYesNoVoteDefinitionStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminYesNoVoteDefinitionTakeBackVoteAction: AdminYesNoVoteDefinitionTakeBackVoteAction = () => {
@@ -85,6 +87,8 @@ export const useAdminYesNoVoteDefinitionTakeBackVoteAction: AdminYesNoVoteDefini
   return async function adminYesNoVoteDefinitionTakeBackVoteAction(
     owner: AdminYesNoVoteDefinitionStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
   ) {
     try {
       const result = await adminYesNoVoteDefinitionServiceForClassImpl.takeBackVote(owner);
@@ -93,12 +97,18 @@ export const useAdminYesNoVoteDefinitionTakeBackVoteAction: AdminYesNoVoteDefini
         return;
       }
       successCallback();
-      enqueueSnackbar(title, {
-        variant: 'success',
-        ...toastConfig.success,
-      });
+      if (!silentMode) {
+        enqueueSnackbar(title, {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+      }
     } catch (error: any) {
-      handleActionError(error, undefined, owner);
+      if (errorCallback) {
+        errorCallback(error); // consider passing mapped content here eventually
+      } else {
+        handleActionError(error, undefined, owner);
+      }
     }
   };
 };

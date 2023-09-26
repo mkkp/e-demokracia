@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230926_000345_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230926_020541_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -24,7 +24,7 @@
       <accesses xmi:id="_NDSZcFvYEe6bTb-1BwQgmA" upper="1" target="_1QeIsFvQEe6jm_SkPSYEYw" name="userProfile" appliedAnnotations="_7D81X2kNEe25ONJ3V89cVA" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <accesses xmi:id="_mGqscFvaEe6bTb-1BwQgmA" upper="1" target="_dGHIYFvOEe6jm_SkPSYEYw" name="adminUserManager" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_GgcgQIyPEe2VSOmaAz6G9Q" name="dashboardMenu" label="Dashboard" iconName="home" access="_GgaEAIyPEe2VSOmaAz6G9Q"/>
-      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_hvYWQGkuEe25ONJ3V89cVA" name="AdminUsersMenu" label="Users" iconName="account" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_hvVS8GkuEe25ONJ3V89cVA"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_hvYWQGkuEe25ONJ3V89cVA" name="AdminUsersMenu" label="Users" iconName="account" hidden="true" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_hvVS8GkuEe25ONJ3V89cVA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_vW3EUG4rEe2siJt-xjHAyw" name="AdminCategories_Menu" label="Categories" iconName="file-tree" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_vWzZ8G4rEe2siJt-xjHAyw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_8Do7MIXgEe2kLcMqsIbMgQ" name="AdminCountiesMenu" label="Counties" iconName="map" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_8DntEIXgEe2kLcMqsIbMgQ"/>
       <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_oIKpIId-Ee2kLcMqsIbMgQ" name="AdminBasicDataMenuGroup" label="Basic data" iconName="toy-brick" menuGroup="_gYSocFuaEe6T042_LMmSdQ" menuItems="_vW3EUG4rEe2siJt-xjHAyw _8Do7MIXgEe2kLcMqsIbMgQ _-T8HQNu-Ee2Bgcx6em3jZg"/>
@@ -40,7 +40,7 @@
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_ITYCUFqnEe6_67aMO2jOsw" name="TechnicalUserCreatedIssuesMenu" label="Issues - User Draft" iconName="ticket-outline" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_ITVmEFqnEe6_67aMO2jOsw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_jgEZEFuXEe6T042_LMmSdQ" name="TechnicalSelectAnswerVoteDefinitionMenu" label="Vote Definitions - Select Answer" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_jf3kwFuXEe6T042_LMmSdQ"/>
       <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_gYSocFuaEe6T042_LMmSdQ" name="AdministrativeMenuGroup" label="Administrative functions" menuItems="_oIKpIId-Ee2kLcMqsIbMgQ _mGvk8FvaEe6bTb-1BwQgmA _hvYWQGkuEe25ONJ3V89cVA _iuDUYId_Ee2kLcMqsIbMgQ _l9dMQJEaEe29qs15q2b6yw _X0Z8AFu_Ee6HqbmdGwnUzw"/>
-      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="__GjiAFuZEe6T042_LMmSdQ" name="TechicalAccessesMenuGroup" hidden="true" menuItems="_0CXbYORyEe2Bgcx6em3jZg _zCyjYFoTEe6_67aMO2jOsw _jgEZEFuXEe6T042_LMmSdQ _9lIR4FuhEe6rLvwZQOpyUA _s3IOEFuiEe6rLvwZQOpyUA _ITYCUFqnEe6_67aMO2jOsw _LZAL8FqmEe6_67aMO2jOsw __hGdQFvLEe6jm_SkPSYEYw _NDbjYFvYEe6bTb-1BwQgmA"/>
+      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="__GjiAFuZEe6T042_LMmSdQ" name="TechicalAccessesMenuGroup" hidden="true" hiddenBy="_tom8IGkwEe25ONJ3V89cVA" menuItems="_0CXbYORyEe2Bgcx6em3jZg _zCyjYFoTEe6_67aMO2jOsw _jgEZEFuXEe6T042_LMmSdQ _9lIR4FuhEe6rLvwZQOpyUA _s3IOEFuiEe6rLvwZQOpyUA _ITYCUFqnEe6_67aMO2jOsw _LZAL8FqmEe6_67aMO2jOsw __hGdQFvLEe6jm_SkPSYEYw _NDbjYFvYEe6bTb-1BwQgmA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_9lIR4FuhEe6rLvwZQOpyUA" name="TechnicalYesNoAbstainVoteDefinitionMenu" label="Vote Definitions - Yes No Abstain" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_9lF1oFuhEe6rLvwZQOpyUA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_s3IOEFuiEe6rLvwZQOpyUA" name="TechnicalRatingVoteDefinitionMenu" label="Vote Definitions - Rating" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_s3Fx0FuiEe6rLvwZQOpyUA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_X0Z8AFu_Ee6HqbmdGwnUzw" name="AdminVoteEntriesMenu" label="Vote Entries" iconName="vote-outline" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_X0RZIFu_Ee6HqbmdGwnUzw"/>
@@ -2119,14 +2119,26 @@
         <inherited xmi:id="_EXfwoFttEe6Mx9dH3yj5gQ"/>
       </attributes>
       <mapping xmi:id="_yZMp8FtqEe6Mx9dH3yj5gQ" target="_Xwdl4G6bEe2wNaja8kBvcQ"/>
-      <form xmi:id="_pSKM8FtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_Form" label="SelectAnswerVoteSelection Form" layout="VERTICAL"/>
-      <table xmi:id="_pSMpMFtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_Table" label="SelectAnswerVoteSelection Table"/>
-      <view xmi:id="_pSHJoFtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_View_Edit" label="SelectAnswerVoteSelection View / Edit" layout="VERTICAL"/>
+      <form xmi:id="_pSKM8FtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_Form" label="SelectAnswerVoteSelection Form" layout="VERTICAL">
+        <components xsi:type="ui:DataField" xmi:id="_k8aEgFv1Ee6nEc5rp_Qy4A" name="title" label="Title" iconName="format-size" col="12" dataFeature="_EXYb4FttEe6Mx9dH3yj5gQ"/>
+        <components xsi:type="ui:DataField" xmi:id="_k8ZdcFv1Ee6nEc5rp_Qy4A" name="description" label="Description" iconName="format-size" col="12" row="4" dataFeature="_EXIkQFttEe6Mx9dH3yj5gQ" textMultiLine="true"/>
+      </form>
+      <table xmi:id="_pSMpMFtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_Table" label="SelectAnswerVoteSelection Table">
+        <columns xsi:type="ui:DataColumn" xmi:id="_tyOrIFv0Ee6nEc5rp_Qy4A" name="title" label="Title" iconName="format-size" dataFeature="_EXYb4FttEe6Mx9dH3yj5gQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_tyNdAFv0Ee6nEc5rp_Qy4A" name="description" label="Description" iconName="format-size" dataFeature="_EXIkQFttEe6Mx9dH3yj5gQ"/>
+      </table>
+      <view xmi:id="_pSHJoFtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_View_Edit" label="SelectAnswerVoteSelection View / Edit" layout="VERTICAL" openInDialog="true" dialogSize="MD">
+        <components xsi:type="ui:DataField" xmi:id="_sHcH0Fv1Ee6nEc5rp_Qy4A" name="title" label="Title" iconName="format-size" col="12" dataFeature="_EXYb4FttEe6Mx9dH3yj5gQ"/>
+        <components xsi:type="ui:DataField" xmi:id="_teidoFv1Ee6nEc5rp_Qy4A" name="description" label="Description" iconName="format-size" col="12" row="4" dataFeature="_EXIkQFttEe6Mx9dH3yj5gQ" textMultiLine="true"/>
+      </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_dGHIYFvOEe6jm_SkPSYEYw" name="UserManager">
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_X0EKgFvPEe6jm_SkPSYEYw" target="_p1aUIGksEe25ONJ3V89cVA" name="users" updateable="true" defaultExpression="" rangeExpression="" memberType="DERIVED" getterExpression="edemokracia::User">
         <inherited xmi:id="_X0MtYFvPEe6jm_SkPSYEYw"/>
       </relations>
+      <attributes xsi:type="structure:DataMember" xmi:id="_l0l3cFv6Ee6nEc5rp_Qy4A" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.userName" memberType="DERIVED">
+        <inherited xmi:id="_l0l3cVv6Ee6nEc5rp_Qy4A"/>
+      </attributes>
       <mapping xmi:id="_g8x38FvOEe6jm_SkPSYEYw" target="_BuSFMGkWEe25ONJ3V89cVA"/>
       <operations xmi:id="_0pdd8FvOEe6jm_SkPSYEYw" name="createUser" customImplementation="false" body="var edemokracia::admin::AdminPrincipalUser user = edemokracia::admin::AdminPrincipalUser!filter(u | u.userName == input.userName)!any();&#xA;&#xA;if (user!isUndefined()) {&#xA;&#x9;user = new edemokracia::admin::AdminPrincipalUser(&#xA;&#x9;    userName = input.userName,&#xA;&#x9;    email = input.email,&#xA;&#x9;    lastName = input.lastName,&#xA;&#x9;    firstName = input.firstName,&#xA;&#x9;    isAdmin = input.hasAdminAccess,&#xA;&#x9;    phone = input.phone&#xA;    )&#xA;}&#xA;return user;" operationType="STATIC" binding="">
         <input xmi:id="_0pdd8VvOEe6jm_SkPSYEYw" lower="1" upper="1" target="_eNSH8I1eEe2J66C5CrhpQw" name="input" rangeExpression=""/>
@@ -2136,7 +2148,9 @@
       <form xmi:id="_dGJkoFvOEe6jm_SkPSYEYw" name="UserManager_Form" label="UserManager Form" layout="VERTICAL"/>
       <table xmi:id="_dGLZ0FvOEe6jm_SkPSYEYw" name="UserManager_Table" label="UserManager Table"/>
       <view xmi:id="_dGIWgFvOEe6jm_SkPSYEYw" name="UserManager_View_Edit" label="UserManager View / Edit" layout="VERTICAL">
-        <components xsi:type="ui:ActionGroup" xmi:id="_9ybJYFvVEe6jm_SkPSYEYw" name="userManagerActionGroup" label="Actions" featuredActions="10"/>
+        <components xsi:type="ui:ActionGroup" xmi:id="_9ybJYFvVEe6jm_SkPSYEYw" name="userManagerActionGroup" label="Actions" featuredActions="10">
+          <actions xmi:id="_rDBEIFv6Ee6nEc5rp_Qy4A" name="createUser" label="Create User" iconName="account-plus" operation="createUser"/>
+        </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_MJ6o0FvVEe6jm_SkPSYEYw" name="users" label="" iconName="" col="12" row="10" relationFeature="_X0EKgFvPEe6jm_SkPSYEYw" targetDefinedTabular="false" representationComponent="table">
           <columns xsi:type="ui:DataColumn" xmi:id="_MKAvcFvVEe6jm_SkPSYEYw" name="representation" label="Representation" iconName="format-size" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_MKAIYFvVEe6jm_SkPSYEYw" name="userName" label="UserName" iconName="format-size" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ"/>
@@ -2821,9 +2835,18 @@
       <inherited xmi:id="_e9L10G6cEe2wNaja8kBvcQ"/>
     </attributes>
     <mapping xmi:id="_Xwe0AG6bEe2wNaja8kBvcQ" target="_Xwdl4G6bEe2wNaja8kBvcQ"/>
-    <form xmi:id="_XwtdgG6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_Form" label="SelectAnswerVoteSelection Form" layout="VERTICAL"/>
-    <table xmi:id="_Xwy9EG6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_Table" label="SelectAnswerVoteSelection Table"/>
-    <view xmi:id="_XwnW4G6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_View_Edit" label="SelectAnswerVoteSelection View / Edit" layout="VERTICAL"/>
+    <form xmi:id="_XwtdgG6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_Form" label="SelectAnswerVoteSelection Form" layout="VERTICAL">
+      <components xsi:type="ui:DataField" xmi:id="_OfPXEFv5Ee6nEc5rp_Qy4A" name="title" label="Title" iconName="format-size" col="12" dataFeature="_ca44MG6cEe2wNaja8kBvcQ"/>
+      <components xsi:type="ui:DataField" xmi:id="_OfPXEVv5Ee6nEc5rp_Qy4A" name="description" label="Description" iconName="format-size" col="12" row="4" dataFeature="_e9LOwG6cEe2wNaja8kBvcQ" textMultiLine="true"/>
+    </form>
+    <table xmi:id="_Xwy9EG6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_Table" label="SelectAnswerVoteSelection Table">
+      <columns xsi:type="ui:DataColumn" xmi:id="_S9ttgFv5Ee6nEc5rp_Qy4A" name="title" label="Title" iconName="format-size" dataFeature="_ca44MG6cEe2wNaja8kBvcQ"/>
+      <columns xsi:type="ui:DataColumn" xmi:id="_U3eEcFv5Ee6nEc5rp_Qy4A" name="description" label="Description" iconName="format-size" dataFeature="_e9LOwG6cEe2wNaja8kBvcQ"/>
+    </table>
+    <view xmi:id="_XwnW4G6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection_View_Edit" label="SelectAnswerVoteSelection View / Edit" layout="VERTICAL">
+      <components xsi:type="ui:DataField" xmi:id="_JckucFv5Ee6nEc5rp_Qy4A" name="title" label="Title" iconName="format-size" col="12" dataFeature="_ca44MG6cEe2wNaja8kBvcQ"/>
+      <components xsi:type="ui:DataField" xmi:id="_JckucVv5Ee6nEc5rp_Qy4A" name="description" label="Description" iconName="format-size" col="12" row="4" dataFeature="_e9LOwG6cEe2wNaja8kBvcQ" textMultiLine="true"/>
+    </view>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_H7Q58GkYEe25ONJ3V89cVA" name="SimpleVote" createable="true" updateable="true" deleteable="true">
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_gil1AWkYEe25ONJ3V89cVA" upper="1" target="_BuSFMGkWEe25ONJ3V89cVA" name="user" defaultExpression="" rangeExpression="" partner="_gilN8GkYEe25ONJ3V89cVA">
@@ -3280,6 +3303,9 @@
     <members xmi:id="_uM-u8FqrEe6_67aMO2jOsw" name="DISTRICT" ordinal="4"/>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_bmYa0FupEe6rLvwZQOpyUA" name="CreateDebateOutputDebateReference">
+    <attributes xsi:type="structure:DataMember" xmi:id="_yMcsUFv3Ee6nEc5rp_Qy4A" name="context" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="" memberType="TRANSIENT">
+      <inherited xmi:id="_yMo5kFv3Ee6nEc5rp_Qy4A"/>
+    </attributes>
     <mapping xmi:id="_qx5iwFupEe6rLvwZQOpyUA" target="_jjCdUGkPEe25ONJ3V89cVA"/>
     <form xmi:id="_bmYa11upEe6rLvwZQOpyUA" name="CreateDebateOutputDebateReference_Form" label="CreateDebateOutputDebateReference Form" layout="VERTICAL" dialogSize="MD">
       <components xsi:type="ui:Group" xmi:id="_bmYa2FupEe6rLvwZQOpyUA" name="debate" label="" iconName="" col="12"/>
@@ -3287,17 +3313,30 @@
         <components xsi:type="ui:ActionButton" xmi:id="_bmYa3VupEe6rLvwZQOpyUA" name="ok" label="OK" iconName="check"/>
         <components xsi:type="ui:ActionButton" xmi:id="_bmYa3lupEe6rLvwZQOpyUA" name="cancel" label="Cancel" iconName="close-circle-outline" action="CANCEL"/>
       </components>
+      <components xsi:type="ui:DataField" xmi:id="_9bNq0Fv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_yMcsUFv3Ee6nEc5rp_Qy4A"/>
     </form>
-    <table xmi:id="_bmYa31upEe6rLvwZQOpyUA" name="CreateDebateOutputDebateReference_Table" label="CreateDebateOutputDebateReference Table"/>
-    <view xmi:id="_bmYa41upEe6rLvwZQOpyUA" name="CreateDebateOutputDebateReference_View_Edit" label="CreateDebateOutputDebateReference View / Edit" layout="VERTICAL"/>
+    <table xmi:id="_bmYa31upEe6rLvwZQOpyUA" name="CreateDebateOutputDebateReference_Table" label="CreateDebateOutputDebateReference Table">
+      <columns xsi:type="ui:DataColumn" xmi:id="_9bVmoFv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_yMcsUFv3Ee6nEc5rp_Qy4A"/>
+    </table>
+    <view xmi:id="_bmYa41upEe6rLvwZQOpyUA" name="CreateDebateOutputDebateReference_View_Edit" label="CreateDebateOutputDebateReference View / Edit" layout="VERTICAL">
+      <components xsi:type="ui:DataField" xmi:id="_9bGWEFv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_yMcsUFv3Ee6nEc5rp_Qy4A"/>
+    </view>
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_YoAHsFu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference">
+    <attributes xsi:type="structure:DataMember" xmi:id="_Zo0lgFv3Ee6nEc5rp_Qy4A" name="context" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="" memberType="TRANSIENT">
+      <inherited xmi:id="_Zo-WgFv3Ee6nEc5rp_Qy4A"/>
+    </attributes>
     <mapping xmi:id="_sPu8QFu1Ee6Lb6PYNSnQSA" target="_0n43QG5mEe2wNaja8kBvcQ"/>
     <form xmi:id="_YoAHuVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_Form" label="CloseDebateOutputVoteDefinitionReference Form" iconName="note-check" layout="VERTICAL" dialogSize="MD">
       <components xsi:type="ui:Group" xmi:id="_YoAHulu1Ee6Lb6PYNSnQSA" name="debate" label="Close debate" iconName="wechat" frame="true" col="12"/>
+      <components xsi:type="ui:DataField" xmi:id="_f6jpUFv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_Zo0lgFv3Ee6nEc5rp_Qy4A"/>
     </form>
-    <table xmi:id="_YoAHv1u1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_Table" label="CloseDebateOutputVoteDefinitionReference Table"/>
-    <view xmi:id="_YoAHwVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_View_Edit" label="CloseDebateOutputVoteDefinitionReference View / Edit" layout="VERTICAL"/>
+    <table xmi:id="_YoAHv1u1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_Table" label="CloseDebateOutputVoteDefinitionReference Table">
+      <columns xsi:type="ui:DataColumn" xmi:id="_f6n6wFv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_Zo0lgFv3Ee6nEc5rp_Qy4A"/>
+    </table>
+    <view xmi:id="_YoAHwVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_View_Edit" label="CloseDebateOutputVoteDefinitionReference View / Edit" layout="VERTICAL">
+      <components xsi:type="ui:DataField" xmi:id="_f6ew0Fv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_Zo0lgFv3Ee6nEc5rp_Qy4A"/>
+    </view>
   </elements>
   <annotations xmi:id="_7D81XmkNEe25ONJ3V89cVA" name="dashboard" className="hu.blackbelt.judo.meta.esm.accesspoint.Access" elements="_GgaEAIyPEe2VSOmaAz6G9Q"/>
   <annotations xmi:id="_7D81X2kNEe25ONJ3V89cVA" name="profile" className="hu.blackbelt.judo.meta.esm.accesspoint.Access" elements="_NDSZcFvYEe6bTb-1BwQgmA"/>

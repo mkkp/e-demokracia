@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminProCreateSubArgumentForm } from './AdminProCreateSubArgumentForm';
+import AdminProCreateSubArgumentForm from './AdminProCreateSubArgumentForm';
 import {
   AdminDashboard,
   AdminDashboardStored,
@@ -66,6 +66,8 @@ export type AdminProCreateSubArgumentActionPostHandlerHook = () => AdminProCreat
 export type AdminProCreateSubArgumentAction = () => (
   owner: AdminProStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminProCreateSubArgumentAction: AdminProCreateSubArgumentAction = () => {

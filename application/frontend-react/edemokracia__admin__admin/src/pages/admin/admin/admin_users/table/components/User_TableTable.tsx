@@ -372,7 +372,6 @@ export const User_TableTable = forwardRef<RefreshableTable, User_TableTableProps
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
-      // autoCloseOnSuccess: true,
     });
   }, []);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {

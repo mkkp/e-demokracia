@@ -8,4 +8,6 @@
 export * from './pageRefreshAdminUserManager';
 export * from './users/rowViewUsers';
 export * from './users/tableActionUsers';
+export * from './adminUserManager/AdminUserManagerCreateUserForm';
+export * from './adminUserManager/adminUserManagerCreateUser';
 export * from './users/tableRefreshRelationUsers';

@@ -43,7 +43,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminDebateCloseDebateForm } from './AdminDebateCloseDebateForm';
+import AdminDebateCloseDebateForm from './AdminDebateCloseDebateForm';
 import {
   AdminDashboard,
   AdminDashboardStored,
@@ -71,6 +71,8 @@ export type AdminDebateCloseDebateActionPostHandlerHook = () => AdminDebateClose
 export type AdminDebateCloseDebateAction = () => (
   owner: AdminDebateStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminDebateCloseDebateAction: AdminDebateCloseDebateAction = () => {

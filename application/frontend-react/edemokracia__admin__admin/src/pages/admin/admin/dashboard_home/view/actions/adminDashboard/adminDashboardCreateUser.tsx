@@ -28,7 +28,7 @@ import type {
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useSnackbar } from 'notistack';
-import { AdminAdminOperationOutput } from '~/pages/admin/dashboard/createuser/output/index';
+import AdminAdminOperationOutput from '~/pages/admin/dashboard/createuser/output/index';
 import { useJudoNavigation, MdiIcon } from '~/components';
 import { useDialog, useRangeDialog } from '~/components/dialog';
 import { baseColumnConfig, toastConfig } from '~/config';
@@ -43,7 +43,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminDashboardCreateUserForm } from './AdminDashboardCreateUserForm';
+import AdminDashboardCreateUserForm from './AdminDashboardCreateUserForm';
 import {
   AdminCreateUserInput,
   AdminCreateUserInputQueryCustomizer,
@@ -65,7 +65,11 @@ export const ADMIN_DASHBOARD_CREATE_USER_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY 
   'AdminDashboardCreateUserActionPostHandlerHook';
 export type AdminDashboardCreateUserActionPostHandlerHook = () => AdminDashboardCreateUserActionPostHandler;
 
-export type AdminDashboardCreateUserAction = () => (successCallback: () => void) => Promise<void>;
+export type AdminDashboardCreateUserAction = () => (
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useAdminDashboardCreateUserAction: AdminDashboardCreateUserAction = () => {
   const { t } = useTranslation();

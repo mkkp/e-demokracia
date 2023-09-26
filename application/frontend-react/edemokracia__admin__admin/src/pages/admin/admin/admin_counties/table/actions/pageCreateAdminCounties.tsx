@@ -23,7 +23,7 @@ import { toastConfig } from '~/config';
 
 import { AdminCounty, AdminCountyQueryCustomizer, AdminCountyStored } from '~/generated/data-api';
 import { adminAdminServiceForAdminCountiesImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
-import { PageCreateAdminCountiesForm } from './PageCreateAdminCountiesForm';
+import PageCreateAdminCountiesForm from './PageCreateAdminCountiesForm';
 
 export type PageCreateAdminCountiesAction = () => (
   successCallback: (result: AdminCountyStored) => void,

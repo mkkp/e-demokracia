@@ -30,7 +30,7 @@ import {
   EdemokraciaAttachmentType,
 } from '~/generated/data-api';
 import { adminIssueServiceForAttachmentsImpl, adminIssueAttachmentServiceForClassImpl } from '~/generated/data-axios';
-import { TableCreateAttachmentsForm } from './TableCreateAttachmentsForm';
+import TableCreateAttachmentsForm from './TableCreateAttachmentsForm';
 
 export type TableCreateAttachmentsAction = () => (
   owner: JudoIdentifiable<AdminIssueAttachment>,

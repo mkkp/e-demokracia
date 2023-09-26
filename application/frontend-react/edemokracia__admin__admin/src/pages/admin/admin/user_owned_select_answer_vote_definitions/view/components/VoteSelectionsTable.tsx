@@ -68,7 +68,7 @@ import {
   adminSelectAnswerVoteDefinitionServiceForClassImpl,
   adminSelectAnswerVoteSelectionServiceForClassImpl,
 } from '~/generated/data-axios';
-import { usePageRefreshUserOwnedSelectAnswerVoteDefinitionsAction } from '../actions';
+import { usePageRefreshUserOwnedSelectAnswerVoteDefinitionsAction, useRowViewVoteSelectionsAction } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
@@ -175,6 +175,7 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
 
   const pageRefreshUserOwnedSelectAnswerVoteDefinitionsAction =
     usePageRefreshUserOwnedSelectAnswerVoteDefinitionsAction();
+  const rowViewVoteSelectionsAction = useRowViewVoteSelectionsAction();
 
   const voteSelectionsRowActions: TableRowAction<AdminSelectAnswerVoteSelectionStored>[] = [];
 
@@ -267,6 +268,11 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={(newRowSelectionModel) => {
           setSelectionModel(newRowSelectionModel);
+        }}
+        onRowClick={(params: GridRowParams<AdminSelectAnswerVoteSelectionStored>) => {
+          if (!editMode) {
+            rowViewVoteSelectionsAction(ownerData, params.row, () => fetchOwnerData());
+          }
         }}
         sortModel={voteSelectionsSortModel}
         onSortModelChange={(newModel: GridSortModel) => {

@@ -29,7 +29,7 @@ import {
   AdminCountyStored,
 } from '~/generated/data-api';
 import { adminCountyServiceForCitiesImpl, adminCityServiceForClassImpl } from '~/generated/data-axios';
-import { TableCreateCitiesForm } from './TableCreateCitiesForm';
+import TableCreateCitiesForm from './TableCreateCitiesForm';
 
 export type TableCreateCitiesAction = () => (
   owner: JudoIdentifiable<AdminCity>,

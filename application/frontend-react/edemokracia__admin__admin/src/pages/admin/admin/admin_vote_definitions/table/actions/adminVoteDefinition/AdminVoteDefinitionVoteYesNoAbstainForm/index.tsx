@@ -94,7 +94,7 @@ export interface AdminVoteDefinitionVoteYesNoAbstainFormProps {
   owner: AdminVoteDefinitionStored;
 }
 
-export function AdminVoteDefinitionVoteYesNoAbstainForm({
+export default function AdminVoteDefinitionVoteYesNoAbstainForm({
   successCallback,
   cancel,
   owner,

@@ -90,7 +90,7 @@ export interface TableCreateCitiesFormProps {
   owner: JudoIdentifiable<AdminCounty>;
 }
 
-export function TableCreateCitiesForm({ successCallback, cancel, owner }: TableCreateCitiesFormProps) {
+export default function TableCreateCitiesForm({ successCallback, cancel, owner }: TableCreateCitiesFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

@@ -18,6 +18,8 @@ import type {
   GridRowId,
   GridSortItem,
 } from '@mui/x-data-grid';
+import { useTrackService } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
 import { MdiIcon } from '~/components';
 import {
   AggregationInput,
@@ -27,10 +29,12 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
-import { FilterOption, FilterType } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { FilterOption, Filter } from '~/components-api';
 import { baseColumnConfig, toastConfig } from '~/config';
 import {
   fileHandling,
+  mapAllFiltersToQueryCustomizerProperties,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
@@ -51,8 +55,12 @@ import {
   _StringOperation,
 } from '~/generated/data-api';
 import { adminRatingVoteEntryServiceForClassImpl, adminUserServiceForClassImpl } from '~/generated/data-axios';
-
 import { useLinkViewOwnerAction } from '../actions';
+
+export type OwnerLinkFilterInitializer = (ownerData: AdminRatingVoteEntryStored) => Filter[] | undefined;
+
+export const OWNER_LINK_FILTER_INITIALIZER_INTERFACE_KEY = 'OwnerLinkFilterInitializerHook';
+export type OwnerLinkFilterInitializerHook = () => OwnerLinkFilterInitializer;
 
 export interface OwnerLinkProps {
   ownerData: AdminRatingVoteEntryStored;
@@ -71,6 +79,12 @@ export function OwnerLink(props: OwnerLinkProps) {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const { service: filterInitializerHook } = useTrackService<OwnerLinkFilterInitializerHook>(
+    `(${OBJECTCLASS}=${OWNER_LINK_FILTER_INITIALIZER_INTERFACE_KEY})`,
+  );
+  const callFilterInitializer: OwnerLinkFilterInitializer | undefined =
+    filterInitializerHook && filterInitializerHook();
 
   const ownerSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 

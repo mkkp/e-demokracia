@@ -110,7 +110,7 @@ export interface AdminDashboardCreateIssueFormProps {
   cancel: () => void;
 }
 
-export function AdminDashboardCreateIssueForm({ successCallback, cancel }: AdminDashboardCreateIssueFormProps) {
+export default function AdminDashboardCreateIssueForm({ successCallback, cancel }: AdminDashboardCreateIssueFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

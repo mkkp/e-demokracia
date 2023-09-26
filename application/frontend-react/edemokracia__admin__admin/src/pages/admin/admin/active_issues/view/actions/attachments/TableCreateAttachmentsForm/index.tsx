@@ -91,7 +91,11 @@ export interface TableCreateAttachmentsFormProps {
   owner: JudoIdentifiable<AdminIssue>;
 }
 
-export function TableCreateAttachmentsForm({ successCallback, cancel, owner }: TableCreateAttachmentsFormProps) {
+export default function TableCreateAttachmentsForm({
+  successCallback,
+  cancel,
+  owner,
+}: TableCreateAttachmentsFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

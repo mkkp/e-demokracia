@@ -1,3 +1,4 @@
+import { v1 as uuidv1 } from 'uuid';
 import { _NumericOperation, _StringOperation, _BooleanOperation, _EnumerationOperation } from '@judo/data-api-common';
 import type { GridFilterModel, GridFilterItem } from '@mui/x-data-grid';
 import { GridLogicOperator } from '@mui/x-data-grid';
@@ -379,3 +380,28 @@ export function mapFilterToFilterModel(filter: Filter): GridFilterItem {
       };
   }
 }
+
+export type FilterBuilder = <T>(
+  filterType: FilterType,
+  operator: Operation,
+  attributeName: keyof T,
+  value: any,
+) => Filter;
+
+export const buildFilter: FilterBuilder = (filterType, operator, attributeName, value): Filter => {
+  const randomized = uuidv1();
+  return {
+    id: randomized + '-id',
+    valueId: randomized + '-value',
+    operationId: randomized + '-operation',
+    filterBy: {
+      operator: operator,
+      value,
+    },
+    filterOption: {
+      attributeName: attributeName as string,
+      id: randomized + '-filter-option',
+      filterType,
+    },
+  };
+};

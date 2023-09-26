@@ -30,7 +30,7 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminAdminServiceForAdminCategoriesImpl, adminIssueCategoryServiceForClassImpl } from '~/generated/data-axios';
-import { PageCreateAdminCategoriesForm } from './PageCreateAdminCategoriesForm';
+import PageCreateAdminCategoriesForm from './PageCreateAdminCategoriesForm';
 
 export type PageCreateAdminCategoriesAction = () => (
   successCallback: (result: AdminIssueCategoryStored) => void,

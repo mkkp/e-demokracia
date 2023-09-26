@@ -67,6 +67,7 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
     alreadySelectedItems,
     filterOptions,
     initialQueryCustomizer,
+    initialFilters,
     createTrigger,
     editMode,
   }: OpenRangeDialogProps<T, U>) => {
@@ -86,6 +87,7 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
           alreadySelectedItems={alreadySelectedItems}
           filterOptions={filterOptions}
           initalQueryCustomizer={initialQueryCustomizer}
+          initialFilters={initialFilters}
           createTrigger={createTrigger}
           editMode={editMode}
         />,

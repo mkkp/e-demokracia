@@ -11,31 +11,20 @@ import type { ForwardRefExoticComponent, RefAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
-import type { ChipProps } from '@mui/material';
-import { Dot } from './Dot';
+import { ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
 import { useConfig } from '~/hooks';
 import { MenuOrientation, ThemeMode } from '~/config';
 import { MdiIcon, useJudoNavigation } from '~/components';
 
-export type LinkTarget = '_blank' | '_self' | '_parent' | '_top';
-
 export type NavItemType = {
-  breadcrumbs?: boolean;
-  caption?: ReactNode | string;
-  children?: NavItemType[];
-  elements?: NavItemType[];
-  chip?: ChipProps;
-  color?: 'primary' | 'secondary' | 'default' | undefined;
-  disabled?: boolean;
-  icon?: string;
   id?: string;
-  search?: string;
-  target?: boolean;
   title?: ReactNode | string;
-  type?: string;
   url?: string;
+  icon?: string;
+  disabled?: boolean;
   hiddenBy?: string;
+  children?: NavItemType[];
+  type?: 'group' | 'collapse' | 'item';
 };
 
 export interface NavItemProps {
@@ -48,223 +37,121 @@ export const NavItem = ({ item, level }: NavItemProps) => {
   const { clearNavigate } = useJudoNavigation();
   const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
   const theme = useTheme();
-
-  const matchDownLg = useMediaQuery(theme.breakpoints.down('lg'));
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
-
-  let itemTarget: LinkTarget = '_self';
-  if (item.target) {
-    itemTarget = '_blank';
-  }
-
-  let listItemProps: {
-    component: ForwardRefExoticComponent<RefAttributes<HTMLAnchorElement>> | string;
-    href?: string;
-    target?: LinkTarget;
-  } = {
-    component: forwardRef((props, ref) => (
-      <Link
-        {...props}
-        to={item.url!}
-        target={itemTarget}
-        ref={ref}
-        onClick={(e) => {
-          // menu item-based navigations should always clear the breadcrumbs
-          e.preventDefault();
-          e.stopPropagation();
-          clearNavigate(item.url!);
-        }}
-      />
-    )),
+  const textColor = theme.palette.mode === ThemeMode.DARK ? 'grey.400' : 'text.primary';
+  const iconWidth = 28;
+  const iconSize = 36;
+  const borderRadius = 1.5;
+  const iconPropsHorizontal = {
+    borderRadius: borderRadius,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    '&:hover': {
+      bgcolor: 'transparent',
+    },
+  };
+  const iconPropsVertical = {
+    borderRadius: borderRadius,
+    alignItems: 'center',
+    justifyContent: 'center',
+    '&:hover': {
+      bgcolor: theme.palette.mode === ThemeMode.DARK ? 'secondary.light' : 'secondary.lighter',
+    },
   };
 
-  const itemIcon = item.icon ? (
-    <MdiIcon path={item.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
-  ) : (
-    false
-  );
-  const isSelected = false; // TODO JNG-5207
-  const textColor = theme.palette.mode === ThemeMode.DARK ? 'grey.400' : 'text.primary';
-  const iconSelectedColor = theme.palette.mode === ThemeMode.DARK && !miniDrawer ? 'text.primary' : 'primary.main';
+  const LinkComponent: ForwardRefExoticComponent<RefAttributes<HTMLAnchorElement>> = forwardRef((props, ref) => (
+    <Link
+      {...props}
+      to={item.url!}
+      ref={ref}
+      onClick={(e) => {
+        // menu item-based navigations should always clear the breadcrumbs
+        e.preventDefault();
+        e.stopPropagation();
+        clearNavigate(item.url!);
+      }}
+    />
+  ));
 
   return (
     <>
       {menuOrientation === MenuOrientation.VERTICAL || downLG ? (
         <ListItemButton
-          {...listItemProps}
+          component={LinkComponent}
           disabled={item.disabled}
-          selected={isSelected}
           sx={{
             zIndex: 1201,
-            pl: !miniDrawer ? `${level * 28}px` : 1.5,
+            pl: !miniDrawer ? `${level * iconWidth}px` : borderRadius,
             py: miniDrawer && level === 1 ? 1.25 : 1,
-            ...(!miniDrawer && {
-              '&:hover': {
-                bgcolor: theme.palette.mode === ThemeMode.DARK ? 'divider' : 'primary.lighter',
-              },
-              '&.Mui-selected': {
-                bgcolor: theme.palette.mode === ThemeMode.DARK ? 'divider' : 'primary.lighter',
-                borderRight: `2px solid ${theme.palette.primary.main}`,
-                color: iconSelectedColor,
-                '&:hover': {
-                  color: iconSelectedColor,
-                  bgcolor: theme.palette.mode === ThemeMode.DARK ? 'divider' : 'primary.lighter',
-                },
-              },
-            }),
-            ...(miniDrawer && {
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
-              '&.Mui-selected': {
-                '&:hover': {
-                  bgcolor: 'transparent',
-                },
-                bgcolor: 'transparent',
-              },
-            }),
+            '&:hover': {
+              bgcolor: theme.palette.mode === ThemeMode.DARK ? 'divider' : 'primary.lighter',
+            },
           }}
-          {...(matchDownLg && {
+          {...(downLG && {
             onClick: () => onChangeMiniDrawer(true),
           })}
         >
-          {itemIcon && (
+          {item.icon && (
             <ListItemIcon
               sx={{
-                minWidth: 28,
-                color: isSelected ? iconSelectedColor : textColor,
+                minWidth: iconWidth,
+                color: textColor,
                 ...(miniDrawer && {
-                  borderRadius: 1.5,
-                  width: 36,
-                  height: 36,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  '&:hover': {
-                    bgcolor: theme.palette.mode === ThemeMode.DARK ? 'secondary.light' : 'secondary.lighter',
-                  },
+                  width: iconSize,
+                  height: iconSize,
+                  ...iconPropsVertical,
                 }),
-                ...(miniDrawer
-                  ? isSelected
-                    ? {
-                        bgcolor: theme.palette.mode === ThemeMode.DARK ? 'primary.900' : 'primary.lighter',
-                        '&:hover': {
-                          bgcolor: theme.palette.mode === ThemeMode.DARK ? 'primary.darker' : 'primary.lighter',
-                        },
-                      }
-                    : {}
-                  : {}),
               }}
             >
-              {itemIcon}
+              <MdiIcon path={item.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
             </ListItemIcon>
           )}
           {(!miniDrawer || (miniDrawer && level !== 1)) && (
             <ListItemText
               primary={
-                <Typography variant="h6" sx={{ color: isSelected ? iconSelectedColor : textColor }}>
+                <Typography variant="h6" sx={{ color: textColor }}>
                   {t(`menuTree.${item.title}`, { defaultValue: item.title })}
                 </Typography>
               }
             />
           )}
-          {(!miniDrawer || (miniDrawer && level !== 1)) && item.chip && (
-            <Chip
-              color={item.chip.color}
-              variant={item.chip.variant}
-              size={item.chip.size}
-              label={item.chip.label}
-              avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
-            />
-          )}
         </ListItemButton>
       ) : (
         <ListItemButton
-          {...listItemProps}
+          component={LinkComponent}
           disabled={item.disabled}
-          selected={isSelected}
           sx={{
             zIndex: 1201,
-            ...(!miniDrawer && {
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
-              '&.Mui-selected': {
-                bgcolor: 'transparent',
-                color: iconSelectedColor,
-                '&:hover': {
-                  color: iconSelectedColor,
-                  bgcolor: 'transparent',
-                },
-              },
-            }),
-            ...(miniDrawer && {
-              '&:hover': {
-                bgcolor: 'transparent',
-              },
-              '&.Mui-selected': {
-                '&:hover': {
-                  bgcolor: 'transparent',
-                },
-                bgcolor: 'transparent',
-              },
-            }),
+            '&:hover': {
+              bgcolor: 'transparent',
+            },
           }}
         >
-          {itemIcon && (
+          {item.icon && (
             <ListItemIcon
               sx={{
-                minWidth: 36,
+                minWidth: iconSize,
                 ...(miniDrawer && {
-                  borderRadius: 1.5,
-                  width: 36,
-                  height: 36,
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  '&:hover': {
-                    bgcolor: 'transparent',
-                  },
+                  width: iconSize,
+                  height: iconSize,
+                  ...iconPropsHorizontal,
                 }),
-                ...(miniDrawer
-                  ? isSelected
-                    ? {
-                        bgcolor: 'transparent',
-                        '&:hover': {
-                          bgcolor: 'transparent',
-                        },
-                      }
-                    : {}
-                  : {}),
               }}
             >
-              {itemIcon}
+              <MdiIcon path={item.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
             </ListItemIcon>
           )}
 
-          {!itemIcon && (
+          {!item.icon && (
             <ListItemIcon
               sx={{
-                color: isSelected ? 'primary.main' : 'secondary.main',
+                color: 'secondary.main',
                 ...(miniDrawer && {
-                  borderRadius: 1.5,
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  '&:hover': {
-                    bgcolor: 'transparent',
-                  },
+                  ...iconPropsHorizontal,
                 }),
-                ...(miniDrawer
-                  ? isSelected
-                    ? {
-                        bgcolor: 'transparent',
-                        '&:hover': {
-                          bgcolor: 'transparent',
-                        },
-                      }
-                    : {}
-                  : {}),
               }}
             >
-              <Dot size={4} color={isSelected ? 'primary' : 'secondary'} />
+              <MdiIcon path={'circle-small'} sx={{ color: 'secondary' }} />
             </ListItemIcon>
           )}
           <ListItemText
@@ -274,15 +161,6 @@ export const NavItem = ({ item, level }: NavItemProps) => {
               </Typography>
             }
           />
-          {(!miniDrawer || (miniDrawer && level !== 1)) && item.chip && (
-            <Chip
-              color={item.chip.color}
-              variant={item.chip.variant}
-              size={item.chip.size}
-              label={item.chip.label}
-              avatar={item.chip.avatar && <Avatar>{item.chip.avatar}</Avatar>}
-            />
-          )}
         </ListItemButton>
       )}
     </>

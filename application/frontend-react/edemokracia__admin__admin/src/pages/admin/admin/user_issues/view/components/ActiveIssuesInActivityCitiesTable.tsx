@@ -88,7 +88,7 @@ export interface ActiveIssuesInActivityCitiesTableProps {
 export const ActiveIssuesInActivityCitiesTable = forwardRef<RefreshableTable, ActiveIssuesInActivityCitiesTableProps>(
   (props, ref) => {
     const { getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-    const { ownerData, fetchOwnerData, editMode, isFormUpdateable, refreshCounter } = props;
+    const { ownerData, isOwnerLoading, fetchOwnerData, editMode, isFormUpdateable, refreshCounter } = props;
     const { t } = useTranslation();
     const { openFilterDialog } = useFilterDialog();
     const { openRangeDialog } = useRangeDialog();

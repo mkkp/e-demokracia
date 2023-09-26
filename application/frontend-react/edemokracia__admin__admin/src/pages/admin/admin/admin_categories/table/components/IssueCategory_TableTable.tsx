@@ -231,7 +231,6 @@ export const IssueCategory_TableTable = forwardRef<RefreshableTable, IssueCatego
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
-      // autoCloseOnSuccess: true,
     });
   }, []);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {

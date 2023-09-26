@@ -58,7 +58,12 @@ export type AdminCommentVoteUpActionPostHandler = (ownerCallback: () => void) =>
 export const ADMIN_COMMENT_VOTE_UP_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'AdminCommentVoteUpActionPostHandlerHook';
 export type AdminCommentVoteUpActionPostHandlerHook = () => AdminCommentVoteUpActionPostHandler;
 
-export type AdminCommentVoteUpAction = () => (owner: AdminCommentStored, successCallback: () => void) => Promise<void>;
+export type AdminCommentVoteUpAction = () => (
+  owner: AdminCommentStored,
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useAdminCommentVoteUpAction: AdminCommentVoteUpAction = () => {
   const { t } = useTranslation();
@@ -77,7 +82,12 @@ export const useAdminCommentVoteUpAction: AdminCommentVoteUpAction = () => {
   );
   const postHandler: AdminCommentVoteUpActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function adminCommentVoteUpAction(owner: AdminCommentStored, successCallback: () => void) {
+  return async function adminCommentVoteUpAction(
+    owner: AdminCommentStored,
+    successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
+  ) {
     try {
       const result = await adminCommentServiceForClassImpl.voteUp(owner);
       if (postHandler) {
@@ -85,12 +95,18 @@ export const useAdminCommentVoteUpAction: AdminCommentVoteUpAction = () => {
         return;
       }
       successCallback();
-      enqueueSnackbar(title, {
-        variant: 'success',
-        ...toastConfig.success,
-      });
+      if (!silentMode) {
+        enqueueSnackbar(title, {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+      }
     } catch (error: any) {
-      handleActionError(error, undefined, owner);
+      if (errorCallback) {
+        errorCallback(error); // consider passing mapped content here eventually
+      } else {
+        handleActionError(error, undefined, owner);
+      }
     }
   };
 };

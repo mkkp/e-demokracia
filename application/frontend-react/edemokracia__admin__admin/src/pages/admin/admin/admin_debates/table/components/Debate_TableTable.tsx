@@ -356,7 +356,6 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
-      // autoCloseOnSuccess: true,
     });
   }, []);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {

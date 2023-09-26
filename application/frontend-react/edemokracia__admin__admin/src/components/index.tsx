@@ -13,3 +13,4 @@ export * from './DropdownButton';
 export * from './MdiIcon';
 export * from './ModeledTabs';
 export * from './PageHeader';
+export * from './SimpleBar';

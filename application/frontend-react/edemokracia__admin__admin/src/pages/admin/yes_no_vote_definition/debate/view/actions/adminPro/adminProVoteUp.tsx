@@ -58,7 +58,12 @@ export type AdminProVoteUpActionPostHandler = (ownerCallback: () => void) => Pro
 export const ADMIN_PRO_VOTE_UP_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'AdminProVoteUpActionPostHandlerHook';
 export type AdminProVoteUpActionPostHandlerHook = () => AdminProVoteUpActionPostHandler;
 
-export type AdminProVoteUpAction = () => (owner: AdminProStored, successCallback: () => void) => Promise<void>;
+export type AdminProVoteUpAction = () => (
+  owner: AdminProStored,
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useAdminProVoteUpAction: AdminProVoteUpAction = () => {
   const { t } = useTranslation();
@@ -77,7 +82,12 @@ export const useAdminProVoteUpAction: AdminProVoteUpAction = () => {
   );
   const postHandler: AdminProVoteUpActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function adminProVoteUpAction(owner: AdminProStored, successCallback: () => void) {
+  return async function adminProVoteUpAction(
+    owner: AdminProStored,
+    successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
+  ) {
     try {
       const result = await adminProServiceForClassImpl.voteUp(owner);
       if (postHandler) {
@@ -85,12 +95,18 @@ export const useAdminProVoteUpAction: AdminProVoteUpAction = () => {
         return;
       }
       successCallback();
-      enqueueSnackbar(title, {
-        variant: 'success',
-        ...toastConfig.success,
-      });
+      if (!silentMode) {
+        enqueueSnackbar(title, {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+      }
     } catch (error: any) {
-      handleActionError(error, undefined, owner);
+      if (errorCallback) {
+        errorCallback(error); // consider passing mapped content here eventually
+      } else {
+        handleActionError(error, undefined, owner);
+      }
     }
   };
 };

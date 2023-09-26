@@ -43,7 +43,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminUserIssuesCreateIssueForm } from './AdminUserIssuesCreateIssueForm';
+import AdminUserIssuesCreateIssueForm from './AdminUserIssuesCreateIssueForm';
 import {
   AdminCity,
   AdminCityQueryCustomizer,
@@ -77,7 +77,11 @@ export const ADMIN_USER_ISSUES_CREATE_ISSUE_ACTION_POST_HANDLER_HOOK_INTERFACE_K
   'AdminUserIssuesCreateIssueActionPostHandlerHook';
 export type AdminUserIssuesCreateIssueActionPostHandlerHook = () => AdminUserIssuesCreateIssueActionPostHandler;
 
-export type AdminUserIssuesCreateIssueAction = () => (successCallback: () => void) => Promise<void>;
+export type AdminUserIssuesCreateIssueAction = () => (
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useAdminUserIssuesCreateIssueAction: AdminUserIssuesCreateIssueAction = () => {
   const { t } = useTranslation();

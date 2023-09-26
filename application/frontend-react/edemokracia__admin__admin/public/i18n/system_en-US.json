@@ -95,6 +95,8 @@
         "judo.modal.filter.equals": "equals",
         "judo.modal.filter.notEquals": "notEquals",
         "judo.error.error": "Error",
+        "judo.error.unhandled": "An unhandled error occurred.",
+        "judo.error.unmappable": "An error occurred, but we could not display the error info.",
         "judo.error.internal-server-error": "An internal server error occurred.",
         "judo.error.technical": "Something went wrong. Please contact with the system admins.",
         "judo.error.technical.no-response": "No response received while processing your request. Please contact with the system admins.",

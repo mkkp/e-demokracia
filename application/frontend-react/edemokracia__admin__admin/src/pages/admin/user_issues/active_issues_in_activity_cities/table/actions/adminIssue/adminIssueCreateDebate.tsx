@@ -43,7 +43,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminIssueCreateDebateForm } from './AdminIssueCreateDebateForm';
+import AdminIssueCreateDebateForm from './AdminIssueCreateDebateForm';
 import {
   AdminIssue,
   AdminIssueQueryCustomizer,
@@ -70,6 +70,8 @@ export type AdminIssueCreateDebateActionPostHandlerHook = () => AdminIssueCreate
 export type AdminIssueCreateDebateAction = () => (
   owner: AdminIssueStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminIssueCreateDebateAction: AdminIssueCreateDebateAction = () => {

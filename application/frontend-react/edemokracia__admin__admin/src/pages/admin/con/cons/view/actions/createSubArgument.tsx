@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { CreateSubArgumentForm } from './CreateSubArgumentForm';
+import CreateSubArgumentForm from './CreateSubArgumentForm';
 import {
   AdminCon,
   AdminConQueryCustomizer,
@@ -58,7 +58,12 @@ export type CreateSubArgumentActionPostHandler = (ownerCallback: () => void) => 
 export const CREATE_SUB_ARGUMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'CreateSubArgumentActionPostHandlerHook';
 export type CreateSubArgumentActionPostHandlerHook = () => CreateSubArgumentActionPostHandler;
 
-export type CreateSubArgumentAction = () => (owner: AdminConStored, successCallback: () => void) => Promise<void>;
+export type CreateSubArgumentAction = () => (
+  owner: AdminConStored,
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useCreateSubArgumentAction: CreateSubArgumentAction = () => {
   const { t } = useTranslation();

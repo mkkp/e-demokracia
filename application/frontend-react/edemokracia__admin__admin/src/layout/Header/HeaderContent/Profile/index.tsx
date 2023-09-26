@@ -7,7 +7,6 @@
 // Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
 
 import { useRef, useState, useCallback } from 'react';
-import type { ReactNode, SyntheticEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -18,53 +17,20 @@ import {
   CardContent,
   ClickAwayListener,
   Grid,
-  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   Paper,
   Popper,
   Stack,
-  Tab,
-  Tabs,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import { useAuth } from 'react-oidc-context';
-import { usePrincipal } from '~/auth';
 import { ThemeMode } from '~/config';
 import { MdiIcon } from '~/components';
-import { useHeroProps, useLogoProps } from '~/hooks';
-import { ProfileTab } from './ProfileTab';
-import { SettingTab } from './SettingTab';
+import { useHeroProps } from '~/hooks';
 import { Transitions } from '../../../Transitions';
-
-interface TabPanelProps {
-  children?: ReactNode;
-  dir?: string;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`profile-tabpanel-${index}`}
-      aria-labelledby={`profile-tab-${index}`}
-      {...other}
-    >
-      {value === index && children}
-    </div>
-  );
-}
-
-function a11yProps(index: number) {
-  return {
-    id: `profile-tab-${index}`,
-    'aria-controls': `profile-tabpanel-${index}`,
-  };
-}
 
 export const Profile = () => {
   const { t } = useTranslation();
@@ -77,7 +43,6 @@ export const Profile = () => {
       post_logout_redirect_uri: redirectUrl,
     });
   }, [isAuthenticated]);
-  const { principal } = usePrincipal();
 
   const anchorRef = useRef<any>(null);
   const [open, setOpen] = useState(false);
@@ -90,12 +55,6 @@ export const Profile = () => {
       return;
     }
     setOpen(false);
-  };
-
-  const [value, setValue] = useState(0);
-
-  const handleChange = (event: SyntheticEvent, newValue: number) => {
-    setValue(newValue);
   };
 
   const iconBackColorOpen = theme.palette.mode === ThemeMode.DARK ? 'grey.200' : 'grey.300';
@@ -169,56 +128,17 @@ export const Profile = () => {
                           </Stack>
                         </Stack>
                       </Grid>
-                      <Grid item>
-                        <Tooltip title="Logout">
-                          <IconButton size="large" sx={{ color: 'text.primary' }} onClick={doLogout}>
-                            <MdiIcon path="logout" />
-                          </IconButton>
-                        </Tooltip>
-                      </Grid>
                     </Grid>
                   </CardContent>
 
-                  <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs
-                      variant="fullWidth"
-                      value={value}
-                      onChange={handleChange}
-                      aria-label="profile tabs"
-                      sx={{ height: '20px', alignItems: 'center' }}
-                    >
-                      <Tab
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          textTransform: 'capitalize',
-                        }}
-                        icon={<MdiIcon path="account-outline" sx={{ marginBottom: 0, marginRight: '10px' }} />}
-                        label="Profile"
-                        {...a11yProps(0)}
-                      />
-                      {/*<Tab*/}
-                      {/*  sx={ {*/}
-                      {/*    display: 'flex',*/}
-                      {/*    flexDirection: 'row',*/}
-                      {/*    justifyContent: 'center',*/}
-                      {/*    alignItems: 'center',*/}
-                      {/*    textTransform: 'capitalize',*/}
-                      {/*  } }*/}
-                      {/*  icon={<MdiIcon path="cog-outline" sx={ { marginBottom: 0, marginRight: '10px' } } />}*/}
-                      {/*  label="Setting"*/}
-                      {/*  {...a11yProps(1)}*/}
-                      {/*/>*/}
-                    </Tabs>
-                  </Box>
-                  <TabPanel value={value} index={0} dir={theme.direction}>
-                    <ProfileTab handleLogout={doLogout} />
-                  </TabPanel>
-                  <TabPanel value={value} index={1} dir={theme.direction}>
-                    <SettingTab />
-                  </TabPanel>
+                  <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
+                    <ListItemButton onClick={doLogout}>
+                      <ListItemIcon>
+                        <MdiIcon path="logout" />
+                      </ListItemIcon>
+                      <ListItemText primary={t('judo.security.logout', { defaultValue: 'Logout' })} />
+                    </ListItemButton>
+                  </List>
                 </Card>
               </ClickAwayListener>
             </Paper>

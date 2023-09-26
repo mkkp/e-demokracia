@@ -23,6 +23,7 @@ import { useSnackbar } from 'notistack';
 import { useDialog } from '~/components/dialog';
 import { MdiIcon } from '~/components';
 import { toastConfig } from '~/config';
+import { isErrorOperationFault } from '~/utilities';
 
 export type CRUDDialogOpenProps<T extends JudoStored<any>> = {
   dialogTitle: string;
@@ -31,6 +32,7 @@ export type CRUDDialogOpenProps<T extends JudoStored<any>> = {
   action: (item: T, successHandler: () => void, errorHandler: (error: any) => void) => Promise<void>;
   onClose: (needsRefresh: boolean) => void;
   autoCloseOnSuccess?: boolean;
+  faultPrefix?: string;
 };
 
 export type UseCRUDDialog = () => <T extends JudoStored<any>>(props: CRUDDialogOpenProps<T>) => void;
@@ -38,7 +40,7 @@ export type UseCRUDDialog = () => <T extends JudoStored<any>>(props: CRUDDialogO
 export const useCRUDDialog: UseCRUDDialog = () => {
   const [createDialog, closeDialog] = useDialog();
 
-  return ({ dialogTitle, itemTitleFn, selectedItems, action, onClose, autoCloseOnSuccess }): void => {
+  return ({ dialogTitle, itemTitleFn, selectedItems, action, onClose, autoCloseOnSuccess, faultPrefix }): void => {
     createDialog({
       fullWidth: true,
       maxWidth: 'sm',
@@ -63,6 +65,7 @@ export const useCRUDDialog: UseCRUDDialog = () => {
             onClose(needsRefresh);
           }}
           autoCloseOnSuccess={autoCloseOnSuccess}
+          faultPrefix={faultPrefix}
         />
       ),
     });
@@ -77,7 +80,7 @@ const iconMapping: Record<ItemStatus, ReactNode> = {
   error: <MdiIcon path='close-circle' color='red' />,
 };
 
-export type QueueItem = { id: string; title: string; status: ItemStatus; data: any };
+export type QueueItem = { id: string; title: string; status: ItemStatus; data: any; error?: any };
 
 export type CRUDDialogProps = {
   title: string;
@@ -85,9 +88,10 @@ export type CRUDDialogProps = {
   queueItems: Array<QueueItem>;
   action: (item: any, successHandler: () => void, errorHandler: (error: any) => void) => Promise<void>;
   autoCloseOnSuccess?: boolean;
+  faultPrefix?: string;
 };
 
-export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSuccess }: CRUDDialogProps) {
+export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSuccess, faultPrefix }: CRUDDialogProps) {
   const MAX_PROGRESS = 100;
   const { enqueueSnackbar } = useSnackbar();
   const { t } = useTranslation();
@@ -98,10 +102,11 @@ export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSucces
   const progressMultiplier = useMemo(() => Math.round(MAX_PROGRESS / queueItems.length), [queueItems]);
 
   const updateQueueItem = useCallback(
-    (queueItem: QueueItem, status: ItemStatus) => {
+    (queueItem: QueueItem, status: ItemStatus, error?: any) => {
       setQueue((prevQueue) => {
         const idx = prevQueue.findIndex((i) => i.id === queueItem.id);
         prevQueue[idx].status = status;
+        prevQueue[idx].error = error;
         return [...prevQueue];
       });
       if (status === 'success') {
@@ -138,8 +143,8 @@ export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSucces
           () => {
             updateQueueItem(queueItem, 'success');
           },
-          () => {
-            updateQueueItem(queueItem, 'error');
+          (error) => {
+            updateQueueItem(queueItem, 'error', error);
           },
         );
       } catch (e) {
@@ -149,6 +154,39 @@ export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSucces
 
     setInProgress(false);
   }, [queue, progress]);
+
+  const mapErrors = (error: any): string => {
+    if (!error?.response?.status) {
+      return t('judo.error.technical.no-status', {
+        defaultValue: 'Could not determine the result(status) of the operation. Please contact with the system admins.',
+      });
+    }
+    if (isErrorOperationFault(error)) {
+      if (!!faultPrefix) {
+        const faultObjectKeys = Object.keys(error.response.data);
+        const translatedErrors: string[] = [];
+
+        for (const faultObjectKey of faultObjectKeys) {
+          const objectAttributes = Object.keys(error.response.data[faultObjectKey]);
+          for (const attribute of objectAttributes) {
+            translatedErrors.push(
+              t(`faults.${faultPrefix}.${faultObjectKey}.${attribute}`, { defaultValue: attribute }) +
+                ': ' +
+                error.response.data[faultObjectKey][attribute],
+            );
+          }
+        }
+
+        return translatedErrors.join(', ');
+      } else {
+        console.error(error?.response);
+        return t('judo.error.unmappable', {
+          defaultValue: 'An error occurred, but we could not display the error info.',
+        });
+      }
+    }
+    return t('judo.error.unhandled', { defaultValue: 'An unhandled error occurred.' });
+  };
 
   useEffect(() => {
     if (runCount.current > 0 && !inProgress) {
@@ -203,7 +241,14 @@ export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSucces
               {queue.map((item) => (
                 <ListItem key={item.id} disablePadding>
                   <ListItemIcon>{iconMapping[item.status]}</ListItemIcon>
-                  <ListItemText primary={item.title} />
+                  <ListItemText
+                    primary={item.title}
+                    secondary={
+                      item.status === 'error' ? (
+                        <Typography sx={{ color: 'red' }}>{mapErrors(item.error)}</Typography>
+                      ) : undefined
+                    }
+                  />
                 </ListItem>
               ))}
             </List>

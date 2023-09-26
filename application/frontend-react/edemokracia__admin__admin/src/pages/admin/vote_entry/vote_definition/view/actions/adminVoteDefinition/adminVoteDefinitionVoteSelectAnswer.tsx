@@ -64,6 +64,8 @@ export type AdminVoteDefinitionVoteSelectAnswerActionPostHandlerHook =
 export type AdminVoteDefinitionVoteSelectAnswerAction = () => (
   owner: AdminVoteDefinitionStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVoteSelectAnswerAction = () => {
@@ -89,7 +91,76 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
   return async function adminVoteDefinitionVoteSelectAnswerAction(
     owner: AdminVoteDefinitionStored,
     successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
   ) {
+    const columns: GridColDef<SelectAnswerVoteSelectionStored>[] = [
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('SelectAnswerVoteSelectionTable.input.title', { defaultValue: 'Title' }) as string,
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('SelectAnswerVoteSelectionTable.input.description', { defaultValue: 'Description' }) as string,
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ];
+
+    const filterOptions: FilterOption[] = [
+      {
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerSelectAnswerVoteSelectionTableTitleFilter',
+        attributeName: 'title',
+        label: t('SelectAnswerVoteSelectionTable.input.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: 'FilteredemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTableDefaultVoteSelectAnswerSelectAnswerVoteSelectionTableDescriptionFilter',
+        attributeName: 'description',
+        label: t('SelectAnswerVoteSelectionTable.input.description', { defaultValue: 'Description' }) as string,
+        filterType: FilterType.string,
+      },
+    ];
+
+    const sortModel: GridSortModel = [{ field: 'title', sort: null }];
+
+    const initialQueryCustomizer: SelectAnswerVoteSelectionQueryCustomizer = {
+      _mask: '{title,description}',
+      _orderBy: sortModel.length
+        ? [
+            {
+              attribute: sortModel[0].field,
+              descending: sortModel[0].sort === 'desc',
+            },
+          ]
+        : [],
+    };
+
+    const res = await openRangeDialog<SelectAnswerVoteSelectionStored, SelectAnswerVoteSelectionQueryCustomizer>({
+      id: 'PageDefinitionedemokraciaAdminAdminEdemokraciaAdminVoteDefinitionVoteSelectAnswerInputTable',
+      columns,
+      defaultSortField: sortModel[0],
+      rangeCall: async (queryCustomizer) =>
+        await adminVoteDefinitionServiceForClassImpl.getRangeForVoteSelectAnswer(
+          owner,
+          processQueryCustomizer(queryCustomizer),
+        ),
+      single: true,
+      filterOptions,
+      initialQueryCustomizer,
+    });
+
+    if (res === undefined) return;
+
     try {
       const result = await adminVoteDefinitionServiceForClassImpl.voteSelectAnswer(
         owner,
@@ -100,12 +171,18 @@ export const useAdminVoteDefinitionVoteSelectAnswerAction: AdminVoteDefinitionVo
         return;
       }
       successCallback();
-      enqueueSnackbar(title, {
-        variant: 'success',
-        ...toastConfig.success,
-      });
+      if (!silentMode) {
+        enqueueSnackbar(title, {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+      }
     } catch (error: any) {
-      handleActionError(error, undefined, owner);
+      if (errorCallback) {
+        errorCallback(error); // consider passing mapped content here eventually
+      } else {
+        handleActionError(error, undefined, owner);
+      }
     }
   };
 };

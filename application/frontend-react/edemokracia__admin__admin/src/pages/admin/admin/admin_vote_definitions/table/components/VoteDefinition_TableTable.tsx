@@ -460,7 +460,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
-      // autoCloseOnSuccess: true,
     });
   }, []);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {

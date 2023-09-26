@@ -18,6 +18,8 @@ import type {
   GridRowId,
   GridSortItem,
 } from '@mui/x-data-grid';
+import { useTrackService } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
 import { MdiIcon } from '~/components';
 import {
   AggregationInput,
@@ -27,10 +29,12 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
-import { FilterOption, FilterType } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { FilterOption, Filter } from '~/components-api';
 import { baseColumnConfig, toastConfig } from '~/config';
 import {
   fileHandling,
+  mapAllFiltersToQueryCustomizerProperties,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
@@ -57,8 +61,12 @@ import {
   _StringOperation,
 } from '~/generated/data-api';
 import { adminUserServiceForClassImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
-
 import { useLinkViewResidentDistrictAction } from '../actions';
+
+export type ResidentDistrictLinkFilterInitializer = (ownerData: AdminUserStored) => Filter[] | undefined;
+
+export const RESIDENT_DISTRICT_LINK_FILTER_INITIALIZER_INTERFACE_KEY = 'ResidentDistrictLinkFilterInitializerHook';
+export type ResidentDistrictLinkFilterInitializerHook = () => ResidentDistrictLinkFilterInitializer;
 
 export interface ResidentDistrictLinkProps {
   ownerData: AdminUserStored;
@@ -77,6 +85,12 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const { service: filterInitializerHook } = useTrackService<ResidentDistrictLinkFilterInitializerHook>(
+    `(${OBJECTCLASS}=${RESIDENT_DISTRICT_LINK_FILTER_INITIALIZER_INTERFACE_KEY})`,
+  );
+  const callFilterInitializer: ResidentDistrictLinkFilterInitializer | undefined =
+    filterInitializerHook && filterInitializerHook();
 
   const residentDistrictSortModel: GridSortModel = [{ field: 'representation', sort: null }];
 
@@ -155,6 +169,7 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
           alreadySelectedItems: ownerData.residentDistrict ? [ownerData.residentDistrict] : undefined,
           filterOptions: residentDistrictRangeFilterOptions,
           initialQueryCustomizer: residentDistrictInitialQueryCustomizer,
+          initialFilters: callFilterInitializer && callFilterInitializer(ownerData),
           editMode: editMode,
         });
 
@@ -169,6 +184,9 @@ export function ResidentDistrictLink(props: ResidentDistrictLinkProps) {
                 representation: [{ operator: _StringOperation.like, value: searchText }],
               }
             : {}),
+          ...mapAllFiltersToQueryCustomizerProperties(
+            (callFilterInitializer && callFilterInitializer(ownerData)) || [],
+          ),
           _mask: '{representation}',
           _orderBy: [{ attribute: 'representation', descending: false }],
           _seek: { limit: 10 },

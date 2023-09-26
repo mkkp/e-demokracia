@@ -269,7 +269,6 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
-      // autoCloseOnSuccess: true,
     });
   }, []);
   const isBulkRemoveAvailable: () => boolean = useCallback(() => {

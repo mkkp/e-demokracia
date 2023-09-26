@@ -2,18 +2,19 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: <actor>
-// Path expression: 'src/layout/Drawer/DrawerContent/SimpleBar.tsx'
-// Template name: actor/src/layout/Drawer/DrawerContent/SimpleBar.tsx
-// Template file: actor/src/layout/Drawer/DrawerContent/SimpleBar.tsx.hbs
+// Path expression: 'src/components/SimpleBar.tsx'
+// Template name: actor/src/components/SimpleBar.tsx
+// Template file: actor/src/components/SimpleBar.tsx.hbs
 
+import { forwardRef } from 'react';
+import type { ReactNode } from 'react';
 import { alpha, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import type { Theme } from '@mui/material';
+import type { MUIStyledCommonProps } from '@mui/system';
 import { default as SimpleBarOriginal } from 'simplebar-react';
 import type { Props as SimpleBarProps } from 'simplebar-react';
 import { BrowserView, MobileView } from 'react-device-detect';
-import type { MUIStyledCommonProps } from '@mui/system';
-import type { ReactNode } from 'react';
 
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -44,19 +45,21 @@ export const SimpleBarStyle = styled(SimpleBarOriginal)(({ theme }) => ({
   },
 }));
 
-export function SimpleBar({ children, sx, ...other }: MUIStyledCommonProps<Theme> & SimpleBarProps) {
-  return (
-    <>
-      <RootStyle>
-        <SimpleBarStyle clickOnTrack={false} sx={sx} {...other}>
-          {children as ReactNode}
-        </SimpleBarStyle>
-      </RootStyle>
-      <MobileView>
-        <Box sx={{ overflowX: 'auto', ...sx }} {...other}>
-          {children as ReactNode}
-        </Box>
-      </MobileView>
-    </>
-  );
-}
+export const SimpleBar = forwardRef<HTMLDivElement, MUIStyledCommonProps<Theme> & SimpleBarProps>(
+  ({ children, sx, ...other }: MUIStyledCommonProps<Theme> & SimpleBarProps, ref) => {
+    return (
+      <div ref={ref}>
+        <RootStyle>
+          <SimpleBarStyle clickOnTrack={false} sx={sx} {...other}>
+            {children as ReactNode}
+          </SimpleBarStyle>
+        </RootStyle>
+        <MobileView>
+          <Box sx={{ overflowX: 'auto', ...sx }} {...other}>
+            {children as ReactNode}
+          </Box>
+        </MobileView>
+      </div>
+    );
+  },
+);

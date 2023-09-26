@@ -29,7 +29,7 @@ import {
   AdminDistrictStored,
 } from '~/generated/data-api';
 import { adminCityServiceForDistrictsImpl, adminDistrictServiceForClassImpl } from '~/generated/data-axios';
-import { TableCreateDistrictsForm } from './TableCreateDistrictsForm';
+import TableCreateDistrictsForm from './TableCreateDistrictsForm';
 
 export type TableCreateDistrictsAction = () => (
   owner: JudoIdentifiable<AdminDistrict>,

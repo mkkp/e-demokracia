@@ -13,7 +13,7 @@
 import type { FC, Dispatch, SetStateAction } from 'react';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
+import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
 import { OBJECTCLASS } from '@pandino/pandino-api';
@@ -94,11 +94,34 @@ export default function AdminDebateClosedebateOutput() {
   );
   const [editMode, setEditMode] = useState<boolean>(false);
   const storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReferenceStored, value: any) => void =
-    useCallback((attributeName: keyof CloseDebateOutputVoteDefinitionReferenceStored, value: any) => {}, [data]);
+    useCallback(
+      (attributeName: keyof CloseDebateOutputVoteDefinitionReferenceStored, value: any) => {
+        const dateTypes: string[] = [];
+        const dateTimeTypes: string[] = [];
+        const timeTypes: string[] = [];
+        if (dateTypes.includes(attributeName as string)) {
+          payloadDiff[attributeName] = uiDateToServiceDate(value);
+        } else if (dateTimeTypes.includes(attributeName as string)) {
+          payloadDiff[attributeName] = value;
+        } else if (timeTypes.includes(attributeName as string)) {
+          payloadDiff[attributeName] = uiTimeToServiceTime(value);
+        } else {
+          payloadDiff[attributeName] = value;
+        }
+        setData((prevData) => ({
+          ...prevData,
+          [attributeName]: value,
+        }));
+        if (!editMode) {
+          setEditMode(true);
+        }
+      },
+      [data],
+    );
   const [validation, setValidation] = useState<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>(new Map());
 
   const queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
-    _mask: '{}',
+    _mask: '{context}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminDebateClosedebateOutputPostRefreshHook>(
@@ -181,7 +204,37 @@ export default function AdminDebateClosedebateOutput() {
             direction="column"
             alignItems="stretch"
             justifyContent="flex-start"
-          ></Grid>
+          >
+            <Grid item xs={12} sm={12}>
+              <TextField
+                required={false}
+                name="context"
+                id="TextInputedemokraciaAdminAdminEdemokraciaAdminDebateCloseDebateOutputDefaultCloseDebateOutputVoteDefinitionReferenceViewEditContext"
+                label={t('CloseDebateOutputVoteDefinitionReferenceView.context', { defaultValue: 'Context' }) as string}
+                value={data.context ?? ''}
+                className={clsx({
+                  'JUDO-viewMode': !editMode,
+                  'JUDO-required': false,
+                })}
+                disabled={isLoading}
+                error={!!validation.get('context')}
+                helperText={validation.get('context')}
+                onChange={(event) => {
+                  const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                  storeDiff('context', realValue);
+                }}
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  readOnly: false || !isFormUpdateable(),
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <MdiIcon path="format-size" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
         </Box>
       </PageContainerTransition>
     </>

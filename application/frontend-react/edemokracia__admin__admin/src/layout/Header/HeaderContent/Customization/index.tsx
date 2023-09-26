@@ -11,11 +11,10 @@ import { useTheme } from '@mui/material/styles';
 import { Box, Card, Drawer, IconButton, Stack, Typography } from '@mui/material';
 import { useConfig } from '~/hooks';
 import { ThemeMode as ThemeModeEnum } from '~/config';
-import { MdiIcon } from '~/components';
+import { MdiIcon, SimpleBar } from '~/components';
 import { ThemeMode } from './ThemeMode';
 import { ThemeWidth } from './ThemeWidth';
 import { ThemeMenuLayout } from './ThemeMenuLayout';
-import { SimpleBar } from '../../../Drawer/DrawerContent/SimpleBar';
 
 export const Customization = () => {
   const theme = useTheme();

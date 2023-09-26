@@ -96,7 +96,11 @@ export interface TableCreateSubcategoriesFormProps {
   owner: JudoIdentifiable<AdminIssueCategory>;
 }
 
-export function TableCreateSubcategoriesForm({ successCallback, cancel, owner }: TableCreateSubcategoriesFormProps) {
+export default function TableCreateSubcategoriesForm({
+  successCallback,
+  cancel,
+  owner,
+}: TableCreateSubcategoriesFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

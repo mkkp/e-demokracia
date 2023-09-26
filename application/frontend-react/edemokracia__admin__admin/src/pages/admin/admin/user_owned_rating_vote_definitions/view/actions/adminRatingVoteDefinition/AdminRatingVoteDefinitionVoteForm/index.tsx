@@ -93,7 +93,7 @@ export interface AdminRatingVoteDefinitionVoteFormProps {
   owner: AdminRatingVoteDefinitionStored;
 }
 
-export function AdminRatingVoteDefinitionVoteForm({
+export default function AdminRatingVoteDefinitionVoteForm({
   successCallback,
   cancel,
   owner,

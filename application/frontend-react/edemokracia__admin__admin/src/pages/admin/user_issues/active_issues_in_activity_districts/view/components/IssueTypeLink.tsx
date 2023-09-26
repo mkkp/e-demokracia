@@ -18,6 +18,8 @@ import type {
   GridRowId,
   GridSortItem,
 } from '@mui/x-data-grid';
+import { useTrackService } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
 import { MdiIcon } from '~/components';
 import {
   AggregationInput,
@@ -27,10 +29,12 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
-import { FilterOption, FilterType } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { FilterOption, Filter } from '~/components-api';
 import { baseColumnConfig, toastConfig } from '~/config';
 import {
   fileHandling,
+  mapAllFiltersToQueryCustomizerProperties,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
@@ -78,8 +82,12 @@ import {
   _StringOperation,
 } from '~/generated/data-api';
 import { adminIssueServiceForClassImpl, adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
-
 import { useLinkViewIssueTypeAction } from '../actions';
+
+export type IssueTypeLinkFilterInitializer = (ownerData: AdminIssueStored) => Filter[] | undefined;
+
+export const ISSUE_TYPE_LINK_FILTER_INITIALIZER_INTERFACE_KEY = 'IssueTypeLinkFilterInitializerHook';
+export type IssueTypeLinkFilterInitializerHook = () => IssueTypeLinkFilterInitializer;
 
 export interface IssueTypeLinkProps {
   ownerData: AdminIssueStored;
@@ -98,6 +106,12 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const { service: filterInitializerHook } = useTrackService<IssueTypeLinkFilterInitializerHook>(
+    `(${OBJECTCLASS}=${ISSUE_TYPE_LINK_FILTER_INITIALIZER_INTERFACE_KEY})`,
+  );
+  const callFilterInitializer: IssueTypeLinkFilterInitializer | undefined =
+    filterInitializerHook && filterInitializerHook();
 
   const issueTypeSortModel: GridSortModel = [{ field: 'title', sort: null }];
 
@@ -191,6 +205,7 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
           alreadySelectedItems: ownerData.issueType ? [ownerData.issueType] : undefined,
           filterOptions: issueTypeRangeFilterOptions,
           initialQueryCustomizer: issueTypeInitialQueryCustomizer,
+          initialFilters: callFilterInitializer && callFilterInitializer(ownerData),
           editMode: editMode,
         });
 
@@ -205,6 +220,9 @@ export function IssueTypeLink(props: IssueTypeLinkProps) {
                 title: [{ operator: _StringOperation.like, value: searchText }],
               }
             : {}),
+          ...mapAllFiltersToQueryCustomizerProperties(
+            (callFilterInitializer && callFilterInitializer(ownerData)) || [],
+          ),
           _mask: '{title,description}',
           _orderBy: [{ attribute: 'title', descending: false }],
           _seek: { limit: 10 },

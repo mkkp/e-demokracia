@@ -10,9 +10,11 @@ import type { JudoStored } from '@judo/data-api-common';
 import { AdminUserStored } from './AdminUser';
 
 export interface AdminUserManager {
+  userName?: null | string;
+
   users?: null | Array<AdminUserStored>;
 }
-export type AdminUserManagerAttributes = '';
+export type AdminUserManagerAttributes = 'userName';
 
 export type AdminUserManagerRelations = 'users';
 

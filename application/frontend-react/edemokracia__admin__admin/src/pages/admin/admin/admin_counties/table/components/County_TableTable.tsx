@@ -206,7 +206,6 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
-      // autoCloseOnSuccess: true,
     });
   }, []);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {

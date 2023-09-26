@@ -35,6 +35,7 @@ export interface OpenRangeDialogProps<T extends JudoStored<T>, U extends QueryCu
   single?: boolean;
   alreadySelectedItems?: T[];
   initialQueryCustomizer: U;
+  initialFilters?: Filter[];
   filterOptions: FilterOption[];
   createTrigger?: () => Promise<T | undefined>;
   editMode?: boolean;

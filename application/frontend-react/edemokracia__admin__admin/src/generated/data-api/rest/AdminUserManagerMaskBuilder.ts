@@ -7,10 +7,10 @@
 // Template file: rest/mask.ts.hbs
 
 import { MaskBuilder } from './MaskBuilder';
-import { AdminUserAttributes } from '../model';
+import { AdminUserManagerAttributes, AdminUserAttributes } from '../model';
 
 export class AdminUserManagerMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<any>) {
+  constructor(protected props: Array<AdminUserManagerAttributes>) {
     super(props);
   }
 }

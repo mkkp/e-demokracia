@@ -54,7 +54,7 @@ import {
   AdminUserStored,
 } from '~/generated/data-api';
 import { adminAdminServiceForAdminUserManagerImpl, adminUserManagerServiceForClassImpl } from '~/generated/data-axios';
-import {} from './actions';
+import { useAdminUserManagerCreateUserAction } from './actions';
 
 import { PageActions } from './components/PageActions';
 import { UsersTable } from './components/UsersTable';
@@ -126,7 +126,7 @@ export default function AdminAdminAdminUserManagerView() {
   );
 
   const queryCustomizer: AdminUserManagerQueryCustomizer = {
-    _mask: '{,users{representation,userName,firstName,lastName,phone,email,isAdmin,created}}',
+    _mask: '{userName,users{representation,userName,firstName,lastName,phone,email,isAdmin,created}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminAdminUserManagerViewPostRefreshHook>(
@@ -134,6 +134,8 @@ export default function AdminAdminAdminUserManagerView() {
   );
   const postRefreshAction: AdminAdminAdminUserManagerViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
+
+  const adminUserManagerCreateUserAction = useAdminUserManagerCreateUserAction();
 
   const title: string = t('admin.UserManagerView', { defaultValue: 'UserManager View / Edit' });
 
@@ -236,7 +238,29 @@ export default function AdminAdminAdminUserManagerView() {
             justifyContent="flex-start"
           >
             <Grid item xs={12}>
-              <Grid container spacing={2}></Grid>
+              <Grid container spacing={2}>
+                <Grid item>
+                  <LoadingButton
+                    id="ButtonedemokraciaAdminAdminEdemokraciaAdminAdminAdminUserManagerViewDefaultUserManagerViewEditUserManagerActionGroupCreateUser"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="account-plus" />}
+                    loadingPosition="start"
+                    onClick={async () => {
+                      try {
+                        setIsLoading(true);
+                        await adminUserManagerCreateUserAction(() => fetchData());
+                      } finally {
+                        setIsLoading(false);
+                      }
+                    }}
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('admin.UserManagerView.userManagerActionGroup.createUser', { defaultValue: 'Create User' })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              </Grid>
             </Grid>
 
             <Grid item xs={12} sm={12}>

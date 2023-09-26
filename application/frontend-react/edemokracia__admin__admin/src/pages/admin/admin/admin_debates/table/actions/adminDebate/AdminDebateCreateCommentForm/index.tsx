@@ -90,7 +90,11 @@ export interface AdminDebateCreateCommentFormProps {
   owner: AdminDebateStored;
 }
 
-export function AdminDebateCreateCommentForm({ successCallback, cancel, owner }: AdminDebateCreateCommentFormProps) {
+export default function AdminDebateCreateCommentForm({
+  successCallback,
+  cancel,
+  owner,
+}: AdminDebateCreateCommentFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

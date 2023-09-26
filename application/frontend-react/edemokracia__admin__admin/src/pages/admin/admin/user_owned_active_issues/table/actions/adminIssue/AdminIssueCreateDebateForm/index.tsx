@@ -94,7 +94,11 @@ export interface AdminIssueCreateDebateFormProps {
   owner: AdminIssueStored;
 }
 
-export function AdminIssueCreateDebateForm({ successCallback, cancel, owner }: AdminIssueCreateDebateFormProps) {
+export default function AdminIssueCreateDebateForm({
+  successCallback,
+  cancel,
+  owner,
+}: AdminIssueCreateDebateFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

@@ -95,6 +95,8 @@
         "judo.applications.available_applications": "Választható alkalmazások",
         "judo.applications.change": "Alkalmazás váltás",
         "judo.error.error": "Hiba",
+        "judo.error.unhandled": "Ismeretlen hiba történt.",
+        "judo.error.unmappable": "Hiba történt, nem tudjuk megjeleníteni a választ.",
         "judo.error.internal-server-error": "Belső alkalmazás hiba történt",
         "judo.error.technical": "Azonosítatlan hiba történt. Kérjük lépjen kapcsolatba a rendszer üzemeltetőivel!",
         "judo.error.technical.no-response": "Nem érkezett válasz a műveletre. Kérjük lépjen kapcsolatba a rendszer üzemeltetőivel!",

@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminRatingVoteDefinitionVoteForm } from './AdminRatingVoteDefinitionVoteForm';
+import AdminRatingVoteDefinitionVoteForm from './AdminRatingVoteDefinitionVoteForm';
 import {
   AdminRatingVoteDefinition,
   AdminRatingVoteDefinitionQueryCustomizer,
@@ -61,6 +61,8 @@ export type AdminRatingVoteDefinitionVoteActionPostHandlerHook = () => AdminRati
 export type AdminRatingVoteDefinitionVoteAction = () => (
   owner: AdminRatingVoteDefinitionStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminRatingVoteDefinitionVoteAction: AdminRatingVoteDefinitionVoteAction = () => {

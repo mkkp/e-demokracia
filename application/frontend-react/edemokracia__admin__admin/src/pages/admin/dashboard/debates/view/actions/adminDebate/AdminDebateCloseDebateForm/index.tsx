@@ -98,7 +98,11 @@ export interface AdminDebateCloseDebateFormProps {
   owner: AdminDebateStored;
 }
 
-export function AdminDebateCloseDebateForm({ successCallback, cancel, owner }: AdminDebateCloseDebateFormProps) {
+export default function AdminDebateCloseDebateForm({
+  successCallback,
+  cancel,
+  owner,
+}: AdminDebateCloseDebateFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

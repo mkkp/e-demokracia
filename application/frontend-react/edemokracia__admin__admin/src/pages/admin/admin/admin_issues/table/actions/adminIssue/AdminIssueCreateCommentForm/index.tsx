@@ -90,7 +90,11 @@ export interface AdminIssueCreateCommentFormProps {
   owner: AdminIssueStored;
 }
 
-export function AdminIssueCreateCommentForm({ successCallback, cancel, owner }: AdminIssueCreateCommentFormProps) {
+export default function AdminIssueCreateCommentForm({
+  successCallback,
+  cancel,
+  owner,
+}: AdminIssueCreateCommentFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

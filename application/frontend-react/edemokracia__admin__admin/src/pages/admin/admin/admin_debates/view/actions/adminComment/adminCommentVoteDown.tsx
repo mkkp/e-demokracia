@@ -60,6 +60,8 @@ export type AdminCommentVoteDownActionPostHandlerHook = () => AdminCommentVoteDo
 export type AdminCommentVoteDownAction = () => (
   owner: AdminCommentStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminCommentVoteDownAction: AdminCommentVoteDownAction = () => {
@@ -79,7 +81,12 @@ export const useAdminCommentVoteDownAction: AdminCommentVoteDownAction = () => {
   );
   const postHandler: AdminCommentVoteDownActionPostHandler | undefined = customPostHandler && customPostHandler();
 
-  return async function adminCommentVoteDownAction(owner: AdminCommentStored, successCallback: () => void) {
+  return async function adminCommentVoteDownAction(
+    owner: AdminCommentStored,
+    successCallback: () => void,
+    errorCallback?: (error: any) => void,
+    silentMode?: boolean,
+  ) {
     try {
       const result = await adminCommentServiceForClassImpl.voteDown(owner);
       if (postHandler) {
@@ -87,12 +94,18 @@ export const useAdminCommentVoteDownAction: AdminCommentVoteDownAction = () => {
         return;
       }
       successCallback();
-      enqueueSnackbar(title, {
-        variant: 'success',
-        ...toastConfig.success,
-      });
+      if (!silentMode) {
+        enqueueSnackbar(title, {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+      }
     } catch (error: any) {
-      handleActionError(error, undefined, owner);
+      if (errorCallback) {
+        errorCallback(error); // consider passing mapped content here eventually
+      } else {
+        handleActionError(error, undefined, owner);
+      }
     }
   };
 };

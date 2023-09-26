@@ -92,7 +92,7 @@ export interface PageCreateAdminCategoriesFormProps {
   cancel: () => void;
 }
 
-export function PageCreateAdminCategoriesForm({ successCallback, cancel }: PageCreateAdminCategoriesFormProps) {
+export default function PageCreateAdminCategoriesForm({ successCallback, cancel }: PageCreateAdminCategoriesFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

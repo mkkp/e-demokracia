@@ -18,6 +18,8 @@ import type {
   GridRowId,
   GridSortItem,
 } from '@mui/x-data-grid';
+import { useTrackService } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
 import { MdiIcon } from '~/components';
 import {
   AggregationInput,
@@ -27,10 +29,12 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
-import { FilterOption, FilterType } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { FilterOption, Filter } from '~/components-api';
 import { baseColumnConfig, toastConfig } from '~/config';
 import {
   fileHandling,
+  mapAllFiltersToQueryCustomizerProperties,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
@@ -67,8 +71,12 @@ import {
   _StringOperation,
 } from '~/generated/data-api';
 import { adminDebateServiceForClassImpl, adminUserServiceForClassImpl } from '~/generated/data-axios';
-
 import { useLinkViewCreatedByAction } from '../actions';
+
+export type CreatedByLinkFilterInitializer = (ownerData: AdminDebateStored) => Filter[] | undefined;
+
+export const CREATED_BY_LINK_FILTER_INITIALIZER_INTERFACE_KEY = 'CreatedByLinkFilterInitializerHook';
+export type CreatedByLinkFilterInitializerHook = () => CreatedByLinkFilterInitializer;
 
 export interface CreatedByLinkProps {
   ownerData: AdminDebateStored;
@@ -87,6 +95,12 @@ export function CreatedByLink(props: CreatedByLinkProps) {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const { service: filterInitializerHook } = useTrackService<CreatedByLinkFilterInitializerHook>(
+    `(${OBJECTCLASS}=${CREATED_BY_LINK_FILTER_INITIALIZER_INTERFACE_KEY})`,
+  );
+  const callFilterInitializer: CreatedByLinkFilterInitializer | undefined =
+    filterInitializerHook && filterInitializerHook();
 
   const createdBySortModel: GridSortModel = [{ field: 'representation', sort: null }];
 

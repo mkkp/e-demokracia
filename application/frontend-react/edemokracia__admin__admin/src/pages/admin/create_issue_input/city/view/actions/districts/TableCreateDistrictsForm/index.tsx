@@ -90,7 +90,7 @@ export interface TableCreateDistrictsFormProps {
   owner: JudoIdentifiable<AdminCity>;
 }
 
-export function TableCreateDistrictsForm({ successCallback, cancel, owner }: TableCreateDistrictsFormProps) {
+export default function TableCreateDistrictsForm({ successCallback, cancel, owner }: TableCreateDistrictsFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

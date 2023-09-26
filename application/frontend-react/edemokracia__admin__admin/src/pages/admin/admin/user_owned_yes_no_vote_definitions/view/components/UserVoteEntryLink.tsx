@@ -18,6 +18,8 @@ import type {
   GridRowId,
   GridSortItem,
 } from '@mui/x-data-grid';
+import { useTrackService } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
 import { MdiIcon } from '~/components';
 import {
   AggregationInput,
@@ -27,10 +29,12 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
-import { FilterOption, FilterType } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { FilterOption, Filter } from '~/components-api';
 import { baseColumnConfig, toastConfig } from '~/config';
 import {
   fileHandling,
+  mapAllFiltersToQueryCustomizerProperties,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
@@ -53,8 +57,12 @@ import {
   adminYesNoVoteDefinitionServiceForClassImpl,
   adminYesNoVoteEntryServiceForClassImpl,
 } from '~/generated/data-axios';
-
 import { useLinkViewUserVoteEntryAction } from '../actions';
+
+export type UserVoteEntryLinkFilterInitializer = (ownerData: AdminYesNoVoteDefinitionStored) => Filter[] | undefined;
+
+export const USER_VOTE_ENTRY_LINK_FILTER_INITIALIZER_INTERFACE_KEY = 'UserVoteEntryLinkFilterInitializerHook';
+export type UserVoteEntryLinkFilterInitializerHook = () => UserVoteEntryLinkFilterInitializer;
 
 export interface UserVoteEntryLinkProps {
   ownerData: AdminYesNoVoteDefinitionStored;
@@ -73,6 +81,12 @@ export function UserVoteEntryLink(props: UserVoteEntryLinkProps) {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const { service: filterInitializerHook } = useTrackService<UserVoteEntryLinkFilterInitializerHook>(
+    `(${OBJECTCLASS}=${USER_VOTE_ENTRY_LINK_FILTER_INITIALIZER_INTERFACE_KEY})`,
+  );
+  const callFilterInitializer: UserVoteEntryLinkFilterInitializer | undefined =
+    filterInitializerHook && filterInitializerHook();
 
   const userVoteEntrySortModel: GridSortModel = [{ field: 'created', sort: null }];
 

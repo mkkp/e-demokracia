@@ -83,7 +83,7 @@ export interface PageCreateAdminCountiesFormProps {
   cancel: () => void;
 }
 
-export function PageCreateAdminCountiesForm({ successCallback, cancel }: PageCreateAdminCountiesFormProps) {
+export default function PageCreateAdminCountiesForm({ successCallback, cancel }: PageCreateAdminCountiesFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

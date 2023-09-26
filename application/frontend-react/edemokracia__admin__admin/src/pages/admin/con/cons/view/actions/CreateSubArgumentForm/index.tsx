@@ -92,7 +92,7 @@ export interface CreateSubArgumentFormProps {
   owner: AdminConStored;
 }
 
-export function CreateSubArgumentForm({ successCallback, cancel, owner }: CreateSubArgumentFormProps) {
+export default function CreateSubArgumentForm({ successCallback, cancel, owner }: CreateSubArgumentFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

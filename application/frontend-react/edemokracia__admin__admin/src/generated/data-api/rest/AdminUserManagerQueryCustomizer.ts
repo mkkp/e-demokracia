@@ -9,4 +9,8 @@
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { AdminUserManager } from '../model/AdminUserManager';
 
-export interface AdminUserManagerQueryCustomizer extends QueryCustomizer<AdminUserManager> {}
+import { FilterByString } from './FilterByString';
+
+export interface AdminUserManagerQueryCustomizer extends QueryCustomizer<AdminUserManager> {
+  userName?: Array<FilterByString>;
+}

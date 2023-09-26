@@ -8,8 +8,10 @@
 
 import type { JudoStored } from '@judo/data-api-common';
 
-export interface CreateDebateOutputDebateReference {}
-export type CreateDebateOutputDebateReferenceAttributes = '';
+export interface CreateDebateOutputDebateReference {
+  context?: null | string;
+}
+export type CreateDebateOutputDebateReferenceAttributes = 'context';
 
 export interface CreateDebateOutputDebateReferenceStored
   extends JudoStored<CreateDebateOutputDebateReference>,

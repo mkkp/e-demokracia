@@ -92,7 +92,7 @@ export interface CreateCommentFormProps {
   owner: AdminConStored;
 }
 
-export function CreateCommentForm({ successCallback, cancel, owner }: CreateCommentFormProps) {
+export default function CreateCommentForm({ successCallback, cancel, owner }: CreateCommentFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

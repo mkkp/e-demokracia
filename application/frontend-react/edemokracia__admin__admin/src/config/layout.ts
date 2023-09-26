@@ -7,7 +7,6 @@
 // Template file: actor/src/config/layout.ts.hbs
 
 export const DIVIDER_HEIGHT = 70;
-export const HORIZONTAL_MAX_ITEM = 6;
 export const DRAWER_WIDTH = 260;
 
 export type I18n = 'en' | 'hu'; // not used yet, will be implemented later, once we need language switching.

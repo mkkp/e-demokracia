@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { CreateCommentForm } from './CreateCommentForm';
+import CreateCommentForm from './CreateCommentForm';
 import {
   AdminPro,
   AdminProQueryCustomizer,
@@ -57,7 +57,12 @@ export type CreateCommentActionPostHandler = (ownerCallback: () => void) => Prom
 export const CREATE_COMMENT_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY = 'CreateCommentActionPostHandlerHook';
 export type CreateCommentActionPostHandlerHook = () => CreateCommentActionPostHandler;
 
-export type CreateCommentAction = () => (owner: AdminProStored, successCallback: () => void) => Promise<void>;
+export type CreateCommentAction = () => (
+  owner: AdminProStored,
+  successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
+) => Promise<void>;
 
 export const useCreateCommentAction: CreateCommentAction = () => {
   const { t } = useTranslation();

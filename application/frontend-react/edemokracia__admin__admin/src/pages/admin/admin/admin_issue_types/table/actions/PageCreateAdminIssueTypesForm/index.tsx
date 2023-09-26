@@ -88,7 +88,7 @@ export interface PageCreateAdminIssueTypesFormProps {
   cancel: () => void;
 }
 
-export function PageCreateAdminIssueTypesForm({ successCallback, cancel }: PageCreateAdminIssueTypesFormProps) {
+export default function PageCreateAdminIssueTypesForm({ successCallback, cancel }: PageCreateAdminIssueTypesFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

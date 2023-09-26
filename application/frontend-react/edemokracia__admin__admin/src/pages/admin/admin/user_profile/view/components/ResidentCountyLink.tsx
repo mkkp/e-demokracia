@@ -18,6 +18,8 @@ import type {
   GridRowId,
   GridSortItem,
 } from '@mui/x-data-grid';
+import { useTrackService } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
 import { MdiIcon } from '~/components';
 import {
   AggregationInput,
@@ -27,10 +29,12 @@ import {
   TrinaryLogicCombobox,
 } from '~/components/widgets';
 import { useFilterDialog, useRangeDialog } from '~/components/dialog';
-import { FilterOption, FilterType } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { FilterOption, Filter } from '~/components-api';
 import { baseColumnConfig, toastConfig } from '~/config';
 import {
   fileHandling,
+  mapAllFiltersToQueryCustomizerProperties,
   serviceDateToUiDate,
   serviceTimeToUiTime,
   processQueryCustomizer,
@@ -55,8 +59,12 @@ import {
   _StringOperation,
 } from '~/generated/data-api';
 import { adminUserProfileServiceForClassImpl, adminCountyServiceForClassImpl } from '~/generated/data-axios';
-
 import { useLinkViewResidentCountyAction } from '../actions';
+
+export type ResidentCountyLinkFilterInitializer = (ownerData: AdminUserProfileStored) => Filter[] | undefined;
+
+export const RESIDENT_COUNTY_LINK_FILTER_INITIALIZER_INTERFACE_KEY = 'ResidentCountyLinkFilterInitializerHook';
+export type ResidentCountyLinkFilterInitializerHook = () => ResidentCountyLinkFilterInitializer;
 
 export interface ResidentCountyLinkProps {
   ownerData: AdminUserProfileStored;
@@ -75,6 +83,12 @@ export function ResidentCountyLink(props: ResidentCountyLinkProps) {
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
   const { locale: l10nLocale } = useL10N();
+
+  const { service: filterInitializerHook } = useTrackService<ResidentCountyLinkFilterInitializerHook>(
+    `(${OBJECTCLASS}=${RESIDENT_COUNTY_LINK_FILTER_INITIALIZER_INTERFACE_KEY})`,
+  );
+  const callFilterInitializer: ResidentCountyLinkFilterInitializer | undefined =
+    filterInitializerHook && filterInitializerHook();
 
   const residentCountySortModel: GridSortModel = [{ field: 'representation', sort: null }];
 

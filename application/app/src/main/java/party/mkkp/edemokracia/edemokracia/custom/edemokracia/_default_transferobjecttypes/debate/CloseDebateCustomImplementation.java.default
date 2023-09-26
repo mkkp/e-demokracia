@@ -74,7 +74,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.debate.CloseDebate.class)
 public class CloseDebateCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.debate.CloseDebate {
 
-    public party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebatevotedefinitionreference.CloseDebateVoteDefinitionReference apply(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.debate.Debate _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebateinput.CloseDebateInput input)  {
+    public party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebateoutputvotedefinitionreference.CloseDebateOutputVoteDefinitionReference apply(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.debate.Debate _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebateinput.CloseDebateInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.debate.CloseDebateExchangeFunctionsComponent");
     }
 

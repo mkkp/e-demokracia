@@ -42,7 +42,7 @@ import {
   serviceDateToUiDate,
   serviceTimeToUiTime,
 } from '~/utilities';
-import { AdminYesNoVoteDefinitionVoteForm } from './AdminYesNoVoteDefinitionVoteForm';
+import AdminYesNoVoteDefinitionVoteForm from './AdminYesNoVoteDefinitionVoteForm';
 import {
   AdminDebate,
   AdminDebateStored,
@@ -64,6 +64,8 @@ export type AdminYesNoVoteDefinitionVoteActionPostHandlerHook = () => AdminYesNo
 export type AdminYesNoVoteDefinitionVoteAction = () => (
   owner: AdminYesNoVoteDefinitionStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminYesNoVoteDefinitionVoteAction: AdminYesNoVoteDefinitionVoteAction = () => {

@@ -61,6 +61,8 @@ export type AdminSelectAnswerVoteDefinitionTakeBackVoteActionPostHandlerHook =
 export type AdminSelectAnswerVoteDefinitionTakeBackVoteAction = () => (
   owner: AdminSelectAnswerVoteDefinitionStored,
   successCallback: () => void,
+  errorCallback?: (error: any) => void,
+  silentMode?: boolean,
 ) => Promise<void>;
 
 export const useAdminSelectAnswerVoteDefinitionTakeBackVoteAction: AdminSelectAnswerVoteDefinitionTakeBackVoteAction =
@@ -88,6 +90,8 @@ export const useAdminSelectAnswerVoteDefinitionTakeBackVoteAction: AdminSelectAn
     return async function adminSelectAnswerVoteDefinitionTakeBackVoteAction(
       owner: AdminSelectAnswerVoteDefinitionStored,
       successCallback: () => void,
+      errorCallback?: (error: any) => void,
+      silentMode?: boolean,
     ) {
       try {
         const result = await adminSelectAnswerVoteDefinitionServiceForClassImpl.takeBackVote(owner);
@@ -96,12 +100,18 @@ export const useAdminSelectAnswerVoteDefinitionTakeBackVoteAction: AdminSelectAn
           return;
         }
         successCallback();
-        enqueueSnackbar(title, {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        if (!silentMode) {
+          enqueueSnackbar(title, {
+            variant: 'success',
+            ...toastConfig.success,
+          });
+        }
       } catch (error: any) {
-        handleActionError(error, undefined, owner);
+        if (errorCallback) {
+          errorCallback(error); // consider passing mapped content here eventually
+        } else {
+          handleActionError(error, undefined, owner);
+        }
       }
     };
   };

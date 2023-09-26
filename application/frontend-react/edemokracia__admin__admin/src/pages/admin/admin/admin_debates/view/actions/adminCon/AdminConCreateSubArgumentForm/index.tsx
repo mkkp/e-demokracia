@@ -94,7 +94,11 @@ export interface AdminConCreateSubArgumentFormProps {
   owner: AdminConStored;
 }
 
-export function AdminConCreateSubArgumentForm({ successCallback, cancel, owner }: AdminConCreateSubArgumentFormProps) {
+export default function AdminConCreateSubArgumentForm({
+  successCallback,
+  cancel,
+  owner,
+}: AdminConCreateSubArgumentFormProps) {
   const { t } = useTranslation();
   const { openRangeDialog } = useRangeDialog();
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();

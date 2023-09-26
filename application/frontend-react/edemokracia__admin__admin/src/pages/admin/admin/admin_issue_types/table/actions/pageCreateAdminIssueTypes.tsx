@@ -28,7 +28,7 @@ import {
   EdemokraciaVoteType,
 } from '~/generated/data-api';
 import { adminAdminServiceForAdminIssueTypesImpl, adminIssueTypeServiceForClassImpl } from '~/generated/data-axios';
-import { PageCreateAdminIssueTypesForm } from './PageCreateAdminIssueTypesForm';
+import PageCreateAdminIssueTypesForm from './PageCreateAdminIssueTypesForm';
 
 export type PageCreateAdminIssueTypesAction = () => (
   successCallback: (result: AdminIssueTypeStored) => void,
