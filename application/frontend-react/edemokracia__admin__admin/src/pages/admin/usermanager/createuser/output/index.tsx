@@ -655,7 +655,7 @@ export default function AdminAdminOperationOutput(props: AdminAdminOperationOutp
                               }) as string,
                               disabled: isLoading,
                               hidden: false,
-                              icon: 'map',
+                              icon: 'castle',
                               nestedDataKeys: ['activityCounties'],
                             },
                             {

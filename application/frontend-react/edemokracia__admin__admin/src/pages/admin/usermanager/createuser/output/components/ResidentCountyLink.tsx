@@ -137,7 +137,7 @@ export function ResidentCountyLink(props: ResidentCountyLinkProps) {
       ownerData={ownerData}
       error={!!validation.get('residentCounty')}
       helperText={validation.get('residentCounty')}
-      icon={<MdiIcon path="map" />}
+      icon={<MdiIcon path="castle" />}
       disabled={disabled}
       readOnly={readOnly}
       editMode={editMode}

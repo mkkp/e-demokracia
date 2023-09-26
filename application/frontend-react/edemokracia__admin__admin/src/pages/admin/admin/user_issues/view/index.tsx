@@ -481,7 +481,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
-                                icon: 'map',
+                                icon: 'castle',
                                 nestedDataKeys: ['activeIssuesInActivityCounties'],
                               },
                               {
@@ -665,7 +665,7 @@ export default function AdminAdminUserIssuesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
-                                icon: 'map',
+                                icon: 'castle',
                                 nestedDataKeys: ['activeIssuesInResidentCounty'],
                               },
                               {

@@ -656,7 +656,7 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
                               }) as string,
                               disabled: isLoading,
                               hidden: false,
-                              icon: 'map',
+                              icon: 'castle',
                               nestedDataKeys: ['activityCounties'],
                             },
                             {

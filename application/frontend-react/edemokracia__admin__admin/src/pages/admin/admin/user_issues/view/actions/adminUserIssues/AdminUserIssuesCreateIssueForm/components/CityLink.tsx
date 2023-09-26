@@ -178,7 +178,7 @@ export function CityLink(props: CityLinkProps) {
       ownerData={ownerData}
       error={!!validation.get('city')}
       helperText={validation.get('city')}
-      icon={<MdiIcon path="map" />}
+      icon={<MdiIcon path="city" />}
       disabled={disabled}
       readOnly={readOnly}
       editMode={editMode}

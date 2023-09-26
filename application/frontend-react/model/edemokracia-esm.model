@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230926_234809_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" version="1.0.0.20230926_235942_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -27,7 +27,7 @@
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_GgcgQIyPEe2VSOmaAz6G9Q" name="dashboardMenu" label="Dashboard" iconName="home" access="_GgaEAIyPEe2VSOmaAz6G9Q"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_hvYWQGkuEe25ONJ3V89cVA" name="AdminUsersMenu" label="Users" iconName="account" hidden="true" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_hvVS8GkuEe25ONJ3V89cVA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_vW3EUG4rEe2siJt-xjHAyw" name="AdminCategories_Menu" label="Categories" iconName="file-tree" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_vWzZ8G4rEe2siJt-xjHAyw"/>
-      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_8Do7MIXgEe2kLcMqsIbMgQ" name="AdminCountiesMenu" label="Counties" iconName="map" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_8DntEIXgEe2kLcMqsIbMgQ"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_8Do7MIXgEe2kLcMqsIbMgQ" name="AdminCountiesMenu" label="Counties" iconName="castle" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_8DntEIXgEe2kLcMqsIbMgQ"/>
       <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_oIKpIId-Ee2kLcMqsIbMgQ" name="AdminBasicDataMenuGroup" label="Basic data" iconName="toy-brick" menuGroup="_gYSocFuaEe6T042_LMmSdQ" menuItems="_vW3EUG4rEe2siJt-xjHAyw _8Do7MIXgEe2kLcMqsIbMgQ _-T8HQNu-Ee2Bgcx6em3jZg"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_iuDUYId_Ee2kLcMqsIbMgQ" name="AdminIssuesMenu" label="Issues " iconName="ticket-confirmation" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_iuCGQId_Ee2kLcMqsIbMgQ"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_-T8HQNu-Ee2Bgcx6em3jZg" name="AdminIssueTypeMenu" label="Issue Types" iconName="folder-open" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_-T3OwNu-Ee2Bgcx6em3jZg"/>
@@ -344,13 +344,13 @@
         <inherited xmi:id="_NdjkoIXyEe2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_EOggMH2kEe2LTNnGda5kaw" target="_uBoOUH2jEe2LTNnGda5kaw"/>
-      <form xmi:id="_a0aoBn2iEe2LTNnGda5kaw" name="County_Form" label="County Form" iconName="map" layout="VERTICAL">
+      <form xmi:id="_a0aoBn2iEe2LTNnGda5kaw" name="County_Form" label="County Form" iconName="castle" layout="VERTICAL">
         <components xsi:type="ui:DataField" xmi:id="_dLdM4H4bEe2j59SYy0JH0Q" name="name" label="County name" iconName="text_fields" dataFeature="_a0aoA32iEe2LTNnGda5kaw"/>
       </form>
       <table xmi:id="_a0aoB32iEe2LTNnGda5kaw" name="County_Table" label="County Table">
         <columns xsi:type="ui:DataColumn" xmi:id="_dLheUH4bEe2j59SYy0JH0Q" name="name" label="Name" iconName="text_fields" dataFeature="_a0aoA32iEe2LTNnGda5kaw"/>
       </table>
-      <view xmi:id="_a0aoCH2iEe2LTNnGda5kaw" name="County_View_Edit" label="County View / Edit" iconName="map" layout="VERTICAL" titleFrom="ATTRIBUTE" titleAttribute="_NdiWgIXyEe2kLcMqsIbMgQ" openInDialog="true" dialogSize="MD">
+      <view xmi:id="_a0aoCH2iEe2LTNnGda5kaw" name="County_View_Edit" label="County View / Edit" iconName="castle" layout="VERTICAL" titleFrom="ATTRIBUTE" titleAttribute="_NdiWgIXyEe2kLcMqsIbMgQ" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:DataField" xmi:id="_dLSNwH4bEe2j59SYy0JH0Q" name="name" label="County name" iconName="text_fields" col="12" dataFeature="_a0aoA32iEe2LTNnGda5kaw"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cK7AsIXhEe2kLcMqsIbMgQ" name="cities" label="Cities" iconName="city" col="12" row="8" relationFeature="_23Z_YH2nEe27Ga2Ojs4Fgg" targetDefinedTabular="false">
           <columns xsi:type="ui:DataColumn" xmi:id="_cK9c8IXhEe2kLcMqsIbMgQ" name="name" label="Name" iconName="text_fields" dataFeature="_a0Xks32iEe2LTNnGda5kaw"/>
@@ -389,11 +389,11 @@
           <components xsi:type="ui:DataField" xmi:id="_DenhMI1DEe2VSOmaAz6G9Q" name="title" label="Title" iconName="text_fields" dataFeature="_E2fDMIeJEe2kLcMqsIbMgQ"/>
           <components xsi:type="ui:DataField" xmi:id="_kPIZMOMfEe2Bgcx6em3jZg" name="debateCloseAt" label="Debate close at" iconName="schedule" dataFeature="_98TXcOMeEe2Bgcx6em3jZg"/>
           <components xsi:type="ui:DataField" xmi:id="_Dekd4I1DEe2VSOmaAz6G9Q" name="description" label="Description" iconName="text_fields" col="12" row="4" dataFeature="_E2dOAIeJEe2kLcMqsIbMgQ" textMultiLine="true"/>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_TXj-IdvXEe2Bgcx6em3jZg" name="county" label="County" iconName="city" relationFeature="_7lJ44NvWEe2Bgcx6em3jZg" targetDefinedTabular="false">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_TXj-IdvXEe2Bgcx6em3jZg" name="county" label="County" iconName="castle" relationFeature="_7lJ44NvWEe2Bgcx6em3jZg" targetDefinedTabular="false">
             <columns xsi:type="ui:DataColumn" xmi:id="_TXklMNvXEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_TXj-ItvXEe2Bgcx6em3jZg" name="name" label="Name" iconName="text_fields" dataFeature="_a0aoA32iEe2LTNnGda5kaw"/>
           </components>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_TXiwANvXEe2Bgcx6em3jZg" name="city" label="City" iconName="map" relationFeature="_AFpBgNvXEe2Bgcx6em3jZg" targetDefinedTabular="false">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_TXiwANvXEe2Bgcx6em3jZg" name="city" label="City" iconName="city" relationFeature="_AFpBgNvXEe2Bgcx6em3jZg" targetDefinedTabular="false">
             <columns xsi:type="ui:DataColumn" xmi:id="_TXj-INvXEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_0F3joIXxEe2kLcMqsIbMgQ"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_TXjXENvXEe2Bgcx6em3jZg" name="name" label="Name" iconName="text_fields" dataFeature="_a0Xks32iEe2LTNnGda5kaw"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_TXjXEdvXEe2Bgcx6em3jZg" name="county" label="County" iconName="text_fields" dataFeature="_XCNnMIXxEe2kLcMqsIbMgQ"/>
@@ -917,7 +917,7 @@
         </components>
         <components xsi:type="ui:TabBar" xmi:id="_hZfckId8Ee2kLcMqsIbMgQ" name="other" label="" col="12" row="11">
           <tabs xmi:id="_yCDu0NvSEe2Bgcx6em3jZg" name="area" label="Area" iconName="map" col="12">
-            <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQxkdvUEe2Bgcx6em3jZg" name="county" label="County" iconName="map" relationFeature="_286p0NvTEe2Bgcx6em3jZg" targetDefinedTabular="false">
+            <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQxkdvUEe2Bgcx6em3jZg" name="county" label="County" iconName="castle" relationFeature="_286p0NvTEe2Bgcx6em3jZg" targetDefinedTabular="false">
               <columns xsi:type="ui:DataColumn" xmi:id="_pPRYoNvUEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
             </components>
             <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQKgNvUEe2Bgcx6em3jZg" name="city" label="City" iconName="city" relationFeature="__tg8wNvTEe2Bgcx6em3jZg" targetDefinedTabular="false">
@@ -1564,7 +1564,7 @@
         </components>
         <components xsi:type="ui:Group" xmi:id="_vzaQsGk5Ee25ONJ3V89cVA" name="Areas" label="Areas" iconName="map" horizontal="CENTER" vertical="CENTER" frame="true" col="12">
           <components xsi:type="ui:Group" xmi:id="_C6EUkIXuEe2kLcMqsIbMgQ" name="Residency" col="12">
-            <components xsi:type="ui:TabularReferenceField" xmi:id="_I-xl0IXqEe2kLcMqsIbMgQ" name="residentCounty" label="Resident county" iconName="map" relationFeature="_z6WbsIXnEe2kLcMqsIbMgQ" targetDefinedTabular="false">
+            <components xsi:type="ui:TabularReferenceField" xmi:id="_I-xl0IXqEe2kLcMqsIbMgQ" name="residentCounty" label="Resident county" iconName="castle" relationFeature="_z6WbsIXnEe2kLcMqsIbMgQ" targetDefinedTabular="false">
               <columns xsi:type="ui:DataColumn" xmi:id="_gVEfEIdkEe2kLcMqsIbMgQ" name="representation" label="County" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
             </components>
             <components xsi:type="ui:TabularReferenceField" xmi:id="_I-5hoIXqEe2kLcMqsIbMgQ" name="residentCity" label="Resident city" iconName="city" relationFeature="_S-xWAIXoEe2kLcMqsIbMgQ" targetDefinedTabular="false">
@@ -1575,7 +1575,7 @@
             </components>
           </components>
           <components xsi:type="ui:TabBar" xmi:id="_grVfcIdjEe2kLcMqsIbMgQ" name="activity" col="12" row="10">
-            <tabs xmi:id="_mk-zYIdjEe2kLcMqsIbMgQ" name="tab_activity_counties" label="Activity counties" iconName="map" col="12">
+            <tabs xmi:id="_mk-zYIdjEe2kLcMqsIbMgQ" name="tab_activity_counties" label="Activity counties" iconName="castle" col="12">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_I-t7cIXqEe2kLcMqsIbMgQ" name="activityCounties" label="" iconName="" col="12" relationFeature="_uAEOkIXnEe2kLcMqsIbMgQ" targetDefinedTabular="false">
                 <columns xsi:type="ui:DataColumn" xmi:id="_cnA48IdkEe2kLcMqsIbMgQ" name="representation" label="County" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
               </components>
@@ -2060,7 +2060,7 @@
             </tabs>
             <tabs xmi:id="_ylgcVFrVEe6gN-oVBDDIOQ" name="activeIssuesByActivityArea" label="Active issues by my activity areas" iconName="map-search" col="12" row="10">
               <components xsi:type="ui:TabBar" xmi:id="_W_R1QFrXEe6gN-oVBDDIOQ" name="tabBar" col="12" row="10" orientation="VERTICAL">
-                <tabs xmi:id="_4JbF8FrXEe6gN-oVBDDIOQ" name="activeByActivityInCounty" label="County" iconName="map" col="12" row="20">
+                <tabs xmi:id="_4JbF8FrXEe6gN-oVBDDIOQ" name="activeByActivityInCounty" label="County" iconName="castle" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_7CQ7UFrXEe6gN-oVBDDIOQ" name="activeIssuesInActivityCounties" label="" iconName="" col="12" row="20" relationFeature="_aMsB4FrWEe6gN-oVBDDIOQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_jUVwUFw-Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GQdN4FrfEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
@@ -2094,7 +2094,7 @@
             </tabs>
             <tabs xmi:id="_RR4bUFrcEe6gN-oVBDDIOQ" name="activeIssuesByResidentArea" label="Active issues by my resident area" iconName="home-circle" col="12" row="20">
               <components xsi:type="ui:TabBar" xmi:id="_l86f8FrcEe6gN-oVBDDIOQ" name="tabBar" col="12" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_BZzvYFrcEe6gN-oVBDDIOQ" name="activeByResidentInCounty" label="County" iconName="map" col="12" row="20">
+                <tabs xmi:id="_BZzvYFrcEe6gN-oVBDDIOQ" name="activeByResidentInCounty" label="County" iconName="castle" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_BZzvYVrcEe6gN-oVBDDIOQ" name="activeIssuesInResidentCounty" label="" iconName="" col="12" row="20" relationFeature="_KOPO4FrbEe6gN-oVBDDIOQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_Va_wUVrdEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_cLtPIFrdEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
@@ -2310,7 +2310,7 @@
         </components>
         <components xsi:type="ui:Group" xmi:id="_fsW_oFvTEe6jm_SkPSYEYw" name="Areas" label="Areas" iconName="map" horizontal="CENTER" vertical="CENTER" frame="true" col="12">
           <components xsi:type="ui:Group" xmi:id="_fsW_oVvTEe6jm_SkPSYEYw" name="Residency" col="12">
-            <components xsi:type="ui:TabularReferenceField" xmi:id="_fsW_olvTEe6jm_SkPSYEYw" name="residentCounty" label="Resident county" iconName="map" relationFeature="_mSi7YFvREe6jm_SkPSYEYw" targetDefinedTabular="false">
+            <components xsi:type="ui:TabularReferenceField" xmi:id="_fsW_olvTEe6jm_SkPSYEYw" name="residentCounty" label="Resident county" iconName="castle" relationFeature="_mSi7YFvREe6jm_SkPSYEYw" targetDefinedTabular="false">
               <columns xsi:type="ui:DataColumn" xmi:id="_fsW_o1vTEe6jm_SkPSYEYw" name="representation" label="County" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
             </components>
             <components xsi:type="ui:TabularReferenceField" xmi:id="_fsW_pFvTEe6jm_SkPSYEYw" name="residentCity" label="Resident city" iconName="city" relationFeature="_1LRqMFvREe6jm_SkPSYEYw" targetDefinedTabular="false">
@@ -2321,7 +2321,7 @@
             </components>
           </components>
           <components xsi:type="ui:TabBar" xmi:id="_fsW_qFvTEe6jm_SkPSYEYw" name="activity" col="12" row="10">
-            <tabs xmi:id="_fsW_qVvTEe6jm_SkPSYEYw" name="tab_activity_counties" label="Activity counties" iconName="map" col="12">
+            <tabs xmi:id="_fsW_qVvTEe6jm_SkPSYEYw" name="tab_activity_counties" label="Activity counties" iconName="castle" col="12">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_fsW_qlvTEe6jm_SkPSYEYw" name="activityCounties" label="" iconName="" col="12" relationFeature="_gu_zQFvREe6jm_SkPSYEYw" targetDefinedTabular="false">
                 <columns xsi:type="ui:DataColumn" xmi:id="_fsW_q1vTEe6jm_SkPSYEYw" name="representation" label="County" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
               </components>
@@ -2393,7 +2393,7 @@
             </tabs>
             <tabs xmi:id="_GermcFyoEe6iZvXMSZbCNQ" name="ActiveDebatesByOwnerActivityArea" label="Active debates bv my activity areas" iconName="map-search" col="12" row="20">
               <components xsi:type="ui:TabBar" xmi:id="_RJrwkFyoEe6iZvXMSZbCNQ" name="tabBar" col="12" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_SeZgwFyoEe6iZvXMSZbCNQ" name="ActiveDebatesByOwnerActivityAreaCountyGroup" label="County" iconName="map" col="12" row="20">
+                <tabs xmi:id="_SeZgwFyoEe6iZvXMSZbCNQ" name="ActiveDebatesByOwnerActivityAreaCountyGroup" label="County" iconName="castle" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_YfQlEFyqEe6iZvXMSZbCNQ" name="activeDebatesInActivityCounties" label="" iconName="" col="12" row="20" relationFeature="_lDONQFvsEe6WVueJTs1KBA" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_YfToYVyqEe6iZvXMSZbCNQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_YWydoFw-Ee6gN-oVBDDIOQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_YfRzMlyqEe6iZvXMSZbCNQ" name="title" label="Title" iconName="format-size" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>
@@ -2427,7 +2427,7 @@
             </tabs>
             <tabs xmi:id="_mA0-kFyoEe6iZvXMSZbCNQ" name="ActiveDebatesByOwnerResidentAreaGroup" label="Active debates by my resident area" iconName="home-circle" col="12" row="20">
               <components xsi:type="ui:TabBar" xmi:id="_vOXsMFyoEe6iZvXMSZbCNQ" name="tabBar" col="12" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_xv3YkFyoEe6iZvXMSZbCNQ" name="ActiveDebatesByOwnerResidentAreaCountyGroup" label="County" iconName="map" col="12" row="20">
+                <tabs xmi:id="_xv3YkFyoEe6iZvXMSZbCNQ" name="ActiveDebatesByOwnerResidentAreaCountyGroup" label="County" iconName="castle" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_WPt5cFysEe6iZvXMSZbCNQ" name="activeDebatesInResidentCounty" label="" iconName="" col="12" row="20" relationFeature="_ul42UFvsEe6WVueJTs1KBA" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_WPwVsVysEe6iZvXMSZbCNQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_YWydoFw-Ee6gN-oVBDDIOQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_WPvHkFysEe6iZvXMSZbCNQ" name="title" label="Title" iconName="format-size" dataFeature="_7FWIEG5UEe2wNaja8kBvcQ"/>

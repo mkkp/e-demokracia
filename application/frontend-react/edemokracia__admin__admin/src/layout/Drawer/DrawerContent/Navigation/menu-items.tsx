@@ -57,7 +57,7 @@ export const menus: NavItemType[] = [
             id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupAdministrativeMenuGroupEdemokraciaAdminAdminMenuItemGroupAdminBasicDataMenuGroupEdemokraciaAdminAdminAdminCountiesNavigationItem',
             type: 'item',
             url: 'admin/admin/admin_counties/table',
-            icon: 'map',
+            icon: 'castle',
             title: 'Counties',
             children: [],
           },

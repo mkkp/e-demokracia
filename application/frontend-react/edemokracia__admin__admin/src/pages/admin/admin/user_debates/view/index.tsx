@@ -422,7 +422,7 @@ export default function AdminAdminUserDebatesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
-                                icon: 'map',
+                                icon: 'castle',
                                 nestedDataKeys: ['activeDebatesInActivityCounties'],
                               },
                               {
@@ -606,7 +606,7 @@ export default function AdminAdminUserDebatesView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
-                                icon: 'map',
+                                icon: 'castle',
                                 nestedDataKeys: ['activeDebatesInResidentCounty'],
                               },
                               {
