@@ -3492,7 +3492,7 @@ src/config/general.ts,96ffa327cde6ed0d60e31c9b9952bb4b
 src/config/index.ts,a64dfab3ae1c5ecd6f63c5385db70a14
 src/config/layout.ts,c3491c8542300d34e7077f2b4585ed40
 src/config/table.ts,290083e29eca234a508fecd16dea48e0
-src/custom/application-customizer.tsx,2138a747888805e314a0d2bebd070df3
+src/custom/application-customizer.tsx,8f8acba2b824c55d46f8ff3e2641ae37
 src/custom/custom-element-types.ts,8e3a3daa2f0e6fffc66fa75db2c3c8c6
 src/custom/index.tsx,143c111448792e9793f22980413a4b47
 src/custom/interfaces.ts,d78c9a876239cca27dbc138511935fca

@@ -2,7 +2,7 @@ import type { BundleContext } from '@pandino/pandino-api';
 import {
   ADMIN_USER_ISSUES_CREATE_ISSUE_ACTION_POST_HANDLER_HOOK_INTERFACE_KEY,
   AdminUserIssuesCreateIssueActionPostHandlerHook,
-} from '~/pages/admin/admin/user_issues/view/actions/adminUserIssues/adminUserIssuesCreateIssue';
+} from '~/pages/admin/admin/user_issues/view/actions';
 
 import { useJudoNavigation } from '~/components';
 import { processQueryCustomizer } from '~/utilities';

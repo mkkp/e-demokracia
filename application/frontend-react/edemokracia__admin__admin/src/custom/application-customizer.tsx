@@ -10,17 +10,15 @@
 import type { BundleContext } from '@pandino/pandino-api';
 import { ApplicationCustomizer } from './interfaces';
 
+import { registerCustomRowViewAdminVoteDefinitionsAction } from './customAdminAdminAdminVoteDefinitionRowViewVoteDefinitionsAction';
 import { registerCustomAdminUserIssuesCreateIssueActionPostHandlerHook } from './customAdminAdminUserIssuesCreateIssueActionPostHandlerHook';
-// import { registerCustomAdminDashboardCreateIssueActionPostHandlerHook } from './customAdminDashboardCreateIssueActionPostHandlerHook';
-// import { registerCustomAdminDebateCloseDebateActionPostHandlerHook } from './customAdminDebateCloseDebateActionPostHandlerHook';
-// import { registerCustomRowViewVoteDefinitionsAction } from './customAdminVoteDefinitionRowViewVoteDefinitionsAction';
+import { registerCustomAdminDebateCloseDebateActionPostHandlerHook } from './customAdminAdminDebateCloseDebateActionPostHandlerHook';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
     // register your implementations here
+    registerCustomRowViewAdminVoteDefinitionsAction(context);
     registerCustomAdminUserIssuesCreateIssueActionPostHandlerHook(context);
-    //    registerCustomAdminDashboardCreateIssueActionPostHandlerHook(context);
-    //    registerCustomAdminDebateCloseDebateActionPostHandlerHook(context);
-    //    registerCustomRowViewVoteDefinitionsAction(context);
+    registerCustomAdminDebateCloseDebateActionPostHandlerHook(context);
   }
 }
