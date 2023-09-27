@@ -10,6 +10,7 @@
 import type { BundleContext } from '@pandino/pandino-api';
 import { ApplicationCustomizer } from './interfaces';
 
+import { registerCustomAdminUserIssuesCreateIssueActionPostHandlerHook } from './customAdminAdminUserIssuesCreateIssueActionPostHandlerHook';
 // import { registerCustomAdminDashboardCreateIssueActionPostHandlerHook } from './customAdminDashboardCreateIssueActionPostHandlerHook';
 // import { registerCustomAdminDebateCloseDebateActionPostHandlerHook } from './customAdminDebateCloseDebateActionPostHandlerHook';
 // import { registerCustomRowViewVoteDefinitionsAction } from './customAdminVoteDefinitionRowViewVoteDefinitionsAction';
@@ -17,6 +18,7 @@ import { ApplicationCustomizer } from './interfaces';
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
     // register your implementations here
+    registerCustomAdminUserIssuesCreateIssueActionPostHandlerHook(context);
     //    registerCustomAdminDashboardCreateIssueActionPostHandlerHook(context);
     //    registerCustomAdminDebateCloseDebateActionPostHandlerHook(context);
     //    registerCustomRowViewVoteDefinitionsAction(context);
