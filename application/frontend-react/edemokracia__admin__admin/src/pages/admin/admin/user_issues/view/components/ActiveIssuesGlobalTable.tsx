@@ -239,7 +239,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesGlobal.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -299,7 +299,7 @@ export const ActiveIssuesGlobalTable = forwardRef<RefreshableTable, ActiveIssues
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesGlobal.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

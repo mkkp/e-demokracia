@@ -50,6 +50,7 @@ export * from './AdminUserProfileQueryCustomizer';
 export * from './AdminUserManagerQueryCustomizer';
 export * from './AdminCreateUserInputQueryCustomizer';
 export * from './AdminUserDebatesQueryCustomizer';
+export * from './AdminUserVoteDefinitionQueryCustomizer';
 export * from './AdminAdminPrincipalUserQueryCustomizer';
 
 export * from './AdminUserMaskBuilder';
@@ -96,6 +97,7 @@ export * from './AdminUserProfileMaskBuilder';
 export * from './AdminUserManagerMaskBuilder';
 export * from './AdminCreateUserInputMaskBuilder';
 export * from './AdminUserDebatesMaskBuilder';
+export * from './AdminUserVoteDefinitionMaskBuilder';
 export * from './AdminAdminPrincipalUserMaskBuilder';
 
 export * from './FilterByString';

@@ -283,7 +283,7 @@ export const ActiveIssuesInResidentCityTable = forwardRef<RefreshableTable, Acti
         attributeName: 'status',
         label: t('admin.UserIssuesView.activeIssuesInResidentCity.status', { defaultValue: 'Status' }) as string,
         filterType: FilterType.enumeration,
-        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
       },
     ];
 
@@ -362,7 +362,7 @@ export const ActiveIssuesInResidentCityTable = forwardRef<RefreshableTable, Acti
         attributeName: 'status',
         label: t('admin.UserIssuesView.activeIssuesInResidentCity.status', { defaultValue: 'Status' }) as string,
         filterType: FilterType.enumeration,
-        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
       },
     ];
 

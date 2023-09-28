@@ -25,6 +25,16 @@ export class AdminSelectAnswerVoteSelectionServiceForClassImpl
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
+  async getTemplate(): Promise<AdminSelectAnswerVoteSelection> {
+    const path = '/admin/SelectAnswerVoteSelection/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
   async refresh(
     target: JudoIdentifiable<AdminSelectAnswerVoteSelection>,
     queryCustomizer?: AdminSelectAnswerVoteSelectionQueryCustomizer,
@@ -33,6 +43,32 @@ export class AdminSelectAnswerVoteSelectionServiceForClassImpl
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async delete(target: JudoIdentifiable<AdminSelectAnswerVoteSelection>): Promise<void> {
+    const path = '/admin/SelectAnswerVoteSelection/~delete';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async update(target: Partial<AdminSelectAnswerVoteSelectionStored>): Promise<AdminSelectAnswerVoteSelectionStored> {
+    const path = '/admin/SelectAnswerVoteSelection/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
     });
 

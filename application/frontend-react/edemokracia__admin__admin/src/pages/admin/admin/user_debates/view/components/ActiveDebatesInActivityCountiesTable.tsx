@@ -266,7 +266,7 @@ export const ActiveDebatesInActivityCountiesTable = forwardRef<
       attributeName: 'status',
       label: t('admin.UserDebatesView.activeDebatesInActivityCounties.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -337,7 +337,7 @@ export const ActiveDebatesInActivityCountiesTable = forwardRef<
       attributeName: 'status',
       label: t('admin.UserDebatesView.activeDebatesInActivityCounties.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

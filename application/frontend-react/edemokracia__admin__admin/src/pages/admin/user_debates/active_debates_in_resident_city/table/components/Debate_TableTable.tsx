@@ -246,7 +246,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
       attributeName: 'status',
       label: t('admin.DebateTable.activeDebatesInResidentCity.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
@@ -311,7 +311,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
       attributeName: 'status',
       label: t('admin.DebateTable.activeDebatesInResidentCity.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {

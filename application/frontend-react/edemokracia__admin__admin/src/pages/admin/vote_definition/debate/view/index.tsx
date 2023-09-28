@@ -448,6 +448,12 @@ export default function AdminVoteDefinitionDebateView() {
                             >
                               {t('enumerations.EdemokraciaDebateStatus.CLOSED', { defaultValue: 'CLOSED' })}
                             </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaDebateStatusARCHIVED"
+                              value={'ARCHIVED'}
+                            >
+                              {t('enumerations.EdemokraciaDebateStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
+                            </MenuItem>
                           </TextField>
                         </Grid>
 

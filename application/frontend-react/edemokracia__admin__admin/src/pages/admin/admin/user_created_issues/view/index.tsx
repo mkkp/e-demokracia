@@ -578,6 +578,12 @@ export default function AdminAdminUserCreatedIssuesView() {
                             >
                               {t('enumerations.EdemokraciaIssueStatus.CLOSED', { defaultValue: 'CLOSED' })}
                             </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaIssueStatusARCHIVED"
+                              value={'ARCHIVED'}
+                            >
+                              {t('enumerations.EdemokraciaIssueStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
+                            </MenuItem>
                           </TextField>
                         </Grid>
 

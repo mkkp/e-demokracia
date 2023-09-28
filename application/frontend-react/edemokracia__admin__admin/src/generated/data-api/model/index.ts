@@ -61,6 +61,7 @@ export * from './AdminUserDebates';
 export * from './AdminUserIssues';
 export * from './AdminUserManager';
 export * from './AdminUserProfile';
+export * from './AdminUserVoteDefinition';
 export * from './AdminVoteDefinition';
 export * from './AdminVoteEntry';
 export * from './AdminYesNoAbstainVoteDefinition';

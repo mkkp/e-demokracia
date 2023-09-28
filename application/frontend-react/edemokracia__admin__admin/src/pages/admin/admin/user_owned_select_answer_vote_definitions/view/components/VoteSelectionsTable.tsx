@@ -68,7 +68,12 @@ import {
   adminSelectAnswerVoteDefinitionServiceForClassImpl,
   adminSelectAnswerVoteSelectionServiceForClassImpl,
 } from '~/generated/data-axios';
-import { usePageRefreshUserOwnedSelectAnswerVoteDefinitionsAction, useRowViewVoteSelectionsAction } from '../actions';
+import {
+  usePageRefreshUserOwnedSelectAnswerVoteDefinitionsAction,
+  useRowDeleteVoteSelectionsAction,
+  useRowViewVoteSelectionsAction,
+  useTableCreateVoteSelectionsAction,
+} from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
@@ -175,9 +180,20 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
 
   const pageRefreshUserOwnedSelectAnswerVoteDefinitionsAction =
     usePageRefreshUserOwnedSelectAnswerVoteDefinitionsAction();
+  const rowDeleteVoteSelectionsAction = useRowDeleteVoteSelectionsAction();
   const rowViewVoteSelectionsAction = useRowViewVoteSelectionsAction();
+  const tableCreateVoteSelectionsAction = useTableCreateVoteSelectionsAction();
 
-  const voteSelectionsRowActions: TableRowAction<AdminSelectAnswerVoteSelectionStored>[] = [];
+  const voteSelectionsRowActions: TableRowAction<AdminSelectAnswerVoteSelectionStored>[] = [
+    {
+      id: 'DeleteActionedemokraciaAdminAdminEdemokraciaAdminAdminUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionVoteSelectionsRowDelete',
+      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
+      icon: <MdiIcon path="delete_forever" />,
+      action: async (row: AdminSelectAnswerVoteSelectionStored) =>
+        rowDeleteVoteSelectionsAction(ownerData, row, () => fetchOwnerData()),
+      disabled: (row: AdminSelectAnswerVoteSelectionStored) => editMode || !row.__deleteable,
+    },
+  ];
 
   const filterOptions: FilterOption[] = [
     {
@@ -209,6 +225,27 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
       setItemStringified(filtersKey, newFilters);
     }
   };
+
+  const bulkDeleteSelected = useCallback(() => {
+    openCRUDDialog<AdminSelectAnswerVoteSelectionStored>({
+      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
+      itemTitleFn: (item) => item.description!,
+      selectedItems: selectedRows.current,
+      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+        await rowDeleteVoteSelectionsAction(ownerData, item, successHandler, errorHandler, true);
+      },
+      onClose: (needsRefresh) => {
+        if (needsRefresh) {
+          fetchOwnerData();
+          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
+        }
+      },
+    });
+  }, []);
+  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
+    // every row has the same `__deleteable` flag
+    return !!selectionModel.length && true && isFormUpdateable() && !false && !!data[0]?.__deleteable;
+  }, [ownerData, data, selectionModel]);
 
   useEffect(() => {
     if (ownerData?.__identifier) {
@@ -284,6 +321,19 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
+                id="CreateActionedemokraciaAdminAdminEdemokraciaAdminAdminUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionVoteSelectionsTableCreate"
+                startIcon={<MdiIcon path="file_document_plus" />}
+                variant="text"
+                onClick={() =>
+                  tableCreateVoteSelectionsAction(ownerData, () => {
+                    fetchOwnerData();
+                  })
+                }
+                disabled={editMode || isOwnerLoading || false || !isFormUpdateable()}
+              >
+                {t('judo.pages.table.create', { defaultValue: 'Create' })}
+              </Button>
+              <Button
                 id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditVoteEntryBaseVirtualVoteSelectionsLabelWrapperVoteSelections-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
@@ -299,6 +349,16 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
+              {isBulkDeleteAvailable() ? (
+                <Button
+                  disabled={isOwnerLoading || editMode}
+                  variant="text"
+                  startIcon={<MdiIcon path="delete-forever" />}
+                  onClick={bulkDeleteSelected}
+                >
+                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
+                </Button>
+              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

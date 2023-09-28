@@ -334,7 +334,7 @@ export const FavoriteIssuesTable = forwardRef<RefreshableTable, FavoriteIssuesTa
       attributeName: 'status',
       label: t('admin.DashboardView.favoriteIssues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -428,7 +428,7 @@ export const FavoriteIssuesTable = forwardRef<RefreshableTable, FavoriteIssuesTa
       attributeName: 'status',
       label: t('admin.DashboardView.favoriteIssues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

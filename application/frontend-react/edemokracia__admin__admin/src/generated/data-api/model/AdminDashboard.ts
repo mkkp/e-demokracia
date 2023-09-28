@@ -16,7 +16,7 @@ export interface AdminDashboard {
 
   issuesOwned?: null | Array<AdminIssueStored>;
   ownedDebates?: null | Array<AdminDebateStored>;
-  voteEntries?: null | Array<AdminVoteEntryStored>;
+  userVoteEntries?: null | Array<AdminVoteEntryStored>;
   favoriteDebates?: null | Array<AdminDebateStored>;
   favoriteIssues?: null | Array<AdminIssueStored>;
 }
@@ -25,7 +25,7 @@ export type AdminDashboardAttributes = 'welcome';
 export type AdminDashboardRelations =
   | 'issuesOwned'
   | 'ownedDebates'
-  | 'voteEntries'
+  | 'userVoteEntries'
   | 'favoriteDebates'
   | 'favoriteIssues';
 

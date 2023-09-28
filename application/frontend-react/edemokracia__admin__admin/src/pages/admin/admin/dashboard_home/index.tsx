@@ -137,7 +137,7 @@ export default function AdminAdminDashboardHomeDashboard() {
 
   const queryCustomizer: AdminDashboardQueryCustomizer = {
     _mask:
-      '{welcome,issuesOwned{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},favoriteIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},ownedDebates{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite},favoriteDebates{title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite},voteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
+      '{welcome,issuesOwned{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},favoriteIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite},ownedDebates{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite},favoriteDebates{title,closeAt,status,issueTitle,isNotClosed,isFavorite,isNotFavorite},userVoteEntries{created,issueTitle,debateTitle,voteTitle,voteStatus}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminAdminDashboardHomeDashboardPostRefreshHook>(
@@ -286,15 +286,15 @@ export default function AdminAdminDashboardHomeDashboard() {
                     nestedDataKeys: ['favoriteDebates', 'ownedDebates'],
                   },
                   {
-                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotes',
-                    name: 'edemokracia.admin.Admin.dashboardHome.Dashboard.votes',
-                    label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.votes', {
-                      defaultValue: 'Votes',
+                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCast',
+                    name: 'edemokracia.admin.Admin.dashboardHome.Dashboard.votesCast',
+                    label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.votesCast', {
+                      defaultValue: 'Votes Cast',
                     }) as string,
                     disabled: isLoading,
                     hidden: false,
-                    icon: 'vote',
-                    nestedDataKeys: ['voteEntries'],
+                    icon: 'vote-outline',
+                    nestedDataKeys: ['userVoteEntries'],
                   },
                 ]}
               >
@@ -560,7 +560,7 @@ export default function AdminAdminDashboardHomeDashboard() {
 
                 <Grid item xs={12} sm={12}>
                   <Grid
-                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotes"
+                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCast"
                     container
                     direction="row"
                     alignItems="flex-start"
@@ -569,7 +569,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                   >
                     <Grid item xs={12} sm={12}>
                       <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapper"
+                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapper"
                         container
                         direction="column"
                         alignItems="stretch"
@@ -578,7 +578,7 @@ export default function AdminAdminDashboardHomeDashboard() {
                       >
                         <Grid item xs={12} sm={12}>
                           <Grid
-                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntries"
+                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntries"
                             container
                             direction="column"
                             alignItems="stretch"

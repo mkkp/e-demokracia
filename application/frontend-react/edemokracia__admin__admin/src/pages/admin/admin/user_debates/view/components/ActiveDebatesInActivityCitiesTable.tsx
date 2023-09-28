@@ -286,7 +286,7 @@ export const ActiveDebatesInActivityCitiesTable = forwardRef<RefreshableTable, A
         attributeName: 'status',
         label: t('admin.UserDebatesView.activeDebatesInActivityCities.status', { defaultValue: 'Status' }) as string,
         filterType: FilterType.enumeration,
-        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
       },
     ];
 
@@ -367,7 +367,7 @@ export const ActiveDebatesInActivityCitiesTable = forwardRef<RefreshableTable, A
         attributeName: 'status',
         label: t('admin.UserDebatesView.activeDebatesInActivityCities.status', { defaultValue: 'Status' }) as string,
         filterType: FilterType.enumeration,
-        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
       },
     ];
 

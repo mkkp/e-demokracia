@@ -411,6 +411,12 @@ export default function AdminAdminUserOwnedYesNoVoteDefinitionsView() {
                             >
                               {t('enumerations.EdemokraciaVoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
                             </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusARCHIVED"
+                              value={'ARCHIVED'}
+                            >
+                              {t('enumerations.EdemokraciaVoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
+                            </MenuItem>
                           </TextField>
                         </Grid>
 

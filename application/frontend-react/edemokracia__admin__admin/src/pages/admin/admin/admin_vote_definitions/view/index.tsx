@@ -50,6 +50,7 @@ import {
   AdminVoteDefinition,
   AdminVoteDefinitionQueryCustomizer,
   AdminVoteDefinitionStored,
+  EdemokraciaIssueScope,
   EdemokraciaVoteStatus,
   EdemokraciaVoteType,
 } from '~/generated/data-api';
@@ -408,6 +409,12 @@ export default function AdminAdminAdminVoteDefinitionsView() {
                           value={'CLOSED'}
                         >
                           {t('enumerations.EdemokraciaVoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
+                        </MenuItem>
+                        <MenuItem
+                          id="EnumerationMemberedemokraciaAdminAdminEdemokraciaVoteStatusARCHIVED"
+                          value={'ARCHIVED'}
+                        >
+                          {t('enumerations.EdemokraciaVoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
                         </MenuItem>
                       </TextField>
                     </Grid>

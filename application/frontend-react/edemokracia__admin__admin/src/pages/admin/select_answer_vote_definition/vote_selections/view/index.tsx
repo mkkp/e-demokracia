@@ -77,7 +77,7 @@ export type AdminAdminViewPostRefreshHook = () => AdminAdminViewPostRefreshActio
  * Name: edemokracia::admin::SelectAnswerVoteDefinition.voteSelections#View
  * Is Access: false
  * Type: View
- * Edit Mode Available: false
+ * Edit Mode Available: true
  **/
 export default function AdminAdminView(props: AdminAdminViewProps) {
   const { entry, successCallback, cancel } = props;
@@ -91,6 +91,12 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
+  );
+  const handleUpdateError = useErrorHandler<AdminSelectAnswerVoteSelection>(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminAdminView))`,
+  );
+  const handleDeleteError = useErrorHandler<AdminSelectAnswerVoteSelection>(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Delete)(component=AdminAdminView))`,
   );
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -144,11 +150,11 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
   });
 
   const isFormUpdateable = useCallback(() => {
-    return false;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
-    return false;
+    return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
   useConfirmationBeforeChange(
@@ -186,6 +192,44 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
     } finally {
       setIsLoading(false);
       setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  }
+
+  async function submit() {
+    setIsLoading(true);
+
+    try {
+      const res = await adminSelectAnswerVoteSelectionServiceForClassImpl.update(payloadDiff);
+
+      if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+        setValidation(new Map<keyof AdminSelectAnswerVoteSelection, string>());
+        successCallback();
+        await fetchData();
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleUpdateError(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function deleteData() {
+    setIsLoading(true);
+
+    try {
+      await adminSelectAnswerVoteSelectionServiceForClassImpl.delete(data);
+
+      successCallback();
+    } catch (error) {
+      handleDeleteError(error, undefined, data);
+    } finally {
+      setIsLoading(false);
+      cancel();
     }
   }
 
@@ -298,6 +342,35 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
           </Button>
         </Grid>
 
+        {editMode && isFormUpdateable() && (
+          <Grid className="page-action" item>
+            <Button
+              id="page-action-edit-cancel"
+              variant="outlined"
+              startIcon={<MdiIcon path="cancel" />}
+              onClick={() => {
+                setEditMode(false);
+                fetchData();
+              }}
+              disabled={isLoading}
+            >
+              {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
+            </Button>
+          </Grid>
+        )}
+        {editMode && isFormUpdateable() && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              loading={isLoading}
+              loadingPosition="start"
+              id="page-action-edit-save"
+              startIcon={<MdiIcon path="content-save" />}
+              onClick={() => submit()}
+            >
+              <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
         {!editMode && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -308,6 +381,32 @@ export default function AdminAdminView(props: AdminAdminViewProps) {
               onClick={() => fetchData()}
             >
               <span>{t('judo.pages.refresh', { defaultValue: 'Refresh' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {!editMode && isFormDeleteable() && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="page-action-delete"
+              loading={isLoading}
+              loadingPosition="start"
+              startIcon={<MdiIcon path="delete" />}
+              onClick={async () => {
+                const confirmed = await openConfirmDialog(
+                  'page-delete-action',
+                  t('judo.modal.confirm.confirm-delete', {
+                    defaultValue: 'Are you sure you would like to delete the selected element?',
+                  }),
+                  t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+                );
+
+                if (confirmed) {
+                  deleteData();
+                }
+              }}
+              disabled={!data.__deleteable}
+            >
+              <span>{t('judo.pages.delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}

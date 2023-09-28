@@ -301,7 +301,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       attributeName: 'status',
       label: t('admin.VoteDefinitionTable.adminVoteDefinitions.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
@@ -384,7 +384,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       attributeName: 'status',
       label: t('admin.VoteDefinitionTable.adminVoteDefinitions.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {

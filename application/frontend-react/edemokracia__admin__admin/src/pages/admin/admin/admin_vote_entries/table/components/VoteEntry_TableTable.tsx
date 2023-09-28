@@ -253,7 +253,7 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
       attributeName: 'voteStatus',
       label: t('admin.VoteEntryTable.adminVoteEntries.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -320,7 +320,7 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
       attributeName: 'voteStatus',
       label: t('admin.VoteEntryTable.adminVoteEntries.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

@@ -352,7 +352,7 @@ export const FavoriteIssuesTable = forwardRef<RefreshableTable, FavoriteIssuesTa
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -456,7 +456,7 @@ export const FavoriteIssuesTable = forwardRef<RefreshableTable, FavoriteIssuesTa
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

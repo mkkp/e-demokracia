@@ -39,4 +39,53 @@ export class AdminSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl
 
     return response.data;
   }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async createVoteSelections(
+    owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    target: AdminSelectAnswerVoteSelection,
+  ): Promise<AdminSelectAnswerVoteSelectionStored> {
+    const path = '/admin/SelectAnswerVoteDefinition/~update/voteSelections/~create';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async deleteVoteSelections(
+    owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    target: JudoIdentifiable<AdminSelectAnswerVoteSelection>,
+  ): Promise<void> {
+    const path = '/admin/SelectAnswerVoteDefinition/~update/voteSelections/~delete';
+    await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async updateVoteSelections(
+    owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    target: Partial<AdminSelectAnswerVoteSelectionStored>,
+  ): Promise<AdminSelectAnswerVoteSelectionStored> {
+    const path = '/admin/SelectAnswerVoteDefinition/~update/voteSelections/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
 }

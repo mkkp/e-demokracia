@@ -69,8 +69,8 @@ import {
 import { adminDashboardServiceForClassImpl, adminVoteEntryServiceForClassImpl } from '~/generated/data-axios';
 import {
   usePageRefreshDashboardHomeAction,
-  useTableActionVoteEntriesAction,
-  useTableRefreshRelationVoteEntriesAction,
+  useTableActionUserVoteEntriesAction,
+  useTableRefreshRelationUserVoteEntriesAction,
 } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
@@ -104,8 +104,8 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
   const [data, setData] = useState<GridRowModel<AdminVoteEntryStored>[]>([]);
   const [rowCount, setRowCount] = useState<number>(0);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
-  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filterModel`;
-  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filters`;
+  const filterModelKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filterModel`;
+  const filtersKey = `TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntries-${ownerData.__signedIdentifier}-filters`;
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -137,13 +137,13 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
   }, [selectionModel]);
 
-  const voteEntriesSortModel: GridSortModel = [{ field: 'created', sort: null }];
+  const userVoteEntriesSortModel: GridSortModel = [{ field: 'created', sort: null }];
 
-  const voteEntriesColumns: GridColDef<AdminVoteEntryStored>[] = [
+  const userVoteEntriesColumns: GridColDef<AdminVoteEntryStored>[] = [
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.created', {
+      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -170,7 +170,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     {
       ...baseColumnConfig,
       field: 'issueTitle',
-      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.issueTitle', {
+      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.issueTitle', {
         defaultValue: 'IssueTitle',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -182,7 +182,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     {
       ...baseColumnConfig,
       field: 'debateTitle',
-      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.debateTitle', {
+      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.debateTitle', {
         defaultValue: 'DebateTitle',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -194,7 +194,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     {
       ...baseColumnConfig,
       field: 'voteTitle',
-      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.voteTitle', {
+      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.voteTitle', {
         defaultValue: 'VoteTitle',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -206,7 +206,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     {
       ...baseColumnConfig,
       field: 'voteStatus',
-      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.voteStatus', {
+      headerName: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.voteStatus', {
         defaultValue: 'VoteStatus',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -226,121 +226,121 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     },
   ];
 
-  const voteEntriesRangeFilterOptions: FilterOption[] = [
+  const userVoteEntriesRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.created', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
       attributeName: 'issueTitle',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.issueTitle', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.issueTitle', {
         defaultValue: 'IssueTitle',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
       attributeName: 'debateTitle',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.debateTitle', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.debateTitle', {
         defaultValue: 'DebateTitle',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.voteTitle', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.voteTitle', {
         defaultValue: 'VoteTitle',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
       attributeName: 'voteStatus',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.voteStatus', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.voteStatus', {
         defaultValue: 'VoteStatus',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
-  const voteEntriesInitialQueryCustomizer: AdminVoteEntryQueryCustomizer = {
+  const userVoteEntriesInitialQueryCustomizer: AdminVoteEntryQueryCustomizer = {
     _mask: '{created,issueTitle,debateTitle,voteTitle,voteStatus}',
-    _orderBy: voteEntriesSortModel.length
+    _orderBy: userVoteEntriesSortModel.length
       ? [
           {
-            attribute: voteEntriesSortModel[0].field,
-            descending: voteEntriesSortModel[0].sort === 'desc',
+            attribute: userVoteEntriesSortModel[0].field,
+            descending: userVoteEntriesSortModel[0].sort === 'desc',
           },
         ]
       : [],
   };
 
   const pageRefreshDashboardHomeAction = usePageRefreshDashboardHomeAction();
-  const tableActionVoteEntriesAction = useTableActionVoteEntriesAction(
+  const tableActionUserVoteEntriesAction = useTableActionUserVoteEntriesAction(
     setFilters,
     setPage,
     setQueryCustomizer,
     openFilterDialog,
     10,
   );
-  const tableRefreshRelationVoteEntriesAction = useTableRefreshRelationVoteEntriesAction();
+  const tableRefreshRelationUserVoteEntriesAction = useTableRefreshRelationUserVoteEntriesAction();
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesCreatedFilter',
       attributeName: 'created',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.created', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesIssueTitleFilter',
       attributeName: 'issueTitle',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.issueTitle', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.issueTitle', {
         defaultValue: 'IssueTitle',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
       attributeName: 'debateTitle',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.debateTitle', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.debateTitle', {
         defaultValue: 'DebateTitle',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.voteTitle', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.voteTitle', {
         defaultValue: 'VoteTitle',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesVotesVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
+      id: 'FilteredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesVoteStatusFilter',
       attributeName: 'voteStatus',
-      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.voteEntries.voteStatus', {
+      label: t('edemokracia.admin.Admin.dashboardHome.Dashboard.userVoteEntries.voteStatus', {
         defaultValue: 'VoteStatus',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -353,7 +353,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
 
     setQueryCustomizer((prevQueryCustomizer: AdminVoteEntryQueryCustomizer) => {
       // remove previous filter values, so that we can always start with a clean slate
-      for (const name of voteEntriesColumns.map((c) => c.field)) {
+      for (const name of userVoteEntriesColumns.map((c) => c.field)) {
         delete (prevQueryCustomizer as any)[name];
       }
       return {
@@ -411,7 +411,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
       setIsLoading(true);
 
       try {
-        const res = await adminDashboardServiceForClassImpl.getVoteEntries(
+        const res = await adminDashboardServiceForClassImpl.getUserVoteEntries(
           ownerData,
           processQueryCustomizer(queryCustomizer),
         );
@@ -452,7 +452,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
           // overflow: 'hidden',
           display: 'grid',
           border: (theme) =>
-            props.validation.has('voteEntries') ? `2px solid ${theme.palette.error.main}` : undefined,
+            props.validation.has('userVoteEntries') ? `2px solid ${theme.palette.error.main}` : undefined,
         }}
         slotProps={{
           filterPanel: {
@@ -466,9 +466,9 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
         columns={[
-          ...voteEntriesColumns,
+          ...userVoteEntriesColumns,
           ...columnsActionCalculator(
-            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntries',
+            'RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardUserVoteEntries',
             rowActions,
             t,
             { shownActions: 2 },
@@ -487,12 +487,12 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="FilterRelationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntriesTableAction"
+                id="FilterRelationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDashboardUserVoteEntriesTableAction"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() => {
-                  tableActionVoteEntriesAction(
-                    'FilterRelationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDashboardVoteEntriesTableAction-filter',
+                  tableActionUserVoteEntriesAction(
+                    'FilterRelationActionedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeDashboardEdemokraciaAdminAdminEdemokraciaAdminDashboardUserVoteEntriesTableAction-filter',
                     filterOptions,
                     filters,
                   );
@@ -516,7 +516,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
           ),
         }}
       />
-      {props.validation.has('voteEntries') && (
+      {props.validation.has('userVoteEntries') && (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -527,7 +527,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
           }}
         >
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
-          <Typography>{props.validation.get('voteEntries')}</Typography>
+          <Typography>{props.validation.get('userVoteEntries')}</Typography>
         </Box>
       )}
     </>

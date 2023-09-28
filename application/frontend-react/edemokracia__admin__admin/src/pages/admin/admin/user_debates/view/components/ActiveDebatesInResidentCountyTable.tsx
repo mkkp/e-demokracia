@@ -264,7 +264,7 @@ export const ActiveDebatesInResidentCountyTable = forwardRef<RefreshableTable, A
         attributeName: 'status',
         label: t('admin.UserDebatesView.activeDebatesInResidentCounty.status', { defaultValue: 'Status' }) as string,
         filterType: FilterType.enumeration,
-        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
       },
     ];
 
@@ -335,7 +335,7 @@ export const ActiveDebatesInResidentCountyTable = forwardRef<RefreshableTable, A
         attributeName: 'status',
         label: t('admin.UserDebatesView.activeDebatesInResidentCounty.status', { defaultValue: 'Status' }) as string,
         filterType: FilterType.enumeration,
-        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
       },
     ];
 

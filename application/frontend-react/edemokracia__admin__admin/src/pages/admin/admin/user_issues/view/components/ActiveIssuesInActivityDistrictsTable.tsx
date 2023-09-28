@@ -311,7 +311,7 @@ export const ActiveIssuesInActivityDistrictsTable = forwardRef<
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesInActivityDistricts.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -400,7 +400,7 @@ export const ActiveIssuesInActivityDistrictsTable = forwardRef<
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesInActivityDistricts.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

@@ -114,11 +114,11 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getVoteEntries(
+  async getUserVoteEntries(
     target: JudoIdentifiable<AdminDashboard>,
     queryCustomizer?: AdminVoteEntryQueryCustomizer,
   ): Promise<Array<AdminVoteEntryStored>> {
-    const path = '/admin/Dashboard/voteEntries/~list';
+    const path = '/admin/Dashboard/userVoteEntries/~list';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -131,11 +131,11 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteEntries(
+  async getRangeForUserVoteEntries(
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminVoteEntryQueryCustomizer,
   ): Promise<Array<AdminVoteEntryStored>> {
-    const path = '/admin/Dashboard/voteEntries/~range';
+    const path = '/admin/Dashboard/userVoteEntries/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

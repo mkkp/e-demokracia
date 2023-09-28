@@ -17,8 +17,14 @@ import {
  * Class Service for AdminSelectAnswerVoteSelection
  */
 export interface AdminSelectAnswerVoteSelectionServiceForClass {
+  getTemplate(): Promise<AdminSelectAnswerVoteSelection>;
+
   refresh(
     target: JudoIdentifiable<AdminSelectAnswerVoteSelection>,
     queryCustomizer?: AdminSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<AdminSelectAnswerVoteSelectionStored>;
+
+  delete(target: JudoIdentifiable<AdminSelectAnswerVoteSelection>): Promise<void>;
+
+  update(target: Partial<AdminSelectAnswerVoteSelectionStored>): Promise<AdminSelectAnswerVoteSelectionStored>;
 }

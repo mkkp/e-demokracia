@@ -309,7 +309,7 @@ export const ActiveIssuesInResidentDistrictTable = forwardRef<
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 
@@ -398,7 +398,7 @@ export const ActiveIssuesInResidentDistrictTable = forwardRef<
       attributeName: 'status',
       label: t('admin.UserIssuesView.activeIssuesInResidentDistrict.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
   ];
 

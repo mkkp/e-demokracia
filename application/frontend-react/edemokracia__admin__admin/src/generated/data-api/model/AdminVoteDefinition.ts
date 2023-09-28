@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 import { AdminDebateStored } from './AdminDebate';
 import { AdminIssueStored } from './AdminIssue';
+import { EdemokraciaIssueScope } from './EdemokraciaIssueScope';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
 import { EdemokraciaVoteType } from './EdemokraciaVoteType';
 
@@ -28,6 +29,12 @@ export interface AdminVoteDefinition {
   isNotYesNoType?: null | boolean;
   numberOfVotes?: null | number;
   voteType?: null | EdemokraciaVoteType;
+  scope?: null | EdemokraciaIssueScope;
+  districtRepresentation?: null | string;
+  countyRepresentation?: null | string;
+  isFavorite?: null | boolean;
+  cityRepresentation?: null | string;
+  isNotFavorite?: null | boolean;
 
   debate?: null | AdminDebateStored;
   issue?: null | AdminIssueStored;
@@ -47,7 +54,13 @@ export type AdminVoteDefinitionAttributes =
   | 'isNotYesNoAbstainType'
   | 'isNotYesNoType'
   | 'numberOfVotes'
-  | 'voteType';
+  | 'voteType'
+  | 'scope'
+  | 'districtRepresentation'
+  | 'countyRepresentation'
+  | 'isFavorite'
+  | 'cityRepresentation'
+  | 'isNotFavorite';
 
 export type AdminVoteDefinitionRelations = 'debate' | 'issue';
 

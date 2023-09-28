@@ -51,12 +51,12 @@ export interface AdminDashboardServiceForClass {
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>>;
 
-  getVoteEntries(
+  getUserVoteEntries(
     target: JudoIdentifiable<AdminDashboard>,
     queryCustomizer?: AdminVoteEntryQueryCustomizer,
   ): Promise<Array<AdminVoteEntryStored>>;
 
-  getRangeForVoteEntries(
+  getRangeForUserVoteEntries(
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminVoteEntryQueryCustomizer,
   ): Promise<Array<AdminVoteEntryStored>>;

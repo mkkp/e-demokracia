@@ -535,6 +535,12 @@ export default function AdminDashboardFavoriteIssuesView() {
                             >
                               {t('enumerations.EdemokraciaIssueStatus.CLOSED', { defaultValue: 'CLOSED' })}
                             </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaAdminAdminEdemokraciaIssueStatusARCHIVED"
+                              value={'ARCHIVED'}
+                            >
+                              {t('enumerations.EdemokraciaIssueStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
+                            </MenuItem>
                           </TextField>
                         </Grid>
 

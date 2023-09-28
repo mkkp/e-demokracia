@@ -208,7 +208,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
       attributeName: 'status',
       label: t('admin.IssueView.debates.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
@@ -255,7 +255,7 @@ export const DebatesTable = (props: DebatesTableProps) => {
       attributeName: 'status',
       label: t('admin.IssueView.debates.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {

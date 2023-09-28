@@ -34,6 +34,14 @@ export const menus: NavItemType[] = [
     children: [],
   },
   {
+    id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminUserVoteDefinitionsNavigationItem',
+    type: 'item',
+    url: 'admin/admin/user_vote_definitions/view/:signedIdentifier',
+    icon: 'vote',
+    title: 'Votes',
+    children: [],
+  },
+  {
     id: 'NavigationItemedemokraciaAdminAdminEdemokraciaAdminAdminNavigationControllerEdemokraciaAdminAdminMenuItemGroupAdministrativeMenuGroup',
     type: 'group',
     icon: 'texture',

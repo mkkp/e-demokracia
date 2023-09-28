@@ -249,7 +249,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       attributeName: 'status',
       label: t('admin.IssueTable.userOwnedActiveIssues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
@@ -321,7 +321,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       attributeName: 'status',
       label: t('admin.IssueTable.userOwnedActiveIssues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {

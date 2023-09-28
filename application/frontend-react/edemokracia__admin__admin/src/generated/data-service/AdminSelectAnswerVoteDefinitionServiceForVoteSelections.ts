@@ -22,4 +22,19 @@ export interface AdminSelectAnswerVoteDefinitionServiceForVoteSelections {
     owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
     queryCustomizer?: AdminSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<AdminSelectAnswerVoteSelectionStored>>;
+
+  createVoteSelections(
+    owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    target: AdminSelectAnswerVoteSelection,
+  ): Promise<AdminSelectAnswerVoteSelectionStored>;
+
+  deleteVoteSelections(
+    owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    target: JudoIdentifiable<AdminSelectAnswerVoteSelection>,
+  ): Promise<void>;
+
+  updateVoteSelections(
+    owner: JudoIdentifiable<AdminSelectAnswerVoteDefinition>,
+    target: Partial<AdminSelectAnswerVoteSelectionStored>,
+  ): Promise<AdminSelectAnswerVoteSelectionStored>;
 }

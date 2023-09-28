@@ -528,6 +528,21 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_ADMIN_USER_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY = 'AdminAdminUserVoteDefinitionsViewRoute';
+export const routeToAdminAdminUserVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/admin/user_vote_definitions/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminAdminUserVoteDefinitionsView = lazy(() => import('./pages/admin/admin/user_vote_definitions/view/index'));
+
+routes.push({
+  path: 'admin/admin/user_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_ADMIN_USER_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
+        <AdminAdminUserVoteDefinitionsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_COMMENT_VOTES_TABLE_INTERFACE_KEY = 'AdminCommentVotesTableRoute';
 export const routeToAdminCommentVotesTable = (signedIdentifier: string): string =>
   'admin/comment/votes/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -753,17 +768,17 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_ADMIN_DASHBOARD_VOTE_ENTRIES_TABLE_INTERFACE_KEY = 'AdminDashboardVoteEntriesTableRoute';
-export const routeToAdminDashboardVoteEntriesTable = (signedIdentifier: string): string =>
-  'admin/dashboard/vote_entries/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const AdminDashboardVoteEntriesTable = lazy(() => import('./pages/admin/dashboard/vote_entries/table/index'));
+export const ROUTE_ADMIN_DASHBOARD_USER_VOTE_ENTRIES_TABLE_INTERFACE_KEY = 'AdminDashboardUserVoteEntriesTableRoute';
+export const routeToAdminDashboardUserVoteEntriesTable = (signedIdentifier: string): string =>
+  'admin/dashboard/user_vote_entries/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardUserVoteEntriesTable = lazy(() => import('./pages/admin/dashboard/user_vote_entries/table/index'));
 
 routes.push({
-  path: 'admin/dashboard/vote_entries/table/:signedIdentifier',
+  path: 'admin/dashboard/user_vote_entries/table/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_VOTE_ENTRIES_TABLE_INTERFACE_KEY})`}>
-        <AdminDashboardVoteEntriesTable />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_USER_VOTE_ENTRIES_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardUserVoteEntriesTable />
       </ComponentProxy>
     </Suspense>
   ),
@@ -1845,6 +1860,398 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_MANAGER_USERS_TABLE_INTERFACE_KEY})`}>
         <AdminUserManagerUsersTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_GLOBAL_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsGlobalTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsGlobalTable = (signedIdentifier: string): string =>
+  'admin/user_vote_definition/active_vote_definitions_global/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsGlobalTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_global/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_global/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_GLOBAL_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsGlobalTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_GLOBAL_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsGlobalViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsGlobalView = (signedIdentifier: string): string =>
+  'admin/user_vote_definition/active_vote_definitions_global/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsGlobalView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_global/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_global/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_GLOBAL_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsGlobalView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesTable = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_activity_cities/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_activity_cities/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_activity_cities/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesView = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_activity_cities/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_activity_cities/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_activity_cities/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesTable = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_activity_counties/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_activity_counties/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_activity_counties/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesView = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_activity_counties/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_activity_counties/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_activity_counties/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsTable = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_activity_districts/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_activity_districts/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_activity_districts/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsView = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_activity_districts/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_activity_districts/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_activity_districts/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityTable = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_resident_city/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_resident_city/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_resident_city/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityView = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_resident_city/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_resident_city/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_resident_city/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCityView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyTable = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_resident_county/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_resident_county/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_resident_county/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyView = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_resident_county/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_resident_county/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_resident_county/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInResidentCountyView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictTableRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictTable = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_resident_district/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictTable = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_resident_district/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_resident_district/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictViewRoute';
+export const routeToAdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictView = (
+  signedIdentifier: string,
+): string =>
+  'admin/user_vote_definition/active_vote_definitions_in_resident_district/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictView = lazy(
+  () => import('./pages/admin/user_vote_definition/active_vote_definitions_in_resident_district/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/active_vote_definitions_in_resident_district/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_OWNED_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminUserVoteDefinitionOwnedVoteDefinitionsTableRoute';
+export const routeToAdminUserVoteDefinitionOwnedVoteDefinitionsTable = (signedIdentifier: string): string =>
+  'admin/user_vote_definition/owned_vote_definitions/table/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionOwnedVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/user_vote_definition/owned_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/owned_vote_definitions/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_OWNED_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionOwnedVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_USER_VOTE_DEFINITION_OWNED_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminUserVoteDefinitionOwnedVoteDefinitionsViewRoute';
+export const routeToAdminUserVoteDefinitionOwnedVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/user_vote_definition/owned_vote_definitions/view/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const AdminUserVoteDefinitionOwnedVoteDefinitionsView = lazy(
+  () => import('./pages/admin/user_vote_definition/owned_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/user_vote_definition/owned_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_USER_VOTE_DEFINITION_OWNED_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}
+      >
+        <AdminUserVoteDefinitionOwnedVoteDefinitionsView />
       </ComponentProxy>
     </Suspense>
   ),

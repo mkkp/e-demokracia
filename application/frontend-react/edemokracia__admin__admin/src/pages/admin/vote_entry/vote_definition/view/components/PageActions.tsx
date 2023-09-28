@@ -10,6 +10,7 @@ import {
   AdminVoteDefinitionStored,
   AdminVoteEntry,
   AdminVoteEntryStored,
+  EdemokraciaIssueScope,
   EdemokraciaVoteStatus,
   EdemokraciaVoteType,
 } from '~/generated/data-api';

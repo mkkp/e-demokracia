@@ -11,6 +11,7 @@ import { AdminVoteDefinition } from '../model/AdminVoteDefinition';
 
 import { FilterByBoolean } from './FilterByBoolean';
 import { FilterByInteger } from './FilterByInteger';
+import { FilterByIssueScope } from './FilterByIssueScope';
 import { FilterByString } from './FilterByString';
 import { FilterByText } from './FilterByText';
 import { FilterByTimestamp } from './FilterByTimestamp';
@@ -33,4 +34,10 @@ export interface AdminVoteDefinitionQueryCustomizer extends QueryCustomizer<Admi
   isNotYesNoType?: Array<FilterByBoolean>;
   numberOfVotes?: Array<FilterByInteger>;
   voteType?: Array<FilterByVoteType>;
+  scope?: Array<FilterByIssueScope>;
+  districtRepresentation?: Array<FilterByString>;
+  countyRepresentation?: Array<FilterByString>;
+  isFavorite?: Array<FilterByBoolean>;
+  cityRepresentation?: Array<FilterByString>;
+  isNotFavorite?: Array<FilterByBoolean>;
 }

@@ -342,7 +342,7 @@ export const OwnedDebatesTable = forwardRef<RefreshableTable, OwnedDebatesTableP
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
@@ -448,7 +448,7 @@ export const OwnedDebatesTable = forwardRef<RefreshableTable, OwnedDebatesTableP
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
