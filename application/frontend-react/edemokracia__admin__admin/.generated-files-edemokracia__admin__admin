@@ -3246,8 +3246,8 @@
 /src/pages/admin/user_vote_definition/owned_vote_definitions/view/actions/index.tsx,85d7858e083d414f26d3366330d00e72
 /src/pages/admin/user_vote_definition/owned_vote_definitions/view/actions/issue/buttonNavigateIssue.tsx,c139f9208a58dcf0e8119a66ad027672
 /src/pages/admin/user_vote_definition/owned_vote_definitions/view/actions/pageRefreshOwnedVoteDefinitions.tsx,3c9f742aabcf3fd883494eaed4ba5bf9
-/src/pages/admin/user_vote_definition/owned_vote_definitions/view/components/PageActions.tsx,982566b304900618c2d0b75f436be27c
-/src/pages/admin/user_vote_definition/owned_vote_definitions/view/index.tsx,701a4d1d039e8138e950d6884d55251d
+/src/pages/admin/user_vote_definition/owned_vote_definitions/view/components/PageActions.tsx,a83e1c048e94465b946a2237e0ac3d37
+/src/pages/admin/user_vote_definition/owned_vote_definitions/view/index.tsx,dc419132c3f709e96122ebe4193dfb2c
 /src/pages/admin/userissues/createissue/output/actions/adminComment/adminCommentVoteDown.tsx,805920163834b33679704739ac1df329
 /src/pages/admin/userissues/createissue/output/actions/adminComment/adminCommentVoteUp.tsx,75754eac34bdf4c7a1a672f989a2302a
 /src/pages/admin/userissues/createissue/output/actions/adminIssue/AdminIssueCreateCommentForm/index.tsx,b808c5e36766b6f83629f9a854c74276

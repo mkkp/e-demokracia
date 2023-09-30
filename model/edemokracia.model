@@ -2484,7 +2484,7 @@
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_gTUgsF4-Ee6vsex_cZNQbQ" name="UserVoteDefinition" createable="false" updateable="false" deleteable="false">
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_7OZ8MF5AEe6vsex_cZNQbQ" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="ownedVoteDefinitions" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_ES_tsF43Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_7OZ8MF5AEe6vsex_cZNQbQ" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="ownedVoteDefinitions" createable="false" updateable="true" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_ES_tsF43Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_7OnXkF5AEe6vsex_cZNQbQ"/>
       </relations>
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_HCMTUF5BEe6vsex_cZNQbQ" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsGlobal" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_I6ZPQF46Ee6vsex_cZNQbQ" getterExpression="">
