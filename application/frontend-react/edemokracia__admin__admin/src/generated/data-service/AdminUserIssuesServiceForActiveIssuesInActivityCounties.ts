@@ -50,6 +50,11 @@ export interface AdminUserIssuesServiceForActiveIssuesInActivityCounties {
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
 
+  updateActiveIssuesInActivityCounties(
+    owner: JudoIdentifiable<AdminUserIssues>,
+    target: Partial<AdminIssueStored>,
+  ): Promise<AdminIssueStored>;
+
   getRangeForOwner(
     owner: JudoIdentifiable<AdminUserIssues>,
     queryCustomizer: AdminUserQueryCustomizer,

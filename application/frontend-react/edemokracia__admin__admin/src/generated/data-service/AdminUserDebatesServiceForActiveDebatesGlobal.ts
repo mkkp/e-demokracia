@@ -52,4 +52,9 @@ export interface AdminUserDebatesServiceForActiveDebatesGlobal {
     owner: JudoIdentifiable<AdminUserDebates>,
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>>;
+
+  updateActiveDebatesGlobal(
+    owner: JudoIdentifiable<AdminUserDebates>,
+    target: Partial<AdminDebateStored>,
+  ): Promise<AdminDebateStored>;
 }

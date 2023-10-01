@@ -463,9 +463,17 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                 ]}
                               >
                                 <Grid item xs={12} sm={12}>
-                                  <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesGroup">
-                                    <CardContent>
+                                  <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesGroup"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
                                       <Grid
+                                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesLabelWrapper"
                                         container
                                         direction="column"
                                         alignItems="stretch"
@@ -474,44 +482,41 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                       >
                                         <Grid item xs={12} sm={12}>
                                           <Grid
-                                            id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesLabelWrapper"
+                                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesLabelWrapperActiveVoteDefinitionsInActivityCounties"
                                             container
                                             direction="column"
                                             alignItems="stretch"
                                             justifyContent="flex-start"
-                                            spacing={2}
                                           >
-                                            <Grid item xs={12} sm={12}>
-                                              <Grid
-                                                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesGroupActiveVoteDefinitionsInActivityCountiesLabelWrapperActiveVoteDefinitionsInActivityCounties"
-                                                container
-                                                direction="column"
-                                                alignItems="stretch"
-                                                justifyContent="flex-start"
-                                              >
-                                                <ActiveVoteDefinitionsInActivityCountiesTable
-                                                  isOwnerLoading={isLoading}
-                                                  validation={validation}
-                                                  fetchOwnerData={fetchData}
-                                                  refreshCounter={refreshCounter}
-                                                  ownerData={data}
-                                                  editMode={editMode}
-                                                  isFormUpdateable={isFormUpdateable}
-                                                  storeDiff={storeDiff}
-                                                />
-                                              </Grid>
-                                            </Grid>
+                                            <ActiveVoteDefinitionsInActivityCountiesTable
+                                              isOwnerLoading={isLoading}
+                                              validation={validation}
+                                              fetchOwnerData={fetchData}
+                                              refreshCounter={refreshCounter}
+                                              ownerData={data}
+                                              editMode={editMode}
+                                              isFormUpdateable={isFormUpdateable}
+                                              storeDiff={storeDiff}
+                                            />
                                           </Grid>
                                         </Grid>
                                       </Grid>
-                                    </CardContent>
-                                  </Card>
+                                    </Grid>
+                                  </Grid>
                                 </Grid>
 
                                 <Grid item xs={12} sm={12}>
-                                  <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCityGroup">
-                                    <CardContent>
+                                  <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCityGroup"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
                                       <Grid
+                                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCitiesLabelWrapper"
                                         container
                                         direction="column"
                                         alignItems="stretch"
@@ -520,44 +525,41 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                       >
                                         <Grid item xs={12} sm={12}>
                                           <Grid
-                                            id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCitiesLabelWrapper"
+                                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCitiesLabelWrapperActiveVoteDefinitionsInActivityCities"
                                             container
                                             direction="column"
                                             alignItems="stretch"
                                             justifyContent="flex-start"
-                                            spacing={2}
                                           >
-                                            <Grid item xs={12} sm={12}>
-                                              <Grid
-                                                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCityGroupActiveVoteDefinitionsInActivityCitiesLabelWrapperActiveVoteDefinitionsInActivityCities"
-                                                container
-                                                direction="column"
-                                                alignItems="stretch"
-                                                justifyContent="flex-start"
-                                              >
-                                                <ActiveVoteDefinitionsInActivityCitiesTable
-                                                  isOwnerLoading={isLoading}
-                                                  validation={validation}
-                                                  fetchOwnerData={fetchData}
-                                                  refreshCounter={refreshCounter}
-                                                  ownerData={data}
-                                                  editMode={editMode}
-                                                  isFormUpdateable={isFormUpdateable}
-                                                  storeDiff={storeDiff}
-                                                />
-                                              </Grid>
-                                            </Grid>
+                                            <ActiveVoteDefinitionsInActivityCitiesTable
+                                              isOwnerLoading={isLoading}
+                                              validation={validation}
+                                              fetchOwnerData={fetchData}
+                                              refreshCounter={refreshCounter}
+                                              ownerData={data}
+                                              editMode={editMode}
+                                              isFormUpdateable={isFormUpdateable}
+                                              storeDiff={storeDiff}
+                                            />
                                           </Grid>
                                         </Grid>
                                       </Grid>
-                                    </CardContent>
-                                  </Card>
+                                    </Grid>
+                                  </Grid>
                                 </Grid>
 
                                 <Grid item xs={12} sm={12}>
-                                  <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictGroup">
-                                    <CardContent>
+                                  <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictGroup"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
                                       <Grid
+                                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictsLabelWrapper"
                                         container
                                         direction="column"
                                         alignItems="stretch"
@@ -566,38 +568,27 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                       >
                                         <Grid item xs={12} sm={12}>
                                           <Grid
-                                            id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictsLabelWrapper"
+                                            id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictsLabelWrapperActiveVoteDefinitionsInActivityDistricts"
                                             container
                                             direction="column"
                                             alignItems="stretch"
                                             justifyContent="flex-start"
-                                            spacing={2}
                                           >
-                                            <Grid item xs={12} sm={12}>
-                                              <Grid
-                                                id="TableedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerActivityAreaActiveVoteDefinitionsByOwnerActivityAreaTabBarActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictGroupActiveVoteDefinitionsInActivityDistrictsLabelWrapperActiveVoteDefinitionsInActivityDistricts"
-                                                container
-                                                direction="column"
-                                                alignItems="stretch"
-                                                justifyContent="flex-start"
-                                              >
-                                                <ActiveVoteDefinitionsInActivityDistrictsTable
-                                                  isOwnerLoading={isLoading}
-                                                  validation={validation}
-                                                  fetchOwnerData={fetchData}
-                                                  refreshCounter={refreshCounter}
-                                                  ownerData={data}
-                                                  editMode={editMode}
-                                                  isFormUpdateable={isFormUpdateable}
-                                                  storeDiff={storeDiff}
-                                                />
-                                              </Grid>
-                                            </Grid>
+                                            <ActiveVoteDefinitionsInActivityDistrictsTable
+                                              isOwnerLoading={isLoading}
+                                              validation={validation}
+                                              fetchOwnerData={fetchData}
+                                              refreshCounter={refreshCounter}
+                                              ownerData={data}
+                                              editMode={editMode}
+                                              isFormUpdateable={isFormUpdateable}
+                                              storeDiff={storeDiff}
+                                            />
                                           </Grid>
                                         </Grid>
                                       </Grid>
-                                    </CardContent>
-                                  </Card>
+                                    </Grid>
+                                  </Grid>
                                 </Grid>
                               </ModeledTabs>
                             </Grid>
@@ -607,63 +598,63 @@ export default function AdminAdminUserVoteDefinitionsView() {
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroup"
-                        container
-                        direction="row"
-                        alignItems="flex-start"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid container item xs={12} sm={12}>
-                          <ModeledTabs
-                            id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBar"
-                            ownerData={data}
-                            validation={validation}
-                            orientation='vertical'
-                            childTabs={[
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroup',
-                                name: 'admin.UserVoteDefinitionView.ActiveDebatesInResidentCountyGroup',
-                                label: t('admin.UserVoteDefinitionView.ActiveDebatesInResidentCountyGroup', {
-                                  defaultValue: 'County',
-                                }) as string,
-                                disabled: isLoading,
-                                hidden: false,
-                                icon: 'castle',
-                                nestedDataKeys: ['activeVoteDefinitionsInResidentCounty'],
-                              },
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCityGroup',
-                                name: 'admin.UserVoteDefinitionView.ActiveDebatesInResidentCityGroup',
-                                label: t('admin.UserVoteDefinitionView.ActiveDebatesInResidentCityGroup', {
-                                  defaultValue: 'City',
-                                }) as string,
-                                disabled: isLoading,
-                                hidden: false,
-                                icon: 'city',
-                                nestedDataKeys: ['activeVoteDefinitionsInResidentCity'],
-                              },
-                              {
-                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentDistrictGroup',
-                                name: 'admin.UserVoteDefinitionView.ActiveDebatesInResidentDistrictGroup',
-                                label: t('admin.UserVoteDefinitionView.ActiveDebatesInResidentDistrictGroup', {
-                                  defaultValue: 'District',
-                                }) as string,
-                                disabled: isLoading,
-                                hidden: false,
-                                icon: 'home-city',
-                                nestedDataKeys: ['activeVoteDefinitionsInResidentDistrict'],
-                              },
-                            ]}
+                      <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroup">
+                        <CardContent>
+                          <Grid
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                            spacing={2}
                           >
-                            <Grid item xs={12} sm={12}>
-                              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveDebatesInResidentCountyGroup">
-                                <CardContent>
+                            <Grid container item xs={12} sm={12}>
+                              <ModeledTabs
+                                id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBar"
+                                ownerData={data}
+                                validation={validation}
+                                orientation='vertical'
+                                childTabs={[
+                                  {
+                                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroup',
+                                    name: 'admin.UserVoteDefinitionView.ActiveDebatesInResidentCountyGroup',
+                                    label: t('admin.UserVoteDefinitionView.ActiveDebatesInResidentCountyGroup', {
+                                      defaultValue: 'County',
+                                    }) as string,
+                                    disabled: isLoading,
+                                    hidden: false,
+                                    icon: 'castle',
+                                    nestedDataKeys: ['activeVoteDefinitionsInResidentCounty'],
+                                  },
+                                  {
+                                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCityGroup',
+                                    name: 'admin.UserVoteDefinitionView.ActiveDebatesInResidentCityGroup',
+                                    label: t('admin.UserVoteDefinitionView.ActiveDebatesInResidentCityGroup', {
+                                      defaultValue: 'City',
+                                    }) as string,
+                                    disabled: isLoading,
+                                    hidden: false,
+                                    icon: 'city',
+                                    nestedDataKeys: ['activeVoteDefinitionsInResidentCity'],
+                                  },
+                                  {
+                                    id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentDistrictGroup',
+                                    name: 'admin.UserVoteDefinitionView.ActiveDebatesInResidentDistrictGroup',
+                                    label: t('admin.UserVoteDefinitionView.ActiveDebatesInResidentDistrictGroup', {
+                                      defaultValue: 'District',
+                                    }) as string,
+                                    disabled: isLoading,
+                                    hidden: false,
+                                    icon: 'home-city',
+                                    nestedDataKeys: ['activeVoteDefinitionsInResidentDistrict'],
+                                  },
+                                ]}
+                              >
+                                <Grid item xs={12} sm={12}>
                                   <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveDebatesInResidentCountyGroup"
                                     container
-                                    direction="column"
-                                    alignItems="stretch"
+                                    direction="row"
+                                    alignItems="flex-start"
                                     justifyContent="flex-start"
                                     spacing={2}
                                   >
@@ -699,17 +690,14 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                       </Grid>
                                     </Grid>
                                   </Grid>
-                                </CardContent>
-                              </Card>
-                            </Grid>
+                                </Grid>
 
-                            <Grid item xs={12} sm={12}>
-                              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCityGroupActiveDebatesInResidentCityGroup">
-                                <CardContent>
+                                <Grid item xs={12} sm={12}>
                                   <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCityGroupActiveDebatesInResidentCityGroup"
                                     container
-                                    direction="column"
-                                    alignItems="stretch"
+                                    direction="row"
+                                    alignItems="flex-start"
                                     justifyContent="flex-start"
                                     spacing={2}
                                   >
@@ -745,17 +733,14 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                       </Grid>
                                     </Grid>
                                   </Grid>
-                                </CardContent>
-                              </Card>
-                            </Grid>
+                                </Grid>
 
-                            <Grid item xs={12} sm={12}>
-                              <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentDistrictGroupActiveDebatesInResidentDistrictGroup">
-                                <CardContent>
+                                <Grid item xs={12} sm={12}>
                                   <Grid
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminUserVoteDefinitionsViewDefaultUserVoteDefinitionViewEditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentDistrictGroupActiveDebatesInResidentDistrictGroup"
                                     container
-                                    direction="column"
-                                    alignItems="stretch"
+                                    direction="row"
+                                    alignItems="flex-start"
                                     justifyContent="flex-start"
                                     spacing={2}
                                   >
@@ -791,12 +776,12 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                       </Grid>
                                     </Grid>
                                   </Grid>
-                                </CardContent>
-                              </Card>
+                                </Grid>
+                              </ModeledTabs>
                             </Grid>
-                          </ModeledTabs>
-                        </Grid>
-                      </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
                     </Grid>
                   </ModeledTabs>
                 </Grid>

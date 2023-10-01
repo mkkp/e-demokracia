@@ -557,131 +557,128 @@ export default function AdminAdminDashboardHomeView() {
                 </Grid>
 
                 <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotes"
-                    container
-                    direction="row"
-                    alignItems="flex-start"
-                    justifyContent="flex-start"
-                    spacing={2}
-                  >
-                    <Grid container item xs={12} sm={12}>
-                      <ModeledTabs
-                        id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBar"
-                        ownerData={data}
-                        validation={validation}
-                        orientation='horizontal'
-                        childTabs={[
-                          {
-                            id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroup',
-                            name: 'admin.DashboardView.myVotesGroup',
-                            label: t('admin.DashboardView.myVotesGroup', { defaultValue: 'My votes' }) as string,
-                            disabled: isLoading,
-                            hidden: false,
-                            icon: 'account-circle',
-                            nestedDataKeys: ['ownedVoteDefinitions'],
-                          },
-                          {
-                            id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroup',
-                            name: 'admin.DashboardView.favoriteVotesGroup',
-                            label: t('admin.DashboardView.favoriteVotesGroup', {
-                              defaultValue: 'Favorite votes',
-                            }) as string,
-                            disabled: isLoading,
-                            hidden: false,
-                            icon: 'star',
-                            nestedDataKeys: ['favoriteVoteDefinitions'],
-                          },
-                        ]}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroupMyVotesGroup"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
+                  <Card id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotes">
+                    <CardContent>
+                      <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container item xs={12} sm={12}>
+                          <ModeledTabs
+                            id="TabControlleredemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBar"
+                            ownerData={data}
+                            validation={validation}
+                            orientation='vertical'
+                            childTabs={[
+                              {
+                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroup',
+                                name: 'admin.DashboardView.myVotesGroup',
+                                label: t('admin.DashboardView.myVotesGroup', { defaultValue: 'My votes' }) as string,
+                                disabled: isLoading,
+                                hidden: false,
+                                icon: 'account-circle',
+                                nestedDataKeys: ['ownedVoteDefinitions'],
+                              },
+                              {
+                                id: 'TabedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroup',
+                                name: 'admin.DashboardView.favoriteVotesGroup',
+                                label: t('admin.DashboardView.favoriteVotesGroup', {
+                                  defaultValue: 'Favorite votes',
+                                }) as string,
+                                disabled: isLoading,
+                                hidden: false,
+                                icon: 'star',
+                                nestedDataKeys: ['favoriteVoteDefinitions'],
+                              },
+                            ]}
                           >
                             <Grid item xs={12} sm={12}>
                               <Grid
-                                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroupMyVotesGroupOwnedVoteDefinitionsLabelWrapper"
+                                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroupMyVotesGroup"
                                 container
-                                direction="column"
-                                alignItems="stretch"
+                                direction="row"
+                                alignItems="flex-start"
                                 justifyContent="flex-start"
                                 spacing={2}
                               >
                                 <Grid item xs={12} sm={12}>
                                   <Grid
-                                    id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroupMyVotesGroupOwnedVoteDefinitionsLabelWrapperOwnedVoteDefinitions"
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroupMyVotesGroupOwnedVoteDefinitionsLabelWrapper"
                                     container
                                     direction="column"
                                     alignItems="stretch"
                                     justifyContent="flex-start"
+                                    spacing={2}
                                   >
-                                    <OwnedVoteDefinitionsTable
-                                      isOwnerLoading={isLoading}
-                                      validation={validation}
-                                      fetchOwnerData={fetchData}
-                                      refreshCounter={refreshCounter}
-                                      ownerData={data}
-                                      editMode={editMode}
-                                      isFormUpdateable={isFormUpdateable}
-                                      storeDiff={storeDiff}
-                                    />
+                                    <Grid item xs={12} sm={12}>
+                                      <Grid
+                                        id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarMyVotesGroupMyVotesGroupOwnedVoteDefinitionsLabelWrapperOwnedVoteDefinitions"
+                                        container
+                                        direction="column"
+                                        alignItems="stretch"
+                                        justifyContent="flex-start"
+                                      >
+                                        <OwnedVoteDefinitionsTable
+                                          isOwnerLoading={isLoading}
+                                          validation={validation}
+                                          fetchOwnerData={fetchData}
+                                          refreshCounter={refreshCounter}
+                                          ownerData={data}
+                                          editMode={editMode}
+                                          isFormUpdateable={isFormUpdateable}
+                                          storeDiff={storeDiff}
+                                        />
+                                      </Grid>
+                                    </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          </Grid>
-                        </Grid>
 
-                        <Grid item xs={12} sm={12} md={4.0}>
-                          <Grid
-                            id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroupFavoriteVotesGroup"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12}>
+                            <Grid item xs={12} sm={12} md={4.0}>
                               <Grid
-                                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroupFavoriteVotesGroupFavoriteVoteDefinitionsLabelWrapper"
+                                id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroupFavoriteVotesGroup"
                                 container
-                                direction="column"
-                                alignItems="stretch"
+                                direction="row"
+                                alignItems="flex-start"
                                 justifyContent="flex-start"
                                 spacing={2}
                               >
                                 <Grid item xs={12} sm={12}>
                                   <Grid
-                                    id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroupFavoriteVotesGroupFavoriteVoteDefinitionsLabelWrapperFavoriteVoteDefinitions"
+                                    id="FlexedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroupFavoriteVotesGroupFavoriteVoteDefinitionsLabelWrapper"
                                     container
                                     direction="column"
                                     alignItems="stretch"
                                     justifyContent="flex-start"
+                                    spacing={2}
                                   >
-                                    <FavoriteVoteDefinitionsTable
-                                      isOwnerLoading={isLoading}
-                                      validation={validation}
-                                      fetchOwnerData={fetchData}
-                                      refreshCounter={refreshCounter}
-                                      ownerData={data}
-                                      editMode={editMode}
-                                      isFormUpdateable={isFormUpdateable}
-                                      storeDiff={storeDiff}
-                                    />
+                                    <Grid item xs={12} sm={12}>
+                                      <Grid
+                                        id="TableedemokraciaAdminAdminEdemokraciaAdminAdminDashboardHomeViewDefaultDashboardViewEditSelectorVotesVotesVotesTabBarFavoriteVotesGroupFavoriteVotesGroupFavoriteVoteDefinitionsLabelWrapperFavoriteVoteDefinitions"
+                                        container
+                                        direction="column"
+                                        alignItems="stretch"
+                                        justifyContent="flex-start"
+                                      >
+                                        <FavoriteVoteDefinitionsTable
+                                          isOwnerLoading={isLoading}
+                                          validation={validation}
+                                          fetchOwnerData={fetchData}
+                                          refreshCounter={refreshCounter}
+                                          ownerData={data}
+                                          editMode={editMode}
+                                          isFormUpdateable={isFormUpdateable}
+                                          storeDiff={storeDiff}
+                                        />
+                                      </Grid>
+                                    </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          </Grid>
+                          </ModeledTabs>
                         </Grid>
-                      </ModeledTabs>
-                    </Grid>
-                  </Grid>
+                      </Grid>
+                    </CardContent>
+                  </Card>
                 </Grid>
 
                 <Grid item xs={12} sm={12}>

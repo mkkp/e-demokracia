@@ -52,4 +52,9 @@ export interface AdminUserDebatesServiceForActiveDebatesInResidentDistrict {
     owner: JudoIdentifiable<AdminUserDebates>,
     queryCustomizer?: AdminDebateQueryCustomizer,
   ): Promise<Array<AdminDebateStored>>;
+
+  updateActiveDebatesInResidentDistrict(
+    owner: JudoIdentifiable<AdminUserDebates>,
+    target: Partial<AdminDebateStored>,
+  ): Promise<AdminDebateStored>;
 }

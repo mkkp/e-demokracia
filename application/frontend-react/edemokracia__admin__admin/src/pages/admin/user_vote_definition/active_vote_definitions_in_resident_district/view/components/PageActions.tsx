@@ -22,10 +22,11 @@ export interface PageActionsProps {
   setEditMode: (mode: boolean) => void;
   isLoading: boolean;
   fetchData: () => Promise<void>;
+  submit: () => Promise<void>;
 }
 
 export function PageActions(props: PageActionsProps) {
-  const { data, editMode, setEditMode, isLoading, fetchData } = props;
+  const { data, editMode, setEditMode, isLoading, fetchData, submit } = props;
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const { openConfirmDialog } = useConfirmDialog();
@@ -34,7 +35,7 @@ export function PageActions(props: PageActionsProps) {
     usePageRefreshActiveVoteDefinitionsInResidentDistrictAction();
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
@@ -43,6 +44,35 @@ export function PageActions(props: PageActionsProps) {
 
   return (
     <>
+      {editMode && isFormUpdateable() && (
+        <Grid className="page-action" item>
+          <Button
+            id="page-action-edit-cancel"
+            variant="outlined"
+            startIcon={<MdiIcon path="cancel" />}
+            onClick={() => {
+              setEditMode(false);
+              fetchData();
+            }}
+            disabled={isLoading}
+          >
+            {t('judo.pages.cancel', { defaultValue: 'Cancel' })}
+          </Button>
+        </Grid>
+      )}
+      {editMode && isFormUpdateable() && (
+        <Grid className="page-action" item>
+          <LoadingButton
+            loading={isLoading}
+            loadingPosition="start"
+            id="page-action-edit-save"
+            startIcon={<MdiIcon path="content-save" />}
+            onClick={() => submit()}
+          >
+            <span>{t('judo.pages.save', { defaultValue: 'Save' })}</span>
+          </LoadingButton>
+        </Grid>
+      )}
       {!editMode && (
         <Grid className="page-action" item>
           <LoadingButton

@@ -48,4 +48,21 @@ export class AdminUserVoteDefinitionServiceForActiveVoteDefinitionsInActivityCit
 
     return response.data;
   }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async updateActiveVoteDefinitionsInActivityCities(
+    owner: JudoIdentifiable<AdminUserVoteDefinition>,
+    target: Partial<AdminVoteDefinitionStored>,
+  ): Promise<AdminVoteDefinitionStored> {
+    const path = '/admin/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCities/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
 }

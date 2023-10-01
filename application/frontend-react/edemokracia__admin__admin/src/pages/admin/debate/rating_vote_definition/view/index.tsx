@@ -152,7 +152,7 @@ export default function AdminDebateRatingVoteDefinitionView() {
 
   const queryCustomizer: AdminRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{title,closeAt,status,created,description,userHasNoVoteEntry,userHasVoteEntry,maxRateValue,minRateValue,userVoteEntry{created,value},voteEntries{created,createdBy,value}}',
+      '{title,closeAt,status,created,description,maxRateValue,minRateValue,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{created,value},voteEntries{created,createdBy,value}}',
   };
 
   const { service: postRefreshHook } = useTrackService<AdminDebateRatingVoteDefinitionViewPostRefreshHook>(
@@ -510,6 +510,74 @@ export default function AdminDebateRatingVoteDefinitionView() {
                             }}
                           />
                         </Grid>
+
+                        <Grid item xs={12} sm={12} md={2.0}>
+                          <NumericInput
+                            required={false}
+                            name="maxRateValue"
+                            id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateRatingVoteDefinitionViewDefaultRatingVoteDefinitionViewEditVoteEntryBaseVirtualMaxRateValue"
+                            label={
+                              t('admin.RatingVoteDefinitionView.maxRateValue', {
+                                defaultValue: 'MaxRateValue',
+                              }) as string
+                            }
+                            customInput={TextField}
+                            value={data.maxRateValue ?? ''}
+                            className={clsx({
+                              'JUDO-viewMode': !editMode,
+                              'JUDO-required': false,
+                            })}
+                            disabled={isLoading}
+                            error={!!validation.get('maxRateValue')}
+                            helperText={validation.get('maxRateValue')}
+                            onValueChange={(values, sourceInfo) => {
+                              storeDiff('maxRateValue', values.floatValue === undefined ? null : values.floatValue);
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                              readOnly: false || !isFormUpdateable(),
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <MdiIcon path="numeric" />
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={2.0}>
+                          <NumericInput
+                            required={false}
+                            name="minRateValue"
+                            id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateRatingVoteDefinitionViewDefaultRatingVoteDefinitionViewEditVoteEntryBaseVirtualMinRateValue"
+                            label={
+                              t('admin.RatingVoteDefinitionView.minRateValue', {
+                                defaultValue: 'MinRateValue',
+                              }) as string
+                            }
+                            customInput={TextField}
+                            value={data.minRateValue ?? ''}
+                            className={clsx({
+                              'JUDO-viewMode': !editMode,
+                              'JUDO-required': false,
+                            })}
+                            disabled={isLoading}
+                            error={!!validation.get('minRateValue')}
+                            helperText={validation.get('minRateValue')}
+                            onValueChange={(values, sourceInfo) => {
+                              storeDiff('minRateValue', values.floatValue === undefined ? null : values.floatValue);
+                            }}
+                            InputLabelProps={{ shrink: true }}
+                            InputProps={{
+                              readOnly: false || !isFormUpdateable(),
+                              startAdornment: (
+                                <InputAdornment position="start">
+                                  <MdiIcon path="numeric" />
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -589,80 +657,6 @@ export default function AdminDebateRatingVoteDefinitionView() {
                                   </Grid>
 
                                   <Grid item xs={12} sm={12} md={2.0}>
-                                    <NumericInput
-                                      required={false}
-                                      name="maxRateValue"
-                                      id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateRatingVoteDefinitionViewDefaultRatingVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVoteMaxRateValue"
-                                      label={
-                                        t('admin.RatingVoteDefinitionView.maxRateValue', {
-                                          defaultValue: 'MaxRateValue',
-                                        }) as string
-                                      }
-                                      customInput={TextField}
-                                      value={data.maxRateValue ?? ''}
-                                      className={clsx({
-                                        'JUDO-viewMode': !editMode,
-                                        'JUDO-required': false,
-                                      })}
-                                      disabled={isLoading}
-                                      error={!!validation.get('maxRateValue')}
-                                      helperText={validation.get('maxRateValue')}
-                                      onValueChange={(values, sourceInfo) => {
-                                        storeDiff(
-                                          'maxRateValue',
-                                          values.floatValue === undefined ? null : values.floatValue,
-                                        );
-                                      }}
-                                      InputLabelProps={{ shrink: true }}
-                                      InputProps={{
-                                        readOnly: false || !isFormUpdateable(),
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <MdiIcon path="numeric" />
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                    />
-                                  </Grid>
-
-                                  <Grid item xs={12} sm={12} md={2.0}>
-                                    <NumericInput
-                                      required={false}
-                                      name="minRateValue"
-                                      id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateRatingVoteDefinitionViewDefaultRatingVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVoteMinRateValue"
-                                      label={
-                                        t('admin.RatingVoteDefinitionView.minRateValue', {
-                                          defaultValue: 'MinRateValue',
-                                        }) as string
-                                      }
-                                      customInput={TextField}
-                                      value={data.minRateValue ?? ''}
-                                      className={clsx({
-                                        'JUDO-viewMode': !editMode,
-                                        'JUDO-required': false,
-                                      })}
-                                      disabled={isLoading}
-                                      error={!!validation.get('minRateValue')}
-                                      helperText={validation.get('minRateValue')}
-                                      onValueChange={(values, sourceInfo) => {
-                                        storeDiff(
-                                          'minRateValue',
-                                          values.floatValue === undefined ? null : values.floatValue,
-                                        );
-                                      }}
-                                      InputLabelProps={{ shrink: true }}
-                                      InputProps={{
-                                        readOnly: false || !isFormUpdateable(),
-                                        startAdornment: (
-                                          <InputAdornment position="start">
-                                            <MdiIcon path="numeric" />
-                                          </InputAdornment>
-                                        ),
-                                      }}
-                                    />
-                                  </Grid>
-
-                                  <Grid item xs={12} sm={12} md={2.0}>
                                     <UserVoteEntryLink
                                       ownerData={data}
                                       readOnly={true || !isFormUpdateable()}
@@ -714,80 +708,6 @@ export default function AdminDebateRatingVoteDefinitionView() {
                                     })}
                                   </span>
                                 </LoadingButton>
-                              </Grid>
-
-                              <Grid item xs={12} sm={12} md={2.0}>
-                                <NumericInput
-                                  required={false}
-                                  name="minRateValue"
-                                  id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateRatingVoteDefinitionViewDefaultRatingVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupTakeVoteMinRateValueForVote"
-                                  label={
-                                    t('admin.RatingVoteDefinitionView.minRateValueForVote', {
-                                      defaultValue: 'MinRateValueForVote',
-                                    }) as string
-                                  }
-                                  customInput={TextField}
-                                  value={data.minRateValue ?? ''}
-                                  className={clsx({
-                                    'JUDO-viewMode': !editMode,
-                                    'JUDO-required': false,
-                                  })}
-                                  disabled={isLoading}
-                                  error={!!validation.get('minRateValue')}
-                                  helperText={validation.get('minRateValue')}
-                                  onValueChange={(values, sourceInfo) => {
-                                    storeDiff(
-                                      'minRateValue',
-                                      values.floatValue === undefined ? null : values.floatValue,
-                                    );
-                                  }}
-                                  InputLabelProps={{ shrink: true }}
-                                  InputProps={{
-                                    readOnly: false || !isFormUpdateable(),
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <MdiIcon path="numeric" />
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                />
-                              </Grid>
-
-                              <Grid item xs={12} sm={12} md={2.0}>
-                                <NumericInput
-                                  required={false}
-                                  name="maxRateValue"
-                                  id="NumericInputedemokraciaAdminAdminEdemokraciaAdminDebateRatingVoteDefinitionViewDefaultRatingVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupTakeVoteMaxRateValueForVote"
-                                  label={
-                                    t('admin.RatingVoteDefinitionView.maxRateValueForVote', {
-                                      defaultValue: 'MaxRateValueForVote',
-                                    }) as string
-                                  }
-                                  customInput={TextField}
-                                  value={data.maxRateValue ?? ''}
-                                  className={clsx({
-                                    'JUDO-viewMode': !editMode,
-                                    'JUDO-required': false,
-                                  })}
-                                  disabled={isLoading}
-                                  error={!!validation.get('maxRateValue')}
-                                  helperText={validation.get('maxRateValue')}
-                                  onValueChange={(values, sourceInfo) => {
-                                    storeDiff(
-                                      'maxRateValue',
-                                      values.floatValue === undefined ? null : values.floatValue,
-                                    );
-                                  }}
-                                  InputLabelProps={{ shrink: true }}
-                                  InputProps={{
-                                    readOnly: false || !isFormUpdateable(),
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        <MdiIcon path="numeric" />
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                />
                               </Grid>
                             </Grid>
                           </Grid>

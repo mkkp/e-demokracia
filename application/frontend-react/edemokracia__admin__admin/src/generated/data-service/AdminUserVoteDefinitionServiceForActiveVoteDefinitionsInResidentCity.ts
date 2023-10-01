@@ -31,4 +31,9 @@ export interface AdminUserVoteDefinitionServiceForActiveVoteDefinitionsInResiden
     owner: JudoIdentifiable<AdminUserVoteDefinition>,
     queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
   ): Promise<Array<AdminVoteDefinitionStored>>;
+
+  updateActiveVoteDefinitionsInResidentCity(
+    owner: JudoIdentifiable<AdminUserVoteDefinition>,
+    target: Partial<AdminVoteDefinitionStored>,
+  ): Promise<AdminVoteDefinitionStored>;
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" version="1.0.0.20231001_152334_SNAPSHOT">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" version="1.0.0.20231001_203924_SNAPSHOT">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -551,8 +551,8 @@
               </tabs>
             </components>
           </tabs>
-          <tabs xmi:id="_bFZdMGBVEe6M1JBD8stPIg" name="votes" label="Votes" iconName="vote" col="12" row="20">
-            <components xsi:type="ui:TabBar" xmi:id="_ju2mUGBVEe6M1JBD8stPIg" name="votesTabBar" col="12" row="20">
+          <tabs xmi:id="_bFZdMGBVEe6M1JBD8stPIg" name="votes" label="Votes" iconName="vote" frame="true" col="12" row="20">
+            <components xsi:type="ui:TabBar" xmi:id="_ju2mUGBVEe6M1JBD8stPIg" name="votesTabBar" col="12" row="20" orientation="VERTICAL">
               <tabs xmi:id="_rK5hIGBVEe6M1JBD8stPIg" name="myVotesGroup" label="My votes" iconName="account-circle" col="12" row="20">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_ZesvsGBWEe6M1JBD8stPIg" name="ownedVoteDefinitions" label="" iconName="" col="12" row="20" relationFeature="_LYtscGBWEe6M1JBD8stPIg" targetDefinedTabular="false" representationComponent="table">
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZexBImBWEe6M1JBD8stPIg" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
@@ -1362,14 +1362,14 @@
             </components>
             <components xsi:type="ui:DataField" xmi:id="_NHnI0lsoEe6Mx9dH3yj5gQ" name="created" label="Created" iconName="schedule" dataFeature="_-ec0YH4XEe2cB7_PsKXsHQ"/>
             <components xsi:type="ui:DataField" xmi:id="_NHnI01soEe6Mx9dH3yj5gQ" name="description" label="Description" iconName="text_fields" col="12" row="4" dataFeature="_-enzgH4XEe2cB7_PsKXsHQ" textMultiLine="true"/>
+            <components xsi:type="ui:DataField" xmi:id="_w1QQ81soEe6Mx9dH3yj5gQ" name="maxRateValue" label="MaxRateValue" iconName="numeric" col="2" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ"/>
+            <components xsi:type="ui:DataField" xmi:id="_w1QQ8lsoEe6Mx9dH3yj5gQ" name="minRateValue" label="MinRateValue" iconName="numeric" col="2" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ"/>
           </components>
         </components>
         <components xsi:type="ui:Group" xmi:id="_NHnv0FsoEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" frame="true" col="12">
           <components xsi:type="ui:Group" xmi:id="_NHnv0VsoEe6Mx9dH3yj5gQ" name="userVote" label="" col="12" hiddenBy="_YYB_AFsmEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_NHnv0lsoEe6Mx9dH3yj5gQ" name="VirtualForUserVote" col="12">
               <components xsi:type="ui:OperationForm" xmi:id="_NHnv01soEe6Mx9dH3yj5gQ" name="takeBackVote" label="TakeBackVote" iconName="delete" col="2" enabledBy="_YXksAFsmEe6Mx9dH3yj5gQ" operation="takeBackVote"/>
-              <components xsi:type="ui:DataField" xmi:id="_w1QQ81soEe6Mx9dH3yj5gQ" name="maxRateValue" label="MaxRateValue" iconName="numeric" col="2" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ"/>
-              <components xsi:type="ui:DataField" xmi:id="_w1QQ8lsoEe6Mx9dH3yj5gQ" name="minRateValue" label="MinRateValue" iconName="numeric" col="2" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ"/>
               <components xsi:type="ui:TabularReferenceField" xmi:id="_NHnv1FsoEe6Mx9dH3yj5gQ" name="userVoteEntry" label="Value" iconName="vote" col="2" relationFeature="_3FFXoFslEe6Mx9dH3yj5gQ" targetDefinedTabular="false" representationComponent="table">
                 <columns xsi:type="ui:DataColumn" xmi:id="_AHvewFuFEe6T042_LMmSdQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_ZCtwMFslEe6Mx9dH3yj5gQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_AHwF0FuFEe6T042_LMmSdQ" name="value" label="Value" iconName="numeric" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ"/>
@@ -1378,8 +1378,6 @@
           </components>
           <components xsi:type="ui:Group" xmi:id="_NHnv11soEe6Mx9dH3yj5gQ" name="TakeVote" label="" col="12" hiddenBy="_YXksAFsmEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:OperationForm" xmi:id="_NHnv2FsoEe6Mx9dH3yj5gQ" name="vote" label="Take a vote" iconName="vote" col="2" enabledBy="_YYB_AFsmEe6Mx9dH3yj5gQ" operation="vote"/>
-            <components xsi:type="ui:DataField" xmi:id="_VPsqMFsoEe6Mx9dH3yj5gQ" name="minRateValueForVote" label="MinRateValueForVote" iconName="numeric" col="2" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ"/>
-            <components xsi:type="ui:DataField" xmi:id="_VPsDIFsoEe6Mx9dH3yj5gQ" name="maxRateValueForVote" label="MaxRateValueForVote" iconName="numeric" col="2" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ"/>
           </components>
         </components>
         <components xsi:type="ui:Group" xmi:id="_NHnv2VsoEe6Mx9dH3yj5gQ" name="entries" label="Entries" col="12" row="10">
@@ -2056,25 +2054,25 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_jK5OoVq4Ee6_67aMO2jOsw" target="_qCREY2ksEe25ONJ3V89cVA" name="ownedIssues" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_AG6rUFq0Ee6_67aMO2jOsw" getterExpression="self.createdIssues">
         <inherited xmi:id="_jK5Oolq4Ee6_67aMO2jOsw"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_NM0voFrKEe6_67aMO2jOsw" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesGlobal" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_PsuLcFrIEe6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_NM0voFrKEe6_67aMO2jOsw" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesGlobal" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_PsuLcFrIEe6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_NM9SgFrKEe6_67aMO2jOsw"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_aMsB4FrWEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivityCounties" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_uM__QFq6Ee6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_aMsB4FrWEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivityCounties" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_uM__QFq6Ee6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_aMxhcFrWEe6gN-oVBDDIOQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_jlpVUFrWEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivityCities" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_AjbIgFqxEe6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_jlpVUFrWEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivityCities" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_AjbIgFqxEe6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_jlu04FrWEe6gN-oVBDDIOQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_riB9EFrWEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivityDistricts" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_KnhCoFq8Ee6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_riB9EFrWEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivityDistricts" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_KnhCoFq8Ee6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_riG1kFrWEe6gN-oVBDDIOQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_KOPO4FrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentCounty" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_vDrKwFrJEe6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_KOPO4FrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentCounty" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_vDrKwFrJEe6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_KOcqQFrbEe6gN-oVBDDIOQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_T07cUFrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentCity" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_bR4bQFrJEe6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_T07cUFrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentCity" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_bR4bQFrJEe6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_T0_twFrbEe6gN-oVBDDIOQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_dmHCgFrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentDistrict" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_3x3fYFrIEe6_67aMO2jOsw" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_dmHCgFrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentDistrict" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_3x3fYFrIEe6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_dmMiEFrbEe6gN-oVBDDIOQ"/>
       </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_xxzysFrOEe6_67aMO2jOsw" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.userName" memberType="DERIVED">
@@ -2399,25 +2397,25 @@
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_y3n5oFveEe6bTb-1BwQgmA" name="UserDebates">
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_BJHWYFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesGlobal" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_nzK0EFvmEe6bTb-1BwQgmA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_BJHWYFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesGlobal" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_nzK0EFvmEe6bTb-1BwQgmA" getterExpression="">
         <inherited xmi:id="_BJM18FvsEe6WVueJTs1KBA"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_IezKgFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInActivityCities" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_1pd4sFvqEe6WVueJTs1KBA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_IezKgFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInActivityCities" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_1pd4sFvqEe6WVueJTs1KBA" getterExpression="">
         <inherited xmi:id="_Ie5RIFvsEe6WVueJTs1KBA"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_aDGuwFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInActivityDistricts" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_9PiSMFvqEe6WVueJTs1KBA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_aDGuwFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInActivityDistricts" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_9PiSMFvqEe6WVueJTs1KBA" getterExpression="">
         <inherited xmi:id="_aDLnQFvsEe6WVueJTs1KBA"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_lDONQFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInActivityCounties" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_oJSRMFvqEe6WVueJTs1KBA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_lDONQFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInActivityCounties" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_oJSRMFvqEe6WVueJTs1KBA" getterExpression="">
         <inherited xmi:id="_lDU68FvsEe6WVueJTs1KBA"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ul42UFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInResidentCounty" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_PtmFwFvnEe6bTb-1BwQgmA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ul42UFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInResidentCounty" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_PtmFwFvnEe6bTb-1BwQgmA" getterExpression="">
         <inherited xmi:id="_ul-88FvsEe6WVueJTs1KBA"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_1uDy4FvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInResidentCity" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_NYZ6kFvoEe6bTb-1BwQgmA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_1uDy4FvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInResidentCity" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_NYZ6kFvoEe6bTb-1BwQgmA" getterExpression="">
         <inherited xmi:id="_1uKgkFvsEe6WVueJTs1KBA"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_6HFBkFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInResidentDistrict" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_XWBIUFvqEe6WVueJTs1KBA" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_6HFBkFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="activeDebatesInResidentDistrict" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_XWBIUFvqEe6WVueJTs1KBA" getterExpression="">
         <inherited xmi:id="_6HLIMFvsEe6WVueJTs1KBA"/>
       </relations>
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="__isVsFvsEe6WVueJTs1KBA" target="_qFjB42ksEe25ONJ3V89cVA" name="ownedDebates" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_ZkuYYFvmEe6bTb-1BwQgmA" getterExpression="">
@@ -2525,25 +2523,25 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_7OZ8MF5AEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="ownedVoteDefinitions" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_ES_tsF43Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_7OnXkF5AEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_HCMTUF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsGlobal" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_I6ZPQF46Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_HCMTUF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsGlobal" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_I6ZPQF46Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_HCZHoF5BEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_O_SswF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivityCounties" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_ZWQPoF44Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_O_SswF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivityCounties" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_ZWQPoF44Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_O_rHQF5BEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_b8NPIF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivityCities" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_RITWwF44Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_b8NPIF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivityCities" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_RITWwF44Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_b8ZcYF5BEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_kXCGYF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivityDistricts" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_KT_xYF44Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_kXCGYF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivityDistricts" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_KT_xYF44Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_kXPhwF5BEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_yd4FQF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentCounty" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_StOQsF45Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_yd4FQF5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentCounty" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_StOQsF45Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_yeESgF5BEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_9qDp0F5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentCity" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_fcxsgF45Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_9qDp0F5BEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentCity" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_fcxsgF45Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_9qRFMF5BEe6vsex_cZNQbQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_omfCAF5EEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentDistrict" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_tYojYF45Ee6vsex_cZNQbQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_omfCAF5EEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentDistrict" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_tYojYF45Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_omr2UF5EEe6vsex_cZNQbQ"/>
       </relations>
       <mapping xmi:id="_stHH4F4-Ee6vsex_cZNQbQ" target="_BuSFMGkWEe25ONJ3V89cVA"/>
@@ -2579,7 +2577,7 @@
             </tabs>
             <tabs xmi:id="_8O7y0F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerActivityArea" label="Active votes bv my activity areas" iconName="map-search" frame="true" col="12" row="20">
               <components xsi:type="ui:TabBar" xmi:id="_75CCAF5KEe6vsex_cZNQbQ" name="tabBar" col="12" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_-qljoF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCountiesGroup" label="County" iconName="castle" frame="true" col="12" row="20">
+                <tabs xmi:id="_-qljoF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCountiesGroup" label="County" iconName="castle" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_SV-JIF5LEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivityCounties" label="" iconName="" col="12" row="20" relationFeature="_O_SswF5BEe6vsex_cZNQbQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV_XSF5LEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV-wMF5LEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
@@ -2590,7 +2588,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV-wM15LEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
                   </components>
                 </tabs>
-                <tabs xmi:id="__jKxcF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCityGroup" label="City" iconName="city" frame="true" col="12" row="20">
+                <tabs xmi:id="__jKxcF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCityGroup" label="City" iconName="city" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_59d3wF5LEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivityCities" label="" iconName="" col="12" row="20" relationFeature="_b8NPIF5BEe6vsex_cZNQbQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_Lyib4F5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_59fs8l5LEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
@@ -2603,7 +2601,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_ZLxG0F5MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
                   </components>
                 </tabs>
-                <tabs xmi:id="_APhhIF5LEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityDistrictGroup" label="District" iconName="home-city" frame="true" col="12" row="20">
+                <tabs xmi:id="_APhhIF5LEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityDistrictGroup" label="District" iconName="home-city" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_GD1zsF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivityDistricts" label="" iconName="" col="12" row="20" relationFeature="_kXCGYF5BEe6vsex_cZNQbQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD3B1F5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD3B1l5MEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
@@ -2618,9 +2616,9 @@
                 </tabs>
               </components>
             </tabs>
-            <tabs xmi:id="__3U10F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" label="Active votes by my resident area" iconName="castle" col="12" row="20">
+            <tabs xmi:id="__3U10F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" label="Active votes by my resident area" iconName="castle" frame="true" col="12" row="20">
               <components xsi:type="ui:TabBar" xmi:id="_9cDT8F5KEe6vsex_cZNQbQ" name="tabBar" col="12" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_BgLQsF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCountyGroup" label="County" iconName="castle" frame="true" col="12" row="20">
+                <tabs xmi:id="_BgLQsF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCountyGroup" label="County" iconName="castle" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_fhZzMF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentCounty" label="" iconName="" col="12" row="20" relationFeature="_yd4FQF5BEe6vsex_cZNQbQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhbBWV5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQF5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
@@ -2631,7 +2629,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQ15MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
                   </components>
                 </tabs>
-                <tabs xmi:id="_CEZ_IF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCityGroup" label="City" iconName="city" frame="true" col="12" row="20">
+                <tabs xmi:id="_CEZ_IF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCityGroup" label="City" iconName="city" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_yjuNkF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentCity" label="" iconName="" col="12" row="20" relationFeature="_9qDp0F5BEe6vsex_cZNQbQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_yjvbsV5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_yjvbs15MEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
@@ -2643,7 +2641,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_Lu9G8F5NEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
                   </components>
                 </tabs>
-                <tabs xmi:id="_Cwu5oF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentDistrictGroup" label="District" iconName="home-city" frame="true" col="12" row="20">
+                <tabs xmi:id="_Cwu5oF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentDistrictGroup" label="District" iconName="home-city" col="12" row="20">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_BdNKUF5NEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentDistrict" label="" iconName="" col="12" row="20" relationFeature="_omfCAF5EEe6vsex_cZNQbQ" targetDefinedTabular="false" representationComponent="table">
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdOYcV5NEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdOYc15NEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>

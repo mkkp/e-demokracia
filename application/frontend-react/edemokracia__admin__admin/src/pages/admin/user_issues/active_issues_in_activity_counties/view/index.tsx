@@ -129,7 +129,7 @@ export type AdminUserIssuesActiveIssuesInActivityCountiesViewPostRefreshHook =
  * Name: edemokracia::admin::UserIssues.activeIssuesInActivityCounties#View
  * Is Access: false
  * Type: View
- * Edit Mode Available: false
+ * Edit Mode Available: true
  **/
 export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
   const { t } = useTranslation();
@@ -142,6 +142,9 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
+  );
+  const handleUpdateError = useErrorHandler<AdminIssue>(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminUserIssuesActiveIssuesInActivityCountiesView))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -197,7 +200,7 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
   const title: string = t('admin.IssueView', { defaultValue: 'Issue View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
@@ -242,6 +245,28 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
     }
   }
 
+  async function submit() {
+    setIsLoading(true);
+
+    try {
+      const res = await adminIssueServiceForClassImpl.update(payloadDiff);
+
+      if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+        setValidation(new Map<keyof AdminIssue, string>());
+        await fetchData();
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleUpdateError(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -255,6 +280,7 @@ export default function AdminUserIssuesActiveIssuesInActivityCountiesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
+          submit={submit}
         />
       </PageHeader>
       <PageContainerTransition>

@@ -69,4 +69,21 @@ export class AdminUserDebatesServiceForActiveDebatesInResidentDistrictImpl
 
     return response.data;
   }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async updateActiveDebatesInResidentDistrict(
+    owner: JudoIdentifiable<AdminUserDebates>,
+    target: Partial<AdminDebateStored>,
+  ): Promise<AdminDebateStored> {
+    const path = '/admin/UserDebates/~update/activeDebatesInResidentDistrict/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
 }

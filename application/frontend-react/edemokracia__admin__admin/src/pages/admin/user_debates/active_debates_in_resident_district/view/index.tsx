@@ -117,7 +117,7 @@ export type AdminUserDebatesActiveDebatesInResidentDistrictViewPostRefreshHook =
  * Name: edemokracia::admin::UserDebates.activeDebatesInResidentDistrict#View
  * Is Access: false
  * Type: View
- * Edit Mode Available: false
+ * Edit Mode Available: true
  **/
 export default function AdminUserDebatesActiveDebatesInResidentDistrictView() {
   const { t } = useTranslation();
@@ -130,6 +130,9 @@ export default function AdminUserDebatesActiveDebatesInResidentDistrictView() {
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
+  );
+  const handleUpdateError = useErrorHandler<AdminDebate>(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminUserDebatesActiveDebatesInResidentDistrictView))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -186,7 +189,7 @@ export default function AdminUserDebatesActiveDebatesInResidentDistrictView() {
   const title: string = t('admin.DebateView', { defaultValue: 'Debate View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
@@ -231,6 +234,28 @@ export default function AdminUserDebatesActiveDebatesInResidentDistrictView() {
     }
   }
 
+  async function submit() {
+    setIsLoading(true);
+
+    try {
+      const res = await adminDebateServiceForClassImpl.update(payloadDiff);
+
+      if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+        setValidation(new Map<keyof AdminDebate, string>());
+        await fetchData();
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleUpdateError(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -244,6 +269,7 @@ export default function AdminUserDebatesActiveDebatesInResidentDistrictView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
+          submit={submit}
         />
       </PageHeader>
       <PageContainerTransition>

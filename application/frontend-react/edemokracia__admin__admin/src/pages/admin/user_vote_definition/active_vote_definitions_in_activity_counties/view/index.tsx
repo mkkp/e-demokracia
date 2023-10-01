@@ -87,7 +87,7 @@ export type AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesViewPo
  * Name: edemokracia::admin::UserVoteDefinition.activeVoteDefinitionsInActivityCounties#View
  * Is Access: false
  * Type: View
- * Edit Mode Available: false
+ * Edit Mode Available: true
  **/
 export default function AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesView() {
   const { t } = useTranslation();
@@ -100,6 +100,9 @@ export default function AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCo
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
+  );
+  const handleUpdateError = useErrorHandler<AdminVoteDefinition>(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesView))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -164,7 +167,7 @@ export default function AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCo
   const title: string = t('admin.VoteDefinitionView', { defaultValue: 'VoteDefinition View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
@@ -209,6 +212,28 @@ export default function AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCo
     }
   }
 
+  async function submit() {
+    setIsLoading(true);
+
+    try {
+      const res = await adminVoteDefinitionServiceForClassImpl.update(payloadDiff);
+
+      if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+        setValidation(new Map<keyof AdminVoteDefinition, string>());
+        await fetchData();
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleUpdateError(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -222,6 +247,7 @@ export default function AdminUserVoteDefinitionActiveVoteDefinitionsInActivityCo
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
+          submit={submit}
         />
       </PageHeader>
       <PageContainerTransition>
