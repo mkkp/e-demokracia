@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230921_143621_f9d4ec5d_feature_JNG_5215_EclipseCrash" advanced="true" version="$MODEL_VERSION_PLACEHOLDER$">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230930_213149_26c1c3da_develop" advanced="true" version="$MODEL_VERSION_PLACEHOLDER$">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" realm="DEFAULT" principal="_ndA8kGkwEe25ONJ3V89cVA" anonymous="true" kind="HUMAN" managed="true" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png" textPrimaryColor="#17191DFF" textSecondaryColor="#434448FF" primaryColor="#3C4166FF" subtitleColor="#8C8C8C" secondaryColor="#E7501DFF" backgroundColor="#FAFAFAFF">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -482,6 +482,12 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_Fp_g8Fw2Ee6gN-oVBDDIOQ" lower="0" upper="-1" target="_qCREY2ksEe25ONJ3V89cVA" name="favoriteIssues" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_iKvKUFxGEe6ma86ynyYZNw" getterExpression="">
         <inherited xmi:id="_FqFnkFw2Ee6gN-oVBDDIOQ"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_-60oYGBVEe6M1JBD8stPIg" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="favoriteVoteDefinitions" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_jkR_UF43Ee6vsex_cZNQbQ" getterExpression="">
+        <inherited xmi:id="_-66vAGBVEe6M1JBD8stPIg"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_LYtscGBWEe6M1JBD8stPIg" lower="0" upper="-1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="ownedVoteDefinitions" createable="false" updateable="true" deleteable="true" targetDefinedCRUD="false" reverseCascadeDelete="false" defaultExpression="" rangeExpression="" relationKind="ASSOCIATION" memberType="MAPPED" rangeType="ANY" binding="_ES_tsF43Ee6vsex_cZNQbQ" getterExpression="">
+        <inherited xmi:id="_LY0aIGBWEe6M1JBD8stPIg"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_OIqfwIyYEe2VSOmaAz6G9Q" name="welcome" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="&quot;Szia &quot; + self.firstName + &quot;!&quot;" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_OIs8AIyYEe2VSOmaAz6G9Q"/>
       </attributes>
@@ -493,7 +499,7 @@
       <view xmi:id="_3M7vYIyNEe2VSOmaAz6G9Q" name="Dashboard_View_Edit" label="Dashboard View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:DataField" xmi:id="_Z44lgIyYEe2VSOmaAz6G9Q" name="welcome" label="" iconName="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_OIqfwIyYEe2VSOmaAz6G9Q" enumWidget="COMBO" textMultiLine="false" textWidget="TEXT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabBar" xmi:id="_ekzRUFw5Ee6gN-oVBDDIOQ" name="Selector" col="12" stretch="NONE" row="20" fit="LOOSE">
-          <tabs xmi:id="_P5VicFw5Ee6gN-oVBDDIOQ" name="issues" label="Issues" iconName="ticket-confirmation" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
+          <tabs xmi:id="_P5VicFw5Ee6gN-oVBDDIOQ" name="issues" label="Issues" iconName="ticket-confirmation" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
             <components xsi:type="ui:TabBar" xmi:id="_CR_JgIyUEe2VSOmaAz6G9Q" name="IssueTabBar" col="12" stretch="NONE" row="20" fit="LOOSE" orientation="VERTICAL">
               <tabs xmi:id="_E0b4IIyUEe2VSOmaAz6G9Q" name="myissues" label="My issues" iconName="account-circle" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_CTqMYFw4Ee6gN-oVBDDIOQ" name="ownedIssues" label="" iconName="" col="12" stretch="NONE" row="20" fit="LOOSE" onBlur="false" relationFeature="_OQ7kkIyQEe2VSOmaAz6G9Q" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -521,7 +527,7 @@
               </tabs>
             </components>
           </tabs>
-          <tabs xmi:id="_UI6hQFw5Ee6gN-oVBDDIOQ" name="debates" label="Debates" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
+          <tabs xmi:id="_UI6hQFw5Ee6gN-oVBDDIOQ" name="debates" label="Debates" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
             <components xsi:type="ui:TabBar" xmi:id="_0Dm8QFw5Ee6gN-oVBDDIOQ" name="DebateTabBar" col="12" stretch="NONE" row="20" fit="LOOSE" orientation="VERTICAL">
               <tabs xmi:id="_GhTpoIyUEe2VSOmaAz6G9Q" name="mydebates" label="My debates" iconName="account-circle" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_f3HqQFw4Ee6gN-oVBDDIOQ" name="ownedDebates" label="" iconName="" col="12" stretch="NONE" row="20" fit="LOOSE" onBlur="false" relationFeature="_m2rV0IyREe2VSOmaAz6G9Q" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -545,7 +551,39 @@
               </tabs>
             </components>
           </tabs>
-          <tabs xmi:id="_YSQVMFw5Ee6gN-oVBDDIOQ" name="votesCast" label="Votes Cast" iconName="vote-outline" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
+          <tabs xmi:id="_bFZdMGBVEe6M1JBD8stPIg" name="votes" label="Votes" iconName="vote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
+            <components xsi:type="ui:TabBar" xmi:id="_ju2mUGBVEe6M1JBD8stPIg" name="votesTabBar" col="12" stretch="NONE" row="20" fit="LOOSE">
+              <tabs xmi:id="_rK5hIGBVEe6M1JBD8stPIg" name="myVotesGroup" label="My votes" iconName="account-circle" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
+                <components xsi:type="ui:TabularReferenceField" xmi:id="_ZesvsGBWEe6M1JBD8stPIg" name="ownedVoteDefinitions" label="" iconName="" col="12" stretch="NONE" row="20" fit="LOOSE" onBlur="false" relationFeature="_LYtscGBWEe6M1JBD8stPIg" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexBImBWEe6M1JBD8stPIg" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexoMWBWEe6M1JBD8stPIg" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZeyPQGBWEe6M1JBD8stPIg" name="cityRepresentation" label="CityRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexoMGBWEe6M1JBD8stPIg" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZetWwGBWEe6M1JBD8stPIg" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexBIWBWEe6M1JBD8stPIg" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZetWwWBWEe6M1JBD8stPIg" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_Zeuk4GBWEe6M1JBD8stPIg" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexBIGBWEe6M1JBD8stPIg" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_Zet90WBWEe6M1JBD8stPIg" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
+                </components>
+              </tabs>
+              <tabs xmi:id="_wvlRsGBVEe6M1JBD8stPIg" name="favoriteVotesGroup" label="Favorite votes" iconName="star" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="4" stretch="NONE" row="1" fit="LOOSE">
+                <components xsi:type="ui:TabularReferenceField" xmi:id="_vp60sGBWEe6M1JBD8stPIg" name="favoriteVoteDefinitions" label="" iconName="" col="12" stretch="NONE" row="20" fit="LOOSE" onBlur="false" relationFeature="_-60oYGBVEe6M1JBD8stPIg" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp94A2BWEe6M1JBD8stPIg" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp-fEWBWEe6M1JBD8stPIg" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp-fE2BWEe6M1JBD8stPIg" name="cityRepresentation" label="CityRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp-fEGBWEe6M1JBD8stPIg" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp7bwGBWEe6M1JBD8stPIg" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp94AmBWEe6M1JBD8stPIg" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp7bwWBWEe6M1JBD8stPIg" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp8C0mBWEe6M1JBD8stPIg" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp94AWBWEe6M1JBD8stPIg" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp8C0WBWEe6M1JBD8stPIg" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
+                </components>
+              </tabs>
+            </components>
+          </tabs>
+          <tabs xmi:id="_YSQVMFw5Ee6gN-oVBDDIOQ" name="votesCast" label="Votes Cast" iconName="vote-outline" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
             <components xsi:type="ui:TabularReferenceField" xmi:id="_YR3LQFxHEe6ma86ynyYZNw" name="voteEntries" label="" iconName="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_q9zlcOSEEe20cv3f2msZXg" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
               <columns xsi:type="ui:DataColumn" xmi:id="_YR4ZYFxHEe6ma86ynyYZNw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_eL6L0OR6Ee20cv3f2msZXg"/>
               <columns xsi:type="ui:DataColumn" xmi:id="_YR5AcFxHEe6ma86ynyYZNw" name="issueTitle" label="IssueTitle" iconName="format-size" visible="true" sort="NONE" dataFeature="_DGC8UOR7Ee20cv3f2msZXg"/>
@@ -2582,7 +2620,7 @@
             </tabs>
             <tabs xmi:id="__3U10F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" label="Active votes by my resident area" iconName="castle" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
               <components xsi:type="ui:TabBar" xmi:id="_9cDT8F5KEe6vsex_cZNQbQ" name="tabBar" col="12" stretch="NONE" row="20" fit="LOOSE" orientation="VERTICAL">
-                <tabs xmi:id="_BgLQsF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCountyGroup" label="County" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
+                <tabs xmi:id="_BgLQsF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCountyGroup" label="County" iconName="castle" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
                   <components xsi:type="ui:TabularReferenceField" xmi:id="_fhZzMF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentCounty" label="" iconName="" col="12" stretch="NONE" row="20" fit="LOOSE" onBlur="false" relationFeature="_yd4FQF5BEe6vsex_cZNQbQ" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhbBWV5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQF5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>

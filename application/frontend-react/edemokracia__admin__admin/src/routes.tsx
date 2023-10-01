@@ -708,6 +708,44 @@ routes.push({
     </Suspense>
   ),
 });
+export const ROUTE_ADMIN_DASHBOARD_FAVORITE_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminDashboardFavoriteVoteDefinitionsTableRoute';
+export const routeToAdminDashboardFavoriteVoteDefinitionsTable = (signedIdentifier: string): string =>
+  'admin/dashboard/favorite_vote_definitions/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardFavoriteVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/dashboard/favorite_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/dashboard/favorite_vote_definitions/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_FAVORITE_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}
+      >
+        <AdminDashboardFavoriteVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_FAVORITE_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminDashboardFavoriteVoteDefinitionsViewRoute';
+export const routeToAdminDashboardFavoriteVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/dashboard/favorite_vote_definitions/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardFavoriteVoteDefinitionsView = lazy(
+  () => import('./pages/admin/dashboard/favorite_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/dashboard/favorite_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_FAVORITE_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
+        <AdminDashboardFavoriteVoteDefinitionsView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
 export const ROUTE_ADMIN_DASHBOARD_ISSUES_OWNED_TABLE_INTERFACE_KEY = 'AdminDashboardIssuesOwnedTableRoute';
 export const routeToAdminDashboardIssuesOwnedTable = (signedIdentifier: string): string =>
   'admin/dashboard/issues_owned/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -764,6 +802,42 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_OWNED_DEBATES_VIEW_INTERFACE_KEY})`}>
         <AdminDashboardOwnedDebatesView />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_OWNED_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
+  'AdminDashboardOwnedVoteDefinitionsTableRoute';
+export const routeToAdminDashboardOwnedVoteDefinitionsTable = (signedIdentifier: string): string =>
+  'admin/dashboard/owned_vote_definitions/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardOwnedVoteDefinitionsTable = lazy(
+  () => import('./pages/admin/dashboard/owned_vote_definitions/table/index'),
+);
+
+routes.push({
+  path: 'admin/dashboard/owned_vote_definitions/table/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_OWNED_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY})`}>
+        <AdminDashboardOwnedVoteDefinitionsTable />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_ADMIN_DASHBOARD_OWNED_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY =
+  'AdminDashboardOwnedVoteDefinitionsViewRoute';
+export const routeToAdminDashboardOwnedVoteDefinitionsView = (signedIdentifier: string): string =>
+  'admin/dashboard/owned_vote_definitions/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const AdminDashboardOwnedVoteDefinitionsView = lazy(
+  () => import('./pages/admin/dashboard/owned_vote_definitions/view/index'),
+);
+
+routes.push({
+  path: 'admin/dashboard/owned_vote_definitions/view/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_ADMIN_DASHBOARD_OWNED_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
+        <AdminDashboardOwnedVoteDefinitionsView />
       </ComponentProxy>
     </Suspense>
   ),

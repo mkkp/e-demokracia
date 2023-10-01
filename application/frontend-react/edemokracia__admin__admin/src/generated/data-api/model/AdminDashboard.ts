@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 import { AdminDebateStored } from './AdminDebate';
 import { AdminIssueStored } from './AdminIssue';
+import { AdminVoteDefinitionStored } from './AdminVoteDefinition';
 import { AdminVoteEntryStored } from './AdminVoteEntry';
 
 export interface AdminDashboard {
@@ -19,6 +20,8 @@ export interface AdminDashboard {
   userVoteEntries?: null | Array<AdminVoteEntryStored>;
   favoriteDebates?: null | Array<AdminDebateStored>;
   favoriteIssues?: null | Array<AdminIssueStored>;
+  favoriteVoteDefinitions?: null | Array<AdminVoteDefinitionStored>;
+  ownedVoteDefinitions?: null | Array<AdminVoteDefinitionStored>;
 }
 export type AdminDashboardAttributes = 'welcome';
 
@@ -27,6 +30,8 @@ export type AdminDashboardRelations =
   | 'ownedDebates'
   | 'userVoteEntries'
   | 'favoriteDebates'
-  | 'favoriteIssues';
+  | 'favoriteIssues'
+  | 'favoriteVoteDefinitions'
+  | 'ownedVoteDefinitions';
 
 export interface AdminDashboardStored extends JudoStored<AdminDashboard>, AdminDashboard {}

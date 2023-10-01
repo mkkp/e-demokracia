@@ -7,15 +7,18 @@
 // Template file: data-service/accessRelationService.ts.hbs
 
 import {
+  AdminVoteDefinitionQueryCustomizer,
+  AdminVoteEntryQueryCustomizer,
+  AdminIssueStored,
+  AdminVoteEntryStored,
   AdminDashboardQueryCustomizer,
   AdminIssueQueryCustomizer,
+  AdminVoteDefinitionStored,
   AdminVoteEntry,
   AdminDebate,
   AdminIssue,
-  AdminVoteEntryQueryCustomizer,
-  AdminIssueStored,
+  AdminVoteDefinition,
   AdminDebateStored,
-  AdminVoteEntryStored,
   AdminDashboardStored,
   AdminDashboard,
   AdminDebateQueryCustomizer,

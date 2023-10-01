@@ -11,6 +11,7 @@ import {
   AdminVoteEntryAttributes,
   AdminIssueAttributes,
   AdminDebateAttributes,
+  AdminVoteDefinitionAttributes,
   AdminDashboardAttributes,
 } from '../model';
 

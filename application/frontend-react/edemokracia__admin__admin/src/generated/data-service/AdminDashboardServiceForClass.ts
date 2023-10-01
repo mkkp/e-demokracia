@@ -8,15 +8,18 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
+  AdminVoteDefinitionQueryCustomizer,
+  AdminVoteEntryQueryCustomizer,
+  AdminIssueStored,
+  AdminVoteEntryStored,
   AdminDashboardQueryCustomizer,
   AdminIssueQueryCustomizer,
+  AdminVoteDefinitionStored,
   AdminVoteEntry,
   AdminDebate,
   AdminIssue,
-  AdminVoteEntryQueryCustomizer,
-  AdminIssueStored,
+  AdminVoteDefinition,
   AdminDebateStored,
-  AdminVoteEntryStored,
   AdminDashboardStored,
   AdminDashboard,
   AdminDebateQueryCustomizer,
@@ -80,4 +83,24 @@ export interface AdminDashboardServiceForClass {
     owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>>;
+
+  getFavoriteVoteDefinitions(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>>;
+
+  getRangeForFavoriteVoteDefinitions(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>>;
+
+  getOwnedVoteDefinitions(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>>;
+
+  getRangeForOwnedVoteDefinitions(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>>;
 }

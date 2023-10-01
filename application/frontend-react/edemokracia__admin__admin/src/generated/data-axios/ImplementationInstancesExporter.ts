@@ -49,8 +49,10 @@ import { AdminCreateIssueInputServiceForDistrictImpl } from './AdminCreateIssueI
 import { AdminCreateIssueInputServiceForIssueTypeImpl } from './AdminCreateIssueInputServiceForIssueTypeImpl';
 import { AdminDashboardServiceForFavoriteDebatesImpl } from './AdminDashboardServiceForFavoriteDebatesImpl';
 import { AdminDashboardServiceForFavoriteIssuesImpl } from './AdminDashboardServiceForFavoriteIssuesImpl';
+import { AdminDashboardServiceForFavoriteVoteDefinitionsImpl } from './AdminDashboardServiceForFavoriteVoteDefinitionsImpl';
 import { AdminDashboardServiceForIssuesOwnedImpl } from './AdminDashboardServiceForIssuesOwnedImpl';
 import { AdminDashboardServiceForOwnedDebatesImpl } from './AdminDashboardServiceForOwnedDebatesImpl';
+import { AdminDashboardServiceForOwnedVoteDefinitionsImpl } from './AdminDashboardServiceForOwnedVoteDefinitionsImpl';
 import { AdminDashboardServiceForUserVoteEntriesImpl } from './AdminDashboardServiceForUserVoteEntriesImpl';
 import { AdminDebateServiceForCommentsImpl } from './AdminDebateServiceForCommentsImpl';
 import { AdminDebateServiceForConsImpl } from './AdminDebateServiceForConsImpl';
@@ -259,8 +261,13 @@ export const adminDashboardServiceForFavoriteDebatesImpl = new AdminDashboardSer
 export const adminDashboardServiceForFavoriteIssuesImpl = new AdminDashboardServiceForFavoriteIssuesImpl(
   judoAxiosProvider,
 );
+export const adminDashboardServiceForFavoriteVoteDefinitionsImpl =
+  new AdminDashboardServiceForFavoriteVoteDefinitionsImpl(judoAxiosProvider);
 export const adminDashboardServiceForIssuesOwnedImpl = new AdminDashboardServiceForIssuesOwnedImpl(judoAxiosProvider);
 export const adminDashboardServiceForOwnedDebatesImpl = new AdminDashboardServiceForOwnedDebatesImpl(judoAxiosProvider);
+export const adminDashboardServiceForOwnedVoteDefinitionsImpl = new AdminDashboardServiceForOwnedVoteDefinitionsImpl(
+  judoAxiosProvider,
+);
 export const adminDashboardServiceForUserVoteEntriesImpl = new AdminDashboardServiceForUserVoteEntriesImpl(
   judoAxiosProvider,
 );

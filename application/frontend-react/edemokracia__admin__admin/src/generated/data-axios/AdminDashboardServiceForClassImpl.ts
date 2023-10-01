@@ -9,15 +9,18 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  AdminVoteDefinitionQueryCustomizer,
+  AdminVoteEntryQueryCustomizer,
+  AdminIssueStored,
+  AdminVoteEntryStored,
   AdminDashboardQueryCustomizer,
   AdminIssueQueryCustomizer,
+  AdminVoteDefinitionStored,
   AdminVoteEntry,
   AdminDebate,
   AdminIssue,
-  AdminVoteEntryQueryCustomizer,
-  AdminIssueStored,
+  AdminVoteDefinition,
   AdminDebateStored,
-  AdminVoteEntryStored,
   AdminDashboardStored,
   AdminDashboard,
   AdminDebateQueryCustomizer,
@@ -202,6 +205,72 @@ export class AdminDashboardServiceForClassImpl extends JudoAxiosService implemen
     queryCustomizer?: AdminIssueQueryCustomizer,
   ): Promise<Array<AdminIssueStored>> {
     const path = '/admin/Dashboard/favoriteIssues/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getFavoriteVoteDefinitions(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>> {
+    const path = '/admin/Dashboard/favoriteVoteDefinitions/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForFavoriteVoteDefinitions(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>> {
+    const path = '/admin/Dashboard/favoriteVoteDefinitions/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getOwnedVoteDefinitions(
+    target: JudoIdentifiable<AdminDashboard>,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>> {
+    const path = '/admin/Dashboard/ownedVoteDefinitions/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwnedVoteDefinitions(
+    owner?: JudoIdentifiable<AdminDashboard> | AdminDashboard,
+    queryCustomizer?: AdminVoteDefinitionQueryCustomizer,
+  ): Promise<Array<AdminVoteDefinitionStored>> {
+    const path = '/admin/Dashboard/ownedVoteDefinitions/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

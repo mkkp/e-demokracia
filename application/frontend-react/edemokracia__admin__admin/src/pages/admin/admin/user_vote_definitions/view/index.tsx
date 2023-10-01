@@ -630,6 +630,7 @@ export default function AdminAdminUserVoteDefinitionsView() {
                                 }) as string,
                                 disabled: isLoading,
                                 hidden: false,
+                                icon: 'castle',
                                 nestedDataKeys: ['activeVoteDefinitionsInResidentCounty'],
                               },
                               {
