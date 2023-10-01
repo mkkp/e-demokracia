@@ -385,11 +385,6 @@ export const CommentsTable = (props: CommentsTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         onRowClick={(params: GridRowParams<AdminCommentStored>) => {
           if (!editMode) {
             rowViewCommentsAction(ownerData, params.row, () => fetchOwnerData());

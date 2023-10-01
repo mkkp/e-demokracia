@@ -368,6 +368,7 @@ export const County_TableTable = forwardRef<RefreshableTable, County_TableTableP
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminAdminCounties-bulk-delete"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

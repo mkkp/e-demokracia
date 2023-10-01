@@ -88,27 +88,24 @@ export function ModeledTabs({ id, ownerData, childTabs, children, orientation, v
         indicatorColor="secondary"
         sx={{ [border]: 1, borderColor: 'divider' }}
       >
-        {childTabs
-          .filter((c) => !c.hidden)
-          .map((c: any, index: number) => (
-            <Tab
-              className={hasNestedError(c) ? 'JUDO-nestedError' : undefined}
-              id={`${c.id}-tab`}
-              key={c.id}
-              label={c.label}
-              icon={c.icon ? <MdiIcon path={c.icon} sx={{ m: '0 0.5rem' }} /> : ''}
-              iconPosition="start"
-              disabled={c.disabled}
-            />
-          ))}
-      </Tabs>
-      {childTabs
-        .filter((c) => !c.hidden)
-        .map((c: any, index: number) => (
-          <TabPanel id={`${c.id}-tab-panel`} key={c.id} value={value} index={index}>
-            {Array.isArray(children) ? children[index] : ''}
-          </TabPanel>
+        {childTabs.map((c: any, index: number) => (
+          <Tab
+            className={hasNestedError(c) ? 'JUDO-nestedError' : undefined}
+            id={`${c.id}-tab`}
+            key={c.id}
+            label={c.label}
+            icon={c.icon ? <MdiIcon path={c.icon} sx={{ m: '0 0.5rem' }} /> : ''}
+            iconPosition="start"
+            disabled={c.disabled}
+            style={{ display: c.hidden ? 'none' : undefined }}
+          />
         ))}
+      </Tabs>
+      {childTabs.map((c: any, index: number) => (
+        <TabPanel id={`${c.id}-tab-panel`} key={c.id} value={value} index={index}>
+          {Array.isArray(children) ? children[index] : ''}
+        </TabPanel>
+      ))}
     </Box>
   );
 }

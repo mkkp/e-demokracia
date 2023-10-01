@@ -565,11 +565,6 @@ export const RatingVoteDefinition_TableTable = forwardRef<RefreshableTable, Rati
             ),
           ]}
           disableRowSelectionOnClick
-          checkboxSelection
-          rowSelectionModel={selectionModel}
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            setSelectionModel(newRowSelectionModel);
-          }}
           keepNonExistentRowsSelected
           onRowClick={(params: GridRowParams<AdminRatingVoteDefinitionStored>) =>
             rowViewUserOwnedRatingVoteDefinitionsAction(params.row, () => fetchData())

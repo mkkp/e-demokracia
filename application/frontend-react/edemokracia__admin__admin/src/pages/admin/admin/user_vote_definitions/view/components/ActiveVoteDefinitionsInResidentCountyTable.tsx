@@ -628,11 +628,6 @@ export const ActiveVoteDefinitionsInResidentCountyTable = forwardRef<
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminVoteDefinitionStored>) =>
           rowViewActiveVoteDefinitionsInResidentCountyAction(ownerData, params.row, () => fetchOwnerData())

@@ -421,7 +421,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {
     // every row has the same `__deleteable` flag
     return !!selectionModel.length && !false && !!data[0]?.__deleteable;
@@ -583,6 +583,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesOwned-bulk-delete"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

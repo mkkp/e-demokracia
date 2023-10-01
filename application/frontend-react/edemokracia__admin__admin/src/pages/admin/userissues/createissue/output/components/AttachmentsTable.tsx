@@ -413,6 +413,7 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueAttachments-bulk-delete"
                   disabled={isOwnerLoading || editMode}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

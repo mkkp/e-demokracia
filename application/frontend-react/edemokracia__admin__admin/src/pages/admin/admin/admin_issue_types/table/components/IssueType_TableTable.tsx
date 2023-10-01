@@ -427,6 +427,7 @@ export const IssueType_TableTable = forwardRef<RefreshableTable, IssueType_Table
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminAdminIssueTypes-bulk-delete"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

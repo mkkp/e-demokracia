@@ -462,11 +462,6 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         sortModel={sortModel}
         onSortModelChange={handleSortModelChange}

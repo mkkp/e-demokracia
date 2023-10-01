@@ -228,11 +228,6 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         onRowClick={(params: GridRowParams<AdminDistrictStored>) => {
           if (!editMode) {
             rowViewActivityDistrictsAction(ownerData, params.row, () => fetchOwnerData());

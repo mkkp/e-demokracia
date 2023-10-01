@@ -214,7 +214,7 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkRemoveAvailable: () => boolean = useCallback(() => {
     return !!selectionModel.length && true && isFormUpdateable() && !false;
   }, [ownerData, selectionModel]);
@@ -347,6 +347,7 @@ export const ActivityCitiesTable = (props: ActivityCitiesTableProps) => {
               </Button>
               {isBulkRemoveAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityCities-bulk-remove"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="link-off" />}

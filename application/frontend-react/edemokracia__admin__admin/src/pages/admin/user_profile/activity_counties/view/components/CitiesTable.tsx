@@ -307,6 +307,7 @@ export const CitiesTable = (props: CitiesTableProps) => {
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminCountyCities-bulk-delete"
                   disabled={isOwnerLoading || editMode}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

@@ -49,15 +49,15 @@
         <judo-sdk-common-version>1.0.4.20230923_041445_9cbf01e5_develop</judo-sdk-common-version>
         <mapper-version>1.0.4.20230826_230852_5723dcb6_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0-SNAPSHOT </judo-tatami-version>
-        <judo-platform-version>2.0.1-SNAPSHOT</judo-platform-version>
-        <judo-services-version>1.1.0.20230926_041043_1ea297b1_develop</judo-services-version>
-        <judo-rdbms-schema-version>1.0.0.20230925_041022_8c2f4a4e_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20230926_041055_a1899985_develop</judo-tatami-client-version>
+        <judo-tatami-version>1.1.0.20231001_041427_f8098512_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20231001_043007_d8a06048_develop</judo-platform-version>
+        <judo-services-version>1.1.0.20231001_042152_bb07a65b_develop</judo-services-version>
+        <judo-rdbms-schema-version>1.0.0.20231001_041009_d36b6c36_develop</judo-rdbms-schema-version>
+        <judo-tatami-client-version>1.1.0.20231001_040541_23c5f195_develop</judo-tatami-client-version>
         
         <judo-meta-ui-version>1.1.0.20230925_171753_ce15064f_develop</judo-meta-ui-version>
-        <judo-meta-psm-version>1.3.0-SNAPSHOT</judo-meta-psm-version>
-        <judo-psm-generator-sdk-core-version>1.0.0.20230923_041745_dfc4ca09_develop</judo-psm-generator-sdk-core-version>
+        <judo-meta-psm-version>1.3.0.20230930_213200_452a976a_develop</judo-meta-psm-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20231001_040602_8023794c_develop</judo-psm-generator-sdk-core-version>
         
         <osgi-default-import>
             org.osgi.framework;version="[1.8,2.0)",

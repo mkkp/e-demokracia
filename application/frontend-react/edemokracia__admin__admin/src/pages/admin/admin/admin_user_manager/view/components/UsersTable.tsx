@@ -510,11 +510,6 @@ export const UsersTable = forwardRef<RefreshableTable, UsersTableProps>((props, 
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminUserStored>) =>
           rowViewUsersAction(ownerData, params.row, () => fetchOwnerData())

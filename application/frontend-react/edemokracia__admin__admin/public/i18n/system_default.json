@@ -11,6 +11,7 @@
         "judo.dialogs.crud-bulk.delete.title": "Delete selected items",
         "judo.dialogs.crud-bulk.toast.success": "Operation(s) executed successfully",
         "judo.dialogs.crud-bulk.toast.warn": "Not all operations executed successfully!",
+        "judo.dialogs.crud-bulk.execute": "Execute Operation(s)",
         "judo.pages.back": "Back",
         "judo.pages.save": "Save",
         "judo.pages.refresh": "Refresh",

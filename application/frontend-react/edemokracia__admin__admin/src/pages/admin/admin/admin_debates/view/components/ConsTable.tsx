@@ -398,6 +398,7 @@ export const ConsTable = (props: ConsTableProps) => {
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminDebateCons-bulk-delete"
                   disabled={isOwnerLoading || editMode}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

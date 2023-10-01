@@ -11,6 +11,7 @@
         "judo.dialogs.crud-bulk.delete.title": "Kiválasztott elemek törlése",
         "judo.dialogs.crud-bulk.toast.success": "Művelet(ek) sikeresen végrehajtva",
         "judo.dialogs.crud-bulk.toast.warn": "Egyes műveleteket nem sikerült elvégezni!",
+        "judo.dialogs.crud-bulk.execute": "Művelet(ek) végrehajtása",
         "judo.pages.back": "Vissza",
         "judo.pages.save": "Mentés",
         "judo.pages.refresh": "Frissítés",

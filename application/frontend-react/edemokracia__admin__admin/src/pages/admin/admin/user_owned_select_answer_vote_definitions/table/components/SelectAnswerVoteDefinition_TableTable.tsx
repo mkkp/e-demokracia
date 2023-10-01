@@ -504,11 +504,6 @@ export const SelectAnswerVoteDefinition_TableTable = forwardRef<
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminSelectAnswerVoteDefinitionStored>) =>
           rowViewUserOwnedSelectAnswerVoteDefinitionsAction(params.row, () => fetchData())

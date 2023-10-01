@@ -228,11 +228,6 @@ export const ActivityCountiesTable = (props: ActivityCountiesTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         onRowClick={(params: GridRowParams<AdminCountyStored>) => {
           if (!editMode) {
             rowViewActivityCountiesAction(ownerData, params.row, () => fetchOwnerData());

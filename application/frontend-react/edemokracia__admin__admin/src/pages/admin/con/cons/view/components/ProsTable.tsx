@@ -385,6 +385,7 @@ export const ProsTable = (props: ProsTableProps) => {
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminConPros-bulk-delete"
                   disabled={isOwnerLoading || editMode}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

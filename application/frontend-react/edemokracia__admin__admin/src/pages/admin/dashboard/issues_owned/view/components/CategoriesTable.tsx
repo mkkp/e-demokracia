@@ -261,7 +261,7 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkRemoveAvailable: () => boolean = useCallback(() => {
     return !!selectionModel.length && true && isFormUpdateable() && !false;
   }, [ownerData, selectionModel]);
@@ -393,6 +393,7 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
               </Button>
               {isBulkRemoveAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategories-bulk-remove"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="link-off" />}

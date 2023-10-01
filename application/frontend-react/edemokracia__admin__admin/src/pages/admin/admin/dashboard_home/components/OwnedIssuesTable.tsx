@@ -530,12 +530,12 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
       },
       onClose: (needsRefresh) => {
         if (needsRefresh) {
-          fetchData();
+          fetchOwnerData();
           setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {
     // every row has the same `__deleteable` flag
     return !!selectionModel.length && true && !false && !!data[0]?.__deleteable;
@@ -702,6 +702,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardIssuesOwned-bulk-delete"
                   disabled={isLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

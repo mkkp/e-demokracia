@@ -333,6 +333,7 @@ export const SubcategoriesTable = (props: SubcategoriesTableProps) => {
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminIssueCategorySubcategories-bulk-delete"
                   disabled={isOwnerLoading || editMode}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

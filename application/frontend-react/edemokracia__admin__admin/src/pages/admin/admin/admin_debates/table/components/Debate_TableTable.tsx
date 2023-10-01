@@ -536,6 +536,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminAdminDebates-bulk-delete"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

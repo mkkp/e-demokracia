@@ -560,11 +560,6 @@ export const ActiveDebatesInActivityCitiesTable = forwardRef<RefreshableTable, A
             ),
           ]}
           disableRowSelectionOnClick
-          checkboxSelection
-          rowSelectionModel={selectionModel}
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            setSelectionModel(newRowSelectionModel);
-          }}
           keepNonExistentRowsSelected
           onRowClick={(params: GridRowParams<AdminDebateStored>) =>
             rowViewActiveDebatesInActivityCitiesAction(ownerData, params.row, () => fetchOwnerData())

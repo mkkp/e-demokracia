@@ -214,7 +214,7 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkRemoveAvailable: () => boolean = useCallback(() => {
     return !!selectionModel.length && true && isFormUpdateable() && !false;
   }, [ownerData, selectionModel]);
@@ -347,6 +347,7 @@ export const ActivityDistrictsTable = (props: ActivityDistrictsTableProps) => {
               </Button>
               {isBulkRemoveAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserActivityDistricts-bulk-remove"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="link-off" />}

@@ -699,11 +699,6 @@ export const ActiveVoteDefinitionsInActivityCitiesTable = forwardRef<
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminVoteDefinitionStored>) =>
           rowViewActiveVoteDefinitionsInActivityCitiesAction(ownerData, params.row, () => fetchOwnerData())

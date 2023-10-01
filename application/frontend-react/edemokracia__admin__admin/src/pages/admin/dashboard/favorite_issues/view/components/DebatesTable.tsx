@@ -345,11 +345,6 @@ export const DebatesTable = (props: DebatesTableProps) => {
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         sortModel={debatesSortModel}
         onSortModelChange={(newModel: GridSortModel) => {
           setDebatesSortModel(newModel);

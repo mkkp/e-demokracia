@@ -352,6 +352,7 @@ export const VoteSelectionsTable = (props: VoteSelectionsTableProps) => {
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminSelectAnswerVoteDefinitionVoteSelections-bulk-delete"
                   disabled={isOwnerLoading || editMode}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

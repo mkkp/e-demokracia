@@ -594,11 +594,6 @@ export const ActiveDebatesInActivityDistrictsTable = forwardRef<
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminDebateStored>) =>
           rowViewActiveDebatesInActivityDistrictsAction(ownerData, params.row, () => fetchOwnerData())

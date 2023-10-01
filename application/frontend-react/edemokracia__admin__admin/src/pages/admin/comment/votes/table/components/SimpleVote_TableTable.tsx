@@ -354,11 +354,6 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminSimpleVoteStored>) =>
           rowViewVotesAction(ownerData, params.row, () => fetchData())

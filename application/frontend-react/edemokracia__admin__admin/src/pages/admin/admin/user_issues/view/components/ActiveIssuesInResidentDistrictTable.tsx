@@ -580,11 +580,6 @@ export const ActiveIssuesInResidentDistrictTable = forwardRef<
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminIssueStored>) =>
           rowViewActiveIssuesInResidentDistrictAction(ownerData, params.row, () => fetchOwnerData())

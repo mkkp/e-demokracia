@@ -514,11 +514,6 @@ export const FavoriteDebatesTable = forwardRef<RefreshableTable, FavoriteDebates
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminDebateStored>) =>
           rowViewFavoriteDebatesAction(ownerData, params.row, () => fetchOwnerData())

@@ -393,7 +393,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkDeleteAvailable: () => boolean = useCallback(() => {
     // every row has the same `__deleteable` flag
     return !!selectionModel.length && !false && !!data[0]?.__deleteable;
@@ -555,6 +555,7 @@ export const Debate_TableTable = forwardRef<RefreshableTable, Debate_TableTableP
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminDashboardOwnedDebates-bulk-delete"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

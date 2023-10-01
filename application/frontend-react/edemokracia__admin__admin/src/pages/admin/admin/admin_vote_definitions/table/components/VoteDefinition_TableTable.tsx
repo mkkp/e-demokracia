@@ -622,6 +622,7 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
               </Button>
               {isBulkDeleteAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminAdminAdminVoteDefinitions-bulk-delete"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="delete-forever" />}

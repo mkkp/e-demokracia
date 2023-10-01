@@ -499,11 +499,6 @@ export const YesNoVoteDefinition_TableTable = forwardRef<RefreshableTable, YesNo
             ),
           ]}
           disableRowSelectionOnClick
-          checkboxSelection
-          rowSelectionModel={selectionModel}
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            setSelectionModel(newRowSelectionModel);
-          }}
           keepNonExistentRowsSelected
           onRowClick={(params: GridRowParams<AdminYesNoVoteDefinitionStored>) =>
             rowViewUserOwnedYesNoVoteDefinitionsAction(params.row, () => fetchData())

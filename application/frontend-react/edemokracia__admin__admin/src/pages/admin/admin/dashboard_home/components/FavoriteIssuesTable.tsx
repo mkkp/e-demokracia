@@ -637,11 +637,6 @@ export const FavoriteIssuesTable = forwardRef<RefreshableTable, FavoriteIssuesTa
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<AdminIssueStored>) =>
           rowViewFavoriteIssuesAction(ownerData, params.row, () => fetchOwnerData())

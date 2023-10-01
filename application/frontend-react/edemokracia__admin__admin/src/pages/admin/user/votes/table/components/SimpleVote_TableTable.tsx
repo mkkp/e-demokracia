@@ -270,7 +270,7 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
         }
       },
     });
-  }, []);
+  }, [ownerData]);
   const isBulkRemoveAvailable: () => boolean = useCallback(() => {
     return !!selectionModel.length;
   }, [selectionModel]);
@@ -425,6 +425,7 @@ export const SimpleVote_TableTable = forwardRef<RefreshableTable, SimpleVote_Tab
               </Button>
               {isBulkRemoveAvailable() ? (
                 <Button
+                  id="RelationTypeedemokraciaAdminAdminEdemokraciaAdminUserVotes-bulk-remove"
                   disabled={isOwnerLoading}
                   variant="text"
                   startIcon={<MdiIcon path="link-off" />}
