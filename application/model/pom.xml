@@ -108,13 +108,13 @@
                         <version>${judo-tatami-version}</version>
                         <executions>
                             <execution>
-                                <id>transform-psm-file</id>
+                                <id>transform-esm-file</id>
                                 <phase>generate-resources</phase>
                                 <goals>
                                     <goal>default-workflow</goal>
                                 </goals>
                                 <configuration>
-                                    <psm>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-psm.model</psm>
+                                    <esm>${maven.multiModuleProjectDirectory}/model/${model-name}.model</esm>
                                     <modelVersion>${model-version}</modelVersion>
                                     <destination>${project.basedir}/target/generated-resources/model</destination>
                                     <dialectList>${dialectList}</dialectList>

@@ -17,13 +17,13 @@
 		</buildCommand>
 	</buildSpec>
 	<natures>
-		<nature>org.eclipse.sirius.nature.modelingproject</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.eclipse.sirius.nature.modelingproject</nature>
 	</natures>
 	<filteredResources>
 		<filter>
-			<id>1681576892743</id>
+			<id>1696406388310</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -32,7 +32,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892760</id>
+			<id>1696406388311</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -41,7 +41,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892761</id>
+			<id>1696406388312</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -50,7 +50,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892764</id>
+			<id>1696406388313</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -59,7 +59,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892768</id>
+			<id>1696406388314</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -68,25 +68,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892769</id>
-			<name></name>
-			<type>26</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-false-.flutter</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1681576892773</id>
-			<name></name>
-			<type>26</type>
-			<matcher>
-				<id>org.eclipse.ui.ide.multiFilter</id>
-				<arguments>1.0-name-matches-false-false-.dart_tool</arguments>
-			</matcher>
-		</filter>
-		<filter>
-			<id>1681576892774</id>
+			<id>1696406388315</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -95,7 +77,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892775</id>
+			<id>1696406388316</id>
 			<name></name>
 			<type>26</type>
 			<matcher>
@@ -104,7 +86,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892776</id>
+			<id>1696406388317</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -113,7 +95,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892784</id>
+			<id>1696406388318</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -122,7 +104,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892787</id>
+			<id>1696406388319</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -131,7 +113,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892789</id>
+			<id>1696406388320</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -140,7 +122,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892792</id>
+			<id>1696406388321</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -149,7 +131,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892794</id>
+			<id>1696406388322</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -158,7 +140,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892795</id>
+			<id>1696406388323</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -167,7 +149,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892799</id>
+			<id>1696406388324</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -176,7 +158,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892889</id>
+			<id>1696406388325</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -185,7 +167,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892918</id>
+			<id>1696406388326</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -194,7 +176,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892947</id>
+			<id>1696406388327</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -203,7 +185,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892954</id>
+			<id>1696406388328</id>
 			<name></name>
 			<type>22</type>
 			<matcher>
@@ -212,7 +194,7 @@
 			</matcher>
 		</filter>
 		<filter>
-			<id>1681576892957</id>
+			<id>1696406388329</id>
 			<name></name>
 			<type>22</type>
 			<matcher>

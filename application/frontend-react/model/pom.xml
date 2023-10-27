@@ -29,9 +29,9 @@
                             <goal>default-workflow</goal>
                         </goals>
                         <configuration>
-                            <esm>mvn:${model-groupId}:${model-artifactId}:${model-version}!model/${model-name}-esm.model</esm>
+                            <esm>${maven.multiModuleProjectDirectory}/model/${model-name}.model</esm>
                             <destination>${basedir}</destination>
-                            <validateModels>false</validateModels>
+                            <validateModels>${validateModels}</validateModels>
                             <saveModels>true</saveModels>
                             <useCache>${useCache}</useCache>
                         </configuration>
