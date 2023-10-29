@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>edemokracia-application</artifactId>
+        <groupId>party.mkkp.edemokracia</groupId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>edemokracia-application-rest</artifactId>
+    <name>edemokracia Jakarta RESTful Web Services</name>
+    <description>edemokracia - Jakarta RESTful Web Services</description>
+
+    <packaging>bundle</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>hu.blackbelt.judo.meta</groupId>
+                <artifactId>judo-psm-generator-maven-plugin</artifactId>
+                <version>${judo-meta-psm-version}</version>
+
+                <configuration>
+                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                    <destination>${basedir}/target/generated-sources</destination>
+
+                    <uris>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-common:${judo-psm-generator-jaxrs-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-api:${judo-psm-generator-jaxrs-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-impl:${judo-psm-generator-jaxrs-version}</uri>
+                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-osgi:${judo-psm-generator-jaxrs-version}</uri>
+                    </uris>
+                    <type>psm-jaxrs</type>
+                    <contextAccessor>hu.blackbelt.judo.psm.generator.jaxrs.api.StoredVariableHelper</contextAccessor>
+                    <scanPackages>
+                        hu.blackbelt.judo.generator.commons,
+                        hu.blackbelt.judo.psm.generator.jaxrs
+                    </scanPackages>
+                    <templateParameters>
+                        <debugPrint>true</debugPrint>
+                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                        <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
+                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                    </templateParameters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>execute-psm-rest-generation</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${basedir}/target/generated-sources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>party.mkkp.edemokracia</groupId>
+            <artifactId>edemokracia-application-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo</groupId>
+            <artifactId>judo-sdk-common</artifactId>
+            <version>${judo-sdk-common-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo</groupId>
+            <artifactId>judo-dispatcher-api</artifactId>
+            <version>${judo-dispatcher-api-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>hu.blackbelt.cxf</groupId>
+            <artifactId>cxf-jaxrs-application-manager</artifactId>
+            <version>0.7.1.20230914_110111_1c9ad225_develop</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-jaxrs-api</artifactId>
+            <version>${judo-psm-generator-jaxrs-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-jaxrs-common</artifactId>
+            <version>${judo-psm-generator-jaxrs-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-jaxrs-impl</artifactId>
+            <version>${judo-psm-generator-jaxrs-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-jaxrs-osgi</artifactId>
+            <version>${judo-psm-generator-jaxrs-version}</version>
+        </dependency>
+
+    </dependencies>
+</project>

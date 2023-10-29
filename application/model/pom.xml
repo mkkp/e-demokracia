@@ -120,6 +120,7 @@
                                     <dialectList>${dialectList}</dialectList>
                                     <validateModels>${validateModels}</validateModels>
                                     <ignoreAsm2Openapi>${ignoreOpenapi}</ignoreAsm2Openapi>
+                                    <ignoreAsm2jaxrsapi>true</ignoreAsm2jaxrsapi>
                                     <useCache>${useCache}</useCache>
                                 </configuration>
                             </execution>

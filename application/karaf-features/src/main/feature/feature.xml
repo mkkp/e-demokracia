@@ -29,7 +29,7 @@
         <!-- To define create 'karaf-features/src/main/feature/feature.xml.model-bundles.fragment.hbs' file -->
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-model/${project.version}</bundle>
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-model/${project.version}/jar/script2operation</bundle>
-        <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-model/${project.version}/jar/jaxrsapi</bundle>
+        <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-rest/${project.version}</bundle>
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-sdk/${project.version}</bundle>
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-internal/${project.version}</bundle>
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-app/${project.version}</bundle>
