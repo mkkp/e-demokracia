@@ -17,10 +17,10 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.initializer;
  * 
  * 
  * // TODO: Create superadmin user
- * var edemokracia::admin::AdminPrincipalUser admin = edemokracia::admin::AdminPrincipalUser!filter(u | u.userName == "admin")!any();
+ * var edemokracia::service::ServicePrincipalUser admin = edemokracia::service::ServicePrincipalUser!filter(u | u.userName == "admin")!any();
  * 
  * if (admin!isUndefined()) {
- * 	new edemokracia::admin::AdminPrincipalUser(
+ * 	new edemokracia::service::ServicePrincipalUser(
  * 	    userName = "admin",
  * 	    firstName = "Test",
  * 	    lastName = "Elek",

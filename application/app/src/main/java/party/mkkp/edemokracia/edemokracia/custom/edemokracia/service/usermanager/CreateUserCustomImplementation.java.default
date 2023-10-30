@@ -1,0 +1,44 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    C L A S S
+// ------------------------------
+// Factory expression: #allCustomizableOperations(#model)
+// Path expression: '/'+#emptyCustomOperationOsgiParentPath(#self)+'/'+#emptyCustomOperationOsgiName(#self)+'.java.default'
+// Template name: empty-custom-operation-implementation-osgi.java
+// Template file: osgi/empty-custom-operation-implementation-osgi.java.hbs
+// Debug: false
+// Payload validator: false
+// Optional types: false
+
+package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.usermanager;
+
+/**
+ * 
+ * 
+ * var edemokracia::service::ServicePrincipalUser user = edemokracia::service::ServicePrincipalUser!filter(u | u.userName == input.userName)!any();
+ * 
+ * if (user!isUndefined()) {
+ * 	user = new edemokracia::service::ServicePrincipalUser(
+ * 	    userName = input.userName,
+ * 	    email = input.email,
+ * 	    lastName = input.lastName,
+ * 	    firstName = input.firstName,
+ * 	    isAdmin = input.hasAdminAccess,
+ * 	    phone = input.phone
+ *     )
+ * }
+ * return user;
+ * 
+ * Usage:
+ *  1. Rename this file from CreateUserCustomImplementation.java.default to CreateUserCustomImplementation.java
+ *  2. Implement method
+ *  3. To ignore the generation of CreateUserCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
+ */
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser.class)
+public class CreateUserCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser {
+
+    public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceuser.ServiceUser apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createuserinput.CreateUserInput input)  {
+        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.usermanager.CreateUserExchangeFunctionsComponent");
+    }
+
+}

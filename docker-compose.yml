@@ -1,0 +1,63 @@
+﻿version: '3'
+services:
+  auth:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=judo
+      - KC_DB=postgres
+    command:
+      - start 
+      - --db-url jdbc:postgresql://postgres:5432/edemokracia
+      - --db-username edemokracia
+      - --db-password edemokracia
+      - --db-schema public
+      - --hostname-url https://auth-edem.judo.technology
+      - --http-port 8080
+      - --http-enabled true
+      - --hostname-strict-https false
+      - --hostname-strict false
+      - --proxy edge
+    depends_on:
+      - postgres      
+  app:
+    image: edemokracia-application:latest
+    environment:
+      - EXTRA_JAVA_OPTS=-Xms1024m -Xmx1024m -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+      - JUDO_PLATFORM_IDENTIFIER_SIGNER_SECRET=tJ0lt0h9X2WvVydp4SoDIahBdBcctMxlTn6UJ1xTbQYltBF//qPLmyZPU6X02ETnsP/X7G3IDhGttNXISwyi1uJk5haBj3MI88baDxckmOKpAd6Fy93KSZJgPoGuICD0bPYKeXMSSqEKypt4NkY0NiNL2aLVwL3UDCWHsWQsCfk=
+      - JUDO_PLATFORM_KEYCLOAK_DEFAULT_PASSWORD_POLICY=SAME_USERNAME
+      - JUDO_PLATFORM_LOG_SMTP_SERVER=true
+      - JUDO_PLATFORM_RDBMS_DB_DATABASE=edemokracia
+      - JUDO_PLATFORM_RDBMS_DB_USER=edemokracia
+      - JUDO_PLATFORM_RDBMS_DB_PASSWORD=edemokracia
+      - JUDO_PLATFORM_FILESTORE=filesystem
+      - JUDO_PLATFORM_FILESTORE_DIRECTORY=/filestore
+      - JUDO_PLATFORM_KEYCLOAK_AUTH_SERVER_URL=http://auth:8080
+      - JUDO_PLATFORM_KEYCLOAK_AUTH_PUBLIC_URL=https://auth-edem.judo.technology
+      - JUDO_PLATFORM_MARK_SELECTED_RANGE_ITEMS=true
+      - JUDO_PLATFORM_RDBMS_DIALECT=postgresql
+      - JUDO_PLATFORM_RDBMS_DB_HOST=postgres
+
+  postgres:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=edemokracia
+      - POSTGRES_PASSWORD=edemokracia
+      - POSTGRES_DB=edemokracia
+    ports:
+      - '5432:5432'
+    volumes: 
+      - edemokracia_db:/var/lib/postgresql/data
+      - edemokracia_filestore:/filestore
+      
+networks:
+  edemokracia:
+    name: edemokracia
+    external: true  
+
+volumes:
+  edemokracia_db:
+    external: true
+  edemokracia_filestore:
+    external: true

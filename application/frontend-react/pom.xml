@@ -102,7 +102,7 @@
             </activation>
 
             <modules>
-                    <module>edemokracia__admin__admin</module>
+                    <module>edemokracia__service__user</module>
             </modules>
         </profile>
     </profiles>

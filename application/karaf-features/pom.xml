@@ -185,7 +185,7 @@
 
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
-            <artifactId>edemokracia-application-frontend-react-edemokracia__admin__admin</artifactId>
+            <artifactId>edemokracia-application-frontend-react-edemokracia__service__user</artifactId>
             <version>${project.version}</version>
         </dependency>
 

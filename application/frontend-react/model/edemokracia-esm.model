@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20230930_213149_26c1c3da_develop">
-  <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="admin">
-    <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="Admin" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20231010_091136_f6914164_develop">
+  <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="service">
+    <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="User" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
       <accesses xmi:id="_hvVS8GkuEe25ONJ3V89cVA" target="_p1aUIGksEe25ONJ3V89cVA" name="adminUsers" updateable="true" deleteable="true"/>
       <accesses xmi:id="_vWzZ8G4rEe2siJt-xjHAyw" target="_qI4CsGksEe25ONJ3V89cVA" name="adminCategories" createable="true" updateable="true" deleteable="true"/>
@@ -51,7 +51,7 @@
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_NDbjYFvYEe6bTb-1BwQgmA" name="Menu" label="UserProfile" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_NDSZcFvYEe6bTb-1BwQgmA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_mGvk8FvaEe6bTb-1BwQgmA" name="AdminUserManagerMenu" label="Users" iconName="account" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_mGqscFvaEe6bTb-1BwQgmA"/>
     </elements>
-    <elements xsi:type="structure:TransferObjectType" xmi:id="_ndA8kGkwEe25ONJ3V89cVA" name="AdminPrincipalUser" actorType="_jUnLgGkqEe25ONJ3V89cVA">
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_ndA8kGkwEe25ONJ3V89cVA" name="ServicePrincipalUser" actorType="_jUnLgGkqEe25ONJ3V89cVA">
       <attributes xsi:type="structure:DataMember" xmi:id="_TzJu8H8GEe2kLcMqsIbMgQ" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_vX4k8G5gEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_TzMLMH8GEe2kLcMqsIbMgQ"/>
       </attributes>
@@ -74,9 +74,9 @@
         <inherited xmi:id="_toUoQGkwEe25ONJ3V89cVA"/>
       </attributes>
       <mapping xmi:id="_rus0MGkwEe25ONJ3V89cVA" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-      <form xmi:id="_ndHDMGkwEe25ONJ3V89cVA" name="AdminPrincipalUser_Form" label="AdminPrincipalUser Form" iconName="account" layout="VERTICAL"/>
-      <table xmi:id="_ndKGgGkwEe25ONJ3V89cVA" name="AdminPrincipalUser_Table" label="AdminPrincipalUser Table" iconName="account"/>
-      <view xmi:id="_ndEm8GkwEe25ONJ3V89cVA" name="AdminPrincipalUser_View_Edit" label="AdminPrincipalUser View / Edit" iconName="account" layout="VERTICAL"/>
+      <form xmi:id="_ndHDMGkwEe25ONJ3V89cVA" name="ServicePrincipalUser_Form" label="ServicePrincipalUser Form" iconName="account" layout="VERTICAL"/>
+      <table xmi:id="_ndKGgGkwEe25ONJ3V89cVA" name="ServicePrincipalUser_Table" label="ServicePrincipalUser Table" iconName="account"/>
+      <view xmi:id="_ndEm8GkwEe25ONJ3V89cVA" name="ServicePrincipalUser_View_Edit" label="ServicePrincipalUser View / Edit" iconName="account" layout="VERTICAL"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_a0XksH2iEe2LTNnGda5kaw" name="City">
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_a0XksX2iEe2LTNnGda5kaw" target="_a0UhYH2iEe2LTNnGda5kaw" name="districts" createable="true" updateable="true" deleteable="true" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="MAPPED" binding="_5bxnkHW6Ee2LTNnGda5kaw" getterExpression="">
@@ -1524,7 +1524,7 @@
         <components xsi:type="ui:Group" xmi:id="_QqUxoG5DEe2Q6M99rsfqSQ" name="group_2" col="12"/>
       </view>
     </elements>
-    <elements xsi:type="structure:TransferObjectType" xmi:id="_p1aUIGksEe25ONJ3V89cVA" name="User">
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_p1aUIGksEe25ONJ3V89cVA" name="ServiceUser">
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_qcneEGksEe25ONJ3V89cVA" target="_p8pkkWksEe25ONJ3V89cVA" name="votes" targetDefinedCRUD="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_gilN8GkYEe25ONJ3V89cVA" getterExpression="">
         <inherited xmi:id="_qcwA8GksEe25ONJ3V89cVA"/>
       </relations>
@@ -1571,7 +1571,8 @@
         <inherited xmi:id="_QruTAIdhEe2kLcMqsIbMgQ"/>
       </attributes>
       <mapping xmi:id="_p2B_MGksEe25ONJ3V89cVA" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-      <table xmi:id="_p141QGksEe25ONJ3V89cVA" name="User_Table" label="User Table" iconName="account">
+      <form xmi:id="_FK78wHZpEe6Lrov5d7JZew" name="ServiceUser_Form" label="ServiceUser Form" layout="VERTICAL"/>
+      <table xmi:id="_p141QGksEe25ONJ3V89cVA" name="ServiceUser_Table" label="ServiceUser Table" iconName="account">
         <columns xsi:type="ui:DataColumn" xmi:id="_ertAAH4NEe2cB7_PsKXsHQ" name="userName" label="Username" iconName="text_fields" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_B86YQGkwEe25ONJ3V89cVA" name="isAdmin" label="Has admin access" iconName="check_box" dataFeature="_p4NJcGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_B6R7AGkwEe25ONJ3V89cVA" name="firstName" label="First name" iconName="text_fields" dataFeature="_p2JT8GksEe25ONJ3V89cVA"/>
@@ -1580,7 +1581,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_B8MmkGkwEe25ONJ3V89cVA" name="email" label="Email" iconName="text_fields" dataFeature="_p3jCIGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_B9mUwGkwEe25ONJ3V89cVA" name="created" label="Created" iconName="schedule" dataFeature="_p4zmYGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_p1nIcGksEe25ONJ3V89cVA" name="User_View_Edit" label="User View / Edit" iconName="account" layout="VERTICAL" openInDialog="true" dialogSize="LG">
+      <view xmi:id="_p1nIcGksEe25ONJ3V89cVA" name="ServiceUser_View_Edit" label="ServiceUser View / Edit" iconName="account" layout="VERTICAL" openInDialog="true" dialogSize="LG">
         <components xsi:type="ui:Group" xmi:id="_oUYE0IXsEe2kLcMqsIbMgQ" name="Security" label="Security" iconName="security" frame="true" col="12">
           <components xsi:type="ui:DataField" xmi:id="_erlrQH4NEe2cB7_PsKXsHQ" name="userName" label="Username" iconName="text_fields" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ"/>
           <components xsi:type="ui:DataField" xmi:id="_B8apAGkwEe25ONJ3V89cVA" name="isAdmin" label="Has admin access" iconName="check_box" dataFeature="_p4NJcGksEe25ONJ3V89cVA"/>
@@ -2289,7 +2290,7 @@
         <inherited xmi:id="_l0l3cVv6Ee6nEc5rp_Qy4A"/>
       </attributes>
       <mapping xmi:id="_g8x38FvOEe6jm_SkPSYEYw" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-      <operations xmi:id="_0pdd8FvOEe6jm_SkPSYEYw" name="createUser" customImplementation="false" body="var edemokracia::admin::AdminPrincipalUser user = edemokracia::admin::AdminPrincipalUser!filter(u | u.userName == input.userName)!any();&#xA;&#xA;if (user!isUndefined()) {&#xA;&#x9;user = new edemokracia::admin::AdminPrincipalUser(&#xA;&#x9;    userName = input.userName,&#xA;&#x9;    email = input.email,&#xA;&#x9;    lastName = input.lastName,&#xA;&#x9;    firstName = input.firstName,&#xA;&#x9;    isAdmin = input.hasAdminAccess,&#xA;&#x9;    phone = input.phone&#xA;    )&#xA;}&#xA;return user;" operationType="STATIC" binding="">
+      <operations xmi:id="_0pdd8FvOEe6jm_SkPSYEYw" name="createUser" customImplementation="false" body="var edemokracia::service::ServicePrincipalUser user = edemokracia::service::ServicePrincipalUser!filter(u | u.userName == input.userName)!any();&#xA;&#xA;if (user!isUndefined()) {&#xA;&#x9;user = new edemokracia::service::ServicePrincipalUser(&#xA;&#x9;    userName = input.userName,&#xA;&#x9;    email = input.email,&#xA;&#x9;    lastName = input.lastName,&#xA;&#x9;    firstName = input.firstName,&#xA;&#x9;    isAdmin = input.hasAdminAccess,&#xA;&#x9;    phone = input.phone&#xA;    )&#xA;}&#xA;return user;" operationType="STATIC" binding="">
         <input xmi:id="_0pdd8VvOEe6jm_SkPSYEYw" lower="1" upper="1" target="_eNSH8I1eEe2J66C5CrhpQw" name="input" rangeExpression=""/>
         <output xmi:id="_0pdd8lvOEe6jm_SkPSYEYw" lower="1" upper="1" target="_p1aUIGksEe25ONJ3V89cVA" name="output" targetDefinedCRUD="true"/>
         <inherited xmi:id="_0pdd81vOEe6jm_SkPSYEYw"/>
@@ -3653,7 +3654,7 @@
   </elements>
   <elements xsi:type="structure:TransferObjectType" xmi:id="_j7q00I1jEe2J66C5CrhpQw" name="Initializer">
     <mapping xmi:id="_y3O1MI1jEe2J66C5CrhpQw" target="_BuSFMGkWEe25ONJ3V89cVA"/>
-    <operations xmi:id="_5rSi8I1jEe2J66C5CrhpQw" name="initUsers" customImplementation="false" body="&#xA;&#xA;// TODO: Create superadmin user&#xA;var edemokracia::admin::AdminPrincipalUser admin = edemokracia::admin::AdminPrincipalUser!filter(u | u.userName == &quot;admin&quot;)!any();&#xA;&#xA;if (admin!isUndefined()) {&#xA;&#x9;new edemokracia::admin::AdminPrincipalUser(&#xA;&#x9;    userName = &quot;admin&quot;,&#xA;&#x9;    firstName = &quot;Test&quot;,&#xA;&#x9;    lastName = &quot;Elek&quot;,&#xA;&#x9;    isAdmin = true,&#xA;&#x9;    email = &quot;test@mkkp.party&quot;&#xA;    )&#xA;}&#xA;" operationType="STATIC" binding="" initializer="true">
+    <operations xmi:id="_5rSi8I1jEe2J66C5CrhpQw" name="initUsers" customImplementation="false" body="&#xA;&#xA;// TODO: Create superadmin user&#xA;var edemokracia::service::ServicePrincipalUser admin = edemokracia::service::ServicePrincipalUser!filter(u | u.userName == &quot;admin&quot;)!any();&#xA;&#xA;if (admin!isUndefined()) {&#xA;&#x9;new edemokracia::service::ServicePrincipalUser(&#xA;&#x9;    userName = &quot;admin&quot;,&#xA;&#x9;    firstName = &quot;Test&quot;,&#xA;&#x9;    lastName = &quot;Elek&quot;,&#xA;&#x9;    isAdmin = true,&#xA;&#x9;    email = &quot;test@mkkp.party&quot;&#xA;    )&#xA;}&#xA;" operationType="STATIC" binding="" initializer="true">
       <inherited xmi:id="_5rSi8Y1jEe2J66C5CrhpQw"/>
     </operations>
     <operations xmi:id="_75dqsI1jEe2J66C5CrhpQw" name="initCategories" customImplementation="false" body="var edemokracia::IssueCategory szocialis_kerdesek = edemokracia::IssueCategory!filter(c | c.title == &quot;Szociális kérdések&quot;)!any();&#xA;if (szocialis_kerdesek!isUndefined()) {&#xA;&#x9;szocialis_kerdesek = new edemokracia::IssueCategory(title = &quot;Szociális kérdések&quot;, description = &quot;Szociális kérdések&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory oktatas = edemokracia::IssueCategory!filter(c | c.title == &quot;Oktatás&quot;)!any();&#xA;if (oktatas!isUndefined()) {&#xA;&#x9;oktatas = new edemokracia::IssueCategory(title = &quot;Oktatás&quot;, description = &quot;Oktatás&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory egeszsegugy = edemokracia::IssueCategory!filter(c | c.title == &quot;Egészségügy&quot;)!any();&#xA;if (egeszsegugy!isUndefined()) {&#xA;&#x9;egeszsegugy = new edemokracia::IssueCategory(title = &quot;Egészségügy&quot;, description = &quot;Egészségügy&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory kornyezetvedelem = edemokracia::IssueCategory!filter(c | c.title == &quot;Környezetvédelem&quot;)!any();&#xA;if (kornyezetvedelem!isUndefined()) {&#xA;&#x9;kornyezetvedelem = new edemokracia::IssueCategory(title = &quot;Környezetvédelem&quot;, description = &quot;Környezetvédelem&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory kultura = edemokracia::IssueCategory!filter(c | c.title == &quot;Kultúra&quot;)!any();&#xA;if (kultura!isUndefined()) {&#xA;&#x9;kultura = new edemokracia::IssueCategory(title = &quot;Kultúra&quot;, description = &quot;Kultúra&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory gazdasag = edemokracia::IssueCategory!filter(c | c.title == &quot;Gazdaság&quot;)!any();&#xA;if (gazdasag!isUndefined()) {&#xA;&#x9;gazdasag = new edemokracia::IssueCategory(title = &quot;Gazdaság&quot;, description = &quot;Gazdaság&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory energetika_logisztika = edemokracia::IssueCategory!filter(c | c.title == &quot;Energetika, logisztika&quot;)!any();&#xA;if (energetika_logisztika!isUndefined()) {&#xA;&#x9;energetika_logisztika = new edemokracia::IssueCategory(title = &quot;Energetika, logisztika&quot;, description = &quot;Energetika, logisztika&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory belugy = edemokracia::IssueCategory!filter(c | c.title == &quot;Belügy&quot;)!any();&#xA;if (belugy!isUndefined()) {&#xA;&#x9;belugy = new edemokracia::IssueCategory(title = &quot;Belügy&quot;, description = &quot;Belügy&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory kulugy = edemokracia::IssueCategory!filter(c | c.title == &quot;Külügy&quot;)!any();&#xA;if (kulugy!isUndefined()) {&#xA;&#x9;kulugy = new edemokracia::IssueCategory(title = &quot;Külügy&quot;, description = &quot;Külügy&quot;);&#xA;}&#xA;&#xA;var edemokracia::IssueCategory it_media = edemokracia::IssueCategory!filter(c | c.title == &quot;Információ technológia, Média és tömegtájékoztatás&quot;)!any();&#xA;if (it_media!isUndefined()) {&#xA;&#x9;it_media = new edemokracia::IssueCategory(title = &quot;Információ technológia, Média és tömegtájékoztatás&quot;, description = &quot;Információ technológia, Média és tömegtájékoztatás&quot;);&#xA;}&#xA;&#xA;" operationType="STATIC" binding="" initializer="true">

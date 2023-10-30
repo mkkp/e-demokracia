@@ -31,9 +31,9 @@ The pom.xml contains the model and all actors as a submodule.
 The model project. It creates the UI model from ESM model and stores it in the model directory(basedir). This UI model
 is used by actors.
 
-- `edemokracia__admin__admin`
+- `edemokracia__service__user`
 +
-Admin actor
+User actor
 
 The submodules can be compiled / deployed separately.
 
