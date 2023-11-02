@@ -11,16 +11,13 @@ import {
   ServiceRatingVoteDefinition,
   ServiceRatingVoteEntryQueryCustomizer,
   RatingVoteInput,
-  ServiceDebate,
   ServiceRatingVoteDefinitionStored,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceRatingVoteDefinitionQueryCustomizer,
-  ServiceIssueStored,
-  ServiceIssue,
-  ServiceDebateQueryCustomizer,
   ServiceRatingVoteEntry,
+  ServiceIssueStored,
   ServiceRatingVoteEntryStored,
+  ServiceIssue,
 } from '../data-api';
 
 /**
@@ -33,16 +30,6 @@ export interface ServiceRatingVoteDefinitionServiceForClass {
   ): Promise<ServiceRatingVoteDefinitionStored>;
 
   update(target: Partial<ServiceRatingVoteDefinitionStored>): Promise<ServiceRatingVoteDefinitionStored>;
-
-  getDebate(
-    target: JudoIdentifiable<ServiceRatingVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored>;
-
-  getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceRatingVoteDefinition> | ServiceRatingVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>>;
 
   getIssue(
     target: JudoIdentifiable<ServiceRatingVoteDefinition>,

@@ -12,6 +12,5 @@ export * from './pageRefreshUserOwnedRatingVoteDefinitions';
 export * from './voteEntries/rowViewVoteEntries';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/tableActionVoteEntries';
-export * from './debate/buttonNavigateDebate';
 export * from './issue/buttonNavigateIssue';
 export * from './voteEntries/tableRefreshRelationVoteEntries';

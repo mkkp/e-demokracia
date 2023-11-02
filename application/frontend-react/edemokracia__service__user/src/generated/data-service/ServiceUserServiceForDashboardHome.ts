@@ -8,20 +8,17 @@
 
 import {
   ServiceVoteDefinitionStored,
-  ServiceDebate,
+  ServiceDashboardQueryCustomizer,
   ServiceVoteDefinitionQueryCustomizer,
+  ServiceDashboard,
   ServiceVoteEntryQueryCustomizer,
   ServiceIssueQueryCustomizer,
-  ServiceDebateStored,
   ServiceVoteDefinition,
+  ServiceDashboardStored,
   ServiceIssueStored,
   ServiceVoteEntryStored,
   ServiceVoteEntry,
   ServiceIssue,
-  ServiceDashboardQueryCustomizer,
-  ServiceDebateQueryCustomizer,
-  ServiceDashboard,
-  ServiceDashboardStored,
 } from '../data-api';
 
 /**

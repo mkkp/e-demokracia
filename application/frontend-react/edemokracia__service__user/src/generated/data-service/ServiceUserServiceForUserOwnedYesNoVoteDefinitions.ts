@@ -9,11 +9,8 @@
 import {
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteEntryStored,
-  ServiceDebate,
   ServiceYesNoVoteEntry,
-  ServiceDebateQueryCustomizer,
   ServiceYesNoVoteDefinitionStored,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
   ServiceYesNoVoteDefinitionQueryCustomizer,

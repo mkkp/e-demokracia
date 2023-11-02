@@ -13,20 +13,13 @@ import { ServiceVoteDefinitionStored } from './ServiceVoteDefinition';
 export interface ServiceVoteEntry {
   created: Date;
   issueTitle?: null | string;
-  debateTitle?: null | string;
   voteTitle?: null | string;
   voteStatus?: null | EdemokraciaVoteStatus;
   userName?: null | string;
 
   voteDefinition?: null | ServiceVoteDefinitionStored;
 }
-export type ServiceVoteEntryAttributes =
-  | 'created'
-  | 'issueTitle'
-  | 'debateTitle'
-  | 'voteTitle'
-  | 'voteStatus'
-  | 'userName';
+export type ServiceVoteEntryAttributes = 'created' | 'issueTitle' | 'voteTitle' | 'voteStatus' | 'userName';
 
 export type ServiceVoteEntryRelations = 'voteDefinition';
 

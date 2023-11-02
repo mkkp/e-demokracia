@@ -10,18 +10,15 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  ServiceDebate,
   ServiceYesNoAbstainVoteDefinitionStored,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   YesNoAbstainVoteInput,
   ServiceYesNoAbstainVoteDefinition,
   ServiceIssueStored,
-  ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ServiceIssue,
-  ServiceDebateQueryCustomizer,
   ServiceYesNoAbstainVoteEntryStored,
   ServiceYesNoAbstainVoteEntry,
+  ServiceYesNoAbstainVoteEntryQueryCustomizer,
+  ServiceIssue,
 } from '../data-api';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForClass } from '../data-service';
 
@@ -60,39 +57,6 @@ export class ServiceYesNoAbstainVoteDefinitionServiceForClassImpl
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getDebate(
-    target: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored> {
-    const path = '/service/YesNoAbstainVoteDefinition/debate/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/YesNoAbstainVoteDefinition/debate/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;

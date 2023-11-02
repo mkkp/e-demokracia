@@ -8,7 +8,6 @@
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNo';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteSelectAnswer';
-export * from './debate/buttonNavigateDebate';
 export * from './pageDeleteAdminVoteDefinitions';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteRatingForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteRating';

@@ -10,20 +10,17 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceVoteDefinitionStored,
-  ServiceDebate,
+  ServiceDashboardQueryCustomizer,
   ServiceVoteDefinitionQueryCustomizer,
+  ServiceDashboard,
   ServiceVoteEntryQueryCustomizer,
   ServiceIssueQueryCustomizer,
-  ServiceDebateStored,
   ServiceVoteDefinition,
+  ServiceDashboardStored,
   ServiceIssueStored,
   ServiceVoteEntry,
   ServiceVoteEntryStored,
   ServiceIssue,
-  ServiceDashboardQueryCustomizer,
-  ServiceDebateQueryCustomizer,
-  ServiceDashboard,
-  ServiceDashboardStored,
 } from '../data-api';
 import type { ServiceDashboardServiceForClass } from '../data-service';
 
@@ -84,39 +81,6 @@ export class ServiceDashboardServiceForClassImpl extends JudoAxiosService implem
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getOwnedDebates(
-    target: JudoIdentifiable<ServiceDashboard>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/Dashboard/ownedDebates/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForOwnedDebates(
-    owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/Dashboard/ownedDebates/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
   async getUserVoteEntries(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
@@ -139,39 +103,6 @@ export class ServiceDashboardServiceForClassImpl extends JudoAxiosService implem
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceVoteEntryStored>> {
     const path = '/service/Dashboard/userVoteEntries/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getFavoriteDebates(
-    target: JudoIdentifiable<ServiceDashboard>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/Dashboard/favoriteDebates/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForFavoriteDebates(
-    owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/Dashboard/favoriteDebates/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

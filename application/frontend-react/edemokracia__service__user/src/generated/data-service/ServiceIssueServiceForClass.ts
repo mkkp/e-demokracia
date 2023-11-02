@@ -8,23 +8,26 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceIssueDebateQueryCustomizer,
   ServiceDistrictQueryCustomizer,
   ServiceCommentQueryCustomizer,
-  CreateDebateInput,
+  CloseDebateOutputVoteDefinitionReferenceStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueStored,
-  ServiceIssueDebateStored,
+  ServiceConStored,
   ServiceIssue,
-  ServiceIssueDebate,
   ServiceServiceUser,
   ServiceCity,
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueCategory,
   CreateCommentInput,
   ServiceCountyStored,
+  ServiceConQueryCustomizer,
   ServiceCounty,
+  ServiceProStored,
+  CreateArgumentInput,
+  ServicePro,
+  CloseDebateInput,
   ServiceIssueType,
   ServiceComment,
   ServiceIssueAttachment,
@@ -33,7 +36,8 @@ import {
   ServiceServiceUserStored,
   ServiceCommentStored,
   ServiceIssueCategoryStored,
-  CreateDebateOutputDebateReferenceStored,
+  ServiceCon,
+  ServiceProQueryCustomizer,
   ServiceDistrictStored,
   ServiceIssueAttachmentQueryCustomizer,
   ServiceServiceUserQueryCustomizer,
@@ -104,16 +108,6 @@ export interface ServiceIssueServiceForClass {
     target: JudoIdentifiable<ServiceIssue>,
     selected: Array<JudoIdentifiable<ServiceIssueCategory>>,
   ): Promise<void>;
-
-  getDebates(
-    target: JudoIdentifiable<ServiceIssue>,
-    queryCustomizer?: ServiceIssueDebateQueryCustomizer,
-  ): Promise<Array<ServiceIssueDebateStored>>;
-
-  getRangeForDebates(
-    owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
-    queryCustomizer?: ServiceIssueDebateQueryCustomizer,
-  ): Promise<Array<ServiceIssueDebateStored>>;
 
   getComments(
     target: JudoIdentifiable<ServiceIssue>,
@@ -191,14 +185,44 @@ export interface ServiceIssueServiceForClass {
 
   unsetDistrict(target: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
-  createDebate(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateDebateInput,
-  ): Promise<CreateDebateOutputDebateReferenceStored>;
+  getCons(
+    target: JudoIdentifiable<ServiceIssue>,
+    queryCustomizer?: ServiceConQueryCustomizer,
+  ): Promise<Array<ServiceConStored>>;
+
+  getRangeForCons(
+    owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
+    queryCustomizer?: ServiceConQueryCustomizer,
+  ): Promise<Array<ServiceConStored>>;
+
+  getPros(
+    target: JudoIdentifiable<ServiceIssue>,
+    queryCustomizer?: ServiceProQueryCustomizer,
+  ): Promise<Array<ServiceProStored>>;
+
+  getRangeForPros(
+    owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
+    queryCustomizer?: ServiceProQueryCustomizer,
+  ): Promise<Array<ServiceProStored>>;
 
   createComment(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
 
   addToFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   removeFromFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  closeDebate(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+
+  createConArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  createProArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  closeVote(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activate(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchive(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 }

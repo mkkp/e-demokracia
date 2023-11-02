@@ -67,6 +67,9 @@ import {
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceCommentStored,
+  ServiceCon,
+  ServiceConQueryCustomizer,
+  ServiceConStored,
   ServiceCounty,
   ServiceCountyQueryCustomizer,
   ServiceCountyStored,
@@ -80,23 +83,28 @@ import {
   ServiceIssueCategory,
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
-  ServiceIssueDebate,
-  ServiceIssueDebateQueryCustomizer,
-  ServiceIssueDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
   ServiceIssueType,
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueTypeStored,
+  ServicePro,
+  ServiceProQueryCustomizer,
+  ServiceProStored,
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/generated/data-api';
 import { serviceUserServiceForActiveIssuesImpl, serviceIssueServiceForClassImpl } from '~/generated/data-axios';
 import {
-  useServiceIssueCreateDebateAction,
   useServiceIssueAddToFavoritesAction,
   useServiceIssueRemoveFromFavoritesAction,
+  useServiceIssueCloseDebateAction,
+  useServiceIssueCloseVoteAction,
+  useServiceIssueActivateAction,
+  useServiceIssueDeleteOrArchiveAction,
+  useServiceIssueCreateConArgumentAction,
+  useServiceIssueCreateProArgumentAction,
   useServiceIssueCreateCommentAction,
 } from './actions';
 
@@ -106,10 +114,11 @@ import { OwnerLink } from './components/OwnerLink';
 import { CityLink } from './components/CityLink';
 import { CountyLink } from './components/CountyLink';
 import { DistrictLink } from './components/DistrictLink';
+import { ConsTable } from './components/ConsTable';
+import { ProsTable } from './components/ProsTable';
 import { AttachmentsTable } from './components/AttachmentsTable';
 import { CategoriesTable } from './components/CategoriesTable';
 import { CommentsTable } from './components/CommentsTable';
-import { DebatesTable } from './components/DebatesTable';
 
 export type ServiceUserActiveIssuesViewPostRefreshAction = (
   data: ServiceIssueStored,
@@ -152,7 +161,7 @@ export default function ServiceUserActiveIssuesView() {
   const storeDiff: (attributeName: keyof ServiceIssueStored, value: any) => void = useCallback(
     (attributeName: keyof ServiceIssueStored, value: any) => {
       const dateTypes: string[] = [];
-      const dateTimeTypes: string[] = [];
+      const dateTimeTypes: string[] = ['debateCloseAt'];
       const timeTypes: string[] = [];
       if (dateTypes.includes(attributeName as string)) {
         payloadDiff[attributeName] = uiDateToServiceDate(value);
@@ -177,7 +186,7 @@ export default function ServiceUserActiveIssuesView() {
 
   const queryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{isFavorite,isNotFavorite,defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},debates{status,title,closeAt,description},comments{comment,created,createdByName,upVotes,downVotes}}',
+      '{isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable,defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},comments{comment,created,createdByName,upVotes,downVotes}}',
   };
 
   const { service: postRefreshHook } = useTrackService<ServiceUserActiveIssuesViewPostRefreshHook>(
@@ -186,9 +195,14 @@ export default function ServiceUserActiveIssuesView() {
   const postRefreshAction: ServiceUserActiveIssuesViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const serviceIssueCreateDebateAction = useServiceIssueCreateDebateAction();
   const serviceIssueAddToFavoritesAction = useServiceIssueAddToFavoritesAction();
   const serviceIssueRemoveFromFavoritesAction = useServiceIssueRemoveFromFavoritesAction();
+  const serviceIssueCloseDebateAction = useServiceIssueCloseDebateAction();
+  const serviceIssueCloseVoteAction = useServiceIssueCloseVoteAction();
+  const serviceIssueActivateAction = useServiceIssueActivateAction();
+  const serviceIssueDeleteOrArchiveAction = useServiceIssueDeleteOrArchiveAction();
+  const serviceIssueCreateConArgumentAction = useServiceIssueCreateConArgumentAction();
+  const serviceIssueCreateProArgumentAction = useServiceIssueCreateProArgumentAction();
   const serviceIssueCreateCommentAction = useServiceIssueCreateCommentAction();
 
   const title: string = t('service.IssueView', { defaultValue: 'Issue View / Edit' });
@@ -275,28 +289,6 @@ export default function ServiceUserActiveIssuesView() {
               >
                 <Grid item xs={12}>
                   <Grid container spacing={2}>
-                    <Grid item>
-                      <LoadingButton
-                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditActionsPageActionButtonsCreateDebate"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="wechat" />}
-                        loadingPosition="start"
-                        onClick={async () => {
-                          try {
-                            setIsLoading(true);
-                            await serviceIssueCreateDebateAction(data, () => fetchData());
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.IssueView.PageActionButtons.createDebate', { defaultValue: 'Create debate' })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
-
                     {!data.isFavorite && (
                       <Grid item>
                         <LoadingButton
@@ -347,6 +339,94 @@ export default function ServiceUserActiveIssuesView() {
                         </LoadingButton>
                       </Grid>
                     )}
+
+                    <Grid item>
+                      <LoadingButton
+                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditActionsPageActionButtonsCloseDebate"
+                        loading={isLoading}
+                        startIcon={<MdiIcon path="vote" />}
+                        loadingPosition="start"
+                        onClick={async () => {
+                          try {
+                            setIsLoading(true);
+                            await serviceIssueCloseDebateAction(data, () => fetchData());
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={editMode}
+                      >
+                        <span>
+                          {t('service.IssueView.PageActionButtons.closeDebate', {
+                            defaultValue: 'Close debate and start vote',
+                          })}
+                        </span>
+                      </LoadingButton>
+                    </Grid>
+
+                    <Grid item>
+                      <LoadingButton
+                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditActionsPageActionButtonsCloseVote"
+                        loading={isLoading}
+                        startIcon={<MdiIcon path="lock-check" />}
+                        loadingPosition="start"
+                        onClick={async () => {
+                          try {
+                            setIsLoading(true);
+                            await serviceIssueCloseVoteAction(data, () => fetchData());
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={editMode}
+                      >
+                        <span>
+                          {t('service.IssueView.PageActionButtons.closeVote', { defaultValue: 'Close Vote' })}
+                        </span>
+                      </LoadingButton>
+                    </Grid>
+
+                    <Grid item>
+                      <LoadingButton
+                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditActionsPageActionButtonsActivate"
+                        loading={isLoading}
+                        startIcon={<MdiIcon path="lock-open" />}
+                        loadingPosition="start"
+                        onClick={async () => {
+                          try {
+                            setIsLoading(true);
+                            await serviceIssueActivateAction(data, () => fetchData());
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={editMode}
+                      >
+                        <span>{t('service.IssueView.PageActionButtons.activate', { defaultValue: 'Activate' })}</span>
+                      </LoadingButton>
+                    </Grid>
+
+                    <Grid item>
+                      <LoadingButton
+                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditActionsPageActionButtonsDeleteOrArchive"
+                        loading={isLoading}
+                        startIcon={<MdiIcon path="delete" />}
+                        loadingPosition="start"
+                        onClick={async () => {
+                          try {
+                            setIsLoading(true);
+                            await serviceIssueDeleteOrArchiveAction(data, () => fetchData());
+                          } finally {
+                            setIsLoading(false);
+                          }
+                        }}
+                        disabled={editMode}
+                      >
+                        <span>
+                          {t('service.IssueView.PageActionButtons.deleteOrArchive', { defaultValue: 'Delete' })}
+                        </span>
+                      </LoadingButton>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
@@ -543,6 +623,12 @@ export default function ServiceUserActiveIssuesView() {
                             >
                               {t('enumerations.EdemokraciaIssueStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
                             </MenuItem>
+                            <MenuItem
+                              id="EnumerationMemberedemokraciaServiceUserEdemokraciaIssueStatusVOTING"
+                              value={'VOTING'}
+                            >
+                              {t('enumerations.EdemokraciaIssueStatus.VOTING', { defaultValue: 'VOTING' })}
+                            </MenuItem>
                           </TextField>
                         </Grid>
 
@@ -655,6 +741,15 @@ export default function ServiceUserActiveIssuesView() {
                 orientation='horizontal'
                 childTabs={[
                   {
+                    id: 'TabedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArguments',
+                    name: 'service.IssueView.arguments',
+                    label: t('service.IssueView.arguments', { defaultValue: 'Arguments' }) as string,
+                    disabled: isLoading,
+                    hidden: false,
+                    icon: 'wechat',
+                    nestedDataKeys: ['cons', 'pros'],
+                  },
+                  {
                     id: 'TabedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArea',
                     name: 'service.IssueView.area',
                     label: t('service.IssueView.area', { defaultValue: 'Area' }) as string,
@@ -682,15 +777,6 @@ export default function ServiceUserActiveIssuesView() {
                     nestedDataKeys: ['categories'],
                   },
                   {
-                    id: 'TabedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherDebates',
-                    name: 'service.IssueView.debates',
-                    label: t('service.IssueView.debates', { defaultValue: 'Debates' }) as string,
-                    disabled: isLoading,
-                    hidden: false,
-                    icon: 'wechat',
-                    nestedDataKeys: ['debates'],
-                  },
-                  {
                     id: 'TabedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherComments',
                     name: 'service.IssueView.comments',
                     label: t('service.IssueView.comments', { defaultValue: 'Comments' }) as string,
@@ -701,6 +787,249 @@ export default function ServiceUserActiveIssuesView() {
                   },
                 ]}
               >
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArguments"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    <Grid item xs={12} sm={12} md={6.0}>
+                      <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapper">
+                        <CardContent>
+                          <Grid
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                            spacing={2}
+                          >
+                            <Grid item xs={12} sm={12}>
+                              <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                                <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
+                                <Typography
+                                  id="LabeledemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapperConsLabel"
+                                  variant="h5"
+                                  component="h1"
+                                >
+                                  {t('service.IssueView.cons.Label', { defaultValue: 'Cons' })}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+
+                            <Grid item xs={12} sm={12}>
+                              <Grid
+                                id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapperCons"
+                                container
+                                direction="row"
+                                alignItems="stretch"
+                                justifyContent="flex-start"
+                                spacing={2}
+                              >
+                                <Grid item xs={12} sm={12}>
+                                  <Grid
+                                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapperConsActions"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
+                                      <LoadingButton
+                                        id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewEdemokraciaServiceUserEdemokraciaServiceIssueCreateConArgumentButtonCallOperation"
+                                        loading={isLoading}
+                                        variant={undefined}
+                                        startIcon={<MdiIcon path="chat-minus" />}
+                                        loadingPosition="start"
+                                        onClick={async () => {
+                                          try {
+                                            setIsLoading(true);
+                                            await serviceIssueCreateConArgumentAction(data, () => fetchData());
+                                          } finally {
+                                            setIsLoading(false);
+                                          }
+                                        }}
+                                        disabled={editMode}
+                                      >
+                                        <span>
+                                          {t('service.IssueView.createConArgument.ButtonCallOperation', {
+                                            defaultValue: 'Add Con Argument',
+                                          })}
+                                        </span>
+                                      </LoadingButton>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+
+                                <Grid item xs={12} sm={12}>
+                                  <Grid
+                                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapperConsTable"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
+                                      <Grid
+                                        id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapperConsTableConsLabelWrapper"
+                                        container
+                                        direction="column"
+                                        alignItems="stretch"
+                                        justifyContent="flex-start"
+                                        spacing={2}
+                                      >
+                                        <Grid item xs={12} sm={12}>
+                                          <Grid
+                                            id="TableedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsConsLabelWrapperConsTableConsLabelWrapperCons"
+                                            container
+                                            direction="column"
+                                            alignItems="stretch"
+                                            justifyContent="flex-start"
+                                          >
+                                            <ConsTable
+                                              isOwnerLoading={isLoading}
+                                              validation={validation}
+                                              fetchOwnerData={fetchData}
+                                              ownerData={data}
+                                              editMode={editMode}
+                                              isFormUpdateable={isFormUpdateable}
+                                              storeDiff={storeDiff}
+                                            />
+                                          </Grid>
+                                        </Grid>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} md={6.0}>
+                      <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapper">
+                        <CardContent>
+                          <Grid
+                            container
+                            direction="column"
+                            alignItems="stretch"
+                            justifyContent="flex-start"
+                            spacing={2}
+                          >
+                            <Grid item xs={12} sm={12}>
+                              <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                                <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
+                                <Typography
+                                  id="LabeledemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapperProsLabel"
+                                  variant="h5"
+                                  component="h1"
+                                >
+                                  {t('service.IssueView.pros.Label', { defaultValue: 'Pros' })}
+                                </Typography>
+                              </Grid>
+                            </Grid>
+
+                            <Grid item xs={12} sm={12}>
+                              <Grid
+                                id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapperPros"
+                                container
+                                direction="row"
+                                alignItems="stretch"
+                                justifyContent="flex-start"
+                                spacing={2}
+                              >
+                                <Grid item xs={12} sm={12}>
+                                  <Grid
+                                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapperProsActions"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
+                                      <LoadingButton
+                                        id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewEdemokraciaServiceUserEdemokraciaServiceIssueCreateProArgumentButtonCallOperation"
+                                        loading={isLoading}
+                                        variant={undefined}
+                                        startIcon={<MdiIcon path="chat-plus" />}
+                                        loadingPosition="start"
+                                        onClick={async () => {
+                                          try {
+                                            setIsLoading(true);
+                                            await serviceIssueCreateProArgumentAction(data, () => fetchData());
+                                          } finally {
+                                            setIsLoading(false);
+                                          }
+                                        }}
+                                        disabled={editMode}
+                                      >
+                                        <span>
+                                          {t('service.IssueView.createProArgument.ButtonCallOperation', {
+                                            defaultValue: 'Add Pro Argument',
+                                          })}
+                                        </span>
+                                      </LoadingButton>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+
+                                <Grid item xs={12} sm={12}>
+                                  <Grid
+                                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapperProsTable"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12}>
+                                      <Grid
+                                        id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapperProsTableProsLabelWrapper"
+                                        container
+                                        direction="column"
+                                        alignItems="stretch"
+                                        justifyContent="flex-start"
+                                        spacing={2}
+                                      >
+                                        <Grid item xs={12} sm={12}>
+                                          <Grid
+                                            id="TableedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherArgumentsArgumentsProsLabelWrapperProsTableProsLabelWrapperPros"
+                                            container
+                                            direction="column"
+                                            alignItems="stretch"
+                                            justifyContent="flex-start"
+                                          >
+                                            <ProsTable
+                                              isOwnerLoading={isLoading}
+                                              validation={validation}
+                                              fetchOwnerData={fetchData}
+                                              ownerData={data}
+                                              editMode={editMode}
+                                              isFormUpdateable={isFormUpdateable}
+                                              storeDiff={storeDiff}
+                                            />
+                                          </Grid>
+                                        </Grid>
+                                      </Grid>
+                                    </Grid>
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
                 <Grid item xs={12} sm={12}>
                   <Grid
                     id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherAreaArea"
@@ -823,61 +1152,6 @@ export default function ServiceUserActiveIssuesView() {
                             justifyContent="flex-start"
                           >
                             <CategoriesTable
-                              isOwnerLoading={isLoading}
-                              validation={validation}
-                              fetchOwnerData={fetchData}
-                              ownerData={data}
-                              editMode={editMode}
-                              isFormUpdateable={isFormUpdateable}
-                              storeDiff={storeDiff}
-                            />
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
-                <Grid item xs={12} sm={12}>
-                  <Grid
-                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherDebatesDebates"
-                    container
-                    direction="row"
-                    alignItems="flex-start"
-                    justifyContent="flex-start"
-                    spacing={2}
-                  >
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapper"
-                        container
-                        direction="column"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        <Grid item xs={12} sm={12}>
-                          <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                            <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                            <Typography
-                              id="LabeledemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebatesLabel"
-                              variant="h5"
-                              component="h1"
-                            >
-                              {t('service.IssueView.debates.Label', { defaultValue: 'Debates' })}
-                            </Typography>
-                          </Grid>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="TableedemokraciaServiceUserEdemokraciaServiceUserActiveIssuesViewDefaultIssueViewEditOtherDebatesDebatesDebatesLabelWrapperDebates"
-                            container
-                            direction="column"
-                            alignItems="stretch"
-                            justifyContent="flex-start"
-                          >
-                            <DebatesTable
                               isOwnerLoading={isLoading}
                               validation={validation}
                               fetchOwnerData={fetchData}

@@ -8,21 +8,17 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceComment,
   ServiceProParentQueryCustomizer,
   ServiceConParent,
-  ServiceCommentQueryCustomizer,
   ServiceConParentQueryCustomizer,
   ServiceSimpleVote,
   ServiceConParentStored,
   ServiceServiceUserStored,
-  ServiceCommentStored,
   ServiceCon,
   ServiceConStored,
   ServiceSimpleVoteStored,
   ServiceServiceUser,
   ServiceProQueryCustomizer,
-  CreateCommentInput,
   ServiceProParentStored,
   ServiceConQueryCustomizer,
   ServiceProStored,
@@ -83,16 +79,6 @@ export interface ServiceProServiceForClass {
     queryCustomizer?: ServiceConQueryCustomizer,
   ): Promise<Array<ServiceConStored>>;
 
-  getComments(
-    target: JudoIdentifiable<ServicePro>,
-    queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<Array<ServiceCommentStored>>;
-
-  getRangeForComments(
-    owner?: JudoIdentifiable<ServicePro> | ServicePro,
-    queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<Array<ServiceCommentStored>>;
-
   getParentPro(
     target: JudoIdentifiable<ServicePro>,
     queryCustomizer?: ServiceProParentQueryCustomizer,
@@ -113,11 +99,11 @@ export interface ServiceProServiceForClass {
     queryCustomizer?: ServiceConParentQueryCustomizer,
   ): Promise<Array<ServiceConParentStored>>;
 
-  createSubArgument(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
-
   voteUp(owner: JudoIdentifiable<ServicePro>): Promise<void>;
 
   voteDown(owner: JudoIdentifiable<ServicePro>): Promise<void>;
 
-  createComment(owner: JudoIdentifiable<ServicePro>, target: CreateCommentInput): Promise<void>;
+  createConArgument(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
+
+  createProArgument(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
 }

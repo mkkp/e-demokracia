@@ -12,12 +12,13 @@ import { EdemokraciaIssueStatus } from './EdemokraciaIssueStatus';
 import { EdemokraciaVoteType } from './EdemokraciaVoteType';
 import { ServiceCityStored } from './ServiceCity';
 import { ServiceCommentStored } from './ServiceComment';
+import { ServiceConStored } from './ServiceCon';
 import { ServiceCountyStored } from './ServiceCounty';
 import { ServiceDistrictStored } from './ServiceDistrict';
 import { ServiceIssueAttachmentStored } from './ServiceIssueAttachment';
 import { ServiceIssueCategoryStored } from './ServiceIssueCategory';
-import { ServiceIssueDebateStored } from './ServiceIssueDebate';
 import { ServiceIssueTypeStored } from './ServiceIssueType';
+import { ServiceProStored } from './ServicePro';
 import { ServiceServiceUserStored } from './ServiceServiceUser';
 
 export interface ServiceIssue {
@@ -26,7 +27,6 @@ export interface ServiceIssue {
   description: string;
   status: EdemokraciaIssueStatus;
   representation?: null | string;
-  numberOfDebates?: null | number;
   defaultVoteType?: null | EdemokraciaVoteType;
   scope?: null | EdemokraciaIssueScope;
   countyRepresentation?: null | string;
@@ -34,17 +34,23 @@ export interface ServiceIssue {
   districtRepresentation?: null | string;
   isFavorite?: null | boolean;
   isNotFavorite?: null | boolean;
+  debateCloseAt: Date;
+  isVoteClosable?: null | boolean;
+  isIssueDraft?: null | boolean;
+  isIssueActive?: null | boolean;
+  isIssueDeletable?: null | boolean;
 
   attachments?: null | Array<ServiceIssueAttachmentStored>;
   owner?: null | ServiceServiceUserStored;
   categories?: null | Array<ServiceIssueCategoryStored>;
-  debates?: null | Array<ServiceIssueDebateStored>;
   comments?: null | Array<ServiceCommentStored>;
   createdBy?: null | ServiceServiceUserStored;
   issueType?: null | ServiceIssueTypeStored;
   county?: null | ServiceCountyStored;
   city?: null | ServiceCityStored;
   district?: null | ServiceDistrictStored;
+  cons?: null | Array<ServiceConStored>;
+  pros?: null | Array<ServiceProStored>;
 }
 export type ServiceIssueAttributes =
   | 'created'
@@ -52,25 +58,30 @@ export type ServiceIssueAttributes =
   | 'description'
   | 'status'
   | 'representation'
-  | 'numberOfDebates'
   | 'defaultVoteType'
   | 'scope'
   | 'countyRepresentation'
   | 'cityRepresentation'
   | 'districtRepresentation'
   | 'isFavorite'
-  | 'isNotFavorite';
+  | 'isNotFavorite'
+  | 'debateCloseAt'
+  | 'isVoteClosable'
+  | 'isIssueDraft'
+  | 'isIssueActive'
+  | 'isIssueDeletable';
 
 export type ServiceIssueRelations =
   | 'attachments'
   | 'owner'
   | 'categories'
-  | 'debates'
   | 'comments'
   | 'createdBy'
   | 'issueType'
   | 'county'
   | 'city'
-  | 'district';
+  | 'district'
+  | 'cons'
+  | 'pros';
 
 export interface ServiceIssueStored extends JudoStored<ServiceIssue>, ServiceIssue {}

@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getActionsForPages(#application)
+// Factory expression: #getActionsForViewDialogs(#application)
 // Path expression: #pagePath(#getActionContainer(#self))+'actions/'+#pageActionPathSuffix(#self)+'.tsx'
 // Template name: actor/src/pages/actions/action.tsx
 // Template file: actor/src/pages/actions/action.tsx.hbs
@@ -13,7 +13,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import type { ServicePro, ServiceProQueryCustomizer, ServiceProStored } from '~/generated/data-api';
 import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { routeToServiceProProsView } from '~/routes';
+import ServiceUserView from '~/pages/service/pro/pros/view/index';
 
 export const ROW_VIEW_PROS_ACTION_INTERFACE_KEY = 'RowViewProsAction';
 export type RowViewProsAction = () => (
@@ -35,7 +35,23 @@ export const useRowViewProsAction: RowViewProsAction = () => {
   }
 
   return async function (owner: JudoIdentifiable<ServicePro>, entry: ServiceProStored, successCallback: () => void) {
-    closeAllDialogs();
-    navigate(routeToServiceProProsView(entry.__signedIdentifier));
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'xl',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: (
+        <ServiceUserView
+          successCallback={() => {
+            successCallback();
+          }}
+          cancel={closeDialog}
+          entry={entry}
+        />
+      ),
+    });
   };
 };

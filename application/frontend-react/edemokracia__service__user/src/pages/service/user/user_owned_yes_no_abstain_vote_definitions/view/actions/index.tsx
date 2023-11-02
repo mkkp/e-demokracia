@@ -13,5 +13,4 @@ export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefini
 export * from './issue/buttonNavigateIssue';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/rowViewVoteEntries';
-export * from './debate/buttonNavigateDebate';
 export * from './voteEntries/tableRefreshRelationVoteEntries';

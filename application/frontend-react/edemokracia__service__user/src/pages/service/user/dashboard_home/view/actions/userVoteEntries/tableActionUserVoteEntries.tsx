@@ -25,7 +25,7 @@ export const useTableActionUserVoteEntriesAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): TableActionUserVoteEntriesAction => {
-  const columnNames = ['created', 'issueTitle', 'debateTitle', 'voteTitle', 'voteStatus'];
+  const columnNames = ['created', 'issueTitle', 'voteTitle', 'voteStatus'];
 
   return async function tableActionUserVoteEntriesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);

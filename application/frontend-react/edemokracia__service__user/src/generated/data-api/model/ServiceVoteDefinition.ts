@@ -10,7 +10,6 @@ import type { JudoStored } from '@judo/data-api-common';
 import { EdemokraciaIssueScope } from './EdemokraciaIssueScope';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
 import { EdemokraciaVoteType } from './EdemokraciaVoteType';
-import { ServiceDebateStored } from './ServiceDebate';
 import { ServiceIssueStored } from './ServiceIssue';
 
 export interface ServiceVoteDefinition {
@@ -36,7 +35,6 @@ export interface ServiceVoteDefinition {
   cityRepresentation?: null | string;
   isNotFavorite?: null | boolean;
 
-  debate?: null | ServiceDebateStored;
   issue?: null | ServiceIssueStored;
 }
 export type ServiceVoteDefinitionAttributes =
@@ -62,6 +60,6 @@ export type ServiceVoteDefinitionAttributes =
   | 'cityRepresentation'
   | 'isNotFavorite';
 
-export type ServiceVoteDefinitionRelations = 'debate' | 'issue';
+export type ServiceVoteDefinitionRelations = 'issue';
 
 export interface ServiceVoteDefinitionStored extends JudoStored<ServiceVoteDefinition>, ServiceVoteDefinition {}

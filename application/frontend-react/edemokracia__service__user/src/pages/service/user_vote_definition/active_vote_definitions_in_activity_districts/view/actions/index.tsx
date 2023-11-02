@@ -10,7 +10,6 @@ export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNo';
 export * from './pageRefreshActiveVoteDefinitionsInActivityDistricts';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteSelectAnswer';
 export * from './issue/buttonNavigateIssue';
-export * from './debate/buttonNavigateDebate';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteRatingForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteRating';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoAbstainForm';

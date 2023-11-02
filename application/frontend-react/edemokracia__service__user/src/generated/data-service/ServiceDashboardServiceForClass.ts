@@ -9,20 +9,17 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   ServiceVoteDefinitionStored,
-  ServiceDebate,
+  ServiceDashboardQueryCustomizer,
   ServiceVoteDefinitionQueryCustomizer,
+  ServiceDashboard,
   ServiceVoteEntryQueryCustomizer,
   ServiceIssueQueryCustomizer,
-  ServiceDebateStored,
   ServiceVoteDefinition,
+  ServiceDashboardStored,
   ServiceIssueStored,
   ServiceVoteEntry,
   ServiceVoteEntryStored,
   ServiceIssue,
-  ServiceDashboardQueryCustomizer,
-  ServiceDebateQueryCustomizer,
-  ServiceDashboard,
-  ServiceDashboardStored,
 } from '../data-api';
 
 /**
@@ -44,16 +41,6 @@ export interface ServiceDashboardServiceForClass {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
-  getOwnedDebates(
-    target: JudoIdentifiable<ServiceDashboard>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>>;
-
-  getRangeForOwnedDebates(
-    owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>>;
-
   getUserVoteEntries(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
@@ -63,16 +50,6 @@ export interface ServiceDashboardServiceForClass {
     owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceVoteEntryStored>>;
-
-  getFavoriteDebates(
-    target: JudoIdentifiable<ServiceDashboard>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>>;
-
-  getRangeForFavoriteDebates(
-    owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>>;
 
   getFavoriteIssues(
     target: JudoIdentifiable<ServiceDashboard>,

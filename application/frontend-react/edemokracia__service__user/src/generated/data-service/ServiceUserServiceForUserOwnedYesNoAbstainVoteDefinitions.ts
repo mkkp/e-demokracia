@@ -8,10 +8,7 @@
 
 import {
   ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  ServiceDebate,
-  ServiceDebateQueryCustomizer,
   ServiceYesNoAbstainVoteDefinitionStored,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceYesNoAbstainVoteDefinition,
   ServiceIssueStored,

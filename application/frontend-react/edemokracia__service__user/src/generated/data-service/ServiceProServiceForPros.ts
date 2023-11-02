@@ -8,15 +8,12 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceComment,
   ServiceProParentQueryCustomizer,
   ServiceConParent,
-  ServiceCommentQueryCustomizer,
   ServiceConParentQueryCustomizer,
   ServiceSimpleVote,
   ServiceConParentStored,
   ServiceServiceUserStored,
-  ServiceCommentStored,
   ServiceConStored,
   ServiceCon,
   ServiceSimpleVoteStored,

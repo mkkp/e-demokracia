@@ -25,7 +25,7 @@ export const useTableActionActiveIssuesInActivityCountiesAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): TableActionActiveIssuesInActivityCountiesAction => {
-  const columnNames = ['countyRepresentation', 'title', 'created', 'numberOfDebates', 'status'];
+  const columnNames = ['countyRepresentation', 'title', 'created', 'status'];
 
   return async function tableActionActiveIssuesInActivityCountiesAction(
     id: string,

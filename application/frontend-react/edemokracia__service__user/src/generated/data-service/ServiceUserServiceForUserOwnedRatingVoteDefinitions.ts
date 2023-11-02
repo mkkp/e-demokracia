@@ -9,10 +9,7 @@
 import {
   ServiceRatingVoteDefinition,
   ServiceRatingVoteEntryQueryCustomizer,
-  ServiceDebate,
   ServiceRatingVoteDefinitionStored,
-  ServiceDebateQueryCustomizer,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceRatingVoteDefinitionQueryCustomizer,
   ServiceRatingVoteEntry,

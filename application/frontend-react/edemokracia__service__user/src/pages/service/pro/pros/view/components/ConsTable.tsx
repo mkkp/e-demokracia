@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // G E N E R A T E D    S O U R C E
 // --------------------------------
-// Factory expression: #getTablesForPages(#application)
+// Factory expression: #getTablesForViewDialogs(#application)
 // Path expression: #pagePath(#self.pageDefinition)+'components/'+#tableComponentName(#self)+'.tsx'
 // Template name: actor/src/pages/components/table.tsx
 // Template file: actor/src/pages/components/table.tsx.hbs
@@ -53,9 +53,6 @@ import type { ContextMenuApi } from '~/components/table/ContextMenu';
 
 import { Box, Typography } from '@mui/material';
 import {
-  ServiceComment,
-  ServiceCommentQueryCustomizer,
-  ServiceCommentStored,
   ServiceCon,
   ServiceConQueryCustomizer,
   ServiceConStored,
@@ -68,8 +65,8 @@ import {
 } from '~/generated/data-api';
 import { serviceProServiceForClassImpl, serviceConServiceForClassImpl } from '~/generated/data-axios';
 import {
-  useServiceConCreateCommentAction,
-  useServiceConCreateSubArgumentAction,
+  useServiceConCreateConArgumentAction,
+  useServiceConCreateProArgumentAction,
   useServiceConVoteDownAction,
   useServiceConVoteUpAction,
   useRowDeleteConsAction,
@@ -80,7 +77,7 @@ import {
 import { applyInMemoryFilters } from '~/utilities';
 import { GridLogicOperator } from '@mui/x-data-grid';
 
-export const SERVICE_PRO_PROS_VIEW_CONS = 'ServiceProProsViewCons';
+export const SERVICE_USER_VIEW_CONS = 'ServiceUserViewCons';
 
 export interface ConsTableProps {
   ownerData: ServiceProStored;
@@ -102,8 +99,8 @@ export const ConsTable = (props: ConsTableProps) => {
   const { locale: l10nLocale } = useL10N();
   const openCRUDDialog = useCRUDDialog();
 
-  const filterModelKey = `TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filterModel`;
-  const filtersKey = `TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-${ownerData.__identifier}-filters`;
+  const filterModelKey = `TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperCons-${ownerData.__identifier}-filterModel`;
+  const filtersKey = `TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperCons-${ownerData.__identifier}-filters`;
   const [consFilterModel, setConsFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -164,21 +161,21 @@ export const ConsTable = (props: ConsTableProps) => {
 
   const consRangeFilterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsTitleFilter',
+      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperConsTitleFilter',
       attributeName: 'title',
       label: t('service.ProView.cons.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsUpVotesFilter',
+      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperConsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('service.ProView.cons.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsDownVotesFilter',
+      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperConsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('service.ProView.cons.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -197,8 +194,8 @@ export const ConsTable = (props: ConsTableProps) => {
       : [],
   };
 
-  const serviceConCreateCommentAction = useServiceConCreateCommentAction();
-  const serviceConCreateSubArgumentAction = useServiceConCreateSubArgumentAction();
+  const serviceConCreateConArgumentAction = useServiceConCreateConArgumentAction();
+  const serviceConCreateProArgumentAction = useServiceConCreateProArgumentAction();
   const serviceConVoteDownAction = useServiceConVoteDownAction();
   const serviceConVoteUpAction = useServiceConVoteUpAction();
   const rowDeleteConsAction = useRowDeleteConsAction();
@@ -229,40 +226,42 @@ export const ConsTable = (props: ConsTableProps) => {
       disabled: (row: ServiceConStored) => editMode,
     },
     {
-      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceProProsViewEdemokraciaServiceUserEdemokraciaServiceConCreateSubArgumentButtonCallOperation',
-      label: t('service.ProView.cons.createSubArgument.ButtonCallOperation', {
-        defaultValue: 'Add argument',
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceProProsViewEdemokraciaServiceUserEdemokraciaServiceConCreateProArgumentButtonCallOperation',
+      label: t('service.ProView.cons.createProArgument.ButtonCallOperation', {
+        defaultValue: 'Add Pro Argument',
       }) as string,
-      icon: <MdiIcon path="account-voice" />,
-      action: async (row: ServiceConStored) => serviceConCreateSubArgumentAction(row, () => fetchOwnerData()),
+      icon: <MdiIcon path="chat-plus" />,
+      action: async (row: ServiceConStored) => serviceConCreateProArgumentAction(row, () => fetchOwnerData()),
       disabled: (row: ServiceConStored) => editMode,
     },
     {
-      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceProProsViewEdemokraciaServiceUserEdemokraciaServiceConCreateCommentButtonCallOperation',
-      label: t('service.ProView.cons.createComment.ButtonCallOperation', { defaultValue: 'Add comment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      action: async (row: ServiceConStored) => serviceConCreateCommentAction(row, () => fetchOwnerData()),
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceProProsViewEdemokraciaServiceUserEdemokraciaServiceConCreateConArgumentButtonCallOperation',
+      label: t('service.ProView.cons.createConArgument.ButtonCallOperation', {
+        defaultValue: 'Add Con Argument',
+      }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      action: async (row: ServiceConStored) => serviceConCreateConArgumentAction(row, () => fetchOwnerData()),
       disabled: (row: ServiceConStored) => editMode,
     },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsTitleFilter',
+      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperConsTitleFilter',
       attributeName: 'title',
       label: t('service.ProView.cons.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsUpVotesFilter',
+      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperConsUpVotesFilter',
       attributeName: 'upVotes',
       label: t('service.ProView.cons.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperConsDownVotesFilter',
+      id: 'FilteredemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperConsDownVotesFilter',
       attributeName: 'downVotes',
       label: t('service.ProView.cons.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -370,12 +369,12 @@ export const ConsTable = (props: ConsTableProps) => {
           Toolbar: () => (
             <GridToolbarContainer>
               <Button
-                id="TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-filter"
+                id="TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperCons-filter"
                 startIcon={<MdiIcon path="filter" />}
                 variant="text"
                 onClick={() =>
                   filter(
-                    'TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditTabBarArgumentsArgumentsConsLabelWrapperCons-filter',
+                    'TableedemokraciaServiceUserEdemokraciaServiceProProsViewDefaultProViewEditArgumentsConsLabelWrapperConsTableConsLabelWrapperCons-filter',
                     filterOptions,
                     filters,
                   )

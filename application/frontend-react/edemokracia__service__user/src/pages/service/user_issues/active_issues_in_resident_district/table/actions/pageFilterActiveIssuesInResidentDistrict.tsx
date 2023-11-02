@@ -25,7 +25,7 @@ export const usePageFilterActiveIssuesInResidentDistrictAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): PageFilterActiveIssuesInResidentDistrictAction => {
-  const columnNames = ['scope', 'title', 'status', 'created', 'numberOfDebates', 'description'];
+  const columnNames = ['scope', 'title', 'status', 'created', 'description'];
 
   return async function pageFilterActiveIssuesInResidentDistrictAction(
     id: string,

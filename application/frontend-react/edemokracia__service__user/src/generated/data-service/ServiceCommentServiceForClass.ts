@@ -28,10 +28,6 @@ export interface ServiceCommentServiceForClass {
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<ServiceCommentStored>;
 
-  delete(target: JudoIdentifiable<ServiceComment>): Promise<void>;
-
-  update(target: Partial<ServiceCommentStored>): Promise<ServiceCommentStored>;
-
   getVotes(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,

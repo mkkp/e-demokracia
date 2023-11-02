@@ -31,7 +31,6 @@ export const useTableActionActiveIssuesInResidentDistrictAction = (
     'districtRepresentation',
     'title',
     'created',
-    'numberOfDebates',
     'status',
   ];
 

@@ -25,7 +25,7 @@ export const usePageFilterUserVoteEntriesAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): PageFilterUserVoteEntriesAction => {
-  const columnNames = ['userName', 'created', 'voteTitle', 'debateTitle', 'issueTitle', 'voteStatus'];
+  const columnNames = ['userName', 'created', 'voteTitle', 'issueTitle', 'voteStatus'];
 
   return async function pageFilterUserVoteEntriesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);

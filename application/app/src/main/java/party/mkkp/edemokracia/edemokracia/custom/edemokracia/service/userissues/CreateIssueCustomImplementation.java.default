@@ -44,7 +44,8 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.userissues
  * 		issueType = issueType,
  * 		county = county,
  * 		city = city,
- * 		district = district		
+ * 		district = district,
+ * 		debateCloseAt = input.debateCloseAt	
  * 	);
  * 	
  * /* 	
@@ -56,16 +57,6 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.userissues
  * 	)
  * }
  * */
- * 
- * var edemokracia::Debate debate = new edemokracia::Debate(
- * 	title = input.title, 
- * 	description = input.description,
- * 	closeAt = input.debateCloseAt,
- * 	createdBy = owner,
- * 	status = edemokracia::DebateStatus#CREATED
- * );
- * 
- * issue.debates += debate;
  * 
  * return issue; 
  * 

@@ -14,4 +14,3 @@ export * from './serviceVoteDefinition/serviceVoteDefinitionVoteRating';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteSelectAnswer';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNo';
-export * from './debate/buttonNavigateDebate';

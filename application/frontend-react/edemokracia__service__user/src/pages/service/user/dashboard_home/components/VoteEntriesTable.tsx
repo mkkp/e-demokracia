@@ -56,9 +56,6 @@ import {
   ServiceDashboard,
   ServiceDashboardQueryCustomizer,
   ServiceDashboardStored,
-  ServiceDebate,
-  ServiceDebateQueryCustomizer,
-  ServiceDebateStored,
   ServiceIssue,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
@@ -118,7 +115,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceVoteEntryQueryCustomizer>({
-    _mask: '{created,issueTitle,debateTitle,voteTitle,voteStatus}',
+    _mask: '{created,issueTitle,voteTitle,voteStatus}',
     _seek: {
       limit: 10 + 1,
     },
@@ -184,18 +181,6 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     },
     {
       ...baseColumnConfig,
-      field: 'debateTitle',
-      headerName: t('edemokracia.service.User.dashboardHome.Dashboard.userVoteEntries.debateTitle', {
-        defaultValue: 'DebateTitle',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
       field: 'voteTitle',
       headerName: t('edemokracia.service.User.dashboardHome.Dashboard.userVoteEntries.voteTitle', {
         defaultValue: 'VoteTitle',
@@ -249,15 +234,6 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
-      attributeName: 'debateTitle',
-      label: t('edemokracia.service.User.dashboardHome.Dashboard.userVoteEntries.debateTitle', {
-        defaultValue: 'DebateTitle',
-      }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
       id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesVoteTitleFilter',
       attributeName: 'voteTitle',
       label: t('edemokracia.service.User.dashboardHome.Dashboard.userVoteEntries.voteTitle', {
@@ -278,7 +254,7 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
   ];
 
   const userVoteEntriesInitialQueryCustomizer: ServiceVoteEntryQueryCustomizer = {
-    _mask: '{created,issueTitle,debateTitle,voteTitle,voteStatus}',
+    _mask: '{created,issueTitle,voteTitle,voteStatus}',
     _orderBy: userVoteEntriesSortModel.length
       ? [
           {
@@ -314,15 +290,6 @@ export const VoteEntriesTable = forwardRef<RefreshableTable, VoteEntriesTablePro
       attributeName: 'issueTitle',
       label: t('edemokracia.service.User.dashboardHome.Dashboard.userVoteEntries.issueTitle', {
         defaultValue: 'IssueTitle',
-      }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorVotesCastVotesCastVoteEntriesLabelWrapperVoteEntriesDebateTitleFilter',
-      attributeName: 'debateTitle',
-      label: t('edemokracia.service.User.dashboardHome.Dashboard.userVoteEntries.debateTitle', {
-        defaultValue: 'DebateTitle',
       }) as string,
       filterType: FilterType.string,
     },

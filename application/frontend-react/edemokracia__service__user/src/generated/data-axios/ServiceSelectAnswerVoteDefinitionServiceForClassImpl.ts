@@ -10,9 +10,7 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceSelectAnswerVoteEntryStored,
-  ServiceDebate,
   ServiceSelectAnswerVoteDefinition,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
   SelectAnswerVoteSelection,
@@ -22,7 +20,6 @@ import type {
   SelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
-  ServiceDebateQueryCustomizer,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
@@ -65,39 +62,6 @@ export class ServiceSelectAnswerVoteDefinitionServiceForClassImpl
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getDebate(
-    target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored> {
-    const path = '/service/SelectAnswerVoteDefinition/debate/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/SelectAnswerVoteDefinition/debate/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;

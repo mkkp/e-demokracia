@@ -14,5 +14,4 @@ export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNo';
 export * from './pageDeleteOwnedVoteDefinitions';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteSelectAnswer';
-export * from './debate/buttonNavigateDebate';
 export * from './pageRefreshOwnedVoteDefinitions';

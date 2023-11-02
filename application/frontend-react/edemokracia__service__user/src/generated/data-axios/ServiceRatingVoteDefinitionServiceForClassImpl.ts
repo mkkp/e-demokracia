@@ -12,16 +12,13 @@ import type {
   ServiceRatingVoteDefinition,
   ServiceRatingVoteEntryQueryCustomizer,
   RatingVoteInput,
-  ServiceDebate,
   ServiceRatingVoteDefinitionStored,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceRatingVoteDefinitionQueryCustomizer,
-  ServiceIssueStored,
-  ServiceIssue,
-  ServiceDebateQueryCustomizer,
   ServiceRatingVoteEntry,
+  ServiceIssueStored,
   ServiceRatingVoteEntryStored,
+  ServiceIssue,
 } from '../data-api';
 import type { ServiceRatingVoteDefinitionServiceForClass } from '../data-service';
 
@@ -58,39 +55,6 @@ export class ServiceRatingVoteDefinitionServiceForClassImpl
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getDebate(
-    target: JudoIdentifiable<ServiceRatingVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored> {
-    const path = '/service/RatingVoteDefinition/debate/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceRatingVoteDefinition> | ServiceRatingVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/RatingVoteDefinition/debate/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;

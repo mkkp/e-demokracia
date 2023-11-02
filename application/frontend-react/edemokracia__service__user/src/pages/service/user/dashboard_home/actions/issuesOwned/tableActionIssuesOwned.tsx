@@ -32,7 +32,6 @@ export const useTableActionIssuesOwnedAction = (
     'districtRepresentation',
     'title',
     'created',
-    'numberOfDebates',
     'status',
   ];
 

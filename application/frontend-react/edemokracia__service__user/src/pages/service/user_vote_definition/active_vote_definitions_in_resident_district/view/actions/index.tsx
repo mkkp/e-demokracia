@@ -9,7 +9,6 @@ export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNo';
 export * from './issue/buttonNavigateIssue';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteSelectAnswer';
-export * from './debate/buttonNavigateDebate';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoAbstainForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNoAbstain';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteRatingForm';

@@ -43,32 +43,6 @@ export class ServiceCommentServiceForClassImpl extends JudoAxiosService implemen
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async delete(target: JudoIdentifiable<ServiceComment>): Promise<void> {
-    const path = '/service/Comment/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async update(target: Partial<ServiceCommentStored>): Promise<ServiceCommentStored> {
-    const path = '/service/Comment/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getVotes(

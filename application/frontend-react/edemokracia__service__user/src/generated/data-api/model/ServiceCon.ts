@@ -7,7 +7,6 @@
 // Template file: model/class.ts.hbs
 
 import type { JudoStored } from '@judo/data-api-common';
-import { ServiceCommentStored } from './ServiceComment';
 import { ServiceConParentStored } from './ServiceConParent';
 import { ServiceProParentStored } from './ServiceProParent';
 import { ServiceProStored } from './ServicePro';
@@ -26,12 +25,11 @@ export interface ServiceCon {
   createdBy?: null | ServiceServiceUserStored;
   cons?: null | Array<ServiceConStored>;
   pros?: null | Array<ServiceProStored>;
-  comments?: null | Array<ServiceCommentStored>;
   parentCon?: null | ServiceConParentStored;
   parentPro?: null | ServiceProParentStored;
 }
 export type ServiceConAttributes = 'createdByName' | 'created' | 'description' | 'title' | 'upVotes' | 'downVotes';
 
-export type ServiceConRelations = 'votes' | 'createdBy' | 'cons' | 'pros' | 'comments' | 'parentCon' | 'parentPro';
+export type ServiceConRelations = 'votes' | 'createdBy' | 'cons' | 'pros' | 'parentCon' | 'parentPro';
 
 export interface ServiceConStored extends JudoStored<ServiceCon>, ServiceCon {}

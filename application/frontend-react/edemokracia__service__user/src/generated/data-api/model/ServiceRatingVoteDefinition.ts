@@ -8,7 +8,6 @@
 
 import type { JudoStored } from '@judo/data-api-common';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
-import { ServiceDebateStored } from './ServiceDebate';
 import { ServiceIssueStored } from './ServiceIssue';
 import { ServiceRatingVoteEntryStored } from './ServiceRatingVoteEntry';
 
@@ -23,7 +22,6 @@ export interface ServiceRatingVoteDefinition {
   userHasVoteEntry?: null | boolean;
   userHasNoVoteEntry?: null | boolean;
 
-  debate?: null | ServiceDebateStored;
   issue?: null | ServiceIssueStored;
   voteEntries?: null | Array<ServiceRatingVoteEntryStored>;
   userVoteEntry?: null | ServiceRatingVoteEntryStored;
@@ -39,7 +37,7 @@ export type ServiceRatingVoteDefinitionAttributes =
   | 'userHasVoteEntry'
   | 'userHasNoVoteEntry';
 
-export type ServiceRatingVoteDefinitionRelations = 'debate' | 'issue' | 'voteEntries' | 'userVoteEntry';
+export type ServiceRatingVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry';
 
 export interface ServiceRatingVoteDefinitionStored
   extends JudoStored<ServiceRatingVoteDefinition>,

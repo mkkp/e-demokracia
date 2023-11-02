@@ -12,17 +12,14 @@ import {
   ServiceProParentAttributes,
   ServiceProAttributes,
   ServiceConParentAttributes,
-  ServiceCommentAttributes,
   ServiceConAttributes,
   ServiceSimpleVoteAttributes,
 } from '../model';
 
-import { ServiceCommentCreatedByMaskBuilder } from './ServiceCommentMaskBuilder';
 import {
   ServiceConCreatedByMaskBuilder,
   ServiceConConsMaskBuilder,
   ServiceConProsMaskBuilder,
-  ServiceConCommentsMaskBuilder,
   ServiceConParentConMaskBuilder,
   ServiceConParentProMaskBuilder,
 } from './ServiceConMaskBuilder';
@@ -59,7 +56,6 @@ export class ServiceProProsMaskBuilder extends RelationMaskBuilder {
       | ServiceProCreatedByMaskBuilder
       | ServiceProProsMaskBuilder
       | ServiceProConsMaskBuilder
-      | ServiceProCommentsMaskBuilder
       | ServiceProParentProMaskBuilder
       | ServiceProParentConMaskBuilder
     >,
@@ -74,17 +70,11 @@ export class ServiceProConsMaskBuilder extends RelationMaskBuilder {
       | ServiceConCreatedByMaskBuilder
       | ServiceConConsMaskBuilder
       | ServiceConProsMaskBuilder
-      | ServiceConCommentsMaskBuilder
       | ServiceConParentConMaskBuilder
       | ServiceConParentProMaskBuilder
     >,
   ) {
     super('cons', props);
-  }
-}
-export class ServiceProCommentsMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCommentAttributes | ServiceCommentCreatedByMaskBuilder>) {
-    super('comments', props);
   }
 }
 export class ServiceProParentProMaskBuilder extends RelationMaskBuilder {
@@ -105,7 +95,6 @@ export class ServiceProMaskBuilder extends MaskBuilder {
       | ServiceProCreatedByMaskBuilder
       | ServiceProProsMaskBuilder
       | ServiceProConsMaskBuilder
-      | ServiceProCommentsMaskBuilder
       | ServiceProParentProMaskBuilder
       | ServiceProParentConMaskBuilder
     >,

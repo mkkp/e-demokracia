@@ -58,7 +58,6 @@ import {
 } from '~/generated/data-api';
 import { serviceDashboardServiceForClassImpl, serviceVoteDefinitionServiceForClassImpl } from '~/generated/data-axios';
 import {
-  useButtonNavigateDebateAction,
   useButtonNavigateIssueAction,
   useServiceVoteDefinitionVoteYesNoAction,
   useServiceVoteDefinitionVoteYesNoAbstainAction,
@@ -149,7 +148,6 @@ export default function ServiceDashboardFavoriteVoteDefinitionsView() {
   const postRefreshAction: ServiceDashboardFavoriteVoteDefinitionsViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const buttonNavigateDebateAction = useButtonNavigateDebateAction();
   const buttonNavigateIssueAction = useButtonNavigateIssueAction();
   const serviceVoteDefinitionVoteYesNoAction = useServiceVoteDefinitionVoteYesNoAction();
   const serviceVoteDefinitionVoteYesNoAbstainAction = useServiceVoteDefinitionVoteYesNoAbstainAction();
@@ -371,24 +369,6 @@ export default function ServiceDashboardFavoriteVoteDefinitionsView() {
                           {t('enumerations.EdemokraciaVoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
                         </MenuItem>
                       </TextField>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <AssociationButton
-                        id="NavigationToPageActionedemokraciaServiceUserEdemokraciaServiceDashboardFavoriteVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceVoteDefinitionDebateButtonNavigate"
-                        variant={undefined}
-                        editMode={editMode}
-                        navigateAction={(target) => buttonNavigateDebateAction(data, target)}
-                        owner={data}
-                        fetchCall={async (owner: JudoIdentifiable<any>) =>
-                          serviceVoteDefinitionServiceForClassImpl.getDebate(owner, {
-                            _mask: '{}',
-                          })
-                        }
-                      >
-                        {t('service.VoteDefinitionView.debate.ButtonNavigate', { defaultValue: 'Debate' })}
-                        <MdiIcon path="arrow-right" />
-                      </AssociationButton>
                     </Grid>
 
                     <Grid item xs={12} sm={12}>

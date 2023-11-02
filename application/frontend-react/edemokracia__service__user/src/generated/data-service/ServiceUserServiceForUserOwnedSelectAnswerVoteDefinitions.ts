@@ -8,9 +8,7 @@
 
 import {
   ServiceSelectAnswerVoteEntryStored,
-  ServiceDebate,
   ServiceSelectAnswerVoteDefinition,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
   SelectAnswerVoteSelection,
@@ -20,7 +18,6 @@ import {
   SelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
-  ServiceDebateQueryCustomizer,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteEntryQueryCustomizer,

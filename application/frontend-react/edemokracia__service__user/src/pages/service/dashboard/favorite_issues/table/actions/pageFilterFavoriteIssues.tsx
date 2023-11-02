@@ -25,7 +25,7 @@ export const usePageFilterFavoriteIssuesAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): PageFilterFavoriteIssuesAction => {
-  const columnNames = ['scope', 'title', 'status', 'created', 'numberOfDebates', 'description'];
+  const columnNames = ['scope', 'title', 'status', 'created', 'description'];
 
   return async function pageFilterFavoriteIssuesAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);

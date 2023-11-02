@@ -9,7 +9,6 @@ export * from './voteSelections/rowDeleteVoteSelections';
 export * from './issue/buttonNavigateIssue';
 export * from './voteSelections/rowViewVoteSelections';
 export * from './serviceSelectAnswerVoteDefinition/serviceSelectAnswerVoteDefinitionVote';
-export * from './debate/buttonNavigateDebate';
 export * from './pageRefreshUserOwnedSelectAnswerVoteDefinitions';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/tableActionVoteEntries';

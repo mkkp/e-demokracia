@@ -54,9 +54,14 @@ import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { ServiceIssue, ServiceIssueQueryCustomizer, ServiceIssueStored } from '~/generated/data-api';
 import { serviceUserServiceForUserOwnedActiveIssuesImpl } from '~/generated/data-axios';
 import {
+  useServiceIssueActivateAction,
   useServiceIssueAddToFavoritesAction,
+  useServiceIssueCloseDebateAction,
+  useServiceIssueCloseVoteAction,
   useServiceIssueCreateCommentAction,
-  useServiceIssueCreateDebateAction,
+  useServiceIssueCreateConArgumentAction,
+  useServiceIssueCreateProArgumentAction,
+  useServiceIssueDeleteOrArchiveAction,
   useServiceIssueRemoveFromFavoritesAction,
   usePageFilterUserOwnedActiveIssuesAction,
   usePageRefreshUserOwnedActiveIssuesAction,
@@ -99,7 +104,8 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
-    _mask: '{scope,title,status,created,numberOfDebates,description,isFavorite,isNotFavorite}',
+    _mask:
+      '{scope,title,status,created,description,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
     _seek: {
       limit: 10 + 1,
     },
@@ -206,19 +212,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
     },
     {
       ...baseColumnConfig,
-      field: 'numberOfDebates',
-      headerName: t('service.IssueTable.userOwnedActiveIssues.numberOfDebates', { defaultValue: 'Debates' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
-      },
-    },
-    {
-      ...baseColumnConfig,
       field: 'description',
       headerName: t('service.IssueTable.userOwnedActiveIssues.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
@@ -250,7 +243,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       attributeName: 'status',
       label: t('service.IssueTable.userOwnedActiveIssues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
 
     {
@@ -258,13 +251,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       attributeName: 'created',
       label: t('service.IssueTable.userOwnedActiveIssues.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
-    },
-
-    {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableDefaultUserOwnedActiveIssuesIssueTableNumberOfDebatesFilter',
-      attributeName: 'numberOfDebates',
-      label: t('service.IssueTable.userOwnedActiveIssues.numberOfDebates', { defaultValue: 'Debates' }) as string,
-      filterType: FilterType.numeric,
     },
 
     {
@@ -276,7 +262,8 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   ];
 
   const userOwnedActiveIssuesInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
-    _mask: '{scope,title,status,created,numberOfDebates,description,isFavorite,isNotFavorite}',
+    _mask:
+      '{scope,title,status,created,description,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
     _orderBy: userOwnedActiveIssuesSortModel.length
       ? [
           {
@@ -287,9 +274,14 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       : [],
   };
 
+  const serviceIssueActivateAction = useServiceIssueActivateAction();
   const serviceIssueAddToFavoritesAction = useServiceIssueAddToFavoritesAction();
+  const serviceIssueCloseDebateAction = useServiceIssueCloseDebateAction();
+  const serviceIssueCloseVoteAction = useServiceIssueCloseVoteAction();
   const serviceIssueCreateCommentAction = useServiceIssueCreateCommentAction();
-  const serviceIssueCreateDebateAction = useServiceIssueCreateDebateAction();
+  const serviceIssueCreateConArgumentAction = useServiceIssueCreateConArgumentAction();
+  const serviceIssueCreateProArgumentAction = useServiceIssueCreateProArgumentAction();
+  const serviceIssueDeleteOrArchiveAction = useServiceIssueDeleteOrArchiveAction();
   const serviceIssueRemoveFromFavoritesAction = useServiceIssueRemoveFromFavoritesAction();
   const pageFilterUserOwnedActiveIssuesAction = usePageFilterUserOwnedActiveIssuesAction(
     setFilters,
@@ -322,7 +314,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       attributeName: 'status',
       label: t('service.IssueTable.userOwnedActiveIssues.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
 
     {
@@ -330,13 +322,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       attributeName: 'created',
       label: t('service.IssueTable.userOwnedActiveIssues.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
-    },
-
-    {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableDefaultUserOwnedActiveIssuesIssueTableNumberOfDebatesFilter',
-      attributeName: 'numberOfDebates',
-      label: t('service.IssueTable.userOwnedActiveIssues.numberOfDebates', { defaultValue: 'Debates' }) as string,
-      filterType: FilterType.numeric,
     },
 
     {
@@ -348,14 +333,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   ];
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueCreateDebateButtonCallOperation',
-      label: t('service.IssueTable.userOwnedActiveIssues.createDebate.ButtonCallOperation', {
-        defaultValue: 'Create debate',
-      }) as string,
-      icon: <MdiIcon path="wechat" />,
-      action: async (row: ServiceIssueStored) => serviceIssueCreateDebateAction(row, () => fetchData()),
-    },
     {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueAddToFavoritesButtonCallOperation',
       label: t('service.IssueTable.userOwnedActiveIssues.addToFavorites.ButtonCallOperation', {
@@ -371,6 +348,54 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       }) as string,
       icon: <MdiIcon path="star-minus" />,
       action: async (row: ServiceIssueStored) => serviceIssueRemoveFromFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueCloseDebateButtonCallOperation',
+      label: t('service.IssueTable.userOwnedActiveIssues.closeDebate.ButtonCallOperation', {
+        defaultValue: 'Close debate and start vote',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      action: async (row: ServiceIssueStored) => serviceIssueCloseDebateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueCloseVoteButtonCallOperation',
+      label: t('service.IssueTable.userOwnedActiveIssues.closeVote.ButtonCallOperation', {
+        defaultValue: 'Close Vote',
+      }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      action: async (row: ServiceIssueStored) => serviceIssueCloseVoteAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueActivateButtonCallOperation',
+      label: t('service.IssueTable.userOwnedActiveIssues.activate.ButtonCallOperation', {
+        defaultValue: 'Activate',
+      }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      action: async (row: ServiceIssueStored) => serviceIssueActivateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueDeleteOrArchiveButtonCallOperation',
+      label: t('service.IssueTable.userOwnedActiveIssues.deleteOrArchive.ButtonCallOperation', {
+        defaultValue: 'Delete',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      action: async (row: ServiceIssueStored) => serviceIssueDeleteOrArchiveAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueCreateConArgumentButtonCallOperation',
+      label: t('service.IssueTable.userOwnedActiveIssues.createConArgument.ButtonCallOperation', {
+        defaultValue: 'Add Con Argument',
+      }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      action: async (row: ServiceIssueStored) => serviceIssueCreateConArgumentAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueCreateProArgumentButtonCallOperation',
+      label: t('service.IssueTable.userOwnedActiveIssues.createProArgument.ButtonCallOperation', {
+        defaultValue: 'Add Pro Argument',
+      }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      action: async (row: ServiceIssueStored) => serviceIssueCreateProArgumentAction(row, () => fetchData()),
     },
     {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedActiveIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueCreateCommentButtonCallOperation',

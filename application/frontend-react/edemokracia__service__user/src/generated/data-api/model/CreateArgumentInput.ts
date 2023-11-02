@@ -7,13 +7,11 @@
 // Template file: model/class.ts.hbs
 
 import type { JudoStored } from '@judo/data-api-common';
-import { EdemokraciaCreateArgumentInputType } from './EdemokraciaCreateArgumentInputType';
 
 export interface CreateArgumentInput {
-  type: EdemokraciaCreateArgumentInputType;
   title: string;
   description: string;
 }
-export type CreateArgumentInputAttributes = 'type' | 'title' | 'description';
+export type CreateArgumentInputAttributes = 'title' | 'description';
 
 export interface CreateArgumentInputStored extends JudoStored<CreateArgumentInput>, CreateArgumentInput {}

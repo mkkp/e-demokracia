@@ -25,7 +25,7 @@ export const usePageFilterActiveIssuesInActivityCitiesAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): PageFilterActiveIssuesInActivityCitiesAction => {
-  const columnNames = ['scope', 'title', 'status', 'created', 'numberOfDebates', 'description'];
+  const columnNames = ['scope', 'title', 'status', 'created', 'description'];
 
   return async function pageFilterActiveIssuesInActivityCitiesAction(
     id: string,

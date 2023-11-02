@@ -9,9 +9,7 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   ServiceSelectAnswerVoteEntryStored,
-  ServiceDebate,
   ServiceSelectAnswerVoteDefinition,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
   SelectAnswerVoteSelection,
@@ -21,7 +19,6 @@ import {
   SelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
-  ServiceDebateQueryCustomizer,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
@@ -38,16 +35,6 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForClass {
   ): Promise<ServiceSelectAnswerVoteDefinitionStored>;
 
   update(target: Partial<ServiceSelectAnswerVoteDefinitionStored>): Promise<ServiceSelectAnswerVoteDefinitionStored>;
-
-  getDebate(
-    target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored>;
-
-  getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>>;
 
   getIssue(
     target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,

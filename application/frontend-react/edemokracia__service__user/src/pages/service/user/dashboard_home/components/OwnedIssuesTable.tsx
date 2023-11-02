@@ -56,9 +56,6 @@ import {
   ServiceDashboard,
   ServiceDashboardQueryCustomizer,
   ServiceDashboardStored,
-  ServiceDebate,
-  ServiceDebateQueryCustomizer,
-  ServiceDebateStored,
   ServiceIssue,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
@@ -75,9 +72,14 @@ import {
   useRowViewIssuesOwnedAction,
   useTableActionIssuesOwnedAction,
   useTableRefreshRelationIssuesOwnedAction,
+  useServiceIssueActivateAction,
   useServiceIssueAddToFavoritesAction,
+  useServiceIssueCloseDebateAction,
+  useServiceIssueCloseVoteAction,
   useServiceIssueCreateCommentAction,
-  useServiceIssueCreateDebateAction,
+  useServiceIssueCreateConArgumentAction,
+  useServiceIssueCreateProArgumentAction,
+  useServiceIssueDeleteOrArchiveAction,
   useServiceIssueRemoveFromFavoritesAction,
   usePageRefreshDashboardHomeAction,
 } from '../actions';
@@ -125,7 +127,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
     _mask:
-      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
     _seek: {
       limit: 10 + 1,
     },
@@ -248,21 +250,6 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
     },
     {
       ...baseColumnConfig,
-      field: 'numberOfDebates',
-      headerName: t('edemokracia.service.User.dashboardHome.Dashboard.issuesOwned.numberOfDebates', {
-        defaultValue: 'NumberOfDebates',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
-      },
-    },
-    {
-      ...baseColumnConfig,
       field: 'status',
       headerName: t('edemokracia.service.User.dashboardHome.Dashboard.issuesOwned.status', {
         defaultValue: 'Status',
@@ -341,28 +328,19 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorIssuesIssuesIssueTabBarMyissuesMyissuesOwnedIssuesLabelWrapperOwnedIssuesNumberOfDebatesFilter',
-      attributeName: 'numberOfDebates',
-      label: t('edemokracia.service.User.dashboardHome.Dashboard.issuesOwned.numberOfDebates', {
-        defaultValue: 'NumberOfDebates',
-      }) as string,
-      filterType: FilterType.numeric,
-    },
-
-    {
       id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorIssuesIssuesIssueTabBarMyissuesMyissuesOwnedIssuesLabelWrapperOwnedIssuesStatusFilter',
       attributeName: 'status',
       label: t('edemokracia.service.User.dashboardHome.Dashboard.issuesOwned.status', {
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
   ];
 
   const issuesOwnedInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,numberOfDebates,status,isFavorite,isNotFavorite}',
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
     _orderBy: issuesOwnedSortModel.length
       ? [
           {
@@ -383,9 +361,14 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
     10,
   );
   const tableRefreshRelationIssuesOwnedAction = useTableRefreshRelationIssuesOwnedAction();
+  const serviceIssueActivateAction = useServiceIssueActivateAction();
   const serviceIssueAddToFavoritesAction = useServiceIssueAddToFavoritesAction();
+  const serviceIssueCloseDebateAction = useServiceIssueCloseDebateAction();
+  const serviceIssueCloseVoteAction = useServiceIssueCloseVoteAction();
   const serviceIssueCreateCommentAction = useServiceIssueCreateCommentAction();
-  const serviceIssueCreateDebateAction = useServiceIssueCreateDebateAction();
+  const serviceIssueCreateConArgumentAction = useServiceIssueCreateConArgumentAction();
+  const serviceIssueCreateProArgumentAction = useServiceIssueCreateProArgumentAction();
+  const serviceIssueDeleteOrArchiveAction = useServiceIssueDeleteOrArchiveAction();
   const serviceIssueRemoveFromFavoritesAction = useServiceIssueRemoveFromFavoritesAction();
   const pageRefreshDashboardHomeAction = usePageRefreshDashboardHomeAction();
 
@@ -446,22 +429,13 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorIssuesIssuesIssueTabBarMyissuesMyissuesOwnedIssuesLabelWrapperOwnedIssuesNumberOfDebatesFilter',
-      attributeName: 'numberOfDebates',
-      label: t('edemokracia.service.User.dashboardHome.Dashboard.issuesOwned.numberOfDebates', {
-        defaultValue: 'NumberOfDebates',
-      }) as string,
-      filterType: FilterType.numeric,
-    },
-
-    {
       id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardDefaultDashboardViewEditSelectorIssuesIssuesIssueTabBarMyissuesMyissuesOwnedIssuesLabelWrapperOwnedIssuesStatusFilter',
       attributeName: 'status',
       label: t('edemokracia.service.User.dashboardHome.Dashboard.issuesOwned.status', {
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
   ];
 
@@ -475,17 +449,6 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
           fetchOwnerData();
         }),
       disabled: (row: ServiceIssueStored) => !row.__deleteable || isLoading,
-    },
-    {
-      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueCreateDebateButtonCallOperation',
-      label: t('edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.createDebate.ButtonCallOperation', {
-        defaultValue: 'Create debate',
-      }) as string,
-      icon: <MdiIcon path="wechat" />,
-      action: async (row: ServiceIssueStored) =>
-        serviceIssueCreateDebateAction(row, () => {
-          fetchOwnerData();
-        }),
     },
     {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueAddToFavoritesButtonCallOperation',
@@ -507,6 +470,74 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
       icon: <MdiIcon path="star-minus" />,
       action: async (row: ServiceIssueStored) =>
         serviceIssueRemoveFromFavoritesAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueCloseDebateButtonCallOperation',
+      label: t('edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.closeDebate.ButtonCallOperation', {
+        defaultValue: 'Close debate and start vote',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      action: async (row: ServiceIssueStored) =>
+        serviceIssueCloseDebateAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueCloseVoteButtonCallOperation',
+      label: t('edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.closeVote.ButtonCallOperation', {
+        defaultValue: 'Close Vote',
+      }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      action: async (row: ServiceIssueStored) =>
+        serviceIssueCloseVoteAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueActivateButtonCallOperation',
+      label: t('edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.activate.ButtonCallOperation', {
+        defaultValue: 'Activate',
+      }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      action: async (row: ServiceIssueStored) =>
+        serviceIssueActivateAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueDeleteOrArchiveButtonCallOperation',
+      label: t('edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.deleteOrArchive.ButtonCallOperation', {
+        defaultValue: 'Delete',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      action: async (row: ServiceIssueStored) =>
+        serviceIssueDeleteOrArchiveAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueCreateConArgumentButtonCallOperation',
+      label: t(
+        'edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.createConArgument.ButtonCallOperation',
+        { defaultValue: 'Add Con Argument' },
+      ) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      action: async (row: ServiceIssueStored) =>
+        serviceIssueCreateConArgumentAction(row, () => {
+          fetchOwnerData();
+        }),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeDashboardEdemokraciaServiceUserEdemokraciaServiceIssueCreateProArgumentButtonCallOperation',
+      label: t(
+        'edemokracia.service.User.dashboardHome.Dashboard.favoriteIssues.createProArgument.ButtonCallOperation',
+        { defaultValue: 'Add Pro Argument' },
+      ) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      action: async (row: ServiceIssueStored) =>
+        serviceIssueCreateProArgumentAction(row, () => {
           fetchOwnerData();
         }),
     },

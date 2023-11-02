@@ -25,7 +25,7 @@ export const usePageFilterIssuesOwnedAction = (
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters: Filter[]) => Promise<Filter[]>,
   numberOfElements: number,
 ): PageFilterIssuesOwnedAction => {
-  const columnNames = ['scope', 'title', 'status', 'created', 'numberOfDebates', 'description'];
+  const columnNames = ['scope', 'title', 'status', 'created', 'description'];
 
   return async function pageFilterIssuesOwnedAction(id: string, filterOptions: FilterOption[], filters: Filter[]) {
     const newFilters = await openFilterDialog(id, filterOptions, filters);

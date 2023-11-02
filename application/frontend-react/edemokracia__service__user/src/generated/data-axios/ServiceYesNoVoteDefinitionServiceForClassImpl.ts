@@ -9,18 +9,15 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceDebate,
-  ServiceYesNoVoteDefinitionStored,
-  ServiceDebateStored,
-  ServiceIssueQueryCustomizer,
-  ServiceIssueStored,
-  ServiceYesNoVoteDefinitionQueryCustomizer,
-  ServiceIssue,
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteEntryStored,
   ServiceYesNoVoteEntry,
-  ServiceDebateQueryCustomizer,
+  ServiceYesNoVoteDefinitionStored,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceYesNoVoteDefinitionQueryCustomizer,
   YesNoVoteInput,
+  ServiceIssue,
   ServiceYesNoVoteEntryQueryCustomizer,
 } from '../data-api';
 import type { ServiceYesNoVoteDefinitionServiceForClass } from '../data-service';
@@ -58,39 +55,6 @@ export class ServiceYesNoVoteDefinitionServiceForClassImpl
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getDebate(
-    target: JudoIdentifiable<ServiceYesNoVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored> {
-    const path = '/service/YesNoVoteDefinition/debate/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceYesNoVoteDefinition> | ServiceYesNoVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/YesNoVoteDefinition/debate/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;

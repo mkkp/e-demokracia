@@ -12,7 +12,6 @@ import {
   ServiceDashboardAttributes,
   ServiceVoteDefinitionAttributes,
   ServiceVoteEntryAttributes,
-  ServiceDebateAttributes,
 } from '../model';
 
 export class ServiceDashboardMaskBuilder extends MaskBuilder {

@@ -44,51 +44,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_CON_COMMENTS_VIEW_INTERFACE_KEY = 'ServiceConCommentsViewRoute';
-export const routeToServiceConCommentsView = (signedIdentifier: string): string =>
-  'service/con/comments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceConCommentsView = lazy(() => import('./pages/service/con/comments/view/index'));
-
-routes.push({
-  path: 'service/con/comments/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_CON_COMMENTS_VIEW_INTERFACE_KEY})`}>
-        <ServiceConCommentsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_CON_CONS_VIEW_INTERFACE_KEY = 'ServiceConConsViewRoute';
-export const routeToServiceConConsView = (signedIdentifier: string): string =>
-  'service/con/cons/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceConConsView = lazy(() => import('./pages/service/con/cons/view/index'));
-
-routes.push({
-  path: 'service/con/cons/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_CON_CONS_VIEW_INTERFACE_KEY})`}>
-        <ServiceConConsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_CON_PROS_VIEW_INTERFACE_KEY = 'ServiceConProsViewRoute';
-export const routeToServiceConProsView = (signedIdentifier: string): string =>
-  'service/con/pros/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceConProsView = lazy(() => import('./pages/service/con/pros/view/index'));
-
-routes.push({
-  path: 'service/con/pros/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_CON_PROS_VIEW_INTERFACE_KEY})`}>
-        <ServiceConProsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_CON_VOTES_TABLE_INTERFACE_KEY = 'ServiceConVotesTableRoute';
 export const routeToServiceConVotesTable = (signedIdentifier: string): string =>
   'service/con/votes/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -115,38 +70,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_CON_VOTES_VIEW_INTERFACE_KEY})`}>
         <ServiceConVotesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DASHBOARD_FAVORITE_DEBATES_TABLE_INTERFACE_KEY = 'ServiceDashboardFavoriteDebatesTableRoute';
-export const routeToServiceDashboardFavoriteDebatesTable = (signedIdentifier: string): string =>
-  'service/dashboard/favorite_debates/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDashboardFavoriteDebatesTable = lazy(
-  () => import('./pages/service/dashboard/favorite_debates/table/index'),
-);
-
-routes.push({
-  path: 'service/dashboard/favorite_debates/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_FAVORITE_DEBATES_TABLE_INTERFACE_KEY})`}>
-        <ServiceDashboardFavoriteDebatesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DASHBOARD_FAVORITE_DEBATES_VIEW_INTERFACE_KEY = 'ServiceDashboardFavoriteDebatesViewRoute';
-export const routeToServiceDashboardFavoriteDebatesView = (signedIdentifier: string): string =>
-  'service/dashboard/favorite_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDashboardFavoriteDebatesView = lazy(() => import('./pages/service/dashboard/favorite_debates/view/index'));
-
-routes.push({
-  path: 'service/dashboard/favorite_debates/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_FAVORITE_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <ServiceDashboardFavoriteDebatesView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -251,36 +174,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_DASHBOARD_OWNED_DEBATES_TABLE_INTERFACE_KEY = 'ServiceDashboardOwnedDebatesTableRoute';
-export const routeToServiceDashboardOwnedDebatesTable = (signedIdentifier: string): string =>
-  'service/dashboard/owned_debates/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDashboardOwnedDebatesTable = lazy(() => import('./pages/service/dashboard/owned_debates/table/index'));
-
-routes.push({
-  path: 'service/dashboard/owned_debates/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_OWNED_DEBATES_TABLE_INTERFACE_KEY})`}>
-        <ServiceDashboardOwnedDebatesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DASHBOARD_OWNED_DEBATES_VIEW_INTERFACE_KEY = 'ServiceDashboardOwnedDebatesViewRoute';
-export const routeToServiceDashboardOwnedDebatesView = (signedIdentifier: string): string =>
-  'service/dashboard/owned_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDashboardOwnedDebatesView = lazy(() => import('./pages/service/dashboard/owned_debates/view/index'));
-
-routes.push({
-  path: 'service/dashboard/owned_debates/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_OWNED_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <ServiceDashboardOwnedDebatesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_DASHBOARD_OWNED_VOTE_DEFINITIONS_TABLE_INTERFACE_KEY =
   'ServiceDashboardOwnedVoteDefinitionsTableRoute';
 export const routeToServiceDashboardOwnedVoteDefinitionsTable = (signedIdentifier: string): string =>
@@ -335,168 +228,17 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_DEBATE_CLOSEDEBATE_OUTPUT_INTERFACE_KEY = 'ServiceDebateClosedebateOutputRoute';
-export const routeToServiceDebateClosedebateOutput = (signedIdentifier: string): string =>
-  'service/debate/closedebate/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateClosedebateOutput = lazy(() => import('./pages/service/debate/closedebate/output/index'));
+export const ROUTE_SERVICE_ISSUE_CLOSEDEBATE_OUTPUT_INTERFACE_KEY = 'ServiceIssueClosedebateOutputRoute';
+export const routeToServiceIssueClosedebateOutput = (signedIdentifier: string): string =>
+  'service/issue/closedebate/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const ServiceIssueClosedebateOutput = lazy(() => import('./pages/service/issue/closedebate/output/index'));
 
 routes.push({
-  path: 'service/debate/closedebate/output/:signedIdentifier',
+  path: 'service/issue/closedebate/output/:signedIdentifier',
   element: (
     <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_CLOSEDEBATE_OUTPUT_INTERFACE_KEY})`}>
-        <ServiceDebateClosedebateOutput />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_COMMENTS_VIEW_INTERFACE_KEY = 'ServiceDebateCommentsViewRoute';
-export const routeToServiceDebateCommentsView = (signedIdentifier: string): string =>
-  'service/debate/comments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateCommentsView = lazy(() => import('./pages/service/debate/comments/view/index'));
-
-routes.push({
-  path: 'service/debate/comments/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_COMMENTS_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateCommentsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_CONS_VIEW_INTERFACE_KEY = 'ServiceDebateConsViewRoute';
-export const routeToServiceDebateConsView = (signedIdentifier: string): string =>
-  'service/debate/cons/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateConsView = lazy(() => import('./pages/service/debate/cons/view/index'));
-
-routes.push({
-  path: 'service/debate/cons/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_CONS_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateConsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_ISSUE_VIEW_INTERFACE_KEY = 'ServiceDebateIssueViewRoute';
-export const routeToServiceDebateIssueView = (signedIdentifier: string): string =>
-  'service/debate/issue/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateIssueView = lazy(() => import('./pages/service/debate/issue/view/index'));
-
-routes.push({
-  path: 'service/debate/issue/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_ISSUE_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateIssueView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_PROS_VIEW_INTERFACE_KEY = 'ServiceDebateProsViewRoute';
-export const routeToServiceDebateProsView = (signedIdentifier: string): string =>
-  'service/debate/pros/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateProsView = lazy(() => import('./pages/service/debate/pros/view/index'));
-
-routes.push({
-  path: 'service/debate/pros/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_PROS_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateProsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_RATING_VOTE_DEFINITION_VIEW_INTERFACE_KEY =
-  'ServiceDebateRatingVoteDefinitionViewRoute';
-export const routeToServiceDebateRatingVoteDefinitionView = (signedIdentifier: string): string =>
-  'service/debate/rating_vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateRatingVoteDefinitionView = lazy(
-  () => import('./pages/service/debate/rating_vote_definition/view/index'),
-);
-
-routes.push({
-  path: 'service/debate/rating_vote_definition/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_RATING_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateRatingVoteDefinitionView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_SELECT_ANSWER_VOTE_DEFINITION_VIEW_INTERFACE_KEY =
-  'ServiceDebateSelectAnswerVoteDefinitionViewRoute';
-export const routeToServiceDebateSelectAnswerVoteDefinitionView = (signedIdentifier: string): string =>
-  'service/debate/select_answer_vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateSelectAnswerVoteDefinitionView = lazy(
-  () => import('./pages/service/debate/select_answer_vote_definition/view/index'),
-);
-
-routes.push({
-  path: 'service/debate/select_answer_vote_definition/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_SELECT_ANSWER_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceDebateSelectAnswerVoteDefinitionView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_VOTE_DEFINITION_VIEW_INTERFACE_KEY = 'ServiceDebateVoteDefinitionViewRoute';
-export const routeToServiceDebateVoteDefinitionView = (signedIdentifier: string): string =>
-  'service/debate/vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateVoteDefinitionView = lazy(() => import('./pages/service/debate/vote_definition/view/index'));
-
-routes.push({
-  path: 'service/debate/vote_definition/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateVoteDefinitionView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_YES_NO_ABSTAIN_VOTE_DEFINITION_VIEW_INTERFACE_KEY =
-  'ServiceDebateYesNoAbstainVoteDefinitionViewRoute';
-export const routeToServiceDebateYesNoAbstainVoteDefinitionView = (signedIdentifier: string): string =>
-  'service/debate/yes_no_abstain_vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateYesNoAbstainVoteDefinitionView = lazy(
-  () => import('./pages/service/debate/yes_no_abstain_vote_definition/view/index'),
-);
-
-routes.push({
-  path: 'service/debate/yes_no_abstain_vote_definition/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_YES_NO_ABSTAIN_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceDebateYesNoAbstainVoteDefinitionView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_DEBATE_YES_NO_VOTE_DEFINITION_VIEW_INTERFACE_KEY =
-  'ServiceDebateYesNoVoteDefinitionViewRoute';
-export const routeToServiceDebateYesNoVoteDefinitionView = (signedIdentifier: string): string =>
-  'service/debate/yes_no_vote_definition/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDebateYesNoVoteDefinitionView = lazy(
-  () => import('./pages/service/debate/yes_no_vote_definition/view/index'),
-);
-
-routes.push({
-  path: 'service/debate/yes_no_vote_definition/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DEBATE_YES_NO_VOTE_DEFINITION_VIEW_INTERFACE_KEY})`}>
-        <ServiceDebateYesNoVoteDefinitionView />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_ISSUE_CLOSEDEBATE_OUTPUT_INTERFACE_KEY})`}>
+        <ServiceIssueClosedebateOutput />
       </ComponentProxy>
     </Suspense>
   ),
@@ -512,66 +254,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_ISSUE_COMMENTS_VIEW_INTERFACE_KEY})`}>
         <ServiceIssueCommentsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_ISSUE_CREATEDEBATE_OUTPUT_INTERFACE_KEY = 'ServiceIssueCreatedebateOutputRoute';
-export const routeToServiceIssueCreatedebateOutput = (signedIdentifier: string): string =>
-  'service/issue/createdebate/output/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceIssueCreatedebateOutput = lazy(() => import('./pages/service/issue/createdebate/output/index'));
-
-routes.push({
-  path: 'service/issue/createdebate/output/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_ISSUE_CREATEDEBATE_OUTPUT_INTERFACE_KEY})`}>
-        <ServiceIssueCreatedebateOutput />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_PRO_COMMENTS_VIEW_INTERFACE_KEY = 'ServiceProCommentsViewRoute';
-export const routeToServiceProCommentsView = (signedIdentifier: string): string =>
-  'service/pro/comments/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceProCommentsView = lazy(() => import('./pages/service/pro/comments/view/index'));
-
-routes.push({
-  path: 'service/pro/comments/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_PRO_COMMENTS_VIEW_INTERFACE_KEY})`}>
-        <ServiceProCommentsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_PRO_CONS_VIEW_INTERFACE_KEY = 'ServiceProConsViewRoute';
-export const routeToServiceProConsView = (signedIdentifier: string): string =>
-  'service/pro/cons/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceProConsView = lazy(() => import('./pages/service/pro/cons/view/index'));
-
-routes.push({
-  path: 'service/pro/cons/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_PRO_CONS_VIEW_INTERFACE_KEY})`}>
-        <ServiceProConsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_PRO_PROS_VIEW_INTERFACE_KEY = 'ServiceProProsViewRoute';
-export const routeToServiceProProsView = (signedIdentifier: string): string =>
-  'service/pro/pros/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceProProsView = lazy(() => import('./pages/service/pro/pros/view/index'));
-
-routes.push({
-  path: 'service/pro/pros/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_PRO_PROS_VIEW_INTERFACE_KEY})`}>
-        <ServiceProProsView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -606,24 +288,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_RATING_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY =
-  'ServiceRatingVoteDefinitionDebateViewRoute';
-export const routeToServiceRatingVoteDefinitionDebateView = (signedIdentifier: string): string =>
-  'service/rating_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceRatingVoteDefinitionDebateView = lazy(
-  () => import('./pages/service/rating_vote_definition/debate/view/index'),
-);
-
-routes.push({
-  path: 'service/rating_vote_definition/debate/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_RATING_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}>
-        <ServiceRatingVoteDefinitionDebateView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_RATING_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY =
   'ServiceRatingVoteDefinitionIssueViewRoute';
 export const routeToServiceRatingVoteDefinitionIssueView = (signedIdentifier: string): string =>
@@ -638,26 +302,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_RATING_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}>
         <ServiceRatingVoteDefinitionIssueView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_SELECT_ANSWER_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteDefinitionDebateViewRoute';
-export const routeToServiceSelectAnswerVoteDefinitionDebateView = (signedIdentifier: string): string =>
-  'service/select_answer_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceSelectAnswerVoteDefinitionDebateView = lazy(
-  () => import('./pages/service/select_answer_vote_definition/debate/view/index'),
-);
-
-routes.push({
-  path: 'service/select_answer_vote_definition/debate/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_SELECT_ANSWER_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceSelectAnswerVoteDefinitionDebateView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -765,35 +409,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ADMIN_COUNTIES_TABLE_INTERFACE_KEY})`}>
         <ServiceUserAdminCountiesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_ADMIN_DEBATES_TABLE_INTERFACE_KEY = 'ServiceUserAdminDebatesTableRoute';
-export const routeToServiceUserAdminDebatesTable = (): string => 'service/user/admin_debates/table';
-const ServiceUserAdminDebatesTable = lazy(() => import('./pages/service/user/admin_debates/table/index'));
-
-routes.push({
-  path: 'service/user/admin_debates/table',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ADMIN_DEBATES_TABLE_INTERFACE_KEY})`}>
-        <ServiceUserAdminDebatesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_ADMIN_DEBATES_VIEW_INTERFACE_KEY = 'ServiceUserAdminDebatesViewRoute';
-export const routeToServiceUserAdminDebatesView = (signedIdentifier: string): string =>
-  'service/user/admin_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserAdminDebatesView = lazy(() => import('./pages/service/user/admin_debates/view/index'));
-
-routes.push({
-  path: 'service/user/admin_debates/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ADMIN_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <ServiceUserAdminDebatesView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -973,21 +588,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_CREATED_ISSUES_VIEW_INTERFACE_KEY})`}>
         <ServiceUserUserCreatedIssuesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_DEBATES_VIEW_INTERFACE_KEY = 'ServiceUserUserDebatesViewRoute';
-export const routeToServiceUserUserDebatesView = (signedIdentifier: string): string =>
-  'service/user/user_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserUserDebatesView = lazy(() => import('./pages/service/user/user_debates/view/index'));
-
-routes.push({
-  path: 'service/user/user_debates/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <ServiceUserUserDebatesView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -1242,354 +842,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_VOTE_DEFINITIONS_VIEW_INTERFACE_KEY})`}>
         <ServiceUserUserVoteDefinitionsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesGlobalTableRoute';
-export const routeToServiceUserDebatesActiveDebatesGlobalTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_global/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserDebatesActiveDebatesGlobalTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_global/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_global/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesGlobalTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesGlobalViewRoute';
-export const routeToServiceUserDebatesActiveDebatesGlobalView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_global/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserDebatesActiveDebatesGlobalView = lazy(
-  () => import('./pages/service/user_debates/active_debates_global/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_global/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_GLOBAL_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesGlobalView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInActivityCitiesTableRoute';
-export const routeToServiceUserDebatesActiveDebatesInActivityCitiesTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_activity_cities/table/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInActivityCitiesTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_activity_cities/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_activity_cities/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInActivityCitiesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInActivityCitiesViewRoute';
-export const routeToServiceUserDebatesActiveDebatesInActivityCitiesView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_activity_cities/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInActivityCitiesView = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_activity_cities/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_activity_cities/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_CITIES_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInActivityCitiesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInActivityCountiesTableRoute';
-export const routeToServiceUserDebatesActiveDebatesInActivityCountiesTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_activity_counties/table/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInActivityCountiesTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_activity_counties/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_activity_counties/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInActivityCountiesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInActivityCountiesViewRoute';
-export const routeToServiceUserDebatesActiveDebatesInActivityCountiesView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_activity_counties/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInActivityCountiesView = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_activity_counties/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_activity_counties/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_COUNTIES_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInActivityCountiesView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInActivityDistrictsTableRoute';
-export const routeToServiceUserDebatesActiveDebatesInActivityDistrictsTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_activity_districts/table/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInActivityDistrictsTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_activity_districts/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_activity_districts/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInActivityDistrictsTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInActivityDistrictsViewRoute';
-export const routeToServiceUserDebatesActiveDebatesInActivityDistrictsView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_activity_districts/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInActivityDistrictsView = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_activity_districts/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_activity_districts/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_ACTIVITY_DISTRICTS_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInActivityDistrictsView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInResidentCityTableRoute';
-export const routeToServiceUserDebatesActiveDebatesInResidentCityTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_resident_city/table/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInResidentCityTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_resident_city/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_resident_city/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInResidentCityTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInResidentCityViewRoute';
-export const routeToServiceUserDebatesActiveDebatesInResidentCityView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_resident_city/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInResidentCityView = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_resident_city/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_resident_city/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_CITY_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInResidentCityView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInResidentCountyTableRoute';
-export const routeToServiceUserDebatesActiveDebatesInResidentCountyTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_resident_county/table/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInResidentCountyTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_resident_county/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_resident_county/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInResidentCountyTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInResidentCountyViewRoute';
-export const routeToServiceUserDebatesActiveDebatesInResidentCountyView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_resident_county/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInResidentCountyView = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_resident_county/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_resident_county/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_COUNTY_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInResidentCountyView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInResidentDistrictTableRoute';
-export const routeToServiceUserDebatesActiveDebatesInResidentDistrictTable = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_resident_district/table/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInResidentDistrictTable = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_resident_district/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_resident_district/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_TABLE_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInResidentDistrictTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY =
-  'ServiceUserDebatesActiveDebatesInResidentDistrictViewRoute';
-export const routeToServiceUserDebatesActiveDebatesInResidentDistrictView = (signedIdentifier: string): string =>
-  'service/user_debates/active_debates_in_resident_district/view/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserDebatesActiveDebatesInResidentDistrictView = lazy(
-  () => import('./pages/service/user_debates/active_debates_in_resident_district/view/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/active_debates_in_resident_district/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_ACTIVE_DEBATES_IN_RESIDENT_DISTRICT_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceUserDebatesActiveDebatesInResidentDistrictView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_OWNED_DEBATES_TABLE_INTERFACE_KEY = 'ServiceUserDebatesOwnedDebatesTableRoute';
-export const routeToServiceUserDebatesOwnedDebatesTable = (signedIdentifier: string): string =>
-  'service/user_debates/owned_debates/table/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserDebatesOwnedDebatesTable = lazy(
-  () => import('./pages/service/user_debates/owned_debates/table/index'),
-);
-
-routes.push({
-  path: 'service/user_debates/owned_debates/table/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_OWNED_DEBATES_TABLE_INTERFACE_KEY})`}>
-        <ServiceUserDebatesOwnedDebatesTable />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_DEBATES_OWNED_DEBATES_VIEW_INTERFACE_KEY = 'ServiceUserDebatesOwnedDebatesViewRoute';
-export const routeToServiceUserDebatesOwnedDebatesView = (signedIdentifier: string): string =>
-  'service/user_debates/owned_debates/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserDebatesOwnedDebatesView = lazy(() => import('./pages/service/user_debates/owned_debates/view/index'));
-
-routes.push({
-  path: 'service/user_debates/owned_debates/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_DEBATES_OWNED_DEBATES_VIEW_INTERFACE_KEY})`}>
-        <ServiceUserDebatesOwnedDebatesView />
       </ComponentProxy>
     </Suspense>
   ),
@@ -2358,21 +1610,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY = 'ServiceVoteDefinitionDebateViewRoute';
-export const routeToServiceVoteDefinitionDebateView = (signedIdentifier: string): string =>
-  'service/vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceVoteDefinitionDebateView = lazy(() => import('./pages/service/vote_definition/debate/view/index'));
-
-routes.push({
-  path: 'service/vote_definition/debate/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}>
-        <ServiceVoteDefinitionDebateView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY = 'ServiceVoteDefinitionIssueViewRoute';
 export const routeToServiceVoteDefinitionIssueView = (signedIdentifier: string): string =>
   'service/vote_definition/issue/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
@@ -2403,26 +1640,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY =
-  'ServiceYesNoAbstainVoteDefinitionDebateViewRoute';
-export const routeToServiceYesNoAbstainVoteDefinitionDebateView = (signedIdentifier: string): string =>
-  'service/yes_no_abstain_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceYesNoAbstainVoteDefinitionDebateView = lazy(
-  () => import('./pages/service/yes_no_abstain_vote_definition/debate/view/index'),
-);
-
-routes.push({
-  path: 'service/yes_no_abstain_vote_definition/debate/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}
-      >
-        <ServiceYesNoAbstainVoteDefinitionDebateView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY =
   'ServiceYesNoAbstainVoteDefinitionIssueViewRoute';
 export const routeToServiceYesNoAbstainVoteDefinitionIssueView = (signedIdentifier: string): string =>
@@ -2439,24 +1656,6 @@ routes.push({
         filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_ISSUE_VIEW_INTERFACE_KEY})`}
       >
         <ServiceYesNoAbstainVoteDefinitionIssueView />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_YES_NO_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY =
-  'ServiceYesNoVoteDefinitionDebateViewRoute';
-export const routeToServiceYesNoVoteDefinitionDebateView = (signedIdentifier: string): string =>
-  'service/yes_no_vote_definition/debate/view/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceYesNoVoteDefinitionDebateView = lazy(
-  () => import('./pages/service/yes_no_vote_definition/debate/view/index'),
-);
-
-routes.push({
-  path: 'service/yes_no_vote_definition/debate/view/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_YES_NO_VOTE_DEFINITION_DEBATE_VIEW_INTERFACE_KEY})`}>
-        <ServiceYesNoVoteDefinitionDebateView />
       </ComponentProxy>
     </Suspense>
   ),

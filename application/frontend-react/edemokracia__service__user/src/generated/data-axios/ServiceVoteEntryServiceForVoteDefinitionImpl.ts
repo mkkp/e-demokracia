@@ -10,18 +10,15 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceVoteDefinitionStored,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
   ServiceVoteDefinitionQueryCustomizer,
-  ServiceDebate,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   ServiceVoteDefinition,
   ServiceVoteEntry,
   ServiceIssueStored,
   SelectAnswerVoteSelection,
   ServiceIssue,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  SelectAnswerVoteSelectionStored,
-  ServiceDebateQueryCustomizer,
 } from '../data-api';
 import type { ServiceVoteEntryServiceForVoteDefinition } from '../data-service';
 

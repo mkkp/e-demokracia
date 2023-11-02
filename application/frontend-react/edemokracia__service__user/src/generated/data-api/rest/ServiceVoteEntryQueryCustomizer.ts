@@ -16,7 +16,6 @@ import { FilterByVoteStatus } from './FilterByVoteStatus';
 export interface ServiceVoteEntryQueryCustomizer extends QueryCustomizer<ServiceVoteEntry> {
   created?: Array<FilterByTimestamp>;
   issueTitle?: Array<FilterByString>;
-  debateTitle?: Array<FilterByString>;
   voteTitle?: Array<FilterByString>;
   voteStatus?: Array<FilterByVoteStatus>;
   userName?: Array<FilterByString>;

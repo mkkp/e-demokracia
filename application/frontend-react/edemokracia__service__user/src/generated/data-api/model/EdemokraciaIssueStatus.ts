@@ -12,4 +12,5 @@ export enum EdemokraciaIssueStatus {
   ACTIVE = 'ACTIVE',
   CLOSED = 'CLOSED',
   ARCHIVED = 'ARCHIVED',
+  VOTING = 'VOTING',
 }

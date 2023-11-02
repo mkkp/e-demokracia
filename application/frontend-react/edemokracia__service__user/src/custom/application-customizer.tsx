@@ -12,13 +12,13 @@ import { ApplicationCustomizer } from './interfaces';
 
 import { registerCustomRowViewAdminVoteDefinitionsAction } from './customServiceUserAdminVoteDefinitionRowViewVoteDefinitionsAction';
 import { registerCustomServiceUserIssuesCreateIssueActionPostHandlerHook } from './customServiceUserUserIssuesCreateIssueActionPostHandlerHook';
-import { registerCustomServiceDebateCloseDebateActionPostHandlerHook } from './customServiceUserDebateCloseDebateActionPostHandlerHook';
+import { registerCustomServiceIssueCloseDebateActionPostHandlerHook } from './customServiceIssueCloseDebateActionPostHandlerHook';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
     // register your implementations here
     registerCustomRowViewAdminVoteDefinitionsAction(context);
     registerCustomServiceUserIssuesCreateIssueActionPostHandlerHook(context);
-    registerCustomServiceDebateCloseDebateActionPostHandlerHook(context);
+    registerCustomServiceIssueCloseDebateActionPostHandlerHook(context);
   }
 }

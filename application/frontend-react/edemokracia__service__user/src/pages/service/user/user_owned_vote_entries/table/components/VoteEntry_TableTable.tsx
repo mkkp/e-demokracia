@@ -91,7 +91,7 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceVoteEntryQueryCustomizer>({
-    _mask: '{userName,created,voteTitle,debateTitle,issueTitle,voteStatus}',
+    _mask: '{userName,created,voteTitle,issueTitle,voteStatus}',
     _seek: {
       limit: 10 + 1,
     },
@@ -170,18 +170,6 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
     },
     {
       ...baseColumnConfig,
-      field: 'debateTitle',
-      headerName: t('service.VoteEntryTable.userOwnedVoteEntries.debateTitle', {
-        defaultValue: 'DebateTitle',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
       field: 'issueTitle',
       headerName: t('service.VoteEntryTable.userOwnedVoteEntries.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       headerClassName: 'data-grid-column-header',
@@ -234,13 +222,6 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
     },
 
     {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserUserOwnedVoteEntriesTableDefaultUserOwnedVoteEntriesVoteEntryTableDebateTitleFilter',
-      attributeName: 'debateTitle',
-      label: t('service.VoteEntryTable.userOwnedVoteEntries.debateTitle', { defaultValue: 'DebateTitle' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
       id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserUserOwnedVoteEntriesTableDefaultUserOwnedVoteEntriesVoteEntryTableIssueTitleFilter',
       attributeName: 'issueTitle',
       label: t('service.VoteEntryTable.userOwnedVoteEntries.issueTitle', { defaultValue: 'IssueTitle' }) as string,
@@ -257,7 +238,7 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
   ];
 
   const userOwnedVoteEntriesInitialQueryCustomizer: ServiceVoteEntryQueryCustomizer = {
-    _mask: '{userName,created,voteTitle,debateTitle,issueTitle,voteStatus}',
+    _mask: '{userName,created,voteTitle,issueTitle,voteStatus}',
     _orderBy: userOwnedVoteEntriesSortModel.length
       ? [
           {
@@ -296,13 +277,6 @@ export const VoteEntry_TableTable = forwardRef<RefreshableTable, VoteEntry_Table
       id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserUserOwnedVoteEntriesTableDefaultUserOwnedVoteEntriesVoteEntryTableVoteTitleFilter',
       attributeName: 'voteTitle',
       label: t('service.VoteEntryTable.userOwnedVoteEntries.voteTitle', { defaultValue: 'VoteTitle' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: 'FilteredemokraciaServiceUserEdemokraciaServiceUserUserOwnedVoteEntriesTableDefaultUserOwnedVoteEntriesVoteEntryTableDebateTitleFilter',
-      attributeName: 'debateTitle',
-      label: t('service.VoteEntryTable.userOwnedVoteEntries.debateTitle', { defaultValue: 'DebateTitle' }) as string,
       filterType: FilterType.string,
     },
 

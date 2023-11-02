@@ -11,7 +11,6 @@ import {
   ServiceIssueAttributes,
   ServiceSelectAnswerVoteEntryAttributes,
   ServiceSelectAnswerVoteSelectionAttributes,
-  ServiceDebateAttributes,
   ServiceSelectAnswerVoteDefinitionAttributes,
 } from '../model';
 

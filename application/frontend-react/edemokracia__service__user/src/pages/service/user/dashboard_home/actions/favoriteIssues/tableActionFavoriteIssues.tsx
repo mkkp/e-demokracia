@@ -32,7 +32,6 @@ export const useTableActionFavoriteIssuesAction = (
     'districtRepresentation',
     'title',
     'created',
-    'numberOfDebates',
     'status',
   ];
 

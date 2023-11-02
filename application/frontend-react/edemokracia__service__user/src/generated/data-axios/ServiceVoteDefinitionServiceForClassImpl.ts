@@ -10,20 +10,17 @@ import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceVoteDefinitionStored,
+  SelectAnswerVoteSelectionQueryCustomizer,
   RatingVoteInput,
+  SelectAnswerVoteSelectionStored,
   ServiceVoteDefinitionQueryCustomizer,
-  ServiceDebate,
-  ServiceDebateStored,
   ServiceIssueQueryCustomizer,
   YesNoAbstainVoteInput,
   ServiceVoteDefinition,
   ServiceIssueStored,
+  YesNoVoteInput,
   SelectAnswerVoteSelection,
   ServiceIssue,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  SelectAnswerVoteSelectionStored,
-  ServiceDebateQueryCustomizer,
-  YesNoVoteInput,
 } from '../data-api';
 import type { ServiceVoteDefinitionServiceForClass } from '../data-service';
 
@@ -72,39 +69,6 @@ export class ServiceVoteDefinitionServiceForClassImpl
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
       },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getDebate(
-    target: JudoIdentifiable<ServiceVoteDefinition>,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<ServiceDebateStored> {
-    const path = '/service/VoteDefinition/debate/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForDebate(
-    owner?: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
-    queryCustomizer?: ServiceDebateQueryCustomizer,
-  ): Promise<Array<ServiceDebateStored>> {
-    const path = '/service/VoteDefinition/debate/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;

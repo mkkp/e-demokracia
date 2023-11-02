@@ -10,7 +10,6 @@ import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceIssue } from '../model/ServiceIssue';
 
 import { FilterByBoolean } from './FilterByBoolean';
-import { FilterByInteger } from './FilterByInteger';
 import { FilterByIssueScope } from './FilterByIssueScope';
 import { FilterByIssueStatus } from './FilterByIssueStatus';
 import { FilterByString } from './FilterByString';
@@ -24,7 +23,6 @@ export interface ServiceIssueQueryCustomizer extends QueryCustomizer<ServiceIssu
   description?: Array<FilterByText>;
   status?: Array<FilterByIssueStatus>;
   representation?: Array<FilterByString>;
-  numberOfDebates?: Array<FilterByInteger>;
   defaultVoteType?: Array<FilterByVoteType>;
   scope?: Array<FilterByIssueScope>;
   countyRepresentation?: Array<FilterByString>;
@@ -32,4 +30,9 @@ export interface ServiceIssueQueryCustomizer extends QueryCustomizer<ServiceIssu
   districtRepresentation?: Array<FilterByString>;
   isFavorite?: Array<FilterByBoolean>;
   isNotFavorite?: Array<FilterByBoolean>;
+  debateCloseAt?: Array<FilterByTimestamp>;
+  isVoteClosable?: Array<FilterByBoolean>;
+  isIssueDraft?: Array<FilterByBoolean>;
+  isIssueActive?: Array<FilterByBoolean>;
+  isIssueDeletable?: Array<FilterByBoolean>;
 }
