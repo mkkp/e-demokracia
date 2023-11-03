@@ -124,7 +124,7 @@ export const ActiveIssuesInActivityDistrictsTable = forwardRef<
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
     _mask:
-      '{countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _seek: {
       limit: 10 + 1,
     },
@@ -300,7 +300,7 @@ export const ActiveIssuesInActivityDistrictsTable = forwardRef<
 
   const activeIssuesInActivityDistrictsInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _orderBy: activeIssuesInActivityDistrictsSortModel.length
       ? [
           {

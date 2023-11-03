@@ -41,6 +41,20 @@ export class ServiceUserManagerServiceForClassImpl extends JudoAxiosService impl
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async update(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored> {
+    const path = '/service/UserManager/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getUsers(

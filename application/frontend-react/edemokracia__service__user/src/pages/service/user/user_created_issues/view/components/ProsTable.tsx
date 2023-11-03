@@ -98,7 +98,6 @@ import {
   useServiceProCreateProArgumentAction,
   useServiceProVoteDownAction,
   useServiceProVoteUpAction,
-  usePageDeleteUserCreatedIssuesAction,
   usePageRefreshUserCreatedIssuesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
@@ -227,7 +226,6 @@ export const ProsTable = (props: ProsTableProps) => {
   const serviceProCreateProArgumentAction = useServiceProCreateProArgumentAction();
   const serviceProVoteDownAction = useServiceProVoteDownAction();
   const serviceProVoteUpAction = useServiceProVoteUpAction();
-  const pageDeleteUserCreatedIssuesAction = usePageDeleteUserCreatedIssuesAction();
   const pageRefreshUserCreatedIssuesAction = usePageRefreshUserCreatedIssuesAction();
 
   const prosRowActions: TableRowAction<ServiceProStored>[] = [

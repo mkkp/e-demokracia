@@ -95,7 +95,6 @@ import {
   useRowDeleteAttachmentsAction,
   useRowViewAttachmentsAction,
   useTableCreateAttachmentsAction,
-  usePageDeleteUserCreatedIssuesAction,
   usePageRefreshUserCreatedIssuesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
@@ -252,7 +251,6 @@ export const AttachmentsTable = (props: AttachmentsTableProps) => {
   const rowDeleteAttachmentsAction = useRowDeleteAttachmentsAction();
   const rowViewAttachmentsAction = useRowViewAttachmentsAction();
   const tableCreateAttachmentsAction = useTableCreateAttachmentsAction();
-  const pageDeleteUserCreatedIssuesAction = usePageDeleteUserCreatedIssuesAction();
   const pageRefreshUserCreatedIssuesAction = usePageRefreshUserCreatedIssuesAction();
 
   const attachmentsRowActions: TableRowAction<ServiceIssueAttachmentStored>[] = [

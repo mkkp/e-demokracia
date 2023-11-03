@@ -16,7 +16,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 
  * var edemokracia::VoteDefinition voteDef;
  * 
- * if (this.status == edemokracia::IssueStatus#CLOSED) {
+ * if (this.status != edemokracia::IssueStatus#ACTIVE) {
  * 	return voteDef;
  * }
  * 

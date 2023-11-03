@@ -95,7 +95,6 @@ import {
   useServiceCommentVoteDownAction,
   useServiceCommentVoteUpAction,
   useRowViewCommentsAction,
-  usePageDeleteUserCreatedIssuesAction,
   usePageRefreshUserCreatedIssuesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
@@ -270,7 +269,6 @@ export const CommentsTable = (props: CommentsTableProps) => {
   const serviceCommentVoteDownAction = useServiceCommentVoteDownAction();
   const serviceCommentVoteUpAction = useServiceCommentVoteUpAction();
   const rowViewCommentsAction = useRowViewCommentsAction();
-  const pageDeleteUserCreatedIssuesAction = usePageDeleteUserCreatedIssuesAction();
   const pageRefreshUserCreatedIssuesAction = usePageRefreshUserCreatedIssuesAction();
 
   const commentsRowActions: TableRowAction<ServiceCommentStored>[] = [

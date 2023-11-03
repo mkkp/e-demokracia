@@ -26,6 +26,8 @@ export interface ServiceUserManagerServiceForClass {
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
   ): Promise<ServiceUserManagerStored>;
 
+  update(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored>;
+
   getUsers(
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

@@ -12,7 +12,6 @@ export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteRatingForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteRating';
 export * from './serviceVoteDefinition/ServiceVoteDefinitionVoteYesNoAbstainForm';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteYesNoAbstain';
-export * from './rowDeleteAdminVoteDefinitions';
 export * from './serviceVoteDefinition/serviceVoteDefinitionVoteSelectAnswer';
 export * from './pageFilterAdminVoteDefinitions';
 export * from './pageRefreshAdminVoteDefinitions';

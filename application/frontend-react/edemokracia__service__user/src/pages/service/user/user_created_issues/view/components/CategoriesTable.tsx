@@ -96,7 +96,6 @@ import {
   useRowViewCategoriesAction,
   useTableAddCategoriesAction,
   useTableClearCategoriesAction,
-  usePageDeleteUserCreatedIssuesAction,
   usePageRefreshUserCreatedIssuesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
@@ -200,7 +199,6 @@ export const CategoriesTable = (props: CategoriesTableProps) => {
   const rowViewCategoriesAction = useRowViewCategoriesAction();
   const tableAddCategoriesAction = useTableAddCategoriesAction();
   const tableClearCategoriesAction = useTableClearCategoriesAction();
-  const pageDeleteUserCreatedIssuesAction = usePageDeleteUserCreatedIssuesAction();
   const pageRefreshUserCreatedIssuesAction = usePageRefreshUserCreatedIssuesAction();
 
   const categoriesRowActions: TableRowAction<ServiceIssueCategoryStored>[] = [

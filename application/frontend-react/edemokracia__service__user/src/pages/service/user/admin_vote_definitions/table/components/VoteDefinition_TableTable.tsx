@@ -60,7 +60,6 @@ import { serviceUserServiceForAdminVoteDefinitionsImpl } from '~/generated/data-
 import {
   usePageFilterAdminVoteDefinitionsAction,
   usePageRefreshAdminVoteDefinitionsAction,
-  useRowDeleteAdminVoteDefinitionsAction,
   useRowViewAdminVoteDefinitionsAction,
   useServiceVoteDefinitionVoteRatingAction,
   useServiceVoteDefinitionVoteSelectAnswerAction,
@@ -344,7 +343,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
     10,
   );
   const pageRefreshAdminVoteDefinitionsAction = usePageRefreshAdminVoteDefinitionsAction();
-  const rowDeleteAdminVoteDefinitionsAction = useRowDeleteAdminVoteDefinitionsAction();
   const rowViewAdminVoteDefinitionsAction = useRowViewAdminVoteDefinitionsAction();
   const serviceVoteDefinitionVoteRatingAction = useServiceVoteDefinitionVoteRatingAction();
   const serviceVoteDefinitionVoteSelectAnswerAction = useServiceVoteDefinitionVoteSelectAnswerAction();
@@ -410,13 +408,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
     {
-      id: 'DeleteActionedemokraciaServiceUserEdemokraciaServiceUserAdminVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceUserAdminVoteDefinitionsRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: ServiceVoteDefinitionStored) => rowDeleteAdminVoteDefinitionsAction(row, () => fetchData()),
-      disabled: (row: ServiceVoteDefinitionStored) => !row.__deleteable,
-    },
-    {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserAdminVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceVoteDefinitionVoteYesNoButtonCallOperation',
       label: t('service.VoteDefinitionTable.adminVoteDefinitions.voteYesNo.ButtonCallOperation', {
         defaultValue: 'Take a vote',
@@ -451,27 +442,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
       action: async (row: ServiceVoteDefinitionStored) => serviceVoteDefinitionVoteRatingAction(row, () => fetchData()),
     },
   ];
-
-  const bulkDeleteSelected = useCallback(() => {
-    openCRUDDialog<ServiceVoteDefinitionStored>({
-      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
-      itemTitleFn: (item) => item.title!,
-      selectedItems: selectedRows.current,
-      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-        await rowDeleteAdminVoteDefinitionsAction(item, successHandler, errorHandler, true);
-      },
-      onClose: (needsRefresh) => {
-        if (needsRefresh) {
-          fetchData();
-          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
-        }
-      },
-    });
-  }, []);
-  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
-    // every row has the same `__deleteable` flag
-    return !!selectionModel.length && !false && !!data[0]?.__deleteable;
-  }, [data, selectionModel]);
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -596,11 +566,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<ServiceVoteDefinitionStored>) =>
           rowViewAdminVoteDefinitionsAction(params.row, () => fetchData())
@@ -626,17 +591,6 @@ export const VoteDefinition_TableTable = forwardRef<RefreshableTable, VoteDefini
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
-              {isBulkDeleteAvailable() ? (
-                <Button
-                  id="RelationTypeedemokraciaServiceUserEdemokraciaServiceUserAdminVoteDefinitions-bulk-delete"
-                  disabled={isOwnerLoading}
-                  variant="text"
-                  startIcon={<MdiIcon path="delete-forever" />}
-                  onClick={bulkDeleteSelected}
-                >
-                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
-                </Button>
-              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

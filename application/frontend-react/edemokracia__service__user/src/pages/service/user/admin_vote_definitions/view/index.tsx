@@ -102,9 +102,6 @@ export default function ServiceUserAdminVoteDefinitionsView() {
   const handleUpdateError = useErrorHandler<ServiceVoteDefinition>(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=ServiceUserAdminVoteDefinitionsView))`,
   );
-  const handleDeleteError = useErrorHandler<ServiceVoteDefinition>(
-    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Delete)(component=ServiceUserAdminVoteDefinitionsView))`,
-  );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
@@ -169,7 +166,7 @@ export default function ServiceUserAdminVoteDefinitionsView() {
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
-    return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
   useConfirmationBeforeChange(
@@ -232,20 +229,6 @@ export default function ServiceUserAdminVoteDefinitionsView() {
     }
   }
 
-  async function deleteData() {
-    setIsLoading(true);
-
-    try {
-      await serviceVoteDefinitionServiceForClassImpl.delete(data as ServiceVoteDefinitionStored);
-
-      back();
-    } catch (error) {
-      handleDeleteError(error, undefined, data);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -260,7 +243,6 @@ export default function ServiceUserAdminVoteDefinitionsView() {
           setEditMode={setEditMode}
           isLoading={isLoading}
           submit={submit}
-          deleteData={deleteData}
         />
       </PageHeader>
       <PageContainerTransition>

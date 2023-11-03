@@ -14,7 +14,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
 /**
  * 
  * 
- * if (this.status == edemokracia::IssueStatus#CREATED) {
+ * if (this.status != edemokracia::IssueStatus#CREATED) {
  * 	return;
  * }
  * this.status = edemokracia::IssueStatus#ACTIVE;

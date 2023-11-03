@@ -35,4 +35,10 @@ export interface ServiceIssueQueryCustomizer extends QueryCustomizer<ServiceIssu
   isIssueDraft?: Array<FilterByBoolean>;
   isIssueActive?: Array<FilterByBoolean>;
   isIssueDeletable?: Array<FilterByBoolean>;
+  isIssueNotActive?: Array<FilterByBoolean>;
+  isVoteNotClosable?: Array<FilterByBoolean>;
+  isIssueNotDraft?: Array<FilterByBoolean>;
+  isIssueNotDeletable?: Array<FilterByBoolean>;
+  isIssueInVoting?: Array<FilterByBoolean>;
+  isIssueNotInVoting?: Array<FilterByBoolean>;
 }

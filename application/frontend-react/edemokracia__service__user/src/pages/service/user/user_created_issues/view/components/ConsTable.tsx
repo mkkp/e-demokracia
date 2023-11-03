@@ -98,7 +98,6 @@ import {
   useServiceConVoteUpAction,
   useRowDeleteConsAction,
   useRowViewConsAction,
-  usePageDeleteUserCreatedIssuesAction,
   usePageRefreshUserCreatedIssuesAction,
 } from '../actions';
 import { applyInMemoryFilters } from '~/utilities';
@@ -227,7 +226,6 @@ export const ConsTable = (props: ConsTableProps) => {
   const serviceConVoteUpAction = useServiceConVoteUpAction();
   const rowDeleteConsAction = useRowDeleteConsAction();
   const rowViewConsAction = useRowViewConsAction();
-  const pageDeleteUserCreatedIssuesAction = usePageDeleteUserCreatedIssuesAction();
   const pageRefreshUserCreatedIssuesAction = usePageRefreshUserCreatedIssuesAction();
 
   const consRowActions: TableRowAction<ServiceConStored>[] = [

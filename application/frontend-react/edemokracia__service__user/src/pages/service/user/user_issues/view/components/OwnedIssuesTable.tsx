@@ -120,7 +120,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
     _mask:
-      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _seek: {
       limit: 10 + 1,
     },
@@ -317,7 +317,7 @@ export const OwnedIssuesTable = forwardRef<RefreshableTable, OwnedIssuesTablePro
 
   const ownedIssuesInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _orderBy: ownedIssuesSortModel.length
       ? [
           {

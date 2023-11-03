@@ -16,6 +16,10 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 
  * var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any()
  * 
+ * if (this.status == edemokracia::IssueStatus#ACTIVE) {
+ * 	return;
+ * }
+ * 
  * this.pros += new edemokracia::Pro(createdBy = user, title = this.title, description = input.description);
  * 
  * 

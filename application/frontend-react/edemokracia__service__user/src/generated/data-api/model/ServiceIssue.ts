@@ -39,6 +39,12 @@ export interface ServiceIssue {
   isIssueDraft?: null | boolean;
   isIssueActive?: null | boolean;
   isIssueDeletable?: null | boolean;
+  isIssueNotActive?: null | boolean;
+  isVoteNotClosable?: null | boolean;
+  isIssueNotDraft?: null | boolean;
+  isIssueNotDeletable?: null | boolean;
+  isIssueInVoting?: null | boolean;
+  isIssueNotInVoting?: null | boolean;
 
   attachments?: null | Array<ServiceIssueAttachmentStored>;
   owner?: null | ServiceServiceUserStored;
@@ -69,7 +75,13 @@ export type ServiceIssueAttributes =
   | 'isVoteClosable'
   | 'isIssueDraft'
   | 'isIssueActive'
-  | 'isIssueDeletable';
+  | 'isIssueDeletable'
+  | 'isIssueNotActive'
+  | 'isVoteNotClosable'
+  | 'isIssueNotDraft'
+  | 'isIssueNotDeletable'
+  | 'isIssueInVoting'
+  | 'isIssueNotInVoting';
 
 export type ServiceIssueRelations =
   | 'attachments'

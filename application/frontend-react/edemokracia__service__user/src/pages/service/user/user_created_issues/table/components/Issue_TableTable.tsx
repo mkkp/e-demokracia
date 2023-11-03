@@ -65,7 +65,6 @@ import {
   useServiceIssueRemoveFromFavoritesAction,
   usePageFilterUserCreatedIssuesAction,
   usePageRefreshUserCreatedIssuesAction,
-  useRowDeleteUserCreatedIssuesAction,
   useRowViewUserCreatedIssuesAction,
 } from '../actions';
 import { GridLogicOperator } from '@mui/x-data-grid';
@@ -105,7 +104,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
     _mask:
-      '{scope,title,status,created,description,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{scope,title,status,created,description,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _seek: {
       limit: 10 + 1,
     },
@@ -263,7 +262,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
 
   const userCreatedIssuesInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{scope,title,status,created,description,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{scope,title,status,created,description,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _orderBy: userCreatedIssuesSortModel.length
       ? [
           {
@@ -291,7 +290,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
     10,
   );
   const pageRefreshUserCreatedIssuesAction = usePageRefreshUserCreatedIssuesAction();
-  const rowDeleteUserCreatedIssuesAction = useRowDeleteUserCreatedIssuesAction();
   const rowViewUserCreatedIssuesAction = useRowViewUserCreatedIssuesAction();
 
   const filterOptions: FilterOption[] = [
@@ -334,13 +332,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   ];
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'DeleteActionedemokraciaServiceUserEdemokraciaServiceUserUserCreatedIssuesTableEdemokraciaServiceUserEdemokraciaServiceUserUserCreatedIssuesRowDelete',
-      label: t('judo.pages.table.delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      action: async (row: ServiceIssueStored) => rowDeleteUserCreatedIssuesAction(row, () => fetchData()),
-      disabled: (row: ServiceIssueStored) => !row.__deleteable,
-    },
     {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserCreatedIssuesTableEdemokraciaServiceUserEdemokraciaServiceIssueAddToFavoritesButtonCallOperation',
       label: t('service.IssueTable.userCreatedIssues.addToFavorites.ButtonCallOperation', {
@@ -414,27 +405,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
       action: async (row: ServiceIssueStored) => serviceIssueCreateCommentAction(row, () => fetchData()),
     },
   ];
-
-  const bulkDeleteSelected = useCallback(() => {
-    openCRUDDialog<ServiceIssueStored>({
-      dialogTitle: t('judo.dialogs.crud-bulk.delete.title', { defaultValue: 'Delete selected items' }),
-      itemTitleFn: (item) => item.title!,
-      selectedItems: selectedRows.current,
-      action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-        await rowDeleteUserCreatedIssuesAction(item, successHandler, errorHandler, true);
-      },
-      onClose: (needsRefresh) => {
-        if (needsRefresh) {
-          fetchData();
-          setSelectionModel([]); // not resetting on fetchData because refreshes would always remove selections...
-        }
-      },
-    });
-  }, []);
-  const isBulkDeleteAvailable: () => boolean = useCallback(() => {
-    // every row has the same `__deleteable` flag
-    return !!selectionModel.length && !false && !!data[0]?.__deleteable;
-  }, [data, selectionModel]);
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -559,11 +529,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
           ),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={(params: GridRowParams<ServiceIssueStored>) =>
           rowViewUserCreatedIssuesAction(params.row, () => fetchData())
@@ -589,17 +554,6 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
                 {t('judo.pages.table.set-filters', { defaultValue: 'Set filters' }) +
                   (filters.length !== 0 ? ' (' + filters.length + ')' : '')}
               </Button>
-              {isBulkDeleteAvailable() ? (
-                <Button
-                  id="RelationTypeedemokraciaServiceUserEdemokraciaServiceUserUserCreatedIssues-bulk-delete"
-                  disabled={isOwnerLoading}
-                  variant="text"
-                  startIcon={<MdiIcon path="delete-forever" />}
-                  onClick={bulkDeleteSelected}
-                >
-                  {t('judo.pages.table.delete.selected', { defaultValue: 'Delete' })}
-                </Button>
-              ) : null}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

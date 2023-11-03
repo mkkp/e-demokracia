@@ -71,9 +71,9 @@ import {
   serviceYesNoAbstainVoteDefinitionServiceForClassImpl,
 } from '~/generated/data-axios';
 import {
-  useButtonNavigateIssueAction,
   useServiceYesNoAbstainVoteDefinitionTakeBackVoteAction,
   useServiceYesNoAbstainVoteDefinitionVoteAction,
+  useButtonNavigateIssueAction,
 } from './actions';
 
 import { PageActions } from './components/PageActions';
@@ -158,7 +158,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
 
   const queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer = {
     _mask:
-      '{title,closeAt,status,created,description,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
+      '{userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
   };
 
   const { service: postRefreshHook } =
@@ -168,9 +168,9 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
   const postRefreshAction: ServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
-  const buttonNavigateIssueAction = useButtonNavigateIssueAction();
   const serviceYesNoAbstainVoteDefinitionTakeBackVoteAction = useServiceYesNoAbstainVoteDefinitionTakeBackVoteAction();
   const serviceYesNoAbstainVoteDefinitionVoteAction = useServiceYesNoAbstainVoteDefinitionVoteAction();
+  const buttonNavigateIssueAction = useButtonNavigateIssueAction();
 
   const title: string = t('service.YesNoAbstainVoteDefinitionView', {
     defaultValue: 'YesNoAbstainVoteDefinition View / Edit',
@@ -270,6 +270,144 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
             alignItems="stretch"
             justifyContent="flex-start"
           >
+            <Grid item xs={12} sm={12}>
+              <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapper">
+                <CardContent>
+                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid item xs={12} sm={12}>
+                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                        <Typography
+                          id="LabeledemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupLabel"
+                          variant="h5"
+                          component="h1"
+                        >
+                          {t('service.YesNoAbstainVoteDefinitionView.userVoteEntryGroup.Label', {
+                            defaultValue: 'My vote entry',
+                          })}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                      <Grid
+                        id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroup"
+                        container
+                        direction="row"
+                        alignItems="stretch"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        {!data.userHasNoVoteEntry && (
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVote"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVote"
+                                  container
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="flex-start"
+                                  spacing={2}
+                                >
+                                  <Grid item xs={12} sm={12} md={4.0}>
+                                    <LoadingButton
+                                      id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionTakeBackVoteButtonCallOperation"
+                                      loading={isLoading}
+                                      variant={undefined}
+                                      startIcon={<MdiIcon path="delete" />}
+                                      loadingPosition="start"
+                                      onClick={async () => {
+                                        try {
+                                          setIsLoading(true);
+                                          await serviceYesNoAbstainVoteDefinitionTakeBackVoteAction(data, () =>
+                                            fetchData(),
+                                          );
+                                        } finally {
+                                          setIsLoading(false);
+                                        }
+                                      }}
+                                      disabled={!data.userHasVoteEntry || editMode}
+                                    >
+                                      <span>
+                                        {t('service.YesNoAbstainVoteDefinitionView.takeBackVote.ButtonCallOperation', {
+                                          defaultValue: 'TakeBackVote',
+                                        })}
+                                      </span>
+                                    </LoadingButton>
+                                  </Grid>
+
+                                  <Grid item xs={12} sm={12} md={4.0}>
+                                    <UserVoteEntryLink
+                                      ownerData={data}
+                                      readOnly={true || !isFormUpdateable()}
+                                      disabled={isLoading}
+                                      editMode={editMode}
+                                      fetchOwnerData={fetchData}
+                                      onChange={(
+                                        value: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored | null,
+                                      ) => {
+                                        storeDiff('userVoteEntry', value);
+                                      }}
+                                      validation={validation}
+                                    />
+                                  </Grid>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        )}
+
+                        {!data.userHasVoteEntry && (
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupTakeVote"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <LoadingButton
+                                  id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionVoteButtonCallOperation"
+                                  loading={isLoading}
+                                  variant={undefined}
+                                  startIcon={<MdiIcon path="vote" />}
+                                  loadingPosition="start"
+                                  onClick={async () => {
+                                    try {
+                                      setIsLoading(true);
+                                      await serviceYesNoAbstainVoteDefinitionVoteAction(data, () => fetchData());
+                                    } finally {
+                                      setIsLoading(false);
+                                    }
+                                  }}
+                                  disabled={!data.userHasNoVoteEntry || editMode}
+                                >
+                                  <span>
+                                    {t('service.YesNoAbstainVoteDefinitionView.vote.ButtonCallOperation', {
+                                      defaultValue: 'Take a vote',
+                                    })}
+                                  </span>
+                                </LoadingButton>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        )}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditVoteEntryBase">
                 <CardContent>
@@ -535,144 +673,6 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
                             }}
                           />
                         </Grid>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} sm={12}>
-              <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapper">
-                <CardContent>
-                  <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                    <Grid item xs={12} sm={12}>
-                      <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                        <Typography
-                          id="LabeledemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupLabel"
-                          variant="h5"
-                          component="h1"
-                        >
-                          {t('service.YesNoAbstainVoteDefinitionView.userVoteEntryGroup.Label', {
-                            defaultValue: 'My vote entry',
-                          })}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroup"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        {!data.userHasNoVoteEntry && (
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVote"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}>
-                                <Grid
-                                  id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVote"
-                                  container
-                                  direction="row"
-                                  alignItems="flex-start"
-                                  justifyContent="flex-start"
-                                  spacing={2}
-                                >
-                                  <Grid item xs={12} sm={12} md={4.0}>
-                                    <LoadingButton
-                                      id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionTakeBackVoteButtonCallOperation"
-                                      loading={isLoading}
-                                      variant={undefined}
-                                      startIcon={<MdiIcon path="delete" />}
-                                      loadingPosition="start"
-                                      onClick={async () => {
-                                        try {
-                                          setIsLoading(true);
-                                          await serviceYesNoAbstainVoteDefinitionTakeBackVoteAction(data, () =>
-                                            fetchData(),
-                                          );
-                                        } finally {
-                                          setIsLoading(false);
-                                        }
-                                      }}
-                                      disabled={!data.userHasVoteEntry || editMode}
-                                    >
-                                      <span>
-                                        {t('service.YesNoAbstainVoteDefinitionView.takeBackVote.ButtonCallOperation', {
-                                          defaultValue: 'TakeBackVote',
-                                        })}
-                                      </span>
-                                    </LoadingButton>
-                                  </Grid>
-
-                                  <Grid item xs={12} sm={12} md={4.0}>
-                                    <UserVoteEntryLink
-                                      ownerData={data}
-                                      readOnly={true || !isFormUpdateable()}
-                                      disabled={isLoading}
-                                      editMode={editMode}
-                                      fetchOwnerData={fetchData}
-                                      onChange={(
-                                        value: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored | null,
-                                      ) => {
-                                        storeDiff('userVoteEntry', value);
-                                      }}
-                                      validation={validation}
-                                    />
-                                  </Grid>
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        )}
-
-                        {!data.userHasVoteEntry && (
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewDefaultYesNoAbstainVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupTakeVote"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}>
-                                <LoadingButton
-                                  id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionVoteButtonCallOperation"
-                                  loading={isLoading}
-                                  variant={undefined}
-                                  startIcon={<MdiIcon path="vote" />}
-                                  loadingPosition="start"
-                                  onClick={async () => {
-                                    try {
-                                      setIsLoading(true);
-                                      await serviceYesNoAbstainVoteDefinitionVoteAction(data, () => fetchData());
-                                    } finally {
-                                      setIsLoading(false);
-                                    }
-                                  }}
-                                  disabled={!data.userHasNoVoteEntry || editMode}
-                                >
-                                  <span>
-                                    {t('service.YesNoAbstainVoteDefinitionView.vote.ButtonCallOperation', {
-                                      defaultValue: 'Take a vote',
-                                    })}
-                                  </span>
-                                </LoadingButton>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        )}
                       </Grid>
                     </Grid>
                   </Grid>

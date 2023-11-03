@@ -121,7 +121,8 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
     const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
-      _mask: '{title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      _mask:
+        '{title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
       _seek: {
         limit: 10 + 1,
       },
@@ -231,7 +232,8 @@ export const ActiveIssuesInResidentCountyTable = forwardRef<RefreshableTable, Ac
     ];
 
     const activeIssuesInResidentCountyInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
-      _mask: '{title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      _mask:
+        '{title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
       _orderBy: activeIssuesInResidentCountySortModel.length
         ? [
             {

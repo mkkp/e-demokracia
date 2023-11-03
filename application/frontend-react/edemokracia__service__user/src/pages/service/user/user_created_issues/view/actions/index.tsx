@@ -8,7 +8,6 @@
 export * from './serviceIssue/serviceIssueCloseVote';
 export * from './city/linkUnsetCity';
 export * from './servicePro/serviceProVoteDown';
-export * from './pageDeleteUserCreatedIssues';
 export * from './serviceIssue/serviceIssueRemoveFromFavorites';
 export * from './categories/rowViewCategories';
 export * from './issueType/linkViewIssueType';

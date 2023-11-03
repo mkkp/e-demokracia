@@ -105,7 +105,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
     _mask:
-      '{scope,title,status,created,description,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{scope,title,status,created,description,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _seek: {
       limit: 10 + 1,
     },
@@ -263,7 +263,7 @@ export const Issue_TableTable = forwardRef<RefreshableTable, Issue_TableTablePro
 
   const userOwnedActiveIssuesInitialQueryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{scope,title,status,created,description,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable}',
+      '{scope,title,status,created,description,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable}',
     _orderBy: userOwnedActiveIssuesSortModel.length
       ? [
           {

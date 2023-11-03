@@ -137,7 +137,7 @@ export default function ServiceUserDashboardHomeView() {
 
   const queryCustomizer: ServiceDashboardQueryCustomizer = {
     _mask:
-      '{welcome,issuesOwned{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable},favoriteIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable},ownedVoteDefinitions{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,voteType,created,closeAt,numberOfVotes,status,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType},favoriteVoteDefinitions{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,voteType,created,closeAt,numberOfVotes,status,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType},userVoteEntries{created,issueTitle,voteTitle,voteStatus}}',
+      '{welcome,issuesOwned{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable},favoriteIssues{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status,isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable},ownedVoteDefinitions{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,voteType,created,closeAt,numberOfVotes,status,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType},favoriteVoteDefinitions{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,voteType,created,closeAt,numberOfVotes,status,isYesNoType,isNotYesNoType,isYesNoAbstainType,isNotYesNoAbstainType,isSelectAnswerType,isNotSelectAnswerType,isRatingType,isNotRatingType},userVoteEntries{created,issueTitle,voteTitle,voteStatus}}',
   };
 
   const { service: postRefreshHook } = useTrackService<ServiceUserDashboardHomeViewPostRefreshHook>(
@@ -269,17 +269,8 @@ export default function ServiceUserDashboardHomeView() {
                     label: t('service.DashboardView.issues', { defaultValue: 'Issues' }) as string,
                     disabled: isLoading,
                     hidden: false,
-                    icon: 'ticket-confirmation',
-                    nestedDataKeys: ['favoriteIssues', 'issuesOwned'],
-                  },
-                  {
-                    id: 'TabedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebates',
-                    name: 'service.DashboardView.debates',
-                    label: t('service.DashboardView.debates', { defaultValue: 'Debates' }) as string,
-                    disabled: isLoading,
-                    hidden: false,
                     icon: 'wechat',
-                    nestedDataKeys: [],
+                    nestedDataKeys: ['favoriteIssues', 'issuesOwned'],
                   },
                   {
                     id: 'TabedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorVotes',
@@ -418,67 +409,6 @@ export default function ServiceUserDashboardHomeView() {
                                   </Grid>
                                 </Grid>
                               </Grid>
-                            </Grid>
-                          </ModeledTabs>
-                        </Grid>
-                      </Grid>
-                    </CardContent>
-                  </Card>
-                </Grid>
-
-                <Grid item xs={12} sm={12}>
-                  <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebatesDebates">
-                    <CardContent>
-                      <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                        <Grid container item xs={12} sm={12}>
-                          <ModeledTabs
-                            id="TabControlleredemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebatesDebatesDebateTabBar"
-                            ownerData={data}
-                            validation={validation}
-                            orientation='vertical'
-                            childTabs={[
-                              {
-                                id: 'TabedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebatesDebatesDebateTabBarMydebates',
-                                name: 'service.DashboardView.mydebates',
-                                label: t('service.DashboardView.mydebates', { defaultValue: 'My debates' }) as string,
-                                disabled: isLoading,
-                                hidden: false,
-                                icon: 'account-circle',
-                                nestedDataKeys: [],
-                              },
-                              {
-                                id: 'TabedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebatesDebatesDebateTabBarFavoriteDebates',
-                                name: 'service.DashboardView.favoriteDebates',
-                                label: t('service.DashboardView.favoriteDebates', {
-                                  defaultValue: 'Favorite Debates',
-                                }) as string,
-                                disabled: isLoading,
-                                hidden: false,
-                                icon: 'star',
-                                nestedDataKeys: [],
-                              },
-                            ]}
-                          >
-                            <Grid item xs={12} sm={12}>
-                              <Grid
-                                id="FlexedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebatesDebatesDebateTabBarMydebatesMydebates"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              ></Grid>
-                            </Grid>
-
-                            <Grid item xs={12} sm={12}>
-                              <Grid
-                                id="FlexedemokraciaServiceUserEdemokraciaServiceUserDashboardHomeViewDefaultDashboardViewEditSelectorDebatesDebatesDebateTabBarFavoriteDebatesFavoriteDebates"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              ></Grid>
                             </Grid>
                           </ModeledTabs>
                         </Grid>

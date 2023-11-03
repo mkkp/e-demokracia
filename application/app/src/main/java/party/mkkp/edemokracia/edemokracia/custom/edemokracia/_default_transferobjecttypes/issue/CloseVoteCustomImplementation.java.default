@@ -14,7 +14,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 /**
  * 
  * 
- * if (this.debateVote!isUndefined()) {
+ * if (this.status == edemokracia::IssueStatus#VOTING or this.debateVote!isUndefined()) {
  * 	return;
  * }
  * 

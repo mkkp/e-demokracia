@@ -136,7 +136,7 @@ export type ServiceUserAdminIssuesViewPostRefreshHook = () => ServiceUserAdminIs
  * Is Access: true
  * Is Dashboard: false
  * Type: View
- * Edit Mode Available: false
+ * Edit Mode Available: true
  **/
 export default function ServiceUserAdminIssuesView() {
   const { t } = useTranslation();
@@ -149,6 +149,9 @@ export default function ServiceUserAdminIssuesView() {
 
   const handleFetchError = useErrorHandler(
     `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
+  );
+  const handleUpdateError = useErrorHandler<ServiceIssue>(
+    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Update)(component=ServiceUserAdminIssuesView))`,
   );
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -186,7 +189,7 @@ export default function ServiceUserAdminIssuesView() {
 
   const queryCustomizer: ServiceIssueQueryCustomizer = {
     _mask:
-      '{isFavorite,isNotFavorite,isVoteClosable,isIssueDraft,isIssueDeletable,defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},comments{comment,created,createdByName,upVotes,downVotes}}',
+      '{isFavorite,isNotFavorite,isIssueActive,isIssueNotActive,isVoteClosable,isVoteNotClosable,isIssueDraft,isIssueNotDraft,isIssueDeletable,isIssueNotDeletable,defaultVoteType,title,status,created,description,issueType{title,description},owner{representation},cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},county{representation},city{representation},district{representation},attachments{link,file,type},categories{title,description},comments{comment,created,createdByName,upVotes,downVotes}}',
   };
 
   const { service: postRefreshHook } = useTrackService<ServiceUserAdminIssuesViewPostRefreshHook>(
@@ -208,7 +211,7 @@ export default function ServiceUserAdminIssuesView() {
   const title: string = t('service.IssueView', { defaultValue: 'Issue View / Edit' });
 
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
 
   const isFormDeleteable = useCallback(() => {
@@ -253,6 +256,28 @@ export default function ServiceUserAdminIssuesView() {
     }
   }
 
+  async function submit() {
+    setIsLoading(true);
+
+    try {
+      const res = await serviceIssueServiceForClassImpl.update(payloadDiff);
+
+      if (res) {
+        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
+          variant: 'success',
+          ...toastConfig.success,
+        });
+        setValidation(new Map<keyof ServiceIssue, string>());
+        await fetchData();
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleUpdateError(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -266,6 +291,7 @@ export default function ServiceUserAdminIssuesView() {
           editMode={editMode}
           setEditMode={setEditMode}
           isLoading={isLoading}
+          submit={submit}
         />
       </PageHeader>
       <PageContainerTransition>
@@ -339,94 +365,98 @@ export default function ServiceUserAdminIssuesView() {
                         </LoadingButton>
                       </Grid>
                     )}
-
-                    <Grid item>
-                      <LoadingButton
-                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsCloseDebate"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="vote" />}
-                        loadingPosition="start"
-                        onClick={async () => {
-                          try {
-                            setIsLoading(true);
-                            await serviceIssueCloseDebateAction(data, () => fetchData());
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.IssueView.PageActionButtons.closeDebate', {
-                            defaultValue: 'Close debate and start vote',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
-
-                    <Grid item>
-                      <LoadingButton
-                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsCloseVote"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-check" />}
-                        loadingPosition="start"
-                        onClick={async () => {
-                          try {
-                            setIsLoading(true);
-                            await serviceIssueCloseVoteAction(data, () => fetchData());
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.IssueView.PageActionButtons.closeVote', { defaultValue: 'Close Vote' })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
-
-                    <Grid item>
-                      <LoadingButton
-                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsActivate"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-open" />}
-                        loadingPosition="start"
-                        onClick={async () => {
-                          try {
-                            setIsLoading(true);
-                            await serviceIssueActivateAction(data, () => fetchData());
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={editMode}
-                      >
-                        <span>{t('service.IssueView.PageActionButtons.activate', { defaultValue: 'Activate' })}</span>
-                      </LoadingButton>
-                    </Grid>
-
-                    <Grid item>
-                      <LoadingButton
-                        id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsDeleteOrArchive"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="delete" />}
-                        loadingPosition="start"
-                        onClick={async () => {
-                          try {
-                            setIsLoading(true);
-                            await serviceIssueDeleteOrArchiveAction(data, () => fetchData());
-                          } finally {
-                            setIsLoading(false);
-                          }
-                        }}
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.IssueView.PageActionButtons.deleteOrArchive', { defaultValue: 'Delete' })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    {!data.isIssueNotActive && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsCloseDebate"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="vote" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceIssueCloseDebateAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.IssueView.PageActionButtons.closeDebate', {
+                              defaultValue: 'Close debate and start vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotClosable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsCloseVote"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-check" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceIssueCloseVoteAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.IssueView.PageActionButtons.closeVote', { defaultValue: 'Close Vote' })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isIssueNotDraft && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsActivate"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-open" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceIssueActivateAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>{t('service.IssueView.PageActionButtons.activate', { defaultValue: 'Activate' })}</span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isIssueNotDeletable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserAdminIssuesViewDefaultIssueViewEditActionsPageActionButtonsDeleteOrArchive"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="delete" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceIssueDeleteOrArchiveAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.IssueView.PageActionButtons.deleteOrArchive', { defaultValue: 'Delete' })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>

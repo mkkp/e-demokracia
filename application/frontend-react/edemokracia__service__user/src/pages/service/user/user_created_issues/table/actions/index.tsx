@@ -21,4 +21,3 @@ export * from './serviceIssue/ServiceIssueCloseDebateForm';
 export * from './serviceIssue/serviceIssueCloseDebate';
 export * from './serviceIssue/ServiceIssueCreateConArgumentForm';
 export * from './serviceIssue/serviceIssueCreateConArgument';
-export * from './rowDeleteUserCreatedIssues';
