@@ -138,8 +138,8 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_Igfb4IfuEe2u0fVmwtP5bA" name="representation" label="Representation" iconName="text_fields" visible="true" sort="NONE" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ"/>
           </components>
           <components xsi:type="ui:DataField" xmi:id="_BYLioG5WEe2wNaja8kBvcQ" name="comment" label="Comment" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_HqzzwG5VEe2wNaja8kBvcQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-          <components xsi:type="ui:DataField" xmi:id="_3kt_oH4bEe2j59SYy0JH0Q" name="upVotes" label="UpVotes" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-          <components xsi:type="ui:DataField" xmi:id="_3k6z8H4bEe2j59SYy0JH0Q" name="downVotes" label="DownVotes" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_3kt_oH4bEe2j59SYy0JH0Q" name="upVotes" label="UpVotes" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+          <components xsi:type="ui:DataField" xmi:id="_3k6z8H4bEe2j59SYy0JH0Q" name="downVotes" label="DownVotes" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           <components xsi:type="ui:TabularReferenceField" xmi:id="_IgOWIIfuEe2u0fVmwtP5bA" name="votes" label="Votes" iconName="table_rows" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qbA7kGksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
             <columns xsi:type="ui:DataColumn" xmi:id="_IgO9MIfuEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_p9bnsGksEe25ONJ3V89cVA"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_IgPkQIfuEe2u0fVmwtP5bA" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_p-OR4GksEe25ONJ3V89cVA"/>
@@ -150,8 +150,8 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_xE0lsG5REe2Q6M99rsfqSQ" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_Q31g0G5REe2Q6M99rsfqSQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_BYNX0G5WEe2wNaja8kBvcQ" name="comment" label="Comment" iconName="text_fields" visible="true" sort="NONE" dataFeature="_HqzzwG5VEe2wNaja8kBvcQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_BYVToG5WEe2wNaja8kBvcQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_Hq4FMG5VEe2wNaja8kBvcQ"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_3kyREH4bEe2j59SYy0JH0Q" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_3k-eUH4bEe2j59SYy0JH0Q" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_3kyREH4bEe2j59SYy0JH0Q" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_3k-eUH4bEe2j59SYy0JH0Q" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
       </table>
       <view xmi:id="_p_AVAGksEe25ONJ3V89cVA" name="Comment_View_Edit" label="Comment View / Edit" iconName="comment-text-multiple" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_eX7kkG5YEe2wNaja8kBvcQ" name="group" label="Comment" iconName="comment-text-multiple" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -230,8 +230,8 @@
         <components xsi:type="ui:DataField" xmi:id="_3nMr4H4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O6fpIH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3nWc4H4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O6qoQH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3ng08H4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_O60ZQH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_cIeKEIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_cIh0cIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+        <components xsi:type="ui:DataField" xmi:id="_cIeKEIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+        <components xsi:type="ui:DataField" xmi:id="_cIh0cIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cImF4IfYEe2u0fVmwtP5bA" name="votes" label="Votes" iconName="table_rows" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qZ3sEGksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_cIn7EIfYEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_p9bnsGksEe25ONJ3V89cVA"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_cIpwQIfYEe2u0fVmwtP5bA" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_p-OR4GksEe25ONJ3V89cVA"/>
@@ -251,16 +251,16 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_cI95UIfYEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_O6jTgH2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_cI_ugIfYEe2u0fVmwtP5bA" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O6u5sH2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_cJBjsIfYEe2u0fVmwtP5bA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O63ckH2hEe2LTNnGda5kaw"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_cJDY4IfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGmD8IeaEe2kLcMqsIbMgQ"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_cJFOEIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2NBQIeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_cJDY4IfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_cGmD8IeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_cJFOEIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_m2NBQIeaEe2kLcMqsIbMgQ"/>
         </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_cJHDQIfYEe2u0fVmwtP5bA" name="pros" label="Pros" iconName="table_rows" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" relationFeature="_WgzWwIezEe2kLcMqsIbMgQ" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_cJIRYIfYEe2u0fVmwtP5bA" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_17TzgW5REe2Q6M99rsfqSQ"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_cJKGkIfYEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_TOzW8H2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_cJL7wIfYEe2u0fVmwtP5bA" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO42gH2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_cJNw8IfYEe2u0fVmwtP5bA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO-9IH2hEe2LTNnGda5kaw"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_cJPmIIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIYeaEe2kLcMqsIbMgQ"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_cJQ0QIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIYeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_cJPmIIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MTkIYeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_cJQ0QIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MdVIYeaEe2kLcMqsIbMgQ"/>
         </components>
       </form>
       <table xmi:id="_qAs-IGksEe25ONJ3V89cVA" name="Con_Table" label="Con Table" iconName="sticker-minus" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -268,8 +268,8 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_3nQWQH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_O6fpIH2hEe2LTNnGda5kaw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3naHQH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O6qoQH2hEe2LTNnGda5kaw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3nj4QH4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O60ZQH2hEe2LTNnGda5kaw"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_cIf_QIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_cIkQsIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_cIf_QIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_cIkQsIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
       </table>
       <view xmi:id="_qAaDMGksEe25ONJ3V89cVA" name="Con_View_Edit" label="Con View / Edit" iconName="sticker-minus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" openInDialog="true" dialogSize="XL">
         <components xsi:type="ui:Group" xmi:id="__VtG0G5QEe2Q6M99rsfqSQ" name="con" label="Contra" iconName="chat-minus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -298,8 +298,8 @@
             <components xsi:type="ui:Group" xmi:id="_UuxjcHjtEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_WihOMIfYEe2u0fVmwtP5bA" name="pros" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_WgzWwIezEe2kLcMqsIbMgQ" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                 <columns xsi:type="ui:DataColumn" xmi:id="_Wih1QIfYEe2u0fVmwtP5bA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO-9IH2hEe2LTNnGda5kaw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Wih1QYfYEe2u0fVmwtP5bA" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIYeaEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Wih1QofYEe2u0fVmwtP5bA" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIYeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Wih1QYfYEe2u0fVmwtP5bA" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MTkIYeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Wih1QofYEe2u0fVmwtP5bA" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MdVIYeaEe2kLcMqsIbMgQ"/>
               </components>
             </components>
           </components>
@@ -310,8 +310,8 @@
             <components xsi:type="ui:Group" xmi:id="_w-gIkHjtEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_WieK4IfYEe2u0fVmwtP5bA" name="cons" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_FkTZYIezEe2kLcMqsIbMgQ" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                 <columns xsi:type="ui:DataColumn" xmi:id="_Wiex8YfYEe2u0fVmwtP5bA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O63ckH2hEe2LTNnGda5kaw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Wiex8ofYEe2u0fVmwtP5bA" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGmD8IeaEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Wiex84fYEe2u0fVmwtP5bA" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2NBQIeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Wiex8ofYEe2u0fVmwtP5bA" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_cGmD8IeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Wiex84fYEe2u0fVmwtP5bA" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_m2NBQIeaEe2kLcMqsIbMgQ"/>
               </components>
             </components>
           </components>
@@ -514,7 +514,7 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZexBIWBWEe6M1JBD8stPIg" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZetWwWBWEe6M1JBD8stPIg" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_Zeuk4GBWEe6M1JBD8stPIg" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexBIGBWEe6M1JBD8stPIg" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_ZexBIGBWEe6M1JBD8stPIg" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_Zet90WBWEe6M1JBD8stPIg" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
                 </components>
               </tabs>
@@ -528,7 +528,7 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp94AmBWEe6M1JBD8stPIg" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp7bwWBWEe6M1JBD8stPIg" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp8C0mBWEe6M1JBD8stPIg" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_vp94AWBWEe6M1JBD8stPIg" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_vp94AWBWEe6M1JBD8stPIg" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp8C0WBWEe6M1JBD8stPIg" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
                 </components>
               </tabs>
@@ -749,8 +749,8 @@
               <components xsi:type="ui:Group" xmi:id="_qJPPDHjvEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPDXjvEe6cB8og8p0UuQ" name="cons" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_gKs3kH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                   <columns xsi:type="ui:DataColumn" xmi:id="_qJPPDnjvEe6cB8og8p0UuQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O60ZQH2hEe2LTNnGda5kaw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPD3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPEHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPD3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPEHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
                 </components>
               </components>
             </components>
@@ -761,8 +761,8 @@
               <components xsi:type="ui:Group" xmi:id="_qJPPBHjvEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPBXjvEe6cB8og8p0UuQ" name="pros" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_7XpxEH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                   <columns xsi:type="ui:DataColumn" xmi:id="_qJPPBnjvEe6cB8og8p0UuQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO8g4H2hEe2LTNnGda5kaw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPB3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPCHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPB3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_qJPPCHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
                 </components>
               </components>
             </components>
@@ -798,8 +798,8 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_mvrxcIybEe2VSOmaAz6G9Q" name="comment" label="Comment" iconName="text_fields" visible="true" sort="NONE" dataFeature="_HqzzwG5VEe2wNaja8kBvcQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_mvvb0IybEe2VSOmaAz6G9Q" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_Hq4FMG5VEe2wNaja8kBvcQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_mvzGMIybEe2VSOmaAz6G9Q" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_Q31g0G5REe2Q6M99rsfqSQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_mv2JgIybEe2VSOmaAz6G9Q" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_mv5z4IybEe2VSOmaAz6G9Q" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_mv2JgIybEe2VSOmaAz6G9Q" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_DnLWQH2rEe27Ga2Ojs4Fgg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_mv5z4IybEe2VSOmaAz6G9Q" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_F_SdIH2rEe27Ga2Ojs4Fgg"/>
               </components>
             </components>
           </tabs>
@@ -965,8 +965,8 @@
         <components xsi:type="ui:DataField" xmi:id="_3nwskH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TOw6sH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3n7rsH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TO2aQH2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:DataField" xmi:id="_3oGq0H4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_TO8g4H2hEe2LTNnGda5kaw" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_eJaHEIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_eJfmoIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+        <components xsi:type="ui:DataField" xmi:id="_eJaHEIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+        <components xsi:type="ui:DataField" xmi:id="_eJfmoIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_eJnicIfYEe2u0fVmwtP5bA" name="votes" label="Votes" iconName="table_rows" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_qSoboGksEe25ONJ3V89cVA" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_eJowkIfYEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_p9bnsGksEe25ONJ3V89cVA"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_eJqlwIfYEe2u0fVmwtP5bA" name="type" label="Type" iconName="list" visible="true" sort="NONE" dataFeature="_p-OR4GksEe25ONJ3V89cVA"/>
@@ -986,16 +986,16 @@
           <columns xsi:type="ui:DataColumn" xmi:id="_eKV7MIfYEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_TOzW8H2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_eKXwYIfYEe2u0fVmwtP5bA" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO42gH2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_eKY-gIfYEe2u0fVmwtP5bA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO-9IH2hEe2LTNnGda5kaw"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_eKazsIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIYeaEe2kLcMqsIbMgQ"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_eKcB0IfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIYeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_eKazsIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MTkIYeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_eKcB0IfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MdVIYeaEe2kLcMqsIbMgQ"/>
         </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_eKoPEIfYEe2u0fVmwtP5bA" name="cons" label="Cons" iconName="table_rows" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" relationFeature="_OttN4IezEe2kLcMqsIbMgQ" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_eKqEQIfYEe2u0fVmwtP5bA" name="createdByName" label="CreatedByName" iconName="text_fields" visible="true" sort="NONE" dataFeature="_1M9fwW5REe2Q6M99rsfqSQ"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_eKrSYIfYEe2u0fVmwtP5bA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_O6jTgH2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_eKtHkIfYEe2u0fVmwtP5bA" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O6u5sH2hEe2LTNnGda5kaw"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_eKu8wIfYEe2u0fVmwtP5bA" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O63ckH2hEe2LTNnGda5kaw"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_eKwK4IfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGmD8IeaEe2kLcMqsIbMgQ"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_eKyAEIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2NBQIeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_eKwK4IfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_cGmD8IeaEe2kLcMqsIbMgQ"/>
+          <columns xsi:type="ui:DataColumn" xmi:id="_eKyAEIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_m2NBQIeaEe2kLcMqsIbMgQ"/>
         </components>
       </form>
       <table xmi:id="_qLrfEGksEe25ONJ3V89cVA" name="Pro_Table" label="Pro Table" iconName="sticker-plus" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -1003,8 +1003,8 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_3n0-AH4bEe2j59SYy0JH0Q" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_TOw6sH2hEe2LTNnGda5kaw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3n_WEH4bEe2j59SYy0JH0Q" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO2aQH2hEe2LTNnGda5kaw"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_3oKVMH4bEe2j59SYy0JH0Q" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO8g4H2hEe2LTNnGda5kaw"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_eJb8QIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_eJg0wIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_eJb8QIfYEe2u0fVmwtP5bA" name="upVotes" label="UpVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_eJg0wIfYEe2u0fVmwtP5bA" name="downVotes" label="DownVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
       </table>
       <view xmi:id="_qLQBQGksEe25ONJ3V89cVA" name="Pro_View_Edit" label="Pro View / Edit" iconName="sticker-plus" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" openInDialog="true" dialogSize="XL">
         <components xsi:type="ui:Group" xmi:id="_OUB-QIfiEe2u0fVmwtP5bA" name="pro" label="Pro" iconName="chat-plus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -1033,8 +1033,8 @@
             <components xsi:type="ui:Group" xmi:id="_KRUbNHjvEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_KRUbNXjvEe6cB8og8p0UuQ" name="pros" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_KSx6sIezEe2kLcMqsIbMgQ" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                 <columns xsi:type="ui:DataColumn" xmi:id="_KRUbNnjvEe6cB8og8p0UuQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_TO8g4H2hEe2LTNnGda5kaw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbN3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbOHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbN3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MTkIIeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbOHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_1MdVIIeaEe2kLcMqsIbMgQ"/>
               </components>
             </components>
           </components>
@@ -1045,8 +1045,8 @@
             <components xsi:type="ui:Group" xmi:id="_KRUbPHjvEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_KRUbPXjvEe6cB8og8p0UuQ" name="cons" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_OttN4IezEe2kLcMqsIbMgQ" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                 <columns xsi:type="ui:DataColumn" xmi:id="_KRUbPnjvEe6cB8og8p0UuQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_O60ZQH2hEe2LTNnGda5kaw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbP3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="dialpad" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbQHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="dialpad" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbP3jvEe6cB8og8p0UuQ" name="upVotes" label="up" iconName="calculator" visible="true" sort="NONE" dataFeature="_cGk10IeaEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KRUbQHjvEe6cB8og8p0UuQ" name="downVotes" label="down" iconName="calculator" visible="true" sort="NONE" dataFeature="_m2LzIIeaEe2kLcMqsIbMgQ"/>
               </components>
             </components>
           </components>
@@ -1100,8 +1100,8 @@
       </operations>
       <form xmi:id="_-dl4wH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_Form" label="RatingVoteDefinition Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
       <table xmi:id="_-dsmcH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_Table" label="RatingVoteDefinition Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
-        <columns xsi:type="ui:DataColumn" xmi:id="_DZVK0IXrEe2kLcMqsIbMgQ" name="minRateValue" label="MinRateValue" iconName="dialpad" visible="true" sort="NONE" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_DZbRcIXrEe2kLcMqsIbMgQ" name="maxRateValue" label="MaxRateValue" iconName="dialpad" visible="true" sort="NONE" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_DZVK0IXrEe2kLcMqsIbMgQ" name="minRateValue" label="MinRateValue" iconName="calculator" visible="true" sort="NONE" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_DZbRcIXrEe2kLcMqsIbMgQ" name="maxRateValue" label="MaxRateValue" iconName="calculator" visible="true" sort="NONE" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZhYEIXrEe2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-eROMH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZnesIXrEe2kLcMqsIbMgQ" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_-ec0YH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZtlUIXrEe2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-enzgH4XEe2cB7_PsKXsHQ"/>
@@ -1115,7 +1115,7 @@
               <components xsi:type="ui:OperationForm" xmi:id="_NHnv01soEe6Mx9dH3yj5gQ" name="takeBackVote" label="TakeBackVote" iconName="delete" col="2" stretch="NONE" row="1" fit="LOOSE" enabledBy="_YXksAFsmEe6Mx9dH3yj5gQ" onBlur="false" operation="takeBackVote"/>
               <components xsi:type="ui:TabularReferenceField" xmi:id="_NHnv1FsoEe6Mx9dH3yj5gQ" name="userVoteEntry" label="Value" iconName="vote" col="2" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_3FFXoFslEe6Mx9dH3yj5gQ" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
                 <columns xsi:type="ui:DataColumn" xmi:id="_AHvewFuFEe6T042_LMmSdQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_ZCtwMFslEe6Mx9dH3yj5gQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_AHwF0FuFEe6T042_LMmSdQ" name="value" label="Value" iconName="numeric" visible="true" sort="NONE" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_AHwF0FuFEe6T042_LMmSdQ" name="value" label="Value" iconName="calculator" visible="true" sort="NONE" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ"/>
               </components>
             </components>
           </components>
@@ -1138,15 +1138,15 @@
             </components>
             <components xsi:type="ui:DataField" xmi:id="_NHnI0lsoEe6Mx9dH3yj5gQ" name="created" label="Created" iconName="schedule" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-ec0YH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
             <components xsi:type="ui:DataField" xmi:id="_NHnI01soEe6Mx9dH3yj5gQ" name="description" label="Description" iconName="text_fields" col="12" stretch="NONE" row="4" fit="LOOSE" onBlur="false" dataFeature="_-enzgH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="true" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-            <components xsi:type="ui:DataField" xmi:id="_w1QQ81soEe6Mx9dH3yj5gQ" name="maxRateValue" label="MaxRateValue" iconName="numeric" col="2" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-            <components xsi:type="ui:DataField" xmi:id="_w1QQ8lsoEe6Mx9dH3yj5gQ" name="minRateValue" label="MinRateValue" iconName="numeric" col="2" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+            <components xsi:type="ui:DataField" xmi:id="_w1QQ81soEe6Mx9dH3yj5gQ" name="maxRateValue" label="MaxRateValue" iconName="calculator" col="2" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-eFoAH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+            <components xsi:type="ui:DataField" xmi:id="_w1QQ8lsoEe6Mx9dH3yj5gQ" name="minRateValue" label="MinRateValue" iconName="calculator" col="2" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_-d1wYH4XEe2cB7_PsKXsHQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
           </components>
         </components>
         <components xsi:type="ui:Group" xmi:id="_NHnv2VsoEe6Mx9dH3yj5gQ" name="entries" label="Entries" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="10" fit="LOOSE">
           <components xsi:type="ui:TabularReferenceField" xmi:id="_NHnv2lsoEe6Mx9dH3yj5gQ" name="voteEntries" label="" iconName="" col="12" stretch="NONE" row="20" fit="LOOSE" onBlur="false" relationFeature="_tgVq8FslEe6Mx9dH3yj5gQ" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
             <columns xsi:type="ui:DataColumn" xmi:id="_DsAPsFuFEe6T042_LMmSdQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_ZCtwMFslEe6Mx9dH3yj5gQ"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_DsAPsVuFEe6T042_LMmSdQ" name="createdBy" label="CreatedBy" iconName="format-size" visible="true" sort="NONE" dataFeature="_rNZX8FslEe6Mx9dH3yj5gQ"/>
-            <columns xsi:type="ui:DataColumn" xmi:id="_DsA2wFuFEe6T042_LMmSdQ" name="value" label="Value" iconName="numeric" visible="true" sort="NONE" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_DsA2wFuFEe6T042_LMmSdQ" name="value" label="Value" iconName="calculator" visible="true" sort="NONE" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ"/>
           </components>
         </components>
       </view>
@@ -1483,7 +1483,7 @@
       <table xmi:id="_-gSncH4XEe2cB7_PsKXsHQ" name="VoteDefinition_Table" label="VoteDefinition Table" iconName="vote" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
         <columns xsi:type="ui:DataColumn" xmi:id="_OOx5YOR9Ee20cv3f2msZXg" name="voteType" label="VoteType" iconName="list" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T5YZsI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
-        <columns xsi:type="ui:DataColumn" xmi:id="_OOwEMOR9Ee20cv3f2msZXg" name="numberOfVotes" label="NumberOfVotes" iconName="dialpad" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+        <columns xsi:type="ui:DataColumn" xmi:id="_OOwEMOR9Ee20cv3f2msZXg" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T5g8kI4jEe29qs15q2b6yw" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T5z3gI4jEe29qs15q2b6yw" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T58aYI4jEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
@@ -1932,7 +1932,7 @@
       <table xmi:id="_J1KA4FslEe6Mx9dH3yj5gQ" name="RatingVoteEntry_Table" label="RatingVoteEntry Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0"/>
       <view xmi:id="_J1HkoFslEe6Mx9dH3yj5gQ" name="RatingVoteEntry_View_Edit" label="RatingVoteEntry View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" openInDialog="true" dialogSize="MD">
         <components xsi:type="ui:DataField" xmi:id="_V523gFuWEe6T042_LMmSdQ" name="created" label="Created" iconName="calendar-clock" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_ZCtwMFslEe6Mx9dH3yj5gQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
-        <components xsi:type="ui:DataField" xmi:id="_V53ekVuWEe6T042_LMmSdQ" name="value" label="Value" iconName="numeric" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+        <components xsi:type="ui:DataField" xmi:id="_V53ekVuWEe6T042_LMmSdQ" name="value" label="Value" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_L_YV8FuXEe6T042_LMmSdQ" name="owner" label="Owner" iconName="table_rows" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_ap8zwFslEe6Mx9dH3yj5gQ" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
           <columns xsi:type="ui:DataColumn" xmi:id="_L_ayMFuXEe6T042_LMmSdQ" name="representation" label="Representation" iconName="format-size" visible="true" sort="NONE" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ"/>
         </components>
@@ -2140,7 +2140,7 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_9xK6QV5IEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_9xK6QF5IEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_9xLhUF5IEe6vsex_cZNQbQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_GBEl0l5HEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_GBEl0l5HEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBDXsF5HEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBD-wl5HEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBD-wV5HEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
@@ -2151,7 +2151,7 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdaO8F5JEe6vsex_cZNQbQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdUvYF5JEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdZn4F5JEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_XdZA0V5JEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_XdZA0V5JEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdVWcF5JEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdV9gV5JEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdV9gF5JEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
@@ -2164,7 +2164,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV_XSF5LEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV-wMF5LEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV_XRV5LEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV_XRF5LEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                    <columns xsi:type="ui:DataColumn" xmi:id="_SV_XRF5LEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV-wMV5LEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV-wNF5LEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_SV-wM15LEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
@@ -2176,7 +2176,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_59fs8l5LEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_59ee0F5LEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_59fF515LEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59fF5l5LEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                    <columns xsi:type="ui:DataColumn" xmi:id="_59fF5l5LEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_59ee0V5LEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_59ee1F5LEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_59fF6F5LEe6vsex_cZNQbQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
@@ -2190,7 +2190,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD3B015MEe6vsex_cZNQbQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD1zsV5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD3B0V5MEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B0F5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B0F5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD1zsl5MEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD2awF5MEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_GD1ztF5MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
@@ -2205,7 +2205,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhbBWV5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQF5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhbBVl5MEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhbBVV5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                    <columns xsi:type="ui:DataColumn" xmi:id="_fhbBVV5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQV5MEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaRF5MEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQ15MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
@@ -2217,7 +2217,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_yjvbs15MEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_yjuNkV5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_yju0qV5MEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yju0qF5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                    <columns xsi:type="ui:DataColumn" xmi:id="_yju0qF5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_yjuNkl5MEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_yjuNlV5MEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_Lu9G8F5NEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
@@ -2230,7 +2230,7 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdOYcF5NEe6vsex_cZNQbQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdNKUV5NEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" visible="true" sort="NONE" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdNxaF5NEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNxZ15NEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNxZ15NEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" visible="true" sort="NONE" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdNKUl5NEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdNKVV5NEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_BdNKVF5NEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" visible="true" sort="NONE" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
@@ -3152,7 +3152,7 @@
       <inherited xmi:id="_LEKjon5YEe2kLcMqsIbMgQ"/>
     </attributes>
     <form xmi:id="_LEKjo35YEe2kLcMqsIbMgQ" name="RatingVoteInput_Form" label="RatingVoteInput Form" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false">
-      <components xsi:type="ui:DataField" xmi:id="_UNECcOSNEe20cv3f2msZXg" name="value" label="Vote rate" iconName="dialpad" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_LEKjoX5YEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
+      <components xsi:type="ui:DataField" xmi:id="_UNECcOSNEe20cv3f2msZXg" name="value" label="Vote rate" iconName="calculator" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" dataFeature="_LEKjoX5YEe2kLcMqsIbMgQ" enumWidget="COMBO" textMultiLine="false" textWidget="INPUT" booleanWidget="CHECKBOX"/>
     </form>
     <table xmi:id="_LEKjpH5YEe2kLcMqsIbMgQ" name="RatingVoteInput_Table" label="RatingVoteInput Table" iconName="vote-outline" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0"/>
     <view xmi:id="_LEKjpX5YEe2kLcMqsIbMgQ" name="RatingVoteInput_View_Edit" label="RatingVoteInput View / Edit" iconName="vote-outline" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL"/>
