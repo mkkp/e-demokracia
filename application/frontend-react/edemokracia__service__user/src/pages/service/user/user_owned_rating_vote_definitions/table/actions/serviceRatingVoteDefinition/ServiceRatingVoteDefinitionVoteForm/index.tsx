@@ -232,7 +232,7 @@ export default function ServiceRatingVoteDefinitionVoteForm({
                 readOnly: false || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MdiIcon path="dialpad" />
+                    <MdiIcon path="calculator" />
                   </InputAdornment>
                 ),
               }}

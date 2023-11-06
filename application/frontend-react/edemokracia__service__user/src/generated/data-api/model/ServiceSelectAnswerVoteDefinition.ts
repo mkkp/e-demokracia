@@ -20,6 +20,14 @@ export interface ServiceSelectAnswerVoteDefinition {
   closeAt: Date;
   userHasVoteEntry?: null | boolean;
   userHasNoVoteEntry?: null | boolean;
+  isVoteEditable?: null | boolean;
+  isVoteOpen?: null | boolean;
+  isVoteNotEditable?: null | boolean;
+  isVoteNotOpen?: null | boolean;
+  isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
+  isVoteDeletable?: null | boolean;
+  isVoteNotDeletable?: null | boolean;
 
   issue?: null | ServiceIssueStored;
   voteEntries?: null | Array<ServiceSelectAnswerVoteEntryStored>;
@@ -33,7 +41,15 @@ export type ServiceSelectAnswerVoteDefinitionAttributes =
   | 'status'
   | 'closeAt'
   | 'userHasVoteEntry'
-  | 'userHasNoVoteEntry';
+  | 'userHasNoVoteEntry'
+  | 'isVoteEditable'
+  | 'isVoteOpen'
+  | 'isVoteNotEditable'
+  | 'isVoteNotOpen'
+  | 'isFavorite'
+  | 'isNotFavorite'
+  | 'isVoteDeletable'
+  | 'isVoteNotDeletable';
 
 export type ServiceSelectAnswerVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry' | 'voteSelections';
 

@@ -71,6 +71,11 @@ import {
   serviceRatingVoteDefinitionServiceForClassImpl,
 } from '~/generated/data-axios';
 import {
+  useServiceRatingVoteDefinitionAddToFavoritesAction,
+  useServiceRatingVoteDefinitionRemoveFromFavoritesAction,
+  useServiceRatingVoteDefinitionCloseVoteAction,
+  useServiceRatingVoteDefinitionActivateAction,
+  useServiceRatingVoteDefinitionDeleteOrArchiveAction,
   useServiceRatingVoteDefinitionTakeBackVoteAction,
   useServiceRatingVoteDefinitionVoteAction,
   useButtonNavigateIssueAction,
@@ -158,7 +163,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
 
   const queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,maxRateValue,minRateValue,userVoteEntry{created,value},voteEntries{created,createdBy,value}}',
+      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,maxRateValue,minRateValue,userVoteEntry{created,value},voteEntries{created,createdBy,value}}',
   };
 
   const { service: postRefreshHook } = useTrackService<ServiceUserUserOwnedRatingVoteDefinitionsViewPostRefreshHook>(
@@ -167,6 +172,12 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
   const postRefreshAction: ServiceUserUserOwnedRatingVoteDefinitionsViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
+  const serviceRatingVoteDefinitionAddToFavoritesAction = useServiceRatingVoteDefinitionAddToFavoritesAction();
+  const serviceRatingVoteDefinitionRemoveFromFavoritesAction =
+    useServiceRatingVoteDefinitionRemoveFromFavoritesAction();
+  const serviceRatingVoteDefinitionCloseVoteAction = useServiceRatingVoteDefinitionCloseVoteAction();
+  const serviceRatingVoteDefinitionActivateAction = useServiceRatingVoteDefinitionActivateAction();
+  const serviceRatingVoteDefinitionDeleteOrArchiveAction = useServiceRatingVoteDefinitionDeleteOrArchiveAction();
   const serviceRatingVoteDefinitionTakeBackVoteAction = useServiceRatingVoteDefinitionTakeBackVoteAction();
   const serviceRatingVoteDefinitionVoteAction = useServiceRatingVoteDefinitionVoteAction();
   const buttonNavigateIssueAction = useButtonNavigateIssueAction();
@@ -267,6 +278,147 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
             alignItems="stretch"
             justifyContent="flex-start"
           >
+            <Grid item xs={12} sm={12}>
+              <Grid
+                id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditActions"
+                container
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                spacing={2}
+              >
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    {!data.isNotFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditActionsPageActionButtonsAddToFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-plus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceRatingVoteDefinitionAddToFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.RatingVoteDefinitionView.PageActionButtons.addToFavorites', {
+                              defaultValue: 'Add to favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditActionsPageActionButtonsRemoveFromFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-minus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceRatingVoteDefinitionRemoveFromFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.RatingVoteDefinitionView.PageActionButtons.removeFromFavorites', {
+                              defaultValue: 'Remove from favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotOpen && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditActionsPageActionButtonsCloseVote"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-check" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceRatingVoteDefinitionCloseVoteAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.RatingVoteDefinitionView.PageActionButtons.closeVote', {
+                              defaultValue: 'Close Vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotEditable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditActionsPageActionButtonsActivate"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-open" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceRatingVoteDefinitionActivateAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.RatingVoteDefinitionView.PageActionButtons.activate', {
+                              defaultValue: 'Activate',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotDeletable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditActionsPageActionButtonsDeleteOrArchive"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="delete" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceRatingVoteDefinitionDeleteOrArchiveAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.RatingVoteDefinitionView.PageActionButtons.deleteOrArchive', {
+                              defaultValue: 'Delete',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewDefaultRatingVoteDefinitionViewEditUserVoteEntryGroupLabelWrapper">
                 <CardContent>
@@ -686,7 +838,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
                               readOnly: false || !isFormUpdateable(),
                               startAdornment: (
                                 <InputAdornment position="start">
-                                  <MdiIcon path="numeric" />
+                                  <MdiIcon path="calculator" />
                                 </InputAdornment>
                               ),
                             }}
@@ -720,7 +872,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
                               readOnly: false || !isFormUpdateable(),
                               startAdornment: (
                                 <InputAdornment position="start">
-                                  <MdiIcon path="numeric" />
+                                  <MdiIcon path="calculator" />
                                 </InputAdornment>
                               ),
                             }}

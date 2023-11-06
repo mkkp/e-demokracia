@@ -1,0 +1,12 @@
+.generator-ignore,f6696f2380dcbd4dd28e2250881a04f4
+.gitignore,cfcac23400810b0cb8dc454b7ba8e124
+.mvn/jvm.config,940053639b55d27c502d48dcc824bdaf
+.project,5e852835a68b2c36fbc238541d8d7119
+.sdkmanrc,e7e6c4b39bf59d67b259919990597e27
+README.adoc,e41e0a48973f1eed1983e902f618a357
+compose-dev.properties,00d57ea4a95bd81737ffeea932214846
+compose-full.properties,c56464d83f5580050b763f714832b88e
+generator-parameter.properties,4013d3334ff0721f975d3393f21ae955
+judo.properties,58ca243364d4280868ac7cb999eee760
+judo.sh,439f24cd173b3ff47763e4d0afae02c0
+pom.xml,12d80450eefdecc669472c5817a9c7d2

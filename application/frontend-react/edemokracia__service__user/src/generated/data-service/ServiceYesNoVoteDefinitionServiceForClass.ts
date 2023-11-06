@@ -64,4 +64,14 @@ export interface ServiceYesNoVoteDefinitionServiceForClass {
   vote(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>, target: YesNoVoteInput): Promise<void>;
 
   takeBackVote(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
+
+  removeFromFavorites(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
+
+  addToFavorites(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
+
+  deleteOrArchive(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
+
+  activate(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
+
+  closeVote(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
 }

@@ -71,6 +71,11 @@ import {
   serviceYesNoVoteDefinitionServiceForClassImpl,
 } from '~/generated/data-axios';
 import {
+  useServiceYesNoVoteDefinitionAddToFavoritesAction,
+  useServiceYesNoVoteDefinitionRemoveFromFavoritesAction,
+  useServiceYesNoVoteDefinitionCloseVoteAction,
+  useServiceYesNoVoteDefinitionActivateAction,
+  useServiceYesNoVoteDefinitionDeleteOrArchiveAction,
   useServiceYesNoVoteDefinitionTakeBackVoteAction,
   useServiceYesNoVoteDefinitionVoteAction,
   useButtonNavigateIssueAction,
@@ -156,7 +161,7 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsView() {
 
   const queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
+      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
   };
 
   const { service: postRefreshHook } = useTrackService<ServiceUserUserOwnedYesNoVoteDefinitionsViewPostRefreshHook>(
@@ -165,6 +170,11 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsView() {
   const postRefreshAction: ServiceUserUserOwnedYesNoVoteDefinitionsViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
+  const serviceYesNoVoteDefinitionAddToFavoritesAction = useServiceYesNoVoteDefinitionAddToFavoritesAction();
+  const serviceYesNoVoteDefinitionRemoveFromFavoritesAction = useServiceYesNoVoteDefinitionRemoveFromFavoritesAction();
+  const serviceYesNoVoteDefinitionCloseVoteAction = useServiceYesNoVoteDefinitionCloseVoteAction();
+  const serviceYesNoVoteDefinitionActivateAction = useServiceYesNoVoteDefinitionActivateAction();
+  const serviceYesNoVoteDefinitionDeleteOrArchiveAction = useServiceYesNoVoteDefinitionDeleteOrArchiveAction();
   const serviceYesNoVoteDefinitionTakeBackVoteAction = useServiceYesNoVoteDefinitionTakeBackVoteAction();
   const serviceYesNoVoteDefinitionVoteAction = useServiceYesNoVoteDefinitionVoteAction();
   const buttonNavigateIssueAction = useButtonNavigateIssueAction();
@@ -265,6 +275,147 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsView() {
             alignItems="stretch"
             justifyContent="flex-start"
           >
+            <Grid item xs={12} sm={12}>
+              <Grid
+                id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditActions"
+                container
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                spacing={2}
+              >
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    {!data.isNotFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditActionsPageActionButtonsAddToFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-plus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceYesNoVoteDefinitionAddToFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.YesNoVoteDefinitionView.PageActionButtons.addToFavorites', {
+                              defaultValue: 'Add to favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditActionsPageActionButtonsRemoveFromFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-minus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceYesNoVoteDefinitionRemoveFromFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.YesNoVoteDefinitionView.PageActionButtons.removeFromFavorites', {
+                              defaultValue: 'Remove from favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotOpen && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditActionsPageActionButtonsCloseVote"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-check" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceYesNoVoteDefinitionCloseVoteAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.YesNoVoteDefinitionView.PageActionButtons.closeVote', {
+                              defaultValue: 'Close Vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotEditable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditActionsPageActionButtonsActivate"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-open" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceYesNoVoteDefinitionActivateAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.YesNoVoteDefinitionView.PageActionButtons.activate', {
+                              defaultValue: 'Activate',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotDeletable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditActionsPageActionButtonsDeleteOrArchive"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="delete" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceYesNoVoteDefinitionDeleteOrArchiveAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.YesNoVoteDefinitionView.PageActionButtons.deleteOrArchive', {
+                              defaultValue: 'Delete',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
             <Grid item xs={12} sm={12}>
               <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoVoteDefinitionsViewDefaultYesNoVoteDefinitionViewEditUserVoteEntryGroupLabelWrapper">
                 <CardContent>

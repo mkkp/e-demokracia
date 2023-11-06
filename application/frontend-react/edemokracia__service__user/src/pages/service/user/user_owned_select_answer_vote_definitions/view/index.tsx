@@ -74,6 +74,11 @@ import {
   serviceSelectAnswerVoteDefinitionServiceForClassImpl,
 } from '~/generated/data-axios';
 import {
+  useServiceSelectAnswerVoteDefinitionAddToFavoritesAction,
+  useServiceSelectAnswerVoteDefinitionRemoveFromFavoritesAction,
+  useServiceSelectAnswerVoteDefinitionCloseVoteAction,
+  useServiceSelectAnswerVoteDefinitionActivateAction,
+  useServiceSelectAnswerVoteDefinitionDeleteOrArchiveAction,
   useServiceSelectAnswerVoteDefinitionTakeBackVoteAction,
   useServiceSelectAnswerVoteDefinitionVoteAction,
   useButtonNavigateIssueAction,
@@ -162,7 +167,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
 
   const queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{valueRepresentation,created},voteSelections{description,title},voteEntries{created,createdBy,valueRepresentation}}',
+      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{valueRepresentation,created},voteSelections{description,title},voteEntries{created,createdBy,valueRepresentation}}',
   };
 
   const { service: postRefreshHook } =
@@ -172,6 +177,14 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
   const postRefreshAction: ServiceUserUserOwnedSelectAnswerVoteDefinitionsViewPostRefreshAction | undefined =
     postRefreshHook && postRefreshHook();
 
+  const serviceSelectAnswerVoteDefinitionAddToFavoritesAction =
+    useServiceSelectAnswerVoteDefinitionAddToFavoritesAction();
+  const serviceSelectAnswerVoteDefinitionRemoveFromFavoritesAction =
+    useServiceSelectAnswerVoteDefinitionRemoveFromFavoritesAction();
+  const serviceSelectAnswerVoteDefinitionCloseVoteAction = useServiceSelectAnswerVoteDefinitionCloseVoteAction();
+  const serviceSelectAnswerVoteDefinitionActivateAction = useServiceSelectAnswerVoteDefinitionActivateAction();
+  const serviceSelectAnswerVoteDefinitionDeleteOrArchiveAction =
+    useServiceSelectAnswerVoteDefinitionDeleteOrArchiveAction();
   const serviceSelectAnswerVoteDefinitionTakeBackVoteAction = useServiceSelectAnswerVoteDefinitionTakeBackVoteAction();
   const serviceSelectAnswerVoteDefinitionVoteAction = useServiceSelectAnswerVoteDefinitionVoteAction();
   const buttonNavigateIssueAction = useButtonNavigateIssueAction();
@@ -275,6 +288,147 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
             justifyContent="flex-start"
           >
             <Grid item xs={12} sm={12}>
+              <Grid
+                id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditActions"
+                container
+                direction="row"
+                alignItems="flex-start"
+                justifyContent="flex-start"
+                spacing={2}
+              >
+                <Grid item xs={12}>
+                  <Grid container spacing={2}>
+                    {!data.isNotFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditActionsPageActionButtonsAddToFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-plus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceSelectAnswerVoteDefinitionAddToFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.SelectAnswerVoteDefinitionView.PageActionButtons.addToFavorites', {
+                              defaultValue: 'Add to favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isFavorite && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditActionsPageActionButtonsRemoveFromFavorites"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="star-minus" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceSelectAnswerVoteDefinitionRemoveFromFavoritesAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.SelectAnswerVoteDefinitionView.PageActionButtons.removeFromFavorites', {
+                              defaultValue: 'Remove from favorites',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotOpen && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditActionsPageActionButtonsCloseVote"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-check" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceSelectAnswerVoteDefinitionCloseVoteAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.SelectAnswerVoteDefinitionView.PageActionButtons.closeVote', {
+                              defaultValue: 'Close Vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotEditable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditActionsPageActionButtonsActivate"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="lock-open" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceSelectAnswerVoteDefinitionActivateAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.SelectAnswerVoteDefinitionView.PageActionButtons.activate', {
+                              defaultValue: 'Activate',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                    {!data.isVoteNotDeletable && (
+                      <Grid item>
+                        <LoadingButton
+                          id="ButtonedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditActionsPageActionButtonsDeleteOrArchive"
+                          loading={isLoading}
+                          startIcon={<MdiIcon path="delete" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            try {
+                              setIsLoading(true);
+                              await serviceSelectAnswerVoteDefinitionDeleteOrArchiveAction(data, () => fetchData());
+                            } finally {
+                              setIsLoading(false);
+                            }
+                          }}
+                          disabled={editMode}
+                        >
+                          <span>
+                            {t('service.SelectAnswerVoteDefinitionView.PageActionButtons.deleteOrArchive', {
+                              defaultValue: 'Delete',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12} sm={12}>
               <Card id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapper">
                 <CardContent>
                   <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
@@ -292,121 +446,127 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
                       </Grid>
                     </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                      <Grid
-                        id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroup"
-                        container
-                        direction="row"
-                        alignItems="stretch"
-                        justifyContent="flex-start"
-                        spacing={2}
-                      >
-                        {!data.userHasNoVoteEntry && (
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVote"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}>
-                                <Grid
-                                  id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVote"
-                                  container
-                                  direction="row"
-                                  alignItems="flex-start"
-                                  justifyContent="flex-start"
-                                  spacing={2}
-                                >
-                                  <Grid item xs={12} sm={12} md={4.0}>
-                                    <LoadingButton
-                                      id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionTakeBackVoteButtonCallOperation"
-                                      loading={isLoading}
-                                      variant={undefined}
-                                      startIcon={<MdiIcon path="delete" />}
-                                      loadingPosition="start"
-                                      onClick={async () => {
-                                        try {
-                                          setIsLoading(true);
-                                          await serviceSelectAnswerVoteDefinitionTakeBackVoteAction(data, () =>
-                                            fetchData(),
-                                          );
-                                        } finally {
-                                          setIsLoading(false);
-                                        }
-                                      }}
-                                      disabled={!data.userHasVoteEntry || editMode}
-                                    >
-                                      <span>
-                                        {t('service.SelectAnswerVoteDefinitionView.takeBackVote.ButtonCallOperation', {
-                                          defaultValue: 'TakeBackVote',
-                                        })}
-                                      </span>
-                                    </LoadingButton>
-                                  </Grid>
+                    {!data.isVoteNotOpen && (
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroup"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          {!data.userHasNoVoteEntry && (
+                            <Grid item xs={12} sm={12}>
+                              <Grid
+                                id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVote"
+                                container
+                                direction="row"
+                                alignItems="flex-start"
+                                justifyContent="flex-start"
+                                spacing={2}
+                              >
+                                <Grid item xs={12} sm={12}>
+                                  <Grid
+                                    id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupUserVoteVirtualForUserVote"
+                                    container
+                                    direction="row"
+                                    alignItems="flex-start"
+                                    justifyContent="flex-start"
+                                    spacing={2}
+                                  >
+                                    <Grid item xs={12} sm={12} md={4.0}>
+                                      <LoadingButton
+                                        id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionTakeBackVoteButtonCallOperation"
+                                        loading={isLoading}
+                                        variant={undefined}
+                                        startIcon={<MdiIcon path="delete" />}
+                                        loadingPosition="start"
+                                        onClick={async () => {
+                                          try {
+                                            setIsLoading(true);
+                                            await serviceSelectAnswerVoteDefinitionTakeBackVoteAction(data, () =>
+                                              fetchData(),
+                                            );
+                                          } finally {
+                                            setIsLoading(false);
+                                          }
+                                        }}
+                                        disabled={!data.userHasVoteEntry || editMode}
+                                      >
+                                        <span>
+                                          {t(
+                                            'service.SelectAnswerVoteDefinitionView.takeBackVote.ButtonCallOperation',
+                                            { defaultValue: 'TakeBackVote' },
+                                          )}
+                                        </span>
+                                      </LoadingButton>
+                                    </Grid>
 
-                                  <Grid item xs={12} sm={12} md={4.0}>
-                                    <UserVoteEntryLink
-                                      ownerData={data}
-                                      readOnly={true || !isFormUpdateable()}
-                                      disabled={isLoading}
-                                      editMode={editMode}
-                                      fetchOwnerData={fetchData}
-                                      onChange={(
-                                        value: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored | null,
-                                      ) => {
-                                        storeDiff('userVoteEntry', value);
-                                      }}
-                                      validation={validation}
-                                    />
+                                    <Grid item xs={12} sm={12} md={4.0}>
+                                      <UserVoteEntryLink
+                                        ownerData={data}
+                                        readOnly={true || !isFormUpdateable()}
+                                        disabled={isLoading}
+                                        editMode={editMode}
+                                        fetchOwnerData={fetchData}
+                                        onChange={(
+                                          value:
+                                            | ServiceSelectAnswerVoteEntry
+                                            | ServiceSelectAnswerVoteEntryStored
+                                            | null,
+                                        ) => {
+                                          storeDiff('userVoteEntry', value);
+                                        }}
+                                        validation={validation}
+                                      />
+                                    </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
                             </Grid>
-                          </Grid>
-                        )}
+                          )}
 
-                        {!data.userHasVoteEntry && (
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupTakeVote"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}>
-                                <LoadingButton
-                                  id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionVoteButtonCallOperation"
-                                  loading={isLoading}
-                                  variant={undefined}
-                                  startIcon={<MdiIcon path="vote" />}
-                                  loadingPosition="start"
-                                  onClick={async () => {
-                                    try {
-                                      setIsLoading(true);
-                                      await serviceSelectAnswerVoteDefinitionVoteAction(data, () => fetchData());
-                                    } finally {
-                                      setIsLoading(false);
-                                    }
-                                  }}
-                                  disabled={!data.userHasNoVoteEntry || editMode}
-                                >
-                                  <span>
-                                    {t('service.SelectAnswerVoteDefinitionView.vote.ButtonCallOperation', {
-                                      defaultValue: 'Take a vote',
-                                    })}
-                                  </span>
-                                </LoadingButton>
+                          {!data.userHasVoteEntry && (
+                            <Grid item xs={12} sm={12}>
+                              <Grid
+                                id="FlexedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewDefaultSelectAnswerVoteDefinitionViewEditUserVoteEntryGroupLabelWrapperUserVoteEntryGroupTakeVote"
+                                container
+                                direction="row"
+                                alignItems="flex-start"
+                                justifyContent="flex-start"
+                                spacing={2}
+                              >
+                                <Grid item xs={12} sm={12}>
+                                  <LoadingButton
+                                    id="CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionVoteButtonCallOperation"
+                                    loading={isLoading}
+                                    variant={undefined}
+                                    startIcon={<MdiIcon path="vote" />}
+                                    loadingPosition="start"
+                                    onClick={async () => {
+                                      try {
+                                        setIsLoading(true);
+                                        await serviceSelectAnswerVoteDefinitionVoteAction(data, () => fetchData());
+                                      } finally {
+                                        setIsLoading(false);
+                                      }
+                                    }}
+                                    disabled={!data.userHasNoVoteEntry || editMode}
+                                  >
+                                    <span>
+                                      {t('service.SelectAnswerVoteDefinitionView.vote.ButtonCallOperation', {
+                                        defaultValue: 'Take a vote',
+                                      })}
+                                    </span>
+                                  </LoadingButton>
+                                </Grid>
                               </Grid>
                             </Grid>
-                          </Grid>
-                        )}
+                          )}
+                        </Grid>
                       </Grid>
-                    </Grid>
+                    )}
                   </Grid>
                 </CardContent>
               </Card>

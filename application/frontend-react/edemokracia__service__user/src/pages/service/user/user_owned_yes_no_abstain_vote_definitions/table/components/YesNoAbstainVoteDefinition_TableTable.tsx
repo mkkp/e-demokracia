@@ -61,6 +61,11 @@ import {
   usePageFilterUserOwnedYesNoAbstainVoteDefinitionsAction,
   usePageRefreshUserOwnedYesNoAbstainVoteDefinitionsAction,
   useRowViewUserOwnedYesNoAbstainVoteDefinitionsAction,
+  useServiceYesNoAbstainVoteDefinitionActivateAction,
+  useServiceYesNoAbstainVoteDefinitionAddToFavoritesAction,
+  useServiceYesNoAbstainVoteDefinitionCloseVoteAction,
+  useServiceYesNoAbstainVoteDefinitionDeleteOrArchiveAction,
+  useServiceYesNoAbstainVoteDefinitionRemoveFromFavoritesAction,
   useServiceYesNoAbstainVoteDefinitionTakeBackVoteAction,
   useServiceYesNoAbstainVoteDefinitionVoteAction,
 } from '../actions';
@@ -104,7 +109,8 @@ export const YesNoAbstainVoteDefinition_TableTable = forwardRef<
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceYesNoAbstainVoteDefinitionQueryCustomizer>({
-    _mask: '{title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
+    _mask:
+      '{title,created,description,status,closeAt,isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasVoteEntry,userHasNoVoteEntry}',
     _seek: {
       limit: 10 + 1,
     },
@@ -286,7 +292,8 @@ export const YesNoAbstainVoteDefinition_TableTable = forwardRef<
   ];
 
   const userOwnedYesNoAbstainVoteDefinitionsInitialQueryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer = {
-    _mask: '{title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
+    _mask:
+      '{title,created,description,status,closeAt,isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasVoteEntry,userHasNoVoteEntry}',
     _orderBy: userOwnedYesNoAbstainVoteDefinitionsSortModel.length
       ? [
           {
@@ -307,6 +314,14 @@ export const YesNoAbstainVoteDefinition_TableTable = forwardRef<
   const pageRefreshUserOwnedYesNoAbstainVoteDefinitionsAction =
     usePageRefreshUserOwnedYesNoAbstainVoteDefinitionsAction();
   const rowViewUserOwnedYesNoAbstainVoteDefinitionsAction = useRowViewUserOwnedYesNoAbstainVoteDefinitionsAction();
+  const serviceYesNoAbstainVoteDefinitionActivateAction = useServiceYesNoAbstainVoteDefinitionActivateAction();
+  const serviceYesNoAbstainVoteDefinitionAddToFavoritesAction =
+    useServiceYesNoAbstainVoteDefinitionAddToFavoritesAction();
+  const serviceYesNoAbstainVoteDefinitionCloseVoteAction = useServiceYesNoAbstainVoteDefinitionCloseVoteAction();
+  const serviceYesNoAbstainVoteDefinitionDeleteOrArchiveAction =
+    useServiceYesNoAbstainVoteDefinitionDeleteOrArchiveAction();
+  const serviceYesNoAbstainVoteDefinitionRemoveFromFavoritesAction =
+    useServiceYesNoAbstainVoteDefinitionRemoveFromFavoritesAction();
   const serviceYesNoAbstainVoteDefinitionTakeBackVoteAction = useServiceYesNoAbstainVoteDefinitionTakeBackVoteAction();
   const serviceYesNoAbstainVoteDefinitionVoteAction = useServiceYesNoAbstainVoteDefinitionVoteAction();
 
@@ -359,6 +374,56 @@ export const YesNoAbstainVoteDefinition_TableTable = forwardRef<
   ];
 
   const rowActions: TableRowAction<ServiceYesNoAbstainVoteDefinitionStored>[] = [
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionAddToFavoritesButtonCallOperation',
+      label: t(
+        'service.YesNoAbstainVoteDefinitionTable.userOwnedYesNoAbstainVoteDefinitions.addToFavorites.ButtonCallOperation',
+        { defaultValue: 'Add to favorites' },
+      ) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: ServiceYesNoAbstainVoteDefinitionStored) =>
+        serviceYesNoAbstainVoteDefinitionAddToFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionRemoveFromFavoritesButtonCallOperation',
+      label: t(
+        'service.YesNoAbstainVoteDefinitionTable.userOwnedYesNoAbstainVoteDefinitions.removeFromFavorites.ButtonCallOperation',
+        { defaultValue: 'Remove from favorites' },
+      ) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: ServiceYesNoAbstainVoteDefinitionStored) =>
+        serviceYesNoAbstainVoteDefinitionRemoveFromFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionCloseVoteButtonCallOperation',
+      label: t(
+        'service.YesNoAbstainVoteDefinitionTable.userOwnedYesNoAbstainVoteDefinitions.closeVote.ButtonCallOperation',
+        { defaultValue: 'Close Vote' },
+      ) as string,
+      icon: <MdiIcon path="lock-check" />,
+      action: async (row: ServiceYesNoAbstainVoteDefinitionStored) =>
+        serviceYesNoAbstainVoteDefinitionCloseVoteAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionActivateButtonCallOperation',
+      label: t(
+        'service.YesNoAbstainVoteDefinitionTable.userOwnedYesNoAbstainVoteDefinitions.activate.ButtonCallOperation',
+        { defaultValue: 'Activate' },
+      ) as string,
+      icon: <MdiIcon path="lock-open" />,
+      action: async (row: ServiceYesNoAbstainVoteDefinitionStored) =>
+        serviceYesNoAbstainVoteDefinitionActivateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionDeleteOrArchiveButtonCallOperation',
+      label: t(
+        'service.YesNoAbstainVoteDefinitionTable.userOwnedYesNoAbstainVoteDefinitions.deleteOrArchive.ButtonCallOperation',
+        { defaultValue: 'Delete' },
+      ) as string,
+      icon: <MdiIcon path="delete" />,
+      action: async (row: ServiceYesNoAbstainVoteDefinitionStored) =>
+        serviceYesNoAbstainVoteDefinitionDeleteOrArchiveAction(row, () => fetchData()),
+    },
     {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionTakeBackVoteButtonCallOperation',
       label: t(

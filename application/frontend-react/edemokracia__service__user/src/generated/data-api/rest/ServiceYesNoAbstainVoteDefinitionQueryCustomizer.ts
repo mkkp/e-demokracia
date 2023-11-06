@@ -24,4 +24,12 @@ export interface ServiceYesNoAbstainVoteDefinitionQueryCustomizer
   closeAt?: Array<FilterByTimestamp>;
   userHasVoteEntry?: Array<FilterByBoolean>;
   userHasNoVoteEntry?: Array<FilterByBoolean>;
+  isFavorite?: Array<FilterByBoolean>;
+  isVoteEditable?: Array<FilterByBoolean>;
+  isVoteNotOpen?: Array<FilterByBoolean>;
+  isVoteOpen?: Array<FilterByBoolean>;
+  isNotFavorite?: Array<FilterByBoolean>;
+  isVoteNotDeletable?: Array<FilterByBoolean>;
+  isVoteDeletable?: Array<FilterByBoolean>;
+  isVoteNotEditable?: Array<FilterByBoolean>;
 }

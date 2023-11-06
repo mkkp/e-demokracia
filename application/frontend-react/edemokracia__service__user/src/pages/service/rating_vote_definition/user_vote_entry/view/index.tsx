@@ -294,7 +294,7 @@ export default function ServiceUserView(props: ServiceUserViewProps) {
                 readOnly: false || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MdiIcon path="numeric" />
+                    <MdiIcon path="calculator" />
                   </InputAdornment>
                 ),
               }}

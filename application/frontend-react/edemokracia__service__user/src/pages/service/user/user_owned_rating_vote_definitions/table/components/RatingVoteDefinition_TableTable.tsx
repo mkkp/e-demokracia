@@ -58,6 +58,11 @@ import {
 } from '~/generated/data-api';
 import { serviceUserServiceForUserOwnedRatingVoteDefinitionsImpl } from '~/generated/data-axios';
 import {
+  useServiceRatingVoteDefinitionActivateAction,
+  useServiceRatingVoteDefinitionAddToFavoritesAction,
+  useServiceRatingVoteDefinitionCloseVoteAction,
+  useServiceRatingVoteDefinitionDeleteOrArchiveAction,
+  useServiceRatingVoteDefinitionRemoveFromFavoritesAction,
   useServiceRatingVoteDefinitionTakeBackVoteAction,
   useServiceRatingVoteDefinitionVoteAction,
   usePageFilterUserOwnedRatingVoteDefinitionsAction,
@@ -102,7 +107,8 @@ export const RatingVoteDefinition_TableTable = forwardRef<RefreshableTable, Rati
     const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
     const [page, setPage] = useState<number>(0);
     const [queryCustomizer, setQueryCustomizer] = useState<ServiceRatingVoteDefinitionQueryCustomizer>({
-      _mask: '{minRateValue,maxRateValue,title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
+      _mask:
+        '{minRateValue,maxRateValue,title,created,description,status,closeAt,isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasVoteEntry,userHasNoVoteEntry}',
       _seek: {
         limit: 10 + 1,
       },
@@ -332,7 +338,8 @@ export const RatingVoteDefinition_TableTable = forwardRef<RefreshableTable, Rati
     ];
 
     const userOwnedRatingVoteDefinitionsInitialQueryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
-      _mask: '{minRateValue,maxRateValue,title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
+      _mask:
+        '{minRateValue,maxRateValue,title,created,description,status,closeAt,isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasVoteEntry,userHasNoVoteEntry}',
       _orderBy: userOwnedRatingVoteDefinitionsSortModel.length
         ? [
             {
@@ -343,6 +350,12 @@ export const RatingVoteDefinition_TableTable = forwardRef<RefreshableTable, Rati
         : [],
     };
 
+    const serviceRatingVoteDefinitionActivateAction = useServiceRatingVoteDefinitionActivateAction();
+    const serviceRatingVoteDefinitionAddToFavoritesAction = useServiceRatingVoteDefinitionAddToFavoritesAction();
+    const serviceRatingVoteDefinitionCloseVoteAction = useServiceRatingVoteDefinitionCloseVoteAction();
+    const serviceRatingVoteDefinitionDeleteOrArchiveAction = useServiceRatingVoteDefinitionDeleteOrArchiveAction();
+    const serviceRatingVoteDefinitionRemoveFromFavoritesAction =
+      useServiceRatingVoteDefinitionRemoveFromFavoritesAction();
     const serviceRatingVoteDefinitionTakeBackVoteAction = useServiceRatingVoteDefinitionTakeBackVoteAction();
     const serviceRatingVoteDefinitionVoteAction = useServiceRatingVoteDefinitionVoteAction();
     const pageFilterUserOwnedRatingVoteDefinitionsAction = usePageFilterUserOwnedRatingVoteDefinitionsAction(
@@ -422,6 +435,54 @@ export const RatingVoteDefinition_TableTable = forwardRef<RefreshableTable, Rati
     ];
 
     const rowActions: TableRowAction<ServiceRatingVoteDefinitionStored>[] = [
+      {
+        id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionAddToFavoritesButtonCallOperation',
+        label: t(
+          'service.RatingVoteDefinitionTable.userOwnedRatingVoteDefinitions.addToFavorites.ButtonCallOperation',
+          { defaultValue: 'Add to favorites' },
+        ) as string,
+        icon: <MdiIcon path="star-plus" />,
+        action: async (row: ServiceRatingVoteDefinitionStored) =>
+          serviceRatingVoteDefinitionAddToFavoritesAction(row, () => fetchData()),
+      },
+      {
+        id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionRemoveFromFavoritesButtonCallOperation',
+        label: t(
+          'service.RatingVoteDefinitionTable.userOwnedRatingVoteDefinitions.removeFromFavorites.ButtonCallOperation',
+          { defaultValue: 'Remove from favorites' },
+        ) as string,
+        icon: <MdiIcon path="star-minus" />,
+        action: async (row: ServiceRatingVoteDefinitionStored) =>
+          serviceRatingVoteDefinitionRemoveFromFavoritesAction(row, () => fetchData()),
+      },
+      {
+        id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionCloseVoteButtonCallOperation',
+        label: t('service.RatingVoteDefinitionTable.userOwnedRatingVoteDefinitions.closeVote.ButtonCallOperation', {
+          defaultValue: 'Close Vote',
+        }) as string,
+        icon: <MdiIcon path="lock-check" />,
+        action: async (row: ServiceRatingVoteDefinitionStored) =>
+          serviceRatingVoteDefinitionCloseVoteAction(row, () => fetchData()),
+      },
+      {
+        id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionActivateButtonCallOperation',
+        label: t('service.RatingVoteDefinitionTable.userOwnedRatingVoteDefinitions.activate.ButtonCallOperation', {
+          defaultValue: 'Activate',
+        }) as string,
+        icon: <MdiIcon path="lock-open" />,
+        action: async (row: ServiceRatingVoteDefinitionStored) =>
+          serviceRatingVoteDefinitionActivateAction(row, () => fetchData()),
+      },
+      {
+        id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionDeleteOrArchiveButtonCallOperation',
+        label: t(
+          'service.RatingVoteDefinitionTable.userOwnedRatingVoteDefinitions.deleteOrArchive.ButtonCallOperation',
+          { defaultValue: 'Delete' },
+        ) as string,
+        icon: <MdiIcon path="delete" />,
+        action: async (row: ServiceRatingVoteDefinitionStored) =>
+          serviceRatingVoteDefinitionDeleteOrArchiveAction(row, () => fetchData()),
+      },
       {
         id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionTakeBackVoteButtonCallOperation',
         label: t('service.RatingVoteDefinitionTable.userOwnedRatingVoteDefinitions.takeBackVote.ButtonCallOperation', {

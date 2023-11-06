@@ -1,0 +1,36 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    C L A S S
+// ------------------------------
+// Factory expression: #allCustomizableOperations(#model)
+// Path expression: '/'+#emptyCustomOperationOsgiParentPath(#self)+'/'+#emptyCustomOperationOsgiName(#self)+'.java.default'
+// Template name: empty-custom-operation-implementation-osgi.java
+// Template file: osgi/empty-custom-operation-implementation-osgi.java.hbs
+// Debug: false
+// Payload validator: false
+// Optional types: false
+
+package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transferobjecttypes.yesnoabstainvotedefinition;
+
+/**
+ * 
+ * 
+ * if (this.status != edemokracia::VoteStatus#CREATED) {
+ * 	return;
+ * }
+ * this.status = edemokracia::VoteStatus#ACTIVE;
+ *  
+ * 
+ * Usage:
+ *  1. Rename this file from ActivateCustomImplementation.java.default to ActivateCustomImplementation.java
+ *  2. Implement method
+ *  3. To ignore the generation of ActivateCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
+ */
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.yesnoabstainvotedefinition.Activate.class)
+public class ActivateCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.yesnoabstainvotedefinition.Activate {
+
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.yesnoabstainvotedefinition.YesNoAbstainVoteDefinition _this)  {
+        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.yesnoabstainvotedefinition.ActivateExchangeFunctionsComponent");
+    }
+
+}

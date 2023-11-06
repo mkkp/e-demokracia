@@ -19,6 +19,14 @@ export interface ServiceYesNoVoteDefinition {
   closeAt: Date;
   userHasVoteEntry?: null | boolean;
   userHasNoVoteEntry?: null | boolean;
+  isFavorite?: null | boolean;
+  isVoteEditable?: null | boolean;
+  isVoteNotOpen?: null | boolean;
+  isVoteOpen?: null | boolean;
+  isNotFavorite?: null | boolean;
+  isVoteNotDeletable?: null | boolean;
+  isVoteDeletable?: null | boolean;
+  isVoteNotEditable?: null | boolean;
 
   issue?: null | ServiceIssueStored;
   voteEntries?: null | Array<ServiceYesNoVoteEntryStored>;
@@ -31,7 +39,15 @@ export type ServiceYesNoVoteDefinitionAttributes =
   | 'status'
   | 'closeAt'
   | 'userHasVoteEntry'
-  | 'userHasNoVoteEntry';
+  | 'userHasNoVoteEntry'
+  | 'isFavorite'
+  | 'isVoteEditable'
+  | 'isVoteNotOpen'
+  | 'isVoteOpen'
+  | 'isNotFavorite'
+  | 'isVoteNotDeletable'
+  | 'isVoteDeletable'
+  | 'isVoteNotEditable';
 
 export type ServiceYesNoVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry';
 

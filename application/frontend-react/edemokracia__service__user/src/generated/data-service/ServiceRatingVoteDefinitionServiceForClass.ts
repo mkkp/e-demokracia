@@ -64,4 +64,14 @@ export interface ServiceRatingVoteDefinitionServiceForClass {
   vote(owner: JudoIdentifiable<ServiceRatingVoteDefinition>, target: RatingVoteInput): Promise<void>;
 
   takeBackVote(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
+
+  removeFromFavorites(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
+
+  addToFavorites(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
+
+  deleteOrArchive(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
+
+  activate(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
+
+  closeVote(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
 }

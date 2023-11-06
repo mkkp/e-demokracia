@@ -10,7 +10,12 @@ export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefini
 export * from './pageRefreshUserOwnedYesNoAbstainVoteDefinitions';
 export * from './voteEntries/tableActionVoteEntries';
 export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefinitionTakeBackVote';
+export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefinitionActivate';
+export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefinitionCloseVote';
+export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefinitionRemoveFromFavorites';
 export * from './issue/buttonNavigateIssue';
 export * from './userVoteEntry/linkViewUserVoteEntry';
 export * from './voteEntries/rowViewVoteEntries';
+export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefinitionDeleteOrArchive';
+export * from './serviceYesNoAbstainVoteDefinition/serviceYesNoAbstainVoteDefinitionAddToFavorites';
 export * from './voteEntries/tableRefreshRelationVoteEntries';

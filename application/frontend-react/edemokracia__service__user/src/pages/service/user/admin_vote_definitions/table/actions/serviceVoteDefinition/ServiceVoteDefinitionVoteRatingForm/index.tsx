@@ -229,7 +229,7 @@ export default function ServiceVoteDefinitionVoteRatingForm({
                 readOnly: false || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MdiIcon path="dialpad" />
+                    <MdiIcon path="calculator" />
                   </InputAdornment>
                 ),
               }}

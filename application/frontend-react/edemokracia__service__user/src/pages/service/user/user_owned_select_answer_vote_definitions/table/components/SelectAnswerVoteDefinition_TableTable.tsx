@@ -58,6 +58,11 @@ import {
 } from '~/generated/data-api';
 import { serviceUserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from '~/generated/data-axios';
 import {
+  useServiceSelectAnswerVoteDefinitionActivateAction,
+  useServiceSelectAnswerVoteDefinitionAddToFavoritesAction,
+  useServiceSelectAnswerVoteDefinitionCloseVoteAction,
+  useServiceSelectAnswerVoteDefinitionDeleteOrArchiveAction,
+  useServiceSelectAnswerVoteDefinitionRemoveFromFavoritesAction,
   useServiceSelectAnswerVoteDefinitionTakeBackVoteAction,
   useServiceSelectAnswerVoteDefinitionVoteAction,
   usePageFilterUserOwnedSelectAnswerVoteDefinitionsAction,
@@ -104,7 +109,8 @@ export const SelectAnswerVoteDefinition_TableTable = forwardRef<
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
   const [page, setPage] = useState<number>(0);
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceSelectAnswerVoteDefinitionQueryCustomizer>({
-    _mask: '{title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
+    _mask:
+      '{title,created,description,status,closeAt,isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasVoteEntry,userHasNoVoteEntry}',
     _seek: {
       limit: 10 + 1,
     },
@@ -286,7 +292,8 @@ export const SelectAnswerVoteDefinition_TableTable = forwardRef<
   ];
 
   const userOwnedSelectAnswerVoteDefinitionsInitialQueryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
-    _mask: '{title,created,description,status,closeAt,userHasVoteEntry,userHasNoVoteEntry}',
+    _mask:
+      '{title,created,description,status,closeAt,isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasVoteEntry,userHasNoVoteEntry}',
     _orderBy: userOwnedSelectAnswerVoteDefinitionsSortModel.length
       ? [
           {
@@ -297,6 +304,14 @@ export const SelectAnswerVoteDefinition_TableTable = forwardRef<
       : [],
   };
 
+  const serviceSelectAnswerVoteDefinitionActivateAction = useServiceSelectAnswerVoteDefinitionActivateAction();
+  const serviceSelectAnswerVoteDefinitionAddToFavoritesAction =
+    useServiceSelectAnswerVoteDefinitionAddToFavoritesAction();
+  const serviceSelectAnswerVoteDefinitionCloseVoteAction = useServiceSelectAnswerVoteDefinitionCloseVoteAction();
+  const serviceSelectAnswerVoteDefinitionDeleteOrArchiveAction =
+    useServiceSelectAnswerVoteDefinitionDeleteOrArchiveAction();
+  const serviceSelectAnswerVoteDefinitionRemoveFromFavoritesAction =
+    useServiceSelectAnswerVoteDefinitionRemoveFromFavoritesAction();
   const serviceSelectAnswerVoteDefinitionTakeBackVoteAction = useServiceSelectAnswerVoteDefinitionTakeBackVoteAction();
   const serviceSelectAnswerVoteDefinitionVoteAction = useServiceSelectAnswerVoteDefinitionVoteAction();
   const pageFilterUserOwnedSelectAnswerVoteDefinitionsAction = usePageFilterUserOwnedSelectAnswerVoteDefinitionsAction(
@@ -359,6 +374,56 @@ export const SelectAnswerVoteDefinition_TableTable = forwardRef<
   ];
 
   const rowActions: TableRowAction<ServiceSelectAnswerVoteDefinitionStored>[] = [
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionAddToFavoritesButtonCallOperation',
+      label: t(
+        'service.SelectAnswerVoteDefinitionTable.userOwnedSelectAnswerVoteDefinitions.addToFavorites.ButtonCallOperation',
+        { defaultValue: 'Add to favorites' },
+      ) as string,
+      icon: <MdiIcon path="star-plus" />,
+      action: async (row: ServiceSelectAnswerVoteDefinitionStored) =>
+        serviceSelectAnswerVoteDefinitionAddToFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionRemoveFromFavoritesButtonCallOperation',
+      label: t(
+        'service.SelectAnswerVoteDefinitionTable.userOwnedSelectAnswerVoteDefinitions.removeFromFavorites.ButtonCallOperation',
+        { defaultValue: 'Remove from favorites' },
+      ) as string,
+      icon: <MdiIcon path="star-minus" />,
+      action: async (row: ServiceSelectAnswerVoteDefinitionStored) =>
+        serviceSelectAnswerVoteDefinitionRemoveFromFavoritesAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionCloseVoteButtonCallOperation',
+      label: t(
+        'service.SelectAnswerVoteDefinitionTable.userOwnedSelectAnswerVoteDefinitions.closeVote.ButtonCallOperation',
+        { defaultValue: 'Close Vote' },
+      ) as string,
+      icon: <MdiIcon path="lock-check" />,
+      action: async (row: ServiceSelectAnswerVoteDefinitionStored) =>
+        serviceSelectAnswerVoteDefinitionCloseVoteAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionActivateButtonCallOperation',
+      label: t(
+        'service.SelectAnswerVoteDefinitionTable.userOwnedSelectAnswerVoteDefinitions.activate.ButtonCallOperation',
+        { defaultValue: 'Activate' },
+      ) as string,
+      icon: <MdiIcon path="lock-open" />,
+      action: async (row: ServiceSelectAnswerVoteDefinitionStored) =>
+        serviceSelectAnswerVoteDefinitionActivateAction(row, () => fetchData()),
+    },
+    {
+      id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionDeleteOrArchiveButtonCallOperation',
+      label: t(
+        'service.SelectAnswerVoteDefinitionTable.userOwnedSelectAnswerVoteDefinitions.deleteOrArchive.ButtonCallOperation',
+        { defaultValue: 'Delete' },
+      ) as string,
+      icon: <MdiIcon path="delete" />,
+      action: async (row: ServiceSelectAnswerVoteDefinitionStored) =>
+        serviceSelectAnswerVoteDefinitionDeleteOrArchiveAction(row, () => fetchData()),
+    },
     {
       id: 'CallOperationActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsTableEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionTakeBackVoteButtonCallOperation',
       label: t(

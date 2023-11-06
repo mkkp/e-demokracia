@@ -58,7 +58,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
  * 	);
  * }
  * 
- * this.debateVote = voteDef;
+ * this.voteDefinitions += voteDef;
  * 
  * this.status = edemokracia::IssueStatus#VOTING;
  * 
