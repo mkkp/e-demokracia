@@ -22,8 +22,13 @@
         <frontend-maven-plugin-version>1.12.1</frontend-maven-plugin-version>
         <ui-model>${basedir}/model/edemokracia-ui.model</ui-model>
 
+<<<<<<< HEAD
         <judo-ui-react-template-version>1.0.0.20231108_085119_222aaa33_develop</judo-ui-react-template-version>
         <judo-ui-typescript-rest-template-version>1.0.0.20231107_042119_61691271_develop</judo-ui-typescript-rest-template-version>
+=======
+        <judo-ui-react-template-version>1.0.0.20231107_154725_54288a4a_feature_JNG_4838_SeparatePageContainerAndDefinition</judo-ui-react-template-version>
+        <judo-ui-typescript-rest-template-version>1.0.0.20231107_153946_0ce0e4a9_feature_JNG_4838_SeparatePageContainerAndDefinition</judo-ui-typescript-rest-template-version>
+>>>>>>> d896dff6 (JNG-4838 new generator and meta)
 
         <node-version>18.16.0</node-version>
         <pnpm-version>8.6.1</pnpm-version>

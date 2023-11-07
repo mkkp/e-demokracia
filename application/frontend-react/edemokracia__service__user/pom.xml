@@ -18,10 +18,7 @@
     <properties>
         <!-- To redefine project definition create 'frontend-react/actor/pom.xml.properties-definition.fragment.override.hbs' file -->
         <model-name>edemokracia</model-name>
-        <actor>edemokracia__service__user</actor>
-        <actor-shortname>user</actor-shortname>
         <actor-name>User</actor-name>
-        <actor-fq-name>edemokracia::service::User</actor-fq-name>
         
         <override-dir>${project.parent.basedir}/generator-overrides</override-dir>
         
@@ -50,7 +47,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Web-ContextPath>/${model-name}/${actor}</Web-ContextPath>
+                        <Web-ContextPath>/${model-name}/${actor-name}</Web-ContextPath>
                         <Include-Resource>
                             /=${project.basedir}/dist
                         </Include-Resource>
@@ -90,11 +87,11 @@
                                     <type>ui-react</type>
                                     <scanPackages>
                                         hu.blackbelt.judo.generator.commons,
-                                        hu.blackbelt.judo.ui.generator.react,
-                                        hu.blackbelt.judo.ui.generator.typescript.rest.commons
+                                        hu.blackbelt.judo.ui.generator.typescript.rest.commons,
+                                        hu.blackbelt.judo.ui.generator.react
                                     </scanPackages>
                                     <applications>
-                                        ${actor-fq-name}
+                                        ${actor-name}
                                     </applications>
                                     <ui>${ui-model}</ui>
                                     <destination>${basedir}</destination>
@@ -110,11 +107,15 @@
                                         <muiLicensePlan>${muiLicensePlan}</muiLicensePlan>
                                     </templateParameters>
                                     <validateChecksum>${validateChecksum}</validateChecksum>
-                                    <contextAccessor>hu.blackbelt.judo.ui.generator.react.StoredVariableHelper</contextAccessor>
                                 </configuration>
                             </execution>
                         </executions>
                         <dependencies>
+                            <dependency>
+                                <groupId>hu.blackbelt.judo.generator</groupId>
+                                <artifactId>judo-ui-typescript-rest-commons</artifactId>
+                                <version>${judo-ui-typescript-rest-template-version}</version>
+                            </dependency>
                             <dependency>
                                 <groupId>hu.blackbelt.judo.generator</groupId>
                                 <artifactId>judo-ui-react</artifactId>
@@ -159,12 +160,11 @@
                                         hu.blackbelt.judo.ui.generator.typescript.rest
                                     </scanPackages>
                                     <applications>
-                                        ${actor-fq-name}
+                                        ${actor-name}
                                     </applications>
                                     <ui>${ui-model}</ui>
-                                    <destination>${basedir}/src/generated</destination>
+                                    <destination>${basedir}/src/services</destination>
                                     <validateChecksum>${validateChecksum}</validateChecksum>
-                                    <contextAccessor>hu.blackbelt.judo.ui.generator.typescript.rest.api.StoredVariableHelper</contextAccessor>
                                 </configuration>
                             </execution>
 
@@ -321,10 +321,10 @@
                         <version>${judo-meta-ui-version}</version>
                         <configuration>
                             <applications>
-                                ${actor-fq-name}
+                                ${actor-name}
                             </applications>
                             <ui>${ui-model}</ui>
-                            <destination>${basedir}/src/generated</destination>
+                            <destination>${basedir}/src/services</destination>
                         </configuration>
                         <executions>
                             <execution>
@@ -334,7 +334,7 @@
                                     <goal>checksum</goal>
                                 </goals>
                                 <configuration>
-                                    <destination>${basedir}/src/generated</destination>
+                                    <destination>${basedir}/src/services</destination>
                                 </configuration>
                             </execution>
 
@@ -382,7 +382,7 @@
                                     <replacements>
                                         <replacement>
                                             <token><![CDATA[<base href="/">]]></token>
-                                            <value><![CDATA[<base href="/${model-name}/${actor}/">]]></value>
+                                            <value><![CDATA[<base href="/${model-name}/${actor-name}/">]]></value>
                                         </replacement>
                                     </replacements>
                                     <regex>false</regex>

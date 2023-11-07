@@ -13,7 +13,7 @@ docker/overrided/bin/setenv,9bce3d5543f2207999dd5e0b06d864e5
 docker/pom.xml,68b2fd9f1f586a83cf3bb20d8eea4cca
 docker/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
-frontend-react/README.adoc,fb273c91edf40f2ada4938bbe358fcd9
+frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
 frontend-react/pom.xml,db5113ae0a4fccdfeb92d16efe71a25b
 internal/pom.xml,a954ddcb6ee521bf1616cf02552e9880

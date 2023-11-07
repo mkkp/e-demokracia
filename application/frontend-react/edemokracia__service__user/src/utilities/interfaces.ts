@@ -16,3 +16,8 @@ export type ColumnActionsProvider<R> = (
   t: TFunction<string, any>,
   options?: ColumnsActionsOptions,
 ) => GridColDef[];
+
+export interface DialogResult<T> {
+  result: 'close' | 'submit';
+  data?: T;
+}

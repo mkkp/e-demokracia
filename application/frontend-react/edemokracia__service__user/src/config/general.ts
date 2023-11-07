@@ -30,8 +30,7 @@ export const toastConfig: OptionsObject & { success: OptionsObject; warning: Opt
   },
   error: {
     ...generalToastConfig,
-    autoHideDuration: 2500,
-    persist: true,
+    autoHideDuration: 5000,
     variant: 'error',
   },
 };

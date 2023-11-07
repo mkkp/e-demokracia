@@ -7,6 +7,7 @@
         "judo.action.create.success": "Sikeres létrehozás",
         "judo.action.delete.success": "Sikeres törlés",
         "judo.action.save.success": "Változások elmentve",
+        "judo.action.operation.success": "Művelet sikeresen végrehajtva",
         "judo.dialogs.crud-bulk.remove.title": "Kiválasztott elemek eltávolítása",
         "judo.dialogs.crud-bulk.delete.title": "Kiválasztott elemek törlése",
         "judo.dialogs.crud-bulk.toast.success": "Művelet(ek) sikeresen végrehajtva",

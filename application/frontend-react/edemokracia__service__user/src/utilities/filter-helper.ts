@@ -95,7 +95,7 @@ export function filterByStringOperation<T>(filter: Filter, data: T[]): T[] {
       return data.filter((d) => d[attributeName] !== filter.filterBy.value);
     case _StringOperation.like:
       return data.filter((d) =>
-        (d[attributeName] as string).toLowerCase().includes(filter.filterBy.value.toLowerCase()),
+        ((d[attributeName] as string) || '').toLowerCase().includes(filter.filterBy.value.toLowerCase()),
       );
     case _StringOperation.greaterOrEqual:
       return data.filter((d) => (d[attributeName] as string).localeCompare(filter.filterBy.value) >= 0);

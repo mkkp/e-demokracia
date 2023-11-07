@@ -13,7 +13,6 @@ import { useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
 import type { To } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { routeToDashboard } from '~/routes';
-import { MdiIcon } from './MdiIcon';
 import { StackableDialogProvider } from './dialog/StackableDialogProvider';
 
 interface BreadcrumbProviderProps {
@@ -150,7 +149,6 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
 
 export const CustomBreadcrumb = () => {
   const breadcrumbItems = useContext(BreadcrumbContextState);
-  const { back, isBackDisabled } = useJudoNavigation();
   const { t } = useTranslation();
 
   return (

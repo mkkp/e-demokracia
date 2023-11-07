@@ -40,21 +40,25 @@ export const isRowSelectable = <T extends JudoStored<T>>(
   return true;
 };
 
-export const getUpdatedRowsSelected = <T extends JudoStored<any>>(
-  selectedRows: MutableRefObject<T[]>,
-  data: T[],
+export const getUpdatedRowsSelected = (
+  selectedRows: MutableRefObject<any[]>,
+  data: any[],
   selectionModel: GridRowSelectionModel,
-): T[] => {
-  const newSelectedRows: T[] = [];
+): any[] => {
+  const newSelectedRows: any[] = [];
+  // if we are dealing with transient items, we give up...
   // our source of truth is the `selectionModel`
   for (const selection of selectionModel) {
-    const prevItem = selectedRows.current.find((r) => r.__identifier === selection);
+    const prevItem =
+      selectedRows.current.length && selectedRows.current[0].__identifier
+        ? selectedRows.current.find((r) => r.__identifier === selection)
+        : undefined;
     if (prevItem) {
       // we already have the item in our `selectedRows`, so keep it
       newSelectedRows.push(prevItem);
     } else {
       // `selection` is a new key, we need to look up the row data in our `data`
-      const newItem = data.find((r) => r.__identifier === selection);
+      const newItem = data.length && data[0].__identifier ? data.find((r) => r.__identifier === selection) : undefined;
       if (newItem) {
         // and add it if found
         newSelectedRows.push(newItem);

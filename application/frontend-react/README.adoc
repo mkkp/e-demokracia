@@ -59,12 +59,6 @@ Actor fully qualified name, equals with the submodule name by default.
 
 For example: `module\__actors__admin__admin`
 
-- `actor-shortname`
-+
-Actor short name which is the plain actor name.
-
-For examole: `admin`
-
 - `actor-name`
 +
 Actor short name which is the plain actor name as is.

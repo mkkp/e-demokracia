@@ -16,6 +16,6 @@ export function useLogoProps(): UseLogoProps {
   return {
     imgSrc: 'mkkp-logo.png',
     iconSrc: 'mkkp-circle-96x96.webp',
-    subTitle: 'edemokracia',
+    subTitle: 'service',
   };
 }

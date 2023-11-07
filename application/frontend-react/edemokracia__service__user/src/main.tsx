@@ -24,7 +24,7 @@ import { axiosRequestInterceptor, Auth, storeMeta, getUser } from './auth';
 import { ThemeCustomization } from './theme';
 import { applicationCustomizer } from './custom';
 import { L10NProvider } from './l10n/l10n-context';
-import { accessServiceImpl, judoAxiosProvider } from './generated/data-axios';
+import { accessServiceImpl, judoAxiosProvider } from '~/services/data-axios';
 import App from './App';
 import { routes } from './routes';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
@@ -50,7 +50,7 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
   judoAxiosProvider.init({
     axios,
     basePathFactory: () => API_DEFAULT_BASE_URL + API_RELATIVE_PATH,
-    filePathFactory: () => FILE_DEFAULT_BASE_URL + '/edemokracia',
+    filePathFactory: () => FILE_DEFAULT_BASE_URL + '/service',
   });
 
   const root = createRoot(document.getElementById('root') as HTMLElement);

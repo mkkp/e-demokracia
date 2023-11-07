@@ -11,7 +11,7 @@ import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton } fr
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { accessServiceImpl } from '../generated/data-axios';
+import { accessServiceImpl } from '~/services/data-axios';
 
 export type FileHandlingHook = () => {
   downloadFile: (data: any, attributeName: string, disposition: 'inline' | 'attachment') => Promise<void>;

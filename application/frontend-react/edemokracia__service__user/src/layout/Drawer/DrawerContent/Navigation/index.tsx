@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Box, Typography, useMediaQuery } from '@mui/material';
 import { usePrincipal } from '~/auth';
-import { ServiceServicePrincipalUserStored } from '~/generated/data-api';
+import { ServiceServicePrincipalUserStored } from '~/services/data-api';
 import { useConfig } from '~/hooks';
 import { MenuOrientation } from '~/config';
 import { NavGroup } from './NavGroup';

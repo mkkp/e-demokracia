@@ -21,18 +21,19 @@ export const columnsActionCalculator: ColumnActionsProvider<any> = (
   t: TFunction<string, any>,
   options?: ColumnsActionsOptions,
 ): GridColDef[] => {
-  if (!exists(actions) || actions.length === 0) {
+  const availableActions = actions.filter((a) => !!a.action);
+  if (!exists(availableActions) || availableActions.length === 0) {
     return [];
   }
 
   if (options?.shownActions === 0) {
     return [];
-  } else if (options?.shownActions && actions.length <= options?.shownActions) {
-    return standaloneActions(id, actions, t, options);
+  } else if (options?.shownActions && availableActions.length <= options?.shownActions) {
+    return standaloneActions(id, availableActions, t, options);
   } else {
-    const sliceNumber = actions.length === options?.shownActions ? options?.shownActions - 1 : 1;
-    const standaloneRowActions = actions.slice(0, sliceNumber);
-    const dropdownRowActions = actions.slice(sliceNumber);
+    const sliceNumber = availableActions.length === options?.shownActions ? options?.shownActions - 1 : 1;
+    const standaloneRowActions = availableActions.slice(0, sliceNumber);
+    const dropdownRowActions = availableActions.slice(sliceNumber);
 
     return [...standaloneActions(id, standaloneRowActions, t, options), ...dropdownActions(id, dropdownRowActions, t)];
   }
@@ -44,27 +45,29 @@ const standaloneActions: ColumnActionsProvider<unknown> = (
   t: TFunction<string, any>,
   options?: ColumnsActionsOptions,
 ): GridColDef[] => {
-  return actions.map((action, index) => {
-    return {
-      ...baseColumnConfig,
-      field: action.label + index,
-      minWidth: 100,
-      headerName: t('judo.pages.table.column.actions.standalone', { defaultValue: 'Actions' }) as string,
-      align: 'center',
-      type: 'actions',
-      getActions: (params: GridRowParams) => [
-        <Button
-          id={id}
-          variant="text"
-          startIcon={action.icon}
-          disabled={action.disabled ? action.disabled(params.row) : false}
-          onClick={() => action.action(params.row)}
-        >
-          {(options?.showLabel ?? true) && action.label}
-        </Button>,
-      ],
-    };
-  });
+  return actions
+    .filter((a) => !!a.action)
+    .map((action, index) => {
+      return {
+        ...baseColumnConfig,
+        field: action.label + index,
+        minWidth: 100,
+        headerName: t('judo.pages.table.column.actions.standalone', { defaultValue: 'Actions' }) as string,
+        align: 'center',
+        type: 'actions',
+        getActions: (params: GridRowParams) => [
+          <Button
+            id={id}
+            variant="text"
+            startIcon={action.icon}
+            disabled={action.disabled ? action.disabled(params.row) : false}
+            onClick={() => action.action!(params.row)}
+          >
+            {(options?.showLabel ?? true) && action.label}
+          </Button>,
+        ],
+      };
+    });
 };
 
 const dropdownActions: ColumnActionsProvider<unknown> = (
@@ -72,7 +75,7 @@ const dropdownActions: ColumnActionsProvider<unknown> = (
   actions: TableRowAction<unknown>[],
   t: TFunction<string, any>,
 ): GridColDef[] => {
-  if (actions.length === 0) return [];
+  if (actions.filter((a) => !!a.action).length === 0) return [];
 
   return [
     {
@@ -87,15 +90,17 @@ const dropdownActions: ColumnActionsProvider<unknown> = (
           id={id}
           variant="text"
           showDropdownIcon={false}
-          menuItems={actions.map((action) => {
-            return {
-              id: action.id,
-              label: action.label,
-              startIcon: action.icon,
-              onClick: () => action.action(params.row),
-              disabled: action.disabled ? action.disabled(params.row) : false,
-            };
-          })}
+          menuItems={actions
+            .filter((a) => !!a.action)
+            .map((action) => {
+              return {
+                id: action.id,
+                label: action.label,
+                startIcon: action.icon,
+                onClick: () => action.action!(params.row),
+                disabled: action.disabled ? action.disabled(params.row) : false,
+              };
+            })}
         >
           <MdiIcon path="dots-horizontal" />
         </DropdownButton>,

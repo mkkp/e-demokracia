@@ -10,6 +10,6 @@ export function useLogoProps(): UseLogoProps {
   return {
     imgSrc: '{{ getApplicationLogo application }}',
     iconSrc: 'mkkp-circle-96x96.webp',
-    subTitle: '{{ modelName application.name }}',
+    subTitle: '{{ application.modelName }}',
   };
 }

@@ -32,7 +32,6 @@ import {
   mapFilterToFilterModel,
   useErrorHandler,
   processQueryCustomizer,
-  ERROR_PROCESSOR_HOOK_INTERFACE_KEY,
   mapFiltersToQueryCustomizerProperty,
   isRowSelectable,
 } from '~/utilities';
@@ -81,9 +80,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
   const { openFilterDialog } = useFilterDialog();
   const { t } = useTranslation();
   const descriptionElementRef = useRef<HTMLElement>(null);
-  const handleFetchError = useErrorHandler(
-    `(&(${OBJECTCLASS}=${ERROR_PROCESSOR_HOOK_INTERFACE_KEY})(operation=Fetch))`,
-  );
+  const handleError = useErrorHandler();
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rowCount, setRowCount] = useState<number>(0);
@@ -139,7 +136,7 @@ export const RangeDialog = <T extends JudoStored<T>, U extends QueryCustomizer<T
       setLastItem(res[res.length - 1]);
       setRowCount(res.length || 0);
     } catch (error) {
-      handleFetchError(error);
+      handleError(error);
     }
     setIsLoading(false);
   };

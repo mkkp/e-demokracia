@@ -18,11 +18,6 @@ type EnqueueSnackbarCallback = (message: SnackbarMessage, options?: OptionsObjec
 
 export interface ErrorHandlingOption<T> {
   /**
-   * Duration to use for potential toasts, could be ignored in actual implementations.
-   */
-  duration?: number;
-
-  /**
    * Callback from a component owning the form data used to set error messages on form inputs. Key-value pair is for
    * form field name and validation error message. Should be called only once per error handler call!
    */
@@ -54,9 +49,9 @@ export type ErrorProcessor<T> = (
 
 export const ERROR_PROCESSOR_HOOK_INTERFACE_KEY = 'ErrorProcessorHook';
 
-export type ErrorProcessorHook<T> = () => ErrorProcessor<T>;
+export type ErrorProcessorHook = () => ErrorProcessor<any>;
 
-export type ErrorHandler<T> = (error: any, options?: ErrorHandlingOption<T>, payload?: T) => void;
+// export type ErrorHandler<T> = (error: any, options?: ErrorHandlingOption<T>, payload?: T) => void;
 
 export interface ErrorProcessResult<T> {
   errorToastConfig: OptionsObject;
@@ -64,13 +59,14 @@ export interface ErrorProcessResult<T> {
   validation?: Map<keyof T, string>;
 }
 
-export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
+export const useErrorHandler = () => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { service: processorHook } = useTrackService<ErrorProcessorHook<T>>(filter);
-  const customErrorProcessor = processorHook && processorHook();
+  // const { service: processorHook } = useTrackService<ErrorProcessorHook<T>>(filter);
+  // const customErrorProcessor = processorHook && processorHook();
 
-  return (error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
+  return <T>(error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
+    console.error(error);
     const errorResults: ErrorProcessResult<T> = {
       errorToastConfig: {
         ...toastConfig.error,
@@ -133,7 +129,6 @@ export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
             const errorList = response.data as ServerError<T>[];
             errorResults.errorToastConfig = {
               ...errorResults.errorToastConfig,
-              autoHideDuration: options?.duration ?? undefined,
             };
             errorResults.toastMessage = t('judo.error.validation-failed', {
               defaultValue: 'Please make sure all fields are filled in correctly.',
@@ -165,10 +160,10 @@ export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
       }
     }
 
-    if (typeof customErrorProcessor === 'function') {
-      customErrorProcessor(error, errorResults, options, payload);
-      return;
-    }
+    // if (typeof customErrorProcessor === 'function') {
+    //     customErrorProcessor(error, errorResults, options, payload);
+    //     return;
+    // }
 
     if (errorResults.toastMessage) {
       enqueueSnackbar(errorResults.toastMessage, errorResults.errorToastConfig);

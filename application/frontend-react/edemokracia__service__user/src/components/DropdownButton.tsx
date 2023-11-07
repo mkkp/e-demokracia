@@ -26,7 +26,7 @@ interface DropdownMenuItem {
   disabled?: boolean;
   visible?: boolean;
   label?: string;
-  onClick: () => void;
+  onClick?: () => void;
   startIcon?: ReactNode;
 }
 
@@ -125,8 +125,10 @@ export function DropdownButton({
                           id={menuItem.id}
                           disabled={menuItem.disabled ?? false}
                           onClick={(event) => {
-                            handleClose(event);
-                            menuItem.onClick();
+                            if (menuItem.onClick) {
+                              handleClose(event);
+                              menuItem.onClick();
+                            }
                           }}
                         >
                           <ListItemIcon sx={{ minWidth: '0 !important', mr: 1 }}>{menuItem.startIcon}</ListItemIcon>

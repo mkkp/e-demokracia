@@ -1,5 +1,6 @@
 {
     "translation": {
+<<<<<<< HEAD
         "applications.User": "User",
         "CloseDebateInputForm": "CloseDebateInput Form",
         "CloseDebateInputForm.closeAt": "Vote close at",
@@ -1344,5 +1345,8 @@
         "service.YesNoVoteEntryView.owner": "User",
         "service.YesNoVoteEntryView.owner.representation": "Representation",
         "service.YesNoVoteEntryView.value": "Value"
+=======
+        "applications.User": "User"
+>>>>>>> d896dff6 (JNG-4838 new generator and meta)
     }
 }
