@@ -108,11 +108,7 @@ export default function ServiceDashboardFavoriteVoteDefinitionsView() {
   const storeDiff: (attributeName: keyof ServiceVoteDefinitionStored, value: any) => void = useCallback(
     (attributeName: keyof ServiceVoteDefinitionStored, value: any) => {
       const dateTypes: string[] = [];
-      const dateTimeTypes: string[] = [
-        'closeAt',
-
-        'created',
-      ];
+      const dateTimeTypes: string[] = ['closeAt'];
       const timeTypes: string[] = [];
       if (dateTypes.includes(attributeName as string)) {
         payloadDiff[attributeName] = uiDateToServiceDate(value);
@@ -395,12 +391,12 @@ export default function ServiceDashboardFavoriteVoteDefinitionsView() {
                         ampmInClock={false}
                         className={clsx({
                           'JUDO-viewMode': !editMode,
-                          'JUDO-required': true,
+                          'JUDO-required': false,
                         })}
                         slotProps={{
                           textField: {
                             id: 'DateTimeInputedemokraciaServiceUserEdemokraciaServiceDashboardFavoriteVoteDefinitionsViewDefaultVoteDefinitionViewEditGroupCreated',
-                            required: true,
+                            required: false,
                             helperText: validation.get('created'),
                             error: !!validation.get('created'),
                             InputProps: {
@@ -430,7 +426,7 @@ export default function ServiceDashboardFavoriteVoteDefinitionsView() {
                         views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                         label={t('service.VoteDefinitionView.created', { defaultValue: 'Created' }) as string}
                         value={serviceDateToUiDate(data.created ?? null)}
-                        readOnly={false || !isFormUpdateable()}
+                        readOnly={true || !isFormUpdateable()}
                         disabled={isLoading}
                         onChange={(newValue: Date) => {
                           storeDiff('created', newValue);

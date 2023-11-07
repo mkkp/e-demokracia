@@ -32,4 +32,5 @@ export interface ServiceSelectAnswerVoteDefinitionQueryCustomizer
   isNotFavorite?: Array<FilterByBoolean>;
   isVoteDeletable?: Array<FilterByBoolean>;
   isVoteNotDeletable?: Array<FilterByBoolean>;
+  createdBy?: Array<FilterByString>;
 }

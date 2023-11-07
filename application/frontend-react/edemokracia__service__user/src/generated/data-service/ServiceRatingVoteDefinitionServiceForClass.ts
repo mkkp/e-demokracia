@@ -14,10 +14,13 @@ import {
   ServiceRatingVoteDefinitionStored,
   ServiceIssueQueryCustomizer,
   ServiceRatingVoteDefinitionQueryCustomizer,
-  ServiceRatingVoteEntry,
   ServiceIssueStored,
-  ServiceRatingVoteEntryStored,
+  ServiceServiceUserStored,
   ServiceIssue,
+  ServiceServiceUser,
+  ServiceRatingVoteEntry,
+  ServiceServiceUserQueryCustomizer,
+  ServiceRatingVoteEntryStored,
 } from '../data-api';
 
 /**
@@ -60,6 +63,23 @@ export interface ServiceRatingVoteDefinitionServiceForClass {
     owner?: JudoIdentifiable<ServiceRatingVoteDefinition> | ServiceRatingVoteDefinition,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceRatingVoteEntryStored>>;
+
+  getOwner(
+    target: JudoIdentifiable<ServiceRatingVoteDefinition>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
+
+  getRangeForOwner(
+    owner?: JudoIdentifiable<ServiceRatingVoteDefinition> | ServiceRatingVoteDefinition,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+
+  setOwner(
+    target: JudoIdentifiable<ServiceRatingVoteDefinition>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+
+  unsetOwner(target: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
 
   vote(owner: JudoIdentifiable<ServiceRatingVoteDefinition>, target: RatingVoteInput): Promise<void>;
 

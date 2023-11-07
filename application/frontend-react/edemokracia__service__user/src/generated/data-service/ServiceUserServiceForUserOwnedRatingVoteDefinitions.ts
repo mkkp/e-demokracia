@@ -8,12 +8,15 @@
 
 import {
   ServiceRatingVoteDefinition,
+  ServiceServiceUser,
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteDefinitionStored,
   ServiceIssueQueryCustomizer,
   ServiceRatingVoteDefinitionQueryCustomizer,
   ServiceRatingVoteEntry,
   ServiceIssueStored,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceRatingVoteEntryStored,
   ServiceIssue,
 } from '../data-api';

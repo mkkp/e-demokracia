@@ -59,6 +59,9 @@ import { clsx } from 'clsx';
 
 import {
   EdemokraciaVoteStatus,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceYesNoAbstainVoteDefinition,
   ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
   ServiceYesNoAbstainVoteDefinitionStored,
@@ -82,6 +85,7 @@ import {
 } from './actions';
 
 import { PageActions } from './components/PageActions';
+import { OwnerLink } from './components/OwnerLink';
 import { UserVoteEntryLink } from './components/UserVoteEntryLink';
 import { VoteEntriesTable } from './components/VoteEntriesTable';
 
@@ -163,7 +167,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
 
   const queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer = {
     _mask:
-      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{value,created},voteEntries{value,created,createdBy}}',
+      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{value,created},owner{representation},voteEntries{value,created,createdBy}}',
   };
 
   const { service: postRefreshHook } =
@@ -721,7 +725,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
                           </TextField>
                         </Grid>
 
-                        <Grid item xs={12} sm={12} md={6.0}>
+                        <Grid item xs={12} sm={12} md={4.0}>
                           <AssociationButton
                             id="NavigationToPageActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedYesNoAbstainVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceYesNoAbstainVoteDefinitionIssueButtonNavigate"
                             variant={undefined}
@@ -789,6 +793,20 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsView() {
                             onChange={(newValue: Date) => {
                               storeDiff('created', newValue);
                             }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <OwnerLink
+                            ownerData={data}
+                            readOnly={false || !isFormUpdateable()}
+                            disabled={isLoading}
+                            editMode={editMode}
+                            fetchOwnerData={fetchData}
+                            onChange={(value: ServiceServiceUser | ServiceServiceUserStored | null) => {
+                              storeDiff('owner', value);
+                            }}
+                            validation={validation}
                           />
                         </Grid>
 

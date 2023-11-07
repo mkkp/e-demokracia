@@ -63,6 +63,9 @@ import {
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '~/generated/data-api';
 import {
   serviceSelectAnswerVoteDefinitionServiceForClassImpl,

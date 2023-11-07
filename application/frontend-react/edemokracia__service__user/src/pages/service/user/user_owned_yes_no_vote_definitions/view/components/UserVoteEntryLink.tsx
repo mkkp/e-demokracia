@@ -45,6 +45,9 @@ import { useL10N } from '~/l10n/l10n-context';
 
 import {
   EdemokraciaVoteStatus,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteDefinitionQueryCustomizer,
   ServiceYesNoVoteDefinitionStored,

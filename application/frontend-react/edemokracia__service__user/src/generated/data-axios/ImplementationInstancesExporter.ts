@@ -69,10 +69,12 @@ import { ServiceProServiceForParentProImpl } from './ServiceProServiceForParentP
 import { ServiceProServiceForProsImpl } from './ServiceProServiceForProsImpl';
 import { ServiceProServiceForVotesImpl } from './ServiceProServiceForVotesImpl';
 import { ServiceRatingVoteDefinitionServiceForIssueImpl } from './ServiceRatingVoteDefinitionServiceForIssueImpl';
+import { ServiceRatingVoteDefinitionServiceForOwnerImpl } from './ServiceRatingVoteDefinitionServiceForOwnerImpl';
 import { ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceRatingVoteDefinitionServiceForVoteEntriesImpl } from './ServiceRatingVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceRatingVoteEntryServiceForOwnerImpl } from './ServiceRatingVoteEntryServiceForOwnerImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForIssueImpl } from './ServiceSelectAnswerVoteDefinitionServiceForIssueImpl';
+import { ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl } from './ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl } from './ServiceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from './ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl';
@@ -112,10 +114,12 @@ import { ServiceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl } from './S
 import { ServiceVoteDefinitionServiceForIssueImpl } from './ServiceVoteDefinitionServiceForIssueImpl';
 import { ServiceVoteEntryServiceForVoteDefinitionImpl } from './ServiceVoteEntryServiceForVoteDefinitionImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl';
+import { ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForVoteEntriesImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceYesNoAbstainVoteEntryServiceForOwnerImpl } from './ServiceYesNoAbstainVoteEntryServiceForOwnerImpl';
 import { ServiceYesNoVoteDefinitionServiceForIssueImpl } from './ServiceYesNoVoteDefinitionServiceForIssueImpl';
+import { ServiceYesNoVoteDefinitionServiceForOwnerImpl } from './ServiceYesNoVoteDefinitionServiceForOwnerImpl';
 import { ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl } from './ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceYesNoVoteEntryServiceForOwnerImpl } from './ServiceYesNoVoteEntryServiceForOwnerImpl';
@@ -262,6 +266,9 @@ export const serviceProServiceForVotesImpl = new ServiceProServiceForVotesImpl(j
 export const serviceRatingVoteDefinitionServiceForIssueImpl = new ServiceRatingVoteDefinitionServiceForIssueImpl(
   judoAxiosProvider,
 );
+export const serviceRatingVoteDefinitionServiceForOwnerImpl = new ServiceRatingVoteDefinitionServiceForOwnerImpl(
+  judoAxiosProvider,
+);
 export const serviceRatingVoteDefinitionServiceForUserVoteEntryImpl =
   new ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceRatingVoteDefinitionServiceForVoteEntriesImpl =
@@ -271,6 +278,8 @@ export const serviceRatingVoteEntryServiceForOwnerImpl = new ServiceRatingVoteEn
 );
 export const serviceSelectAnswerVoteDefinitionServiceForIssueImpl =
   new ServiceSelectAnswerVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const serviceSelectAnswerVoteDefinitionServiceForOwnerImpl =
+  new ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl(judoAxiosProvider);
 export const serviceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl =
   new ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl =
@@ -362,6 +371,8 @@ export const serviceVoteEntryServiceForVoteDefinitionImpl = new ServiceVoteEntry
 );
 export const serviceYesNoAbstainVoteDefinitionServiceForIssueImpl =
   new ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl =
+  new ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl =
   new ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForVoteEntriesImpl =
@@ -370,6 +381,9 @@ export const serviceYesNoAbstainVoteEntryServiceForOwnerImpl = new ServiceYesNoA
   judoAxiosProvider,
 );
 export const serviceYesNoVoteDefinitionServiceForIssueImpl = new ServiceYesNoVoteDefinitionServiceForIssueImpl(
+  judoAxiosProvider,
+);
+export const serviceYesNoVoteDefinitionServiceForOwnerImpl = new ServiceYesNoVoteDefinitionServiceForOwnerImpl(
   judoAxiosProvider,
 );
 export const serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl =

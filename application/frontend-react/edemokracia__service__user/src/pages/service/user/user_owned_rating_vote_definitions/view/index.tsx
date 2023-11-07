@@ -65,6 +65,9 @@ import {
   ServiceRatingVoteEntry,
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '~/generated/data-api';
 import {
   serviceUserServiceForUserOwnedRatingVoteDefinitionsImpl,
@@ -82,6 +85,7 @@ import {
 } from './actions';
 
 import { PageActions } from './components/PageActions';
+import { OwnerLink } from './components/OwnerLink';
 import { UserVoteEntryLink } from './components/UserVoteEntryLink';
 import { VoteEntriesTable } from './components/VoteEntriesTable';
 
@@ -163,7 +167,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
 
   const queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,maxRateValue,minRateValue,userVoteEntry{created,value},voteEntries{created,createdBy,value}}',
+      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,maxRateValue,minRateValue,userVoteEntry{created,value},owner{representation},voteEntries{created,createdBy,value}}',
   };
 
   const { service: postRefreshHook } = useTrackService<ServiceUserUserOwnedRatingVoteDefinitionsViewPostRefreshHook>(
@@ -708,7 +712,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
                           </TextField>
                         </Grid>
 
-                        <Grid item xs={12} sm={12} md={6.0}>
+                        <Grid item xs={12} sm={12} md={4.0}>
                           <AssociationButton
                             id="NavigationToPageActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedRatingVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceRatingVoteDefinitionIssueButtonNavigate"
                             variant={undefined}
@@ -772,6 +776,20 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsView() {
                             onChange={(newValue: Date) => {
                               storeDiff('created', newValue);
                             }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <OwnerLink
+                            ownerData={data}
+                            readOnly={false || !isFormUpdateable()}
+                            disabled={isLoading}
+                            editMode={editMode}
+                            fetchOwnerData={fetchData}
+                            onChange={(value: ServiceServiceUser | ServiceServiceUserStored | null) => {
+                              storeDiff('owner', value);
+                            }}
+                            validation={validation}
                           />
                         </Grid>
 

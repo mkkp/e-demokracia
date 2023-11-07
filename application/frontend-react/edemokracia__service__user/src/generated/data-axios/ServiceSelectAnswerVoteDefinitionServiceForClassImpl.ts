@@ -13,14 +13,17 @@ import type {
   ServiceSelectAnswerVoteDefinition,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
+  ServiceServiceUserStored,
   SelectAnswerVoteSelection,
   ServiceSelectAnswerVoteEntry,
   ServiceIssue,
   ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
   SelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceServiceUserQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
   ServiceSelectAnswerVoteSelection,
@@ -197,6 +200,66 @@ export class ServiceSelectAnswerVoteDefinitionServiceForClassImpl
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getOwner(
+    target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored> {
+    const path = '/service/SelectAnswerVoteDefinition/owner/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwner(
+    owner?: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>> {
+    const path = '/service/SelectAnswerVoteDefinition/owner/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setOwner(
+    target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/owner/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetOwner(target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/owner/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
   }
 
   /**

@@ -12,14 +12,17 @@ import {
   ServiceSelectAnswerVoteDefinition,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
+  ServiceServiceUserStored,
   SelectAnswerVoteSelection,
   ServiceSelectAnswerVoteEntry,
   ServiceIssue,
   ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
   SelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceServiceUserQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
   ServiceSelectAnswerVoteSelection,
@@ -75,6 +78,23 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForClass {
     owner?: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
+
+  getOwner(
+    target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
+
+  getRangeForOwner(
+    owner?: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+
+  setOwner(
+    target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+
+  unsetOwner(target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
 
   vote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>, target: SelectAnswerVoteSelection): Promise<void>;
 

@@ -7,12 +7,15 @@
 // Template file: data-service/accessRelationService.ts.hbs
 
 import {
+  ServiceServiceUser,
   ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
   ServiceYesNoAbstainVoteDefinitionStored,
   ServiceIssueQueryCustomizer,
   ServiceYesNoAbstainVoteDefinition,
   ServiceIssueStored,
   ServiceYesNoAbstainVoteEntryStored,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ServiceYesNoAbstainVoteEntry,
   ServiceIssue,

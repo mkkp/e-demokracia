@@ -54,6 +54,9 @@ import {
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   _StringOperation,
 } from '~/generated/data-api';
 import {

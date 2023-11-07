@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
 import { ServiceIssueStored } from './ServiceIssue';
+import { ServiceServiceUserStored } from './ServiceServiceUser';
 import { ServiceYesNoAbstainVoteEntryStored } from './ServiceYesNoAbstainVoteEntry';
 
 export interface ServiceYesNoAbstainVoteDefinition {
@@ -27,10 +28,12 @@ export interface ServiceYesNoAbstainVoteDefinition {
   isVoteNotDeletable?: null | boolean;
   isVoteDeletable?: null | boolean;
   isVoteNotEditable?: null | boolean;
+  createdBy?: null | string;
 
   issue?: null | ServiceIssueStored;
   voteEntries?: null | Array<ServiceYesNoAbstainVoteEntryStored>;
   userVoteEntry?: null | ServiceYesNoAbstainVoteEntryStored;
+  owner?: null | ServiceServiceUserStored;
 }
 export type ServiceYesNoAbstainVoteDefinitionAttributes =
   | 'title'
@@ -47,9 +50,10 @@ export type ServiceYesNoAbstainVoteDefinitionAttributes =
   | 'isNotFavorite'
   | 'isVoteNotDeletable'
   | 'isVoteDeletable'
-  | 'isVoteNotEditable';
+  | 'isVoteNotEditable'
+  | 'createdBy';
 
-export type ServiceYesNoAbstainVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry';
+export type ServiceYesNoAbstainVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry' | 'owner';
 
 export interface ServiceYesNoAbstainVoteDefinitionStored
   extends JudoStored<ServiceYesNoAbstainVoteDefinition>,

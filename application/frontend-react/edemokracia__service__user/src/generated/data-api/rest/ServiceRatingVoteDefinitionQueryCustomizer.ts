@@ -34,4 +34,5 @@ export interface ServiceRatingVoteDefinitionQueryCustomizer extends QueryCustomi
   isVoteNotDeletable?: Array<FilterByBoolean>;
   isVoteDeletable?: Array<FilterByBoolean>;
   isVoteNotEditable?: Array<FilterByBoolean>;
+  createdBy?: Array<FilterByString>;
 }

@@ -11,6 +11,7 @@ import { EdemokraciaVoteStatus } from './EdemokraciaVoteStatus';
 import { ServiceIssueStored } from './ServiceIssue';
 import { ServiceSelectAnswerVoteEntryStored } from './ServiceSelectAnswerVoteEntry';
 import { ServiceSelectAnswerVoteSelectionStored } from './ServiceSelectAnswerVoteSelection';
+import { ServiceServiceUserStored } from './ServiceServiceUser';
 
 export interface ServiceSelectAnswerVoteDefinition {
   title: string;
@@ -28,11 +29,13 @@ export interface ServiceSelectAnswerVoteDefinition {
   isNotFavorite?: null | boolean;
   isVoteDeletable?: null | boolean;
   isVoteNotDeletable?: null | boolean;
+  createdBy?: null | string;
 
   issue?: null | ServiceIssueStored;
   voteEntries?: null | Array<ServiceSelectAnswerVoteEntryStored>;
   userVoteEntry?: null | ServiceSelectAnswerVoteEntryStored;
   voteSelections?: null | Array<ServiceSelectAnswerVoteSelectionStored>;
+  owner?: null | ServiceServiceUserStored;
 }
 export type ServiceSelectAnswerVoteDefinitionAttributes =
   | 'title'
@@ -49,9 +52,15 @@ export type ServiceSelectAnswerVoteDefinitionAttributes =
   | 'isFavorite'
   | 'isNotFavorite'
   | 'isVoteDeletable'
-  | 'isVoteNotDeletable';
+  | 'isVoteNotDeletable'
+  | 'createdBy';
 
-export type ServiceSelectAnswerVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry' | 'voteSelections';
+export type ServiceSelectAnswerVoteDefinitionRelations =
+  | 'issue'
+  | 'voteEntries'
+  | 'userVoteEntry'
+  | 'voteSelections'
+  | 'owner';
 
 export interface ServiceSelectAnswerVoteDefinitionStored
   extends JudoStored<ServiceSelectAnswerVoteDefinition>,

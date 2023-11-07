@@ -60,6 +60,9 @@ import {
   ServiceRatingVoteEntry,
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '~/generated/data-api';
 import {
   serviceRatingVoteDefinitionServiceForClassImpl,

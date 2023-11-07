@@ -15,6 +15,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 
  * 
  * var edemokracia::VoteDefinition voteDef;
+ * var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any()
  * 
  * if (this.status != edemokracia::IssueStatus#ACTIVE) {
  * 	return voteDef;
@@ -25,7 +26,9 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 		title = input.title, 
  * 		description = input.description,
  * 		closeAt = input.closeAt,
- * 		status = edemokracia::VoteStatus#CREATED
+ * 		status = edemokracia::VoteStatus#CREATED,
+ * 		owner = user,
+ * 		createdBy = user
  * 	);
  * }
  * 
@@ -34,7 +37,9 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 		title = input.title, 
  * 		description = input.description,
  * 		closeAt = input.closeAt,
- * 		status = edemokracia::VoteStatus#CREATED		
+ * 		status = edemokracia::VoteStatus#CREATED,
+ * 		owner = user,
+ * 		createdBy = user		
  * 	);
  * }
  * 
@@ -43,7 +48,10 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 		title = input.title, 
  * 		description = input.description,
  * 		closeAt = input.closeAt,
- * 		status = edemokracia::VoteStatus#CREATED		
+ * 		status = edemokracia::VoteStatus#CREATED,	
+ * 		owner = user,
+ * 		createdBy = user
+ * 			
  * 	);
  * 		
  * 	voteDef = selectVoteDef;
@@ -54,7 +62,9 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 		title = input.title, 
  * 		description = input.description,
  * 		closeAt = input.closeAt,
- * 		status = edemokracia::VoteStatus#CREATED		
+ * 		status = edemokracia::VoteStatus#CREATED,
+ * 		owner = user,
+ * 		createdBy = user			
  * 	);
  * }
  * 

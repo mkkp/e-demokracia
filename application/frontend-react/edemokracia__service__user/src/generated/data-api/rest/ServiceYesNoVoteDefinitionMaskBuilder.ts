@@ -9,6 +9,7 @@
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceIssueAttributes,
+  ServiceServiceUserAttributes,
   ServiceYesNoVoteEntryAttributes,
   ServiceYesNoVoteDefinitionAttributes,
 } from '../model';

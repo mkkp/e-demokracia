@@ -14,10 +14,13 @@ import {
   YesNoAbstainVoteInput,
   ServiceYesNoAbstainVoteDefinition,
   ServiceIssueStored,
-  ServiceYesNoAbstainVoteEntryStored,
-  ServiceYesNoAbstainVoteEntry,
+  ServiceServiceUserStored,
   ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ServiceIssue,
+  ServiceServiceUser,
+  ServiceYesNoAbstainVoteEntryStored,
+  ServiceServiceUserQueryCustomizer,
+  ServiceYesNoAbstainVoteEntry,
 } from '../data-api';
 
 /**
@@ -60,6 +63,23 @@ export interface ServiceYesNoAbstainVoteDefinitionServiceForClass {
     owner?: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceYesNoAbstainVoteEntryStored>>;
+
+  getOwner(
+    target: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
+
+  getRangeForOwner(
+    owner?: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+
+  setOwner(
+    target: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+
+  unsetOwner(target: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void>;
 
   vote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>, target: YesNoAbstainVoteInput): Promise<void>;
 

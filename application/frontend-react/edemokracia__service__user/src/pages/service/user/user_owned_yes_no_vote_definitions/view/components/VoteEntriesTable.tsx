@@ -54,6 +54,9 @@ import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { Box, Typography } from '@mui/material';
 import {
   EdemokraciaVoteStatus,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteDefinitionQueryCustomizer,
   ServiceYesNoVoteDefinitionStored,

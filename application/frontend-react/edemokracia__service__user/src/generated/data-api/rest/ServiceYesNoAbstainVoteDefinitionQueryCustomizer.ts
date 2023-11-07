@@ -32,4 +32,5 @@ export interface ServiceYesNoAbstainVoteDefinitionQueryCustomizer
   isVoteNotDeletable?: Array<FilterByBoolean>;
   isVoteDeletable?: Array<FilterByBoolean>;
   isVoteNotEditable?: Array<FilterByBoolean>;
+  createdBy?: Array<FilterByString>;
 }

@@ -68,6 +68,9 @@ import {
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '~/generated/data-api';
 import {
   serviceUserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl,
@@ -85,6 +88,7 @@ import {
 } from './actions';
 
 import { PageActions } from './components/PageActions';
+import { OwnerLink } from './components/OwnerLink';
 import { UserVoteEntryLink } from './components/UserVoteEntryLink';
 import { VoteSelectionsTable } from './components/VoteSelectionsTable';
 import { VoteEntriesTable } from './components/VoteEntriesTable';
@@ -167,7 +171,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
 
   const queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
     _mask:
-      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{valueRepresentation,created},voteSelections{description,title},voteEntries{created,createdBy,valueRepresentation}}',
+      '{isNotFavorite,isFavorite,isVoteNotOpen,isVoteNotEditable,isVoteNotDeletable,userHasNoVoteEntry,userHasVoteEntry,title,closeAt,status,created,description,userVoteEntry{valueRepresentation,created},owner{representation},voteSelections{description,title},voteEntries{created,createdBy,valueRepresentation}}',
   };
 
   const { service: postRefreshHook } =
@@ -731,7 +735,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
                           </TextField>
                         </Grid>
 
-                        <Grid item xs={12} sm={12} md={6.0}>
+                        <Grid item xs={12} sm={12} md={4.0}>
                           <AssociationButton
                             id="NavigationToPageActionedemokraciaServiceUserEdemokraciaServiceUserUserOwnedSelectAnswerVoteDefinitionsViewEdemokraciaServiceUserEdemokraciaServiceSelectAnswerVoteDefinitionIssueButtonNavigate"
                             variant={undefined}
@@ -799,6 +803,20 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsView() {
                             onChange={(newValue: Date) => {
                               storeDiff('created', newValue);
                             }}
+                          />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12} md={4.0}>
+                          <OwnerLink
+                            ownerData={data}
+                            readOnly={false || !isFormUpdateable()}
+                            disabled={isLoading}
+                            editMode={editMode}
+                            fetchOwnerData={fetchData}
+                            onChange={(value: ServiceServiceUser | ServiceServiceUserStored | null) => {
+                              storeDiff('owner', value);
+                            }}
+                            validation={validation}
                           />
                         </Grid>
 

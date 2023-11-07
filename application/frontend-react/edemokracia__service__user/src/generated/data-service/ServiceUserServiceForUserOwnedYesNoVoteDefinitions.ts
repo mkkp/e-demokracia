@@ -8,11 +8,14 @@
 
 import {
   ServiceYesNoVoteDefinition,
+  ServiceServiceUser,
   ServiceYesNoVoteEntryStored,
   ServiceYesNoVoteEntry,
   ServiceYesNoVoteDefinitionStored,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceYesNoVoteDefinitionQueryCustomizer,
   ServiceIssue,
   ServiceYesNoVoteEntryQueryCustomizer,

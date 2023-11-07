@@ -14,7 +14,7 @@ import { ServiceIssueStored } from './ServiceIssue';
 
 export interface ServiceVoteDefinition {
   title: string;
-  created: Date;
+  created?: null | Date;
   description: string;
   status: EdemokraciaVoteStatus;
   closeAt: Date;
