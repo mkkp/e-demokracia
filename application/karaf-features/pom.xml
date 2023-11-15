@@ -171,10 +171,8 @@
 
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
-            <artifactId>edemokracia-application-model</artifactId>
+            <artifactId>edemokracia-application-rest</artifactId>
             <version>${project.version}</version>
-            <classifier>jaxrsapi</classifier>
-            <type>jar</type>
         </dependency>
 
         <dependency>

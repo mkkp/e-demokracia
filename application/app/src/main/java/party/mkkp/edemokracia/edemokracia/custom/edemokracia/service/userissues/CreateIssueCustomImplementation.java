@@ -101,7 +101,7 @@ public class CreateIssueCustomImplementation implements party.mkkp.edemokracia.e
 
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createissueinput.CreateIssueInput input)  {
         String userName = variableResolver.resolve(String.class, "ACTOR", "userName");
-        User user = userDao.query().filterByUserName(StringFilter.equalTo(userName)).execute().get(0);
+        User user = userDao.query().filterByUserName(StringFilter.equalTo(userName)).selectOne().get();
 
         Issue issue = Issue.builder()
                 .withTitle(input.getTitle())
