@@ -89,6 +89,8 @@ const ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageC
 
 // XMIID: User/(esm/_9lF1oFuhEe6rLvwZQOpyUA)/AccessViewPageDefinition
 // Name: service::User::userOwnedYesNoAbstainVoteDefinitions::Access::View::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -262,6 +264,13 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
+    await openServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const issueOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceYesNoAbstainVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
@@ -300,13 +309,6 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       queryCustomizer,
     );
   };
-  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
-    await openServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
 
   const actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActions = {
     backAction,
@@ -315,12 +317,12 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
     updateAction,
     takeBackVoteForYesNoAbstainVoteDefinitionAction,
     voteAction,
+    userVoteEntryOpenPageAction,
     issueOpenPageAction,
     issuePreFetchAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
-    userVoteEntryOpenPageAction,
     ...(customActions ?? {}),
   };
 

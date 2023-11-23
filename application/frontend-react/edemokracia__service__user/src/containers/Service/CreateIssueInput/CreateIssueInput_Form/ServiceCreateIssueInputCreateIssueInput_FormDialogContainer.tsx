@@ -48,7 +48,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceCreateIssueInput;
+  data: ServiceCreateIssueInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
@@ -154,7 +154,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
         {editMode && actions.createIssueForUserIssuesAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_0C-jAYoAEe6F9LXBn0VWTg)"
+              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_YZ54IIpWEe6AtscSh_kd4w)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

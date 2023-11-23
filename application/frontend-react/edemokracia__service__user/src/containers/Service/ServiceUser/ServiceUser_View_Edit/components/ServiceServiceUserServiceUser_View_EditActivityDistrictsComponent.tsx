@@ -92,7 +92,7 @@ export interface ServiceServiceUserServiceUser_View_EditActivityDistrictsCompone
   actions: ServiceServiceUserServiceUser_View_EditActivityDistrictsComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceServiceUser;
+  ownerData: ServiceServiceUserStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -173,7 +173,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0U29MooAEe6F9LXBn0VWTg',
+      id: '_ZGMWYopWEe6AtscSh_kd4w',
       attributeName: 'representation',
       label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,

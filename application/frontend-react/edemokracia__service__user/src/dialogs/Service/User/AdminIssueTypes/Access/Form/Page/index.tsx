@@ -116,6 +116,7 @@ export interface ServiceUserAdminIssueTypesAccessFormPageProps {
 
 // XMIID: User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition
 // Name: service::User::adminIssueTypes::Access::Form::Page
+// Open in dialog: true
 export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceUserAdminIssueTypesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 

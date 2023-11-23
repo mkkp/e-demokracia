@@ -62,7 +62,7 @@ export interface CloseDebateInputCloseDebateInput_View_EditProps {
   refreshCounter: number;
   actions: CloseDebateInputCloseDebateInput_View_EditActionDefinitions;
 
-  data: CloseDebateInput;
+  data: CloseDebateInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

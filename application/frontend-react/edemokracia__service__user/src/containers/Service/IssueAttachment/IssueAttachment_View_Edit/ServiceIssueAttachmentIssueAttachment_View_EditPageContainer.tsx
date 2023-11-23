@@ -46,7 +46,7 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceIssueAttachment;
+  data: ServiceIssueAttachmentStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void;

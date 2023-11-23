@@ -44,7 +44,7 @@ export interface ServiceUserIssuesUserIssues_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceUserIssues;
+  data: ServiceUserIssuesStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceUserIssues, value: any) => void;

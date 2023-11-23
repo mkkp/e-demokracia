@@ -75,7 +75,7 @@ export interface ServiceCommentComment_FormProps {
   refreshCounter: number;
   actions: ServiceCommentComment_FormActionDefinitions;
 
-  data: ServiceComment;
+  data: ServiceCommentStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

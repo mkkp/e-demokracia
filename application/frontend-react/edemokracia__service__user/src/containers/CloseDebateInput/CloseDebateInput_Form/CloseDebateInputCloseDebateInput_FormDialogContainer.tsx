@@ -43,7 +43,7 @@ export interface CloseDebateInputCloseDebateInput_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: CloseDebateInput;
+  data: CloseDebateInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void;
@@ -148,7 +148,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
         {editMode && actions.closeDebateForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zu-B4ooAEe6F9LXBn0VWTg)"
+              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_XcspAIpWEe6AtscSh_kd4w)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

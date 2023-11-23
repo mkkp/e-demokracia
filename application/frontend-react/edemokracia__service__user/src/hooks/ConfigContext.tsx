@@ -22,7 +22,7 @@ type ConfigProviderProps = {
 };
 
 function ConfigProvider({ children }: ConfigProviderProps) {
-  const [config, setConfig] = useLocalStorage('service-config', initialState);
+  const [config, setConfig] = useLocalStorage('edemokracia-config', initialState);
 
   const onChangeContainer = () => {
     setConfig({

@@ -33,7 +33,7 @@ export class UserServiceForUserProfileImpl extends JudoAxiosService implements U
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async refreshForUserProfile(queryCustomizer?: ServiceUserProfileQueryCustomizer): Promise<ServiceUserProfileStored> {
-    const path = '/User/userProfile/~get';
+    const path = '/service/User/userProfile/~get';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {});
 
     return response.data;

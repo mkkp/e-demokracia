@@ -120,6 +120,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm
 
 // XMIID: User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationUnmappedInputPageDefinition
 // Name: service::VoteDefinition::VoteDefinition_View_Edit::voteYesNo::Input::Form
+// Open in dialog: true
 export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
   props: ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputFormProps,
 ) {

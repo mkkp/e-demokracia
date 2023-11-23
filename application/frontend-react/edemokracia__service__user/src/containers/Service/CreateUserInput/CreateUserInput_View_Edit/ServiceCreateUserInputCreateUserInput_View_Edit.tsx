@@ -69,7 +69,7 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditProps {
   refreshCounter: number;
   actions: ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions;
 
-  data: ServiceCreateUserInput;
+  data: ServiceCreateUserInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

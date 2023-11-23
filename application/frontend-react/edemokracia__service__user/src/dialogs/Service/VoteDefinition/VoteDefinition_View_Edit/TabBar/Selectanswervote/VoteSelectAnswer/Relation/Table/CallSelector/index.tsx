@@ -105,6 +105,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswer
 
 // XMIID: User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputSelectorCallOperationPageDefinition
 // Name: service::VoteDefinition::VoteDefinition_View_Edit::tabBar::selectanswervote::voteSelectAnswer::Relation::Table::CallSelector
+// Open in dialog: true
 export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
   props: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelectorProps,
 ) {

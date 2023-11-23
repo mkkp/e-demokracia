@@ -122,6 +122,7 @@ export interface ServiceIssueAttachmentsRelationFormPageProps {
 
 // XMIID: User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm
 // Name: service::Issue::attachments::Relation::Form::Page
+// Open in dialog: true
 export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIssueAttachmentsRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 

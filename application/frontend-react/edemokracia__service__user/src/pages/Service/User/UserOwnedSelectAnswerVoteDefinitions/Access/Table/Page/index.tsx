@@ -61,6 +61,8 @@ const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageConta
 
 // XMIID: User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessTablePageDefinition
 // Name: service::User::userOwnedSelectAnswerVoteDefinitions::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

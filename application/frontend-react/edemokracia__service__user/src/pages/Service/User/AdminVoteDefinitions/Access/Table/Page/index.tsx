@@ -29,6 +29,10 @@ import {
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceUserAdminVoteDefinitionsAccessViewPage } from '~/routes';
+import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
+import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
+import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
+import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNoAbstain/Input/Form';
 import type { ServiceVoteDefinitionVoteDefinition_TablePageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/ServiceVoteDefinitionVoteDefinition_TablePageContainer';
 import type {
   IssueScope,
@@ -58,6 +62,8 @@ const ServiceVoteDefinitionVoteDefinition_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_l9Zh4JEaEe29qs15q2b6yw)/AccessTablePageDefinition
 // Name: service::User::adminVoteDefinitions::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();
@@ -85,6 +91,14 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
   );
 
   // Dialog hooks
+  const openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector =
+    useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector();
+  const openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm =
+    useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm();
+  const openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm =
+    useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm();
+  const openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm =
+    useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm();
 
   // Calculated section
   const title: string = t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
@@ -120,11 +134,46 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const voteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      target,
+    );
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      target,
+    );
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const voteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
+    }
+  };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
+    voteYesNoAction,
+    voteYesNoAbstainAction,
+    voteRatingAction,
+    voteSelectAnswerAction,
     ...(customActions ?? {}),
   };
 

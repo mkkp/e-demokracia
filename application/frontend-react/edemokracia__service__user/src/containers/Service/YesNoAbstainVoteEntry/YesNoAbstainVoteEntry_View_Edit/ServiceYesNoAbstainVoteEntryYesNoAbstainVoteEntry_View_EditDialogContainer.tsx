@@ -53,7 +53,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditDial
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceYesNoAbstainVoteEntry;
+  data: ServiceYesNoAbstainVoteEntryStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteEntry, value: any) => void;

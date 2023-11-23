@@ -126,6 +126,7 @@ export interface ServiceYesNoVoteDefinitionVoteEntriesRelationViewPageProps {
 
 // XMIID: User/(esm/_j_gXIFojEe6_67aMO2jOsw)/RelationFeatureView
 // Name: service::YesNoVoteDefinition::voteEntries::Relation::View::Page
+// Open in dialog: true
 export default function ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(
   props: ServiceYesNoVoteDefinitionVoteEntriesRelationViewPageProps,
 ) {

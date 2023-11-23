@@ -72,6 +72,8 @@ const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionRef
 
 // XMIID: User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationOutputPageDefinition
 // Name: service::Issue::Issue_View_Edit::closeDebate::Output::View
+// Access:
+// Single Access: false
 export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   // Router params section
   const { signedIdentifier } = useParams();

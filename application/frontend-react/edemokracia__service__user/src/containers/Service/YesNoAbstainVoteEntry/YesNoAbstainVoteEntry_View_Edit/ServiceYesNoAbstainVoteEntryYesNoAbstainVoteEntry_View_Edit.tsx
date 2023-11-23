@@ -72,7 +72,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditProp
   refreshCounter: number;
   actions: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditActionDefinitions;
 
-  data: ServiceYesNoAbstainVoteEntry;
+  data: ServiceYesNoAbstainVoteEntryStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

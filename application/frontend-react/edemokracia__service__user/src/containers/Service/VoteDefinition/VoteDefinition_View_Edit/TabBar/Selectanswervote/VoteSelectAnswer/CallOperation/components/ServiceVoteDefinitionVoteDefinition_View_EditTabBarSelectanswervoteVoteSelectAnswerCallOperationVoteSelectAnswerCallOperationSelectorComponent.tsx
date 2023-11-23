@@ -167,7 +167,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0NtMUIoAEe6F9LXBn0VWTg',
+      id: '_XlbHM4pWEe6AtscSh_kd4w',
       attributeName: 'title',
       label: t(
         'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.title',
@@ -177,7 +177,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
     },
 
     {
-      id: '_0Nw2sIoAEe6F9LXBn0VWTg',
+      id: '_XlbuQ4pWEe6AtscSh_kd4w',
       attributeName: 'description',
       label: t(
         'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.description',

@@ -126,6 +126,7 @@ export interface ServiceUserAdminCategoriesAccessViewPageProps {
 
 // XMIID: User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessViewPageDefinition
 // Name: service::User::adminCategories::Access::View::Page
+// Open in dialog: true
 export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceUserAdminCategoriesAccessViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 

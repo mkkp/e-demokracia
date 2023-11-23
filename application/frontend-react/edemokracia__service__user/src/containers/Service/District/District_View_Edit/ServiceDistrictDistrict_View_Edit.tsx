@@ -61,7 +61,7 @@ export interface ServiceDistrictDistrict_View_EditProps {
   refreshCounter: number;
   actions: ServiceDistrictDistrict_View_EditActionDefinitions;
 
-  data: ServiceDistrict;
+  data: ServiceDistrictStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

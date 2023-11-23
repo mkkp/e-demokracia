@@ -92,7 +92,7 @@ export interface ServiceIssueIssue_View_EditCategoriesComponentProps {
   actions: ServiceIssueIssue_View_EditCategoriesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceIssue;
+  ownerData: ServiceIssueStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -183,14 +183,14 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0SkeMIoAEe6F9LXBn0VWTg',
+      id: '_ZDlHQIpWEe6AtscSh_kd4w',
       attributeName: 'title',
       label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0SkeNIoAEe6F9LXBn0VWTg',
+      id: '_ZDlHRIpWEe6AtscSh_kd4w',
       attributeName: 'description',
       label: t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

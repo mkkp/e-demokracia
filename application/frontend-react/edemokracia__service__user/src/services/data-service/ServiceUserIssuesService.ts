@@ -40,13 +40,25 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForOwnedIssues(): Promise<CreateArgumentInput>;
+
   createConArgumentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
 
   getTemplateForCreateConArgumentForOwnedIssues(): Promise<CreateArgumentInput>;
 
-  createProArgumentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  addToFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
-  getTemplateForCreateProArgumentForOwnedIssues(): Promise<CreateArgumentInput>;
+  deleteOrArchiveForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForOwnedIssues(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForOwnedIssues(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -55,19 +67,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForOwnedIssues(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-
-  getTemplateForCreateCommentForOwnedIssues(): Promise<CreateCommentInput>;
 
   listActiveIssuesGlobal(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -79,6 +79,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesGlobal(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesGlobal(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesGlobal(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -86,12 +93,17 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesGlobal(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesGlobal(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
-  ): Promise<void>;
+  addToFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesGlobal(): Promise<CreateArgumentInput>;
+  deleteOrArchiveForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForActiveIssuesGlobal(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesGlobal(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -100,19 +112,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesGlobal(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesGlobal(): Promise<CreateCommentInput>;
 
   listActiveIssuesInActivityCounties(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -124,6 +124,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesInActivityCounties(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesInActivityCounties(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesInActivityCounties(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -131,12 +138,20 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesInActivityCounties(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesInActivityCounties(
+  addToFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesInActivityCounties(
     owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
+    target: CreateCommentInput,
   ): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesInActivityCounties(): Promise<CreateArgumentInput>;
+  getTemplateForCreateCommentForActiveIssuesInActivityCounties(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesInActivityCounties(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -145,22 +160,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesInActivityCounties(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesInActivityCounties(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesInActivityCounties(): Promise<CreateCommentInput>;
 
   listActiveIssuesInActivityCities(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -172,6 +172,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesInActivityCities(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesInActivityCities(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesInActivityCities(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -179,12 +186,20 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesInActivityCities(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesInActivityCities(
+  addToFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesInActivityCities(
     owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
+    target: CreateCommentInput,
   ): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesInActivityCities(): Promise<CreateArgumentInput>;
+  getTemplateForCreateCommentForActiveIssuesInActivityCities(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesInActivityCities(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -193,22 +208,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesInActivityCities(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesInActivityCities(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesInActivityCities(): Promise<CreateCommentInput>;
 
   listActiveIssuesInActivityDistricts(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -220,6 +220,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesInActivityDistricts(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesInActivityDistricts(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesInActivityDistricts(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -227,12 +234,20 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesInActivityDistricts(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesInActivityDistricts(
+  addToFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesInActivityDistricts(
     owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
+    target: CreateCommentInput,
   ): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesInActivityDistricts(): Promise<CreateArgumentInput>;
+  getTemplateForCreateCommentForActiveIssuesInActivityDistricts(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesInActivityDistricts(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -241,22 +256,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesInActivityDistricts(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesInActivityDistricts(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesInActivityDistricts(): Promise<CreateCommentInput>;
 
   listActiveIssuesInResidentCounty(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -268,6 +268,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesInResidentCounty(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesInResidentCounty(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesInResidentCounty(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -275,12 +282,20 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesInResidentCounty(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesInResidentCounty(
+  addToFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesInResidentCounty(
     owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
+    target: CreateCommentInput,
   ): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesInResidentCounty(): Promise<CreateArgumentInput>;
+  getTemplateForCreateCommentForActiveIssuesInResidentCounty(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesInResidentCounty(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -289,22 +304,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesInResidentCounty(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesInResidentCounty(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesInResidentCounty(): Promise<CreateCommentInput>;
 
   listActiveIssuesInResidentCity(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -316,6 +316,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesInResidentCity(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesInResidentCity(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesInResidentCity(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -323,12 +330,20 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesInResidentCity(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesInResidentCity(
+  addToFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesInResidentCity(
     owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
+    target: CreateCommentInput,
   ): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesInResidentCity(): Promise<CreateArgumentInput>;
+  getTemplateForCreateCommentForActiveIssuesInResidentCity(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesInResidentCity(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -337,22 +352,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesInResidentCity(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesInResidentCity(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesInResidentCity(): Promise<CreateCommentInput>;
 
   listActiveIssuesInResidentDistrict(
     target: JudoIdentifiable<ServiceUserIssues>,
@@ -364,6 +364,13 @@ export interface ServiceUserIssuesService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
+  createProArgumentForActiveIssuesInResidentDistrict(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<void>;
+
+  getTemplateForCreateProArgumentForActiveIssuesInResidentDistrict(): Promise<CreateArgumentInput>;
+
   createConArgumentForActiveIssuesInResidentDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CreateArgumentInput,
@@ -371,12 +378,20 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCreateConArgumentForActiveIssuesInResidentDistrict(): Promise<CreateArgumentInput>;
 
-  createProArgumentForActiveIssuesInResidentDistrict(
+  addToFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForActiveIssuesInResidentDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateArgumentInput,
+    target: CreateCommentInput,
   ): Promise<void>;
 
-  getTemplateForCreateProArgumentForActiveIssuesInResidentDistrict(): Promise<CreateArgumentInput>;
+  getTemplateForCreateCommentForActiveIssuesInResidentDistrict(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForActiveIssuesInResidentDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -385,22 +400,7 @@ export interface ServiceUserIssuesService {
 
   getTemplateForCloseDebateForActiveIssuesInResidentDistrict(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForActiveIssuesInResidentDistrict(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void>;
-
-  getTemplateForCreateCommentForActiveIssuesInResidentDistrict(): Promise<CreateCommentInput>;
 
   createIssue(target: ServiceCreateIssueInput): Promise<ServiceIssueStored>;
 

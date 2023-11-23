@@ -48,7 +48,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageProp
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceYesNoVoteDefinition;
+  data: ServiceYesNoVoteDefinitionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceYesNoVoteDefinition, value: any) => void;

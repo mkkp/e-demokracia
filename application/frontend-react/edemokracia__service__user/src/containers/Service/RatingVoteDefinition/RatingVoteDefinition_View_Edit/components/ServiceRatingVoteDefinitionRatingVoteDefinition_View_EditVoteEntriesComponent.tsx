@@ -85,7 +85,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEn
   actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceRatingVoteDefinition;
+  ownerData: ServiceRatingVoteDefinitionStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -201,7 +201,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0UnFkooAEe6F9LXBn0VWTg',
+      id: '_ZF-7AIpWEe6AtscSh_kd4w',
       attributeName: 'created',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -210,7 +210,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
 
     {
-      id: '_0UnsoooAEe6F9LXBn0VWTg',
+      id: '_ZF-7BIpWEe6AtscSh_kd4w',
       attributeName: 'createdBy',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -219,7 +219,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
 
     {
-      id: '_0UoTsIoAEe6F9LXBn0VWTg',
+      id: '_ZF_iE4pWEe6AtscSh_kd4w',
       attributeName: 'value',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
@@ -293,7 +293,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   }, [selectionModel]);
 
   async function fetchData() {
-    if (!isLoading) {
+    if (!isLoading && ownerData.__signedIdentifier) {
       setIsLoading(true);
 
       try {

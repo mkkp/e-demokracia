@@ -41,7 +41,7 @@ export interface ServiceCommentComment_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceComment;
+  data: ServiceCommentStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceComment, value: any) => void;

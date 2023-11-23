@@ -139,6 +139,7 @@ export interface ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps 
 
 // XMIID: User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationUnmappedInputPageDefinition
 // Name: service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form
+// Open in dialog: true
 export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputForm(
   props: ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps,
 ) {

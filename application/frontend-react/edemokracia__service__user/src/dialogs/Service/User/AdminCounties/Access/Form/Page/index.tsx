@@ -111,6 +111,7 @@ export interface ServiceUserAdminCountiesAccessFormPageProps {
 
 // XMIID: User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessFormPageDefinition
 // Name: service::User::adminCounties::Access::Form::Page
+// Open in dialog: true
 export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUserAdminCountiesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 

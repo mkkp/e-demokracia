@@ -89,7 +89,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesCompone
   actions: ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceIssueCategory;
+  ownerData: ServiceIssueCategoryStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -182,14 +182,14 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0StBEooAEe6F9LXBn0VWTg',
+      id: '_ZDtqIIpWEe6AtscSh_kd4w',
       attributeName: 'title',
       label: t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0StoIIoAEe6F9LXBn0VWTg',
+      id: '_ZDtqJIpWEe6AtscSh_kd4w',
       attributeName: 'description',
       label: t('service.IssueCategory.IssueCategory_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

@@ -69,7 +69,7 @@ export interface ServiceVoteDefinitionVoteDefinition_FormProps {
   refreshCounter: number;
   actions: ServiceVoteDefinitionVoteDefinition_FormActionDefinitions;
 
-  data: ServiceVoteDefinition;
+  data: ServiceVoteDefinitionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

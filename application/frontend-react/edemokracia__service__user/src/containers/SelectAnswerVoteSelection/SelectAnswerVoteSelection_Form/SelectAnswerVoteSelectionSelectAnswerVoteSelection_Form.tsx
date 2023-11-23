@@ -65,7 +65,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormProps {
   refreshCounter: number;
   actions: SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions;
 
-  data: SelectAnswerVoteSelection;
+  data: SelectAnswerVoteSelectionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

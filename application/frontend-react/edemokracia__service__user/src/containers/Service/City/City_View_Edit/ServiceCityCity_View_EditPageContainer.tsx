@@ -38,7 +38,7 @@ export interface ServiceCityCity_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceCity;
+  data: ServiceCityStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCity, value: any) => void;

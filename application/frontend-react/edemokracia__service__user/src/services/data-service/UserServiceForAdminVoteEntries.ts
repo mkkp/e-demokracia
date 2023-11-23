@@ -46,6 +46,17 @@ export interface UserServiceForAdminVoteEntries {
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored>;
 
+  voteYesNoForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: YesNoVoteInput): Promise<void>;
+
+  getTemplateForVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput>;
+
+  voteYesNoAbstainForVoteDefinition(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: YesNoAbstainVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput>;
+
   voteRatingForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
 
   getTemplateForVoteRatingForVoteDefinition(): Promise<RatingVoteInput>;
@@ -61,14 +72,4 @@ export interface UserServiceForAdminVoteEntries {
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
-  voteYesNoForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: YesNoVoteInput): Promise<void>;
-
-  getTemplateForVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput>;
-
-  voteYesNoAbstainForVoteDefinition(
-    owner: JudoIdentifiable<ServiceVoteDefinition>,
-    target: YesNoAbstainVoteInput,
-  ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput>;
 }

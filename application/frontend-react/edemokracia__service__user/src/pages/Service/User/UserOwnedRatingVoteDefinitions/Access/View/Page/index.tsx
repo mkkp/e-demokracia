@@ -89,6 +89,8 @@ const ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageContainer = l
 
 // XMIID: User/(esm/_s3Fx0FuiEe6rLvwZQOpyUA)/AccessViewPageDefinition
 // Name: service::User::userOwnedRatingVoteDefinitions::Access::View::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -145,7 +147,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
 
   const pageQueryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,maxRateValue,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
+      '{userHasVoteEntry,maxRateValue,created,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
   };
 
   // Pandino Action overrides
@@ -261,6 +263,18 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       setIsLoading(false);
     }
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceRatingVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceRatingVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
   const userVoteEntryOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
     await openServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(target!);
 
@@ -294,18 +308,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       queryCustomizer,
     );
   };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceRatingVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceRatingVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions = {
     backAction,
@@ -314,12 +316,12 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
     updateAction,
     voteAction,
     takeBackVoteForRatingVoteDefinitionAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
     userVoteEntryOpenPageAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
     ...(customActions ?? {}),
   };
 

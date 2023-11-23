@@ -81,6 +81,8 @@ const ServiceCommentComment_View_EditPageContainer = lazy(
 
 // XMIID: User/(esm/_UjefsIybEe2VSOmaAz6G9Q)/RelationFeatureView
 // Name: service::Issue::comments::Relation::View::Page
+// Access: false
+// Single Access: false
 export default function ServiceIssueCommentsRelationViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -236,10 +238,6 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setIsLoading(false);
     }
   };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceCommentVotesRelationTablePage((target || data).__signedIdentifier));
-  };
   const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceCommentCreatedByRelationViewPage(target!);
 
@@ -247,14 +245,18 @@ export default function ServiceIssueCommentsRelationViewPage() {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceCommentVotesRelationTablePage((target || data).__signedIdentifier));
+  };
 
   const actions: ServiceCommentComment_View_EditPageActions = {
     backAction,
     refreshAction,
     voteDownForCommentAction,
     voteUpForCommentAction,
-    votesOpenPageAction,
     createdByOpenPageAction,
+    votesOpenPageAction,
     ...(customActions ?? {}),
   };
 

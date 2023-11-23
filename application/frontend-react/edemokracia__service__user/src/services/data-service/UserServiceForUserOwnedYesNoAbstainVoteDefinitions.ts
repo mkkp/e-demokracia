@@ -50,13 +50,25 @@ export interface UserServiceForUserOwnedYesNoAbstainVoteDefinitions {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
 
+  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+
   createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
 
   getTemplateForCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
 
-  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
-  getTemplateForCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+  deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForIssue(): Promise<CreateCommentInput>;
+
+  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   closeDebateForIssue(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -65,19 +77,7 @@ export interface UserServiceForUserOwnedYesNoAbstainVoteDefinitions {
 
   getTemplateForCloseDebateForIssue(): Promise<CloseDebateInput>;
 
-  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-
-  getTemplateForCreateCommentForIssue(): Promise<CreateCommentInput>;
 
   listVoteEntries(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,

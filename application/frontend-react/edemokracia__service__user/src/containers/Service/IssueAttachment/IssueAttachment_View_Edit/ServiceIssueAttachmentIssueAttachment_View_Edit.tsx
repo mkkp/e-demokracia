@@ -67,7 +67,7 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditProps {
   refreshCounter: number;
   actions: ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions;
 
-  data: ServiceIssueAttachment;
+  data: ServiceIssueAttachmentStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

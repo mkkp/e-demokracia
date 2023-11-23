@@ -41,7 +41,7 @@ export interface ServiceProPro_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServicePro;
+  data: ServiceProStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServicePro, value: any) => void;

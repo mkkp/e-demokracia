@@ -54,6 +54,8 @@ const ServiceSimpleVoteSimpleVote_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_qbA7kGksEe25ONJ3V89cVA)/RelationFeatureTable
 // Name: service::Comment::votes::Relation::Table::Page
+// Access: false
+// Single Access: false
 export default function ServiceCommentVotesRelationTablePage() {
   // Router params section
   const { signedIdentifier } = useParams();

@@ -91,7 +91,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceSelectAnswerVoteDefinition;
+  ownerData: ServiceSelectAnswerVoteDefinitionStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -189,7 +189,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0UqI4IoAEe6F9LXBn0VWTg',
+      id: '_ZGBXQopWEe6AtscSh_kd4w',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.description', {
         defaultValue: 'Description',
@@ -198,7 +198,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_0UqI5IoAEe6F9LXBn0VWTg',
+      id: '_ZGB-UopWEe6AtscSh_kd4w',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.title', {
         defaultValue: 'Title',

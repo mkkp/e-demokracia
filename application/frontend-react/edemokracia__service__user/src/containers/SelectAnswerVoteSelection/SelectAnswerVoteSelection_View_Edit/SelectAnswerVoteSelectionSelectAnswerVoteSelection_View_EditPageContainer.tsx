@@ -48,7 +48,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPag
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: SelectAnswerVoteSelection;
+  data: SelectAnswerVoteSelectionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof SelectAnswerVoteSelection, value: any) => void;

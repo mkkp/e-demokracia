@@ -39,7 +39,7 @@ export interface ServiceConCon_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceCon;
+  data: ServiceConStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCon, value: any) => void;

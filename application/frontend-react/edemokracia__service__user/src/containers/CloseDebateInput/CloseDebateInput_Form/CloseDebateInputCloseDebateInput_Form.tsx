@@ -63,7 +63,7 @@ export interface CloseDebateInputCloseDebateInput_FormProps {
   refreshCounter: number;
   actions: CloseDebateInputCloseDebateInput_FormActionDefinitions;
 
-  data: CloseDebateInput;
+  data: CloseDebateInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -102,13 +102,13 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_0LNR8IoAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y7PDkIpWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="debate::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_0LNR8IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y7PDkIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t('CloseDebateInput.CloseDebateInput_Form.debate.Icon', { defaultValue: 'Close debate' })}
                   </Typography>
                 </Grid>

@@ -52,6 +52,8 @@ const ServiceServiceUserServiceUser_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_hvVS8GkuEe25ONJ3V89cVA)/AccessTablePageDefinition
 // Name: service::User::adminUsers::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserAdminUsersAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

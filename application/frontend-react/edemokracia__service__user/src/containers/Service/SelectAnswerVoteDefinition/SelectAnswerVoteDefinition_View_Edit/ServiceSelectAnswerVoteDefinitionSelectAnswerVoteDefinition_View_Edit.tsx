@@ -89,7 +89,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   refreshCounter: number;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionDefinitions;
 
-  data: ServiceSelectAnswerVoteDefinition;
+  data: ServiceSelectAnswerVoteDefinitionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -130,12 +130,12 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_0K6XAooAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y60M0opWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_0K6XAooAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y60M0opWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t(
                       'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                       { defaultValue: 'My vote entry' },
@@ -494,7 +494,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="_0Uph0IoAEe6F9LXBn0VWTg)/LabelWrapper"
+                      id="_ZGAwNIpWEe6AtscSh_kd4w)/LabelWrapper"
                       container
                       direction="column"
                       alignItems="center"
@@ -504,7 +504,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="voteSelections::Icon" sx={{ marginRight: 1 }} />
-                          <Typography id="_0Uph0IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                          <Typography id="_ZGAwNIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                             {t(
                               'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.voteSelections.Icon',
                               { defaultValue: 'VoteSelections' },
@@ -543,7 +543,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0K9aUIoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_Y64eQIpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -552,7 +552,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_0K9aUIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_Y64eQIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.entries.Label', {
                   defaultValue: 'Entries',
                 })}

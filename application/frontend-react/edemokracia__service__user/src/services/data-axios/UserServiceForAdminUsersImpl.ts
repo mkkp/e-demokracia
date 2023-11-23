@@ -39,7 +39,7 @@ export class UserServiceForAdminUsersImpl extends JudoAxiosService implements Us
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>> {
-    const path = '/User/adminUsers/~list';
+    const path = '/service/User/adminUsers/~list';
     const response = await this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},

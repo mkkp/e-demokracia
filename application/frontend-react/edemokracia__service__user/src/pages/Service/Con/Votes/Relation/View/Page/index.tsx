@@ -73,6 +73,8 @@ const ServiceSimpleVoteSimpleVote_View_EditPageContainer = lazy(
 
 // XMIID: User/(esm/_qZ3sEGksEe25ONJ3V89cVA)/RelationFeatureView
 // Name: service::Con::votes::Relation::View::Page
+// Access: false
+// Single Access: false
 export default function ServiceConVotesRelationViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();

@@ -107,6 +107,7 @@ export interface ServiceIssueIssue_View_EditIssueIssueTypeTabularReferenceFieldL
 
 // XMIID: User/(esm/_FHpVENvSEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition
 // Name: service::Issue::Issue_View_Edit::issue::issueType::TabularReferenceField::Link::Set::Selector::Page
+// Open in dialog: true
 export default function ServiceIssueIssue_View_EditIssueIssueTypeTabularReferenceFieldLinkSetSelectorPage(
   props: ServiceIssueIssue_View_EditIssueIssueTypeTabularReferenceFieldLinkSetSelectorPageProps,
 ) {

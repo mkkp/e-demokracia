@@ -71,7 +71,7 @@ export interface ServiceUserManagerUserManager_View_EditProps {
   refreshCounter: number;
   actions: ServiceUserManagerUserManager_View_EditActionDefinitions;
 
-  data: ServiceUserManager;
+  data: ServiceUserManagerStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

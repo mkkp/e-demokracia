@@ -118,6 +118,7 @@ export interface ServiceUserProfileResidentDistrictRelationViewPageProps {
 
 // XMIID: User/(esm/_CQxg0FvSEe6jm_SkPSYEYw)/RelationFeatureView
 // Name: service::UserProfile::residentDistrict::Relation::View::Page
+// Open in dialog: true
 export default function ServiceUserProfileResidentDistrictRelationViewPage(
   props: ServiceUserProfileResidentDistrictRelationViewPageProps,
 ) {

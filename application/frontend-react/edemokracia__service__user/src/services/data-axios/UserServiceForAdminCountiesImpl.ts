@@ -30,7 +30,7 @@ export class UserServiceForAdminCountiesImpl extends JudoAxiosService implements
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>> {
-    const path = '/User/adminCounties/~list';
+    const path = '/service/User/adminCounties/~list';
     const response = await this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
@@ -86,7 +86,7 @@ export class UserServiceForAdminCountiesImpl extends JudoAxiosService implements
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
   async create(target: ServiceCounty): Promise<ServiceCountyStored> {
-    const path = '/User/adminCounties/~create';
+    const path = '/service/User/adminCounties/~create';
     const response = await this.axios.post(this.getPathForActor(path), target);
 
     return response.data;

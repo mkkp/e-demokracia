@@ -38,7 +38,7 @@ export interface ServiceCommentComment_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceComment;
+  data: ServiceCommentStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceComment, value: any) => void;

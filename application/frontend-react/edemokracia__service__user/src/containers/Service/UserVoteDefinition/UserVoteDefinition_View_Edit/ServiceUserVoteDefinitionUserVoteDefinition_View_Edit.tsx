@@ -90,7 +90,7 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditProps {
   refreshCounter: number;
   actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions;
 
-  data: ServiceUserVoteDefinition;
+  data: ServiceUserVoteDefinitionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

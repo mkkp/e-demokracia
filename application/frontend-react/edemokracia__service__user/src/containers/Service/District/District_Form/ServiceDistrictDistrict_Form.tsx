@@ -61,7 +61,7 @@ export interface ServiceDistrictDistrict_FormProps {
   refreshCounter: number;
   actions: ServiceDistrictDistrict_FormActionDefinitions;
 
-  data: ServiceDistrict;
+  data: ServiceDistrictStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

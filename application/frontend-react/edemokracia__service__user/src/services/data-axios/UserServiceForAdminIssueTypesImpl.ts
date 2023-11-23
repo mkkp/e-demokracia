@@ -23,7 +23,7 @@ export class UserServiceForAdminIssueTypesImpl extends JudoAxiosService implemen
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>> {
-    const path = '/User/adminIssueTypes/~list';
+    const path = '/service/User/adminIssueTypes/~list';
     const response = await this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
@@ -79,7 +79,7 @@ export class UserServiceForAdminIssueTypesImpl extends JudoAxiosService implemen
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
   async create(target: ServiceIssueType): Promise<ServiceIssueTypeStored> {
-    const path = '/User/adminIssueTypes/~create';
+    const path = '/service/User/adminIssueTypes/~create';
     const response = await this.axios.post(this.getPathForActor(path), target);
 
     return response.data;

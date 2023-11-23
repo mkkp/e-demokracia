@@ -48,7 +48,7 @@ export interface ServiceServiceUserServiceUser_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceServiceUser;
+  data: ServiceServiceUserStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceServiceUser, value: any) => void;

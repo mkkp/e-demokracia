@@ -89,7 +89,7 @@ export interface ServiceProPro_View_EditProps {
   refreshCounter: number;
   actions: ServiceProPro_View_EditActionDefinitions;
 
-  data: ServicePro;
+  data: ServiceProStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -128,13 +128,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_0KCNQYoAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y5n6AYpWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="pro::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_0KCNQYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y5n6AYpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t('service.Pro.Pro_View_Edit.pro.Icon', { defaultValue: 'Pro' })}
                   </Typography>
                 </Grid>
@@ -401,13 +401,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
           spacing={2}
         >
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_0KzpUYoAEe6F9LXBn0VWTg)/LabelWrapper">
+            <Card id="_Y6rp8YpWEe6AtscSh_kd4w)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-                      <Typography id="_0KzpUYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                      <Typography id="_Y6rp8YpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                         {t('service.Pro.Pro_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
                       </Typography>
                     </Grid>
@@ -475,13 +475,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
           </Grid>
 
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_0K1egIoAEe6F9LXBn0VWTg)/LabelWrapper">
+            <Card id="_Y6uGMIpWEe6AtscSh_kd4w)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-                      <Typography id="_0K1egIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                      <Typography id="_Y6uGMIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                         {t('service.Pro.Pro_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
                       </Typography>
                     </Grid>

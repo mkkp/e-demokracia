@@ -30,6 +30,9 @@ import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPage } from '~/routes';
 import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
+import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
+import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
+import { useServiceIssueIssue_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateProArgument/Input/Form';
 import type { ServiceIssueIssue_TablePageActions } from '~/containers/Service/Issue/Issue_Table/ServiceIssueIssue_TablePageContainer';
 import type {
   IssueScope,
@@ -63,6 +66,8 @@ const ServiceIssueIssue_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_jlpVUFrWEe6gN-oVBDDIOQ)/RelationFeatureTable
 // Name: service::UserIssues::activeIssuesInActivityCities::Relation::Table::Page
+// Access: false
+// Single Access: false
 export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationTablePage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -91,6 +96,11 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationTab
 
   // Dialog hooks
   const openServiceIssueIssue_View_EditCloseDebateInputForm = useServiceIssueIssue_View_EditCloseDebateInputForm();
+  const openServiceIssueIssue_View_EditCreateCommentInputForm = useServiceIssueIssue_View_EditCreateCommentInputForm();
+  const openServiceIssueIssue_View_EditCreateConArgumentInputForm =
+    useServiceIssueIssue_View_EditCreateConArgumentInputForm();
+  const openServiceIssueIssue_View_EditCreateProArgumentInputForm =
+    useServiceIssueIssue_View_EditCreateProArgumentInputForm();
 
   // Calculated section
   const title: string = t('service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
@@ -130,8 +140,62 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const closeDebateAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
+  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.addToFavorites(target!);
+
+      if (customActions?.postAddToFavoritesForIssueAction) {
+        await customActions.postAddToFavoritesForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const createProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const deleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.deleteOrArchive(target!);
+
+      if (customActions?.postDeleteOrArchiveForIssueAction) {
+        await customActions.postDeleteOrArchiveForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const createCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -143,54 +207,6 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationTab
 
       if (customActions?.postRemoveFromFavoritesForIssueAction) {
         await customActions.postRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        enqueueSnackbar(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
-        );
-
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.closeVote(target!);
-
-      if (customActions?.postCloseVoteForIssueAction) {
-        await customActions.postCloseVoteForIssueAction(target!);
-      } else {
-        enqueueSnackbar(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
-        );
-
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const deleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.deleteOrArchive(target!);
-
-      if (customActions?.postDeleteOrArchiveForIssueAction) {
-        await customActions.postDeleteOrArchiveForIssueAction(target!);
       } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -232,13 +248,25 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationTab
       setIsLoading(false);
     }
   };
-  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const createConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const closeDebateAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.addToFavorites(target!);
+      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.closeVote(target!);
 
-      if (customActions?.postAddToFavoritesForIssueAction) {
-        await customActions.postAddToFavoritesForIssueAction(target!);
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction(target!);
       } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -262,12 +290,15 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationTab
     openPageAction,
     filterAction,
     refreshAction,
-    closeDebateAction,
-    removeFromFavoritesForIssueAction,
-    closeVoteForIssueAction,
-    deleteOrArchiveForIssueAction,
-    activateForIssueAction,
     addToFavoritesForIssueAction,
+    createProArgumentAction,
+    deleteOrArchiveForIssueAction,
+    createCommentAction,
+    removeFromFavoritesForIssueAction,
+    activateForIssueAction,
+    createConArgumentAction,
+    closeDebateAction,
+    closeVoteForIssueAction,
     ...(customActions ?? {}),
   };
 

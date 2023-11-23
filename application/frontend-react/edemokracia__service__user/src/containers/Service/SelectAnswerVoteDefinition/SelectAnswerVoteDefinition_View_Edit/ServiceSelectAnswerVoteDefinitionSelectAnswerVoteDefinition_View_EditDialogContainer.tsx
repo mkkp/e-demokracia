@@ -53,7 +53,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceSelectAnswerVoteDefinition;
+  data: ServiceSelectAnswerVoteDefinitionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteDefinition, value: any) => void;

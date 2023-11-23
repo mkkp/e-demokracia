@@ -64,7 +64,7 @@ export interface CreateCommentInputCreateCommentInput_FormProps {
   refreshCounter: number;
   actions: CreateCommentInputCreateCommentInput_FormActionDefinitions;
 
-  data: CreateCommentInput;
+  data: CreateCommentInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

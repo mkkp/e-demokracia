@@ -47,7 +47,7 @@ export interface ServiceCreateUserInputCreateUserInput_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceCreateUserInput;
+  data: ServiceCreateUserInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void;
@@ -79,7 +79,7 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
     setValidation,
   } = props;
   const queryCustomizer: ServiceCreateUserInputQueryCustomizer = {
-    _mask: '{firstName,lastName,phone,userName,email,hasAdminAccess}',
+    _mask: '{lastName,firstName,phone,userName,email,hasAdminAccess}',
   };
 
   return (
@@ -152,7 +152,7 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
         {editMode && actions.createUserForUserManagerAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormCallButton/(discriminator/_0D364ooAEe6F9LXBn0VWTg)"
+              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormCallButton/(discriminator/_YoSSYIpWEe6AtscSh_kd4w)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

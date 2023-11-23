@@ -53,7 +53,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditDialog
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceRatingVoteDefinition;
+  data: ServiceRatingVoteDefinitionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceRatingVoteDefinition, value: any) => void;
@@ -86,7 +86,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
   } = props;
   const queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,maxRateValue,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
+      '{userHasVoteEntry,maxRateValue,created,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
   };
 
   return (

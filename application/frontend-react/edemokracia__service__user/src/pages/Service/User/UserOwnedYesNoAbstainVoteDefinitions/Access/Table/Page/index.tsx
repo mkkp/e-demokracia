@@ -61,6 +61,8 @@ const ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageConta
 
 // XMIID: User/(esm/_9lF1oFuhEe6rLvwZQOpyUA)/AccessTablePageDefinition
 // Name: service::User::userOwnedYesNoAbstainVoteDefinitions::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

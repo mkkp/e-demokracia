@@ -122,6 +122,7 @@ export interface ServiceIssueCountyRelationViewPageProps {
 
 // XMIID: User/(esm/_286p0NvTEe2Bgcx6em3jZg)/RelationFeatureView
 // Name: service::Issue::county::Relation::View::Page
+// Open in dialog: true
 export default function ServiceIssueCountyRelationViewPage(props: ServiceIssueCountyRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 

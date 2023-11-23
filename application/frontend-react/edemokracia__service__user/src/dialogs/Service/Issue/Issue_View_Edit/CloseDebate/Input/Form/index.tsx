@@ -126,6 +126,7 @@ export interface ServiceIssueIssue_View_EditCloseDebateInputFormProps {
 
 // XMIID: User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition
 // Name: service::Issue::Issue_View_Edit::closeDebate::Input::Form
+// Open in dialog: true
 export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   props: ServiceIssueIssue_View_EditCloseDebateInputFormProps,
 ) {

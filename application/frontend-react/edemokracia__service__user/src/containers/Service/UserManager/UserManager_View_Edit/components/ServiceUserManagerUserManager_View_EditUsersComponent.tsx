@@ -83,7 +83,7 @@ export interface ServiceUserManagerUserManager_View_EditUsersComponentProps {
   actions: ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceUserManager;
+  ownerData: ServiceUserManagerStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -251,7 +251,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0dmCcIoAEe6F9LXBn0VWTg',
+      id: '_ZM1w8IpWEe6AtscSh_kd4w',
       attributeName: 'representation',
       label: t('service.UserManager.UserManager_View_Edit.representation', {
         defaultValue: 'Representation',
@@ -260,49 +260,49 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     },
 
     {
-      id: '_0dmpgIoAEe6F9LXBn0VWTg',
+      id: '_ZM1w9IpWEe6AtscSh_kd4w',
       attributeName: 'userName',
       label: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0dmphIoAEe6F9LXBn0VWTg',
+      id: '_ZM2YAopWEe6AtscSh_kd4w',
       attributeName: 'firstName',
       label: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0dnQkooAEe6F9LXBn0VWTg',
+      id: '_ZM2_EopWEe6AtscSh_kd4w',
       attributeName: 'lastName',
       label: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0dn3oIoAEe6F9LXBn0VWTg',
+      id: '_ZM3mIopWEe6AtscSh_kd4w',
       attributeName: 'phone',
       label: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0dn3pIoAEe6F9LXBn0VWTg',
+      id: '_ZM4NMopWEe6AtscSh_kd4w',
       attributeName: 'email',
       label: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0doesooAEe6F9LXBn0VWTg',
+      id: '_ZM40QYpWEe6AtscSh_kd4w',
       attributeName: 'isAdmin',
       label: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
       filterType: FilterType.boolean,
     },
 
     {
-      id: '_0dpFwooAEe6F9LXBn0VWTg',
+      id: '_ZM5bUIpWEe6AtscSh_kd4w',
       attributeName: 'created',
       label: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
@@ -374,7 +374,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   }, [selectionModel]);
 
   async function fetchData() {
-    if (!isLoading) {
+    if (!isLoading && ownerData.__signedIdentifier) {
       setIsLoading(true);
 
       try {

@@ -128,6 +128,7 @@ export interface ServiceUserManagerUserManager_View_EditCreateUserInputFormProps
 
 // XMIID: User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition
 // Name: service::UserManager::UserManager_View_Edit::createUser::Input::Form
+// Open in dialog: true
 export default function ServiceUserManagerUserManager_View_EditCreateUserInputForm(
   props: ServiceUserManagerUserManager_View_EditCreateUserInputFormProps,
 ) {

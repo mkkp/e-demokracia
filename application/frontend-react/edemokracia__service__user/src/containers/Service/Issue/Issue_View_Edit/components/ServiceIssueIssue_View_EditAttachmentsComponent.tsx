@@ -91,7 +91,7 @@ export interface ServiceIssueIssue_View_EditAttachmentsComponentProps {
   actions: ServiceIssueIssue_View_EditAttachmentsComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceIssue;
+  ownerData: ServiceIssueStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -167,7 +167,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_0SflsIoAEe6F9LXBn0VWTg)-download"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_ZDg10IpWEe6AtscSh_kd4w)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -178,7 +178,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_0SflsIoAEe6F9LXBn0VWTg)-view"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_ZDg10IpWEe6AtscSh_kd4w)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -235,14 +235,14 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0SgMwooAEe6F9LXBn0VWTg',
+      id: '_ZDhc4opWEe6AtscSh_kd4w',
       attributeName: 'link',
       label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0Sgz04oAEe6F9LXBn0VWTg',
+      id: '_ZDiD84pWEe6AtscSh_kd4w',
       attributeName: 'type',
       label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

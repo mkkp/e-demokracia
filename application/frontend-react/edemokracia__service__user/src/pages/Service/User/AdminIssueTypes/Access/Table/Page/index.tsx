@@ -53,6 +53,8 @@ const ServiceIssueTypeIssueType_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessTablePageDefinition
 // Name: service::User::adminIssueTypes::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserAdminIssueTypesAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

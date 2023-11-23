@@ -85,7 +85,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceSelectAnswerVoteDefinition;
+  ownerData: ServiceSelectAnswerVoteDefinitionStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -198,7 +198,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0UtMMIoAEe6F9LXBn0VWTg',
+      id: '_ZGFBoIpWEe6AtscSh_kd4w',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -207,7 +207,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_0UtMNIoAEe6F9LXBn0VWTg',
+      id: '_ZGFBpIpWEe6AtscSh_kd4w',
       attributeName: 'createdBy',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -216,7 +216,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_0UtzQooAEe6F9LXBn0VWTg',
+      id: '_ZGFos4pWEe6AtscSh_kd4w',
       attributeName: 'valueRepresentation',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
         defaultValue: 'ValueRepresentation',
@@ -290,7 +290,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   }, [selectionModel]);
 
   async function fetchData() {
-    if (!isLoading) {
+    if (!isLoading && ownerData.__signedIdentifier) {
       setIsLoading(true);
 
       try {

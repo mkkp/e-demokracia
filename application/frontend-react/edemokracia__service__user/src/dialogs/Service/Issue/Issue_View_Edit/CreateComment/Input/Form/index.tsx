@@ -123,6 +123,7 @@ export interface ServiceIssueIssue_View_EditCreateCommentInputFormProps {
 
 // XMIID: User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationUnmappedInputPageDefinition
 // Name: service::Issue::Issue_View_Edit::createComment::Input::Form
+// Open in dialog: true
 export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
   props: ServiceIssueIssue_View_EditCreateCommentInputFormProps,
 ) {

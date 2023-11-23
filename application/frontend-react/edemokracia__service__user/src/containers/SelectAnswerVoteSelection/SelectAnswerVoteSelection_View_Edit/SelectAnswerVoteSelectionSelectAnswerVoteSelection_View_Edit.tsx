@@ -65,7 +65,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPro
   refreshCounter: number;
   actions: SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions;
 
-  data: SelectAnswerVoteSelection;
+  data: SelectAnswerVoteSelectionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

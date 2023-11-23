@@ -88,7 +88,7 @@ export interface ServiceDashboardDashboard_View_EditProps {
   refreshCounter: number;
   actions: ServiceDashboardDashboard_View_EditActionDefinitions;
 
-  data: ServiceDashboard;
+  data: ServiceDashboardStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

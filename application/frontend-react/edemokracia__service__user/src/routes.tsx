@@ -552,14 +552,14 @@ routes.push({
 });
 export const ROUTE_SERVICE_USER_ADMIN_USER_MANAGER_ACCESS_VIEW_PAGE_INTERFACE_KEY =
   'ServiceUserAdminUserManagerAccessViewPageRoute';
-export const routeToServiceUserAdminUserManagerAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/AdminUserManager/Access/View/Page/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+export const routeToServiceUserAdminUserManagerAccessViewPage = (): string =>
+  'Service/User/AdminUserManager/Access/View/Page';
 const ServiceUserAdminUserManagerAccessViewPage = lazy(
   () => import('./pages/Service/User/AdminUserManager/Access/View/Page'),
 );
 
 routes.push({
-  path: 'Service/User/AdminUserManager/Access/View/Page/:signedIdentifier',
+  path: 'Service/User/AdminUserManager/Access/View/Page',
   element: (
     <Suspense>
       <ComponentProxy
@@ -701,12 +701,11 @@ routes.push({
   ),
 });
 export const ROUTE_SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY = 'ServiceUserUserIssuesAccessViewPageRoute';
-export const routeToServiceUserUserIssuesAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/UserIssues/Access/View/Page/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+export const routeToServiceUserUserIssuesAccessViewPage = (): string => 'Service/User/UserIssues/Access/View/Page';
 const ServiceUserUserIssuesAccessViewPage = lazy(() => import('./pages/Service/User/UserIssues/Access/View/Page'));
 
 routes.push({
-  path: 'Service/User/UserIssues/Access/View/Page/:signedIdentifier',
+  path: 'Service/User/UserIssues/Access/View/Page',
   element: (
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}>
@@ -956,14 +955,14 @@ routes.push({
 });
 export const ROUTE_SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
   'ServiceUserUserVoteDefinitionsAccessViewPageRoute';
-export const routeToServiceUserUserVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/UserVoteDefinitions/Access/View/Page/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+export const routeToServiceUserUserVoteDefinitionsAccessViewPage = (): string =>
+  'Service/User/UserVoteDefinitions/Access/View/Page';
 const ServiceUserUserVoteDefinitionsAccessViewPage = lazy(
   () => import('./pages/Service/User/UserVoteDefinitions/Access/View/Page'),
 );
 
 routes.push({
-  path: 'Service/User/UserVoteDefinitions/Access/View/Page/:signedIdentifier',
+  path: 'Service/User/UserVoteDefinitions/Access/View/Page',
   element: (
     <Suspense>
       <ComponentProxy

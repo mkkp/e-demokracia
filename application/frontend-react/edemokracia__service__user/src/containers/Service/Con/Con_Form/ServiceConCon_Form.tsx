@@ -85,7 +85,7 @@ export interface ServiceConCon_FormProps {
   refreshCounter: number;
   actions: ServiceConCon_FormActionDefinitions;
 
-  data: ServiceCon;
+  data: ServiceConStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -355,7 +355,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0ODKkYoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_Y-fL4YpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -365,7 +365,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0ODKkYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_Y-fL4YpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.Con.Con_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>
@@ -395,7 +395,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0OZI0IoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_Y-6psIpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -405,7 +405,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0OZI0IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_Y-6psIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.Con.Con_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>

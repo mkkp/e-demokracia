@@ -85,7 +85,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntr
   actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceYesNoVoteDefinition;
+  ownerData: ServiceYesNoVoteDefinitionStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -207,7 +207,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0U9D0ooAEe6F9LXBn0VWTg',
+      id: '_ZGR18opWEe6AtscSh_kd4w',
       attributeName: 'value',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.value', { defaultValue: 'Value' }) as string,
       filterType: FilterType.enumeration,
@@ -215,7 +215,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     },
 
     {
-      id: '_0U9q44oAEe6F9LXBn0VWTg',
+      id: '_ZGSdAYpWEe6AtscSh_kd4w',
       attributeName: 'created',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -224,7 +224,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     },
 
     {
-      id: '_0U-R8YoAEe6F9LXBn0VWTg',
+      id: '_ZGTEEIpWEe6AtscSh_kd4w',
       attributeName: 'createdBy',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -298,7 +298,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
   }, [selectionModel]);
 
   async function fetchData() {
-    if (!isLoading) {
+    if (!isLoading && ownerData.__signedIdentifier) {
       setIsLoading(true);
 
       try {

@@ -46,7 +46,7 @@ export interface ServiceVoteDefinitionVoteDefinition_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceVoteDefinition;
+  data: ServiceVoteDefinitionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void;
@@ -78,7 +78,7 @@ export default function ServiceVoteDefinitionVoteDefinition_FormDialog(
     setValidation,
   } = props;
   const queryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
-    _mask: '{isYesNoAbstainType,created,isSelectAnswerType,description,title,isRatingType,closeAt,status,isYesNoType}',
+    _mask: '{isYesNoAbstainType,isSelectAnswerType,created,description,title,closeAt,isRatingType,status,isYesNoType}',
   };
 
   return (

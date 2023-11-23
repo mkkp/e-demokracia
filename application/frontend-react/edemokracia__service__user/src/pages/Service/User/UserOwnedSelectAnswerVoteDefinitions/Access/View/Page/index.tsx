@@ -94,6 +94,8 @@ const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageC
 
 // XMIID: User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessViewPageDefinition
 // Name: service::User::userOwnedSelectAnswerVoteDefinitions::Access::View::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -275,6 +277,44 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       }
     }
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
+  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
+    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteEntriesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const voteEntriesRefreshAction = async (
+    queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<ServiceSelectAnswerVoteEntryStored[]> => {
+    return serviceSelectAnswerVoteDefinitionServiceImpl.listVoteEntries(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      queryCustomizer,
+    );
+  };
   const voteSelectionsOpenPageAction = async (target?: ServiceSelectAnswerVoteSelectionStored) => {
     await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
 
@@ -370,44 +410,6 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       });
     });
   };
-  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
-    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const voteEntriesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const voteEntriesRefreshAction = async (
-    queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteEntryStored[]> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.listVoteEntries(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      queryCustomizer,
-    );
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
   const userVoteEntryOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
     await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
 
@@ -423,16 +425,16 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
     updateAction,
     takeBackVoteForSelectAnswerVoteDefinitionAction,
     voteAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    voteEntriesOpenPageAction,
+    voteEntriesFilterAction,
+    voteEntriesRefreshAction,
     voteSelectionsOpenPageAction,
     voteSelectionsFilterAction,
     voteSelectionsOpenFormAction,
     voteSelectionsDeleteAction,
     voteSelectionsBulkDeleteAction,
-    voteEntriesOpenPageAction,
-    voteEntriesFilterAction,
-    voteEntriesRefreshAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
     userVoteEntryOpenPageAction,
     ...(customActions ?? {}),
   };

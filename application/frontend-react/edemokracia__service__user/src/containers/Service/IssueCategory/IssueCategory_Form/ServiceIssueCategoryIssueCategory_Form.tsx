@@ -71,7 +71,7 @@ export interface ServiceIssueCategoryIssueCategory_FormProps {
   refreshCounter: number;
   actions: ServiceIssueCategoryIssueCategory_FormActionDefinitions;
 
-  data: ServiceIssueCategory;
+  data: ServiceIssueCategoryStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

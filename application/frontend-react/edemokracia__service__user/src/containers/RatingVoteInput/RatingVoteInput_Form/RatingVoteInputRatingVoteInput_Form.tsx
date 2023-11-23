@@ -61,7 +61,7 @@ export interface RatingVoteInputRatingVoteInput_FormProps {
   refreshCounter: number;
   actions: RatingVoteInputRatingVoteInput_FormActionDefinitions;
 
-  data: RatingVoteInput;
+  data: RatingVoteInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

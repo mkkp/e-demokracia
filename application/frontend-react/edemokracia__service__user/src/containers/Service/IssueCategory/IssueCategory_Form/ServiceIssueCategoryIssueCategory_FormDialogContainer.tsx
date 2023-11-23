@@ -46,7 +46,7 @@ export interface ServiceIssueCategoryIssueCategory_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceIssueCategory;
+  data: ServiceIssueCategoryStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void;

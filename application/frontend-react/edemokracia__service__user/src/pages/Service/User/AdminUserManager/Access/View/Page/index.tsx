@@ -77,10 +77,9 @@ const ServiceUserManagerUserManager_View_EditPageContainer = lazy(
 
 // XMIID: User/(esm/_mGqscFvaEe6bTb-1BwQgmA)/AccessViewPageDefinition
 // Name: service::User::adminUserManager::Access::View::Page
+// Access: true
+// Single Access: true
 export default function ServiceUserAdminUserManagerAccessViewPage() {
-  // Router params section
-  const { signedIdentifier } = useParams();
-
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -95,9 +94,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<ServiceUserManagerStored>({
-    __signedIdentifier: signedIdentifier,
-  } as ServiceUserManagerStored);
+  const [data, setData] = useState<ServiceUserManagerStored>({} as ServiceUserManagerStored);
   const [validation, setValidation] = useState<Map<keyof ServiceUserManager, string>>(
     new Map<keyof ServiceUserManager, string>(),
   );
@@ -164,10 +161,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForAdminUserManagerImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
-      );
+      const result = await userServiceForAdminUserManagerImpl.refresh(singletonHost.current, pageQueryCustomizer);
 
       setData(result);
 
@@ -240,10 +234,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   const usersRefreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
-    return userServiceForAdminUserManagerImpl.listUsers(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      queryCustomizer,
-    );
+    return userServiceForAdminUserManagerImpl.listUsers(singletonHost.current, queryCustomizer);
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
     return await userServiceForAdminUserManagerImpl.refreshForAdminUserManager({

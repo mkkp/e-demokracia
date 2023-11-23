@@ -87,7 +87,7 @@ export interface ServiceCountyCounty_View_EditCitiesComponentProps {
   actions: ServiceCountyCounty_View_EditCitiesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceCounty;
+  ownerData: ServiceCountyStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -164,7 +164,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0PYAQooAEe6F9LXBn0VWTg',
+      id: '_ZAJ_0YpWEe6AtscSh_kd4w',
       attributeName: 'name',
       label: t('service.County.County_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,

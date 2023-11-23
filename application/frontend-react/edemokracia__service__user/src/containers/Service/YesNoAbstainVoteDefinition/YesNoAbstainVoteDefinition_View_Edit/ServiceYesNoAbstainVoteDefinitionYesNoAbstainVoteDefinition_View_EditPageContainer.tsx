@@ -48,7 +48,7 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceYesNoAbstainVoteDefinition;
+  data: ServiceYesNoAbstainVoteDefinitionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteDefinition, value: any) => void;

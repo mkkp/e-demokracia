@@ -122,6 +122,7 @@ export interface ServiceCreateIssueInputCountyRelationViewPageProps {
 
 // XMIID: User/(esm/_7lJ44NvWEe2Bgcx6em3jZg)/RelationFeatureView
 // Name: service::CreateIssueInput::county::Relation::View::Page
+// Open in dialog: true
 export default function ServiceCreateIssueInputCountyRelationViewPage(
   props: ServiceCreateIssueInputCountyRelationViewPageProps,
 ) {

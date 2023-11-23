@@ -87,7 +87,7 @@ export interface ServiceCityCity_View_EditDistrictsComponentProps {
   actions: ServiceCityCity_View_EditDistrictsComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceCity;
+  ownerData: ServiceCityStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -164,7 +164,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0OBVYIoAEe6F9LXBn0VWTg',
+      id: '_Y-cvoopWEe6AtscSh_kd4w',
       attributeName: 'name',
       label: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,

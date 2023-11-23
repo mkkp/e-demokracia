@@ -61,7 +61,7 @@ export interface ServiceCityCity_FormProps {
   refreshCounter: number;
   actions: ServiceCityCity_FormActionDefinitions;
 
-  data: ServiceCity;
+  data: ServiceCityStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

@@ -51,7 +51,7 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceYesNoVoteEntry;
+  data: ServiceYesNoVoteEntryStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceYesNoVoteEntry, value: any) => void;

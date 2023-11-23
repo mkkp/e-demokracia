@@ -65,7 +65,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   refreshCounter: number;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionDefinitions;
 
-  data: CloseDebateOutputVoteDefinitionReference;
+  data: CloseDebateOutputVoteDefinitionReferenceStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

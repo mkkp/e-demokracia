@@ -39,7 +39,7 @@ export interface ServiceCityCity_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceCity;
+  data: ServiceCityStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCity, value: any) => void;

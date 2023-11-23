@@ -123,6 +123,7 @@ export interface ServiceIssueIssue_View_EditCreateConArgumentInputFormProps {
 
 // XMIID: User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition
 // Name: service::Issue::Issue_View_Edit::createConArgument::Input::Form
+// Open in dialog: true
 export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   props: ServiceIssueIssue_View_EditCreateConArgumentInputFormProps,
 ) {

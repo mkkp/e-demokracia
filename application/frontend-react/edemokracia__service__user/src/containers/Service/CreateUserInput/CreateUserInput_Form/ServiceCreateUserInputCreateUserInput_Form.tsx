@@ -73,7 +73,7 @@ export interface ServiceCreateUserInputCreateUserInput_FormProps {
   refreshCounter: number;
   actions: ServiceCreateUserInputCreateUserInput_FormActionDefinitions;
 
-  data: ServiceCreateUserInput;
+  data: ServiceCreateUserInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -114,13 +114,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_0KrtgIoAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y6h48IpWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="security::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_0KrtgIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y6h48IpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t('service.CreateUserInput.CreateUserInput_Form.security.Icon', { defaultValue: 'Security' })}
                   </Typography>
                 </Grid>
@@ -200,13 +200,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_0KsUkooAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y6igAopWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="personal::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_0KsUkooAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y6igAopWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t('service.CreateUserInput.CreateUserInput_Form.personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>

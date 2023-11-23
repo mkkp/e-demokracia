@@ -36,7 +36,7 @@ export interface ServiceConCon_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceCon;
+  data: ServiceConStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCon, value: any) => void;
@@ -65,7 +65,7 @@ export default function ServiceConCon_View_EditPage(props: ServiceConCon_View_Ed
   } = props;
   const queryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{created,upVotes,description,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,description,upVotes,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   return (

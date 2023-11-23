@@ -39,7 +39,7 @@ export interface ServiceDashboardDashboard_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceDashboard;
+  data: ServiceDashboardStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceDashboard, value: any) => void;

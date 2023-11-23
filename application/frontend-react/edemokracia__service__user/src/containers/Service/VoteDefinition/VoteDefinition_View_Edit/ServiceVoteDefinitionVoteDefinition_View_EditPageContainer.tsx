@@ -46,7 +46,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceVoteDefinition;
+  data: ServiceVoteDefinitionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void;

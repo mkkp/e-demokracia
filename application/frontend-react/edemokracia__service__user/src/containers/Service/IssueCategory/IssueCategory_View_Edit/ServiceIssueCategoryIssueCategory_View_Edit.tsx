@@ -75,7 +75,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditProps {
   refreshCounter: number;
   actions: ServiceIssueCategoryIssueCategory_View_EditActionDefinitions;
 
-  data: ServiceIssueCategory;
+  data: ServiceIssueCategoryStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -191,7 +191,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0SsaAYoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_ZDtDEIpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -201,7 +201,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="subcategories::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0SsaAYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_ZDtDEIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Icon', {
                   defaultValue: 'Subcategories',
                 })}

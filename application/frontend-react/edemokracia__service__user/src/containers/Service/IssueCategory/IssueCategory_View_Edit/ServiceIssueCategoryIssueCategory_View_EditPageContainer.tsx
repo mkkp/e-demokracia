@@ -44,7 +44,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceIssueCategory;
+  data: ServiceIssueCategoryStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void;

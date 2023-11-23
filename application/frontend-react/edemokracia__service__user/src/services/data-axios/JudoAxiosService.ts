@@ -26,7 +26,7 @@ export abstract class JudoAxiosService {
 
   protected getPathForApp(path?: string): string {
     const tmp = path ? path : '';
-    return this.getBasePath('service' + (tmp.length && !tmp.startsWith('/') ? '/' + tmp : tmp));
+    return this.getBasePath('edemokracia' + (tmp.length && !tmp.startsWith('/') ? '/' + tmp : tmp));
   }
 
   protected getPathForActor(path?: string): string {

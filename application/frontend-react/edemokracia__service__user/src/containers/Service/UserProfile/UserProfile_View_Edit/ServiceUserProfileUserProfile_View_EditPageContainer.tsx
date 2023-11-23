@@ -43,7 +43,7 @@ export interface ServiceUserProfileUserProfile_View_EditPageProps {
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
-  data: ServiceUserProfile;
+  data: ServiceUserProfileStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void;
@@ -74,7 +74,7 @@ export default function ServiceUserProfileUserProfile_View_EditPage(
   } = props;
   const queryCustomizer: ServiceUserProfileQueryCustomizer = {
     _mask:
-      '{lastName,firstName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+      '{firstName,lastName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   return (

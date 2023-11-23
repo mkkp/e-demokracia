@@ -93,7 +93,7 @@ export interface ServiceUserIssuesUserIssues_View_EditProps {
   refreshCounter: number;
   actions: ServiceUserIssuesUserIssues_View_EditActionDefinitions;
 
-  data: ServiceUserIssues;
+  data: ServiceUserIssuesStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -268,7 +268,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="_0LKOoIoAEe6F9LXBn0VWTg)/LabelWrapper"
+                      id="_Y7Hu0IpWEe6AtscSh_kd4w)/LabelWrapper"
                       container
                       direction="column"
                       alignItems="center"
@@ -277,7 +277,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <Typography id="_0LKOoIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                          <Typography id="_Y7Hu0IpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                             {t('service.UserIssues.UserIssues_View_Edit.activeGlobal.Label', {
                               defaultValue: 'Global',
                             })}

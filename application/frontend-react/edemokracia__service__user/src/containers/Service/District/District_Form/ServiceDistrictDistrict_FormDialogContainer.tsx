@@ -41,7 +41,7 @@ export interface ServiceDistrictDistrict_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceDistrict;
+  data: ServiceDistrictStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void;

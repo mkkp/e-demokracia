@@ -95,17 +95,17 @@ export interface ServiceProService {
 
   deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void>;
 
-  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateProArgumentForCons(): Promise<CreateArgumentInput>;
+  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
 
   createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
 
   getTemplateForCreateConArgumentForCons(): Promise<CreateArgumentInput>;
 
-  voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
+  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
 
-  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
+  getTemplateForCreateProArgumentForCons(): Promise<CreateArgumentInput>;
+
+  voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
 
   getParentPro(
     target: JudoIdentifiable<ServicePro>,

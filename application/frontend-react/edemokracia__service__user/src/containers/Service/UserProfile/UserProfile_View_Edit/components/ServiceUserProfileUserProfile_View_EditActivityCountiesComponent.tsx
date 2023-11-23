@@ -84,7 +84,7 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponen
   actions: ServiceUserProfileUserProfile_View_EditActivityCountiesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceUserProfile;
+  ownerData: ServiceUserProfileStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -151,7 +151,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0driAIoAEe6F9LXBn0VWTg',
+      id: '_ZM7QgIpWEe6AtscSh_kd4w',
       attributeName: 'representation',
       label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,

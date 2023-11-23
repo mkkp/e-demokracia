@@ -80,6 +80,9 @@ export interface ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDe
   issuesOwnedAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   issuesOwnedCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
   issuesOwnedCloseVoteForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedCreateCommentAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedCreateConArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
   issuesOwnedDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   issuesOwnedRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   issuesOwnedDeleteAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
@@ -91,7 +94,7 @@ export interface ServiceDashboardDashboard_View_EditOwnedIssuesComponentProps {
   actions: ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceDashboard;
+  ownerData: ServiceDashboardStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -273,18 +276,53 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
-      label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.issuesOwnedCloseDebateAction
+      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.issuesOwnedAddToFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedCloseDebateAction!(rowData);
+            await actions.issuesOwnedAddToFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.createProArgument', {
+        defaultValue: 'createProArgument',
+      }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.issuesOwnedCreateProArgumentAction
+        ? async (rowData) => {
+            await actions.issuesOwnedCreateProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
+      action: actions.issuesOwnedDeleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.issuesOwnedDeleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
+      icon: <MdiIcon path="comment-text-multiple" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.issuesOwnedCreateCommentAction
+        ? async (rowData) => {
+            await actions.issuesOwnedCreateCommentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
       label: t('service.Dashboard.Dashboard_View_Edit.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
       }) as string,
@@ -297,29 +335,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
-      label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
-      action: actions.issuesOwnedCloseVoteForIssueAction
-        ? async (rowData) => {
-            await actions.issuesOwnedCloseVoteForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
-      label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.issuesOwnedDeleteOrArchiveForIssueAction
-        ? async (rowData) => {
-            await actions.issuesOwnedDeleteOrArchiveForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
       label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
       icon: <MdiIcon path="lock-open" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
@@ -330,13 +346,37 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
-      label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
-      icon: <MdiIcon path="star-plus" />,
+      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.createConArgument', {
+        defaultValue: 'createConArgument',
+      }) as string,
+      icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedAddToFavoritesForIssueAction
+      action: actions.issuesOwnedCreateConArgumentAction
         ? async (rowData) => {
-            await actions.issuesOwnedAddToFavoritesForIssueAction!(rowData);
+            await actions.issuesOwnedCreateConArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
+      action: actions.issuesOwnedCloseDebateAction
+        ? async (rowData) => {
+            await actions.issuesOwnedCloseDebateAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZAR7o4pWEe6AtscSh_kd4w)',
+      label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
+      action: actions.issuesOwnedCloseVoteForIssueAction
+        ? async (rowData) => {
+            await actions.issuesOwnedCloseVoteForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -344,7 +384,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0PacgooAEe6F9LXBn0VWTg',
+      id: '_ZANDIYpWEe6AtscSh_kd4w',
       attributeName: 'scope',
       label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -352,7 +392,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     },
 
     {
-      id: '_0PbDkIoAEe6F9LXBn0VWTg',
+      id: '_ZANqMopWEe6AtscSh_kd4w',
       attributeName: 'countyRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
@@ -361,7 +401,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     },
 
     {
-      id: '_0PbDlIoAEe6F9LXBn0VWTg',
+      id: '_ZAORQopWEe6AtscSh_kd4w',
       attributeName: 'cityRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
@@ -370,7 +410,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     },
 
     {
-      id: '_0PbqoooAEe6F9LXBn0VWTg',
+      id: '_ZAO4UopWEe6AtscSh_kd4w',
       attributeName: 'districtRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
@@ -379,21 +419,21 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     },
 
     {
-      id: '_0PcRsIoAEe6F9LXBn0VWTg',
+      id: '_ZAPfYIpWEe6AtscSh_kd4w',
       attributeName: 'title',
       label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0PcRtIoAEe6F9LXBn0VWTg',
+      id: '_ZAQGcopWEe6AtscSh_kd4w',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_0Pc4wYoAEe6F9LXBn0VWTg',
+      id: '_ZAQtgopWEe6AtscSh_kd4w',
       attributeName: 'status',
       label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -466,7 +506,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
   }, [selectionModel]);
 
   async function fetchData() {
-    if (!isLoading) {
+    if (!isLoading && ownerData.__signedIdentifier) {
       setIsLoading(true);
 
       try {

@@ -29,6 +29,10 @@ import {
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceVoteDefinitionIssueRelationViewPage } from '~/routes';
+import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
+import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
+import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
+import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNoAbstain/Input/Form';
 import type { ServiceVoteDefinitionVoteDefinition_View_EditPageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_View_Edit/ServiceVoteDefinitionVoteDefinition_View_EditPageContainer';
 import type {
   IssueScope,
@@ -85,6 +89,8 @@ const ServiceVoteDefinitionVoteDefinition_View_EditPageContainer = lazy(
 
 // XMIID: User/(esm/_5M0NYOR6Ee20cv3f2msZXg)/RelationFeatureView
 // Name: service::VoteEntry::voteDefinition::Relation::View::Page
+// Access: false
+// Single Access: false
 export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -152,6 +158,14 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
     customActionsHook?.(data, editMode, storeDiff);
 
   // Dialog hooks
+  const openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector =
+    useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector();
+  const openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm =
+    useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm();
+  const openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm =
+    useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm();
+  const openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm =
+    useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm();
 
   // Calculated section
   const title: string = t('service.VoteDefinition.VoteDefinition_View_Edit', {
@@ -192,6 +206,40 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const voteYesNoAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteYesNoAbstainAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteRatingAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        data,
+      );
+    if (result === 'submit') {
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      }
+    }
+  };
   const issueOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
@@ -208,6 +256,10 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
+    voteYesNoAction,
+    voteYesNoAbstainAction,
+    voteRatingAction,
+    voteSelectAnswerAction,
     issueOpenPageAction,
     issuePreFetchAction,
     ...(customActions ?? {}),

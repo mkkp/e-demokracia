@@ -84,7 +84,7 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCitiesComponentP
   actions: ServiceUserProfileUserProfile_View_EditActivityCitiesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceUserProfile;
+  ownerData: ServiceUserProfileStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -151,7 +151,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0dt-QooAEe6F9LXBn0VWTg',
+      id: '_ZM9FsopWEe6AtscSh_kd4w',
       attributeName: 'representation',
       label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,

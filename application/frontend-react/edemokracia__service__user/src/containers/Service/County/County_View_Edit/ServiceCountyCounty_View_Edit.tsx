@@ -72,7 +72,7 @@ export interface ServiceCountyCounty_View_EditProps {
   refreshCounter: number;
   actions: ServiceCountyCounty_View_EditActionDefinitions;
 
-  data: ServiceCounty;
+  data: ServiceCountyStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -143,7 +143,7 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0PXZMIoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_ZAJYwIpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -153,7 +153,7 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="cities::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0PXZMIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_ZAJYwIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.County.County_View_Edit.cities.Icon', { defaultValue: 'Cities' })}
               </Typography>
             </Grid>

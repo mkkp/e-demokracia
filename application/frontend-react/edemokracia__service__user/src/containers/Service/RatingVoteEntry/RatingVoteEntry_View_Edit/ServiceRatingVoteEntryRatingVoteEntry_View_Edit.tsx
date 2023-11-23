@@ -71,7 +71,7 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditProps {
   refreshCounter: number;
   actions: ServiceRatingVoteEntryRatingVoteEntry_View_EditActionDefinitions;
 
-  data: ServiceRatingVoteEntry;
+  data: ServiceRatingVoteEntryStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

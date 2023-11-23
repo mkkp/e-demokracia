@@ -49,7 +49,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   editMode: boolean;
   refreshCounter: number;
 
-  data: CloseDebateOutputVoteDefinitionReference;
+  data: CloseDebateOutputVoteDefinitionReferenceStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void;

@@ -62,7 +62,7 @@ export interface ServiceIssueTypeIssueType_FormProps {
   refreshCounter: number;
   actions: ServiceIssueTypeIssueType_FormActionDefinitions;
 
-  data: ServiceIssueType;
+  data: ServiceIssueTypeStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

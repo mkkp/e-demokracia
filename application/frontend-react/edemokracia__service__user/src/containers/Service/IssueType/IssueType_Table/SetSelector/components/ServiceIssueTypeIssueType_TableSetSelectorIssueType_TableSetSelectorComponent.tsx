@@ -180,14 +180,14 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_zwBx0ooAEe6F9LXBn0VWTg',
+      id: '_XfI5A4pWEe6AtscSh_kd4w',
       attributeName: 'title',
       label: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_zwDnAYoAEe6F9LXBn0VWTg',
+      id: '_XfJgEopWEe6AtscSh_kd4w',
       attributeName: 'voteType',
       label: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
         defaultValue: 'Default vote type',
@@ -197,7 +197,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     },
 
     {
-      id: '_zwEOEIoAEe6F9LXBn0VWTg',
+      id: '_XfKHIopWEe6AtscSh_kd4w',
       attributeName: 'description',
       label: t('service.IssueType.IssueType_Table.SetSelector.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

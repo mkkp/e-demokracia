@@ -107,6 +107,7 @@ export interface ServiceServiceUserServiceUser_View_EditAreasResidencyResidentDi
 
 // XMIID: User/(esm/_I_CEgIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition
 // Name: service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentDistrict::TabularReferenceField::Link::Set::Selector::Page
+// Open in dialog: true
 export default function ServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictTabularReferenceFieldLinkSetSelectorPage(
   props: ServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictTabularReferenceFieldLinkSetSelectorPageProps,
 ) {

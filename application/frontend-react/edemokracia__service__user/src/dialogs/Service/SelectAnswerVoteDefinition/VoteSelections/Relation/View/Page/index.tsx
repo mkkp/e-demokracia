@@ -121,6 +121,7 @@ export interface ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage
 
 // XMIID: User/(esm/_-cKskFtqEe6Mx9dH3yj5gQ)/RelationFeatureView
 // Name: service::SelectAnswerVoteDefinition::voteSelections::Relation::View::Page
+// Open in dialog: true
 export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(
   props: ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPageProps,
 ) {

@@ -43,7 +43,7 @@ export interface ServiceIssueIssue_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceIssue;
+  data: ServiceIssueStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssue, value: any) => void;

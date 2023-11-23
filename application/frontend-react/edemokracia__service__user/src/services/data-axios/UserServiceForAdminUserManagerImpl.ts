@@ -31,7 +31,7 @@ export class UserServiceForAdminUserManagerImpl extends JudoAxiosService impleme
   async refreshForAdminUserManager(
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
   ): Promise<ServiceUserManagerStored> {
-    const path = '/User/adminUserManager/~get';
+    const path = '/service/User/adminUserManager/~get';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {});
 
     return response.data;

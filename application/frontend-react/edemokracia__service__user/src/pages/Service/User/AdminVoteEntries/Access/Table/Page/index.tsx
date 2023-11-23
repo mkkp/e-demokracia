@@ -51,6 +51,8 @@ const ServiceVoteEntryVoteEntry_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_X0RZIFu_Ee6HqbmdGwnUzw)/AccessTablePageDefinition
 // Name: service::User::adminVoteEntries::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserAdminVoteEntriesAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

@@ -86,7 +86,7 @@ export interface ServiceUserProfileUserProfile_View_EditActivityDistrictsCompone
   actions: ServiceUserProfileUserProfile_View_EditActivityDistrictsComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceUserProfile;
+  ownerData: ServiceUserProfileStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -153,7 +153,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0dxBkooAEe6F9LXBn0VWTg',
+      id: '_ZM-64opWEe6AtscSh_kd4w',
       attributeName: 'representation',
       label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,

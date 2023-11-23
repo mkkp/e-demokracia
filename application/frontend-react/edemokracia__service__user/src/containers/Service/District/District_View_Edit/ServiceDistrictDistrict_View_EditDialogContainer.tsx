@@ -44,7 +44,7 @@ export interface ServiceDistrictDistrict_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceDistrict;
+  data: ServiceDistrictStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void;

@@ -44,7 +44,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceSimpleVote;
+  data: ServiceSimpleVoteStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void;

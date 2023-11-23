@@ -107,6 +107,7 @@ export interface ServiceServiceUserVotesRelationTableSetSelectorPageProps {
 
 // XMIID: User/(esm/_qcneEGksEe25ONJ3V89cVA)/RelationFeatureTableSetSelectorPageDefinition
 // Name: service::ServiceUser::votes::Relation::Table::Set::Selector::Page
+// Open in dialog: true
 export default function ServiceServiceUserVotesRelationTableSetSelectorPage(
   props: ServiceServiceUserVotesRelationTableSetSelectorPageProps,
 ) {

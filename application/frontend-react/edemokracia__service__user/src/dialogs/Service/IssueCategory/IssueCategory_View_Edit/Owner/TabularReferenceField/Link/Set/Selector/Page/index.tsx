@@ -106,6 +106,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenc
 
 // XMIID: User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition
 // Name: service::IssueCategory::IssueCategory_View_Edit::owner::TabularReferenceField::Link::Set::Selector::Page
+// Open in dialog: true
 export default function ServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage(
   props: ServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPageProps,
 ) {

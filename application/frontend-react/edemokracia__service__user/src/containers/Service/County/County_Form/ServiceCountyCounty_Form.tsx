@@ -61,7 +61,7 @@ export interface ServiceCountyCounty_FormProps {
   refreshCounter: number;
   actions: ServiceCountyCounty_FormActionDefinitions;
 
-  data: ServiceCounty;
+  data: ServiceCountyStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

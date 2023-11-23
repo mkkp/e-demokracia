@@ -44,7 +44,7 @@ export interface CloseDebateInputCloseDebateInput_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: CloseDebateInput;
+  data: CloseDebateInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void;

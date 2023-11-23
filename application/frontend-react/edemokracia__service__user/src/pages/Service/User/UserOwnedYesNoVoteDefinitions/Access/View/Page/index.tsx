@@ -89,6 +89,8 @@ const ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageContainer = laz
 
 // XMIID: User/(esm/_zCZh0FoTEe6_67aMO2jOsw)/AccessViewPageDefinition
 // Name: service::User::userOwnedYesNoVoteDefinitions::Access::View::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
@@ -268,6 +270,18 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceYesNoVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceYesNoVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
   const voteEntriesOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
     await openServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(target!);
 
@@ -294,18 +308,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       queryCustomizer,
     );
   };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceYesNoVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceYesNoVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
 
   const actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions = {
     backAction,
@@ -315,11 +317,11 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
     takeBackVoteForYesNoVoteDefinitionAction,
     voteAction,
     userVoteEntryOpenPageAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
     ...(customActions ?? {}),
   };
 

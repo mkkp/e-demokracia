@@ -53,7 +53,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDia
   editMode: boolean;
   refreshCounter: number;
 
-  data: SelectAnswerVoteSelection;
+  data: SelectAnswerVoteSelectionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof SelectAnswerVoteSelection, value: any) => void;

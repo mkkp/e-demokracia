@@ -83,7 +83,7 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   refreshCounter: number;
   actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionDefinitions;
 
-  data: ServiceYesNoAbstainVoteDefinition;
+  data: ServiceYesNoAbstainVoteDefinitionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -124,12 +124,12 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_0LC54IoAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y6_L8IpWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_0LC54IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y6_L8IpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t(
                       'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                       { defaultValue: 'My vote entry' },
@@ -494,7 +494,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0LF9MYoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_Y7C2UIpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -503,7 +503,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_0LF9MYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_Y7C2UIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.entries.Label', {
                   defaultValue: 'Entries',
                 })}

@@ -47,7 +47,7 @@ export interface CreateCommentInputCreateCommentInput_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: CreateCommentInput;
+  data: CreateCommentInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CreateCommentInput, value: any) => void;
@@ -152,7 +152,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
         {editMode && actions.createCommentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_0Ni0QooAEe6F9LXBn0VWTg)"
+              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_Xcf0sIpWEe6AtscSh_kd4w)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

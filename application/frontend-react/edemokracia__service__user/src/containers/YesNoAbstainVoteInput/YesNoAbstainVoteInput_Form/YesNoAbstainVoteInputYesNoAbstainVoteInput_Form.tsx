@@ -66,7 +66,7 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormProps {
   refreshCounter: number;
   actions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions;
 
-  data: YesNoAbstainVoteInput;
+  data: YesNoAbstainVoteInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

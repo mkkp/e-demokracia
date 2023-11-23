@@ -65,7 +65,7 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormP
   refreshCounter: number;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions;
 
-  data: ServiceSelectAnswerVoteSelection;
+  data: ServiceSelectAnswerVoteSelectionStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

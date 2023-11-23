@@ -126,6 +126,7 @@ export interface ServiceProProsRelationViewPageProps {
 
 // XMIID: User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationFeatureView
 // Name: service::Pro::pros::Relation::View::Page
+// Open in dialog: true
 export default function ServiceProProsRelationViewPage(props: ServiceProProsRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
@@ -273,6 +274,18 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       handleError(error, undefined, data);
     }
   };
+  const createProArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const createConArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const voteUpForProAction = async () => {
     try {
       setIsLoading(true);
@@ -329,22 +342,12 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       setIsLoading(false);
     }
   };
-  const createProArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceProCreatedByRelationViewPage(target!);
+
+    if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const createConArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceProVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
   };
   const prosOpenPageAction = async (target?: ServiceProStored) => {
     await openServiceProProsRelationViewPage(target!);
@@ -514,12 +517,10 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       });
     });
   };
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceProCreatedByRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceProVotesRelationTablePage((target || data).__signedIdentifier));
+    onClose();
   };
 
   const actions: ServiceProPro_View_EditDialogActions = {
@@ -528,11 +529,11 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     cancelAction,
     updateAction,
     deleteAction,
-    voteUpForProAction,
-    voteDownForProAction,
     createProArgumentAction,
     createConArgumentAction,
-    votesOpenPageAction,
+    voteUpForProAction,
+    voteDownForProAction,
+    createdByOpenPageAction,
     prosOpenPageAction,
     prosFilterAction,
     prosDeleteAction,
@@ -541,7 +542,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     consFilterAction,
     consDeleteAction,
     consBulkDeleteAction,
-    createdByOpenPageAction,
+    votesOpenPageAction,
     ...(customActions ?? {}),
   };
 

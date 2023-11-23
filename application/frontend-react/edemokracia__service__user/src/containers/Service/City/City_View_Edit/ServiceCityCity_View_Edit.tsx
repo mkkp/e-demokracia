@@ -72,7 +72,7 @@ export interface ServiceCityCity_View_EditProps {
   refreshCounter: number;
   actions: ServiceCityCity_View_EditActionDefinitions;
 
-  data: ServiceCity;
+  data: ServiceCityStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -143,7 +143,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0OAuUIoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_Y-cIkIpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -153,7 +153,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="districts::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0OAuUIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_Y-cIkIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.City.City_View_Edit.districts.Icon', { defaultValue: 'Districts' })}
               </Typography>
             </Grid>

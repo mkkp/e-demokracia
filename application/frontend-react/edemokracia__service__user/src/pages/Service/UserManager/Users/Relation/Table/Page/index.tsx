@@ -54,6 +54,8 @@ const ServiceServiceUserServiceUser_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_X0EKgFvPEe6jm_SkPSYEYw)/RelationFeatureTable
 // Name: service::UserManager::users::Relation::Table::Page
+// Access: false
+// Single Access: false
 export default function ServiceUserManagerUsersRelationTablePage() {
   // Router params section
   const { signedIdentifier } = useParams();

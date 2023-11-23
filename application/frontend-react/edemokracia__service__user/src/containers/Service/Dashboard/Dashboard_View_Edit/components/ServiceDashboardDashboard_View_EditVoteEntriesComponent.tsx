@@ -85,7 +85,7 @@ export interface ServiceDashboardDashboard_View_EditVoteEntriesComponentProps {
   actions: ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
   validationError?: string;
-  ownerData: ServiceDashboard;
+  ownerData: ServiceDashboardStored;
   editMode: boolean;
   isFormUpdateable: () => boolean;
 }
@@ -211,28 +211,28 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_0RT58IoAEe6F9LXBn0VWTg',
+      id: '_ZCwn4YpWEe6AtscSh_kd4w',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_0RT59IoAEe6F9LXBn0VWTg',
+      id: '_ZCxO8IpWEe6AtscSh_kd4w',
       attributeName: 'issueTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0RUhA4oAEe6F9LXBn0VWTg',
+      id: '_ZCxO9IpWEe6AtscSh_kd4w',
       attributeName: 'voteTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_0RVIEYoAEe6F9LXBn0VWTg',
+      id: '_ZCx2AopWEe6AtscSh_kd4w',
       attributeName: 'voteStatus',
       label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
@@ -305,7 +305,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   }, [selectionModel]);
 
   async function fetchData() {
-    if (!isLoading) {
+    if (!isLoading && ownerData.__signedIdentifier) {
       setIsLoading(true);
 
       try {

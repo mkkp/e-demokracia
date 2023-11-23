@@ -93,7 +93,7 @@ export interface ServiceUserProfileUserProfile_View_EditProps {
   refreshCounter: number;
   actions: ServiceUserProfileUserProfile_View_EditActionDefinitions;
 
-  data: ServiceUserProfile;
+  data: ServiceUserProfileStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -132,13 +132,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_0LK1sYoAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y7IV4YpWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="Personal::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_0LK1sYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y7IV4YpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>
@@ -347,13 +347,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_0KJiAIoAEe6F9LXBn0VWTg)/LabelWrapper">
+        <Card id="_Y53KkIpWEe6AtscSh_kd4w)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="Areas::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_0KJiAIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                  <Typography id="_Y53KkIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                     {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
                   </Typography>
                 </Grid>

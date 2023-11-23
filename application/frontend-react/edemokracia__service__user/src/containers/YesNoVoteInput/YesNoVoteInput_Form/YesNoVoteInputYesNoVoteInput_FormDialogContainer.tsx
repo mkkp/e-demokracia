@@ -44,7 +44,7 @@ export interface YesNoVoteInputYesNoVoteInput_FormDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: YesNoVoteInput;
+  data: YesNoVoteInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof YesNoVoteInput, value: any) => void;
@@ -147,7 +147,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteYesNoForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_0FYWwooAEe6F9LXBn0VWTg)"
+              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_Xk5iwIpWEe6AtscSh_kd4w)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -168,7 +168,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteForYesNoVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_0FYWwooAEe6F9LXBn0VWTg)"
+              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_Xk5iwIpWEe6AtscSh_kd4w)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

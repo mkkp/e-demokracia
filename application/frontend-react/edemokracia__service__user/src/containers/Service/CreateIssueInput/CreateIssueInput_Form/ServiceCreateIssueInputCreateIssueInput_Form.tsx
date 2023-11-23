@@ -89,7 +89,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormProps {
   refreshCounter: number;
   actions: ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions;
 
-  data: ServiceCreateIssueInput;
+  data: ServiceCreateIssueInputStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

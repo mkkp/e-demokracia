@@ -116,6 +116,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFor
 
 // XMIID: User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationUnmappedInputPageDefinition
 // Name: service::VoteDefinition::VoteDefinition_View_Edit::voteRating::Input::Form
+// Open in dialog: true
 export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
   props: ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFormProps,
 ) {

@@ -59,6 +59,8 @@ const ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_s3Fx0FuiEe6rLvwZQOpyUA)/AccessTablePageDefinition
 // Name: service::User::userOwnedRatingVoteDefinitions::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

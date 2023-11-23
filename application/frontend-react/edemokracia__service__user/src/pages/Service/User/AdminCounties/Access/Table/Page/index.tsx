@@ -48,6 +48,8 @@ const ServiceCountyCounty_TablePageContainer = lazy(
 
 // XMIID: User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessTablePageDefinition
 // Name: service::User::adminCounties::Access::Table::Page
+// Access: true
+// Single Access: false
 export default function ServiceUserAdminCountiesAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();

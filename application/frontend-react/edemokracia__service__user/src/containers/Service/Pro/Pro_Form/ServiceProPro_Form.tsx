@@ -85,7 +85,7 @@ export interface ServiceProPro_FormProps {
   refreshCounter: number;
   actions: ServiceProPro_FormActionDefinitions;
 
-  data: ServicePro;
+  data: ServiceProStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
@@ -355,7 +355,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0SvdUooAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_ZDwGYopWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -365,7 +365,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0SvdUooAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_ZDwGYopWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.Pro.Pro_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>
@@ -395,7 +395,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_0TXvcIoAEe6F9LXBn0VWTg)/LabelWrapper"
+          id="_ZEcC4IpWEe6AtscSh_kd4w)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -405,7 +405,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_0TXvcIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+              <Typography id="_ZEcC4IpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
                 {t('service.Pro.Pro_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>

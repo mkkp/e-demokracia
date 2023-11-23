@@ -51,7 +51,7 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceRatingVoteEntry;
+  data: ServiceRatingVoteEntryStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void;

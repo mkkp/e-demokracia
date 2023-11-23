@@ -51,7 +51,7 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceCreateUserInput;
+  data: ServiceCreateUserInputStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void;

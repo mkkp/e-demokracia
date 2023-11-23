@@ -116,6 +116,7 @@ export interface ServiceCountyCitiesRelationFormPageProps {
 
 // XMIID: User/(esm/_23Z_YH2nEe27Ga2Ojs4Fgg)/RelationFeatureForm
 // Name: service::County::cities::Relation::Form::Page
+// Open in dialog: true
 export default function ServiceCountyCitiesRelationFormPage(props: ServiceCountyCitiesRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 

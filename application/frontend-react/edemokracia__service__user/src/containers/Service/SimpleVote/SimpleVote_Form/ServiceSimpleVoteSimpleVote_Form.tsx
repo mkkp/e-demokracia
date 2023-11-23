@@ -62,7 +62,7 @@ export interface ServiceSimpleVoteSimpleVote_FormProps {
   refreshCounter: number;
   actions: ServiceSimpleVoteSimpleVote_FormActionDefinitions;
 
-  data: ServiceSimpleVote;
+  data: ServiceSimpleVoteStored;
   isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;

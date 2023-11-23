@@ -43,7 +43,7 @@ export interface ServiceCountyCounty_View_EditDialogProps {
   editMode: boolean;
   refreshCounter: number;
 
-  data: ServiceCounty;
+  data: ServiceCountyStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCounty, value: any) => void;

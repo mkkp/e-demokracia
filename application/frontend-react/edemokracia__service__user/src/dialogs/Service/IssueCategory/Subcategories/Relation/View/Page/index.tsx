@@ -125,6 +125,7 @@ export interface ServiceIssueCategorySubcategoriesRelationViewPageProps {
 
 // XMIID: User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationFeatureView
 // Name: service::IssueCategory::subcategories::Relation::View::Page
+// Open in dialog: true
 export default function ServiceIssueCategorySubcategoriesRelationViewPage(
   props: ServiceIssueCategorySubcategoriesRelationViewPageProps,
 ) {

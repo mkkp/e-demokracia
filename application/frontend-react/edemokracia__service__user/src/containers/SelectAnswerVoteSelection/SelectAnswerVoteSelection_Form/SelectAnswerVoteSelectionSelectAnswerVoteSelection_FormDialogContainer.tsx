@@ -49,7 +49,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogPr
   editMode: boolean;
   refreshCounter: number;
 
-  data: SelectAnswerVoteSelection;
+  data: SelectAnswerVoteSelectionStored;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof SelectAnswerVoteSelection, value: any) => void;

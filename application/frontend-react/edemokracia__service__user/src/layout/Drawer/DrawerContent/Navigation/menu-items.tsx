@@ -12,7 +12,7 @@ export const menus: NavItemType[] = [
   {
     id: 'User/(esm/_GgcgQIyPEe2VSOmaAz6G9Q)/AccessMenuNavigationItemView',
     type: 'item',
-    url: 'Service/User/DashboardHome/Access/View/Page/:signedIdentifier',
+    url: '',
     icon: 'home',
     title: 'Dashboard',
     children: [],
@@ -20,7 +20,7 @@ export const menus: NavItemType[] = [
   {
     id: 'User/(esm/_UVCdkFrMEe6_67aMO2jOsw)/AccessMenuNavigationItemView',
     type: 'item',
-    url: 'Service/User/UserIssues/Access/View/Page/:signedIdentifier',
+    url: 'Service/User/UserIssues/Access/View/Page',
     icon: 'wechat',
     title: 'Issues',
     children: [],
@@ -28,7 +28,7 @@ export const menus: NavItemType[] = [
   {
     id: 'User/(esm/_mNq6EF5QEe6vsex_cZNQbQ)/AccessMenuNavigationItemView',
     type: 'item',
-    url: 'Service/User/UserVoteDefinitions/Access/View/Page/:signedIdentifier',
+    url: 'Service/User/UserVoteDefinitions/Access/View/Page',
     icon: 'vote',
     title: 'Votes',
     children: [],
@@ -74,7 +74,7 @@ export const menus: NavItemType[] = [
       {
         id: 'User/(esm/_mGvk8FvaEe6bTb-1BwQgmA)/AccessMenuNavigationItemView',
         type: 'item',
-        url: 'Service/User/AdminUserManager/Access/View/Page/:signedIdentifier',
+        url: 'Service/User/AdminUserManager/Access/View/Page',
         icon: 'account',
         title: 'Users',
         children: [],
