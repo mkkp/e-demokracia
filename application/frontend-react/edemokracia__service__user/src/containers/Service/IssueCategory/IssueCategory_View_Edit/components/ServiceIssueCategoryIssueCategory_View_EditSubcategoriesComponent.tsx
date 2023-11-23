@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -63,33 +67,21 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions {
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesAddOpenSelector?: () => Promise<void>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkDelete?: (
+  subcategoriesBulkDeleteAction?: (
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkRemove?: (
-    selectedRows: ServiceIssueCategoryStored[],
-  ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesClear?: () => Promise<void>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesCreateOpen?: () => Promise<void>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesFilter?: (
+  subcategoriesOpenFormAction?: () => Promise<void>;
+  subcategoriesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesRefresh?: (
+  subcategoriesRefreshAction?: (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
   ) => Promise<ServiceIssueCategoryStored[]>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete?: (
-    row: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesRemove?: (
-    row: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueCategoryIssueCategory_View_EditSubcategoriesView?: (row: ServiceIssueCategoryStored) => Promise<void>;
+  subcategoriesDeleteAction?: (row: ServiceIssueCategoryStored, silentMode?: boolean) => Promise<void>;
+  subcategoriesOpenPageAction?: (row: ServiceIssueCategoryStored) => Promise<void>;
 }
 
 export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentProps {
@@ -151,7 +143,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.IssueCategory.IssueCategory.View.Edit.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -161,7 +153,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.IssueCategory.IssueCategory.View.Edit.description', {
+      headerName: t('service.IssueCategory.IssueCategory_View_Edit.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -174,30 +166,15 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const rowActions: TableRowAction<ServiceIssueCategoryStored>[] = [
     {
-      id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueCategoryStored) => isLoading,
-      action: actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesRemove
-        ? async (rowData) => {
-            await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Delete', {
+        defaultValue: 'Delete',
+      }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceIssueCategoryStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete
+      action: actions.subcategoriesDeleteAction
         ? async (rowData) => {
-            await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete!(rowData);
+            await actions.subcategoriesDeleteAction!(rowData);
           }
         : undefined,
     },
@@ -205,18 +182,16 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fw8akH2GEe6V8KKnnZfChA',
+      id: '_0StBEooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.IssueCategory.IssueCategory.View.Edit.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fw8alH2GEe6V8KKnnZfChA',
+      id: '_0StoIIoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.IssueCategory.IssueCategory.View.Edit.description::Filter', {
-        defaultValue: 'Description',
-      }) as string,
+      label: t('service.IssueCategory.IssueCategory_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -282,7 +257,10 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
   }, [ownerData?.subcategories, filters]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="subcategories"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -316,9 +294,9 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesView
+          actions.subcategoriesOpenPageAction
             ? async (params: GridRowParams<ServiceIssueCategoryStored>) =>
-                await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesView!(params.row)
+                await actions.subcategoriesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -328,13 +306,13 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesFilter && true ? (
+              {actions.subcategoriesFilterAction && true ? (
                 <Button
                   id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesFilter!(
+                    const filterResults = await actions.subcategoriesFilterAction!(
                       'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -346,123 +324,56 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesRefresh && true ? (
+              {actions.subcategoriesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.subcategoriesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesCreateOpen && true ? (
+              {actions.subcategoriesOpenFormAction && true ? (
                 <Button
                   id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesCreateOpen!();
+                    await actions.subcategoriesOpenFormAction!();
                   }}
                   disabled={editMode || isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesClear && data.length ? (
-                <Button
-                  id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.subcategoriesBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.subcategoriesBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.View.Edit.service::IssueCategory::IssueCategory_View_Edit::subcategories::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.BulkDelete', {
+                    defaultValue: 'Delete',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -484,6 +395,6 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

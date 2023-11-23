@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,21 +62,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCityCity_TableCity_TableComponentActionDefinitions {
-  serviceCityCity_TableAddOpenSelector?: () => Promise<void>;
-  serviceCityCity_TableBulkDelete?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
-  serviceCityCity_TableBulkRemove?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
-  serviceCityCity_TableClear?: () => Promise<void>;
-  serviceCityCity_TableCreateOpen?: () => Promise<void>;
-  serviceCityCity_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCityCity_TableTableRefresh?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored[]>;
-  serviceCityCity_TableDelete?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
-  serviceCityCity_TableRemove?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
-  serviceCityCity_TableView?: (row: ServiceCityStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored[]>;
+  deleteAction?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceCityStored) => Promise<void>;
 }
 
 export interface ServiceCityCity_TableCity_TableComponentProps {
@@ -134,7 +139,7 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
     {
       ...baseColumnConfig,
       field: 'county',
-      headerName: t('service.City.City.Table.county', { defaultValue: 'County' }) as string,
+      headerName: t('service.City.City_Table.county', { defaultValue: 'County' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -144,7 +149,7 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
     {
       ...baseColumnConfig,
       field: 'name',
-      headerName: t('service.City.City.Table.name', { defaultValue: 'City name' }) as string,
+      headerName: t('service.City.City_Table.name', { defaultValue: 'City name' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -156,23 +161,23 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
   const rowActions: TableRowAction<ServiceCityStored>[] = [
     {
       id: 'User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableRowRemoveButton',
-      label: t('service.City.City.Table.service::City::City_Table::Remove', { defaultValue: 'Remove' }) as string,
+      label: t('service.City.City_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceCityStored) => isLoading,
-      action: actions.serviceCityCity_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceCityCity_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableRowDeleteButton',
-      label: t('service.City.City.Table.service::City::City_Table::Delete', { defaultValue: 'Delete' }) as string,
+      label: t('service.City.City_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceCityStored) => !row.__deleteable || isLoading,
-      action: actions.serviceCityCity_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceCityCity_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -180,16 +185,16 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gAFCwH2GEe6V8KKnnZfChA',
+      id: '_0iLngIoAEe6F9LXBn0VWTg',
       attributeName: 'county',
-      label: t('service.City.City.Table.county::Filter', { defaultValue: 'County' }) as string,
+      label: t('service.City.City_Table.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gALJYH2GEe6V8KKnnZfChA',
+      id: '_0iQgAIoAEe6F9LXBn0VWTg',
       attributeName: 'name',
-      label: t('service.City.City.Table.name::Filter', { defaultValue: 'City name' }) as string,
+      label: t('service.City.City_Table.name', { defaultValue: 'City name' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -263,7 +268,7 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceCityCity_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -289,7 +294,7 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="City_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -322,8 +327,8 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceCityCity_TableView
-            ? async (params: GridRowParams<ServiceCityStored>) => await actions.serviceCityCity_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceCityStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -333,13 +338,13 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCityCity_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCityCity_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -351,94 +356,105 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.City.City_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCityCity_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::Table::Refresh', { defaultValue: 'Refresh' })}
+                  {t('service.City.City_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCityCity_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::Create', { defaultValue: 'Create' })}
+                  {t('service.City.City_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCityCity_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.City.City_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.City.City_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCityCity_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::Clear', { defaultValue: 'Clear' })}
+                  {t('service.City.City_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCityCity_TableBulkRemove!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::BulkRemove', { defaultValue: 'Remove' })}
+                  {t('service.City.City_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCityCity_TableBulkDelete!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.City.City.Table.service::City::City_Table::BulkDelete', { defaultValue: 'Delete' })}
+                  {t('service.City.City_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -469,6 +485,6 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,40 +66,29 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteDefinition_TableComponentActionDefinitions {
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableAddOpenSelector?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: ServiceRatingVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceRatingVoteDefinitionStored[]>>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: ServiceRatingVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceRatingVoteDefinitionStored[]>>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableClear?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableCreateOpen?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableTableRefresh?: (
+  refreshAction?: (
     queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceRatingVoteDefinitionStored[]>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableDelete?: (
-    row: ServiceRatingVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableRemove?: (
-    row: ServiceRatingVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableView?: (row: ServiceRatingVoteDefinitionStored) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote?: (
-    row: ServiceRatingVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm?: (
-    row: ServiceRatingVoteDefinitionStored,
-  ) => Promise<void>;
+  deleteAction?: (row: ServiceRatingVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceRatingVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceRatingVoteDefinitionStored) => Promise<void>;
+  takeBackVoteForRatingVoteDefinitionAction?: (row: ServiceRatingVoteDefinitionStored) => Promise<void>;
+  voteAction?: (row: ServiceRatingVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteDefinition_TableComponentProps {
@@ -159,7 +152,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'minRateValue',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.minRateValue', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
         defaultValue: 'MinRateValue',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -174,7 +167,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'maxRateValue',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.maxRateValue', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
         defaultValue: 'MaxRateValue',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -189,7 +182,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.title', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -201,7 +194,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.created', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -228,7 +221,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.description', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -240,7 +233,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.status', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -261,7 +254,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.closeAt', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -290,58 +283,47 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
   const rowActions: TableRowAction<ServiceRatingVoteDefinitionStored>[] = [
     {
       id: 'User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
-      action: actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceRatingVoteDefinitionStored) => !row.__deleteable || isLoading,
-      action: actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.takeBackVote', {
+      id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.takeBackVote', {
         defaultValue: 'takeBackVote',
       }) as string,
       icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action:
-        actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote
-          ? async (rowData) => {
-              await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.vote', { defaultValue: 'vote' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm
+      action: actions.takeBackVoteForRatingVoteDefinitionAction
         ? async (rowData) => {
-            await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm!(
-              rowData,
-            );
+            await actions.takeBackVoteForRatingVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -349,64 +331,60 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fk0DEH2GEe6V8KKnnZfChA',
+      id: '_0IacoooAEe6F9LXBn0VWTg',
       attributeName: 'minRateValue',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.minRateValue::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
         defaultValue: 'MinRateValue',
       }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_fk0DFH2GEe6V8KKnnZfChA',
+      id: '_0IbDs4oAEe6F9LXBn0VWTg',
       attributeName: 'maxRateValue',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.maxRateValue::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
         defaultValue: 'MaxRateValue',
       }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_fk0qI32GEe6V8KKnnZfChA',
+      id: '_0IbqwIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.title::Filter', {
-        defaultValue: 'Title',
-      }) as string,
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fk1RMX2GEe6V8KKnnZfChA',
+      id: '_0IbqxIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.created::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fk1RNX2GEe6V8KKnnZfChA',
+      id: '_0IcR04oAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.description::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fk14Q32GEe6V8KKnnZfChA',
+      id: '_0Ic44YoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.status::Filter', {
-        defaultValue: 'Status',
-      }) as string,
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
-      id: '_fk2fUn2GEe6V8KKnnZfChA',
+      id: '_0Ic45YoAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.Table.closeAt::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       filterType: FilterType.dateTime,
@@ -482,9 +460,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -510,7 +486,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable" data-table-name="RatingVoteDefinition_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -543,9 +519,9 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableView
+          actions.openPageAction
             ? async (params: GridRowParams<ServiceRatingVoteDefinitionStored>) =>
-                await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableView!(params.row)
+                await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -555,140 +531,114 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableTableFilter!(
-                        'User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.filterAction!(
+                      'User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Table.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Table.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -719,6 +669,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

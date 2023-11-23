@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const ServiceUserVoteDefinitionUserVoteDefinition_Table = lazy(
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_TablePageActions
   extends ServiceUserVoteDefinitionUserVoteDefinition_TableActionDefinitions {
-  serviceUserVoteDefinitionUserVoteDefinition_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_TablePageProps {
@@ -54,24 +56,19 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceUserVoteDefinitionUserVoteDefinition_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserVoteDefinition::UserVoteDefinition_Table::Back"
+              id="User/(esm/_gTjKMF4-Ee6vsex_cZNQbQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition.Table.service::UserVoteDefinition::UserVoteDefinition_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.UserVoteDefinition.UserVoteDefinition_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

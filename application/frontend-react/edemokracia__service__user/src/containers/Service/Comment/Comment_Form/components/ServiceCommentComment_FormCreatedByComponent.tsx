@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceCommentComment_FormCreatedByComponentActionDefinitions {
-  serviceCommentComment_FormGroupCreatedByCreate?: () => Promise<void>;
-  serviceCommentComment_FormGroupCreatedByDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceCommentComment_FormGroupCreatedBySetOpenSelector?: () => Promise<void>;
-  serviceCommentComment_FormGroupCreatedByUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceCommentComment_FormGroupCreatedByView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceCommentComment_FormGroupCreatedByAutocomplete?: (
+  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -55,11 +51,7 @@ export function ServiceCommentComment_FormCreatedByComponent(props: ServiceComme
     <AggregationInput
       name="createdBy"
       id="User/(esm/_IgYHIIfuEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t('service.Comment.Comment.Form.createdBy.group.Comment_Form.service::Comment::Comment_Form', {
-          defaultValue: 'CreatedBy',
-        }) as string
-      }
+      label={t('service.Comment.Comment_Form.createdBy', { defaultValue: 'CreatedBy' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -72,7 +64,7 @@ export function ServiceCommentComment_FormCreatedByComponent(props: ServiceComme
         storeDiff('createdBy', createdBy);
       }}
       onAutoCompleteSearch={
-        actions.serviceCommentComment_FormGroupCreatedByAutocomplete
+        actions.createdByAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -84,41 +76,15 @@ export function ServiceCommentComment_FormCreatedByComponent(props: ServiceComme
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceCommentComment_FormGroupCreatedByAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.createdByAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.createdBy && actions.serviceCommentComment_FormGroupCreatedByView
+        ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.serviceCommentComment_FormGroupCreatedByView!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceCommentComment_FormGroupCreatedByCreate
-          ? async () => {
-              await actions.serviceCommentComment_FormGroupCreatedByCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.createdBy && actions.serviceCommentComment_FormGroupCreatedByDelete
-          ? async () => actions.serviceCommentComment_FormGroupCreatedByDelete!(ownerData.createdBy!)
-          : undefined
-      }
-      onSet={
-        actions.serviceCommentComment_FormGroupCreatedBySetOpenSelector
-          ? async () => {
-              await actions.serviceCommentComment_FormGroupCreatedBySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.createdBy && actions.serviceCommentComment_FormGroupCreatedByUnset
-          ? async () => actions.serviceCommentComment_FormGroupCreatedByUnset!(ownerData.createdBy!)
           : undefined
       }
     ></AggregationInput>

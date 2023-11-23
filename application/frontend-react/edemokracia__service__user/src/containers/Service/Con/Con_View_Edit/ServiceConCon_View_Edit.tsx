@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCon,
@@ -63,11 +78,11 @@ export interface ServiceConCon_View_EditActionDefinitions
   extends ServiceConCon_View_EditConsComponentActionDefinitions,
     ServiceConCon_View_EditCreatedByComponentActionDefinitions,
     ServiceConCon_View_EditProsComponentActionDefinitions {
-  serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm?: () => Promise<void>;
-  serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm?: () => Promise<void>;
-  serviceConCon_View_EditConVoteDown?: () => Promise<void>;
-  serviceConCon_View_EditConVoteUp?: () => Promise<void>;
-  serviceConCon_View_EditConVotesOpenPage?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  createConArgumentAction?: () => Promise<void>;
+  createProArgumentAction?: () => Promise<void>;
+  voteDownForConAction?: () => Promise<void>;
+  voteUpForConAction?: () => Promise<void>;
+  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceConCon_View_EditProps {
@@ -113,17 +128,14 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fmjIcH2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KA_IIoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                  <Typography id="_fmjIcH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.Con.Con.View.Edit.con::Label.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                      { defaultValue: 'Contra' },
-                    )}
+                  <MdiIcon path="con::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KA_IIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.Con.Con_View_Edit.con.Icon', { defaultValue: 'Contra' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -143,12 +155,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       name="title"
                       id="User/(esm/_3ndKkH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
                       autoFocus
-                      label={
-                        t(
-                          'service.Con.Con.View.Edit.title.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: 'Title' },
-                        ) as string
-                      }
+                      label={t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string}
                       value={data.title ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -212,12 +219,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                         });
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                      label={
-                        t(
-                          'service.Con.Con.View.Edit.created.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: 'Created' },
-                        ) as string
-                      }
+                      label={t('service.Con.Con_View_Edit.created', { defaultValue: 'Created' }) as string}
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={false || !isFormUpdateable()}
                       disabled={isLoading}
@@ -243,12 +245,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       required={true}
                       name="description"
                       id="User/(esm/_3nTZkH4bEe2j59SYy0JH0Q)/StringTypeTextArea"
-                      label={
-                        t(
-                          'service.Con.Con.View.Edit.description.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: 'Description' },
-                        ) as string
-                      }
+                      label={t('service.Con.Con_View_Edit.description', { defaultValue: 'Description' }) as string}
                       value={data.description ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -283,18 +280,13 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       startIcon={<MdiIcon path="thumb-up" />}
                       loadingPosition="start"
                       onClick={async () => {
-                        if (actions.serviceConCon_View_EditConVoteUp) {
-                          await actions.serviceConCon_View_EditConVoteUp!();
+                        if (actions.voteUpForConAction) {
+                          await actions.voteUpForConAction!();
                         }
                       }}
-                      disabled={!actions.serviceConCon_View_EditConVoteUp || editMode}
+                      disabled={!actions.voteUpForConAction || editMode}
                     >
-                      <span>
-                        {t(
-                          'service.Con.Con.View.Edit.voteUp.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: '' },
-                        )}
-                      </span>
+                      <span>{t('service.Con.Con_View_Edit.voteUp', { defaultValue: '' })}</span>
                     </LoadingButton>
                   </Grid>
 
@@ -303,12 +295,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       required={false}
                       name="upVotes"
                       id="User/(esm/_Widj0IfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-                      label={
-                        t(
-                          'service.Con.Con.View.Edit.upVotes.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: '' },
-                        ) as string
-                      }
+                      label={t('service.Con.Con_View_Edit.upVotes', { defaultValue: '' }) as string}
                       customInput={TextField}
                       value={data.upVotes ?? ''}
                       className={clsx({
@@ -343,18 +330,13 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       startIcon={<MdiIcon path="thumb-down" />}
                       loadingPosition="start"
                       onClick={async () => {
-                        if (actions.serviceConCon_View_EditConVoteDown) {
-                          await actions.serviceConCon_View_EditConVoteDown!();
+                        if (actions.voteDownForConAction) {
+                          await actions.voteDownForConAction!();
                         }
                       }}
-                      disabled={!actions.serviceConCon_View_EditConVoteDown || editMode}
+                      disabled={!actions.voteDownForConAction || editMode}
                     >
-                      <span>
-                        {t(
-                          'service.Con.Con.View.Edit.voteDown.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: '' },
-                        )}
-                      </span>
+                      <span>{t('service.Con.Con_View_Edit.voteDown', { defaultValue: '' })}</span>
                     </LoadingButton>
                   </Grid>
 
@@ -363,12 +345,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       required={false}
                       name="downVotes"
                       id="User/(esm/_Wic8wIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-                      label={
-                        t(
-                          'service.Con.Con.View.Edit.downVotes.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: '' },
-                        ) as string
-                      }
+                      label={t('service.Con.Con_View_Edit.downVotes', { defaultValue: '' }) as string}
                       customInput={TextField}
                       value={data.downVotes ?? ''}
                       className={clsx({
@@ -400,13 +377,10 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                       id="User/(esm/_Wih1Q4fYEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
                       variant={undefined}
                       editMode={editMode}
-                      navigateAction={actions.serviceConCon_View_EditConVotesOpenPage}
+                      navigateAction={actions.votesOpenPageAction}
                       refreshCounter={refreshCounter}
                     >
-                      {t(
-                        'service.Con.Con.View.Edit.votes.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit',
-                        { defaultValue: 'Votes' },
-                      )}
+                      {t('service.Con.Con_View_Edit.votes', { defaultValue: 'Votes' })}
                       <MdiIcon path="arrow-right" />
                     </AssociationButton>
                   </Grid>
@@ -427,17 +401,14 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
           spacing={2}
         >
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_fnOd4H2GEe6V8KKnnZfChA)/LabelWrapper">
+            <Card id="_0KoDIIoAEe6F9LXBn0VWTg)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                      <Typography id="_fnOd4H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                        {t(
-                          'service.Con.Con.View.Edit.pros::Label.pros::LabelWrapper.Arguments.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: 'Pros' },
-                        )}
+                      <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
+                      <Typography id="_0KoDIIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                        {t('service.Con.Con_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -482,7 +453,9 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                               justifyContent="flex-start"
                             >
                               <ServiceConCon_View_EditProsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_WihOMIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -502,17 +475,14 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
           </Grid>
 
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_fnQTEH2GEe6V8KKnnZfChA)/LabelWrapper">
+            <Card id="_0Kp4UIoAEe6F9LXBn0VWTg)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                      <Typography id="_fnQTEH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                        {t(
-                          'service.Con.Con.View.Edit.cons::Label.cons::LabelWrapper.Arguments.Con_View_Edit.service::Con::Con_View_Edit',
-                          { defaultValue: 'Cons' },
-                        )}
+                      <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
+                      <Typography id="_0Kp4UIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                        {t('service.Con.Con_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -557,7 +527,9 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                               justifyContent="flex-start"
                             >
                               <ServiceConCon_View_EditConsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}

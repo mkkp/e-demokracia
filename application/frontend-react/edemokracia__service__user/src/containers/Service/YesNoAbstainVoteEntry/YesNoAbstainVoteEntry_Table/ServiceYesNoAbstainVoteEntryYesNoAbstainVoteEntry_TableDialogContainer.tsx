@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,13 +34,13 @@ const ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_Table = lazy(
 
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableDialogActions
   extends ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableActionDefinitions {
-  serviceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -57,7 +62,7 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableD
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_Table-dialog-close-wrapper"
+          id="User/(esm/_L2wXIFsjEe6Mx9dH3yj5gQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -76,23 +81,20 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableD
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::YesNoAbstainVoteEntry::YesNoAbstainVoteEntry_Table::Back"
+              id="User/(esm/_L2wXIFsjEe6Mx9dH3yj5gQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableBack!();
+                await actions.backAction!();
               }}
             >
               <span>
-                {t(
-                  'service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry.Table.service::YesNoAbstainVoteEntry::YesNoAbstainVoteEntry_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
+                {t('service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry_Table.Back', { defaultValue: 'Back' })}
               </span>
             </LoadingButton>
           </Grid>

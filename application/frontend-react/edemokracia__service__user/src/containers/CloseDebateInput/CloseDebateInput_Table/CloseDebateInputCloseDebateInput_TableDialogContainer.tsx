@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,13 +27,13 @@ const CloseDebateInputCloseDebateInput_Table = lazy(
 
 export interface CloseDebateInputCloseDebateInput_TableDialogActions
   extends CloseDebateInputCloseDebateInput_TableActionDefinitions {
-  closeDebateInputCloseDebateInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CloseDebateInputCloseDebateInput_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: CloseDebateInputCloseDebateInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -50,7 +55,7 @@ export default function CloseDebateInputCloseDebateInput_TableDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="CloseDebateInputCloseDebateInput_Table-dialog-close-wrapper"
+          id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -69,23 +74,19 @@ export default function CloseDebateInputCloseDebateInput_TableDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.closeDebateInputCloseDebateInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CloseDebateInput::CloseDebateInput_Table::Back"
+              id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.closeDebateInputCloseDebateInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CloseDebateInput.CloseDebateInput.Table.CloseDebateInput::CloseDebateInput_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CloseDebateInput.CloseDebateInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

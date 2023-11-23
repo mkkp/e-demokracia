@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,29 +62,24 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCommentComment_TableComment_TableComponentActionDefinitions {
-  serviceCommentComment_TableAddOpenSelector?: () => Promise<void>;
-  serviceCommentComment_TableBulkDelete?: (
-    selectedRows: ServiceCommentStored[],
-  ) => Promise<DialogResult<ServiceCommentStored[]>>;
-  serviceCommentComment_TableBulkRemove?: (
-    selectedRows: ServiceCommentStored[],
-  ) => Promise<DialogResult<ServiceCommentStored[]>>;
-  serviceCommentComment_TableClear?: () => Promise<void>;
-  serviceCommentComment_TableCreateOpen?: () => Promise<void>;
-  serviceCommentComment_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceCommentStored[]) => Promise<DialogResult<ServiceCommentStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceCommentStored[]) => Promise<DialogResult<ServiceCommentStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCommentComment_TableTableRefresh?: (
-    queryCustomizer: ServiceCommentQueryCustomizer,
-  ) => Promise<ServiceCommentStored[]>;
-  serviceCommentComment_TableDelete?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
-  serviceCommentComment_TableRemove?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
-  serviceCommentComment_TableView?: (row: ServiceCommentStored) => Promise<void>;
-  serviceCommentComment_View_EditGroupVoteDown?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
-  serviceCommentComment_View_EditGroupVoteUp?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<ServiceCommentStored[]>;
+  deleteAction?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceCommentStored) => Promise<void>;
+  voteDownForCommentAction?: (row: ServiceCommentStored) => Promise<void>;
+  voteUpForCommentAction?: (row: ServiceCommentStored) => Promise<void>;
 }
 
 export interface ServiceCommentComment_TableComment_TableComponentProps {
@@ -144,7 +143,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
     {
       ...baseColumnConfig,
       field: 'createdByName',
-      headerName: t('service.Comment.Comment.Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
+      headerName: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -154,7 +153,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
     {
       ...baseColumnConfig,
       field: 'comment',
-      headerName: t('service.Comment.Comment.Table.comment', { defaultValue: 'Comment' }) as string,
+      headerName: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -164,7 +163,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Comment.Comment.Table.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -189,7 +188,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
     {
       ...baseColumnConfig,
       field: 'upVotes',
-      headerName: t('service.Comment.Comment.Table.upVotes', { defaultValue: 'UpVotes' }) as string,
+      headerName: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -202,7 +201,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
     {
       ...baseColumnConfig,
       field: 'downVotes',
-      headerName: t('service.Comment.Comment.Table.downVotes', { defaultValue: 'DownVotes' }) as string,
+      headerName: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -217,49 +216,45 @@ export function ServiceCommentComment_TableComment_TableComponent(
   const rowActions: TableRowAction<ServiceCommentStored>[] = [
     {
       id: 'User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.Comment.Comment.Table.service::Comment::Comment_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.Comment.Comment_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.serviceCommentComment_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceCommentComment_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.Comment.Comment.Table.service::Comment::Comment_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.Comment.Comment_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceCommentStored) => !row.__deleteable || isLoading,
-      action: actions.serviceCommentComment_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceCommentComment_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Comment.Comment.Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.serviceCommentComment_View_EditGroupVoteUp
-        ? async (rowData) => {
-            await actions.serviceCommentComment_View_EditGroupVoteUp!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Comment.Comment.Table.voteDown', { defaultValue: 'voteDown' }) as string,
+      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Comment.Comment_Table.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.serviceCommentComment_View_EditGroupVoteDown
+      action: actions.voteDownForCommentAction
         ? async (rowData) => {
-            await actions.serviceCommentComment_View_EditGroupVoteDown!(rowData);
+            await actions.voteDownForCommentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceCommentStored) => isLoading,
+      action: actions.voteUpForCommentAction
+        ? async (rowData) => {
+            await actions.voteUpForCommentAction!(rowData);
           }
         : undefined,
     },
@@ -267,37 +262,37 @@ export function ServiceCommentComment_TableComment_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gAocYH2GEe6V8KKnnZfChA',
+      id: '_0iwPQIoAEe6F9LXBn0VWTg',
       attributeName: 'createdByName',
-      label: t('service.Comment.Comment.Table.createdByName::Filter', { defaultValue: 'CreatedByName' }) as string,
+      label: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gAocZH2GEe6V8KKnnZfChA',
+      id: '_0ixdYIoAEe6F9LXBn0VWTg',
       attributeName: 'comment',
-      label: t('service.Comment.Comment.Table.comment::Filter', { defaultValue: 'Comment' }) as string,
+      label: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gApDcn2GEe6V8KKnnZfChA',
+      id: '_0iyEcIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Comment.Comment.Table.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_gApqgn2GEe6V8KKnnZfChA',
+      id: '_0izSkIoAEe6F9LXBn0VWTg',
       attributeName: 'upVotes',
-      label: t('service.Comment.Comment.Table.upVotes::Filter', { defaultValue: 'UpVotes' }) as string,
+      label: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_gAqRkH2GEe6V8KKnnZfChA',
+      id: '_0iz5oooAEe6F9LXBn0VWTg',
       attributeName: 'downVotes',
-      label: t('service.Comment.Comment.Table.downVotes::Filter', { defaultValue: 'DownVotes' }) as string,
+      label: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
     },
   ];
@@ -371,7 +366,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceCommentComment_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -397,7 +392,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Comment_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -430,9 +425,8 @@ export function ServiceCommentComment_TableComment_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceCommentComment_TableView
-            ? async (params: GridRowParams<ServiceCommentStored>) =>
-                await actions.serviceCommentComment_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceCommentStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -442,13 +436,13 @@ export function ServiceCommentComment_TableComment_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCommentComment_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCommentComment_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -460,106 +454,105 @@ export function ServiceCommentComment_TableComment_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.Comment.Comment_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCommentComment_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCommentComment_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.Comment.Comment_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceCommentComment_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCommentComment_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.Comment.Comment_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceCommentComment_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCommentComment_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.Comment.Comment_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceCommentComment_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Comment.Comment_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCommentComment_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::Clear', { defaultValue: 'Clear' })}
+                  {t('service.Comment.Comment_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceCommentComment_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCommentComment_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.Comment.Comment_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceCommentComment_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCommentComment_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Comment.Comment.Table.service::Comment::Comment_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.Comment.Comment_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -590,6 +583,6 @@ export function ServiceCommentComment_TableComment_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

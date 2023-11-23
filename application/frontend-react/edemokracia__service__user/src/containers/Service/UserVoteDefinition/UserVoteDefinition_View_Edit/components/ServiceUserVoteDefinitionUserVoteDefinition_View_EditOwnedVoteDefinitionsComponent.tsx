@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,35 +68,16 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentActionDefinitions {
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddOpenSelector?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsBulkDelete?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsBulkRemove?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsClear?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsCreateOpen?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsFilter?: (
+  ownedVoteDefinitionsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRefresh?: (
+  ownedVoteDefinitionsRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceVoteDefinitionStored[]>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsDelete?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRemove?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsView?: (
-    row: ServiceVoteDefinitionStored,
-  ) => Promise<void>;
+  ownedVoteDefinitionsOpenPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentProps {
@@ -160,7 +145,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'scope',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.scope', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.scope', {
         defaultValue: 'Scope',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -181,7 +166,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.title', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -193,7 +178,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'voteType',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.voteType', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
         defaultValue: 'VoteType',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -214,7 +199,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'countyRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.countyRepresentation', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -226,7 +211,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'cityRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.cityRepresentation', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -238,7 +223,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'districtRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.districtRepresentation', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -250,7 +235,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'numberOfVotes',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.numberOfVotes', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -265,7 +250,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.created', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -292,7 +277,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.closeAt', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -319,7 +304,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.status', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -339,67 +324,28 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
   ];
 
-  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceVoteDefinitionStored) => isLoading,
-      action:
-        actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRemove
-          ? async (rowData) => {
-              await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRemove!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.__deleteable || isLoading,
-      action:
-        actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsDelete
-          ? async (rowData) => {
-              await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsDelete!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_f8rJcn2GEe6V8KKnnZfChA',
+      id: '_0d8AsIoAEe6F9LXBn0VWTg',
       attributeName: 'scope',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.scope::Filter', {
-        defaultValue: 'Scope',
-      }) as string,
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
     },
 
     {
-      id: '_f8rwg32GEe6V8KKnnZfChA',
+      id: '_0d8AtIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.title::Filter', {
-        defaultValue: 'Title',
-      }) as string,
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8sXkn2GEe6V8KKnnZfChA',
+      id: '_0d8nwooAEe6F9LXBn0VWTg',
       attributeName: 'voteType',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.voteType::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
         defaultValue: 'VoteType',
       }) as string,
       filterType: FilterType.enumeration,
@@ -407,65 +353,63 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_f8s-oX2GEe6V8KKnnZfChA',
+      id: '_0d9O0ooAEe6F9LXBn0VWTg',
       attributeName: 'countyRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.countyRepresentation::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8tlsH2GEe6V8KKnnZfChA',
+      id: '_0d914YoAEe6F9LXBn0VWTg',
       attributeName: 'cityRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.cityRepresentation::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8uMwH2GEe6V8KKnnZfChA',
+      id: '_0d-c8IoAEe6F9LXBn0VWTg',
       attributeName: 'districtRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.districtRepresentation::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8uz0H2GEe6V8KKnnZfChA',
+      id: '_0d_EAIoAEe6F9LXBn0VWTg',
       attributeName: 'numberOfVotes',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.numberOfVotes::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
       }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_f8uz1H2GEe6V8KKnnZfChA',
+      id: '_0d_rEIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.created::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_f8va4n2GEe6V8KKnnZfChA',
+      id: '_0eASIooAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.closeAt::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_f8wB8n2GEe6V8KKnnZfChA',
+      id: '_0eCHUIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.status::Filter', {
-        defaultValue: 'Status',
-      }) as string,
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
@@ -540,10 +484,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
       setIsLoading(true);
 
       try {
-        const res =
-          await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRefresh!(
-            processQueryCustomizer(queryCustomizer),
-          );
+        const res = await actions.ownedVoteDefinitionsRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -569,7 +510,10 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="ownedVoteDefinitions"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -596,18 +540,11 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsView
+          actions.ownedVoteDefinitionsOpenPageAction
             ? async (params: GridRowParams<ServiceVoteDefinitionStored>) =>
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsView!(
-                  params.row,
-                )
+                await actions.ownedVoteDefinitionsOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -617,20 +554,18 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsFilter &&
-              true ? (
+              {actions.ownedVoteDefinitionsFilterAction && true ? (
                 <Button
                   id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsFilter!(
-                        'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.ownedVoteDefinitionsFilterAction!(
+                      'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -638,125 +573,25 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Filter',
+                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRefresh &&
-              true ? (
+              {actions.ownedVoteDefinitionsRefreshAction && true ? (
                 <Button
                   id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.ownedVoteDefinitionsRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Refresh',
+                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}
@@ -788,6 +623,6 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

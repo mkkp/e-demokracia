@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,19 +35,17 @@ const ServiceCreateUserInputCreateUserInput_View_Edit = lazy(
 
 export interface ServiceCreateUserInputCreateUserInput_View_EditDialogActions
   extends ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions {
-  serviceCreateUserInputCreateUserInput_View_EditBack?: () => Promise<void>;
-  serviceCreateUserInputCreateUserInput_View_EditCancel?: () => Promise<void>;
-  serviceCreateUserInputCreateUserInput_View_EditDelete?: () => Promise<void>;
-  serviceCreateUserInputCreateUserInput_View_EditRefresh?: (
-    queryCustomizer: ServiceCreateUserInputQueryCustomizer,
-  ) => Promise<ServiceCreateUserInputStored>;
-  serviceCreateUserInputCreateUserInput_View_EditUpdate?: () => Promise<void>;
+  backAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  deleteAction?: () => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceCreateUserInputQueryCustomizer) => Promise<ServiceCreateUserInputStored>;
+  updateAction?: () => Promise<void>;
 }
 
 export interface ServiceCreateUserInputCreateUserInput_View_EditDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceCreateUserInputCreateUserInput_View_EditDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -80,7 +83,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditDialog(
     setValidation,
   } = props;
   const queryCustomizer: ServiceCreateUserInputQueryCustomizer = {
-    _mask: '{lastName,firstName,userName,email,hasAdminAccess}',
+    _mask: '{firstName,lastName,userName,email,hasAdminAccess}',
   };
 
   return (
@@ -88,7 +91,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceCreateUserInputCreateUserInput_View_Edit-dialog-close-wrapper"
+          id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -118,54 +121,42 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceCreateUserInputCreateUserInput_View_EditBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_View_Edit::Back"
+              id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceCreateUserInputCreateUserInput_View_EditBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.View.Edit.service::CreateUserInput::CreateUserInput_View_Edit::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_View_Edit.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceCreateUserInputCreateUserInput_View_EditRefresh && (
+        {!editMode && actions.refreshAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_View_Edit::Refresh"
+              id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewRefreshButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
-                await actions.serviceCreateUserInputCreateUserInput_View_EditRefresh!(
-                  processQueryCustomizer(queryCustomizer),
-                );
+                await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.View.Edit.service::CreateUserInput::CreateUserInput_View_Edit::Refresh',
-                  { defaultValue: 'Refresh' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_View_Edit.Refresh', { defaultValue: 'Refresh' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceCreateUserInputCreateUserInput_View_EditDelete && (
+        {!editMode && actions.deleteAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_View_Edit::Delete"
+              id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewDeleteButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -180,58 +171,43 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditDialog(
                 );
 
                 if (confirmed) {
-                  actions.serviceCreateUserInputCreateUserInput_View_EditDelete!();
+                  actions.deleteAction!();
                 }
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.View.Edit.service::CreateUserInput::CreateUserInput_View_Edit::Delete',
-                  { defaultValue: 'Delete' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_View_Edit.Delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceCreateUserInputCreateUserInput_View_EditCancel && (
+        {editMode && actions.cancelAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_View_Edit::Cancel"
+              id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewCancelButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
-                await actions.serviceCreateUserInputCreateUserInput_View_EditCancel!();
+                await actions.cancelAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.View.Edit.service::CreateUserInput::CreateUserInput_View_Edit::Cancel',
-                  { defaultValue: 'Cancel' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_View_Edit.Cancel', { defaultValue: 'Cancel' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceCreateUserInputCreateUserInput_View_EditUpdate && (
+        {editMode && actions.updateAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_View_Edit::Update"
+              id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewUpdateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceCreateUserInputCreateUserInput_View_EditUpdate!();
+                await actions.updateAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.View.Edit.service::CreateUserInput::CreateUserInput_View_Edit::Update',
-                  { defaultValue: 'Save' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_View_Edit.Update', { defaultValue: 'Save' })}</span>
             </LoadingButton>
           </Grid>
         )}

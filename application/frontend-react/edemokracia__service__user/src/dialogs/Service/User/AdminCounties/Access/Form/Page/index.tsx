@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -29,6 +30,16 @@ import type { DialogResult } from '~/utilities';
 import type { ServiceCountyCounty_FormDialogActions } from '~/containers/Service/County/County_Form/ServiceCountyCounty_FormDialogContainer';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import { userServiceForAdminCountiesImpl } from '~/services/data-axios';
+export type ServiceCountyCounty_FormDialogActionsExtended = ServiceCountyCounty_FormDialogActions & {};
+
+export const SERVICE_USER_ADMIN_COUNTIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCountyCounty_FormActionsHook';
+export type ServiceCountyCounty_FormActionsHook = (
+  ownerData: any,
+  data: ServiceCountyStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCounty, value: any) => void,
+) => ServiceCountyCounty_FormDialogActionsExtended;
 
 export const useServiceUserAdminCountiesAccessFormPage = (): ((
   ownerData: any,
@@ -40,9 +51,9 @@ export const useServiceUserAdminCountiesAccessFormPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -51,14 +62,14 @@ export const useServiceUserAdminCountiesAccessFormPage = (): ((
         children: (
           <ServiceUserAdminCountiesAccessFormPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -94,10 +105,11 @@ const ServiceCountyCounty_FormDialogContainer = lazy(
 export interface ServiceUserAdminCountiesAccessFormPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceCountyStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessFormPageDefinition
 // Name: service::User::adminCounties::Access::Form::Page
 export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUserAdminCountiesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -105,7 +117,7 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -147,16 +159,27 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCountyCounty_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_COUNTIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCountyCounty_FormDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.County.County_Form', { defaultValue: 'County Form' });
+  const title: string = t('service.County.County_Form', { defaultValue: 'County Form' });
 
   // Action section
-  const serviceCountyCounty_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceCountyCounty_FormCreate = async () => {
+  const createAction = async () => {
     try {
       setIsLoading(true);
       const res = await userServiceForAdminCountiesImpl.create(data);
@@ -173,7 +196,7 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
       setIsLoading(false);
     }
   };
-  const serviceCountyCounty_FormGetTemplate = async (): Promise<ServiceCounty> => {
+  const getTemplateAction = async (): Promise<ServiceCounty> => {
     try {
       setIsLoading(true);
       const result = await userServiceForAdminCountiesImpl.getTemplate();
@@ -190,18 +213,22 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
   };
 
   const actions: ServiceCountyCounty_FormDialogActions = {
-    serviceCountyCounty_FormBack,
-    serviceCountyCounty_FormCreate,
-    serviceCountyCounty_FormGetTemplate,
+    backAction,
+    createAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceCountyCounty_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessFormPageDefinition"
+      data-page-name="service::User::adminCounties::Access::Form::Page"
+    >
       <Suspense>
         <ServiceCountyCounty_FormDialogContainer
           ownerData={ownerData}
@@ -219,6 +246,6 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

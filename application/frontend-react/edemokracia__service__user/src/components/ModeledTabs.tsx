@@ -8,7 +8,9 @@
 
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useState, useEffect } from 'react';
-import { Tabs, Tab, Box } from '@mui/material';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import { useDataStore } from '~/hooks';
 import { MdiIcon } from './MdiIcon';
 

@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const ServiceRatingVoteDefinitionRatingVoteDefinition_Table = lazy(
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions
   extends ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionDefinitions {
-  serviceRatingVoteDefinitionRatingVoteDefinition_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageProps {
@@ -54,24 +56,19 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_TablePag
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::RatingVoteDefinition::RatingVoteDefinition_Table::Back"
+              id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceRatingVoteDefinitionRatingVoteDefinition_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.RatingVoteDefinition.RatingVoteDefinition.Table.service::RatingVoteDefinition::RatingVoteDefinition_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.RatingVoteDefinition.RatingVoteDefinition_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

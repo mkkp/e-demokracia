@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -29,6 +30,22 @@ import type { DialogResult } from '~/utilities';
 import type { RatingVoteInputRatingVoteInput_FormDialogActions } from '~/containers/RatingVoteInput/RatingVoteInput_Form/RatingVoteInputRatingVoteInput_FormDialogContainer';
 import type { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
 import { serviceVoteDefinitionServiceImpl } from '~/services/data-axios';
+export type RatingVoteInputRatingVoteInput_FormDialogActionsExtended =
+  RatingVoteInputRatingVoteInput_FormDialogActions & {
+    postVoteRatingForVoteDefinitionAction?: (
+      onSubmit: (result?: RatingVoteInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_VOTE_RATING_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
+  'RatingVoteInputRatingVoteInput_FormActionsHook';
+export type RatingVoteInputRatingVoteInput_FormActionsHook = (
+  ownerData: any,
+  data: RatingVoteInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof RatingVoteInput, value: any) => void,
+) => RatingVoteInputRatingVoteInput_FormDialogActionsExtended;
 
 export const useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm = (): ((
   ownerData: any,
@@ -40,9 +57,9 @@ export const useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -51,14 +68,14 @@ export const useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm
         children: (
           <ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={() => {
-              closeDialog();
+            onSubmit={async () => {
+              await closeDialog();
               resolve({
                 result: 'submit',
               });
@@ -93,10 +110,11 @@ const RatingVoteInputRatingVoteInput_FormDialogContainer = lazy(
 export interface ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFormProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: RatingVoteInputStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: RatingVoteInputStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationUnmappedInputPageDefinition
 // Name: service::VoteDefinition::VoteDefinition_View_Edit::voteRating::Input::Form
 export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
   props: ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFormProps,
@@ -106,7 +124,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -149,36 +167,54 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<RatingVoteInputRatingVoteInput_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_VOTE_RATING_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: RatingVoteInputRatingVoteInput_FormDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
   const title: string = t('RatingVoteInput.RatingVoteInput_Form', { defaultValue: 'RatingVoteInput Form' });
 
   // Action section
-  const ratingVoteInputRatingVoteInput_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceVoteDefinitionVoteDefinition_View_EditTabBarRatingvoteVoteRating = async () => {
+  const voteRatingForVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
       await serviceVoteDefinitionServiceImpl.voteRating(ownerData, data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postVoteRatingForVoteDefinitionAction) {
+        await customActions.postVoteRatingForVoteDefinitionAction(
+          onSubmit,
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      onSubmit();
+        onSubmit();
+      }
     } catch (error) {
       handleError<RatingVoteInput>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
     }
   };
-  const ratingVoteInputRatingVoteInput_FormGetTemplate = async (): Promise<RatingVoteInput> => {
+  const getTemplateAction = async (): Promise<RatingVoteInput> => {
     try {
       setIsLoading(true);
       const result = await serviceVoteDefinitionServiceImpl.getTemplateForVoteRating();
@@ -195,18 +231,22 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
   };
 
   const actions: RatingVoteInputRatingVoteInput_FormDialogActions = {
-    ratingVoteInputRatingVoteInput_FormBack,
-    serviceVoteDefinitionVoteDefinition_View_EditTabBarRatingvoteVoteRating,
-    ratingVoteInputRatingVoteInput_FormGetTemplate,
+    backAction,
+    voteRatingForVoteDefinitionAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.ratingVoteInputRatingVoteInput_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationUnmappedInputPageDefinition"
+      data-page-name="service::VoteDefinition::VoteDefinition_View_Edit::voteRating::Input::Form"
+    >
       <Suspense>
         <RatingVoteInputRatingVoteInput_FormDialogContainer
           ownerData={ownerData}
@@ -224,6 +264,6 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

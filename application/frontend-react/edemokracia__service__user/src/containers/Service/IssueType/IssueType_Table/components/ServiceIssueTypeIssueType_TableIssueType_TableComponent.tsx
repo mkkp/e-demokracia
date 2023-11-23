@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,27 +62,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueTypeIssueType_TableIssueType_TableComponentActionDefinitions {
-  serviceIssueTypeIssueType_TableAddOpenSelector?: () => Promise<void>;
-  serviceIssueTypeIssueType_TableBulkDelete?: (
-    selectedRows: ServiceIssueTypeStored[],
-  ) => Promise<DialogResult<ServiceIssueTypeStored[]>>;
-  serviceIssueTypeIssueType_TableBulkRemove?: (
-    selectedRows: ServiceIssueTypeStored[],
-  ) => Promise<DialogResult<ServiceIssueTypeStored[]>>;
-  serviceIssueTypeIssueType_TableClear?: () => Promise<void>;
-  serviceIssueTypeIssueType_TableCreateOpen?: () => Promise<void>;
-  serviceIssueTypeIssueType_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceIssueTypeStored[]) => Promise<DialogResult<ServiceIssueTypeStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceIssueTypeStored[]) => Promise<DialogResult<ServiceIssueTypeStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueTypeIssueType_TableTableRefresh?: (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ) => Promise<ServiceIssueTypeStored[]>;
-  serviceIssueTypeIssueType_TableDelete?: (row: ServiceIssueTypeStored, silentMode?: boolean) => Promise<void>;
-  serviceIssueTypeIssueType_TableRemove?: (row: ServiceIssueTypeStored, silentMode?: boolean) => Promise<void>;
-  serviceIssueTypeIssueType_TableView?: (row: ServiceIssueTypeStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceIssueTypeQueryCustomizer) => Promise<ServiceIssueTypeStored[]>;
+  deleteAction?: (row: ServiceIssueTypeStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceIssueTypeStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceIssueTypeStored) => Promise<void>;
 }
 
 export interface ServiceIssueTypeIssueType_TableIssueType_TableComponentProps {
@@ -142,7 +141,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.IssueType.IssueType.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.IssueType.IssueType_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -152,7 +151,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
     {
       ...baseColumnConfig,
       field: 'voteType',
-      headerName: t('service.IssueType.IssueType.Table.voteType', { defaultValue: 'Default vote type' }) as string,
+      headerName: t('service.IssueType.IssueType_Table.voteType', { defaultValue: 'Default vote type' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -171,7 +170,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.IssueType.IssueType.Table.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.IssueType.IssueType_Table.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -183,27 +182,23 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
   const rowActions: TableRowAction<ServiceIssueTypeStored>[] = [
     {
       id: 'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableRowRemoveButton',
-      label: t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.IssueType.IssueType_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceIssueTypeStored) => isLoading,
-      action: actions.serviceIssueTypeIssueType_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceIssueTypeIssueType_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableRowDeleteButton',
-      label: t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.IssueType.IssueType_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceIssueTypeStored) => !row.__deleteable || isLoading,
-      action: actions.serviceIssueTypeIssueType_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceIssueTypeIssueType_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -211,24 +206,24 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fe5BQH2GEe6V8KKnnZfChA',
+      id: '_0ClhcIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.IssueType.IssueType.Table.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.IssueType.IssueType_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fe7dgH2GEe6V8KKnnZfChA',
+      id: '_0Cn9sIoAEe6F9LXBn0VWTg',
       attributeName: 'voteType',
-      label: t('service.IssueType.IssueType.Table.voteType::Filter', { defaultValue: 'Default vote type' }) as string,
+      label: t('service.IssueType.IssueType_Table.voteType', { defaultValue: 'Default vote type' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
     },
 
     {
-      id: '_fe95wH2GEe6V8KKnnZfChA',
+      id: '_0CqZ8IoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.IssueType.IssueType.Table.description::Filter', { defaultValue: 'Description' }) as string,
+      label: t('service.IssueType.IssueType_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -302,7 +297,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceIssueTypeIssueType_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -328,7 +323,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTable" data-table-name="IssueType_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -361,9 +356,8 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceIssueTypeIssueType_TableView
-            ? async (params: GridRowParams<ServiceIssueTypeStored>) =>
-                await actions.serviceIssueTypeIssueType_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceIssueTypeStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -373,13 +367,13 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueTypeIssueType_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueTypeIssueType_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -391,110 +385,105 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.IssueType.IssueType_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueTypeIssueType_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.IssueType.IssueType_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueTypeIssueType_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.IssueType.IssueType_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueTypeIssueType_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('service.IssueType.IssueType_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.IssueType.IssueType_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueTypeIssueType_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('service.IssueType.IssueType_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceIssueTypeIssueType_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.IssueType.IssueType_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceIssueTypeIssueType_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.IssueType.IssueType.Table.service::IssueType::IssueType_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.IssueType.IssueType_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -525,6 +514,6 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

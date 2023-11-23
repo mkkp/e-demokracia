@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,16 +32,16 @@ const CreateCommentInputCreateCommentInput_Form = lazy(
 
 export interface CreateCommentInputCreateCommentInput_FormDialogActions
   extends CreateCommentInputCreateCommentInput_FormActionDefinitions {
-  createCommentInputCreateCommentInput_FormGetTemplate?: () => Promise<CreateCommentInput>;
-  createCommentInputCreateCommentInput_FormBack?: () => Promise<void>;
-  createCommentInputCreateCommentInput_FormCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCreateComment?: () => Promise<void>;
+  getTemplateAction?: () => Promise<CreateCommentInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  createCommentForIssueAction?: () => Promise<void>;
 }
 
 export interface CreateCommentInputCreateCommentInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: CreateCommentInputCreateCommentInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -82,7 +87,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="CreateCommentInputCreateCommentInput_Form-dialog-close-wrapper"
+          id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -112,63 +117,54 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.createCommentInputCreateCommentInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateCommentInput::CreateCommentInput_Form::Back"
+              id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.createCommentInputCreateCommentInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CreateCommentInput.CreateCommentInput.Form.CreateCommentInput::CreateCommentInput_Form::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CreateCommentInput.CreateCommentInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.createCommentInputCreateCommentInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateCommentInput::CreateCommentInput_Form::Create"
+              id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.createCommentInputCreateCommentInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t('CreateCommentInput.CreateCommentInput.Form.CreateCommentInput::CreateCommentInput_Form::Create', {
-                  defaultValue: 'Create',
-                })}
-              </span>
+              <span>{t('CreateCommentInput.CreateCommentInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueIssue_View_EditOtherCommentsActionsCreateComment && (
+        {editMode && actions.createCommentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Issue::Issue_View_Edit::other::comments::actions::createComment::OperationFormCallButton"
+              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_0Ni0QooAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="comment-text-multiple" />}
               onClick={async () => {
-                await actions.serviceIssueIssue_View_EditOtherCommentsActionsCreateComment!();
+                await actions.createCommentForIssueAction!();
               }}
             >
               <span>
-                {t(
-                  'CreateCommentInput.CreateCommentInput.Form.service::Issue::Issue_View_Edit::other::comments::actions::createComment::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
+                {t('service.Issue.Issue_View_Edit.other.comments.actions.createComment.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
               </span>
             </LoadingButton>
           </Grid>

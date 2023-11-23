@@ -12,16 +12,24 @@ import {
   RatingVoteInput,
   YesNoAbstainVoteInputStored,
   ServiceVoteDefinitionQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CloseDebateOutputVoteDefinitionReference,
   ServiceIssueQueryCustomizer,
   YesNoAbstainVoteInput,
   ServiceVoteDefinition,
+  CreateArgumentInputStored,
   ServiceIssueStored,
   SelectAnswerVoteSelection,
   ServiceIssue,
   RatingVoteInputStored,
   SelectAnswerVoteSelectionQueryCustomizer,
+  CreateCommentInputStored,
   SelectAnswerVoteSelectionStored,
+  CreateCommentInput,
+  CreateArgumentInput,
+  CloseDebateInputStored,
   YesNoVoteInput,
+  CloseDebateInput,
   YesNoVoteInputStored,
 } from '../data-api';
 
@@ -45,6 +53,35 @@ export interface UserServiceForAdminVoteDefinitions {
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
+
+  createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
+
+  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+
+  closeDebateForIssue(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+
+  getTemplateForCloseDebateForIssue(): Promise<CloseDebateInput>;
+
+  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForIssue(): Promise<CreateCommentInput>;
 
   voteRating(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
 

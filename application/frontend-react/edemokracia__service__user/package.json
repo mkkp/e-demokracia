@@ -27,7 +27,6 @@
     "@pandino/loader-configuration-dom": "0.8.29",
     "@pandino/pandino": "0.8.29",
     "@pandino/react-hooks": "0.8.29",
-    "@remix-run/router": "1.10.0",
     "axios": "1.2.1",
     "clsx": "2.0.0",
     "date-fns": "2.29.3",

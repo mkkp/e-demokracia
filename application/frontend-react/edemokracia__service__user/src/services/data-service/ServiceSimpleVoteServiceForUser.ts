@@ -58,6 +58,7 @@ export interface ServiceSimpleVoteServiceForUser {
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
   ): Promise<void>;
+
   listActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
@@ -89,6 +90,7 @@ export interface ServiceSimpleVoteServiceForUser {
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
   ): Promise<void>;
+
   getResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
@@ -147,6 +149,7 @@ export interface ServiceSimpleVoteServiceForUser {
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
   ): Promise<void>;
+
   getResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
@@ -199,6 +202,7 @@ export interface ServiceSimpleVoteServiceForUser {
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
   ): Promise<void>;
+
   getResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,

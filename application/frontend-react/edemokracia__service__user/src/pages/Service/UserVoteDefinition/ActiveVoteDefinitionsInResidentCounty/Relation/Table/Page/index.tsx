@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -40,6 +41,15 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import { serviceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentCountyImpl } from '~/services/data-axios';
+export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
+  ServiceVoteDefinitionVoteDefinition_TablePageActions & {};
+
+export const SERVICE_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceVoteDefinitionVoteDefinition_TableActionsHook';
+export type ServiceVoteDefinitionVoteDefinition_TableActionsHook = (
+  data: ServiceVoteDefinitionStored[],
+  editMode: boolean,
+) => ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended;
 
 const ServiceVoteDefinitionVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -57,7 +67,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -70,22 +80,31 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceVoteDefinitionStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceVoteDefinitionVoteDefinition_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
+  const title: string = t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
 
   // Action section
-  const serviceVoteDefinitionVoteDefinition_TableBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceVoteDefinitionVoteDefinition_TableView = async (target?: ServiceVoteDefinitionStored) => {
+  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(
       routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCountyRelationViewPage(target!.__signedIdentifier),
     );
   };
-  const serviceVoteDefinitionVoteDefinition_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -96,7 +115,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       filters: newFilters,
     };
   };
-  const serviceVoteDefinitionVoteDefinition_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored[]> => {
     try {
@@ -116,25 +135,31 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
-    serviceVoteDefinitionVoteDefinition_TableBack,
-    serviceVoteDefinitionVoteDefinition_TableView,
-    serviceVoteDefinitionVoteDefinition_TableTableFilter,
-    serviceVoteDefinitionVoteDefinition_TableTableRefresh,
+    backAction,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceVoteDefinitionVoteDefinition_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_yd4FQF5BEe6vsex_cZNQbQ)/RelationFeatureTable"
+      data-page-name="service::UserVoteDefinition::activeVoteDefinitionsInResidentCounty::Relation::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceVoteDefinitionVoteDefinition_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

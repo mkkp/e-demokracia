@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -27,6 +28,7 @@ import {
 } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_Form/Owner/TabularReferenceField/Link/Set/Selector/Page';
+import { useServiceIssueCategoryOwnerRelationViewPage } from '~/dialogs/Service/IssueCategory/Owner/Relation/View/Page';
 import type { ServiceIssueCategoryIssueCategory_FormDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_Form/ServiceIssueCategoryIssueCategory_FormDialogContainer';
 import type {
   ServiceIssueCategory,
@@ -37,6 +39,17 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import { userServiceForAdminCategoriesImpl } from '~/services/data-axios';
+export type ServiceIssueCategoryIssueCategory_FormDialogActionsExtended =
+  ServiceIssueCategoryIssueCategory_FormDialogActions & {};
+
+export const SERVICE_USER_ADMIN_CATEGORIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_FormActionsHook';
+export type ServiceIssueCategoryIssueCategory_FormActionsHook = (
+  ownerData: any,
+  data: ServiceIssueCategoryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+) => ServiceIssueCategoryIssueCategory_FormDialogActionsExtended;
 
 export const useServiceUserAdminCategoriesAccessFormPage = (): ((
   ownerData: any,
@@ -48,9 +61,9 @@ export const useServiceUserAdminCategoriesAccessFormPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -59,14 +72,14 @@ export const useServiceUserAdminCategoriesAccessFormPage = (): ((
         children: (
           <ServiceUserAdminCategoriesAccessFormPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -105,10 +118,11 @@ const ServiceIssueCategoryIssueCategory_FormDialogContainer = lazy(
 export interface ServiceUserAdminCategoriesAccessFormPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueCategoryStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessFormPageDefinition
 // Name: service::User::adminCategories::Access::Form::Page
 export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceUserAdminCategoriesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -116,7 +130,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -161,18 +175,30 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueCategoryIssueCategory_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_CATEGORIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueCategoryIssueCategory_FormDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage =
     useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage();
+  const openServiceIssueCategoryOwnerRelationViewPage = useServiceIssueCategoryOwnerRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
+  const title: string = t('service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
 
   // Action section
-  const serviceIssueCategoryIssueCategory_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueCategoryIssueCategory_FormCreate = async () => {
+  const createAction = async () => {
     try {
       setIsLoading(true);
       const res = await userServiceForAdminCategoriesImpl.create(data);
@@ -189,7 +215,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(false);
     }
   };
-  const serviceIssueCategoryIssueCategory_FormGetTemplate = async (): Promise<ServiceIssueCategory> => {
+  const getTemplateAction = async (): Promise<ServiceIssueCategory> => {
     try {
       setIsLoading(true);
       const result = await userServiceForAdminCategoriesImpl.getTemplate();
@@ -204,7 +230,10 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(false);
     }
   };
-  const serviceIssueCategoryIssueCategory_FormOwnerSetOpenSelector = async () => {
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
+  };
+  const ownerOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
       await openServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage(
         data,
@@ -216,7 +245,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       }
     }
   };
-  const serviceIssueCategoryIssueCategory_FormOwnerAutocomplete = async (
+  const ownerAutocompleteRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
@@ -226,26 +255,31 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       return Promise.resolve([]);
     }
   };
-  const serviceIssueCategoryIssueCategory_FormOwnerUnset = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
 
   const actions: ServiceIssueCategoryIssueCategory_FormDialogActions = {
-    serviceIssueCategoryIssueCategory_FormBack,
-    serviceIssueCategoryIssueCategory_FormCreate,
-    serviceIssueCategoryIssueCategory_FormGetTemplate,
-    serviceIssueCategoryIssueCategory_FormOwnerSetOpenSelector,
-    serviceIssueCategoryIssueCategory_FormOwnerAutocomplete,
-    serviceIssueCategoryIssueCategory_FormOwnerUnset,
+    backAction,
+    createAction,
+    getTemplateAction,
+    ownerOpenPageAction,
+    ownerOpenSetSelectorAction,
+    ownerAutocompleteRangeAction,
+    ownerUnsetAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceIssueCategoryIssueCategory_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessFormPageDefinition"
+      data-page-name="service::User::adminCategories::Access::Form::Page"
+    >
       <Suspense>
         <ServiceIssueCategoryIssueCategory_FormDialogContainer
           ownerData={ownerData}
@@ -263,6 +297,6 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCity,
@@ -117,17 +132,14 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fn6aYn2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0LK1sYoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                  <Typography id="_fn6aYn2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.UserProfile.UserProfile.View.Edit.Personal::Label.Personal::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                      { defaultValue: 'Personal' },
-                    )}
+                  <MdiIcon path="Personal::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0LK1sYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -147,10 +159,7 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                       name="userName"
                       id="User/(esm/_WRx7kVvTEe6jm_SkPSYEYw)/StringTypeTextInput"
                       label={
-                        t(
-                          'service.UserProfile.UserProfile.View.Edit.userName.Personal.Personal::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                          { defaultValue: 'Username' },
-                        ) as string
+                        t('service.UserProfile.UserProfile_View_Edit.userName', { defaultValue: 'Username' }) as string
                       }
                       value={data.userName ?? ''}
                       className={clsx({
@@ -192,10 +201,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                           id="User/(esm/_AEEGw1vUEe6jm_SkPSYEYw)/StringTypeTextInput"
                           autoFocus
                           label={
-                            t(
-                              'service.UserProfile.UserProfile.View.Edit.firstName.name.Personal.Personal::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                              { defaultValue: 'First name' },
-                            ) as string
+                            t('service.UserProfile.UserProfile_View_Edit.firstName', {
+                              defaultValue: 'First name',
+                            }) as string
                           }
                           value={data.firstName ?? ''}
                           className={clsx({
@@ -227,10 +235,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                           name="lastName"
                           id="User/(esm/_AEEGxFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.UserProfile.UserProfile.View.Edit.lastName.name.Personal.Personal::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                              { defaultValue: 'Last name' },
-                            ) as string
+                            t('service.UserProfile.UserProfile_View_Edit.lastName', {
+                              defaultValue: 'Last name',
+                            }) as string
                           }
                           value={data.lastName ?? ''}
                           className={clsx({
@@ -273,10 +280,7 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                           name="email"
                           id="User/(esm/_AEEGwFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.UserProfile.UserProfile.View.Edit.email.contact.Personal.Personal::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                              { defaultValue: 'Email' },
-                            ) as string
+                            t('service.UserProfile.UserProfile_View_Edit.email', { defaultValue: 'Email' }) as string
                           }
                           value={data.email ?? ''}
                           className={clsx({
@@ -308,10 +312,7 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                           name="phone"
                           id="User/(esm/_AEEGwVvUEe6jm_SkPSYEYw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.UserProfile.UserProfile.View.Edit.phone.contact.Personal.Personal::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                              { defaultValue: 'Phone' },
-                            ) as string
+                            t('service.UserProfile.UserProfile_View_Edit.phone', { defaultValue: 'Phone' }) as string
                           }
                           value={data.phone ?? ''}
                           className={clsx({
@@ -346,17 +347,14 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_fms5cX2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KJiAIoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                  <Typography id="_fms5cX2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.UserProfile.UserProfile.View.Edit.Areas::Label.Areas::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-                      { defaultValue: 'Areas' },
-                    )}
+                  <MdiIcon path="Areas::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KJiAIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -423,8 +421,8 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                       childTabs={[
                         {
                           id: 'User/(esm/_fsW_qVvTEe6jm_SkPSYEYw)/GroupTab',
-                          name: 'service.UserProfile.UserProfile.View.Edit.tab_activity_counties',
-                          label: t('service.UserProfile.UserProfile.View.Edit.tab_activity_counties', {
+                          name: 'service.UserProfile.UserProfile_View_Edit.tab_activity_counties',
+                          label: t('service.UserProfile.UserProfile_View_Edit.tab_activity_counties', {
                             defaultValue: 'Activity counties',
                           }) as string,
                           disabled: isLoading,
@@ -434,8 +432,8 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                         },
                         {
                           id: 'User/(esm/_fsW_rFvTEe6jm_SkPSYEYw)/GroupTab',
-                          name: 'service.UserProfile.UserProfile.View.Edit.activity_cities',
-                          label: t('service.UserProfile.UserProfile.View.Edit.activity_cities', {
+                          name: 'service.UserProfile.UserProfile_View_Edit.activity_cities',
+                          label: t('service.UserProfile.UserProfile_View_Edit.activity_cities', {
                             defaultValue: 'Activity cities',
                           }) as string,
                           disabled: isLoading,
@@ -445,8 +443,8 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                         },
                         {
                           id: 'User/(esm/_fsW_r1vTEe6jm_SkPSYEYw)/GroupTab',
-                          name: 'service.UserProfile.UserProfile.View.Edit.activity_districts',
-                          label: t('service.UserProfile.UserProfile.View.Edit.activity_districts', {
+                          name: 'service.UserProfile.UserProfile_View_Edit.activity_districts',
+                          label: t('service.UserProfile.UserProfile_View_Edit.activity_districts', {
                             defaultValue: 'Activity districts',
                           }) as string,
                           disabled: isLoading,
@@ -474,7 +472,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                               justifyContent="flex-start"
                             >
                               <ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -505,7 +505,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                               justifyContent="flex-start"
                             >
                               <ServiceUserProfileUserProfile_View_EditActivityCitiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -536,7 +538,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                               justifyContent="flex-start"
                             >
                               <ServiceUserProfileUserProfile_View_EditActivityDistrictsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}

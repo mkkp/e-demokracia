@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,10 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 export interface ServiceIssueIssue_View_EditCountyComponentActionDefinitions {
-  serviceIssueIssue_View_EditOtherAreaCountyCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCountyDelete?: (target: ServiceCountyStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCountySetOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCountyUnset?: (target: ServiceCountyStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCountyView?: (target: ServiceCountyStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCountyAutocomplete?: (
+  countyOpenSetSelectorAction?: () => Promise<void>;
+  countyUnsetAction?: (target: ServiceCountyStored) => Promise<void>;
+  countyOpenPageAction?: (target: ServiceCountyStored) => Promise<void>;
+  countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
 }
@@ -55,7 +53,7 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
     <AggregationInput
       name="county"
       id="User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={t('service.Issue.Issue.View.Edit.county.area', { defaultValue: 'County' }) as string}
+      label={t('service.Issue.Issue_View_Edit.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -68,7 +66,7 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
         storeDiff('county', county);
       }}
       onAutoCompleteSearch={
-        actions.serviceIssueIssue_View_EditOtherAreaCountyAutocomplete
+        actions.countyAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceCountyQueryCustomizer = {
                 ...(searchText?.length
@@ -80,41 +78,27 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceIssueIssue_View_EditOtherAreaCountyAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.countyAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.county && actions.serviceIssueIssue_View_EditOtherAreaCountyView
+        ownerData.county && actions.countyOpenPageAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaCountyView!(ownerData.county!);
+              await actions.countyOpenPageAction!(ownerData.county!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceIssueIssue_View_EditOtherAreaCountyCreate
-          ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaCountyCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.county && actions.serviceIssueIssue_View_EditOtherAreaCountyDelete
-          ? async () => actions.serviceIssueIssue_View_EditOtherAreaCountyDelete!(ownerData.county!)
           : undefined
       }
       onSet={
-        actions.serviceIssueIssue_View_EditOtherAreaCountySetOpenSelector
+        actions.countyOpenSetSelectorAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaCountySetOpenSelector!();
+              await actions.countyOpenSetSelectorAction!();
             }
           : undefined
       }
       onUnset={
-        ownerData.county && actions.serviceIssueIssue_View_EditOtherAreaCountyUnset
-          ? async () => actions.serviceIssueIssue_View_EditOtherAreaCountyUnset!(ownerData.county!)
+        ownerData.county && actions.countyUnsetAction
+          ? async () => actions.countyUnsetAction!(ownerData.county!)
           : undefined
       }
     ></AggregationInput>

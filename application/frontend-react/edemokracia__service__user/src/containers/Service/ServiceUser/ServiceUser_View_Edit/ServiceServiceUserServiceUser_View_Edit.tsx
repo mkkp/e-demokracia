@@ -13,23 +13,22 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -51,7 +50,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCity,
@@ -89,7 +94,7 @@ export interface ServiceServiceUserServiceUser_View_EditActionDefinitions
     ServiceServiceUserServiceUser_View_EditResidentCityComponentActionDefinitions,
     ServiceServiceUserServiceUser_View_EditResidentCountyComponentActionDefinitions,
     ServiceServiceUserServiceUser_View_EditResidentDistrictComponentActionDefinitions {
-  serviceServiceUserServiceUser_View_EditPersonalVotesOpenPage?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceServiceUserServiceUser_View_EditProps {
@@ -135,17 +140,14 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fnrJ0H2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0K_2kIoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="security" sx={{ marginRight: 1 }} />
-                  <Typography id="_fnrJ0H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.ServiceUser.ServiceUser.View.Edit.Security::Label.Security::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                      { defaultValue: 'Security' },
-                    )}
+                  <MdiIcon path="Security::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0K_2kIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.ServiceUser.ServiceUser_View_Edit.Security.Icon', { defaultValue: 'Security' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -166,10 +168,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                       id="User/(esm/_erlrQH4NEe2cB7_PsKXsHQ)/StringTypeTextInput"
                       autoFocus
                       label={
-                        t(
-                          'service.ServiceUser.ServiceUser.View.Edit.userName.Security.Security::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                          { defaultValue: 'Username' },
-                        ) as string
+                        t('service.ServiceUser.ServiceUser_View_Edit.userName', { defaultValue: 'Username' }) as string
                       }
                       value={data.userName ?? ''}
                       className={clsx({
@@ -210,10 +209,9 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                           />
                         }
                         label={
-                          t(
-                            'service.ServiceUser.ServiceUser.View.Edit.isAdmin.Security.Security::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                            { defaultValue: 'Has admin access' },
-                          ) as string
+                          t('service.ServiceUser.ServiceUser_View_Edit.isAdmin', {
+                            defaultValue: 'Has admin access',
+                          }) as string
                         }
                       />
                     </FormGroup>
@@ -259,10 +257,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                       label={
-                        t(
-                          'service.ServiceUser.ServiceUser.View.Edit.created.Security.Security::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                          { defaultValue: 'Created' },
-                        ) as string
+                        t('service.ServiceUser.ServiceUser_View_Edit.created', { defaultValue: 'Created' }) as string
                       }
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={false || !isFormUpdateable()}
@@ -280,17 +275,14 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_fnrw5H2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0LAdoYoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                  <Typography id="_fnrw5H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.ServiceUser.ServiceUser.View.Edit.personal::Label.personal::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                      { defaultValue: 'Personal' },
-                    )}
+                  <MdiIcon path="personal::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0LAdoYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.ServiceUser.ServiceUser_View_Edit.personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -319,10 +311,9 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                           name="firstName"
                           id="User/(esm/_B545cGkwEe25ONJ3V89cVA)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.ServiceUser.ServiceUser.View.Edit.firstName.name.personal.personal::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                              { defaultValue: 'First name' },
-                            ) as string
+                            t('service.ServiceUser.ServiceUser_View_Edit.firstName', {
+                              defaultValue: 'First name',
+                            }) as string
                           }
                           value={data.firstName ?? ''}
                           className={clsx({
@@ -354,10 +345,9 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                           name="lastName"
                           id="User/(esm/_B6eIQGkwEe25ONJ3V89cVA)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.ServiceUser.ServiceUser.View.Edit.lastName.name.personal.personal::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                              { defaultValue: 'Last name' },
-                            ) as string
+                            t('service.ServiceUser.ServiceUser_View_Edit.lastName', {
+                              defaultValue: 'Last name',
+                            }) as string
                           }
                           value={data.lastName ?? ''}
                           className={clsx({
@@ -400,10 +390,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                           name="email"
                           id="User/(esm/_B7xv0GkwEe25ONJ3V89cVA)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.ServiceUser.ServiceUser.View.Edit.email.contact.personal.personal::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                              { defaultValue: 'Email' },
-                            ) as string
+                            t('service.ServiceUser.ServiceUser_View_Edit.email', { defaultValue: 'Email' }) as string
                           }
                           value={data.email ?? ''}
                           className={clsx({
@@ -435,10 +422,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                           name="phone"
                           id="User/(esm/_B7FMQGkwEe25ONJ3V89cVA)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.ServiceUser.ServiceUser.View.Edit.phone.contact.personal.personal::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                              { defaultValue: 'Phone' },
-                            ) as string
+                            t('service.ServiceUser.ServiceUser_View_Edit.phone', { defaultValue: 'Phone' }) as string
                           }
                           value={data.phone ?? ''}
                           className={clsx({
@@ -471,13 +455,10 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                       id="User/(esm/_I-ob4IXqEe2kLcMqsIbMgQ)/TabularReferenceFieldButton"
                       variant={undefined}
                       editMode={editMode}
-                      navigateAction={actions.serviceServiceUserServiceUser_View_EditPersonalVotesOpenPage}
+                      navigateAction={actions.votesOpenPageAction}
                       refreshCounter={refreshCounter}
                     >
-                      {t(
-                        'service.ServiceUser.ServiceUser.View.Edit.votes.personal.personal::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                        { defaultValue: 'Votes' },
-                      )}
+                      {t('service.ServiceUser.ServiceUser_View_Edit.votes', { defaultValue: 'Votes' })}
                       <MdiIcon path="arrow-right" />
                     </AssociationButton>
                   </Grid>
@@ -489,17 +470,14 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_fmpPEX2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KF3oooAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                  <Typography id="_fmpPEX2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.ServiceUser.ServiceUser.View.Edit.Areas::Label.Areas::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-                      { defaultValue: 'Areas' },
-                    )}
+                  <MdiIcon path="Areas::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KF3oooAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.ServiceUser.ServiceUser_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -566,8 +544,8 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                       childTabs={[
                         {
                           id: 'User/(esm/_mk-zYIdjEe2kLcMqsIbMgQ)/GroupTab',
-                          name: 'service.ServiceUser.ServiceUser.View.Edit.tab_activity_counties',
-                          label: t('service.ServiceUser.ServiceUser.View.Edit.tab_activity_counties', {
+                          name: 'service.ServiceUser.ServiceUser_View_Edit.tab_activity_counties',
+                          label: t('service.ServiceUser.ServiceUser_View_Edit.tab_activity_counties', {
                             defaultValue: 'Activity counties',
                           }) as string,
                           disabled: isLoading,
@@ -577,8 +555,8 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                         },
                         {
                           id: 'User/(esm/_yYmycIdjEe2kLcMqsIbMgQ)/GroupTab',
-                          name: 'service.ServiceUser.ServiceUser.View.Edit.activity_cities',
-                          label: t('service.ServiceUser.ServiceUser.View.Edit.activity_cities', {
+                          name: 'service.ServiceUser.ServiceUser_View_Edit.activity_cities',
+                          label: t('service.ServiceUser.ServiceUser_View_Edit.activity_cities', {
                             defaultValue: 'Activity cities',
                           }) as string,
                           disabled: isLoading,
@@ -588,8 +566,8 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                         },
                         {
                           id: 'User/(esm/_4jHz8IdjEe2kLcMqsIbMgQ)/GroupTab',
-                          name: 'service.ServiceUser.ServiceUser.View.Edit.activity_districts',
-                          label: t('service.ServiceUser.ServiceUser.View.Edit.activity_districts', {
+                          name: 'service.ServiceUser.ServiceUser_View_Edit.activity_districts',
+                          label: t('service.ServiceUser.ServiceUser_View_Edit.activity_districts', {
                             defaultValue: 'Activity districts',
                           }) as string,
                           disabled: isLoading,
@@ -617,7 +595,9 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                               justifyContent="flex-start"
                             >
                               <ServiceServiceUserServiceUser_View_EditActivityCountiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -648,7 +628,9 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                               justifyContent="flex-start"
                             >
                               <ServiceServiceUserServiceUser_View_EditActivityCitiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -679,7 +661,9 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                               justifyContent="flex-start"
                             >
                               <ServiceServiceUserServiceUser_View_EditActivityDistrictsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}

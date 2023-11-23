@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,7 +29,7 @@ const ServiceYesNoVoteEntryYesNoVoteEntry_Table = lazy(
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_TablePageActions
   extends ServiceYesNoVoteEntryYesNoVoteEntry_TableActionDefinitions {
-  serviceYesNoVoteEntryYesNoVoteEntry_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_TablePageProps {
@@ -51,23 +53,19 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceYesNoVoteEntryYesNoVoteEntry_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::YesNoVoteEntry::YesNoVoteEntry_Table::Back"
+              id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceYesNoVoteEntryYesNoVoteEntry_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.YesNoVoteEntry.YesNoVoteEntry.Table.service::YesNoVoteEntry::YesNoVoteEntry_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.YesNoVoteEntry.YesNoVoteEntry_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

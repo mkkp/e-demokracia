@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,21 +32,21 @@ const CreateArgumentInputCreateArgumentInput_Form = lazy(
 
 export interface CreateArgumentInputCreateArgumentInput_FormDialogActions
   extends CreateArgumentInputCreateArgumentInput_FormActionDefinitions {
-  createArgumentInputCreateArgumentInput_FormGetTemplate?: () => Promise<CreateArgumentInput>;
-  createArgumentInputCreateArgumentInput_FormBack?: () => Promise<void>;
-  createArgumentInputCreateArgumentInput_FormCreate?: () => Promise<void>;
-  serviceConCon_View_EditArgumentsConsActionsCreateConArgument?: () => Promise<void>;
-  serviceConCon_View_EditArgumentsProsActionsCreateProArgument?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherArgumentsConsActionsCreateConArgument?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherArgumentsProsActionsCreateProArgument?: () => Promise<void>;
-  serviceProPro_View_EditArgumentsConsActionsCreateConArgument?: () => Promise<void>;
-  serviceProPro_View_EditArgumentsProsActionsCreateProArgument?: () => Promise<void>;
+  getTemplateAction?: () => Promise<CreateArgumentInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  createConArgumentForConAction?: () => Promise<void>;
+  createProArgumentForConAction?: () => Promise<void>;
+  createConArgumentForIssueAction?: () => Promise<void>;
+  createProArgumentForIssueAction?: () => Promise<void>;
+  createConArgumentForProAction?: () => Promise<void>;
+  createProArgumentForProAction?: () => Promise<void>;
 }
 
 export interface CreateArgumentInputCreateArgumentInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: CreateArgumentInputCreateArgumentInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -87,7 +92,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="CreateArgumentInputCreateArgumentInput_Form-dialog-close-wrapper"
+          id="User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -117,169 +122,156 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.createArgumentInputCreateArgumentInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateArgumentInput::CreateArgumentInput_Form::Back"
+              id="User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.createArgumentInputCreateArgumentInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CreateArgumentInput.CreateArgumentInput.Form.CreateArgumentInput::CreateArgumentInput_Form::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CreateArgumentInput.CreateArgumentInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.createArgumentInputCreateArgumentInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateArgumentInput::CreateArgumentInput_Form::Create"
+              id="User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.createArgumentInputCreateArgumentInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.CreateArgumentInput::CreateArgumentInput_Form::Create',
-                  { defaultValue: 'Create' },
-                )}
-              </span>
+              <span>{t('CreateArgumentInput.CreateArgumentInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueIssue_View_EditOtherArgumentsProsActionsCreateProArgument && (
+        {editMode && actions.createProArgumentForConAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Issue::Issue_View_Edit::other::arguments::pros::actions::createProArgument::OperationFormCallButton"
+              id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zsYn8YoAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="chat-plus" />}
               onClick={async () => {
-                await actions.serviceIssueIssue_View_EditOtherArgumentsProsActionsCreateProArgument!();
+                await actions.createProArgumentForConAction!();
               }}
             >
               <span>
-                {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.service::Issue::Issue_View_Edit::other::arguments::pros::actions::createProArgument::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
+                {t('service.Con.Con_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceConCon_View_EditArgumentsConsActionsCreateConArgument && (
+        {editMode && actions.createConArgumentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_View_Edit::Arguments::cons::actions::createConArgument::OperationFormCallButton"
+              id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zsYn8YoAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="chat-minus" />}
               onClick={async () => {
-                await actions.serviceConCon_View_EditArgumentsConsActionsCreateConArgument!();
+                await actions.createConArgumentForIssueAction!();
               }}
             >
               <span>
                 {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.service::Con::Con_View_Edit::Arguments::cons::actions::createConArgument::OperationFormCallButton',
+                  'service.Issue.Issue_View_Edit.other.arguments.cons.actions.createConArgument.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceProPro_View_EditArgumentsConsActionsCreateConArgument && (
+        {editMode && actions.createProArgumentForProAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Pro::Pro_View_Edit::Arguments::cons::actions::createConArgument::OperationFormCallButton"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="chat-minus" />}
-              onClick={async () => {
-                await actions.serviceProPro_View_EditArgumentsConsActionsCreateConArgument!();
-              }}
-            >
-              <span>
-                {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.service::Pro::Pro_View_Edit::Arguments::cons::actions::createConArgument::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {editMode && actions.serviceProPro_View_EditArgumentsProsActionsCreateProArgument && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="service::Pro::Pro_View_Edit::Arguments::pros::actions::createProArgument::OperationFormCallButton"
+              id="User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zsYn8YoAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="chat-plus" />}
               onClick={async () => {
-                await actions.serviceProPro_View_EditArgumentsProsActionsCreateProArgument!();
+                await actions.createProArgumentForProAction!();
               }}
             >
               <span>
-                {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.service::Pro::Pro_View_Edit::Arguments::pros::actions::createProArgument::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
+                {t('service.Pro.Pro_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueIssue_View_EditOtherArgumentsConsActionsCreateConArgument && (
+        {editMode && actions.createProArgumentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Issue::Issue_View_Edit::other::arguments::cons::actions::createConArgument::OperationFormCallButton"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="chat-minus" />}
-              onClick={async () => {
-                await actions.serviceIssueIssue_View_EditOtherArgumentsConsActionsCreateConArgument!();
-              }}
-            >
-              <span>
-                {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.service::Issue::Issue_View_Edit::other::arguments::cons::actions::createConArgument::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {editMode && actions.serviceConCon_View_EditArgumentsProsActionsCreateProArgument && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="service::Con::Con_View_Edit::Arguments::pros::actions::createProArgument::OperationFormCallButton"
+              id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zsYn8YoAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="chat-plus" />}
               onClick={async () => {
-                await actions.serviceConCon_View_EditArgumentsProsActionsCreateProArgument!();
+                await actions.createProArgumentForIssueAction!();
               }}
             >
               <span>
                 {t(
-                  'CreateArgumentInput.CreateArgumentInput.Form.service::Con::Con_View_Edit::Arguments::pros::actions::createProArgument::OperationFormCallButton',
+                  'service.Issue.Issue_View_Edit.other.arguments.pros.actions.createProArgument.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.createConArgumentForProAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zsYn8YoAEe6F9LXBn0VWTg)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="chat-minus" />}
+              onClick={async () => {
+                await actions.createConArgumentForProAction!();
+              }}
+            >
+              <span>
+                {t('service.Pro.Pro_View_Edit.Arguments.cons.actions.createConArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.createConArgumentForConAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zsYn8YoAEe6F9LXBn0VWTg)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="chat-minus" />}
+              onClick={async () => {
+                await actions.createConArgumentForConAction!();
+              }}
+            >
+              <span>
+                {t('service.Con.Con_View_Edit.Arguments.cons.actions.createConArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
               </span>
             </LoadingButton>
           </Grid>

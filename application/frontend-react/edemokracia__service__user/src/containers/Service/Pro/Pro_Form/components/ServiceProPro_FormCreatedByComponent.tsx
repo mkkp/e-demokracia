@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceProPro_FormCreatedByComponentActionDefinitions {
-  serviceProPro_FormCreatedByCreate?: () => Promise<void>;
-  serviceProPro_FormCreatedByDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceProPro_FormCreatedBySetOpenSelector?: () => Promise<void>;
-  serviceProPro_FormCreatedByUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceProPro_FormCreatedByView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceProPro_FormCreatedByAutocomplete?: (
+  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -55,9 +51,7 @@ export function ServiceProPro_FormCreatedByComponent(props: ServiceProPro_FormCr
     <AggregationInput
       name="createdBy"
       id="User/(esm/_eJ6dYIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t('service.Pro.Pro.Form.createdBy.Pro_Form.service::Pro::Pro_Form', { defaultValue: 'CreatedBy' }) as string
-      }
+      label={t('service.Pro.Pro_Form.createdBy', { defaultValue: 'CreatedBy' }) as string}
       labelList={[
         ownerData.createdBy?.firstName?.toString() ?? '',
         ownerData.createdBy?.lastName?.toString() ?? '',
@@ -79,7 +73,7 @@ export function ServiceProPro_FormCreatedByComponent(props: ServiceProPro_FormCr
         storeDiff('createdBy', createdBy);
       }}
       onAutoCompleteSearch={
-        actions.serviceProPro_FormCreatedByAutocomplete
+        actions.createdByAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -91,39 +85,15 @@ export function ServiceProPro_FormCreatedByComponent(props: ServiceProPro_FormCr
                 _orderBy: [{ attribute: 'firstName', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceProPro_FormCreatedByAutocomplete!(processQueryCustomizer(queryCustomizer));
+              return await actions.createdByAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.createdBy && actions.serviceProPro_FormCreatedByView
+        ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.serviceProPro_FormCreatedByView!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceProPro_FormCreatedByCreate
-          ? async () => {
-              await actions.serviceProPro_FormCreatedByCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.createdBy && actions.serviceProPro_FormCreatedByDelete
-          ? async () => actions.serviceProPro_FormCreatedByDelete!(ownerData.createdBy!)
-          : undefined
-      }
-      onSet={
-        actions.serviceProPro_FormCreatedBySetOpenSelector
-          ? async () => {
-              await actions.serviceProPro_FormCreatedBySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.createdBy && actions.serviceProPro_FormCreatedByUnset
-          ? async () => actions.serviceProPro_FormCreatedByUnset!(ownerData.createdBy!)
           : undefined
       }
     ></AggregationInput>

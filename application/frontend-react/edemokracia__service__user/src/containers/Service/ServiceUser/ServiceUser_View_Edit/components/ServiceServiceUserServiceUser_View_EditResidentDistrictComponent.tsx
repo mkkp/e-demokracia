@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,18 +26,10 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponentActionDefinitions {
-  serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictCreate?: () => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictDelete?: (
-    target: ServiceDistrictStored,
-  ) => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictSetOpenSelector?: () => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictUnset?: (
-    target: ServiceDistrictStored,
-  ) => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictView?: (
-    target: ServiceDistrictStored,
-  ) => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictAutocomplete?: (
+  residentDistrictOpenSetSelectorAction?: () => Promise<void>;
+  residentDistrictUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
+  residentDistrictOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
+  residentDistrictAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
 }
@@ -64,10 +56,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
       name="residentDistrict"
       id="User/(esm/_I_CEgIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink"
       label={
-        t(
-          'service.ServiceUser.ServiceUser.View.Edit.residentDistrict.Residency.Areas.Areas::LabelWrapper.ServiceUser_View_Edit.service::ServiceUser::ServiceUser_View_Edit',
-          { defaultValue: 'Resident district' },
-        ) as string
+        t('service.ServiceUser.ServiceUser_View_Edit.residentDistrict', { defaultValue: 'Resident district' }) as string
       }
       labelList={[ownerData.residentDistrict?.representation?.toString() ?? '']}
       ownerData={ownerData}
@@ -81,7 +70,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
         storeDiff('residentDistrict', residentDistrict);
       }}
       onAutoCompleteSearch={
-        actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictAutocomplete
+        actions.residentDistrictAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceDistrictQueryCustomizer = {
                 ...(searchText?.length
@@ -93,50 +82,27 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.residentDistrictAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.residentDistrict && actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictView
+        ownerData.residentDistrict && actions.residentDistrictOpenPageAction
           ? async () => {
-              await actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictView!(
-                ownerData.residentDistrict!,
-              );
+              await actions.residentDistrictOpenPageAction!(ownerData.residentDistrict!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictCreate
-          ? async () => {
-              await actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.residentDistrict &&
-        actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictDelete
-          ? async () =>
-              actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictDelete!(
-                ownerData.residentDistrict!,
-              )
           : undefined
       }
       onSet={
-        actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictSetOpenSelector
+        actions.residentDistrictOpenSetSelectorAction
           ? async () => {
-              await actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictSetOpenSelector!();
+              await actions.residentDistrictOpenSetSelectorAction!();
             }
           : undefined
       }
       onUnset={
-        ownerData.residentDistrict && actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictUnset
-          ? async () =>
-              actions.serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictUnset!(
-                ownerData.residentDistrict!,
-              )
+        ownerData.residentDistrict && actions.residentDistrictUnsetAction
+          ? async () => actions.residentDistrictUnsetAction!(ownerData.residentDistrict!)
           : undefined
       }
     ></AggregationInput>

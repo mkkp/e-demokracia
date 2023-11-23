@@ -28,7 +28,7 @@ export interface ServiceCommentService {
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<ServiceCommentStored>;
 
-  getVotes(
+  listVotes(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
@@ -48,7 +48,7 @@ export interface ServiceCommentService {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
 
-  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
-
   voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+
+  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 }

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -39,7 +40,18 @@ import type {
   ServiceYesNoVoteEntryStored,
   YesNoVoteValue,
 } from '~/services/data-api';
-import { serviceYesNoVoteDefinitionServiceForVoteEntriesImpl } from '~/services/data-axios';
+import { serviceYesNoVoteEntryServiceImpl } from '~/services/data-axios';
+export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended =
+  ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions & {};
+
+export const SERVICE_YES_NO_VOTE_DEFINITION_VOTE_ENTRIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionsHook';
+export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceYesNoVoteEntryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceYesNoVoteEntry, value: any) => void,
+) => ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended;
 
 export const useServiceYesNoVoteDefinitionVoteEntriesRelationViewPage = (): ((
   ownerData: any,
@@ -51,9 +63,9 @@ export const useServiceYesNoVoteDefinitionVoteEntriesRelationViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -62,14 +74,14 @@ export const useServiceYesNoVoteDefinitionVoteEntriesRelationViewPage = (): ((
         children: (
           <ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -108,10 +120,11 @@ const ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer = lazy(
 export interface ServiceYesNoVoteDefinitionVoteEntriesRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceYesNoVoteEntryStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceYesNoVoteEntryStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_j_gXIFojEe6_67aMO2jOsw)/RelationFeatureView
 // Name: service::YesNoVoteDefinition::voteEntries::Relation::View::Page
 export default function ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(
   props: ServiceYesNoVoteDefinitionVoteEntriesRelationViewPageProps,
@@ -121,7 +134,7 @@ export default function ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -170,25 +183,32 @@ export default function ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(
     _mask: '{created,value,owner{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_YES_NO_VOTE_DEFINITION_VOTE_ENTRIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
   const openServiceYesNoVoteEntryOwnerRelationViewPage = useServiceYesNoVoteEntryOwnerRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.YesNoVoteEntry.YesNoVoteEntry_View_Edit', {
+  const title: string = t('service.YesNoVoteEntry.YesNoVoteEntry_View_Edit', {
     defaultValue: 'YesNoVoteEntry View / Edit',
   });
 
   // Action section
-  const serviceYesNoVoteEntryYesNoVoteEntry_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceYesNoVoteEntryYesNoVoteEntry_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
   ): Promise<ServiceYesNoVoteEntryStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceYesNoVoteDefinitionServiceForVoteEntriesImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceYesNoVoteEntryServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -209,27 +229,31 @@ export default function ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserView = async (target?: ServiceServiceUserStored) => {
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceYesNoVoteEntryOwnerRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
 
   const actions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions = {
-    serviceYesNoVoteEntryYesNoVoteEntry_View_EditBack,
-    serviceYesNoVoteEntryYesNoVoteEntry_View_EditRefresh,
-    serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserView,
+    backAction,
+    refreshAction,
+    ownerOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_j_gXIFojEe6_67aMO2jOsw)/RelationFeatureView"
+      data-page-name="service::YesNoVoteDefinition::voteEntries::Relation::View::Page"
+    >
       <Suspense>
         <ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer
           ownerData={ownerData}
@@ -247,6 +271,6 @@ export default function ServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

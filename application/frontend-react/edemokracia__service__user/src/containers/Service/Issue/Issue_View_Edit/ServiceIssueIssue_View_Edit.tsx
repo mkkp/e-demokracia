@@ -13,26 +13,19 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -54,7 +47,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCity,
@@ -123,15 +122,15 @@ export interface ServiceIssueIssue_View_EditActionDefinitions
     ServiceIssueIssue_View_EditIssueTypeComponentActionDefinitions,
     ServiceIssueIssue_View_EditOwnerComponentActionDefinitions,
     ServiceIssueIssue_View_EditProsComponentActionDefinitions {
-  serviceIssueIssue_View_EditActionsPageActionButtonsActivate?: () => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites?: () => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm?: () => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote?: () => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive?: () => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherArgumentsConsActionsCreateConArgumentOpenForm?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherArgumentsProsActionsCreateProArgumentOpenForm?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCreateCommentOpenForm?: () => Promise<void>;
+  activateForIssueAction?: () => Promise<void>;
+  addToFavoritesForIssueAction?: () => Promise<void>;
+  closeDebateAction?: () => Promise<void>;
+  closeVoteForIssueAction?: () => Promise<void>;
+  deleteOrArchiveForIssueAction?: () => Promise<void>;
+  removeFromFavoritesForIssueAction?: () => Promise<void>;
+  createConArgumentAction?: () => Promise<void>;
+  createProArgumentAction?: () => Promise<void>;
+  createCommentAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueIssue_View_EditProps {
@@ -195,15 +194,15 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   startIcon={<MdiIcon path="star-plus" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites
+                    actions.addToFavoritesForIssueAction
                       ? async () => {
-                          await actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites!();
+                          await actions.addToFavoritesForIssueAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
-                  <span>{t('service.Issue.Issue.View.Edit.addToFavorites', { defaultValue: 'Add to favorites' })}</span>
+                  <span>{t('service.Issue.Issue_View_Edit.addToFavorites', { defaultValue: 'Add to favorites' })}</span>
                 </LoadingButton>
               </Grid>
               ) ( !data.isNotFavorite &&
@@ -214,16 +213,16 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   startIcon={<MdiIcon path="star-minus" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites
+                    actions.removeFromFavoritesForIssueAction
                       ? async () => {
-                          await actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites!();
+                          await actions.removeFromFavoritesForIssueAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
                   <span>
-                    {t('service.Issue.Issue.View.Edit.removeFromFavorites', { defaultValue: 'Remove from favorites' })}
+                    {t('service.Issue.Issue_View_Edit.removeFromFavorites', { defaultValue: 'Remove from favorites' })}
                   </span>
                 </LoadingButton>
               </Grid>
@@ -235,16 +234,16 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   startIcon={<MdiIcon path="vote" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm
+                    actions.closeDebateAction
                       ? async () => {
-                          await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm!();
+                          await actions.closeDebateAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
                   <span>
-                    {t('service.Issue.Issue.View.Edit.closeDebate', { defaultValue: 'Close debate and start vote' })}
+                    {t('service.Issue.Issue_View_Edit.closeDebate', { defaultValue: 'Close debate and start vote' })}
                   </span>
                 </LoadingButton>
               </Grid>
@@ -256,15 +255,15 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   startIcon={<MdiIcon path="lock-check" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote
+                    actions.closeVoteForIssueAction
                       ? async () => {
-                          await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote!();
+                          await actions.closeVoteForIssueAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
-                  <span>{t('service.Issue.Issue.View.Edit.closeVote', { defaultValue: 'Close Vote' })}</span>
+                  <span>{t('service.Issue.Issue_View_Edit.closeVote', { defaultValue: 'Close Vote' })}</span>
                 </LoadingButton>
               </Grid>
               ) ( !data.isIssueNotDraft &&
@@ -275,15 +274,15 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   startIcon={<MdiIcon path="lock-open" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate
+                    actions.activateForIssueAction
                       ? async () => {
-                          await actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate!();
+                          await actions.activateForIssueAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
-                  <span>{t('service.Issue.Issue.View.Edit.activate', { defaultValue: 'Activate' })}</span>
+                  <span>{t('service.Issue.Issue_View_Edit.activate', { defaultValue: 'Activate' })}</span>
                 </LoadingButton>
               </Grid>
               ) ( !data.isIssueNotDeletable &&
@@ -294,15 +293,15 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   startIcon={<MdiIcon path="delete" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive
+                    actions.deleteOrArchiveForIssueAction
                       ? async () => {
-                          await actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive!();
+                          await actions.deleteOrArchiveForIssueAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
-                  <span>{t('service.Issue.Issue.View.Edit.deleteOrArchive', { defaultValue: 'Delete' })}</span>
+                  <span>{t('service.Issue.Issue_View_Edit.deleteOrArchive', { defaultValue: 'Delete' })}</span>
                 </LoadingButton>
               </Grid>
               )
@@ -312,17 +311,14 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_fnUkgH2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KtisIoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
-                  <Typography id="_fnUkgH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.Issue.Issue.View.Edit.issue::Label.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                      { defaultValue: 'Issue' },
-                    )}
+                  <MdiIcon path="issue::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KtisIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.Issue.Issue_View_Edit.issue.Icon', { defaultValue: 'Issue' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -348,107 +344,15 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={4.0}>
-                    <Grid
-                      id="_fomW4H2GEe6V8KKnnZfChA)/LabelWrapper"
-                      container
-                      direction="column"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                          <Typography id="_fomW4H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t(
-                              'service.Issue.Issue.View.Edit.defaultVoteType::Label.defaultVoteType::LabelWrapper.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                              { defaultValue: 'Default Vote Type' },
-                            )}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <FormControl
-                          fullWidth={true}
-                          sx={{ mt: '10px' }}
-                          className='MuiTextField-root'
-                          disabled={false || !isFormUpdateable() || isLoading}
-                          error={validation.has('defaultVoteType')}
-                        >
-                          <InputLabel
-                            id="User/(esm/_h1CAMOMdEe2Bgcx6em3jZg)/EnumerationTypeRadio"
-                            shrink={true}
-                            size={'small'}
-                          >
-                            {t(
-                              'service.Issue.Issue.View.Edit.defaultVoteType.defaultVoteType::LabelWrapper.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                              { defaultValue: 'Default Vote Type' },
-                            )}
-                          </InputLabel>
-                          <RadioGroup
-                            sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                            name="defaultVoteType"
-                            id="User/(esm/_h1CAMOMdEe2Bgcx6em3jZg)/EnumerationTypeRadio"
-                            value={data.defaultVoteType || ''}
-                            onChange={(event) => {
-                              storeDiff('defaultVoteType', event.target.value);
-                            }}
-                          >
-                            <FormControlLabel
-                              id="User/(esm/_r9r9IeMbEe2Bgcx6em3jZg)/EnumerationTypeMember"
-                              value={'YES_NO'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteType.YES_NO', { defaultValue: 'YES_NO' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_r9r9IuMbEe2Bgcx6em3jZg)/EnumerationTypeMember"
-                              value={'YES_NO_ABSTAIN'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteType.YES_NO_ABSTAIN', { defaultValue: 'YES_NO_ABSTAIN' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_r9r9I-MbEe2Bgcx6em3jZg)/EnumerationTypeMember"
-                              value={'SELECT_ANSWER'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteType.SELECT_ANSWER', { defaultValue: 'SELECT_ANSWER' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_r9r9JOMbEe2Bgcx6em3jZg)/EnumerationTypeMember"
-                              value={'RATE'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteType.RATE', { defaultValue: 'RATE' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_r9r9JeMbEe2Bgcx6em3jZg)/EnumerationTypeMember"
-                              value={'NO_VOTE'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteType.NO_VOTE', { defaultValue: 'NO_VOTE' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                          </RadioGroup>
-                          {validation.has('defaultVoteType') && (
-                            <FormHelperText>{validation.get('defaultVoteType')}</FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={false}
                       name="defaultVoteType"
                       id="User/(esm/_h1CAMOMdEe2Bgcx6em3jZg)/EnumerationTypeCombo"
+                      autoFocus
                       label={
-                        t(
-                          'service.Issue.Issue.View.Edit.defaultVoteType.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                          { defaultValue: 'Default Vote Type' },
-                        ) as string
+                        t('service.Issue.Issue_View_Edit.defaultVoteType', {
+                          defaultValue: 'Default Vote Type',
+                        }) as string
                       }
                       value={data.defaultVoteType || ''}
                       className={clsx({
@@ -495,12 +399,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       required={true}
                       name="title"
                       id="User/(esm/_BvyiQGkwEe25ONJ3V89cVA)/StringTypeTextInput"
-                      label={
-                        t(
-                          'service.Issue.Issue.View.Edit.title.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                          { defaultValue: 'Title' },
-                        ) as string
-                      }
+                      label={t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string}
                       value={data.title ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -526,116 +425,11 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={4.0}>
-                    <Grid
-                      id="_fom9-H2GEe6V8KKnnZfChA)/LabelWrapper"
-                      container
-                      direction="column"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                          <Typography id="_fom9-H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t(
-                              'service.Issue.Issue.View.Edit.status::Label.status::LabelWrapper.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                              { defaultValue: 'Status' },
-                            )}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <FormControl
-                          fullWidth={true}
-                          sx={{ mt: '10px' }}
-                          className='MuiTextField-root'
-                          disabled={false || !isFormUpdateable() || isLoading}
-                          error={validation.has('status')}
-                        >
-                          <InputLabel
-                            id="User/(esm/_Bw7xwGkwEe25ONJ3V89cVA)/EnumerationTypeRadio"
-                            shrink={true}
-                            size={'small'}
-                          >
-                            {t(
-                              'service.Issue.Issue.View.Edit.status.status::LabelWrapper.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                              { defaultValue: 'Status' },
-                            )}{' '}
-                            *
-                          </InputLabel>
-                          <RadioGroup
-                            sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                            name="status"
-                            id="User/(esm/_Bw7xwGkwEe25ONJ3V89cVA)/EnumerationTypeRadio"
-                            value={data.status || ''}
-                            onChange={(event) => {
-                              storeDiff('status', event.target.value);
-                            }}
-                          >
-                            <FormControlLabel
-                              id="User/(esm/_Es6EYGkUEe25ONJ3V89cVA)/EnumerationTypeMember"
-                              value={'CREATED'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.IssueStatus.CREATED', { defaultValue: 'CREATED' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_F1DYMGkUEe25ONJ3V89cVA)/EnumerationTypeMember"
-                              value={'PENDING'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.IssueStatus.PENDING', { defaultValue: 'PENDING' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_IO7ZoGkUEe25ONJ3V89cVA)/EnumerationTypeMember"
-                              value={'ACTIVE'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.IssueStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_JnJJwGkUEe25ONJ3V89cVA)/EnumerationTypeMember"
-                              value={'CLOSED'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.IssueStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_b31-cF4_Ee6vsex_cZNQbQ)/EnumerationTypeMember"
-                              value={'ARCHIVED'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.IssueStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_pqmHAHj2Ee6cB8og8p0UuQ)/EnumerationTypeMember"
-                              value={'VOTING'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.IssueStatus.VOTING', { defaultValue: 'VOTING' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                          </RadioGroup>
-                          {validation.has('status') && !data.status && (
-                            <FormHelperText>{validation.get('status')}</FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={true}
                       name="status"
                       id="User/(esm/_Bw7xwGkwEe25ONJ3V89cVA)/EnumerationTypeCombo"
-                      label={
-                        t(
-                          'service.Issue.Issue.View.Edit.status.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                          { defaultValue: 'Status' },
-                        ) as string
-                      }
+                      label={t('service.Issue.Issue_View_Edit.status', { defaultValue: 'Status' }) as string}
                       value={data.status || ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -718,12 +512,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                         });
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                      label={
-                        t(
-                          'service.Issue.Issue.View.Edit.created.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                          { defaultValue: 'Created' },
-                        ) as string
-                      }
+                      label={t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string}
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={true || !isFormUpdateable()}
                       disabled={isLoading}
@@ -738,12 +527,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       required={true}
                       name="description"
                       id="User/(esm/_BwVU0GkwEe25ONJ3V89cVA)/StringTypeTextArea"
-                      label={
-                        t(
-                          'service.Issue.Issue.View.Edit.description.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-                          { defaultValue: 'Description' },
-                        ) as string
-                      }
+                      label={t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string}
                       value={data.description ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -796,8 +580,8 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
           childTabs={[
             {
               id: 'User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/GroupTab',
-              name: 'service.Issue.Issue.View.Edit.arguments',
-              label: t('service.Issue.Issue.View.Edit.arguments', { defaultValue: 'Arguments' }) as string,
+              name: 'service.Issue.Issue_View_Edit.arguments',
+              label: t('service.Issue.Issue_View_Edit.arguments', { defaultValue: 'Arguments' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'wechat',
@@ -805,8 +589,8 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
             },
             {
               id: 'User/(esm/_yCDu0NvSEe2Bgcx6em3jZg)/GroupTab',
-              name: 'service.Issue.Issue.View.Edit.area',
-              label: t('service.Issue.Issue.View.Edit.area', { defaultValue: 'Area' }) as string,
+              name: 'service.Issue.Issue_View_Edit.area',
+              label: t('service.Issue.Issue_View_Edit.area', { defaultValue: 'Area' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'map',
@@ -814,8 +598,8 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
             },
             {
               id: 'User/(esm/_x23N8Id8Ee2kLcMqsIbMgQ)/GroupTab',
-              name: 'service.Issue.Issue.View.Edit.attachments',
-              label: t('service.Issue.Issue.View.Edit.attachments', { defaultValue: 'Attachments' }) as string,
+              name: 'service.Issue.Issue_View_Edit.attachments',
+              label: t('service.Issue.Issue_View_Edit.attachments', { defaultValue: 'Attachments' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'paperclip',
@@ -823,8 +607,8 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
             },
             {
               id: 'User/(esm/_Cb01EId9Ee2kLcMqsIbMgQ)/GroupTab',
-              name: 'service.Issue.Issue.View.Edit.categories',
-              label: t('service.Issue.Issue.View.Edit.categories', { defaultValue: 'Categories' }) as string,
+              name: 'service.Issue.Issue_View_Edit.categories',
+              label: t('service.Issue.Issue_View_Edit.categories', { defaultValue: 'Categories' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'file-tree',
@@ -832,8 +616,8 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
             },
             {
               id: 'User/(esm/__yV9oIybEe2VSOmaAz6G9Q)/GroupTab',
-              name: 'service.Issue.Issue.View.Edit.comments',
-              label: t('service.Issue.Issue.View.Edit.comments', { defaultValue: 'Comments' }) as string,
+              name: 'service.Issue.Issue_View_Edit.comments',
+              label: t('service.Issue.Issue_View_Edit.comments', { defaultValue: 'Comments' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'comment-text-multiple',
@@ -851,16 +635,14 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
               spacing={2}
             >
               <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="_fnVLlH2GEe6V8KKnnZfChA)/LabelWrapper">
+                <Card id="_0KuJwYoAEe6F9LXBn0VWTg)/LabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                          <Typography id="_fnVLlH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t('service.Issue.Issue.View.Edit.cons::Label.cons::LabelWrapper.arguments', {
-                              defaultValue: 'Cons',
-                            })}
+                          <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
+                          <Typography id="_0KuJwYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                            {t('service.Issue.Issue_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -905,7 +687,9 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                   justifyContent="flex-start"
                                 >
                                   <ServiceIssueIssue_View_EditConsComponent
-                                    uniqueId={'TMP'}
+                                    uniqueId={
+                                      'User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
                                     actions={actions}
                                     ownerData={data}
                                     editMode={editMode}
@@ -925,16 +709,14 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
               </Grid>
 
               <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="_fnXn0H2GEe6V8KKnnZfChA)/LabelWrapper">
+                <Card id="_0KvX4YoAEe6F9LXBn0VWTg)/LabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                          <Typography id="_fnXn0H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t('service.Issue.Issue.View.Edit.pros::Label.pros::LabelWrapper.arguments', {
-                              defaultValue: 'Pros',
-                            })}
+                          <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
+                          <Typography id="_0KvX4YoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                            {t('service.Issue.Issue_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -979,7 +761,9 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                   justifyContent="flex-start"
                                 >
                                   <ServiceIssueIssue_View_EditProsComponent
-                                    uniqueId={'TMP'}
+                                    uniqueId={
+                                      'User/(esm/_qJPPBXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
                                     actions={actions}
                                     ownerData={data}
                                     editMode={editMode}
@@ -1062,7 +846,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   justifyContent="flex-start"
                 >
                   <ServiceIssueIssue_View_EditAttachmentsComponent
-                    uniqueId={'TMP'}
+                    uniqueId={'User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
                     actions={actions}
                     ownerData={data}
                     editMode={editMode}
@@ -1093,7 +877,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   justifyContent="flex-start"
                 >
                   <ServiceIssueIssue_View_EditCategoriesComponent
-                    uniqueId={'TMP'}
+                    uniqueId={'User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
                     actions={actions}
                     ownerData={data}
                     editMode={editMode}
@@ -1135,7 +919,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       justifyContent="flex-start"
                     >
                       <ServiceIssueIssue_View_EditCommentsComponent
-                        uniqueId={'TMP'}
+                        uniqueId={'User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable'}
                         actions={actions}
                         ownerData={data}
                         editMode={editMode}

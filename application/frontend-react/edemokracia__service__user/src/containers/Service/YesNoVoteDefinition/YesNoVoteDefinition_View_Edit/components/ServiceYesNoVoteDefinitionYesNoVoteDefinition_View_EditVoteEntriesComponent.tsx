@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,35 +68,16 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesAddOpenSelector?: () => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesBulkDelete?: (
-    selectedRows: ServiceYesNoVoteEntryStored[],
-  ) => Promise<DialogResult<ServiceYesNoVoteEntryStored[]>>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesBulkRemove?: (
-    selectedRows: ServiceYesNoVoteEntryStored[],
-  ) => Promise<DialogResult<ServiceYesNoVoteEntryStored[]>>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesClear?: () => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesCreateOpen?: () => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesFilter?: (
+  voteEntriesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRefresh?: (
+  voteEntriesRefreshAction?: (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
   ) => Promise<ServiceYesNoVoteEntryStored[]>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesDelete?: (
-    row: ServiceYesNoVoteEntryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRemove?: (
-    row: ServiceYesNoVoteEntryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesView?: (
-    row: ServiceYesNoVoteEntryStored,
-  ) => Promise<void>;
+  voteEntriesOpenPageAction?: (row: ServiceYesNoVoteEntryStored) => Promise<void>;
 }
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponentProps {
@@ -159,7 +144,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     {
       ...baseColumnConfig,
       field: 'value',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.value', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -180,7 +165,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.created', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -207,7 +192,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     {
       ...baseColumnConfig,
       field: 'createdBy',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.createdBy', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -218,61 +203,30 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     },
   ];
 
-  const rowActions: TableRowAction<ServiceYesNoVoteEntryStored>[] = [
-    {
-      id: 'User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceYesNoVoteEntryStored) => isLoading,
-      action: actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRemove
-        ? async (rowData) => {
-            await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceYesNoVoteEntryStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesDelete
-        ? async (rowData) => {
-            await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesDelete!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceYesNoVoteEntryStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_f0IRcn2GEe6V8KKnnZfChA',
+      id: '_0U9D0ooAEe6F9LXBn0VWTg',
       attributeName: 'value',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.value::Filter', {
-        defaultValue: 'Value',
-      }) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.value', { defaultValue: 'Value' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['YES', 'NO'],
     },
 
     {
-      id: '_f0I4gn2GEe6V8KKnnZfChA',
+      id: '_0U9q44oAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.created::Filter', {
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_f0JfkH2GEe6V8KKnnZfChA',
+      id: '_0U-R8YoAEe6F9LXBn0VWTg',
       attributeName: 'createdBy',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.createdBy::Filter', {
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
       }) as string,
       filterType: FilterType.string,
@@ -348,9 +302,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -376,7 +328,10 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="voteEntries"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -403,16 +358,11 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesView
+          actions.voteEntriesOpenPageAction
             ? async (params: GridRowParams<ServiceYesNoVoteEntryStored>) =>
-                await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesView!(params.row)
+                await actions.voteEntriesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -422,143 +372,43 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesFilter && true ? (
+              {actions.voteEntriesFilterAction && true ? (
                 <Button
                   id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesFilter!(
-                        'User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.voteEntriesFilterAction!(
+                      'User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.entries.voteEntries.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRefresh && true ? (
+              {actions.voteEntriesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesClear && data.length ? (
-                <Button
-                  id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditEntriesVoteEntriesBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.View.Edit.service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::entries::voteEntries::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.entries.voteEntries.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -589,6 +439,6 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

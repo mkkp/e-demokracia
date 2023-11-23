@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,19 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import { userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActionsExtended =
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions & {
+    postTakeBackVoteForSelectAnswerVoteDefinitionAction?: (
+      target: ServiceSelectAnswerVoteDefinitionStored,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionsHook';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionsHook = (
+  data: ServiceSelectAnswerVoteDefinitionStored[],
+  editMode: boolean,
+) => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActionsExtended;
 
 const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -51,7 +65,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -64,23 +78,30 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceSelectAnswerVoteDefinitionStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActionsExtended
+    | undefined = customActionsHook?.(data, editMode);
+
   // Dialog hooks
   const openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector =
     useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector();
 
   // Calculated section
-  const title: string = t('Service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table', {
+  const title: string = t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table', {
     defaultValue: 'SelectAnswerVoteDefinition Table',
   });
 
   // Action section
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableView = async (
-    target?: ServiceSelectAnswerVoteDefinitionStored,
-  ) => {
+  const openPageAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -91,7 +112,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       filters: newFilters,
     };
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteDefinitionStored[]> => {
     try {
@@ -106,21 +127,14 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOperationFormTableRowCallButtonOpenSelector =
-    async () => {
-      const { result, data: returnedData } =
-        await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
-          [],
-        );
-      if (result === 'submit') {
-      }
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote =
-    async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
-      try {
-        setIsLoading(true);
-        await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.takeBackVote(target!);
+  const takeBackVoteForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.takeBackVote(target!);
 
+      if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction(target!);
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -130,34 +144,49 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
         );
 
         setRefreshCounter((prev) => prev + 1);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsLoading(false);
       }
-    };
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
+    }
+  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions = {
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableView,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableFilter,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableRefresh,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOperationFormTableRowCallButtonOpenSelector,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    takeBackVoteForSelectAnswerVoteDefinitionAction,
+    voteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessTablePageDefinition"
+      data-page-name="service::User::userOwnedSelectAnswerVoteDefinitions::Access::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,33 +69,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueIssue_View_EditCategoriesComponentActionDefinitions {
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesAddOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesBulkDelete?: (
+  categoriesOpenAddSelectorAction?: () => Promise<void>;
+  categoriesBulkRemoveAction?: (
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesBulkRemove?: (
-    selectedRows: ServiceIssueCategoryStored[],
-  ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesClear?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesCreateOpen?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesFilter?: (
+  categoriesClearAction?: () => Promise<void>;
+  categoriesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesRefresh?: (
+  categoriesRefreshAction?: (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
   ) => Promise<ServiceIssueCategoryStored[]>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesDelete?: (
-    row: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesRemove?: (
-    row: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditOtherCategoriesCategoriesView?: (row: ServiceIssueCategoryStored) => Promise<void>;
+  categoriesRemoveAction?: (row: ServiceIssueCategoryStored, silentMode?: boolean) => Promise<void>;
+  categoriesOpenPageAction?: (row: ServiceIssueCategoryStored) => Promise<void>;
 }
 
 export interface ServiceIssueIssue_View_EditCategoriesComponentProps {
@@ -153,7 +146,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Issue.Issue.View.Edit.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -163,7 +156,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.Issue.Issue.View.Edit.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -175,27 +168,14 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
   const rowActions: TableRowAction<ServiceIssueCategoryStored>[] = [
     {
       id: 'User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-      label: t('service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Remove', {
+      label: t('service.Issue.Issue_View_Edit.other.categories.categories.Remove', {
         defaultValue: 'Remove',
       }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceIssueCategoryStored) => isLoading,
-      action: actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesRemove
+      action: actions.categoriesRemoveAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceIssueCategoryStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesDelete
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesDelete!(rowData);
+            await actions.categoriesRemoveAction!(rowData);
           }
         : undefined,
     },
@@ -203,16 +183,16 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fwu_Mn2GEe6V8KKnnZfChA',
+      id: '_0SkeMIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Issue.Issue.View.Edit.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fwvmQX2GEe6V8KKnnZfChA',
+      id: '_0SkeNIoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.Issue.Issue.View.Edit.description::Filter', { defaultValue: 'Description' }) as string,
+      label: t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -278,7 +258,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
   }, [ownerData?.categories, filters]);
 
   return (
-    <>
+    <div id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable" data-table-name="categories">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -312,9 +292,9 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesView
+          actions.categoriesOpenPageAction
             ? async (params: GridRowParams<ServiceIssueCategoryStored>) =>
-                await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesView!(params.row)
+                await actions.categoriesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -324,13 +304,13 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesFilter && true ? (
+              {actions.categoriesFilterAction && true ? (
                 <Button
                   id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesFilter!(
+                    const filterResults = await actions.categoriesFilterAction!(
                       'User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -342,121 +322,67 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesRefresh && true ? (
+              {actions.categoriesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.categoriesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesAddOpenSelector && true ? (
+              {actions.categoriesOpenAddSelectorAction && true ? (
                 <Button
                   id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableAddSelectorOpenButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesAddOpenSelector!();
+                    await actions.categoriesOpenAddSelectorAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesClear && data.length ? (
+              {actions.categoriesClearAction && data.length ? (
                 <Button
                   id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesClear!();
+                    await actions.categoriesClearAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesBulkRemove && selectionModel.length > 0 ? (
+              {actions.categoriesBulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.categoriesBulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesBulkDelete && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceIssueIssue_View_EditOtherCategoriesCategoriesBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::categories::categories::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.categories.categories.BulkRemove', {
+                    defaultValue: 'Remove',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -478,6 +404,6 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

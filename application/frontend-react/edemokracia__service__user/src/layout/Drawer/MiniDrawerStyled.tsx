@@ -8,7 +8,7 @@
 
 import type { Theme, CSSObject } from '@mui/material/styles';
 import { styled } from '@mui/material/styles';
-import { Drawer } from '@mui/material';
+import Drawer from '@mui/material/Drawer';
 import { DRAWER_WIDTH, ThemeMode } from '~/config';
 
 const openedMixin = (theme: Theme): CSSObject => ({

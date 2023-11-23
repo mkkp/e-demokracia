@@ -8,7 +8,10 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { Typography, Button, Menu, MenuItem } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from './MdiIcon';
 import { generateAlternativeApplications, changeApplication } from '../utilities/application';

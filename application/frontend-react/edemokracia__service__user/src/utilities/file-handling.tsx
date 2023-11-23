@@ -7,7 +7,12 @@
 // Template file: actor/src/utilities/file-handling.tsx.hbs
 
 import jwt_decode from 'jwt-decode';
-import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import { useDialog } from '~/components/dialog';

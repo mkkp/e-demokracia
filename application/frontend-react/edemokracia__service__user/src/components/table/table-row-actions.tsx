@@ -6,7 +6,8 @@
 // Template name: actor/src/components/table/table-row-actions.tsx
 // Template file: actor/src/components/table/table-row-actions.tsx.hbs
 
-import { Button, ButtonGroup } from '@mui/material';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import type { TFunction } from 'i18next';
 import type { GridColDef, GridRowParams } from '@mui/x-data-grid';
 import type { ColumnActionsProvider, ColumnsActionsOptions, TableRowAction } from '../../utilities';

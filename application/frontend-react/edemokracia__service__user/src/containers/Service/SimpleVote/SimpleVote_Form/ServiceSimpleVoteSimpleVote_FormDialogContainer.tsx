@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,15 +28,15 @@ const ServiceSimpleVoteSimpleVote_Form = lazy(
 
 export interface ServiceSimpleVoteSimpleVote_FormDialogActions
   extends ServiceSimpleVoteSimpleVote_FormActionDefinitions {
-  serviceSimpleVoteSimpleVote_FormGetTemplate?: () => Promise<ServiceSimpleVote>;
-  serviceSimpleVoteSimpleVote_FormBack?: () => Promise<void>;
-  serviceSimpleVoteSimpleVote_FormCreate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceSimpleVote>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
 }
 
 export interface ServiceSimpleVoteSimpleVote_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceSimpleVoteSimpleVote_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -75,7 +80,7 @@ export default function ServiceSimpleVoteSimpleVote_FormDialog(props: ServiceSim
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceSimpleVoteSimpleVote_Form-dialog-close-wrapper"
+          id="User/(esm/_p9AJ4GksEe25ONJ3V89cVA)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -105,43 +110,35 @@ export default function ServiceSimpleVoteSimpleVote_FormDialog(props: ServiceSim
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceSimpleVoteSimpleVote_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SimpleVote::SimpleVote_Form::Back"
+              id="User/(esm/_p9AJ4GksEe25ONJ3V89cVA)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceSimpleVoteSimpleVote_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.SimpleVote.SimpleVote.Form.service::SimpleVote::SimpleVote_Form::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.SimpleVote.SimpleVote_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceSimpleVoteSimpleVote_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SimpleVote::SimpleVote_Form::Create"
+              id="User/(esm/_p9AJ4GksEe25ONJ3V89cVA)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceSimpleVoteSimpleVote_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t('service.SimpleVote.SimpleVote.Form.service::SimpleVote::SimpleVote_Form::Create', {
-                  defaultValue: 'Create',
-                })}
-              </span>
+              <span>{t('service.SimpleVote.SimpleVote_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}

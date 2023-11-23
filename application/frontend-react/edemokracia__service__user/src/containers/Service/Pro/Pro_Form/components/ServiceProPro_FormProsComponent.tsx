@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -59,25 +63,20 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceProPro_FormProsComponentActionDefinitions {
-  serviceProPro_FormProsAddOpenSelector?: () => Promise<void>;
-  serviceProPro_FormProsBulkDelete?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
-  serviceProPro_FormProsBulkRemove?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
-  serviceProPro_FormProsClear?: () => Promise<void>;
-  serviceProPro_FormProsCreateOpen?: () => Promise<void>;
-  serviceProPro_FormProsFilter?: (
+  prosBulkDeleteAction?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
+  prosFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceProPro_FormProsRefresh?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<ServiceProStored[]>;
-  serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm?: (row: ServiceProStored) => Promise<void>;
-  serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm?: (row: ServiceProStored) => Promise<void>;
-  serviceProPro_FormProsDelete?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  serviceProPro_FormProsRemove?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  serviceProPro_FormProsView?: (row: ServiceProStored) => Promise<void>;
-  serviceProPro_View_EditProVoteDown?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  serviceProPro_View_EditProVoteUp?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
+  prosRefreshAction?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<ServiceProStored[]>;
+  prosCreateConArgumentAction?: (row: ServiceProStored) => Promise<void>;
+  prosCreateProArgumentAction?: (row: ServiceProStored) => Promise<void>;
+  prosDeleteAction?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
+  prosOpenPageAction?: (row: ServiceProStored) => Promise<void>;
+  prosVoteDownForProAction?: (row: ServiceProStored) => Promise<void>;
+  prosVoteUpForProAction?: (row: ServiceProStored) => Promise<void>;
 }
 
 export interface ServiceProPro_FormProsComponentProps {
@@ -137,7 +136,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     {
       ...baseColumnConfig,
       field: 'createdByName',
-      headerName: t('service.Pro.Pro.Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
+      headerName: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -147,7 +146,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Pro.Pro.Form.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -172,7 +171,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.Pro.Pro.Form.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -182,7 +181,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Pro.Pro.Form.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -192,7 +191,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     {
       ...baseColumnConfig,
       field: 'upVotes',
-      headerName: t('service.Pro.Pro.Form.upVotes', { defaultValue: 'UpVotes' }) as string,
+      headerName: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -205,7 +204,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     {
       ...baseColumnConfig,
       field: 'downVotes',
-      headerName: t('service.Pro.Pro.Form.downVotes', { defaultValue: 'DownVotes' }) as string,
+      headerName: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -219,68 +218,57 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
 
   const rowActions: TableRowAction<ServiceProStored>[] = [
     {
-      id: 'User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowRemoveButton',
-      label: t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceProStored) => isLoading,
-      action: actions.serviceProPro_FormProsRemove
-        ? async (rowData) => {
-            await actions.serviceProPro_FormProsRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Delete', { defaultValue: 'Delete' }) as string,
+      label: t('service.Pro.Pro_Form.pros.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceProStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceProPro_FormProsDelete
+      action: actions.prosDeleteAction
         ? async (rowData) => {
-            await actions.serviceProPro_FormProsDelete!(rowData);
+            await actions.prosDeleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Form.voteUp', { defaultValue: 'voteUp' }) as string,
+      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_0Szuw4oAEe6F9LXBn0VWTg)',
+      label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.serviceProPro_View_EditProVoteUp
+      action: actions.prosVoteUpForProAction
         ? async (rowData) => {
-            await actions.serviceProPro_View_EditProVoteUp!(rowData);
+            await actions.prosVoteUpForProAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm
-        ? async (rowData) => {
-            await actions.serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm
-        ? async (rowData) => {
-            await actions.serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Form.voteDown', { defaultValue: 'voteDown' }) as string,
+      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_0Szuw4oAEe6F9LXBn0VWTg)',
+      label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.serviceProPro_View_EditProVoteDown
+      action: actions.prosVoteDownForProAction
         ? async (rowData) => {
-            await actions.serviceProPro_View_EditProVoteDown!(rowData);
+            await actions.prosVoteDownForProAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Szuw4oAEe6F9LXBn0VWTg)',
+      label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceProStored) => editMode || isLoading,
+      action: actions.prosCreateProArgumentAction
+        ? async (rowData) => {
+            await actions.prosCreateProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Szuw4oAEe6F9LXBn0VWTg)',
+      label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceProStored) => editMode || isLoading,
+      action: actions.prosCreateConArgumentAction
+        ? async (rowData) => {
+            await actions.prosCreateConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -288,44 +276,44 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fxAsAH2GEe6V8KKnnZfChA',
+      id: '_0SwEYooAEe6F9LXBn0VWTg',
       attributeName: 'createdByName',
-      label: t('service.Pro.Pro.Form.createdByName::Filter', { defaultValue: 'CreatedByName' }) as string,
+      label: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fxBTEH2GEe6V8KKnnZfChA',
+      id: '_0SwrcYoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Pro.Pro.Form.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fxBTFH2GEe6V8KKnnZfChA',
+      id: '_0SwrdYoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.Pro.Pro.Form.description::Filter', { defaultValue: 'Description' }) as string,
+      label: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fxB6In2GEe6V8KKnnZfChA',
+      id: '_0SxSgooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Pro.Pro.Form.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fxChMX2GEe6V8KKnnZfChA',
+      id: '_0Sx5kIoAEe6F9LXBn0VWTg',
       attributeName: 'upVotes',
-      label: t('service.Pro.Pro.Form.upVotes::Filter', { defaultValue: 'UpVotes' }) as string,
+      label: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_fxDIQH2GEe6V8KKnnZfChA',
+      id: '_0Sx5lIoAEe6F9LXBn0VWTg',
       attributeName: 'downVotes',
-      label: t('service.Pro.Pro.Form.downVotes::Filter', { defaultValue: 'DownVotes' }) as string,
+      label: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
     },
   ];
@@ -391,7 +379,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   }, [ownerData?.pros, filters]);
 
   return (
-    <>
+    <div id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable" data-table-name="pros">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -425,8 +413,8 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceProPro_FormProsView
-            ? async (params: GridRowParams<ServiceProStored>) => await actions.serviceProPro_FormProsView!(params.row)
+          actions.prosOpenPageAction
+            ? async (params: GridRowParams<ServiceProStored>) => await actions.prosOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -436,13 +424,13 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceProPro_FormProsFilter && true ? (
+              {actions.prosFilterAction && true ? (
                 <Button
                   id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceProPro_FormProsFilter!(
+                    const filterResults = await actions.prosFilterAction!(
                       'User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -454,96 +442,37 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Filter', { defaultValue: 'Set Filters' })}
+                  {t('service.Pro.Pro_Form.pros.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceProPro_FormProsRefresh && true ? (
+              {actions.prosRefreshAction && true ? (
                 <Button
                   id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceProPro_FormProsRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.prosRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Refresh', { defaultValue: 'Refresh' })}
+                  {t('service.Pro.Pro_Form.pros.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceProPro_FormProsCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceProPro_FormProsCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Create', { defaultValue: 'Create' })}
-                </Button>
-              ) : null}
-              {actions.serviceProPro_FormProsAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceProPro_FormProsAddOpenSelector!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Add', { defaultValue: 'Add' })}
-                </Button>
-              ) : null}
-              {actions.serviceProPro_FormProsClear && data.length ? (
-                <Button
-                  id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceProPro_FormProsClear!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::Clear', { defaultValue: 'Clear' })}
-                </Button>
-              ) : null}
-              {actions.serviceProPro_FormProsBulkRemove && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceProPro_FormProsBulkRemove!(
-                      selectedRows.current,
-                    );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::BulkRemove', { defaultValue: 'Remove' })}
-                </Button>
-              ) : null}
-              {actions.serviceProPro_FormProsBulkDelete && selectionModel.length > 0 ? (
+              {actions.prosBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceProPro_FormProsBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.prosBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Pro.Pro.Form.service::Pro::Pro_Form::pros::BulkDelete', { defaultValue: 'Delete' })}
+                  {t('service.Pro.Pro_Form.pros.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -565,6 +494,6 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

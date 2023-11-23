@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,17 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import { userServiceForUserOwnedRatingVoteDefinitionsImpl } from '~/services/data-axios';
+export type ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExtended =
+  ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions & {
+    postTakeBackVoteForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
+  };
+
+export const SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionsHook';
+export type ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionsHook = (
+  data: ServiceRatingVoteDefinitionStored[],
+  editMode: boolean,
+) => ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExtended;
 
 const ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -51,7 +63,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -64,23 +76,29 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceRatingVoteDefinitionStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExtended | undefined =
+    customActionsHook?.(data, editMode);
+
   // Dialog hooks
   const openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm =
     useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm();
 
   // Calculated section
-  const title: string = t('Service.RatingVoteDefinition.RatingVoteDefinition_Table', {
+  const title: string = t('service.RatingVoteDefinition.RatingVoteDefinition_Table', {
     defaultValue: 'RatingVoteDefinition Table',
   });
 
   // Action section
-  const serviceRatingVoteDefinitionRatingVoteDefinition_TableView = async (
-    target?: ServiceRatingVoteDefinitionStored,
-  ) => {
+  const openPageAction = async (target?: ServiceRatingVoteDefinitionStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
   };
-  const serviceRatingVoteDefinitionRatingVoteDefinition_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -91,7 +109,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       filters: newFilters,
     };
   };
-  const serviceRatingVoteDefinitionRatingVoteDefinition_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
   ): Promise<ServiceRatingVoteDefinitionStored[]> => {
     try {
@@ -106,12 +124,21 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote =
-    async (target?: ServiceRatingVoteDefinitionStored) => {
-      try {
-        setIsLoading(true);
-        await userServiceForUserOwnedRatingVoteDefinitionsImpl.takeBackVote(target!);
+  const voteAction = async (target: ServiceRatingVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const takeBackVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.takeBackVote(target!);
 
+      if (customActions?.postTakeBackVoteForRatingVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForRatingVoteDefinitionAction(target!);
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -121,41 +148,41 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
         );
 
         setRefreshCounter((prev) => prev + 1);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsLoading(false);
       }
-    };
-  const serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm = async (
-    target: ServiceRatingVoteDefinitionStored,
-  ) => {
-    const { result, data: returnedData } =
-      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
-    setRefreshCounter((prev) => prev + 1);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions = {
-    serviceRatingVoteDefinitionRatingVoteDefinition_TableView,
-    serviceRatingVoteDefinitionRatingVoteDefinition_TableTableFilter,
-    serviceRatingVoteDefinitionRatingVoteDefinition_TableTableRefresh,
-    serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote,
-    serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    voteAction,
+    takeBackVoteForRatingVoteDefinitionAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_s3Fx0FuiEe6rLvwZQOpyUA)/AccessTablePageDefinition"
+      data-page-name="service::User::userOwnedRatingVoteDefinitions::Access::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

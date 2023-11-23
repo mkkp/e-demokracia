@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,7 +24,7 @@ const ServiceDistrictDistrict_Table = lazy(
 );
 
 export interface ServiceDistrictDistrict_TablePageActions extends ServiceDistrictDistrict_TableActionDefinitions {
-  serviceDistrictDistrict_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceDistrictDistrict_TablePageProps {
@@ -44,21 +46,19 @@ export default function ServiceDistrictDistrict_TablePage(props: ServiceDistrict
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceDistrictDistrict_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::District::District_Table::Back"
+              id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceDistrictDistrict_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.District.District.Table.service::District::District_Table::Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('service.District.District_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

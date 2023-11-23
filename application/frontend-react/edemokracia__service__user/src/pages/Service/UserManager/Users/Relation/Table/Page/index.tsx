@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,15 @@ import type {
   ServiceUserManagerStored,
 } from '~/services/data-api';
 import { serviceUserManagerServiceForUsersImpl } from '~/services/data-axios';
+export type ServiceServiceUserServiceUser_TablePageActionsExtended =
+  ServiceServiceUserServiceUser_TablePageActions & {};
+
+export const SERVICE_USER_MANAGER_USERS_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceServiceUserServiceUser_TableActionsHook';
+export type ServiceServiceUserServiceUser_TableActionsHook = (
+  data: ServiceServiceUserStored[],
+  editMode: boolean,
+) => ServiceServiceUserServiceUser_TablePageActionsExtended;
 
 const ServiceServiceUserServiceUser_TablePageContainer = lazy(
   () => import('~/containers/Service/ServiceUser/ServiceUser_Table/ServiceServiceUserServiceUser_TablePageContainer'),
@@ -51,7 +61,7 @@ export default function ServiceUserManagerUsersRelationTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -64,22 +74,31 @@ export default function ServiceUserManagerUsersRelationTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceServiceUserStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_MANAGER_USERS_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceServiceUserServiceUser_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
   const openServiceUserManagerUsersRelationViewPage = useServiceUserManagerUsersRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.ServiceUser.ServiceUser_Table', { defaultValue: 'ServiceUser Table' });
+  const title: string = t('service.ServiceUser.ServiceUser_Table', { defaultValue: 'ServiceUser Table' });
 
   // Action section
-  const serviceServiceUserServiceUser_TableBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceServiceUserServiceUser_TableView = async (target?: ServiceServiceUserStored) => {
+  const openPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceUserManagerUsersRelationViewPage(target!);
 
     setRefreshCounter((prev) => prev + 1);
   };
-  const serviceServiceUserServiceUser_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -90,7 +109,7 @@ export default function ServiceUserManagerUsersRelationTablePage() {
       filters: newFilters,
     };
   };
-  const serviceServiceUserServiceUser_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
@@ -110,25 +129,31 @@ export default function ServiceUserManagerUsersRelationTablePage() {
   };
 
   const actions: ServiceServiceUserServiceUser_TablePageActions = {
-    serviceServiceUserServiceUser_TableBack,
-    serviceServiceUserServiceUser_TableView,
-    serviceServiceUserServiceUser_TableTableFilter,
-    serviceServiceUserServiceUser_TableTableRefresh,
+    backAction,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceServiceUserServiceUser_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_X0EKgFvPEe6jm_SkPSYEYw)/RelationFeatureTable"
+      data-page-name="service::UserManager::users::Relation::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceServiceUserServiceUser_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

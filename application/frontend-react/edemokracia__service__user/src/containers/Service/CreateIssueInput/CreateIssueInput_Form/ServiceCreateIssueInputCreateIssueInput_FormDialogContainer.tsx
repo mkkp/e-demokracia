@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,16 +33,16 @@ const ServiceCreateIssueInputCreateIssueInput_Form = lazy(
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormDialogActions
   extends ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions {
-  serviceCreateIssueInputCreateIssueInput_FormGetTemplate?: () => Promise<ServiceCreateIssueInput>;
-  serviceCreateIssueInputCreateIssueInput_FormBack?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormCreate?: () => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssue?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceCreateIssueInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  createIssueForUserIssuesAction?: () => Promise<void>;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceCreateIssueInputCreateIssueInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -84,7 +89,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceCreateIssueInputCreateIssueInput_Form-dialog-close-wrapper"
+          id="User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -114,65 +119,54 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceCreateIssueInputCreateIssueInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateIssueInput::CreateIssueInput_Form::Back"
+              id="User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceCreateIssueInputCreateIssueInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateIssueInput.CreateIssueInput.Form.service::CreateIssueInput::CreateIssueInput_Form::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.CreateIssueInput.CreateIssueInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceCreateIssueInputCreateIssueInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateIssueInput::CreateIssueInput_Form::Create"
+              id="User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceCreateIssueInputCreateIssueInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateIssueInput.CreateIssueInput.Form.service::CreateIssueInput::CreateIssueInput_Form::Create',
-                  { defaultValue: 'Create' },
-                )}
-              </span>
+              <span>{t('service.CreateIssueInput.CreateIssueInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssue && (
+        {editMode && actions.createIssueForUserIssuesAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserIssues::UserIssues_View_Edit::root::actionGroup::createIssue::OperationFormCallButton"
+              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_0C-jAYoAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="wechat" />}
               onClick={async () => {
-                await actions.serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssue!();
+                await actions.createIssueForUserIssuesAction!();
               }}
             >
               <span>
-                {t(
-                  'service.CreateIssueInput.CreateIssueInput.Form.service::UserIssues::UserIssues_View_Edit::root::actionGroup::createIssue::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
+                {t('service.UserIssues.UserIssues_View_Edit.root.actionGroup.createIssue.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
               </span>
             </LoadingButton>
           </Grid>

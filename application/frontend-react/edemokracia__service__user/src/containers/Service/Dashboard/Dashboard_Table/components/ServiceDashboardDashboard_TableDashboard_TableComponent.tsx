@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,27 +62,21 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceDashboardDashboard_TableDashboard_TableComponentActionDefinitions {
-  serviceDashboardDashboard_TableAddOpenSelector?: () => Promise<void>;
-  serviceDashboardDashboard_TableBulkDelete?: (
-    selectedRows: ServiceDashboardStored[],
-  ) => Promise<DialogResult<ServiceDashboardStored[]>>;
-  serviceDashboardDashboard_TableBulkRemove?: (
-    selectedRows: ServiceDashboardStored[],
-  ) => Promise<DialogResult<ServiceDashboardStored[]>>;
-  serviceDashboardDashboard_TableClear?: () => Promise<void>;
-  serviceDashboardDashboard_TableCreateOpen?: () => Promise<void>;
-  serviceDashboardDashboard_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceDashboardStored[]) => Promise<DialogResult<ServiceDashboardStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceDashboardStored[]) => Promise<DialogResult<ServiceDashboardStored[]>>;
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceDashboardDashboard_TableTableRefresh?: (
-    queryCustomizer: ServiceDashboardQueryCustomizer,
-  ) => Promise<ServiceDashboardStored[]>;
-  serviceDashboardDashboard_TableDelete?: (row: ServiceDashboardStored, silentMode?: boolean) => Promise<void>;
-  serviceDashboardDashboard_TableRemove?: (row: ServiceDashboardStored, silentMode?: boolean) => Promise<void>;
-  serviceDashboardDashboard_TableView?: (row: ServiceDashboardStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceDashboardQueryCustomizer) => Promise<ServiceDashboardStored[]>;
+  deleteAction?: (row: ServiceDashboardStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceDashboardStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceDashboardStored) => Promise<void>;
 }
 
 export interface ServiceDashboardDashboard_TableDashboard_TableComponentProps {
@@ -142,7 +140,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
     {
       ...baseColumnConfig,
       field: 'welcome',
-      headerName: t('service.Dashboard.Dashboard.Table.welcome', { defaultValue: 'Welcome' }) as string,
+      headerName: t('service.Dashboard.Dashboard_Table.welcome', { defaultValue: 'Welcome' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -154,27 +152,23 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
   const rowActions: TableRowAction<ServiceDashboardStored>[] = [
     {
       id: 'User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowRemoveButton',
-      label: t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.Dashboard.Dashboard_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceDashboardStored) => isLoading,
-      action: actions.serviceDashboardDashboard_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceDashboardDashboard_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowDeleteButton',
-      label: t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.Dashboard.Dashboard_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceDashboardStored) => !row.__deleteable || isLoading,
-      action: actions.serviceDashboardDashboard_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceDashboardDashboard_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -182,9 +176,9 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gB0vMn2GEe6V8KKnnZfChA',
+      id: '_0j-XQooAEe6F9LXBn0VWTg',
       attributeName: 'welcome',
-      label: t('service.Dashboard.Dashboard.Table.welcome::Filter', { defaultValue: 'Welcome' }) as string,
+      label: t('service.Dashboard.Dashboard_Table.welcome', { defaultValue: 'Welcome' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -258,7 +252,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceDashboardDashboard_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -284,7 +278,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable" data-table-name="Dashboard_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -317,9 +311,8 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceDashboardDashboard_TableView
-            ? async (params: GridRowParams<ServiceDashboardStored>) =>
-                await actions.serviceDashboardDashboard_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceDashboardStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -329,13 +322,13 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceDashboardDashboard_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceDashboardDashboard_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -347,110 +340,92 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.Dashboard.Dashboard_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDashboardDashboard_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.Dashboard.Dashboard_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDashboardDashboard_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('service.Dashboard.Dashboard_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Dashboard.Dashboard_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDashboardDashboard_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('service.Dashboard.Dashboard_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceDashboardDashboard_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.Dashboard.Dashboard_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceDashboardDashboard_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Dashboard.Dashboard.Table.service::Dashboard::Dashboard_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.Dashboard.Dashboard_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -481,6 +456,6 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

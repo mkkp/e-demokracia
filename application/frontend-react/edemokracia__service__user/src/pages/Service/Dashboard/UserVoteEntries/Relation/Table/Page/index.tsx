@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,14 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import { serviceDashboardServiceForUserVoteEntriesImpl } from '~/services/data-axios';
+export type ServiceVoteEntryVoteEntry_TablePageActionsExtended = ServiceVoteEntryVoteEntry_TablePageActions & {};
+
+export const SERVICE_DASHBOARD_USER_VOTE_ENTRIES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceVoteEntryVoteEntry_TableActionsHook';
+export type ServiceVoteEntryVoteEntry_TableActionsHook = (
+  data: ServiceVoteEntryStored[],
+  editMode: boolean,
+) => ServiceVoteEntryVoteEntry_TablePageActionsExtended;
 
 const ServiceVoteEntryVoteEntry_TablePageContainer = lazy(
   () => import('~/containers/Service/VoteEntry/VoteEntry_Table/ServiceVoteEntryVoteEntry_TablePageContainer'),
@@ -51,7 +60,7 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -64,19 +73,28 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceVoteEntryStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceVoteEntryVoteEntry_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_DASHBOARD_USER_VOTE_ENTRIES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceVoteEntryVoteEntry_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.VoteEntry.VoteEntry_Table', { defaultValue: 'VoteEntry Table' });
+  const title: string = t('service.VoteEntry.VoteEntry_Table', { defaultValue: 'VoteEntry Table' });
 
   // Action section
-  const serviceVoteEntryVoteEntry_TableBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceVoteEntryVoteEntry_TableView = async (target?: ServiceVoteEntryStored) => {
+  const openPageAction = async (target?: ServiceVoteEntryStored) => {
     // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
   };
-  const serviceVoteEntryVoteEntry_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -87,9 +105,7 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
       filters: newFilters,
     };
   };
-  const serviceVoteEntryVoteEntry_TableTableRefresh = async (
-    queryCustomizer: ServiceVoteEntryQueryCustomizer,
-  ): Promise<ServiceVoteEntryStored[]> => {
+  const refreshAction = async (queryCustomizer: ServiceVoteEntryQueryCustomizer): Promise<ServiceVoteEntryStored[]> => {
     try {
       setIsLoading(true);
       setEditMode(false);
@@ -107,25 +123,31 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
   };
 
   const actions: ServiceVoteEntryVoteEntry_TablePageActions = {
-    serviceVoteEntryVoteEntry_TableBack,
-    serviceVoteEntryVoteEntry_TableView,
-    serviceVoteEntryVoteEntry_TableTableFilter,
-    serviceVoteEntryVoteEntry_TableTableRefresh,
+    backAction,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceVoteEntryVoteEntry_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_q9zlcOSEEe20cv3f2msZXg)/RelationFeatureTable"
+      data-page-name="service::Dashboard::userVoteEntries::Relation::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceVoteEntryVoteEntry_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

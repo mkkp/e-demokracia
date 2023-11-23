@@ -8,7 +8,9 @@
 
 import type { ChangeEvent } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import { useConfig } from '~/hooks';
 import { ThemeMode as ThemeModeEnum } from '~/config';
 

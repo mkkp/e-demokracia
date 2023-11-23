@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,7 +36,18 @@ import type {
   ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
-import { serviceIssueServiceForIssueTypeImpl } from '~/services/data-axios';
+import { serviceIssueTypeServiceImpl } from '~/services/data-axios';
+export type ServiceIssueTypeIssueType_View_EditDialogActionsExtended =
+  ServiceIssueTypeIssueType_View_EditDialogActions & {};
+
+export const SERVICE_ISSUE_ISSUE_TYPE_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueTypeIssueType_View_EditActionsHook';
+export type ServiceIssueTypeIssueType_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceIssueTypeStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+) => ServiceIssueTypeIssueType_View_EditDialogActionsExtended;
 
 export const useServiceIssueIssueTypeRelationViewPage = (): ((
   ownerData: any,
@@ -47,9 +59,9 @@ export const useServiceIssueIssueTypeRelationViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -58,14 +70,14 @@ export const useServiceIssueIssueTypeRelationViewPage = (): ((
         children: (
           <ServiceIssueIssueTypeRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -101,10 +113,11 @@ const ServiceIssueTypeIssueType_View_EditDialogContainer = lazy(
 export interface ServiceIssueIssueTypeRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueTypeStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_V_8twNu4Ee2Bgcx6em3jZg)/RelationFeatureView
 // Name: service::Issue::issueType::Relation::View::Page
 export default function ServiceIssueIssueTypeRelationViewPage(props: ServiceIssueIssueTypeRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -112,7 +125,7 @@ export default function ServiceIssueIssueTypeRelationViewPage(props: ServiceIssu
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -158,22 +171,31 @@ export default function ServiceIssueIssueTypeRelationViewPage(props: ServiceIssu
     _mask: '{voteType,description,title}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_TYPE_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueTypeIssueType_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
+  const title: string = t('service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
 
   // Action section
-  const serviceIssueTypeIssueType_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueTypeIssueType_View_EditRefresh = async (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored> => {
+  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueServiceForIssueTypeImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceIssueTypeServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -196,17 +218,21 @@ export default function ServiceIssueIssueTypeRelationViewPage(props: ServiceIssu
   };
 
   const actions: ServiceIssueTypeIssueType_View_EditDialogActions = {
-    serviceIssueTypeIssueType_View_EditBack,
-    serviceIssueTypeIssueType_View_EditRefresh,
+    backAction,
+    refreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceIssueTypeIssueType_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_V_8twNu4Ee2Bgcx6em3jZg)/RelationFeatureView"
+      data-page-name="service::Issue::issueType::Relation::View::Page"
+    >
       <Suspense>
         <ServiceIssueTypeIssueType_View_EditDialogContainer
           ownerData={ownerData}
@@ -224,6 +250,6 @@ export default function ServiceIssueIssueTypeRelationViewPage(props: ServiceIssu
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

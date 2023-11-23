@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,27 +62,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentActionDefinitions {
-  serviceSimpleVoteSimpleVote_TableAddOpenSelector?: () => Promise<void>;
-  serviceSimpleVoteSimpleVote_TableBulkDelete?: (
-    selectedRows: ServiceSimpleVoteStored[],
-  ) => Promise<DialogResult<ServiceSimpleVoteStored[]>>;
-  serviceSimpleVoteSimpleVote_TableBulkRemove?: (
-    selectedRows: ServiceSimpleVoteStored[],
-  ) => Promise<DialogResult<ServiceSimpleVoteStored[]>>;
-  serviceSimpleVoteSimpleVote_TableClear?: () => Promise<void>;
-  serviceSimpleVoteSimpleVote_TableCreateOpen?: () => Promise<void>;
-  serviceSimpleVoteSimpleVote_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceSimpleVoteStored[]) => Promise<DialogResult<ServiceSimpleVoteStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceSimpleVoteStored[]) => Promise<DialogResult<ServiceSimpleVoteStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceSimpleVoteSimpleVote_TableTableRefresh?: (
-    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
-  ) => Promise<ServiceSimpleVoteStored[]>;
-  serviceSimpleVoteSimpleVote_TableDelete?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
-  serviceSimpleVoteSimpleVote_TableRemove?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
-  serviceSimpleVoteSimpleVote_TableView?: (row: ServiceSimpleVoteStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceSimpleVoteQueryCustomizer) => Promise<ServiceSimpleVoteStored[]>;
+  deleteAction?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentProps {
@@ -142,7 +141,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.SimpleVote.SimpleVote.Table.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.SimpleVote.SimpleVote_Table.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -167,7 +166,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
     {
       ...baseColumnConfig,
       field: 'type',
-      headerName: t('service.SimpleVote.SimpleVote.Table.type', { defaultValue: 'Type' }) as string,
+      headerName: t('service.SimpleVote.SimpleVote_Table.type', { defaultValue: 'Type' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -188,27 +187,23 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   const rowActions: TableRowAction<ServiceSimpleVoteStored>[] = [
     {
       id: 'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.SimpleVote.SimpleVote_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceSimpleVoteStored) => isLoading,
-      action: actions.serviceSimpleVoteSimpleVote_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceSimpleVoteSimpleVote_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.SimpleVote.SimpleVote_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceSimpleVoteStored) => !row.__deleteable || isLoading,
-      action: actions.serviceSimpleVoteSimpleVote_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceSimpleVoteSimpleVote_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -216,16 +211,16 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fIi90n2GEe6V8KKnnZfChA',
+      id: '_zryyEooAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.SimpleVote.SimpleVote.Table.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.SimpleVote.SimpleVote_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fIkL8H2GEe6V8KKnnZfChA',
+      id: '_zrzZIooAEe6F9LXBn0VWTg',
       attributeName: 'type',
-      label: t('service.SimpleVote.SimpleVote.Table.type::Filter', { defaultValue: 'Type' }) as string,
+      label: t('service.SimpleVote.SimpleVote_Table.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['UP', 'DOWN'],
     },
@@ -300,9 +295,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceSimpleVoteSimpleVote_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -328,7 +321,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="SimpleVote_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -361,9 +354,8 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceSimpleVoteSimpleVote_TableView
-            ? async (params: GridRowParams<ServiceSimpleVoteStored>) =>
-                await actions.serviceSimpleVoteSimpleVote_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceSimpleVoteStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -373,13 +365,13 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceSimpleVoteSimpleVote_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceSimpleVoteSimpleVote_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -391,112 +383,105 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSimpleVoteSimpleVote_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSimpleVoteSimpleVote_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSimpleVoteSimpleVote_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.SimpleVote.SimpleVote_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSimpleVoteSimpleVote_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceSimpleVoteSimpleVote_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceSimpleVoteSimpleVote_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.SimpleVote.SimpleVote_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -527,6 +512,6 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

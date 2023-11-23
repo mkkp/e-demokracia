@@ -13,26 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -54,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { YesNoVoteInput, YesNoVoteInputQueryCustomizer, YesNoVoteInputStored } from '~/services/data-api';
 
@@ -103,80 +101,12 @@ export default function YesNoVoteInputYesNoVoteInput_Form(props: YesNoVoteInputY
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Grid
-          id="_fo3cpn2GEe6V8KKnnZfChA)/LabelWrapper"
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="flex-start"
-          spacing={2}
-        >
-          <Grid item xs={12} sm={12}>
-            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="list" sx={{ marginRight: 1 }} />
-              <Typography id="_fo3cpn2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                {t(
-                  'YesNoVoteInput.YesNoVoteInput.Form.value::Label.value::LabelWrapper.YesNoVoteInput_Form.YesNoVoteInput::YesNoVoteInput_Form',
-                  { defaultValue: 'Vote' },
-                )}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <FormControl
-              fullWidth={true}
-              sx={{ mt: '10px' }}
-              className='MuiTextField-root'
-              disabled={false || !isFormUpdateable() || isLoading}
-              error={validation.has('value')}
-            >
-              <InputLabel id="User/(esm/_HrXDYKlbEe2kkPT1Lcj30A)/EnumerationTypeRadio" shrink={true} size={'small'}>
-                {t(
-                  'YesNoVoteInput.YesNoVoteInput.Form.value.value::LabelWrapper.YesNoVoteInput_Form.YesNoVoteInput::YesNoVoteInput_Form',
-                  { defaultValue: 'Vote' },
-                )}
-              </InputLabel>
-              <RadioGroup
-                sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                name="value"
-                id="User/(esm/_HrXDYKlbEe2kkPT1Lcj30A)/EnumerationTypeRadio"
-                value={data.value || ''}
-                onChange={(event) => {
-                  storeDiff('value', event.target.value);
-                }}
-              >
-                <FormControlLabel
-                  id="User/(esm/_2E9NMW6dEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                  value={'YES'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.YesNoVoteValue.YES', { defaultValue: 'YES' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-                <FormControlLabel
-                  id="User/(esm/_2E9NMm6dEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                  value={'NO'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.YesNoVoteValue.NO', { defaultValue: 'NO' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-              </RadioGroup>
-              {validation.has('value') && <FormHelperText>{validation.get('value')}</FormHelperText>}
-            </FormControl>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
         <TextField
           required={false}
           name="value"
           id="User/(esm/_HrXDYKlbEe2kkPT1Lcj30A)/EnumerationTypeCombo"
-          label={
-            t('YesNoVoteInput.YesNoVoteInput.Form.value.YesNoVoteInput_Form.YesNoVoteInput::YesNoVoteInput_Form', {
-              defaultValue: 'Vote',
-            }) as string
-          }
+          autoFocus
+          label={t('YesNoVoteInput.YesNoVoteInput_Form.value', { defaultValue: 'Vote' }) as string}
           value={data.value || ''}
           className={clsx({
             'JUDO-viewMode': !editMode,

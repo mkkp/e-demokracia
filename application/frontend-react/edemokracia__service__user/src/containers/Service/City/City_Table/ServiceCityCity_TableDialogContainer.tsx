@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -19,13 +24,13 @@ import type { ServiceCity, ServiceCityStored, ServiceCityQueryCustomizer } from 
 const ServiceCityCity_Table = lazy(() => import('~/containers/Service/City/City_Table/ServiceCityCity_Table'));
 
 export interface ServiceCityCity_TableDialogActions extends ServiceCityCity_TableActionDefinitions {
-  serviceCityCity_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceCityCity_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceCityCity_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -45,7 +50,7 @@ export default function ServiceCityCity_TableDialog(props: ServiceCityCity_Table
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceCityCity_Table-dialog-close-wrapper"
+          id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -64,19 +69,19 @@ export default function ServiceCityCity_TableDialog(props: ServiceCityCity_Table
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceCityCity_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::City::City_Table::Back"
+              id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceCityCity_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>{t('service.City.City.Table.service::City::City_Table::Back', { defaultValue: 'Back' })}</span>
+              <span>{t('service.City.City_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

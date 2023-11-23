@@ -33,7 +33,7 @@ export interface ServiceUserProfileService {
 
   getTemplateForActivityCounties(): Promise<ServiceCounty>;
 
-  getActivityCounties(
+  listActivityCounties(
     target: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
@@ -57,7 +57,7 @@ export interface ServiceUserProfileService {
 
   getTemplateForActivityCities(): Promise<ServiceCity>;
 
-  getActivityCities(
+  listActivityCities(
     target: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
@@ -81,7 +81,7 @@ export interface ServiceUserProfileService {
 
   getTemplateForActivityDistricts(): Promise<ServiceDistrict>;
 
-  getActivityDistricts(
+  listActivityDistricts(
     target: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;

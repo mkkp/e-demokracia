@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,16 +32,16 @@ const ServiceCreateUserInputCreateUserInput_Form = lazy(
 
 export interface ServiceCreateUserInputCreateUserInput_FormDialogActions
   extends ServiceCreateUserInputCreateUserInput_FormActionDefinitions {
-  serviceCreateUserInputCreateUserInput_FormGetTemplate?: () => Promise<ServiceCreateUserInput>;
-  serviceCreateUserInputCreateUserInput_FormBack?: () => Promise<void>;
-  serviceCreateUserInputCreateUserInput_FormCreate?: () => Promise<void>;
-  serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUser?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceCreateUserInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  createUserForUserManagerAction?: () => Promise<void>;
 }
 
 export interface ServiceCreateUserInputCreateUserInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceCreateUserInputCreateUserInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -82,7 +87,7 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceCreateUserInputCreateUserInput_Form-dialog-close-wrapper"
+          id="User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -112,63 +117,53 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceCreateUserInputCreateUserInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_Form::Back"
+              id="User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceCreateUserInputCreateUserInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.Form.service::CreateUserInput::CreateUserInput_Form::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceCreateUserInputCreateUserInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::CreateUserInput::CreateUserInput_Form::Create"
+              id="User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceCreateUserInputCreateUserInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.CreateUserInput.CreateUserInput.Form.service::CreateUserInput::CreateUserInput_Form::Create',
-                  { defaultValue: 'Create' },
-                )}
-              </span>
+              <span>{t('service.CreateUserInput.CreateUserInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUser && (
+        {editMode && actions.createUserForUserManagerAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserManager::UserManager_View_Edit::userManagerActionGroup::createUser::OperationFormCallButton"
+              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormCallButton/(discriminator/_0D364ooAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="account-plus" />}
               onClick={async () => {
-                await actions.serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUser!();
+                await actions.createUserForUserManagerAction!();
               }}
             >
               <span>
                 {t(
-                  'service.CreateUserInput.CreateUserInput.Form.service::UserManager::UserManager_View_Edit::userManagerActionGroup::createUser::OperationFormCallButton',
+                  'service.UserManager.UserManager_View_Edit.userManagerActionGroup.createUser.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

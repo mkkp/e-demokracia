@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,35 +68,16 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCountyComponentActionDefinitions {
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyAddOpenSelector?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyBulkDelete?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyBulkRemove?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyClear?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyCreateOpen?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyFilter?: (
+  activeVoteDefinitionsInResidentCountyFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRefresh?: (
+  activeVoteDefinitionsInResidentCountyRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceVoteDefinitionStored[]>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyDelete?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRemove?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyView?: (
-    row: ServiceVoteDefinitionStored,
-  ) => Promise<void>;
+  activeVoteDefinitionsInResidentCountyOpenPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCountyComponentProps {
@@ -159,7 +144,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'countyRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.countyRepresentation', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -171,7 +156,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.title', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -183,7 +168,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'voteType',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.voteType', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
         defaultValue: 'VoteType',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -204,7 +189,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'numberOfVotes',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.numberOfVotes', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -219,7 +204,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.created', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -246,7 +231,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.closeAt', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -273,7 +258,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.status', {
+      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -293,66 +278,29 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
   ];
 
-  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceVoteDefinitionStored) => isLoading,
-      action:
-        actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRemove
-          ? async (rowData) => {
-              await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRemove!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.__deleteable || isLoading,
-      action:
-        actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyDelete
-          ? async (rowData) => {
-              await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyDelete!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_f9We4H2GEe6V8KKnnZfChA',
+      id: '_0emIAIoAEe6F9LXBn0VWTg',
       attributeName: 'countyRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.countyRepresentation::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f9XF8H2GEe6V8KKnnZfChA',
+      id: '_0emvEIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.title::Filter', {
-        defaultValue: 'Title',
-      }) as string,
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f9XF9H2GEe6V8KKnnZfChA',
+      id: '_0emvFIoAEe6F9LXBn0VWTg',
       attributeName: 'voteType',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.voteType::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
         defaultValue: 'VoteType',
       }) as string,
       filterType: FilterType.enumeration,
@@ -360,38 +308,36 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_f9XtA32GEe6V8KKnnZfChA',
+      id: '_0enWIYoAEe6F9LXBn0VWTg',
       attributeName: 'numberOfVotes',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.numberOfVotes::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
       }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_f9YUEn2GEe6V8KKnnZfChA',
+      id: '_0en9MIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.created::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_f9Y7IX2GEe6V8KKnnZfChA',
+      id: '_0en9NIoAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.closeAt::Filter', {
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_f9ZiMH2GEe6V8KKnnZfChA',
+      id: '_0epLUIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.status::Filter', {
-        defaultValue: 'Status',
-      }) as string,
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
@@ -466,10 +412,9 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       setIsLoading(true);
 
       try {
-        const res =
-          await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRefresh!(
-            processQueryCustomizer(queryCustomizer),
-          );
+        const res = await actions.activeVoteDefinitionsInResidentCountyRefreshAction!(
+          processQueryCustomizer(queryCustomizer),
+        );
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -495,7 +440,10 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="activeVoteDefinitionsInResidentCounty"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -522,18 +470,11 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyView
+          actions.activeVoteDefinitionsInResidentCountyOpenPageAction
             ? async (params: GridRowParams<ServiceVoteDefinitionStored>) =>
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyView!(
-                  params.row,
-                )
+                await actions.activeVoteDefinitionsInResidentCountyOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -543,20 +484,18 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyFilter &&
-              true ? (
+              {actions.activeVoteDefinitionsInResidentCountyFilterAction && true ? (
                 <Button
                   id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyFilter!(
-                        'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.activeVoteDefinitionsInResidentCountyFilterAction!(
+                      'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -564,125 +503,27 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Filter',
+                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.ActiveVoteDefinitionsByOwnerResidentAreaGroup.tabBar.ActiveDebatesInResidentCountyGroup.activeVoteDefinitionsInResidentCounty.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRefresh &&
-              true ? (
+              {actions.activeVoteDefinitionsInResidentCountyRefreshAction && true ? (
                 <Button
                   id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyRefresh!(
+                    await actions.activeVoteDefinitionsInResidentCountyRefreshAction!(
                       processQueryCustomizer(queryCustomizer),
                     );
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Refresh',
+                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.ActiveVoteDefinitionsByOwnerResidentAreaGroup.tabBar.ActiveDebatesInResidentCountyGroup.activeVoteDefinitionsInResidentCounty.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarActiveVoteDefinitionsByOwnerResidentAreaGroupTabBarActiveDebatesInResidentCountyGroupActiveVoteDefinitionsInResidentCountyBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::ActiveVoteDefinitionsByOwnerResidentAreaGroup::tabBar::ActiveDebatesInResidentCountyGroup::activeVoteDefinitionsInResidentCounty::BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}
@@ -714,6 +555,6 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

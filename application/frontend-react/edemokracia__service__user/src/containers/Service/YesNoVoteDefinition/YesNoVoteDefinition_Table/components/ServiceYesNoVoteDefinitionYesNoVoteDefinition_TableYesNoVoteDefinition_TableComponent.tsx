@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,40 +66,29 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponentActionDefinitions {
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableAddOpenSelector?: () => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: ServiceYesNoVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceYesNoVoteDefinitionStored[]>>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: ServiceYesNoVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceYesNoVoteDefinitionStored[]>>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableClear?: () => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableCreateOpen?: () => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableRefresh?: (
+  refreshAction?: (
     queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceYesNoVoteDefinitionStored[]>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableDelete?: (
-    row: ServiceYesNoVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableRemove?: (
-    row: ServiceYesNoVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_TableView?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote?: (
-    row: ServiceYesNoVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm?: (
-    row: ServiceYesNoVoteDefinitionStored,
-  ) => Promise<void>;
+  deleteAction?: (row: ServiceYesNoVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceYesNoVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+  takeBackVoteForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+  voteAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponentProps {
@@ -159,7 +152,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -169,7 +162,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.created', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -196,7 +189,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.description', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -208,7 +201,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.status', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -229,7 +222,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.closeAt', {
+      headerName: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -258,107 +251,88 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   const rowActions: TableRowAction<ServiceYesNoVoteDefinitionStored>[] = [
     {
       id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.__deleteable || isLoading,
-      action: actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.vote', { defaultValue: 'vote' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm
-        ? async (rowData) => {
-            await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm!(
-              rowData,
-            );
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_--H4sFouEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.takeBackVote', {
+      id: 'User/(esm/_--H4sFouEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.takeBackVote', {
         defaultValue: 'takeBackVote',
       }) as string,
       icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action:
-        actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote
-          ? async (rowData) => {
-              await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote!(
-                rowData,
-              );
-            }
-          : undefined,
+      action: actions.takeBackVoteForYesNoVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForYesNoVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
     },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fhoMMH2GEe6V8KKnnZfChA',
+      id: '_0FSQIIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.title::Filter', {
-        defaultValue: 'Title',
-      }) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fhoMNH2GEe6V8KKnnZfChA',
+      id: '_0FSQJIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.created::Filter', {
-        defaultValue: 'Created',
-      }) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fhozQn2GEe6V8KKnnZfChA',
+      id: '_0FS3MooAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.description::Filter', {
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fhpaUH2GEe6V8KKnnZfChA',
+      id: '_0FTeQIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.status::Filter', {
-        defaultValue: 'Status',
-      }) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
 
     {
-      id: '_fhpaVH2GEe6V8KKnnZfChA',
+      id: '_0FTeRIoAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition.Table.closeAt::Filter', {
-        defaultValue: 'CloseAt',
-      }) as string,
+      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
   ];
@@ -432,9 +406,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -460,7 +432,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable" data-table-name="YesNoVoteDefinition_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -493,9 +465,9 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableView
+          actions.openPageAction
             ? async (params: GridRowParams<ServiceYesNoVoteDefinitionStored>) =>
-                await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableView!(params.row)
+                await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -505,13 +477,13 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -523,121 +495,96 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Table.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Table.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceYesNoVoteDefinitionYesNoVoteDefinition_TableBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.YesNoVoteDefinition.YesNoVoteDefinition.Table.service::YesNoVoteDefinition::YesNoVoteDefinition_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -668,6 +615,6 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

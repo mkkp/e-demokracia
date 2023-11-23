@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -33,6 +34,22 @@ import type {
   CreateArgumentInputStored,
 } from '~/services/data-api';
 import { serviceIssueServiceImpl } from '~/services/data-axios';
+export type CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended =
+  CreateArgumentInputCreateArgumentInput_FormDialogActions & {
+    postCreateConArgumentForIssueAction?: (
+      onSubmit: (result?: CreateArgumentInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_CON_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
+  'CreateArgumentInputCreateArgumentInput_FormActionsHook';
+export type CreateArgumentInputCreateArgumentInput_FormActionsHook = (
+  ownerData: any,
+  data: CreateArgumentInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void,
+) => CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended;
 
 export const useServiceIssueIssue_View_EditCreateConArgumentInputForm = (): ((
   ownerData: any,
@@ -44,9 +61,9 @@ export const useServiceIssueIssue_View_EditCreateConArgumentInputForm = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -55,14 +72,14 @@ export const useServiceIssueIssue_View_EditCreateConArgumentInputForm = (): ((
         children: (
           <ServiceIssueIssue_View_EditCreateConArgumentInputForm
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={() => {
-              closeDialog();
+            onSubmit={async () => {
+              await closeDialog();
               resolve({
                 result: 'submit',
               });
@@ -100,10 +117,11 @@ const CreateArgumentInputCreateArgumentInput_FormDialogContainer = lazy(
 export interface ServiceIssueIssue_View_EditCreateConArgumentInputFormProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: CreateArgumentInputStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: CreateArgumentInputStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition
 // Name: service::Issue::Issue_View_Edit::createConArgument::Input::Form
 export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   props: ServiceIssueIssue_View_EditCreateConArgumentInputFormProps,
@@ -113,7 +131,7 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -158,36 +176,50 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<CreateArgumentInputCreateArgumentInput_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_CON_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
   const title: string = t('CreateArgumentInput.CreateArgumentInput_Form', { defaultValue: 'CreateArgumentInput Form' });
 
   // Action section
-  const createArgumentInputCreateArgumentInput_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueIssue_View_EditOtherArgumentsConsActionsCreateConArgument = async () => {
+  const createConArgumentForIssueAction = async () => {
     try {
       setIsLoading(true);
       await serviceIssueServiceImpl.createConArgument(ownerData, data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postCreateConArgumentForIssueAction) {
+        await customActions.postCreateConArgumentForIssueAction(
+          onSubmit,
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      onSubmit();
+        onSubmit();
+      }
     } catch (error) {
       handleError<CreateArgumentInput>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
     }
   };
-  const createArgumentInputCreateArgumentInput_FormGetTemplate = async (): Promise<CreateArgumentInput> => {
+  const getTemplateAction = async (): Promise<CreateArgumentInput> => {
     try {
       setIsLoading(true);
       const result = await serviceIssueServiceImpl.getTemplateForCreateConArgument();
@@ -204,18 +236,22 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   };
 
   const actions: CreateArgumentInputCreateArgumentInput_FormDialogActions = {
-    createArgumentInputCreateArgumentInput_FormBack,
-    serviceIssueIssue_View_EditOtherArgumentsConsActionsCreateConArgument,
-    createArgumentInputCreateArgumentInput_FormGetTemplate,
+    backAction,
+    createConArgumentForIssueAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.createArgumentInputCreateArgumentInput_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition"
+      data-page-name="service::Issue::Issue_View_Edit::createConArgument::Input::Form"
+    >
       <Suspense>
         <CreateArgumentInputCreateArgumentInput_FormDialogContainer
           ownerData={ownerData}
@@ -233,6 +269,6 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

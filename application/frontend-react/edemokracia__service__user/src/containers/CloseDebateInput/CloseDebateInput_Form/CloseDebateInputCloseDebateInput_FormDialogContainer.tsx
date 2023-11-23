@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,16 +28,16 @@ const CloseDebateInputCloseDebateInput_Form = lazy(
 
 export interface CloseDebateInputCloseDebateInput_FormDialogActions
   extends CloseDebateInputCloseDebateInput_FormActionDefinitions {
-  closeDebateInputCloseDebateInput_FormGetTemplate?: () => Promise<CloseDebateInput>;
-  closeDebateInputCloseDebateInput_FormBack?: () => Promise<void>;
-  closeDebateInputCloseDebateInput_FormCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<CloseDebateInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  closeDebateForIssueAction?: () => Promise<void>;
 }
 
 export interface CloseDebateInputCloseDebateInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: CloseDebateInputCloseDebateInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -78,7 +83,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="CloseDebateInputCloseDebateInput_Form-dialog-close-wrapper"
+          id="User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -108,63 +113,54 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.closeDebateInputCloseDebateInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CloseDebateInput::CloseDebateInput_Form::Back"
+              id="User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.closeDebateInputCloseDebateInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CloseDebateInput.CloseDebateInput.Form.CloseDebateInput::CloseDebateInput_Form::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CloseDebateInput.CloseDebateInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.closeDebateInputCloseDebateInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CloseDebateInput::CloseDebateInput_Form::Create"
+              id="User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.closeDebateInputCloseDebateInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t('CloseDebateInput.CloseDebateInput.Form.CloseDebateInput::CloseDebateInput_Form::Create', {
-                  defaultValue: 'Create',
-                })}
-              </span>
+              <span>{t('CloseDebateInput.CloseDebateInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebate && (
+        {editMode && actions.closeDebateForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Issue::Issue_View_Edit::actions::PageActionButtons::closeDebate::OperationFormCallButton"
+              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_zu-B4ooAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
-                await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebate!();
+                await actions.closeDebateForIssueAction!();
               }}
             >
               <span>
-                {t(
-                  'CloseDebateInput.CloseDebateInput.Form.service::Issue::Issue_View_Edit::actions::PageActionButtons::closeDebate::OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
+                {t('service.Issue.Issue_View_Edit.actions.PageActionButtons.closeDebate.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
               </span>
             </LoadingButton>
           </Grid>

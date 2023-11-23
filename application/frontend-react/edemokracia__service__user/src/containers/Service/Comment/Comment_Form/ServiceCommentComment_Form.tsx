@@ -13,9 +13,17 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +45,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceComment,
@@ -54,7 +68,7 @@ import { ServiceCommentComment_FormCreatedByComponent } from './components/Servi
 
 export interface ServiceCommentComment_FormActionDefinitions
   extends ServiceCommentComment_FormCreatedByComponentActionDefinitions {
-  serviceCommentComment_FormGroupVotesOpenPage?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceCommentComment_FormProps {
@@ -147,11 +161,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
                 });
               }}
               views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-              label={
-                t('service.Comment.Comment.Form.created.group.Comment_Form.service::Comment::Comment_Form', {
-                  defaultValue: 'Created',
-                }) as string
-              }
+              label={t('service.Comment.Comment_Form.created', { defaultValue: 'Created' }) as string}
               value={serviceDateToUiDate(data.created ?? null)}
               readOnly={true || !isFormUpdateable()}
               disabled={isLoading}
@@ -178,11 +188,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
               name="comment"
               id="User/(esm/_BYLioG5WEe2wNaja8kBvcQ)/StringTypeTextArea"
               autoFocus
-              label={
-                t('service.Comment.Comment.Form.comment.group.Comment_Form.service::Comment::Comment_Form', {
-                  defaultValue: 'Comment',
-                }) as string
-              }
+              label={t('service.Comment.Comment_Form.comment', { defaultValue: 'Comment' }) as string}
               value={data.comment ?? ''}
               className={clsx({
                 'JUDO-viewMode': !editMode,
@@ -214,11 +220,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
               required={false}
               name="upVotes"
               id="User/(esm/_3kt_oH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
-              label={
-                t('service.Comment.Comment.Form.upVotes.group.Comment_Form.service::Comment::Comment_Form', {
-                  defaultValue: 'UpVotes',
-                }) as string
-              }
+              label={t('service.Comment.Comment_Form.upVotes', { defaultValue: 'UpVotes' }) as string}
               customInput={TextField}
               value={data.upVotes ?? ''}
               className={clsx({
@@ -251,11 +253,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
               required={false}
               name="downVotes"
               id="User/(esm/_3k6z8H4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
-              label={
-                t('service.Comment.Comment.Form.downVotes.group.Comment_Form.service::Comment::Comment_Form', {
-                  defaultValue: 'DownVotes',
-                }) as string
-              }
+              label={t('service.Comment.Comment_Form.downVotes', { defaultValue: 'DownVotes' }) as string}
               customInput={TextField}
               value={data.downVotes ?? ''}
               className={clsx({
@@ -288,12 +286,10 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
               id="User/(esm/_IgOWIIfuEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
               variant={undefined}
               editMode={editMode}
-              navigateAction={actions.serviceCommentComment_FormGroupVotesOpenPage}
+              navigateAction={actions.votesOpenPageAction}
               refreshCounter={refreshCounter}
             >
-              {t('service.Comment.Comment.Form.votes.group.Comment_Form.service::Comment::Comment_Form', {
-                defaultValue: 'Votes',
-              })}
+              {t('service.Comment.Comment_Form.votes', { defaultValue: 'Votes' })}
               <MdiIcon path="arrow-right" />
             </AssociationButton>
           </Grid>

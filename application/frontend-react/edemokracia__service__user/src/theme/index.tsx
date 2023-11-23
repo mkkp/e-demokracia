@@ -8,7 +8,9 @@
 
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
-import { createTheme, CssBaseline, StyledEngineProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 import { amber, deepOrange, grey } from '@mui/material/colors';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';

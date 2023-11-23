@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -44,7 +45,19 @@ import type {
   ServiceYesNoAbstainVoteEntryStored,
   VoteStatus,
 } from '~/services/data-api';
-import { userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios';
+import { serviceYesNoAbstainVoteDefinitionServiceImpl } from '~/services/data-axios';
+export type ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActionsExtended =
+  ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActions & {
+    postTakeBackVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  };
+
+export const SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionsHook';
+export type ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionsHook = (
+  data: ServiceYesNoAbstainVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteDefinition, value: any) => void,
+) => ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActionsExtended;
 
 export const convertServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPagePayload = (
   attributeName: keyof ServiceYesNoAbstainVoteDefinition,
@@ -83,7 +96,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -135,6 +148,15 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       '{userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,userVoteEntry{value,created}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActionsExtended
+    | undefined = customActionsHook?.(data, editMode, storeDiff);
+
   // Dialog hooks
   const openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm =
     useServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm();
@@ -144,21 +166,21 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
     useServiceYesNoAbstainVoteDefinitionVoteEntriesRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit', {
+  const title: string = t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit', {
     defaultValue: 'YesNoAbstainVoteDefinition View / Edit',
   });
 
   // Action section
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
   ): Promise<ServiceYesNoAbstainVoteDefinitionStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.refresh(
+      const result = await serviceYesNoAbstainVoteDefinitionServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         pageQueryCustomizer,
       );
@@ -182,17 +204,15 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh(
-      processQueryCustomizer(pageQueryCustomizer),
-    );
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.update(payloadDiff.current);
+      const res = await serviceYesNoAbstainVoteDefinitionServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -200,9 +220,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceYesNoAbstainVoteDefinition, string>());
-        await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh!(
-          pageQueryCustomizer,
-        );
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -211,12 +229,14 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote =
-    async () => {
-      try {
-        setIsLoading(true);
-        await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.takeBackVote(data);
+  const takeBackVoteForYesNoAbstainVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceYesNoAbstainVoteDefinitionServiceImpl.takeBackVote(data);
 
+      if (customActions?.postTakeBackVoteForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForYesNoAbstainVoteDefinitionAction();
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -226,63 +246,42 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
         );
 
         if (!editMode) {
-          await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh!(
-            processQueryCustomizer(pageQueryCustomizer),
-          );
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
         }
-      } catch (error) {
-        handleError<ServiceYesNoAbstainVoteDefinition>(error, { setValidation }, data);
-      } finally {
-        setIsLoading(false);
       }
-    };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm =
-    async () => {
-      const { result, data: returnedData } =
-        await openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(data);
-      if (!editMode) {
-        await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh!(
-          processQueryCustomizer(pageQueryCustomizer),
-        );
-      }
-    };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssueOpenPage = async (
-    target?: ServiceIssueStored,
-  ) => {
+    } catch (error) {
+      handleError<ServiceYesNoAbstainVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceYesNoAbstainVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssuePreFetch =
-    async (): Promise<ServiceIssueStored> => {
-      return userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.getIssue(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        {
-          _mask: '{}',
-        },
-      );
-    };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView =
-    async (target?: ServiceYesNoAbstainVoteEntryStored) => {
-      await openServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationViewPage(target!);
-
-      if (!editMode) {
-        await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh!(
-          processQueryCustomizer(pageQueryCustomizer),
-        );
-      }
-    };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditEntriesVoteEntriesView = async (
-    target?: ServiceYesNoAbstainVoteEntryStored,
-  ) => {
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceYesNoAbstainVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
+  const voteEntriesOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
     await openServiceYesNoAbstainVoteDefinitionVoteEntriesRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh!(
-        processQueryCustomizer(pageQueryCustomizer),
-      );
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditEntriesVoteEntriesFilter = async (
+  const voteEntriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -293,54 +292,67 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       filters: newFilters,
     };
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditEntriesVoteEntriesRefresh = async (
+  const voteEntriesRefreshAction = async (
     queryCustomizer: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ): Promise<ServiceYesNoAbstainVoteEntryStored[]> => {
-    return userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.listVoteEntries(
+    return serviceYesNoAbstainVoteDefinitionServiceImpl.listVoteEntries(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,
     );
   };
+  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
+    await openServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
 
   const actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActions = {
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditBack,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditCancel,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUpdate,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssueOpenPage,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssuePreFetch,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditEntriesVoteEntriesView,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditEntriesVoteEntriesFilter,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditEntriesVoteEntriesRefresh,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    takeBackVoteForYesNoAbstainVoteDefinitionAction,
+    voteAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    voteEntriesOpenPageAction,
+    voteEntriesFilterAction,
+    voteEntriesRefreshAction,
+    userVoteEntryOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_9lF1oFuhEe6rLvwZQOpyUA)/AccessViewPageDefinition"
+      data-page-name="service::User::userOwnedYesNoAbstainVoteDefinitions::Access::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

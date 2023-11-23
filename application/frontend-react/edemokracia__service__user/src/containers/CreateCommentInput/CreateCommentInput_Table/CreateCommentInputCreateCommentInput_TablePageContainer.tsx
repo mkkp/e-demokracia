@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,7 +29,7 @@ const CreateCommentInputCreateCommentInput_Table = lazy(
 
 export interface CreateCommentInputCreateCommentInput_TablePageActions
   extends CreateCommentInputCreateCommentInput_TableActionDefinitions {
-  createCommentInputCreateCommentInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CreateCommentInputCreateCommentInput_TablePageProps {
@@ -51,23 +53,19 @@ export default function CreateCommentInputCreateCommentInput_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.createCommentInputCreateCommentInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateCommentInput::CreateCommentInput_Table::Back"
+              id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.createCommentInputCreateCommentInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CreateCommentInput.CreateCommentInput.Table.CreateCommentInput::CreateCommentInput_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CreateCommentInput.CreateCommentInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

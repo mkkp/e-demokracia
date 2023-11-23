@@ -8,7 +8,12 @@
 
 import { forwardRef } from 'react';
 import type { CSSProperties, ExoticComponent, ReactElement, Ref } from 'react';
-import { Collapse, Fade, Box, Grow, Slide, Zoom } from '@mui/material';
+import Collapse from '@mui/material/Collapse';
+import Fade from '@mui/material/Fade';
+import Box from '@mui/material/Box';
+import Grow from '@mui/material/Grow';
+import Slide from '@mui/material/Slide';
+import Zoom from '@mui/material/Zoom';
 import type { ZoomProps } from '@mui/material';
 
 export interface TransitionProps {

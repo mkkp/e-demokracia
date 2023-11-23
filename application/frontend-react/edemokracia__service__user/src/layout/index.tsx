@@ -8,7 +8,10 @@
 
 import { Outlet } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
-import { useMediaQuery, Box, Container, Toolbar } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
 import { CustomBreadcrumb } from '~/components/CustomBreadcrumb';
 import { useConfig } from '~/hooks';
 import { MenuOrientation } from '~/config';

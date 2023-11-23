@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,15 +62,13 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponentActionDefinitions {
-  serviceCountyCounty_TableTableFilter?: (
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCountyCounty_TableTableRange?: (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ) => Promise<ServiceCountyStored[]>;
+  selectorRangeAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored[]>;
 }
 
 export interface ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponentProps {
@@ -132,7 +134,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
     {
       ...baseColumnConfig,
       field: 'name',
-      headerName: t('service.County.County.Table.SetSelector.name', { defaultValue: 'Name' }) as string,
+      headerName: t('service.County.County_Table.SetSelector.name', { defaultValue: 'Name' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -145,9 +147,9 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fJWPEH2GEe6V8KKnnZfChA',
+      id: '_zrqPNIoAEe6F9LXBn0VWTg',
       attributeName: 'name',
-      label: t('service.County.County.Table.SetSelector.name::Filter', { defaultValue: 'Name' }) as string,
+      label: t('service.County.County_Table.SetSelector.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -213,21 +215,34 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
   }
 
   const handleIsRowSelectable = (params: GridRowParams<ServiceCountyStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !false, alreadySelected);
+    return isRowSelectable(params.row, !true, alreadySelected);
   };
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;
-    if (newSelectionModel.length === 0) {
-      setSelectionModel([]);
-      setSelectionDiff([]);
-      return;
+    // added new items
+    if (newSelectionModel.length > selectionModel.length) {
+      const diff = newSelectionModel.length - selectionModel.length;
+      const newItemsId = [...newSelectionModel].slice(diff * -1);
+      const newItems = data.filter((value) => newItemsId.indexOf(value.__identifier as GridRowId) !== -1);
+      setSelectionDiff((prevSelectedItems: ServiceCountyStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
+
+        return [...prevSelectedItems, ...newItems];
+      });
     }
 
-    const lastId = newSelectionModel[newSelectionModel.length - 1];
+    // removed items
+    if (newSelectionModel.length < selectionModel.length) {
+      const removedItemsId = selectionModel.filter((value) => newSelectionModel.indexOf(value) === -1);
+      setSelectionDiff((prevSelectedItems: ServiceCountyStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
 
-    setSelectionModel([lastId]);
-    setSelectionDiff([data.find((value) => value.__identifier === lastId)!]);
+        return [...prevSelectedItems.filter((value) => removedItemsId.indexOf(value.__identifier as GridRowId) === -1)];
+      });
+    }
+
+    setSelectionModel(newSelectionModel);
   };
 
   async function fetchData() {
@@ -235,7 +250,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceCountyCounty_TableTableRange!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -261,7 +276,10 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTable"
+      data-table-name="County_Table::Set::Selector"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -288,7 +306,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
         ]}
         disableRowSelectionOnClick
         isRowSelectable={handleIsRowSelectable}
-        hideFooterSelectedRowCount={!false}
+        hideFooterSelectedRowCount={!true}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleOnSelection}
@@ -300,13 +318,13 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCountyCounty_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCountyCounty_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -318,25 +336,21 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.SetSelector.service::County::County_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.County.County_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableTableRange && true ? (
+              {actions.selectorRangeAction && true ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_TableTableRange!(processQueryCustomizer(queryCustomizer));
+                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.SetSelector.service::County::County_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.County.County_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -367,6 +381,6 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

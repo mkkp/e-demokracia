@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -33,6 +34,22 @@ import type {
   CreateArgumentInputStored,
 } from '~/services/data-api';
 import { serviceProServiceImpl } from '~/services/data-axios';
+export type CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended =
+  CreateArgumentInputCreateArgumentInput_FormDialogActions & {
+    postCreateProArgumentForProAction?: (
+      onSubmit: (result?: CreateArgumentInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_PRO_PRO_VIEW_EDIT_CREATE_PRO_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
+  'CreateArgumentInputCreateArgumentInput_FormActionsHook';
+export type CreateArgumentInputCreateArgumentInput_FormActionsHook = (
+  ownerData: any,
+  data: CreateArgumentInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void,
+) => CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended;
 
 export const useServiceProPro_View_EditCreateProArgumentInputForm = (): ((
   ownerData: any,
@@ -44,9 +61,9 @@ export const useServiceProPro_View_EditCreateProArgumentInputForm = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -55,14 +72,14 @@ export const useServiceProPro_View_EditCreateProArgumentInputForm = (): ((
         children: (
           <ServiceProPro_View_EditCreateProArgumentInputForm
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={() => {
-              closeDialog();
+            onSubmit={async () => {
+              await closeDialog();
               resolve({
                 result: 'submit',
               });
@@ -100,10 +117,11 @@ const CreateArgumentInputCreateArgumentInput_FormDialogContainer = lazy(
 export interface ServiceProPro_View_EditCreateProArgumentInputFormProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: CreateArgumentInputStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: CreateArgumentInputStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition
 // Name: service::Pro::Pro_View_Edit::createProArgument::Input::Form
 export default function ServiceProPro_View_EditCreateProArgumentInputForm(
   props: ServiceProPro_View_EditCreateProArgumentInputFormProps,
@@ -113,7 +131,7 @@ export default function ServiceProPro_View_EditCreateProArgumentInputForm(
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -158,36 +176,50 @@ export default function ServiceProPro_View_EditCreateProArgumentInputForm(
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<CreateArgumentInputCreateArgumentInput_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_PRO_PRO_VIEW_EDIT_CREATE_PRO_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
   const title: string = t('CreateArgumentInput.CreateArgumentInput_Form', { defaultValue: 'CreateArgumentInput Form' });
 
   // Action section
-  const createArgumentInputCreateArgumentInput_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceProPro_View_EditArgumentsProsActionsCreateProArgument = async () => {
+  const createProArgumentForProAction = async () => {
     try {
       setIsLoading(true);
       await serviceProServiceImpl.createProArgument(ownerData, data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postCreateProArgumentForProAction) {
+        await customActions.postCreateProArgumentForProAction(
+          onSubmit,
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      onSubmit();
+        onSubmit();
+      }
     } catch (error) {
       handleError<CreateArgumentInput>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
     }
   };
-  const createArgumentInputCreateArgumentInput_FormGetTemplate = async (): Promise<CreateArgumentInput> => {
+  const getTemplateAction = async (): Promise<CreateArgumentInput> => {
     try {
       setIsLoading(true);
       const result = await serviceProServiceImpl.getTemplateForCreateProArgument();
@@ -204,18 +236,22 @@ export default function ServiceProPro_View_EditCreateProArgumentInputForm(
   };
 
   const actions: CreateArgumentInputCreateArgumentInput_FormDialogActions = {
-    createArgumentInputCreateArgumentInput_FormBack,
-    serviceProPro_View_EditArgumentsProsActionsCreateProArgument,
-    createArgumentInputCreateArgumentInput_FormGetTemplate,
+    backAction,
+    createProArgumentForProAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.createArgumentInputCreateArgumentInput_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition"
+      data-page-name="service::Pro::Pro_View_Edit::createProArgument::Input::Form"
+    >
       <Suspense>
         <CreateArgumentInputCreateArgumentInput_FormDialogContainer
           ownerData={ownerData}
@@ -233,6 +269,6 @@ export default function ServiceProPro_View_EditCreateProArgumentInputForm(
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

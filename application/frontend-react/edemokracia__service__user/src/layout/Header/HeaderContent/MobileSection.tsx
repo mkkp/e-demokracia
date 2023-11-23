@@ -8,7 +8,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Box, ClickAwayListener, IconButton, Paper, Popper, Toolbar } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import IconButton from '@mui/material/IconButton';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import Toolbar from '@mui/material/Toolbar';
 import { ThemeMode } from '~/config';
 import { MdiIcon } from '~/components';
 import { Profile } from './Profile';

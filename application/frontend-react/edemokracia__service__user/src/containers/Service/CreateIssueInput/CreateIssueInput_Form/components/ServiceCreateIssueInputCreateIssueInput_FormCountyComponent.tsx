@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,7 @@ import type {
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActionDefinitions {
-  serviceCreateIssueInputCreateIssueInput_FormIssueCountyCreate?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCountyDelete?: (target: ServiceCountyStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCountySetOpenSelector?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCountyUnset?: (target: ServiceCountyStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCountyView?: (target: ServiceCountyStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCountyAutocomplete?: (
+  countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
 }
@@ -57,12 +52,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
     <AggregationInput
       name="county"
       id="User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.CreateIssueInput.CreateIssueInput.Form.county.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-          { defaultValue: 'County' },
-        ) as string
-      }
+      label={t('service.CreateIssueInput.CreateIssueInput_Form.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '', ownerData.county?.name?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -75,7 +65,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
         storeDiff('county', county);
       }}
       onAutoCompleteSearch={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyAutocomplete
+        actions.countyAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceCountyQueryCustomizer = {
                 ...(searchText?.length
@@ -87,41 +77,8 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.countyAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
-          : undefined
-      }
-      onView={
-        ownerData.county && actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyView
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyView!(ownerData.county!);
-            }
-          : undefined
-      }
-      onCreate={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyCreate
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.county && actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyDelete
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyDelete!(ownerData.county!)
-          : undefined
-      }
-      onSet={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountySetOpenSelector
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.county && actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyUnset
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueCountyUnset!(ownerData.county!)
           : undefined
       }
     ></AggregationInput>

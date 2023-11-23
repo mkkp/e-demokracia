@@ -13,9 +13,17 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +45,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   CloseDebateOutputVoteDefinitionReference,
@@ -98,10 +112,9 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           id="User/(esm/_f6ew0Fv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
           autoFocus
           label={
-            t(
-              'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.View.Edit.context.CloseDebateOutputVoteDefinitionReference_View_Edit.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_View_Edit',
-              { defaultValue: 'Context' },
-            ) as string
+            t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.context', {
+              defaultValue: 'Context',
+            }) as string
           }
           value={data.context ?? ''}
           className={clsx({

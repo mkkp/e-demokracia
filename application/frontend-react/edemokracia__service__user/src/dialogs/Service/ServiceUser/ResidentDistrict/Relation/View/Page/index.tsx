@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -34,7 +35,18 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceServiceUserServiceForResidentDistrictImpl } from '~/services/data-axios';
+import { serviceDistrictServiceImpl } from '~/services/data-axios';
+export type ServiceDistrictDistrict_View_EditDialogActionsExtended =
+  ServiceDistrictDistrict_View_EditDialogActions & {};
+
+export const SERVICE_SERVICE_USER_RESIDENT_DISTRICT_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceDistrictDistrict_View_EditActionsHook';
+export type ServiceDistrictDistrict_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceDistrictStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+) => ServiceDistrictDistrict_View_EditDialogActionsExtended;
 
 export const useServiceServiceUserResidentDistrictRelationViewPage = (): ((
   ownerData: any,
@@ -46,9 +58,9 @@ export const useServiceServiceUserResidentDistrictRelationViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -57,14 +69,14 @@ export const useServiceServiceUserResidentDistrictRelationViewPage = (): ((
         children: (
           <ServiceServiceUserResidentDistrictRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -100,10 +112,11 @@ const ServiceDistrictDistrict_View_EditDialogContainer = lazy(
 export interface ServiceServiceUserResidentDistrictRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceDistrictStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceDistrictStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_iEh0MIXoEe2kLcMqsIbMgQ)/RelationFeatureView
 // Name: service::ServiceUser::residentDistrict::Relation::View::Page
 export default function ServiceServiceUserResidentDistrictRelationViewPage(
   props: ServiceServiceUserResidentDistrictRelationViewPageProps,
@@ -113,7 +126,7 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -162,22 +175,31 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
     _mask: '{name}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceDistrictDistrict_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_RESIDENT_DISTRICT_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceDistrictDistrict_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
   const title: string = data.representation as string;
 
   // Action section
-  const serviceDistrictDistrict_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceDistrictDistrict_View_EditRefresh = async (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored> => {
+  const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceServiceUserServiceForResidentDistrictImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceDistrictServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -198,15 +220,15 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceDistrictDistrict_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceDistrictDistrict_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceDistrictDistrict_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await serviceServiceUserServiceForResidentDistrictImpl.update(payloadDiff.current);
+      const res = await serviceDistrictServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -214,7 +236,7 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceDistrict, string>());
-        await actions.serviceDistrictDistrict_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -225,19 +247,23 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
   };
 
   const actions: ServiceDistrictDistrict_View_EditDialogActions = {
-    serviceDistrictDistrict_View_EditBack,
-    serviceDistrictDistrict_View_EditRefresh,
-    serviceDistrictDistrict_View_EditCancel,
-    serviceDistrictDistrict_View_EditUpdate,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceDistrictDistrict_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_iEh0MIXoEe2kLcMqsIbMgQ)/RelationFeatureView"
+      data-page-name="service::ServiceUser::residentDistrict::Relation::View::Page"
+    >
       <Suspense>
         <ServiceDistrictDistrict_View_EditDialogContainer
           ownerData={ownerData}
@@ -255,6 +281,6 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

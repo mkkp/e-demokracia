@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,42 +66,29 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableYesNoAbstainVoteDefinition_TableComponentActionDefinitions {
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableAddOpenSelector?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: ServiceYesNoAbstainVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceYesNoAbstainVoteDefinitionStored[]>>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: ServiceYesNoAbstainVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceYesNoAbstainVoteDefinitionStored[]>>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableClear?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableCreateOpen?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableRefresh?: (
+  refreshAction?: (
     queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceYesNoAbstainVoteDefinitionStored[]>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableDelete?: (
-    row: ServiceYesNoAbstainVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableRemove?: (
-    row: ServiceYesNoAbstainVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableView?: (
-    row: ServiceYesNoAbstainVoteDefinitionStored,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote?: (
-    row: ServiceYesNoAbstainVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm?: (
-    row: ServiceYesNoAbstainVoteDefinitionStored,
-  ) => Promise<void>;
+  deleteAction?: (row: ServiceYesNoAbstainVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceYesNoAbstainVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceYesNoAbstainVoteDefinitionStored) => Promise<void>;
+  takeBackVoteForYesNoAbstainVoteDefinitionAction?: (row: ServiceYesNoAbstainVoteDefinitionStored) => Promise<void>;
+  voteAction?: (row: ServiceYesNoAbstainVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableYesNoAbstainVoteDefinition_TableComponentProps {
@@ -161,7 +152,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.title', {
+      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -173,7 +164,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.created', {
+      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -200,7 +191,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.description', {
+      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -212,7 +203,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.status', {
+      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -233,7 +224,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.closeAt', {
+      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -262,98 +253,90 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
   const rowActions: TableRowAction<ServiceYesNoAbstainVoteDefinitionStored>[] = [
     {
       id: 'User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Remove', {
+        defaultValue: 'Remove',
+      }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Delete', {
+        defaultValue: 'Delete',
+      }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => !row.__deleteable || isLoading,
-      action: actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_7M-IN1snEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.takeBackVote', {
+      id: 'User/(esm/_7M-IN1snEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.takeBackVote', {
         defaultValue: 'takeBackVote',
       }) as string,
       icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action:
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote
-          ? async (rowData) => {
-              await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote!(
-                rowData,
-              );
-            }
-          : undefined,
+      action: actions.takeBackVoteForYesNoAbstainVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForYesNoAbstainVoteDefinitionAction!(rowData);
+          }
+        : undefined,
     },
     {
-      id: 'User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.vote', {
+      id: 'User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.vote', {
         defaultValue: 'vote',
       }) as string,
       icon: <MdiIcon path="vote" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action:
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm
-          ? async (rowData) => {
-              await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm!(
-                rowData,
-              );
-            }
-          : undefined,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
     },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fkZMUX2GEe6V8KKnnZfChA',
+      id: '_0H_l4IoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.title::Filter', {
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
         defaultValue: 'Title',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fkZzYH2GEe6V8KKnnZfChA',
+      id: '_0H_l5IoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.created::Filter', {
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fkZzZH2GEe6V8KKnnZfChA',
+      id: '_0IAM8ooAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.description::Filter', {
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fkaacn2GEe6V8KKnnZfChA',
+      id: '_0IA0AIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.status::Filter', {
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
@@ -361,9 +344,9 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_fkbBgn2GEe6V8KKnnZfChA',
+      id: '_0IA0BIoAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.closeAt::Filter', {
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       filterType: FilterType.dateTime,
@@ -439,9 +422,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -467,7 +448,10 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable"
+      data-table-name="YesNoAbstainVoteDefinition_Table"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -500,9 +484,9 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableView
+          actions.openPageAction
             ? async (params: GridRowParams<ServiceYesNoAbstainVoteDefinitionStored>) =>
-                await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableView!(params.row)
+                await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -512,142 +496,124 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableFilter!(
-                        'User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.filterAction!(
+                      'User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Table.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Table.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Add', {
+                    defaultValue: 'Add',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Set', {
+                    defaultValue: 'Set',
+                  })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Clear', {
+                    defaultValue: 'Clear',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBulkRemove &&
-              selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.BulkRemove', {
+                    defaultValue: 'Remove',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.BulkDelete', {
+                    defaultValue: 'Delete',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -678,6 +644,6 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

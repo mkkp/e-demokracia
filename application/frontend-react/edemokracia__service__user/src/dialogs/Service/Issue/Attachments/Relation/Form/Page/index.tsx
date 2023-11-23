@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -36,6 +37,17 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import { serviceIssueServiceForAttachmentsImpl } from '~/services/data-axios';
+export type ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended =
+  ServiceIssueAttachmentIssueAttachment_FormDialogActions & {};
+
+export const SERVICE_ISSUE_ATTACHMENTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueAttachmentIssueAttachment_FormActionsHook';
+export type ServiceIssueAttachmentIssueAttachment_FormActionsHook = (
+  ownerData: any,
+  data: ServiceIssueAttachmentStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void,
+) => ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended;
 
 export const useServiceIssueAttachmentsRelationFormPage = (): ((
   ownerData: any,
@@ -47,9 +59,9 @@ export const useServiceIssueAttachmentsRelationFormPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -58,14 +70,14 @@ export const useServiceIssueAttachmentsRelationFormPage = (): ((
         children: (
           <ServiceIssueAttachmentsRelationFormPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -104,10 +116,11 @@ const ServiceIssueAttachmentIssueAttachment_FormDialogContainer = lazy(
 export interface ServiceIssueAttachmentsRelationFormPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueAttachmentStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueAttachmentStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm
 // Name: service::Issue::attachments::Relation::Form::Page
 export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIssueAttachmentsRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -115,7 +128,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -157,16 +170,23 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueAttachmentIssueAttachment_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_ATTACHMENTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.IssueAttachment.IssueAttachment_Form', { defaultValue: 'IssueAttachment Form' });
+  const title: string = t('service.IssueAttachment.IssueAttachment_Form', { defaultValue: 'IssueAttachment Form' });
 
   // Action section
-  const serviceIssueAttachmentIssueAttachment_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueAttachmentIssueAttachment_FormCreate = async () => {
+  const createAction = async () => {
     try {
       setIsLoading(true);
       const res = await serviceIssueServiceForAttachmentsImpl.create(ownerData, data);
@@ -183,7 +203,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
       setIsLoading(false);
     }
   };
-  const serviceIssueAttachmentIssueAttachment_FormGetTemplate = async (): Promise<ServiceIssueAttachment> => {
+  const getTemplateAction = async (): Promise<ServiceIssueAttachment> => {
     try {
       setIsLoading(true);
       const result = await serviceIssueServiceForAttachmentsImpl.getTemplate();
@@ -200,18 +220,22 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
   };
 
   const actions: ServiceIssueAttachmentIssueAttachment_FormDialogActions = {
-    serviceIssueAttachmentIssueAttachment_FormBack,
-    serviceIssueAttachmentIssueAttachment_FormCreate,
-    serviceIssueAttachmentIssueAttachment_FormGetTemplate,
+    backAction,
+    createAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceIssueAttachmentIssueAttachment_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm"
+      data-page-name="service::Issue::attachments::Relation::Form::Page"
+    >
       <Suspense>
         <ServiceIssueAttachmentIssueAttachment_FormDialogContainer
           ownerData={ownerData}
@@ -229,6 +253,6 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

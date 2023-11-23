@@ -6,24 +6,22 @@
 // Template name: actor/src/components/dialog/FilterDialog.tsx
 // Template file: actor/src/components/dialog/FilterDialog.tsx.hbs
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Slide,
-  Box,
-  Container,
-  Grid,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  InputAdornment,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
+import Slide from '@mui/material/Slide';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
 import type { TransitionProps } from '@mui/material/transitions';
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';

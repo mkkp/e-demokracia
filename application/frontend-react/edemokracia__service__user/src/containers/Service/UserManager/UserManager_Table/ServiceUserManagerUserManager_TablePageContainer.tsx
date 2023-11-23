@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,7 +29,7 @@ const ServiceUserManagerUserManager_Table = lazy(
 
 export interface ServiceUserManagerUserManager_TablePageActions
   extends ServiceUserManagerUserManager_TableActionDefinitions {
-  serviceUserManagerUserManager_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceUserManagerUserManager_TablePageProps {
@@ -49,23 +51,19 @@ export default function ServiceUserManagerUserManager_TablePage(props: ServiceUs
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceUserManagerUserManager_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserManager::UserManager_Table::Back"
+              id="User/(esm/_dGLZ0FvOEe6jm_SkPSYEYw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceUserManagerUserManager_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.UserManager.UserManager.Table.service::UserManager::UserManager_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.UserManager.UserManager_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

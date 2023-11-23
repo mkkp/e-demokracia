@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceProPro_View_EditCreatedByComponentActionDefinitions {
-  serviceProPro_View_EditProCreatedByCreate?: () => Promise<void>;
-  serviceProPro_View_EditProCreatedByDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceProPro_View_EditProCreatedBySetOpenSelector?: () => Promise<void>;
-  serviceProPro_View_EditProCreatedByUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceProPro_View_EditProCreatedByView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceProPro_View_EditProCreatedByAutocomplete?: (
+  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -55,11 +51,7 @@ export function ServiceProPro_View_EditCreatedByComponent(props: ServiceProPro_V
     <AggregationInput
       name="createdBy"
       id="User/(esm/_eJsa8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t('service.Pro.Pro.View.Edit.createdBy.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit', {
-          defaultValue: 'Created by',
-        }) as string
-      }
+      label={t('service.Pro.Pro_View_Edit.createdBy', { defaultValue: 'Created by' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -72,7 +64,7 @@ export function ServiceProPro_View_EditCreatedByComponent(props: ServiceProPro_V
         storeDiff('createdBy', createdBy);
       }}
       onAutoCompleteSearch={
-        actions.serviceProPro_View_EditProCreatedByAutocomplete
+        actions.createdByAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -84,41 +76,15 @@ export function ServiceProPro_View_EditCreatedByComponent(props: ServiceProPro_V
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceProPro_View_EditProCreatedByAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.createdByAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.createdBy && actions.serviceProPro_View_EditProCreatedByView
+        ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.serviceProPro_View_EditProCreatedByView!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceProPro_View_EditProCreatedByCreate
-          ? async () => {
-              await actions.serviceProPro_View_EditProCreatedByCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.createdBy && actions.serviceProPro_View_EditProCreatedByDelete
-          ? async () => actions.serviceProPro_View_EditProCreatedByDelete!(ownerData.createdBy!)
-          : undefined
-      }
-      onSet={
-        actions.serviceProPro_View_EditProCreatedBySetOpenSelector
-          ? async () => {
-              await actions.serviceProPro_View_EditProCreatedBySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.createdBy && actions.serviceProPro_View_EditProCreatedByUnset
-          ? async () => actions.serviceProPro_View_EditProCreatedByUnset!(ownerData.createdBy!)
           : undefined
       }
     ></AggregationInput>

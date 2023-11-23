@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,33 +66,26 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_TableComponentActionDefinitions {
-  serviceCreateIssueInputCreateIssueInput_TableAddOpenSelector?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: ServiceCreateIssueInputStored[],
   ) => Promise<DialogResult<ServiceCreateIssueInputStored[]>>;
-  serviceCreateIssueInputCreateIssueInput_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: ServiceCreateIssueInputStored[],
   ) => Promise<DialogResult<ServiceCreateIssueInputStored[]>>;
-  serviceCreateIssueInputCreateIssueInput_TableClear?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_TableCreateOpen?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCreateIssueInputCreateIssueInput_TableTableRefresh?: (
-    queryCustomizer: ServiceCreateIssueInputQueryCustomizer,
-  ) => Promise<ServiceCreateIssueInputStored[]>;
-  serviceCreateIssueInputCreateIssueInput_TableDelete?: (
-    row: ServiceCreateIssueInputStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_TableRemove?: (
-    row: ServiceCreateIssueInputStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_TableView?: (row: ServiceCreateIssueInputStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceCreateIssueInputQueryCustomizer) => Promise<ServiceCreateIssueInputStored[]>;
+  deleteAction?: (row: ServiceCreateIssueInputStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceCreateIssueInputStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceCreateIssueInputStored) => Promise<void>;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_TableComponentProps {
@@ -152,7 +149,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.CreateIssueInput.CreateIssueInput.Table.description', {
+      headerName: t('service.CreateIssueInput.CreateIssueInput_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -168,7 +165,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.CreateIssueInput.CreateIssueInput.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.CreateIssueInput.CreateIssueInput_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -184,29 +181,23 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
   const rowActions: TableRowAction<ServiceCreateIssueInputStored>[] = [
     {
       id: 'User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('service.CreateIssueInput.CreateIssueInput_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceCreateIssueInputStored) => isLoading,
-      action: actions.serviceCreateIssueInputCreateIssueInput_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceCreateIssueInputCreateIssueInput_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.CreateIssueInput.CreateIssueInput_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceCreateIssueInputStored) => !row.__deleteable || isLoading,
-      action: actions.serviceCreateIssueInputCreateIssueInput_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceCreateIssueInputCreateIssueInput_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -283,9 +274,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceCreateIssueInputCreateIssueInput_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -311,7 +300,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable" data-table-name="CreateIssueInput_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -344,9 +333,8 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceCreateIssueInputCreateIssueInput_TableView
-            ? async (params: GridRowParams<ServiceCreateIssueInputStored>) =>
-                await actions.serviceCreateIssueInputCreateIssueInput_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceCreateIssueInputStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -356,13 +344,13 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCreateIssueInputCreateIssueInput_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCreateIssueInputCreateIssueInput_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -374,117 +362,105 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCreateIssueInputCreateIssueInput_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCreateIssueInputCreateIssueInput_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceCreateIssueInputCreateIssueInput_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCreateIssueInputCreateIssueInput_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceCreateIssueInputCreateIssueInput_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCreateIssueInputCreateIssueInput_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceCreateIssueInputCreateIssueInput_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCreateIssueInputCreateIssueInput_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceCreateIssueInputCreateIssueInput_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceCreateIssueInputCreateIssueInput_TableBulkRemove!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceCreateIssueInputCreateIssueInput_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceCreateIssueInputCreateIssueInput_TableBulkDelete!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.CreateIssueInput.CreateIssueInput.Table.service::CreateIssueInput::CreateIssueInput_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.CreateIssueInput.CreateIssueInput_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -515,6 +491,6 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

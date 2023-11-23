@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,35 +69,21 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponentActionDefinitions {
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsAddOpenSelector?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkDelete?: (
+  voteSelectionsBulkDeleteAction?: (
     selectedRows: ServiceSelectAnswerVoteSelectionStored[],
   ) => Promise<DialogResult<ServiceSelectAnswerVoteSelectionStored[]>>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkRemove?: (
-    selectedRows: ServiceSelectAnswerVoteSelectionStored[],
-  ) => Promise<DialogResult<ServiceSelectAnswerVoteSelectionStored[]>>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsClear?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsCreateOpen?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsFilter?: (
+  voteSelectionsOpenFormAction?: () => Promise<void>;
+  voteSelectionsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsRefresh?: (
+  voteSelectionsRefreshAction?: (
     queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ) => Promise<ServiceSelectAnswerVoteSelectionStored[]>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete?: (
-    row: ServiceSelectAnswerVoteSelectionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsRemove?: (
-    row: ServiceSelectAnswerVoteSelectionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsView?: (
-    row: ServiceSelectAnswerVoteSelectionStored,
-  ) => Promise<void>;
+  voteSelectionsDeleteAction?: (row: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
+  voteSelectionsOpenPageAction?: (row: ServiceSelectAnswerVoteSelectionStored) => Promise<void>;
 }
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponentProps {
@@ -157,7 +147,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.description', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -169,7 +159,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.title', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -182,55 +172,35 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const rowActions: TableRowAction<ServiceSelectAnswerVoteSelectionStored>[] = [
     {
-      id: 'User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceSelectAnswerVoteSelectionStored) => isLoading,
-      action:
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsRemove
-          ? async (rowData) => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsRemove!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
       id: 'User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableRowDeleteButton',
       label: t(
-        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Delete',
+        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Delete',
         { defaultValue: 'Delete' },
       ) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceSelectAnswerVoteSelectionStored) => editMode || !row.__deleteable || isLoading,
-      action:
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete
-          ? async (rowData) => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete!(
-                rowData,
-              );
-            }
-          : undefined,
+      action: actions.voteSelectionsDeleteAction
+        ? async (rowData) => {
+            await actions.voteSelectionsDeleteAction!(rowData);
+          }
+        : undefined,
     },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fzsMkn2GEe6V8KKnnZfChA',
+      id: '_0UqI4IoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.description::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.description', {
         defaultValue: 'Description',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fzszon2GEe6V8KKnnZfChA',
+      id: '_0UqI5IoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.title::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.title', {
         defaultValue: 'Title',
       }) as string,
       filterType: FilterType.string,
@@ -301,7 +271,10 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   }, [ownerData?.voteSelections, filters]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="voteSelections"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -335,11 +308,9 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsView
+          actions.voteSelectionsOpenPageAction
             ? async (params: GridRowParams<ServiceSelectAnswerVoteSelectionStored>) =>
-                await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsView!(
-                  params.row,
-                )
+                await actions.voteSelectionsOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -349,20 +320,18 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsFilter &&
-              true ? (
+              {actions.voteSelectionsFilterAction && true ? (
                 <Button
                   id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsFilter!(
-                        'User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.voteSelectionsFilterAction!(
+                      'User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -370,116 +339,51 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   disabled={isLoading}
                 >
                   {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Filter',
+                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsRefresh &&
-              true ? (
+              {actions.voteSelectionsRefreshAction && true ? (
                 <Button
                   id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.voteSelectionsRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Refresh',
+                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Refresh',
                     { defaultValue: 'Refresh' },
                   )}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsCreateOpen &&
-              true ? (
+              {actions.voteSelectionsOpenFormAction && true ? (
                 <Button
                   id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsCreateOpen!();
+                    await actions.voteSelectionsOpenFormAction!();
                   }}
                   disabled={editMode || isLoading}
                 >
                   {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Create',
+                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Create',
                     { defaultValue: 'Create' },
                   )}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.voteSelectionsBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.voteSelectionsBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
@@ -487,7 +391,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
                   {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::voteSelections::BulkDelete',
+                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkDelete',
                     { defaultValue: 'Delete' },
                   )}
                 </Button>
@@ -511,6 +415,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,6 +36,17 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import { serviceServiceUserServiceForResidentCountyImpl } from '~/services/data-axios';
+export type ServiceCountyCounty_TableSetSelectorDialogActionsExtended =
+  ServiceCountyCounty_TableSetSelectorDialogActions & {};
+
+export const SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_COUNTY_TABULAR_REFERENCE_FIELD_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCountyCounty_TableSetSelectorActionsHook';
+export type ServiceCountyCounty_TableSetSelectorActionsHook = (
+  ownerData: any,
+  data: ServiceCountyStored[],
+  editMode: boolean,
+  selectionDiff: ServiceCountyStored[],
+) => ServiceCountyCounty_TableSetSelectorDialogActionsExtended;
 
 export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyTabularReferenceFieldLinkSetSelectorPage =
   (): ((ownerData: any, alreadySelected: ServiceCountyStored[]) => Promise<DialogResult<ServiceCountyStored[]>>) => {
@@ -45,9 +57,9 @@ export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCou
         createDialog({
           fullWidth: true,
           maxWidth: 'md',
-          onClose: (event: object, reason: string) => {
+          onClose: async (event: object, reason: string) => {
             if (reason !== 'backdropClick') {
-              closeDialog();
+              await closeDialog();
               resolve({
                 result: 'close',
               });
@@ -57,14 +69,14 @@ export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCou
             <ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyTabularReferenceFieldLinkSetSelectorPage
               ownerData={ownerData}
               alreadySelected={alreadySelected}
-              onClose={() => {
-                closeDialog();
+              onClose={async () => {
+                await closeDialog();
                 resolve({
                   result: 'close',
                 });
               }}
-              onSubmit={(result) => {
-                closeDialog();
+              onSubmit={async (result) => {
+                await closeDialog();
                 resolve({
                   result: 'submit',
                   data: result,
@@ -84,10 +96,11 @@ const ServiceCountyCounty_TableSetSelectorDialogContainer = lazy(
 export interface ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyTabularReferenceFieldLinkSetSelectorPageProps {
   ownerData: any;
   alreadySelected: ServiceCountyStored[];
-  onClose: () => void;
-  onSubmit: (result?: ServiceCountyStored[]) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored[]) => Promise<void>;
 }
 
+// XMIID: User/(esm/_I-xl0IXqEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition
 // Name: service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCounty::TabularReferenceField::Link::Set::Selector::Page
 export default function ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyTabularReferenceFieldLinkSetSelectorPage(
   props: ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyTabularReferenceFieldLinkSetSelectorPageProps,
@@ -97,7 +110,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -111,19 +124,30 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   const [data, setData] = useState<ServiceCountyStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceCountyStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCountyCounty_TableSetSelectorActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_COUNTY_TABULAR_REFERENCE_FIELD_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCountyCounty_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    selectionDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
+  const title: string = t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
 
   // Action section
-  const serviceCountyCounty_TableSet = async (selected: ServiceCountyStored[]) => {
+  const setAction = async (selected: ServiceCountyStored[]) => {
     onSubmit(selected);
   };
-  const serviceCountyCounty_TableBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceCountyCounty_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -134,9 +158,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
       filters: newFilters,
     };
   };
-  const serviceCountyCounty_TableTableRange = async (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored[]> => {
+  const selectorRangeAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
     try {
       return serviceServiceUserServiceForResidentCountyImpl.getRangeForResidentCounty(ownerData, queryCustomizer);
     } catch (error) {
@@ -146,16 +168,20 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   };
 
   const actions: ServiceCountyCounty_TableSetSelectorDialogActions = {
-    serviceCountyCounty_TableSet,
-    serviceCountyCounty_TableBack,
-    serviceCountyCounty_TableTableFilter,
-    serviceCountyCounty_TableTableRange,
+    setAction,
+    backAction,
+    filterAction,
+    selectorRangeAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <>
+    <div
+      id="User/(esm/_I-xl0IXqEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+      data-page-name="service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCounty::TabularReferenceField::Link::Set::Selector::Page"
+    >
       <Suspense>
         <ServiceCountyCounty_TableSetSelectorDialogContainer
           ownerData={ownerData}
@@ -170,6 +196,6 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
           alreadySelected={alreadySelected}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

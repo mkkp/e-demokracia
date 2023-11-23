@@ -13,9 +13,17 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +45,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceRatingVoteEntry,
@@ -137,12 +151,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
             });
           }}
           views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-          label={
-            t(
-              'service.RatingVoteEntry.RatingVoteEntry.View.Edit.created.RatingVoteEntry_View_Edit.service::RatingVoteEntry::RatingVoteEntry_View_Edit',
-              { defaultValue: 'Created' },
-            ) as string
-          }
+          label={t('service.RatingVoteEntry.RatingVoteEntry_View_Edit.created', { defaultValue: 'Created' }) as string}
           value={serviceDateToUiDate(data.created ?? null)}
           readOnly={false || !isFormUpdateable()}
           disabled={isLoading}
@@ -157,12 +166,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
           required={true}
           name="value"
           id="User/(esm/_V53ekVuWEe6T042_LMmSdQ)/NumericTypeVisualInput"
-          label={
-            t(
-              'service.RatingVoteEntry.RatingVoteEntry.View.Edit.value.RatingVoteEntry_View_Edit.service::RatingVoteEntry::RatingVoteEntry_View_Edit',
-              { defaultValue: 'Value' },
-            ) as string
-          }
+          label={t('service.RatingVoteEntry.RatingVoteEntry_View_Edit.value', { defaultValue: 'Value' }) as string}
           customInput={TextField}
           value={data.value ?? ''}
           className={clsx({

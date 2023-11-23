@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,6 +36,16 @@ import type {
   ServiceDistrictStored,
 } from '~/services/data-api';
 import { serviceCityServiceForDistrictsImpl } from '~/services/data-axios';
+export type ServiceDistrictDistrict_FormDialogActionsExtended = ServiceDistrictDistrict_FormDialogActions & {};
+
+export const SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceDistrictDistrict_FormActionsHook';
+export type ServiceDistrictDistrict_FormActionsHook = (
+  ownerData: any,
+  data: ServiceDistrictStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+) => ServiceDistrictDistrict_FormDialogActionsExtended;
 
 export const useServiceCityDistrictsRelationFormPage = (): ((
   ownerData: any,
@@ -46,9 +57,9 @@ export const useServiceCityDistrictsRelationFormPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -57,14 +68,14 @@ export const useServiceCityDistrictsRelationFormPage = (): ((
         children: (
           <ServiceCityDistrictsRelationFormPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -100,10 +111,11 @@ const ServiceDistrictDistrict_FormDialogContainer = lazy(
 export interface ServiceCityDistrictsRelationFormPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceDistrictStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceDistrictStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationFeatureForm
 // Name: service::City::districts::Relation::Form::Page
 export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityDistrictsRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -111,7 +123,7 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -153,16 +165,27 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceDistrictDistrict_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceDistrictDistrict_FormDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.District.District_Form', { defaultValue: 'District Form' });
+  const title: string = t('service.District.District_Form', { defaultValue: 'District Form' });
 
   // Action section
-  const serviceDistrictDistrict_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceDistrictDistrict_FormCreate = async () => {
+  const createAction = async () => {
     try {
       setIsLoading(true);
       const res = await serviceCityServiceForDistrictsImpl.create(ownerData, data);
@@ -179,7 +202,7 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
       setIsLoading(false);
     }
   };
-  const serviceDistrictDistrict_FormGetTemplate = async (): Promise<ServiceDistrict> => {
+  const getTemplateAction = async (): Promise<ServiceDistrict> => {
     try {
       setIsLoading(true);
       const result = await serviceCityServiceForDistrictsImpl.getTemplate();
@@ -196,18 +219,22 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
   };
 
   const actions: ServiceDistrictDistrict_FormDialogActions = {
-    serviceDistrictDistrict_FormBack,
-    serviceDistrictDistrict_FormCreate,
-    serviceDistrictDistrict_FormGetTemplate,
+    backAction,
+    createAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceDistrictDistrict_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationFeatureForm"
+      data-page-name="service::City::districts::Relation::Form::Page"
+    >
       <Suspense>
         <ServiceDistrictDistrict_FormDialogContainer
           ownerData={ownerData}
@@ -225,6 +252,6 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

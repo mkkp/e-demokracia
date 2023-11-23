@@ -11,7 +11,11 @@ import type { ForwardRefExoticComponent, RefAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
-import { ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useConfig } from '~/hooks';
 import { MenuOrientation, ThemeMode } from '~/config';
 import { MdiIcon, useJudoNavigation } from '~/components';

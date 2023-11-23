@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,15 +62,13 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSelectorComponentActionDefinitions {
-  serviceSimpleVoteSimpleVote_TableTableFilter?: (
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceSimpleVoteSimpleVote_TableTableRange?: (
-    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
-  ) => Promise<ServiceSimpleVoteStored[]>;
+  selectorRangeAction?: (queryCustomizer: ServiceSimpleVoteQueryCustomizer) => Promise<ServiceSimpleVoteStored[]>;
 }
 
 export interface ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSelectorComponentProps {
@@ -132,7 +134,7 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.SimpleVote.SimpleVote.Table.AddSelector.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -157,7 +159,7 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
     {
       ...baseColumnConfig,
       field: 'type',
-      headerName: t('service.SimpleVote.SimpleVote.Table.AddSelector.type', { defaultValue: 'Type' }) as string,
+      headerName: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -179,18 +181,16 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fIq5oH2GEe6V8KKnnZfChA',
+      id: '_zr6t4IoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.SimpleVote.SimpleVote.Table.AddSelector.created::Filter', {
-        defaultValue: 'Created',
-      }) as string,
+      label: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fIsHwH2GEe6V8KKnnZfChA',
+      id: '_zr78AIoAEe6F9LXBn0VWTg',
       attributeName: 'type',
-      label: t('service.SimpleVote.SimpleVote.Table.AddSelector.type::Filter', { defaultValue: 'Type' }) as string,
+      label: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['UP', 'DOWN'],
     },
@@ -292,7 +292,7 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceSimpleVoteSimpleVote_TableTableRange!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -318,7 +318,10 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable"
+      data-table-name="SimpleVote_Table::Add::Selector"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -357,13 +360,13 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceSimpleVoteSimpleVote_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceSimpleVoteSimpleVote_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -375,27 +378,21 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SimpleVote.SimpleVote.Table.AddSelector.service::SimpleVote::SimpleVote_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.SimpleVote.SimpleVote_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceSimpleVoteSimpleVote_TableTableRange && true ? (
+              {actions.selectorRangeAction && true ? (
                 <Button
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSimpleVoteSimpleVote_TableTableRange!(processQueryCustomizer(queryCustomizer));
+                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SimpleVote.SimpleVote.Table.AddSelector.service::SimpleVote::SimpleVote_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.SimpleVote.SimpleVote_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -426,6 +423,6 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

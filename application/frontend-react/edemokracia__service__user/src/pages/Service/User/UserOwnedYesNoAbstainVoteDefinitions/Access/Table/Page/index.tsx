@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,19 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import { userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios';
+export type ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActionsExtended =
+  ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActions & {
+    postTakeBackVoteForYesNoAbstainVoteDefinitionAction?: (
+      target: ServiceYesNoAbstainVoteDefinitionStored,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableActionsHook';
+export type ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableActionsHook = (
+  data: ServiceYesNoAbstainVoteDefinitionStored[],
+  editMode: boolean,
+) => ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActionsExtended;
 
 const ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -51,7 +65,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -64,23 +78,30 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceYesNoAbstainVoteDefinitionStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActionsExtended
+    | undefined = customActionsHook?.(data, editMode);
+
   // Dialog hooks
   const openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm =
     useServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm();
 
   // Calculated section
-  const title: string = t('Service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table', {
+  const title: string = t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table', {
     defaultValue: 'YesNoAbstainVoteDefinition Table',
   });
 
   // Action section
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableView = async (
-    target?: ServiceYesNoAbstainVoteDefinitionStored,
-  ) => {
+  const openPageAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -91,7 +112,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       filters: newFilters,
     };
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
   ): Promise<ServiceYesNoAbstainVoteDefinitionStored[]> => {
     try {
@@ -106,12 +127,14 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote =
-    async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
-      try {
-        setIsLoading(true);
-        await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.takeBackVote(target!);
+  const takeBackVoteForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.takeBackVote(target!);
 
+      if (customActions?.postTakeBackVoteForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -121,40 +144,48 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
         );
 
         setRefreshCounter((prev) => prev + 1);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsLoading(false);
       }
-    };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm =
-    async (target: ServiceYesNoAbstainVoteDefinitionStored) => {
-      const { result, data: returnedData } =
-        await openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(target);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async (target: ServiceYesNoAbstainVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
-    };
+    }
+  };
 
   const actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActions = {
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableView,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableFilter,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableTableRefresh,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    takeBackVoteForYesNoAbstainVoteDefinitionAction,
+    voteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_9lF1oFuhEe6rLvwZQOpyUA)/AccessTablePageDefinition"
+      data-page-name="service::User::userOwnedYesNoAbstainVoteDefinitions::Access::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

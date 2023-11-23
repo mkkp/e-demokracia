@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentActionDefinitions {
-  serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerCreate?: () => Promise<void>;
-  serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerSetOpenSelector?: () => Promise<void>;
-  serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerAutocomplete?: (
+  ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -57,12 +53,7 @@ export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent(
     <AggregationInput
       name="owner"
       id="User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.RatingVoteEntry.RatingVoteEntry.View.Edit.owner.RatingVoteEntry_View_Edit.service::RatingVoteEntry::RatingVoteEntry_View_Edit',
-          { defaultValue: 'Owner' },
-        ) as string
-      }
+      label={t('service.RatingVoteEntry.RatingVoteEntry_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -75,7 +66,7 @@ export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent(
         storeDiff('owner', owner);
       }}
       onAutoCompleteSearch={
-        actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerAutocomplete
+        actions.ownerAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -87,41 +78,15 @@ export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.ownerAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.owner && actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerView
+        ownerData.owner && actions.ownerOpenPageAction
           ? async () => {
-              await actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerView!(ownerData.owner!);
+              await actions.ownerOpenPageAction!(ownerData.owner!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerCreate
-          ? async () => {
-              await actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.owner && actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerDelete
-          ? async () => actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerDelete!(ownerData.owner!)
-          : undefined
-      }
-      onSet={
-        actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerSetOpenSelector
-          ? async () => {
-              await actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerSetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.owner && actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerUnset
-          ? async () => actions.serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerUnset!(ownerData.owner!)
           : undefined
       }
     ></AggregationInput>

@@ -9,6 +9,7 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   ServiceSelectAnswerVoteEntryStored,
+  CloseDebateOutputVoteDefinitionReferenceStored,
   ServiceSelectAnswerVoteDefinition,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
@@ -19,8 +20,11 @@ import {
   SelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
   SelectAnswerVoteSelectionStored,
+  CreateCommentInput,
+  CreateArgumentInput,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
+  CloseDebateInput,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
   ServiceSelectAnswerVoteSelection,
 } from '../data-api';
@@ -46,7 +50,36 @@ export interface ServiceSelectAnswerVoteDefinitionService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
-  getVoteEntries(
+  createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
+
+  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+
+  closeDebateForIssue(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+
+  getTemplateForCloseDebateForIssue(): Promise<CloseDebateInput>;
+
+  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForIssue(): Promise<CreateCommentInput>;
+
+  listVoteEntries(
     target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceSelectAnswerVoteEntryStored>>;
@@ -73,7 +106,7 @@ export interface ServiceSelectAnswerVoteDefinitionService {
     target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
 
-  getVoteSelections(
+  listVoteSelections(
     target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;

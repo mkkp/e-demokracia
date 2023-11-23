@@ -7,7 +7,7 @@
 // Template file: actor/src/App.tsx.hbs
 
 import { useEffect, useState } from 'react';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { LoadingButton } from '@mui/lab';
 import { SnackbarProvider, closeSnackbar } from 'notistack';
 import { BreadcrumbProvider, MdiIcon } from './components';

@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const SelectAnswerVoteSelectionSelectAnswerVoteSelection_Table = lazy(
 
 export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_TablePageActions
   extends SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableActionDefinitions {
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_TablePageProps {
@@ -54,23 +56,20 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Back"
+              id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBack!();
+                await actions.backAction!();
               }}
             >
               <span>
-                {t(
-                  'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
+                {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Back', { defaultValue: 'Back' })}
               </span>
             </LoadingButton>
           </Grid>

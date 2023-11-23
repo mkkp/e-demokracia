@@ -9,7 +9,7 @@
 import { forwardRef } from 'react';
 import type { ReactNode } from 'react';
 import { alpha, styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import type { Theme } from '@mui/material';
 import type { MUIStyledCommonProps } from '@mui/system';
 import { default as SimpleBarOriginal } from 'simplebar-react';

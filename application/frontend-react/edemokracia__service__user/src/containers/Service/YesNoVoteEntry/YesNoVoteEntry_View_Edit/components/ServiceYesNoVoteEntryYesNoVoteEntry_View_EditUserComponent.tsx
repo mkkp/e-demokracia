@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceYesNoVoteEntryStored,
 } from '~/services/data-api';
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponentActionDefinitions {
-  serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserCreate?: () => Promise<void>;
-  serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetOpenSelector?: () => Promise<void>;
-  serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserAutocomplete?: (
+  ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -57,12 +53,7 @@ export function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponent(
     <AggregationInput
       name="owner"
       id="User/(esm/_88iwkFowEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.YesNoVoteEntry.YesNoVoteEntry.View.Edit.user.YesNoVoteEntry_View_Edit.service::YesNoVoteEntry::YesNoVoteEntry_View_Edit',
-          { defaultValue: 'User' },
-        ) as string
-      }
+      label={t('service.YesNoVoteEntry.YesNoVoteEntry_View_Edit.user', { defaultValue: 'User' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -75,7 +66,7 @@ export function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponent(
         storeDiff('owner', owner);
       }}
       onAutoCompleteSearch={
-        actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserAutocomplete
+        actions.ownerAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -87,41 +78,15 @@ export function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.ownerAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.owner && actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserView
+        ownerData.owner && actions.ownerOpenPageAction
           ? async () => {
-              await actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserView!(ownerData.owner!);
+              await actions.ownerOpenPageAction!(ownerData.owner!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserCreate
-          ? async () => {
-              await actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.owner && actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserDelete
-          ? async () => actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserDelete!(ownerData.owner!)
-          : undefined
-      }
-      onSet={
-        actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetOpenSelector
-          ? async () => {
-              await actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.owner && actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserUnset
-          ? async () => actions.serviceYesNoVoteEntryYesNoVoteEntry_View_EditUserUnset!(ownerData.owner!)
           : undefined
       }
     ></AggregationInput>

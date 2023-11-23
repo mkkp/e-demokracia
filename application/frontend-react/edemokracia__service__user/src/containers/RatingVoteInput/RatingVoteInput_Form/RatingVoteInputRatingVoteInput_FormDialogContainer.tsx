@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,17 +28,17 @@ const RatingVoteInputRatingVoteInput_Form = lazy(
 
 export interface RatingVoteInputRatingVoteInput_FormDialogActions
   extends RatingVoteInputRatingVoteInput_FormActionDefinitions {
-  ratingVoteInputRatingVoteInput_FormGetTemplate?: () => Promise<RatingVoteInput>;
-  ratingVoteInputRatingVoteInput_FormBack?: () => Promise<void>;
-  ratingVoteInputRatingVoteInput_FormCreate?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote?: () => Promise<void>;
-  serviceVoteDefinitionVoteDefinition_View_EditTabBarRatingvoteVoteRating?: () => Promise<void>;
+  getTemplateAction?: () => Promise<RatingVoteInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  voteForRatingVoteDefinitionAction?: () => Promise<void>;
+  voteRatingForVoteDefinitionAction?: () => Promise<void>;
 }
 
 export interface RatingVoteInputRatingVoteInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: RatingVoteInputRatingVoteInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -79,7 +84,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="RatingVoteInputRatingVoteInput_Form-dialog-close-wrapper"
+          id="User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -109,83 +114,74 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.ratingVoteInputRatingVoteInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="RatingVoteInput::RatingVoteInput_Form::Back"
+              id="User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.ratingVoteInputRatingVoteInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('RatingVoteInput.RatingVoteInput.Form.RatingVoteInput::RatingVoteInput_Form::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('RatingVoteInput.RatingVoteInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.ratingVoteInputRatingVoteInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="RatingVoteInput::RatingVoteInput_Form::Create"
+              id="User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.ratingVoteInputRatingVoteInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t('RatingVoteInput.RatingVoteInput.Form.RatingVoteInput::RatingVoteInput_Form::Create', {
-                  defaultValue: 'Create',
-                })}
-              </span>
+              <span>{t('RatingVoteInput.RatingVoteInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode &&
-          actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote && (
-            <Grid className="page-action" item>
-              <LoadingButton
-                id="service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::OperationFormCallButton"
-                loading={isLoading}
-                loadingPosition="start"
-                variant={'contained'}
-                startIcon={<MdiIcon path="vote" />}
-                onClick={async () => {
-                  await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote!();
-                }}
-              >
-                <span>
-                  {t(
-                    'RatingVoteInput.RatingVoteInput.Form.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::OperationFormCallButton',
-                    { defaultValue: 'Submit' },
-                  )}
-                </span>
-              </LoadingButton>
-            </Grid>
-          )}
-        {editMode && actions.serviceVoteDefinitionVoteDefinition_View_EditTabBarRatingvoteVoteRating && (
+        {editMode && actions.voteRatingForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::VoteDefinition::VoteDefinition_View_Edit::tabBar::ratingvote::voteRating::OperationFormCallButton"
+              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_0IhxYIoAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
-                await actions.serviceVoteDefinitionVoteDefinition_View_EditTabBarRatingvoteVoteRating!();
+                await actions.voteRatingForVoteDefinitionAction!();
               }}
             >
               <span>
                 {t(
-                  'RatingVoteInput.RatingVoteInput.Form.service::VoteDefinition::VoteDefinition_View_Edit::tabBar::ratingvote::voteRating::OperationFormCallButton',
+                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.ratingvote.voteRating.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.voteForRatingVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_0IhxYIoAEe6F9LXBn0VWTg)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteForRatingVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

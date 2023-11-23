@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCon,
@@ -63,11 +78,11 @@ export interface ServiceProPro_View_EditActionDefinitions
   extends ServiceProPro_View_EditConsComponentActionDefinitions,
     ServiceProPro_View_EditCreatedByComponentActionDefinitions,
     ServiceProPro_View_EditProsComponentActionDefinitions {
-  serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm?: () => Promise<void>;
-  serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm?: () => Promise<void>;
-  serviceProPro_View_EditProVoteDown?: () => Promise<void>;
-  serviceProPro_View_EditProVoteUp?: () => Promise<void>;
-  serviceProPro_View_EditProVotesOpenPage?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  createConArgumentAction?: () => Promise<void>;
+  createProArgumentAction?: () => Promise<void>;
+  voteDownForProAction?: () => Promise<void>;
+  voteUpForProAction?: () => Promise<void>;
+  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceProPro_View_EditProps {
@@ -113,17 +128,14 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fmkWkX2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KCNQYoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                  <Typography id="_fmkWkX2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.Pro.Pro.View.Edit.pro::Label.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                      { defaultValue: 'Pro' },
-                    )}
+                  <MdiIcon path="pro::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KCNQYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.Pro.Pro_View_Edit.pro.Icon', { defaultValue: 'Pro' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -143,12 +155,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       name="title"
                       id="User/(esm/_3oDAcH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
                       autoFocus
-                      label={
-                        t(
-                          'service.Pro.Pro.View.Edit.title.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: 'Title' },
-                        ) as string
-                      }
+                      label={t('service.Pro.Pro_View_Edit.title', { defaultValue: 'Title' }) as string}
                       value={data.title ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -212,12 +219,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                         });
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                      label={
-                        t(
-                          'service.Pro.Pro.View.Edit.created.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: 'Created' },
-                        ) as string
-                      }
+                      label={t('service.Pro.Pro_View_Edit.created', { defaultValue: 'Created' }) as string}
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={false || !isFormUpdateable()}
                       disabled={isLoading}
@@ -243,12 +245,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       required={true}
                       name="description"
                       id="User/(esm/_3n4oYH4bEe2j59SYy0JH0Q)/StringTypeTextArea"
-                      label={
-                        t(
-                          'service.Pro.Pro.View.Edit.description.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: 'Description' },
-                        ) as string
-                      }
+                      label={t('service.Pro.Pro_View_Edit.description', { defaultValue: 'Description' }) as string}
                       value={data.description ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -283,18 +280,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       startIcon={<MdiIcon path="thumb-up" />}
                       loadingPosition="start"
                       onClick={async () => {
-                        if (actions.serviceProPro_View_EditProVoteUp) {
-                          await actions.serviceProPro_View_EditProVoteUp!();
+                        if (actions.voteUpForProAction) {
+                          await actions.voteUpForProAction!();
                         }
                       }}
-                      disabled={!actions.serviceProPro_View_EditProVoteUp || editMode}
+                      disabled={!actions.voteUpForProAction || editMode}
                     >
-                      <span>
-                        {t(
-                          'service.Pro.Pro.View.Edit.voteUp.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: '' },
-                        )}
-                      </span>
+                      <span>{t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: '' })}</span>
                     </LoadingButton>
                   </Grid>
 
@@ -303,12 +295,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       required={false}
                       name="upVotes"
                       id="User/(esm/_eJYR4IfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-                      label={
-                        t(
-                          'service.Pro.Pro.View.Edit.upVotes.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: '' },
-                        ) as string
-                      }
+                      label={t('service.Pro.Pro_View_Edit.upVotes', { defaultValue: '' }) as string}
                       customInput={TextField}
                       value={data.upVotes ?? ''}
                       className={clsx({
@@ -343,18 +330,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       startIcon={<MdiIcon path="thumb-down" />}
                       loadingPosition="start"
                       onClick={async () => {
-                        if (actions.serviceProPro_View_EditProVoteDown) {
-                          await actions.serviceProPro_View_EditProVoteDown!();
+                        if (actions.voteDownForProAction) {
+                          await actions.voteDownForProAction!();
                         }
                       }}
-                      disabled={!actions.serviceProPro_View_EditProVoteDown || editMode}
+                      disabled={!actions.voteDownForProAction || editMode}
                     >
-                      <span>
-                        {t(
-                          'service.Pro.Pro.View.Edit.voteDown.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: '' },
-                        )}
-                      </span>
+                      <span>{t('service.Pro.Pro_View_Edit.voteDown', { defaultValue: '' })}</span>
                     </LoadingButton>
                   </Grid>
 
@@ -363,12 +345,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       required={false}
                       name="downVotes"
                       id="User/(esm/_eJdxcIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-                      label={
-                        t(
-                          'service.Pro.Pro.View.Edit.downVotes.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: '' },
-                        ) as string
-                      }
+                      label={t('service.Pro.Pro_View_Edit.downVotes', { defaultValue: '' }) as string}
                       customInput={TextField}
                       value={data.downVotes ?? ''}
                       className={clsx({
@@ -400,13 +377,10 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       id="User/(esm/_eJip8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
                       variant={undefined}
                       editMode={editMode}
-                      navigateAction={actions.serviceProPro_View_EditProVotesOpenPage}
+                      navigateAction={actions.votesOpenPageAction}
                       refreshCounter={refreshCounter}
                     >
-                      {t(
-                        'service.Pro.Pro.View.Edit.votes.pro.pro::LabelWrapper.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                        { defaultValue: 'Votes' },
-                      )}
+                      {t('service.Pro.Pro_View_Edit.votes', { defaultValue: 'Votes' })}
                       <MdiIcon path="arrow-right" />
                     </AssociationButton>
                   </Grid>
@@ -427,17 +401,14 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
           spacing={2}
         >
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_fncgUH2GEe6V8KKnnZfChA)/LabelWrapper">
+            <Card id="_0KzpUYoAEe6F9LXBn0VWTg)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                      <Typography id="_fncgUH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                        {t(
-                          'service.Pro.Pro.View.Edit.pros::Label.pros::LabelWrapper.Arguments.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: 'Pros' },
-                        )}
+                      <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
+                      <Typography id="_0KzpUYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                        {t('service.Pro.Pro_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -482,7 +453,9 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                               justifyContent="flex-start"
                             >
                               <ServiceProPro_View_EditProsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_KRUbNXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -502,17 +475,14 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
           </Grid>
 
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_fneVgH2GEe6V8KKnnZfChA)/LabelWrapper">
+            <Card id="_0K1egIoAEe6F9LXBn0VWTg)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                      <Typography id="_fneVgH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                        {t(
-                          'service.Pro.Pro.View.Edit.cons::Label.cons::LabelWrapper.Arguments.Pro_View_Edit.service::Pro::Pro_View_Edit',
-                          { defaultValue: 'Cons' },
-                        )}
+                      <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
+                      <Typography id="_0K1egIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                        {t('service.Pro.Pro_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -557,7 +527,9 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                               justifyContent="flex-start"
                             >
                               <ServiceProPro_View_EditConsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_KRUbPXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}

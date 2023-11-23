@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,10 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 export interface ServiceIssueIssue_View_EditDistrictComponentActionDefinitions {
-  serviceIssueIssue_View_EditOtherAreaDistrictCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaDistrictDelete?: (target: ServiceDistrictStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaDistrictSetOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaDistrictUnset?: (target: ServiceDistrictStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaDistrictView?: (target: ServiceDistrictStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaDistrictAutocomplete?: (
+  districtOpenSetSelectorAction?: () => Promise<void>;
+  districtUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
+  districtOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
+  districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
 }
@@ -55,7 +53,7 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
     <AggregationInput
       name="district"
       id="User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={t('service.Issue.Issue.View.Edit.district.area', { defaultValue: 'District' }) as string}
+      label={t('service.Issue.Issue_View_Edit.district', { defaultValue: 'District' }) as string}
       labelList={[ownerData.district?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -68,7 +66,7 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
         storeDiff('district', district);
       }}
       onAutoCompleteSearch={
-        actions.serviceIssueIssue_View_EditOtherAreaDistrictAutocomplete
+        actions.districtAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceDistrictQueryCustomizer = {
                 ...(searchText?.length
@@ -80,41 +78,27 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceIssueIssue_View_EditOtherAreaDistrictAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.districtAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.district && actions.serviceIssueIssue_View_EditOtherAreaDistrictView
+        ownerData.district && actions.districtOpenPageAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaDistrictView!(ownerData.district!);
+              await actions.districtOpenPageAction!(ownerData.district!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceIssueIssue_View_EditOtherAreaDistrictCreate
-          ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaDistrictCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.district && actions.serviceIssueIssue_View_EditOtherAreaDistrictDelete
-          ? async () => actions.serviceIssueIssue_View_EditOtherAreaDistrictDelete!(ownerData.district!)
           : undefined
       }
       onSet={
-        actions.serviceIssueIssue_View_EditOtherAreaDistrictSetOpenSelector
+        actions.districtOpenSetSelectorAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaDistrictSetOpenSelector!();
+              await actions.districtOpenSetSelectorAction!();
             }
           : undefined
       }
       onUnset={
-        ownerData.district && actions.serviceIssueIssue_View_EditOtherAreaDistrictUnset
-          ? async () => actions.serviceIssueIssue_View_EditOtherAreaDistrictUnset!(ownerData.district!)
+        ownerData.district && actions.districtUnsetAction
+          ? async () => actions.districtUnsetAction!(ownerData.district!)
           : undefined
       }
     ></AggregationInput>

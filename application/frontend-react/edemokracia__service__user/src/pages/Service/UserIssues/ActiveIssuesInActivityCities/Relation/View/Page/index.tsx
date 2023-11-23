@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -73,7 +74,22 @@ import type {
   ServiceUserIssuesStored,
   VoteType,
 } from '~/services/data-api';
-import { serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl } from '~/services/data-axios';
+import { serviceIssueServiceImpl } from '~/services/data-axios';
+export type ServiceIssueIssue_View_EditPageActionsExtended = ServiceIssueIssue_View_EditPageActions & {
+  postActivateForIssueAction?: () => Promise<void>;
+  postAddToFavoritesForIssueAction?: () => Promise<void>;
+  postCloseVoteForIssueAction?: () => Promise<void>;
+  postDeleteOrArchiveForIssueAction?: () => Promise<void>;
+  postRemoveFromFavoritesForIssueAction?: () => Promise<void>;
+};
+
+export const SERVICE_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_CITIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueIssue_View_EditActionsHook';
+export type ServiceIssueIssue_View_EditActionsHook = (
+  data: ServiceIssueStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssue, value: any) => void,
+) => ServiceIssueIssue_View_EditPageActionsExtended;
 
 export const convertServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPagePayload = (
   attributeName: keyof ServiceIssue,
@@ -105,7 +121,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -153,6 +169,16 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       '{defaultVoteType,created,description,title,status,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},attachments{link,file,type},categories{title,description},comments{comment,created,createdByName,upVotes,downVotes},issueType{title,description},owner{representation},city{representation},county{representation},district{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueIssue_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_CITIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueIssue_View_EditPageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceIssueIssue_View_EditCloseDebateInputForm = useServiceIssueIssue_View_EditCloseDebateInputForm();
   const openServiceIssueIssue_View_EditIssueIssueTypeTabularReferenceFieldLinkSetSelectorPage =
@@ -163,19 +189,17 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
   const openServiceIssueOwnerRelationViewPage = useServiceIssueOwnerRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.Issue.Issue_View_Edit', { defaultValue: 'Issue View / Edit' });
+  const title: string = t('service.Issue.Issue_View_Edit', { defaultValue: 'Issue View / Edit' });
 
   // Action section
-  const serviceIssueIssue_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceIssueIssue_View_EditRefresh = async (
-    queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored> => {
+  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.refresh(
+      const result = await serviceIssueServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         pageQueryCustomizer,
       );
@@ -199,15 +223,15 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceIssueIssue_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceIssueIssue_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceIssueIssue_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.update(payloadDiff.current);
+      const res = await serviceIssueServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -215,7 +239,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceIssue, string>());
-        await actions.serviceIssueIssue_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -224,115 +248,31 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       setIsLoading(false);
     }
   };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsActivate = async () => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.activate(data);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (!editMode) {
-        await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote = async () => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.closeVote(data);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (!editMode) {
-        await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive = async () => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.deleteOrArchive(data);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (!editMode) {
-        await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites = async () => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.removeFromFavorites(data);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (!editMode) {
-        await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm = async () => {
+  const closeDebateAction = async () => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(data);
-    if (!editMode) {
-      await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites = async () => {
+  const removeFromFavoritesForIssueAction = async () => {
     try {
       setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.addToFavorites(data);
+      await serviceIssueServiceImpl.removeFromFavorites(data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      if (!editMode) {
-        await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
       }
     } catch (error) {
       handleError<ServiceIssue>(error, { setValidation }, data);
@@ -340,14 +280,118 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       setIsLoading(false);
     }
   };
-  const serviceIssueIssue_View_EditIssueOwnerView = async (target?: ServiceServiceUserStored) => {
+  const closeVoteForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceIssueServiceImpl.closeVote(data);
+
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const deleteOrArchiveForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceIssueServiceImpl.deleteOrArchive(data);
+
+      if (customActions?.postDeleteOrArchiveForIssueAction) {
+        await customActions.postDeleteOrArchiveForIssueAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const activateForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceIssueServiceImpl.activate(data);
+
+      if (customActions?.postActivateForIssueAction) {
+        await customActions.postActivateForIssueAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const addToFavoritesForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceIssueServiceImpl.addToFavorites(data);
+
+      if (customActions?.postAddToFavoritesForIssueAction) {
+        await customActions.postAddToFavoritesForIssueAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceIssueOwnerRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceIssueIssue_View_EditIssueOwnerSetOpenSelector = async () => {
+  const ownerOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
       await openServiceIssueIssue_View_EditIssueOwnerTabularReferenceFieldLinkSetSelectorPage(
         data,
@@ -359,27 +403,27 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       }
     }
   };
-  const serviceIssueIssue_View_EditIssueOwnerAutocomplete = async (
+  const ownerAutocompleteRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForOwner(data, queryCustomizer);
+      return serviceIssueServiceImpl.getRangeForOwner(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
-  const serviceIssueIssue_View_EditIssueOwnerUnset = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const serviceIssueIssue_View_EditIssueIssueTypeView = async (target?: ServiceIssueTypeStored) => {
+  const issueTypeOpenPageAction = async (target?: ServiceIssueTypeStored) => {
     await openServiceIssueIssueTypeRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceIssueIssue_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceIssueIssue_View_EditIssueIssueTypeSetOpenSelector = async () => {
+  const issueTypeOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
       await openServiceIssueIssue_View_EditIssueIssueTypeTabularReferenceFieldLinkSetSelectorPage(
         data,
@@ -391,65 +435,71 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       }
     }
   };
-  const serviceIssueIssue_View_EditIssueIssueTypeAutocomplete = async (
+  const issueTypeAutocompleteRangeAction = async (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForIssueType(data, queryCustomizer);
+      return serviceIssueServiceImpl.getRangeForIssueType(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
-  const serviceIssueIssue_View_EditIssueIssueTypeUnset = async (target: ServiceIssueTypeStored) => {
+  const issueTypeUnsetAction = async (target: ServiceIssueTypeStored) => {
     storeDiff('issueType', null);
   };
 
   const actions: ServiceIssueIssue_View_EditPageActions = {
-    serviceIssueIssue_View_EditBack,
-    serviceIssueIssue_View_EditRefresh,
-    serviceIssueIssue_View_EditCancel,
-    serviceIssueIssue_View_EditUpdate,
-    serviceIssueIssue_View_EditActionsPageActionButtonsActivate,
-    serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote,
-    serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive,
-    serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites,
-    serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm,
-    serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites,
-    serviceIssueIssue_View_EditIssueOwnerView,
-    serviceIssueIssue_View_EditIssueOwnerSetOpenSelector,
-    serviceIssueIssue_View_EditIssueOwnerAutocomplete,
-    serviceIssueIssue_View_EditIssueOwnerUnset,
-    serviceIssueIssue_View_EditIssueIssueTypeView,
-    serviceIssueIssue_View_EditIssueIssueTypeSetOpenSelector,
-    serviceIssueIssue_View_EditIssueIssueTypeAutocomplete,
-    serviceIssueIssue_View_EditIssueIssueTypeUnset,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    closeDebateAction,
+    removeFromFavoritesForIssueAction,
+    closeVoteForIssueAction,
+    deleteOrArchiveForIssueAction,
+    activateForIssueAction,
+    addToFavoritesForIssueAction,
+    ownerOpenPageAction,
+    ownerOpenSetSelectorAction,
+    ownerAutocompleteRangeAction,
+    ownerUnsetAction,
+    issueTypeOpenPageAction,
+    issueTypeOpenSetSelectorAction,
+    issueTypeAutocompleteRangeAction,
+    issueTypeUnsetAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.serviceIssueIssue_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceIssueIssue_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_jlpVUFrWEe6gN-oVBDDIOQ)/RelationFeatureView"
+      data-page-name="service::UserIssues::activeIssuesInActivityCities::Relation::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceIssueIssue_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

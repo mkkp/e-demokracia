@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,7 +30,7 @@ const CreateArgumentInputCreateArgumentInput_Table = lazy(
 
 export interface CreateArgumentInputCreateArgumentInput_TablePageActions
   extends CreateArgumentInputCreateArgumentInput_TableActionDefinitions {
-  createArgumentInputCreateArgumentInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CreateArgumentInputCreateArgumentInput_TablePageProps {
@@ -52,24 +54,19 @@ export default function CreateArgumentInputCreateArgumentInput_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.createArgumentInputCreateArgumentInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateArgumentInput::CreateArgumentInput_Table::Back"
+              id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.createArgumentInputCreateArgumentInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('CreateArgumentInput.CreateArgumentInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

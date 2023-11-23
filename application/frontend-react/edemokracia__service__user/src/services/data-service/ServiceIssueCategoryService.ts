@@ -38,7 +38,7 @@ export interface ServiceIssueCategoryService {
     target: JudoIdentifiable<ServiceIssueCategory>,
   ): Promise<ServiceIssueCategoryStored>;
 
-  getSubcategories(
+  listSubcategories(
     target: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
   ): Promise<Array<ServiceIssueCategoryStored>>;

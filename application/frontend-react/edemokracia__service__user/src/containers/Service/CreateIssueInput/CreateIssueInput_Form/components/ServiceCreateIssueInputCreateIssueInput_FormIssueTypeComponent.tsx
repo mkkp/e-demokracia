@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,7 @@ import type {
   ServiceIssueTypeStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions {
-  serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeCreate?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeDelete?: (target: ServiceIssueTypeStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeSetOpenSelector?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeUnset?: (target: ServiceIssueTypeStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeView?: (target: ServiceIssueTypeStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeAutocomplete?: (
+  issueTypeAutocompleteRangeAction?: (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ) => Promise<Array<ServiceIssueTypeStored>>;
 }
@@ -57,12 +52,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
     <AggregationInput
       name="issueType"
       id="User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.CreateIssueInput.CreateIssueInput.Form.issueType.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-          { defaultValue: 'Issue type' },
-        ) as string
-      }
+      label={t('service.CreateIssueInput.CreateIssueInput_Form.issueType', { defaultValue: 'Issue type' }) as string}
       labelList={[
         ownerData.issueType?.representation?.toString() ?? '',
         ownerData.issueType?.title?.toString() ?? '',
@@ -79,7 +69,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
         storeDiff('issueType', issueType);
       }}
       onAutoCompleteSearch={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeAutocomplete
+        actions.issueTypeAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceIssueTypeQueryCustomizer = {
                 ...(searchText?.length
@@ -91,41 +81,8 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.issueTypeAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
-          : undefined
-      }
-      onView={
-        ownerData.issueType && actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeView
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeView!(ownerData.issueType!);
-            }
-          : undefined
-      }
-      onCreate={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeCreate
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.issueType && actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeDelete
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeDelete!(ownerData.issueType!)
-          : undefined
-      }
-      onSet={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeSetOpenSelector
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeSetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.issueType && actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeUnset
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueIssueTypeUnset!(ownerData.issueType!)
           : undefined
       }
     ></AggregationInput>

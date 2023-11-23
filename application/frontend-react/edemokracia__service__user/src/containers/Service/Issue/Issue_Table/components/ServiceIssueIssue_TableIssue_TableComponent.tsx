@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,46 +62,27 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueIssue_TableIssue_TableComponentActionDefinitions {
-  serviceIssueIssue_TableAddOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_TableBulkDelete?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
-  serviceIssueIssue_TableBulkRemove?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
-  serviceIssueIssue_TableClear?: () => Promise<void>;
-  serviceIssueIssue_TableCreateOpen?: () => Promise<void>;
-  serviceIssueIssue_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueIssue_TableTableRefresh?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsActivate?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm?: (row: ServiceIssueStored) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_TableDelete?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
-  serviceIssueIssue_TableRemove?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
-  serviceIssueIssue_TableView?: (row: ServiceIssueStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  activateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  addToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  closeDebateAction?: (row: ServiceIssueStored) => Promise<void>;
+  closeVoteForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  deleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  removeFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  deleteAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
 export interface ServiceIssueIssue_TableIssue_TableComponentProps {
@@ -159,7 +144,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     {
       ...baseColumnConfig,
       field: 'scope',
-      headerName: t('service.Issue.Issue.Table.scope', { defaultValue: 'Scope' }) as string,
+      headerName: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -178,7 +163,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Issue.Issue.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -188,7 +173,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.Issue.Issue.Table.status', { defaultValue: 'Status' }) as string,
+      headerName: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -207,7 +192,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Issue.Issue.Table.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -232,7 +217,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.Issue.Issue.Table.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -244,89 +229,89 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
     {
       id: 'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.Issue.Issue.Table.service::Issue::Issue_Table::Remove', { defaultValue: 'Remove' }) as string,
+      label: t('service.Issue.Issue_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.serviceIssueIssue_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.Issue.Issue.Table.service::Issue::Issue_Table::Delete', { defaultValue: 'Delete' }) as string,
+      label: t('service.Issue.Issue_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceIssueStored) => !row.__deleteable || isLoading,
-      action: actions.serviceIssueIssue_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Issue.Issue.Table.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueDraft || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Issue.Issue.Table.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Issue.Issue.Table.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueDeletable || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Issue.Issue.Table.removeFromFavorites', { defaultValue: 'removeFromFavorites' }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Issue.Issue.Table.closeDebate', { defaultValue: 'closeDebate' }) as string,
+      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.closeDebate', { defaultValue: 'closeDebate' }) as string,
       icon: <MdiIcon path="vote" />,
       disabled: (row: ServiceIssueStored) => !row.isIssueActive || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm
+      action: actions.closeDebateAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm!(rowData);
+            await actions.closeDebateAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Issue.Issue.Table.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.removeFromFavorites', { defaultValue: 'removeFromFavorites' }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      disabled: (row: ServiceIssueStored) => isLoading,
+      action: actions.removeFromFavoritesForIssueAction
+        ? async (rowData) => {
+            await actions.removeFromFavoritesForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
+      action: actions.closeVoteForIssueAction
+        ? async (rowData) => {
+            await actions.closeVoteForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => !row.isIssueDeletable || isLoading,
+      action: actions.deleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.deleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.activate', { defaultValue: 'activate' }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceIssueStored) => !row.isIssueDraft || isLoading,
+      action: actions.activateForIssueAction
+        ? async (rowData) => {
+            await actions.activateForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
       disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites
+      action: actions.addToFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites!(rowData);
+            await actions.addToFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -334,39 +319,39 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fZhZEn2GEe6V8KKnnZfChA',
+      id: '_z9PucooAEe6F9LXBn0VWTg',
       attributeName: 'scope',
-      label: t('service.Issue.Issue.Table.scope::Filter', { defaultValue: 'Scope' }) as string,
+      label: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
     },
 
     {
-      id: '_fZiAIn2GEe6V8KKnnZfChA',
+      id: '_z9QVg4oAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Issue.Issue.Table.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fZinMn2GEe6V8KKnnZfChA',
+      id: '_z9Q8kooAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.Issue.Issue.Table.status::Filter', { defaultValue: 'Status' }) as string,
+      label: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
 
     {
-      id: '_fZjOQn2GEe6V8KKnnZfChA',
+      id: '_z9Q8looAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Issue.Issue.Table.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fZj1Un2GEe6V8KKnnZfChA',
+      id: '_z9RjoooAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.Issue.Issue.Table.description::Filter', { defaultValue: 'Description' }) as string,
+      label: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -440,7 +425,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceIssueIssue_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -466,7 +451,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Issue_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -499,9 +484,8 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceIssueIssue_TableView
-            ? async (params: GridRowParams<ServiceIssueStored>) =>
-                await actions.serviceIssueIssue_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceIssueStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -511,13 +495,13 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueIssue_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueIssue_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -529,100 +513,92 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.Issue.Issue_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.Issue.Issue_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueIssue_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::Create', { defaultValue: 'Create' })}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.Issue.Issue_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Issue.Issue_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::Clear', { defaultValue: 'Clear' })}
+                  {t('service.Issue.Issue_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceIssueIssue_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::BulkRemove', { defaultValue: 'Remove' })}
+                  {t('service.Issue.Issue_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceIssueIssue_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Issue.Issue.Table.service::Issue::Issue_Table::BulkDelete', { defaultValue: 'Delete' })}
+                  {t('service.Issue.Issue_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -653,6 +629,6 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

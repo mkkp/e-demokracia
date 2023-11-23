@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionRef
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TablePageActions
   extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableActionDefinitions {
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TablePageProps {
@@ -54,28 +56,26 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   return (
     <>
       <PageHeader title={title}>
-        {!editMode &&
-          actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBack && (
-            <Grid className="page-action" item>
-              <LoadingButton
-                id="CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Back"
-                loading={isLoading}
-                loadingPosition="start"
-                variant={'text'}
-                startIcon={<MdiIcon path="arrow-left" />}
-                onClick={async () => {
-                  await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBack!();
-                }}
-              >
-                <span>
-                  {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Back',
-                    { defaultValue: 'Back' },
-                  )}
-                </span>
-              </LoadingButton>
-            </Grid>
-          )}
+        {!editMode && actions.backAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableBackButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'text'}
+              startIcon={<MdiIcon path="arrow-left" />}
+              onClick={async () => {
+                await actions.backAction!();
+              }}
+            >
+              <span>
+                {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Back', {
+                  defaultValue: 'Back',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
         <div>{/* Placeholder */}</div>
       </PageHeader>
       <Suspense>

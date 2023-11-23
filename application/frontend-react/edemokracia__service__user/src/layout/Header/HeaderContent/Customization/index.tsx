@@ -8,7 +8,12 @@
 
 import { useMemo, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Box, Card, Drawer, IconButton, Stack, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useConfig } from '~/hooks';
 import { ThemeMode as ThemeModeEnum } from '~/config';
 import { MdiIcon, SimpleBar } from '~/components';

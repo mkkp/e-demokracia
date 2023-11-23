@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,35 +68,16 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesAddOpenSelector?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesBulkDelete?: (
-    selectedRows: ServiceRatingVoteEntryStored[],
-  ) => Promise<DialogResult<ServiceRatingVoteEntryStored[]>>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesBulkRemove?: (
-    selectedRows: ServiceRatingVoteEntryStored[],
-  ) => Promise<DialogResult<ServiceRatingVoteEntryStored[]>>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesClear?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesCreateOpen?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesFilter?: (
+  voteEntriesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRefresh?: (
+  voteEntriesRefreshAction?: (
     queryCustomizer: ServiceRatingVoteEntryQueryCustomizer,
   ) => Promise<ServiceRatingVoteEntryStored[]>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesDelete?: (
-    row: ServiceRatingVoteEntryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRemove?: (
-    row: ServiceRatingVoteEntryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesView?: (
-    row: ServiceRatingVoteEntryStored,
-  ) => Promise<void>;
+  voteEntriesOpenPageAction?: (row: ServiceRatingVoteEntryStored) => Promise<void>;
 }
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentProps {
@@ -159,7 +144,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.created', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -186,7 +171,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     {
       ...baseColumnConfig,
       field: 'createdBy',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.createdBy', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -198,7 +183,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     {
       ...baseColumnConfig,
       field: 'value',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.value', {
+      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -212,60 +197,31 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
   ];
 
-  const rowActions: TableRowAction<ServiceRatingVoteEntryStored>[] = [
-    {
-      id: 'User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceRatingVoteEntryStored) => isLoading,
-      action: actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRemove
-        ? async (rowData) => {
-            await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceRatingVoteEntryStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesDelete
-        ? async (rowData) => {
-            await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesDelete!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceRatingVoteEntryStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fznUEn2GEe6V8KKnnZfChA',
+      id: '_0UnFkooAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.created::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fzn7In2GEe6V8KKnnZfChA',
+      id: '_0UnsoooAEe6F9LXBn0VWTg',
       attributeName: 'createdBy',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.createdBy::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fzoiMn2GEe6V8KKnnZfChA',
+      id: '_0UoTsIoAEe6F9LXBn0VWTg',
       attributeName: 'value',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.value::Filter', {
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
       }) as string,
       filterType: FilterType.numeric,
@@ -341,9 +297,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -369,7 +323,10 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="voteEntries"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -396,18 +353,11 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesView
+          actions.voteEntriesOpenPageAction
             ? async (params: GridRowParams<ServiceRatingVoteEntryStored>) =>
-                await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesView!(
-                  params.row,
-                )
+                await actions.voteEntriesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -417,144 +367,43 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesFilter && true ? (
+              {actions.voteEntriesFilterAction && true ? (
                 <Button
                   id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesFilter!(
-                        'User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.voteEntriesFilterAction!(
+                      'User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.entries.voteEntries.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRefresh && true ? (
+              {actions.voteEntriesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditEntriesVoteEntriesBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::entries::voteEntries::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.entries.voteEntries.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -585,6 +434,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

@@ -7,7 +7,8 @@
 // Template file: actor/src/layout/Header/HeaderContent/index.tsx.hbs
 
 import type { Theme } from '@mui/material/styles';
-import { Box, useMediaQuery } from '@mui/material';
+import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useConfig } from '~/hooks';
 import { MenuOrientation } from '~/config';
 import { Profile } from './Profile';

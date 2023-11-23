@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,7 +25,7 @@ const YesNoVoteInputYesNoVoteInput_Table = lazy(
 
 export interface YesNoVoteInputYesNoVoteInput_TablePageActions
   extends YesNoVoteInputYesNoVoteInput_TableActionDefinitions {
-  yesNoVoteInputYesNoVoteInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface YesNoVoteInputYesNoVoteInput_TablePageProps {
@@ -45,23 +47,19 @@ export default function YesNoVoteInputYesNoVoteInput_TablePage(props: YesNoVoteI
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.yesNoVoteInputYesNoVoteInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="YesNoVoteInput::YesNoVoteInput_Table::Back"
+              id="User/(esm/_-1R8hHWyEe2LTNnGda5kaw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.yesNoVoteInputYesNoVoteInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('YesNoVoteInput.YesNoVoteInput.Table.YesNoVoteInput::YesNoVoteInput_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('YesNoVoteInput.YesNoVoteInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

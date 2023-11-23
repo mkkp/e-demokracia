@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -31,13 +33,13 @@ const ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_Edit = lazy
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPageActions
   extends ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions {
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditBack?: () => Promise<void>;
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditCancel?: () => Promise<void>;
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDelete?: () => Promise<void>;
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditRefresh?: (
+  backAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  deleteAction?: () => Promise<void>;
+  refreshAction?: (
     queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ) => Promise<ServiceSelectAnswerVoteSelectionStored>;
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditUpdate?: () => Promise<void>;
+  updateAction?: () => Promise<void>;
 }
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPageProps {
@@ -82,54 +84,50 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Back"
+              id="User/(esm/_pSHJoFtqEe6Mx9dH3yj5gQ)/TransferObjectViewBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditBack!();
+                await actions.backAction!();
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.View.Edit.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Back',
-                  { defaultValue: 'Back' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_View_Edit.Back', {
+                  defaultValue: 'Back',
+                })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditRefresh && (
+        {!editMode && actions.refreshAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Refresh"
+              id="User/(esm/_pSHJoFtqEe6Mx9dH3yj5gQ)/TransferObjectViewRefreshButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditRefresh!(
-                  processQueryCustomizer(queryCustomizer),
-                );
+                await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.View.Edit.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Refresh',
-                  { defaultValue: 'Refresh' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_View_Edit.Refresh', {
+                  defaultValue: 'Refresh',
+                })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDelete && (
+        {!editMode && actions.deleteAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Delete"
+              id="User/(esm/_pSHJoFtqEe6Mx9dH3yj5gQ)/TransferObjectViewDeleteButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -144,57 +142,54 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                 );
 
                 if (confirmed) {
-                  actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDelete!();
+                  actions.deleteAction!();
                 }
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.View.Edit.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Delete',
-                  { defaultValue: 'Delete' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_View_Edit.Delete', {
+                  defaultValue: 'Delete',
+                })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditCancel && (
+        {editMode && actions.cancelAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Cancel"
+              id="User/(esm/_pSHJoFtqEe6Mx9dH3yj5gQ)/TransferObjectViewCancelButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditCancel!();
+                await actions.cancelAction!();
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.View.Edit.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Cancel',
-                  { defaultValue: 'Cancel' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_View_Edit.Cancel', {
+                  defaultValue: 'Cancel',
+                })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditUpdate && (
+        {editMode && actions.updateAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Update"
+              id="User/(esm/_pSHJoFtqEe6Mx9dH3yj5gQ)/TransferObjectViewUpdateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditUpdate!();
+                await actions.updateAction!();
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.View.Edit.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit::Update',
-                  { defaultValue: 'Save' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_View_Edit.Update', {
+                  defaultValue: 'Save',
+                })}
               </span>
             </LoadingButton>
           </Grid>

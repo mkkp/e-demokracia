@@ -38,7 +38,7 @@ export interface ServiceServiceUserService {
 
   update(target: Partial<ServiceServiceUserStored>): Promise<ServiceServiceUserStored>;
 
-  getVotes(
+  listVotes(
     target: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
@@ -65,7 +65,7 @@ export interface ServiceServiceUserService {
 
   getTemplateForActivityCounties(): Promise<ServiceCounty>;
 
-  getActivityCounties(
+  listActivityCounties(
     target: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
@@ -111,7 +111,7 @@ export interface ServiceServiceUserService {
 
   getTemplateForActivityCities(): Promise<ServiceCity>;
 
-  getActivityCities(
+  listActivityCities(
     target: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
@@ -154,7 +154,7 @@ export interface ServiceServiceUserService {
 
   getTemplateForActivityDistricts(): Promise<ServiceDistrict>;
 
-  getActivityDistricts(
+  listActivityDistricts(
     target: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;

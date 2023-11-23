@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -29,6 +30,7 @@ import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceServiceUserVotesRelationViewPage } from '~/routes';
 import { useServiceServiceUserVotesRelationTableAddSelectorPage } from '~/dialogs/Service/ServiceUser/Votes/Relation/Table/Add/Selector/Page';
+import { useServiceServiceUserVotesRelationTableSetSelectorPage } from '~/dialogs/Service/ServiceUser/Votes/Relation/Table/Set/Selector/Page';
 import type { ServiceSimpleVoteSimpleVote_TablePageActions } from '~/containers/Service/SimpleVote/SimpleVote_Table/ServiceSimpleVoteSimpleVote_TablePageContainer';
 import type {
   ServiceServiceUser,
@@ -39,6 +41,14 @@ import type {
   SimpleVoteType,
 } from '~/services/data-api';
 import { serviceServiceUserServiceForVotesImpl } from '~/services/data-axios';
+export type ServiceSimpleVoteSimpleVote_TablePageActionsExtended = ServiceSimpleVoteSimpleVote_TablePageActions & {};
+
+export const SERVICE_SERVICE_USER_VOTES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSimpleVoteSimpleVote_TableActionsHook';
+export type ServiceSimpleVoteSimpleVote_TableActionsHook = (
+  data: ServiceSimpleVoteStored[],
+  editMode: boolean,
+) => ServiceSimpleVoteSimpleVote_TablePageActionsExtended;
 
 const ServiceSimpleVoteSimpleVote_TablePageContainer = lazy(
   () => import('~/containers/Service/SimpleVote/SimpleVote_Table/ServiceSimpleVoteSimpleVote_TablePageContainer'),
@@ -53,7 +63,7 @@ export default function ServiceServiceUserVotesRelationTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -66,22 +76,33 @@ export default function ServiceServiceUserVotesRelationTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceSimpleVoteStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceSimpleVoteSimpleVote_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_VOTES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceSimpleVoteSimpleVote_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
   const openServiceServiceUserVotesRelationTableAddSelectorPage =
     useServiceServiceUserVotesRelationTableAddSelectorPage();
+  const openServiceServiceUserVotesRelationTableSetSelectorPage =
+    useServiceServiceUserVotesRelationTableSetSelectorPage();
 
   // Calculated section
-  const title: string = t('Service.SimpleVote.SimpleVote_Table', { defaultValue: 'SimpleVote Table' });
+  const title: string = t('service.SimpleVote.SimpleVote_Table', { defaultValue: 'SimpleVote Table' });
 
   // Action section
-  const serviceSimpleVoteSimpleVote_TableBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceSimpleVoteSimpleVote_TableView = async (target?: ServiceSimpleVoteStored) => {
+  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceServiceUserVotesRelationViewPage(target!.__signedIdentifier));
   };
-  const serviceSimpleVoteSimpleVote_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -92,7 +113,7 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       filters: newFilters,
     };
   };
-  const serviceSimpleVoteSimpleVote_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceSimpleVoteQueryCustomizer,
   ): Promise<ServiceSimpleVoteStored[]> => {
     try {
@@ -110,7 +131,7 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceSimpleVoteSimpleVote_TableClear = async () => {
+  const clearAction = async () => {
     try {
       await serviceServiceUserServiceForVotesImpl.setVotes(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
@@ -121,7 +142,17 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       console.error(e);
     }
   };
-  const serviceSimpleVoteSimpleVote_TableAddOpenSelector = async () => {
+  const openSetSelectorAction = async () => {
+    const { result, data: returnedData } = await openServiceServiceUserVotesRelationTableSetSelectorPage(
+      { __signedIdentifier: signedIdentifier },
+      [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+      }
+    }
+  };
+  const openAddSelectorAction = async () => {
     const { result, data: returnedData } = await openServiceServiceUserVotesRelationTableAddSelectorPage(
       { __signedIdentifier: signedIdentifier },
       [],
@@ -143,7 +174,8 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       }
     }
   };
-  const serviceSimpleVoteSimpleVote_TableRemove = async (target?: ServiceSimpleVoteStored, silentMode?: boolean) => {
+
+  const removeAction = async (target?: ServiceSimpleVoteStored, silentMode?: boolean) => {
     if (target) {
       try {
         if (!silentMode) {
@@ -167,18 +199,18 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       }
     }
   };
-  const serviceSimpleVoteSimpleVote_TableBulkRemove = async (
+  const bulkRemoveAction = async (
     selectedRows: ServiceSimpleVoteStored[],
   ): Promise<DialogResult<Array<ServiceSimpleVoteStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceSimpleVoteStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Remove' }),
+        dialogTitle: t('service.SimpleVote.SimpleVote_Table.BulkRemove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => t('judo.placeholder', { defaultValue: 'placeholder' }) as string,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceSimpleVoteSimpleVote_TableRemove) {
-              await actions.serviceSimpleVoteSimpleVote_TableRemove!(item, true);
+            if (actions.removeAction) {
+              await actions.removeAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -203,29 +235,36 @@ export default function ServiceServiceUserVotesRelationTablePage() {
   };
 
   const actions: ServiceSimpleVoteSimpleVote_TablePageActions = {
-    serviceSimpleVoteSimpleVote_TableBack,
-    serviceSimpleVoteSimpleVote_TableView,
-    serviceSimpleVoteSimpleVote_TableTableFilter,
-    serviceSimpleVoteSimpleVote_TableTableRefresh,
-    serviceSimpleVoteSimpleVote_TableClear,
-    serviceSimpleVoteSimpleVote_TableAddOpenSelector,
-    serviceSimpleVoteSimpleVote_TableRemove,
-    serviceSimpleVoteSimpleVote_TableBulkRemove,
+    backAction,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    clearAction,
+    openSetSelectorAction,
+    openAddSelectorAction,
+    removeAction,
+    bulkRemoveAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceSimpleVoteSimpleVote_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_qcneEGksEe25ONJ3V89cVA)/RelationFeatureTable"
+      data-page-name="service::ServiceUser::votes::Relation::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceSimpleVoteSimpleVote_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

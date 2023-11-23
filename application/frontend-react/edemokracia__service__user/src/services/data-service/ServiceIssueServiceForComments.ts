@@ -44,7 +44,7 @@ export interface ServiceIssueServiceForComments {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
 
-  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
-
   voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+
+  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 }

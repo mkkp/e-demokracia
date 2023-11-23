@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,27 +62,21 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponentActionDefinitions {
-  serviceVoteEntryVoteEntry_TableAddOpenSelector?: () => Promise<void>;
-  serviceVoteEntryVoteEntry_TableBulkDelete?: (
-    selectedRows: ServiceVoteEntryStored[],
-  ) => Promise<DialogResult<ServiceVoteEntryStored[]>>;
-  serviceVoteEntryVoteEntry_TableBulkRemove?: (
-    selectedRows: ServiceVoteEntryStored[],
-  ) => Promise<DialogResult<ServiceVoteEntryStored[]>>;
-  serviceVoteEntryVoteEntry_TableClear?: () => Promise<void>;
-  serviceVoteEntryVoteEntry_TableCreateOpen?: () => Promise<void>;
-  serviceVoteEntryVoteEntry_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceVoteEntryStored[]) => Promise<DialogResult<ServiceVoteEntryStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceVoteEntryStored[]) => Promise<DialogResult<ServiceVoteEntryStored[]>>;
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceVoteEntryVoteEntry_TableTableRefresh?: (
-    queryCustomizer: ServiceVoteEntryQueryCustomizer,
-  ) => Promise<ServiceVoteEntryStored[]>;
-  serviceVoteEntryVoteEntry_TableDelete?: (row: ServiceVoteEntryStored, silentMode?: boolean) => Promise<void>;
-  serviceVoteEntryVoteEntry_TableRemove?: (row: ServiceVoteEntryStored, silentMode?: boolean) => Promise<void>;
-  serviceVoteEntryVoteEntry_TableView?: (row: ServiceVoteEntryStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceVoteEntryQueryCustomizer) => Promise<ServiceVoteEntryStored[]>;
+  deleteAction?: (row: ServiceVoteEntryStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceVoteEntryStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceVoteEntryStored) => Promise<void>;
 }
 
 export interface ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponentProps {
@@ -142,7 +140,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     {
       ...baseColumnConfig,
       field: 'userName',
-      headerName: t('service.VoteEntry.VoteEntry.Table.userName', { defaultValue: 'UserName' }) as string,
+      headerName: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -152,7 +150,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.VoteEntry.VoteEntry.Table.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -177,7 +175,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     {
       ...baseColumnConfig,
       field: 'voteTitle',
-      headerName: t('service.VoteEntry.VoteEntry.Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
+      headerName: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -187,7 +185,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     {
       ...baseColumnConfig,
       field: 'issueTitle',
-      headerName: t('service.VoteEntry.VoteEntry.Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
+      headerName: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -197,7 +195,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     {
       ...baseColumnConfig,
       field: 'voteStatus',
-      headerName: t('service.VoteEntry.VoteEntry.Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
+      headerName: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -218,27 +216,23 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   const rowActions: TableRowAction<ServiceVoteEntryStored>[] = [
     {
       id: 'User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableRowRemoveButton',
-      label: t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceVoteEntryStored) => isLoading,
-      action: actions.serviceVoteEntryVoteEntry_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceVoteEntryVoteEntry_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableRowDeleteButton',
-      label: t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceVoteEntryStored) => !row.__deleteable || isLoading,
-      action: actions.serviceVoteEntryVoteEntry_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceVoteEntryVoteEntry_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -246,37 +240,37 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fZwCkH2GEe6V8KKnnZfChA',
+      id: '_z9ZfcooAEe6F9LXBn0VWTg',
       attributeName: 'userName',
-      label: t('service.VoteEntry.VoteEntry.Table.userName::Filter', { defaultValue: 'UserName' }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fZwpon2GEe6V8KKnnZfChA',
+      id: '_z9aGgIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.VoteEntry.VoteEntry.Table.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fZxQsn2GEe6V8KKnnZfChA',
+      id: '_z9aGhIoAEe6F9LXBn0VWTg',
       attributeName: 'voteTitle',
-      label: t('service.VoteEntry.VoteEntry.Table.voteTitle::Filter', { defaultValue: 'VoteTitle' }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fZye0H2GEe6V8KKnnZfChA',
+      id: '_z9atkYoAEe6F9LXBn0VWTg',
       attributeName: 'issueTitle',
-      label: t('service.VoteEntry.VoteEntry.Table.issueTitle::Filter', { defaultValue: 'IssueTitle' }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fZzF4H2GEe6V8KKnnZfChA',
+      id: '_z9atlYoAEe6F9LXBn0VWTg',
       attributeName: 'voteStatus',
-      label: t('service.VoteEntry.VoteEntry.Table.voteStatus::Filter', { defaultValue: 'VoteStatus' }) as string,
+      label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
@@ -351,7 +345,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceVoteEntryVoteEntry_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -377,7 +371,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable" data-table-name="VoteEntry_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -410,9 +404,8 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceVoteEntryVoteEntry_TableView
-            ? async (params: GridRowParams<ServiceVoteEntryStored>) =>
-                await actions.serviceVoteEntryVoteEntry_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceVoteEntryStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -422,13 +415,13 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceVoteEntryVoteEntry_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceVoteEntryVoteEntry_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -440,110 +433,92 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.VoteEntry.VoteEntry_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceVoteEntryVoteEntry_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceVoteEntryVoteEntry_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.VoteEntry.VoteEntry_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceVoteEntryVoteEntry_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceVoteEntryVoteEntry_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceVoteEntryVoteEntry_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceVoteEntryVoteEntry_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('service.VoteEntry.VoteEntry_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceVoteEntryVoteEntry_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.VoteEntry.VoteEntry_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceVoteEntryVoteEntry_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('service.VoteEntry.VoteEntry_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceVoteEntryVoteEntry_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceVoteEntryVoteEntry_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.VoteEntry.VoteEntry_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceVoteEntryVoteEntry_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceVoteEntryVoteEntry_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry.Table.service::VoteEntry::VoteEntry_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.VoteEntry.VoteEntry_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -574,6 +549,6 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

@@ -9,7 +9,10 @@
 import { cloneElement } from 'react';
 import type { ReactElement } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Box, Container, useScrollTrigger } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
 import { useConfig } from '~/hooks';
 import { Navigation } from './DrawerContent/Navigation';
 

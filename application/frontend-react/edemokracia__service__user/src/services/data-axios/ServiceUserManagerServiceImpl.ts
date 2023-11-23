@@ -57,7 +57,7 @@ export class ServiceUserManagerServiceImpl extends JudoAxiosService implements S
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getUsers(
+  async listUsers(
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>> {

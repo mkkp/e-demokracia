@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,14 +26,7 @@ import type {
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentActionDefinitions {
-  serviceCreateIssueInputCreateIssueInput_FormIssueCityCreate?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCityDelete?: (target: ServiceCityStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCitySetOpenSelector?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCityUnset?: (target: ServiceCityStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCityView?: (target: ServiceCityStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueCityAutocomplete?: (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ) => Promise<Array<ServiceCityStored>>;
+  cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps {
@@ -57,12 +50,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
     <AggregationInput
       name="city"
       id="User/(esm/_TXiwANvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.CreateIssueInput.CreateIssueInput.Form.city.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-          { defaultValue: 'City' },
-        ) as string
-      }
+      label={t('service.CreateIssueInput.CreateIssueInput_Form.city', { defaultValue: 'City' }) as string}
       labelList={[
         ownerData.city?.representation?.toString() ?? '',
         ownerData.city?.name?.toString() ?? '',
@@ -79,7 +67,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
         storeDiff('city', city);
       }}
       onAutoCompleteSearch={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityAutocomplete
+        actions.cityAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceCityQueryCustomizer = {
                 ...(searchText?.length
@@ -91,41 +79,8 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.cityAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
-          : undefined
-      }
-      onView={
-        ownerData.city && actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityView
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityView!(ownerData.city!);
-            }
-          : undefined
-      }
-      onCreate={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityCreate
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.city && actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityDelete
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityDelete!(ownerData.city!)
-          : undefined
-      }
-      onSet={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueCitySetOpenSelector
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueCitySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.city && actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityUnset
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueCityUnset!(ownerData.city!)
           : undefined
       }
     ></AggregationInput>

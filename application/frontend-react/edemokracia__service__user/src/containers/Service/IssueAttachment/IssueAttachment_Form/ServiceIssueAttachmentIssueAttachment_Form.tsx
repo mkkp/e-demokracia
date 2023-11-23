@@ -13,27 +13,19 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  ButtonGroup,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -55,7 +47,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssueAttachment,
@@ -119,96 +117,12 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
           spacing={2}
         >
           <Grid item xs={12} sm={12} md={4.0}>
-            <Grid
-              id="_fooMEH2GEe6V8KKnnZfChA)/LabelWrapper"
-              container
-              direction="column"
-              alignItems="center"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                  <Typography id="_fooMEH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.IssueAttachment.IssueAttachment.Form.type::Label.type::LabelWrapper.group.IssueAttachment_Form.service::IssueAttachment::IssueAttachment_Form',
-                      { defaultValue: 'Type' },
-                    )}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <FormControl
-                  fullWidth={true}
-                  sx={{ mt: '10px' }}
-                  className='MuiTextField-root'
-                  disabled={false || !isFormUpdateable() || isLoading}
-                  error={validation.has('type')}
-                >
-                  <InputLabel id="User/(esm/_Rd_fsG5CEe2Q6M99rsfqSQ)/EnumerationTypeRadio" shrink={true} size={'small'}>
-                    {t(
-                      'service.IssueAttachment.IssueAttachment.Form.type.type::LabelWrapper.group.IssueAttachment_Form.service::IssueAttachment::IssueAttachment_Form',
-                      { defaultValue: 'Type' },
-                    )}{' '}
-                    *
-                  </InputLabel>
-                  <RadioGroup
-                    sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                    name="type"
-                    id="User/(esm/_Rd_fsG5CEe2Q6M99rsfqSQ)/EnumerationTypeRadio"
-                    value={data.type || ''}
-                    onChange={(event) => {
-                      storeDiff('type', event.target.value);
-                    }}
-                  >
-                    <FormControlLabel
-                      id="User/(esm/_GyGMEGkQEe25ONJ3V89cVA)/EnumerationTypeMember"
-                      value={'LINK'}
-                      control={<Radio size='small' />}
-                      label={t('enumerations.AttachmentType.LINK', { defaultValue: 'LINK' })}
-                      disabled={false || !isFormUpdateable()}
-                    />
-                    <FormControlLabel
-                      id="User/(esm/_IlUdMGkQEe25ONJ3V89cVA)/EnumerationTypeMember"
-                      value={'IMAGE'}
-                      control={<Radio size='small' />}
-                      label={t('enumerations.AttachmentType.IMAGE', { defaultValue: 'IMAGE' })}
-                      disabled={false || !isFormUpdateable()}
-                    />
-                    <FormControlLabel
-                      id="User/(esm/_ZFYWMGkQEe25ONJ3V89cVA)/EnumerationTypeMember"
-                      value={'VIDEO'}
-                      control={<Radio size='small' />}
-                      label={t('enumerations.AttachmentType.VIDEO', { defaultValue: 'VIDEO' })}
-                      disabled={false || !isFormUpdateable()}
-                    />
-                    <FormControlLabel
-                      id="User/(esm/_a1lvkGkQEe25ONJ3V89cVA)/EnumerationTypeMember"
-                      value={'MAP'}
-                      control={<Radio size='small' />}
-                      label={t('enumerations.AttachmentType.MAP', { defaultValue: 'MAP' })}
-                      disabled={false || !isFormUpdateable()}
-                    />
-                  </RadioGroup>
-                  {validation.has('type') && !data.type && <FormHelperText>{validation.get('type')}</FormHelperText>}
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={true}
               name="type"
               id="User/(esm/_Rd_fsG5CEe2Q6M99rsfqSQ)/EnumerationTypeCombo"
-              label={
-                t(
-                  'service.IssueAttachment.IssueAttachment.Form.type.group.IssueAttachment_Form.service::IssueAttachment::IssueAttachment_Form',
-                  { defaultValue: 'Type' },
-                ) as string
-              }
+              autoFocus
+              label={t('service.IssueAttachment.IssueAttachment_Form.type', { defaultValue: 'Type' }) as string}
               value={data.type || ''}
               className={clsx({
                 'JUDO-viewMode': !editMode,
@@ -251,12 +165,7 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
               required={false}
               name="link"
               id="User/(esm/_Rd7OQG5CEe2Q6M99rsfqSQ)/StringTypeTextInput"
-              label={
-                t(
-                  'service.IssueAttachment.IssueAttachment.Form.link.group.IssueAttachment_Form.service::IssueAttachment::IssueAttachment_Form',
-                  { defaultValue: 'Link' },
-                ) as string
-              }
+              label={t('service.IssueAttachment.IssueAttachment_Form.link', { defaultValue: 'Link' }) as string}
               value={data.link ?? ''}
               className={clsx({
                 'JUDO-viewMode': !editMode,
@@ -285,12 +194,7 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
             <BinaryInput
               required={false}
               id="User/(esm/_Rd9qgG5CEe2Q6M99rsfqSQ)/BinaryTypeInput"
-              label={
-                t(
-                  'service.IssueAttachment.IssueAttachment.Form.file.group.IssueAttachment_Form.service::IssueAttachment::IssueAttachment_Form',
-                  { defaultValue: 'File' },
-                ) as string
-              }
+              label={t('service.IssueAttachment.IssueAttachment_Form.file', { defaultValue: 'File' }) as string}
               icon="file-document-outline"
               mimeType={{
                 type: '*',

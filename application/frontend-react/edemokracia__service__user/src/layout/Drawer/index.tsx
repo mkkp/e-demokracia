@@ -8,7 +8,9 @@
 
 import { useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer as MuiDrawer, useMediaQuery } from '@mui/material';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerContent } from './DrawerContent';
 import { MiniDrawerStyled } from './MiniDrawerStyled';

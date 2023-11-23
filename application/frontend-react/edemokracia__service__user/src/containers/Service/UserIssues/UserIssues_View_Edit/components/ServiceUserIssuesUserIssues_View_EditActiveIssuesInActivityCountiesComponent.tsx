@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,56 +68,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentActionDefinitions {
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesAddOpenSelector?: () => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesBulkDelete?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesBulkRemove?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesClear?: () => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesCreateOpen?: () => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesFilter?: (
+  activeIssuesInActivityCountiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRefresh?: (
+  activeIssuesInActivityCountiesRefreshAction?: (
     queryCustomizer: ServiceIssueQueryCustomizer,
   ) => Promise<ServiceIssueStored[]>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsActivate?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm?: (row: ServiceIssueStored) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesDelete?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRemove?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesView?: (
-    row: ServiceIssueStored,
-  ) => Promise<void>;
+  activeIssuesInActivityCountiesActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInActivityCountiesAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInActivityCountiesCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInActivityCountiesCloseVoteForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInActivityCountiesDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInActivityCountiesRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInActivityCountiesOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
 export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentProps {
@@ -180,7 +150,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
     {
       ...baseColumnConfig,
       field: 'countyRepresentation',
-      headerName: t('service.UserIssues.UserIssues.View.Edit.countyRepresentation', {
+      headerName: t('service.UserIssues.UserIssues_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -192,7 +162,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.UserIssues.UserIssues.View.Edit.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -202,7 +172,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.UserIssues.UserIssues.View.Edit.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -227,7 +197,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.UserIssues.UserIssues.View.Edit.status', { defaultValue: 'Status' }) as string,
+      headerName: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -247,106 +217,72 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
     {
-      id: 'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action:
-        actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRemove
-          ? async (rowData) => {
-              await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRemove!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.__deleteable || isLoading,
-      action:
-        actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesDelete
-          ? async (rowData) => {
-              await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesDelete!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues.View.Edit.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate
+      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0W16MIoAEe6F9LXBn0VWTg)',
+      label: t('service.UserIssues.UserIssues_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
+      action: actions.activeIssuesInActivityCountiesCloseDebateAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate!(rowData);
+            await actions.activeIssuesInActivityCountiesCloseDebateAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues.View.Edit.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues.View.Edit.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues.View.Edit.removeFromFavorites', {
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_0W16MIoAEe6F9LXBn0VWTg)',
+      label: t('service.UserIssues.UserIssues_View_Edit.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
       }) as string,
       icon: <MdiIcon path="star-minus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites
+      action: actions.activeIssuesInActivityCountiesRemoveFromFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites!(rowData);
+            await actions.activeIssuesInActivityCountiesRemoveFromFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues.View.Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0W16MIoAEe6F9LXBn0VWTg)',
+      label: t('service.UserIssues.UserIssues_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
+      action: actions.activeIssuesInActivityCountiesCloseVoteForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm!(rowData);
+            await actions.activeIssuesInActivityCountiesCloseVoteForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues.View.Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0W16MIoAEe6F9LXBn0VWTg)',
+      label: t('service.UserIssues.UserIssues_View_Edit.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
+      action: actions.activeIssuesInActivityCountiesDeleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.activeIssuesInActivityCountiesDeleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0W16MIoAEe6F9LXBn0VWTg)',
+      label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
+      action: actions.activeIssuesInActivityCountiesActivateForIssueAction
+        ? async (rowData) => {
+            await actions.activeIssuesInActivityCountiesActivateForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_0W16MIoAEe6F9LXBn0VWTg)',
+      label: t('service.UserIssues.UserIssues_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites
+      action: actions.activeIssuesInActivityCountiesAddToFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites!(rowData);
+            await actions.activeIssuesInActivityCountiesAddToFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -354,32 +290,32 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_f2MG8n2GEe6V8KKnnZfChA',
+      id: '_0Wy24IoAEe6F9LXBn0VWTg',
       attributeName: 'countyRepresentation',
-      label: t('service.UserIssues.UserIssues.View.Edit.countyRepresentation::Filter', {
+      label: t('service.UserIssues.UserIssues_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f2MuAn2GEe6V8KKnnZfChA',
+      id: '_0Wzd8IoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.UserIssues.UserIssues.View.Edit.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f2NVEn2GEe6V8KKnnZfChA',
+      id: '_0W0FAIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.UserIssues.UserIssues.View.Edit.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_f2N8IH2GEe6V8KKnnZfChA',
+      id: '_0W0FBIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.UserIssues.UserIssues.View.Edit.status::Filter', { defaultValue: 'Status' }) as string,
+      label: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
@@ -454,10 +390,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
       setIsLoading(true);
 
       try {
-        const res =
-          await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRefresh!(
-            processQueryCustomizer(queryCustomizer),
-          );
+        const res = await actions.activeIssuesInActivityCountiesRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -483,7 +416,10 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="activeIssuesInActivityCounties"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -510,18 +446,11 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesView
+          actions.activeIssuesInActivityCountiesOpenPageAction
             ? async (params: GridRowParams<ServiceIssueStored>) =>
-                await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesView!(
-                  params.row,
-                )
+                await actions.activeIssuesInActivityCountiesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -531,20 +460,18 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesFilter &&
-              true ? (
+              {actions.activeIssuesInActivityCountiesFilterAction && true ? (
                 <Button
                   id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesFilter!(
-                        'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.activeIssuesInActivityCountiesFilterAction!(
+                      'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -552,125 +479,25 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Filter',
+                    'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByActivityArea.tabBar.activeByActivityInCounty.activeIssuesInActivityCounties.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRefresh &&
-              true ? (
+              {actions.activeIssuesInActivityCountiesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.activeIssuesInActivityCountiesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Refresh',
+                    'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByActivityArea.tabBar.activeByActivityInCounty.activeIssuesInActivityCounties.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues.View.Edit.service::UserIssues::UserIssues_View_Edit::root::tabBar::activeIssuesByActivityArea::tabBar::activeByActivityInCounty::activeIssuesInActivityCounties::BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}
@@ -702,6 +529,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

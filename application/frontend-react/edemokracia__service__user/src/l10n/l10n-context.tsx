@@ -48,8 +48,9 @@ export const L10NProvider = ({ axios, children }: { axios?: AxiosInstance; child
   const defaultLocale: LocaleKey = 'hu-HU';
   const [locale, setLocale] = useState<LocaleKey>(defaultLocale);
   const [translation, setTranslation] = useState<any>(null);
-  const [filter, setFilter] = useState<string>(`(${OBJECTCLASS}=${L10N_TRANSLATION_PROVIDER_INTERFACE_KEY})`);
-  const { service: translationProvider } = useTrackService<L10NTranslationProvider>(filter);
+  const { service: translationProvider } = useTrackService<L10NTranslationProvider>(
+    `(${OBJECTCLASS}=${L10N_TRANSLATION_PROVIDER_INTERFACE_KEY})`,
+  );
   const [interceptorId, setInterceptorId] = useState<number | null>(null);
 
   useEffect(() => {

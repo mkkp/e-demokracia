@@ -13,9 +13,17 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +45,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCity,
@@ -141,12 +155,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
               name="title"
               id="User/(esm/_DenhMI1DEe2VSOmaAz6G9Q)/StringTypeTextInput"
               autoFocus
-              label={
-                t(
-                  'service.CreateIssueInput.CreateIssueInput.Form.title.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-                  { defaultValue: 'Title' },
-                ) as string
-              }
+              label={t('service.CreateIssueInput.CreateIssueInput_Form.title', { defaultValue: 'Title' }) as string}
               value={data.title ?? ''}
               className={clsx({
                 'JUDO-viewMode': !editMode,
@@ -211,10 +220,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
               }}
               views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
               label={
-                t(
-                  'service.CreateIssueInput.CreateIssueInput.Form.debateCloseAt.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-                  { defaultValue: 'Debate close at' },
-                ) as string
+                t('service.CreateIssueInput.CreateIssueInput_Form.debateCloseAt', {
+                  defaultValue: 'Debate close at',
+                }) as string
               }
               value={serviceDateToUiDate(data.debateCloseAt ?? null)}
               readOnly={false || !isFormUpdateable()}
@@ -231,10 +239,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
               name="description"
               id="User/(esm/_Dekd4I1DEe2VSOmaAz6G9Q)/StringTypeTextArea"
               label={
-                t(
-                  'service.CreateIssueInput.CreateIssueInput.Form.description.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-                  { defaultValue: 'Description' },
-                ) as string
+                t('service.CreateIssueInput.CreateIssueInput_Form.description', {
+                  defaultValue: 'Description',
+                }) as string
               }
               value={data.description ?? ''}
               className={clsx({

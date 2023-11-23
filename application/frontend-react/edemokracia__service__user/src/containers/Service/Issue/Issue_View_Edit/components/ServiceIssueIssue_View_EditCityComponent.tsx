@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,14 +26,10 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 export interface ServiceIssueIssue_View_EditCityComponentActionDefinitions {
-  serviceIssueIssue_View_EditOtherAreaCityCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCityDelete?: (target: ServiceCityStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCitySetOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCityUnset?: (target: ServiceCityStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCityView?: (target: ServiceCityStored) => Promise<void>;
-  serviceIssueIssue_View_EditOtherAreaCityAutocomplete?: (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ) => Promise<Array<ServiceCityStored>>;
+  cityOpenSetSelectorAction?: () => Promise<void>;
+  cityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
+  cityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
+  cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
 }
 
 export interface ServiceIssueIssue_View_EditCityComponentProps {
@@ -55,7 +51,7 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
     <AggregationInput
       name="city"
       id="User/(esm/_pPQKgNvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={t('service.Issue.Issue.View.Edit.city.area', { defaultValue: 'City' }) as string}
+      label={t('service.Issue.Issue_View_Edit.city', { defaultValue: 'City' }) as string}
       labelList={[ownerData.city?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -68,7 +64,7 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
         storeDiff('city', city);
       }}
       onAutoCompleteSearch={
-        actions.serviceIssueIssue_View_EditOtherAreaCityAutocomplete
+        actions.cityAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceCityQueryCustomizer = {
                 ...(searchText?.length
@@ -80,42 +76,26 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceIssueIssue_View_EditOtherAreaCityAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.cityAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.city && actions.serviceIssueIssue_View_EditOtherAreaCityView
+        ownerData.city && actions.cityOpenPageAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaCityView!(ownerData.city!);
+              await actions.cityOpenPageAction!(ownerData.city!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceIssueIssue_View_EditOtherAreaCityCreate
-          ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaCityCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.city && actions.serviceIssueIssue_View_EditOtherAreaCityDelete
-          ? async () => actions.serviceIssueIssue_View_EditOtherAreaCityDelete!(ownerData.city!)
           : undefined
       }
       onSet={
-        actions.serviceIssueIssue_View_EditOtherAreaCitySetOpenSelector
+        actions.cityOpenSetSelectorAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditOtherAreaCitySetOpenSelector!();
+              await actions.cityOpenSetSelectorAction!();
             }
           : undefined
       }
       onUnset={
-        ownerData.city && actions.serviceIssueIssue_View_EditOtherAreaCityUnset
-          ? async () => actions.serviceIssueIssue_View_EditOtherAreaCityUnset!(ownerData.city!)
-          : undefined
+        ownerData.city && actions.cityUnsetAction ? async () => actions.cityUnsetAction!(ownerData.city!) : undefined
       }
     ></AggregationInput>
   );

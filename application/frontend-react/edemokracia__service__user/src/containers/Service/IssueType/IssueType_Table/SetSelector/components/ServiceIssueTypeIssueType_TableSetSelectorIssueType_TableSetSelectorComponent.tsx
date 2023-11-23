@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,15 +62,13 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSelectorComponentActionDefinitions {
-  serviceIssueTypeIssueType_TableTableFilter?: (
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueTypeIssueType_TableTableRange?: (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ) => Promise<ServiceIssueTypeStored[]>;
+  selectorRangeAction?: (queryCustomizer: ServiceIssueTypeQueryCustomizer) => Promise<ServiceIssueTypeStored[]>;
 }
 
 export interface ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSelectorComponentProps {
@@ -132,7 +134,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.IssueType.IssueType.Table.SetSelector.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -142,7 +144,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     {
       ...baseColumnConfig,
       field: 'voteType',
-      headerName: t('service.IssueType.IssueType.Table.SetSelector.voteType', {
+      headerName: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
         defaultValue: 'Default vote type',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -163,7 +165,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.IssueType.IssueType.Table.SetSelector.description', {
+      headerName: t('service.IssueType.IssueType_Table.SetSelector.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -178,16 +180,16 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fMUDg32GEe6V8KKnnZfChA',
+      id: '_zwBx0ooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.IssueType.IssueType.Table.SetSelector.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fMUqkn2GEe6V8KKnnZfChA',
+      id: '_zwDnAYoAEe6F9LXBn0VWTg',
       attributeName: 'voteType',
-      label: t('service.IssueType.IssueType.Table.SetSelector.voteType::Filter', {
+      label: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
         defaultValue: 'Default vote type',
       }) as string,
       filterType: FilterType.enumeration,
@@ -195,11 +197,9 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     },
 
     {
-      id: '_fMVRoH2GEe6V8KKnnZfChA',
+      id: '_zwEOEIoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.IssueType.IssueType.Table.SetSelector.description::Filter', {
-        defaultValue: 'Description',
-      }) as string,
+      label: t('service.IssueType.IssueType_Table.SetSelector.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -265,21 +265,34 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
   }
 
   const handleIsRowSelectable = (params: GridRowParams<ServiceIssueTypeStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !false, alreadySelected);
+    return isRowSelectable(params.row, !true, alreadySelected);
   };
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;
-    if (newSelectionModel.length === 0) {
-      setSelectionModel([]);
-      setSelectionDiff([]);
-      return;
+    // added new items
+    if (newSelectionModel.length > selectionModel.length) {
+      const diff = newSelectionModel.length - selectionModel.length;
+      const newItemsId = [...newSelectionModel].slice(diff * -1);
+      const newItems = data.filter((value) => newItemsId.indexOf(value.__identifier as GridRowId) !== -1);
+      setSelectionDiff((prevSelectedItems: ServiceIssueTypeStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
+
+        return [...prevSelectedItems, ...newItems];
+      });
     }
 
-    const lastId = newSelectionModel[newSelectionModel.length - 1];
+    // removed items
+    if (newSelectionModel.length < selectionModel.length) {
+      const removedItemsId = selectionModel.filter((value) => newSelectionModel.indexOf(value) === -1);
+      setSelectionDiff((prevSelectedItems: ServiceIssueTypeStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
 
-    setSelectionModel([lastId]);
-    setSelectionDiff([data.find((value) => value.__identifier === lastId)!]);
+        return [...prevSelectedItems.filter((value) => removedItemsId.indexOf(value.__identifier as GridRowId) === -1)];
+      });
+    }
+
+    setSelectionModel(newSelectionModel);
   };
 
   async function fetchData() {
@@ -287,7 +300,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceIssueTypeIssueType_TableTableRange!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -313,7 +326,10 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable"
+      data-table-name="IssueType_Table::Set::Selector"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -340,7 +356,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
         ]}
         disableRowSelectionOnClick
         isRowSelectable={handleIsRowSelectable}
-        hideFooterSelectedRowCount={!false}
+        hideFooterSelectedRowCount={!true}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleOnSelection}
@@ -352,13 +368,13 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueTypeIssueType_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueTypeIssueType_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -370,27 +386,21 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueType.IssueType.Table.SetSelector.service::IssueType::IssueType_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.IssueType.IssueType_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueTypeIssueType_TableTableRange && true ? (
+              {actions.selectorRangeAction && true ? (
                 <Button
                   id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueTypeIssueType_TableTableRange!(processQueryCustomizer(queryCustomizer));
+                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueType.IssueType.Table.SetSelector.service::IssueType::IssueType_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.IssueType.IssueType_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -421,6 +431,6 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

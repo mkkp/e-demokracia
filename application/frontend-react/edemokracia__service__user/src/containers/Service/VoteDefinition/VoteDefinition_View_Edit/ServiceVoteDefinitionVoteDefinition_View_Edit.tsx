@@ -13,26 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -54,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssue,
@@ -65,14 +63,12 @@ import {
 } from '~/services/data-api';
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions {
-  serviceVoteDefinitionVoteDefinition_View_EditGroupIssueOpenPage?: (target?: ServiceIssueStored) => Promise<void>;
-  serviceVoteDefinitionVoteDefinition_View_EditGroupIssuePreFetch?: (
-    target?: ServiceIssueStored,
-  ) => Promise<ServiceIssueStored>;
-  serviceVoteDefinitionVoteDefinition_View_EditTabBarRatingvoteVoteRatingOpenForm?: () => Promise<void>;
-  serviceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerOpenSelector?: () => Promise<void>;
-  serviceVoteDefinitionVoteDefinition_View_EditTabBarYesnoabstainvoteVoteYesNoAbstainOpenForm?: () => Promise<void>;
-  serviceVoteDefinitionVoteDefinition_View_EditTabBarYesnovoteVoteYesNoOpenForm?: () => Promise<void>;
+  issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
+  issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
+  voteRatingAction?: () => Promise<void>;
+  voteSelectAnswerAction?: () => Promise<void>;
+  voteYesNoAbstainAction?: () => Promise<void>;
+  voteYesNoAction?: () => Promise<void>;
 }
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditProps {
@@ -130,10 +126,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                   id="User/(esm/_T5STEI4jEe29qs15q2b6yw)/StringTypeTextInput"
                   autoFocus
                   label={
-                    t(
-                      'service.VoteDefinition.VoteDefinition.View.Edit.title.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                      { defaultValue: 'Title' },
-                    ) as string
+                    t('service.VoteDefinition.VoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string
                   }
                   value={data.title ?? ''}
                   className={clsx({
@@ -199,10 +192,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                   }}
                   views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                   label={
-                    t(
-                      'service.VoteDefinition.VoteDefinition.View.Edit.closeAt.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                      { defaultValue: 'CloseAt' },
-                    ) as string
+                    t('service.VoteDefinition.VoteDefinition_View_Edit.closeAt', { defaultValue: 'CloseAt' }) as string
                   }
                   value={serviceDateToUiDate(data.closeAt ?? null)}
                   readOnly={false || !isFormUpdateable()}
@@ -214,108 +204,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="_fowH432GEe6V8KKnnZfChA)/LabelWrapper"
-                  container
-                  direction="column"
-                  alignItems="center"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                      <Typography id="_fowH432GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                        {t(
-                          'service.VoteDefinition.VoteDefinition.View.Edit.status::Label.status::LabelWrapper.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                          { defaultValue: 'Status' },
-                        )}
-                      </Typography>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12}>
-                    <FormControl
-                      fullWidth={true}
-                      sx={{ mt: '10px' }}
-                      className='MuiTextField-root'
-                      disabled={false || !isFormUpdateable() || isLoading}
-                      error={validation.has('status')}
-                    >
-                      <InputLabel
-                        id="User/(esm/_T5rUoI4jEe29qs15q2b6yw)/EnumerationTypeRadio"
-                        shrink={true}
-                        size={'small'}
-                      >
-                        {t(
-                          'service.VoteDefinition.VoteDefinition.View.Edit.status.status::LabelWrapper.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                          { defaultValue: 'Status' },
-                        )}{' '}
-                        *
-                      </InputLabel>
-                      <RadioGroup
-                        sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                        name="status"
-                        id="User/(esm/_T5rUoI4jEe29qs15q2b6yw)/EnumerationTypeRadio"
-                        value={data.status || ''}
-                        onChange={(event) => {
-                          storeDiff('status', event.target.value);
-                        }}
-                      >
-                        <FormControlLabel
-                          id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                          value={'CREATED'}
-                          control={<Radio size='small' />}
-                          label={t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
-                          disabled={false || !isFormUpdateable()}
-                        />
-                        <FormControlLabel
-                          id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                          value={'PENDING'}
-                          control={<Radio size='small' />}
-                          label={t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
-                          disabled={false || !isFormUpdateable()}
-                        />
-                        <FormControlLabel
-                          id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                          value={'ACTIVE'}
-                          control={<Radio size='small' />}
-                          label={t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                          disabled={false || !isFormUpdateable()}
-                        />
-                        <FormControlLabel
-                          id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                          value={'CLOSED'}
-                          control={<Radio size='small' />}
-                          label={t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                          disabled={false || !isFormUpdateable()}
-                        />
-                        <FormControlLabel
-                          id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember"
-                          value={'ARCHIVED'}
-                          control={<Radio size='small' />}
-                          label={t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
-                          disabled={false || !isFormUpdateable()}
-                        />
-                      </RadioGroup>
-                      {validation.has('status') && !data.status && (
-                        <FormHelperText>{validation.get('status')}</FormHelperText>
-                      )}
-                    </FormControl>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
                 <TextField
                   required={true}
                   name="status"
                   id="User/(esm/_T5rUoI4jEe29qs15q2b6yw)/EnumerationTypeCombo"
                   label={
-                    t(
-                      'service.VoteDefinition.VoteDefinition.View.Edit.status.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                      { defaultValue: 'Status' },
-                    ) as string
+                    t('service.VoteDefinition.VoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string
                   }
                   value={data.status || ''}
                   className={clsx({
@@ -362,14 +256,11 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                   id="User/(esm/_mQ0lYFoWEe6_67aMO2jOsw)/TabularReferenceFieldButton"
                   variant={undefined}
                   editMode={editMode}
-                  navigateAction={actions.serviceVoteDefinitionVoteDefinition_View_EditGroupIssueOpenPage}
+                  navigateAction={actions.issueOpenPageAction}
                   refreshCounter={refreshCounter}
-                  fetchCall={actions.serviceVoteDefinitionVoteDefinition_View_EditGroupIssuePreFetch}
+                  fetchCall={actions.issuePreFetchAction}
                 >
-                  {t(
-                    'service.VoteDefinition.VoteDefinition.View.Edit.issue.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                    { defaultValue: 'Issue' },
-                  )}
+                  {t('service.VoteDefinition.VoteDefinition_View_Edit.issue', { defaultValue: 'Issue' })}
                   <MdiIcon path="arrow-right" />
                 </AssociationButton>
               </Grid>
@@ -414,10 +305,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                   }}
                   views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                   label={
-                    t(
-                      'service.VoteDefinition.VoteDefinition.View.Edit.created.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                      { defaultValue: 'Created' },
-                    ) as string
+                    t('service.VoteDefinition.VoteDefinition_View_Edit.created', { defaultValue: 'Created' }) as string
                   }
                   value={serviceDateToUiDate(data.created ?? null)}
                   readOnly={false || !isFormUpdateable()}
@@ -434,10 +322,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                   name="description"
                   id="User/(esm/_T5jY0I4jEe29qs15q2b6yw)/StringTypeTextArea"
                   label={
-                    t(
-                      'service.VoteDefinition.VoteDefinition.View.Edit.description.group.VoteDefinition_View_Edit.service::VoteDefinition::VoteDefinition_View_Edit',
-                      { defaultValue: 'Description' },
-                    ) as string
+                    t('service.VoteDefinition.VoteDefinition_View_Edit.description', {
+                      defaultValue: 'Description',
+                    }) as string
                   }
                   value={data.description ?? ''}
                   className={clsx({
@@ -478,8 +365,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
           childTabs={[
             {
               id: 'User/(esm/_kxgNYI4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition.View.Edit.yesnovote',
-              label: t('service.VoteDefinition.VoteDefinition.View.Edit.yesnovote', {
+              name: 'service.VoteDefinition.VoteDefinition_View_Edit.yesnovote',
+              label: t('service.VoteDefinition.VoteDefinition_View_Edit.yesnovote', {
                 defaultValue: 'Yes / No vote',
               }) as string,
               disabled: !data.isYesNoType || isLoading,
@@ -488,8 +375,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
             },
             {
               id: 'User/(esm/_z_MfkI4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition.View.Edit.yesnoabstainvote',
-              label: t('service.VoteDefinition.VoteDefinition.View.Edit.yesnoabstainvote', {
+              name: 'service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote',
+              label: t('service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote', {
                 defaultValue: 'Yes / No / Abstain vote',
               }) as string,
               disabled: !data.isYesNoAbstainType || isLoading,
@@ -498,8 +385,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
             },
             {
               id: 'User/(esm/_1tyvYI4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition.View.Edit.selectanswervote',
-              label: t('service.VoteDefinition.VoteDefinition.View.Edit.selectanswervote', {
+              name: 'service.VoteDefinition.VoteDefinition_View_Edit.selectanswervote',
+              label: t('service.VoteDefinition.VoteDefinition_View_Edit.selectanswervote', {
                 defaultValue: 'Select answer vote',
               }) as string,
               disabled: !data.isSelectAnswerType || isLoading,
@@ -508,8 +395,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
             },
             {
               id: 'User/(esm/_31NH0I4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition.View.Edit.ratingvote',
-              label: t('service.VoteDefinition.VoteDefinition.View.Edit.ratingvote', {
+              name: 'service.VoteDefinition.VoteDefinition_View_Edit.ratingvote',
+              label: t('service.VoteDefinition.VoteDefinition_View_Edit.ratingvote', {
                 defaultValue: 'Rating vote',
               }) as string,
               disabled: !data.isRatingType || isLoading,

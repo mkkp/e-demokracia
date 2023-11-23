@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,35 +68,16 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentActionDefinitions {
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsAddOpenSelector?: () => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsBulkDelete?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsBulkRemove?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsClear?: () => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsCreateOpen?: () => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsFilter?: (
+  favoriteVoteDefinitionsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRefresh?: (
+  favoriteVoteDefinitionsRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceVoteDefinitionStored[]>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsDelete?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRemove?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsView?: (
-    row: ServiceVoteDefinitionStored,
-  ) => Promise<void>;
+  favoriteVoteDefinitionsOpenPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentProps {
@@ -160,7 +145,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'scope',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.scope', { defaultValue: 'Scope' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -179,7 +164,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'countyRepresentation',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.countyRepresentation', {
+      headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -191,7 +176,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'cityRepresentation',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.cityRepresentation', {
+      headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -203,7 +188,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'districtRepresentation',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.districtRepresentation', {
+      headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -215,7 +200,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -225,7 +210,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'voteType',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.voteType', { defaultValue: 'VoteType' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.voteType', { defaultValue: 'VoteType' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -244,7 +229,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -269,7 +254,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.closeAt', { defaultValue: 'CloseAt' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.closeAt', { defaultValue: 'CloseAt' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -294,7 +279,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'numberOfVotes',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.numberOfVotes', { defaultValue: 'NumberOfVotes' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.numberOfVotes', { defaultValue: 'NumberOfVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -307,7 +292,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.status', { defaultValue: 'Status' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -325,121 +310,84 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     },
   ];
 
-  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceVoteDefinitionStored) => isLoading,
-      action:
-        actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRemove
-          ? async (rowData) => {
-              await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRemove!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.__deleteable || isLoading,
-      action:
-        actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsDelete
-          ? async (rowData) => {
-              await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsDelete!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fvK48H2GEe6V8KKnnZfChA',
+      id: '_0RNMQIoAEe6F9LXBn0VWTg',
       attributeName: 'scope',
-      label: t('service.Dashboard.Dashboard.View.Edit.scope::Filter', { defaultValue: 'Scope' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
     },
 
     {
-      id: '_fvK49H2GEe6V8KKnnZfChA',
+      id: '_0RNzUIoAEe6F9LXBn0VWTg',
       attributeName: 'countyRepresentation',
-      label: t('service.Dashboard.Dashboard.View.Edit.countyRepresentation::Filter', {
+      label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fvLgAn2GEe6V8KKnnZfChA',
+      id: '_0ROaYIoAEe6F9LXBn0VWTg',
       attributeName: 'cityRepresentation',
-      label: t('service.Dashboard.Dashboard.View.Edit.cityRepresentation::Filter', {
+      label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fvMHEn2GEe6V8KKnnZfChA',
+      id: '_0ROaZIoAEe6F9LXBn0VWTg',
       attributeName: 'districtRepresentation',
-      label: t('service.Dashboard.Dashboard.View.Edit.districtRepresentation::Filter', {
+      label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fvMuIH2GEe6V8KKnnZfChA',
+      id: '_0RPBcooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Dashboard.Dashboard.View.Edit.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fvMuJH2GEe6V8KKnnZfChA',
+      id: '_0RPogYoAEe6F9LXBn0VWTg',
       attributeName: 'voteType',
-      label: t('service.Dashboard.Dashboard.View.Edit.voteType::Filter', { defaultValue: 'VoteType' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.voteType', { defaultValue: 'VoteType' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
     },
 
     {
-      id: '_fvNVM32GEe6V8KKnnZfChA',
+      id: '_0RPohYoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Dashboard.Dashboard.View.Edit.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fvN8Qn2GEe6V8KKnnZfChA',
+      id: '_0RQPk4oAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.Dashboard.Dashboard.View.Edit.closeAt::Filter', { defaultValue: 'CloseAt' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fvOjUH2GEe6V8KKnnZfChA',
+      id: '_0RQ2oooAEe6F9LXBn0VWTg',
       attributeName: 'numberOfVotes',
-      label: t('service.Dashboard.Dashboard.View.Edit.numberOfVotes::Filter', {
-        defaultValue: 'NumberOfVotes',
-      }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.numberOfVotes', { defaultValue: 'NumberOfVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_fvPKYH2GEe6V8KKnnZfChA',
+      id: '_0RRdsIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.Dashboard.Dashboard.View.Edit.status::Filter', { defaultValue: 'Status' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
     },
@@ -514,10 +462,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
       setIsLoading(true);
 
       try {
-        const res =
-          await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRefresh!(
-            processQueryCustomizer(queryCustomizer),
-          );
+        const res = await actions.favoriteVoteDefinitionsRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -543,7 +488,10 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="favoriteVoteDefinitions"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -570,18 +518,11 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsView
+          actions.favoriteVoteDefinitionsOpenPageAction
             ? async (params: GridRowParams<ServiceVoteDefinitionStored>) =>
-                await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsView!(
-                  params.row,
-                )
+                await actions.favoriteVoteDefinitionsOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -591,20 +532,18 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsFilter &&
-              true ? (
+              {actions.favoriteVoteDefinitionsFilterAction && true ? (
                 <Button
                   id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsFilter!(
-                        'User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.favoriteVoteDefinitionsFilterAction!(
+                      'User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -612,125 +551,25 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
                   disabled={isLoading}
                 >
                   {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Filter',
+                    'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.favoriteVotesGroup.favoriteVoteDefinitions.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRefresh &&
-              true ? (
+              {actions.favoriteVoteDefinitionsRefreshAction && true ? (
                 <Button
                   id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.favoriteVoteDefinitionsRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Refresh',
+                    'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.favoriteVotesGroup.favoriteVoteDefinitions.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::favoriteVotesGroup::favoriteVoteDefinitions::BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}
@@ -762,6 +601,6 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

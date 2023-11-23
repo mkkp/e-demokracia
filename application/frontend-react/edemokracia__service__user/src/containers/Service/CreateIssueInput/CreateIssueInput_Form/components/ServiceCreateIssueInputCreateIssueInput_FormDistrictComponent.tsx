@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,7 @@ import type {
   ServiceDistrictStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentActionDefinitions {
-  serviceCreateIssueInputCreateIssueInput_FormIssueDistrictCreate?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueDistrictDelete?: (target: ServiceDistrictStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueDistrictSetOpenSelector?: () => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueDistrictUnset?: (target: ServiceDistrictStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueDistrictView?: (target: ServiceDistrictStored) => Promise<void>;
-  serviceCreateIssueInputCreateIssueInput_FormIssueDistrictAutocomplete?: (
+  districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
 }
@@ -57,12 +52,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
     <AggregationInput
       name="district"
       id="User/(esm/_TXklMdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.CreateIssueInput.CreateIssueInput.Form.district.issue.CreateIssueInput_Form.service::CreateIssueInput::CreateIssueInput_Form',
-          { defaultValue: 'District' },
-        ) as string
-      }
+      label={t('service.CreateIssueInput.CreateIssueInput_Form.district', { defaultValue: 'District' }) as string}
       labelList={[
         ownerData.district?.representation?.toString() ?? '',
         ownerData.district?.name?.toString() ?? '',
@@ -80,7 +70,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
         storeDiff('district', district);
       }}
       onAutoCompleteSearch={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictAutocomplete
+        actions.districtAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceDistrictQueryCustomizer = {
                 ...(searchText?.length
@@ -92,41 +82,8 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.districtAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
-          : undefined
-      }
-      onView={
-        ownerData.district && actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictView
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictView!(ownerData.district!);
-            }
-          : undefined
-      }
-      onCreate={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictCreate
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.district && actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictDelete
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictDelete!(ownerData.district!)
-          : undefined
-      }
-      onSet={
-        actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictSetOpenSelector
-          ? async () => {
-              await actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictSetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.district && actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictUnset
-          ? async () => actions.serviceCreateIssueInputCreateIssueInput_FormIssueDistrictUnset!(ownerData.district!)
           : undefined
       }
     ></AggregationInput>

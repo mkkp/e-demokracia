@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,7 +25,7 @@ const CloseDebateInputCloseDebateInput_Table = lazy(
 
 export interface CloseDebateInputCloseDebateInput_TablePageActions
   extends CloseDebateInputCloseDebateInput_TableActionDefinitions {
-  closeDebateInputCloseDebateInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CloseDebateInputCloseDebateInput_TablePageProps {
@@ -47,23 +49,19 @@ export default function CloseDebateInputCloseDebateInput_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.closeDebateInputCloseDebateInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CloseDebateInput::CloseDebateInput_Table::Back"
+              id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.closeDebateInputCloseDebateInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CloseDebateInput.CloseDebateInput.Table.CloseDebateInput::CloseDebateInput_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CloseDebateInput.CloseDebateInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

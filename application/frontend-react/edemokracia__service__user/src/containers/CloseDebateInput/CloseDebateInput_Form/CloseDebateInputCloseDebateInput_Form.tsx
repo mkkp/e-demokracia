@@ -13,26 +13,19 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -54,7 +47,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
 
@@ -103,17 +102,14 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fn9dsH2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0LNR8IoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                  <Typography id="_fn9dsH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'CloseDebateInput.CloseDebateInput.Form.debate::Label.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                      { defaultValue: 'Close debate' },
-                    )}
+                  <MdiIcon path="debate::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0LNR8IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('CloseDebateInput.CloseDebateInput_Form.debate.Icon', { defaultValue: 'Close debate' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -128,112 +124,13 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                   spacing={2}
                 >
                   <Grid item xs={12} sm={12} md={4.0}>
-                    <Grid
-                      id="_fo1AYH2GEe6V8KKnnZfChA)/LabelWrapper"
-                      container
-                      direction="column"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                          <Typography id="_fo1AYH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t(
-                              'CloseDebateInput.CloseDebateInput.Form.voteType::Label.voteType::LabelWrapper.debate.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                              { defaultValue: 'VoteType' },
-                            )}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <FormControl
-                          fullWidth={true}
-                          sx={{ mt: '10px' }}
-                          className='MuiTextField-root'
-                          disabled={false || !isFormUpdateable() || isLoading}
-                          error={validation.has('voteType')}
-                        >
-                          <InputLabel
-                            id="User/(esm/_yfDhAH5VEe2kLcMqsIbMgQ)/EnumerationTypeRadio"
-                            shrink={true}
-                            size={'small'}
-                          >
-                            {t(
-                              'CloseDebateInput.CloseDebateInput.Form.voteType.voteType::LabelWrapper.debate.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                              { defaultValue: 'VoteType' },
-                            )}{' '}
-                            *
-                          </InputLabel>
-                          <RadioGroup
-                            sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                            name="voteType"
-                            id="User/(esm/_yfDhAH5VEe2kLcMqsIbMgQ)/EnumerationTypeRadio"
-                            value={data.voteType || ''}
-                            onChange={(event) => {
-                              storeDiff('voteType', event.target.value);
-                            }}
-                          >
-                            <FormControlLabel
-                              id="User/(esm/_6eNosXMMEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'YES_NO'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteTypeOnCloseDebate.YES_NO', { defaultValue: 'YES_NO' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_6eNosnMMEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'YES_NO_ABSTAIN'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteTypeOnCloseDebate.YES_NO_ABSTAIN', {
-                                defaultValue: 'YES_NO_ABSTAIN',
-                              })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_6eNos3MMEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'SELECT_ANSWER'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteTypeOnCloseDebate.SELECT_ANSWER', {
-                                defaultValue: 'SELECT_ANSWER',
-                              })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_6eNotHMMEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'RATE'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteTypeOnCloseDebate.RATE', { defaultValue: 'RATE' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_XjfVwHMNEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'NO_VOTE'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteTypeOnCloseDebate.NO_VOTE', { defaultValue: 'NO_VOTE' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                          </RadioGroup>
-                          {validation.has('voteType') && !data.voteType && (
-                            <FormHelperText>{validation.get('voteType')}</FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={true}
                       name="voteType"
                       id="User/(esm/_yfDhAH5VEe2kLcMqsIbMgQ)/EnumerationTypeCombo"
+                      autoFocus
                       label={
-                        t(
-                          'CloseDebateInput.CloseDebateInput.Form.voteType.debate.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                          { defaultValue: 'VoteType' },
-                        ) as string
+                        t('CloseDebateInput.CloseDebateInput_Form.voteType', { defaultValue: 'VoteType' }) as string
                       }
                       value={data.voteType || ''}
                       className={clsx({
@@ -315,10 +212,7 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                       label={
-                        t(
-                          'CloseDebateInput.CloseDebateInput.Form.closeAt.debate.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                          { defaultValue: 'Vote close at' },
-                        ) as string
+                        t('CloseDebateInput.CloseDebateInput_Form.closeAt', { defaultValue: 'Vote close at' }) as string
                       }
                       value={serviceDateToUiDate(data.closeAt ?? null)}
                       readOnly={false || !isFormUpdateable()}
@@ -335,10 +229,7 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                       name="title"
                       id="User/(esm/_uZrGAYfXEe2u0fVmwtP5bA)/StringTypeTextInput"
                       label={
-                        t(
-                          'CloseDebateInput.CloseDebateInput.Form.title.debate.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                          { defaultValue: 'Vote title' },
-                        ) as string
+                        t('CloseDebateInput.CloseDebateInput_Form.title', { defaultValue: 'Vote title' }) as string
                       }
                       value={data.title ?? ''}
                       className={clsx({
@@ -370,10 +261,9 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                       name="description"
                       id="User/(esm/_uZrGAIfXEe2u0fVmwtP5bA)/StringTypeTextArea"
                       label={
-                        t(
-                          'CloseDebateInput.CloseDebateInput.Form.description.debate.debate::LabelWrapper.CloseDebateInput_Form.CloseDebateInput::CloseDebateInput_Form',
-                          { defaultValue: 'Vote description' },
-                        ) as string
+                        t('CloseDebateInput.CloseDebateInput_Form.description', {
+                          defaultValue: 'Vote description',
+                        }) as string
                       }
                       value={data.description ?? ''}
                       className={clsx({

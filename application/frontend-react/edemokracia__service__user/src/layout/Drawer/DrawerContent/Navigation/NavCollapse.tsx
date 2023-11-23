@@ -11,19 +11,17 @@ import type { MouseEvent } from 'react';
 import { useJudoNavigation } from '~/components';
 import { useTranslation } from 'react-i18next';
 import { styled, useTheme } from '@mui/material/styles';
-import {
-  Box,
-  Collapse,
-  ClickAwayListener,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Popper,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Collapse from '@mui/material/Collapse';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useConfig } from '~/hooks';
 import { MenuOrientation, ThemeMode } from '~/config';
 import { MdiIcon, SimpleBar } from '~/components';

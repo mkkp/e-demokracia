@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,25 +62,26 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceConCon_TableCon_TableComponentActionDefinitions {
-  serviceConCon_TableAddOpenSelector?: () => Promise<void>;
-  serviceConCon_TableBulkDelete?: (selectedRows: ServiceConStored[]) => Promise<DialogResult<ServiceConStored[]>>;
-  serviceConCon_TableBulkRemove?: (selectedRows: ServiceConStored[]) => Promise<DialogResult<ServiceConStored[]>>;
-  serviceConCon_TableClear?: () => Promise<void>;
-  serviceConCon_TableCreateOpen?: () => Promise<void>;
-  serviceConCon_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceConStored[]) => Promise<DialogResult<ServiceConStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceConStored[]) => Promise<DialogResult<ServiceConStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceConCon_TableTableRefresh?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored[]>;
-  serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm?: (row: ServiceConStored) => Promise<void>;
-  serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm?: (row: ServiceConStored) => Promise<void>;
-  serviceConCon_TableDelete?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  serviceConCon_TableRemove?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  serviceConCon_TableView?: (row: ServiceConStored) => Promise<void>;
-  serviceConCon_View_EditConVoteDown?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  serviceConCon_View_EditConVoteUp?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored[]>;
+  createConArgumentAction?: (row: ServiceConStored) => Promise<void>;
+  createProArgumentAction?: (row: ServiceConStored) => Promise<void>;
+  deleteAction?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceConStored) => Promise<void>;
+  voteDownForConAction?: (row: ServiceConStored) => Promise<void>;
+  voteUpForConAction?: (row: ServiceConStored) => Promise<void>;
 }
 
 export interface ServiceConCon_TableCon_TableComponentProps {
@@ -138,7 +143,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
     {
       ...baseColumnConfig,
       field: 'createdByName',
-      headerName: t('service.Con.Con.Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
+      headerName: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -148,7 +153,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Con.Con.Table.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -173,7 +178,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.Con.Con.Table.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -183,7 +188,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Con.Con.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -193,7 +198,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
     {
       ...baseColumnConfig,
       field: 'upVotes',
-      headerName: t('service.Con.Con.Table.upVotes', { defaultValue: 'UpVotes' }) as string,
+      headerName: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -206,7 +211,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
     {
       ...baseColumnConfig,
       field: 'downVotes',
-      headerName: t('service.Con.Con.Table.downVotes', { defaultValue: 'DownVotes' }) as string,
+      headerName: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -221,67 +226,67 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
   const rowActions: TableRowAction<ServiceConStored>[] = [
     {
       id: 'User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.Con.Con.Table.service::Con::Con_Table::Remove', { defaultValue: 'Remove' }) as string,
+      label: t('service.Con.Con_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceConStored) => isLoading,
-      action: actions.serviceConCon_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceConCon_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.Con.Con.Table.service::Con::Con_Table::Delete', { defaultValue: 'Delete' }) as string,
+      label: t('service.Con.Con_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceConStored) => !row.__deleteable || isLoading,
-      action: actions.serviceConCon_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceConCon_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Con.Con.Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Con.Con.Table.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.serviceConCon_View_EditConVoteDown
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditConVoteDown!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Con.Con.Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.serviceConCon_View_EditConVoteUp
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditConVoteUp!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Con.Con.Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
       icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => isLoading,
-      action: actions.serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm
+      action: actions.createProArgumentAction
         ? async (rowData) => {
-            await actions.serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm!(rowData);
+            await actions.createProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceConStored) => isLoading,
+      action: actions.voteDownForConAction
+        ? async (rowData) => {
+            await actions.voteDownForConAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceConStored) => isLoading,
+      action: actions.voteUpForConAction
+        ? async (rowData) => {
+            await actions.voteUpForConAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceConStored) => isLoading,
+      action: actions.createConArgumentAction
+        ? async (rowData) => {
+            await actions.createConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -289,44 +294,44 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gBh0Qn2GEe6V8KKnnZfChA',
+      id: '_0jpAEooAEe6F9LXBn0VWTg',
       attributeName: 'createdByName',
-      label: t('service.Con.Con.Table.createdByName::Filter', { defaultValue: 'CreatedByName' }) as string,
+      label: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gBibUn2GEe6V8KKnnZfChA',
+      id: '_0jpnIYoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Con.Con.Table.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_gBjCYn2GEe6V8KKnnZfChA',
+      id: '_0jqOMYoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.Con.Con.Table.description::Filter', { defaultValue: 'Description' }) as string,
+      label: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gBjpcH2GEe6V8KKnnZfChA',
+      id: '_0jq1QIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Con.Con.Table.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gBjpdH2GEe6V8KKnnZfChA',
+      id: '_0jrcUIoAEe6F9LXBn0VWTg',
       attributeName: 'upVotes',
-      label: t('service.Con.Con.Table.upVotes::Filter', { defaultValue: 'UpVotes' }) as string,
+      label: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_gBkQg32GEe6V8KKnnZfChA',
+      id: '_0jsDYIoAEe6F9LXBn0VWTg',
       attributeName: 'downVotes',
-      label: t('service.Con.Con.Table.downVotes::Filter', { defaultValue: 'DownVotes' }) as string,
+      label: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
     },
   ];
@@ -400,7 +405,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceConCon_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -426,7 +431,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Con_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -459,8 +464,8 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceConCon_TableView
-            ? async (params: GridRowParams<ServiceConStored>) => await actions.serviceConCon_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceConStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -470,13 +475,13 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceConCon_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceConCon_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -488,92 +493,105 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::Table::Filter', { defaultValue: 'Set Filters' })}
+                  {t('service.Con.Con_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceConCon_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceConCon_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::Table::Refresh', { defaultValue: 'Refresh' })}
+                  {t('service.Con.Con_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceConCon_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceConCon_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::Create', { defaultValue: 'Create' })}
+                  {t('service.Con.Con_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceConCon_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceConCon_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.Con.Con_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceConCon_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Con.Con_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceConCon_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::Clear', { defaultValue: 'Clear' })}
+                  {t('service.Con.Con_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceConCon_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceConCon_TableBulkRemove!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::BulkRemove', { defaultValue: 'Remove' })}
+                  {t('service.Con.Con_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceConCon_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceConCon_TableBulkDelete!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Con.Con.Table.service::Con::Con_Table::BulkDelete', { defaultValue: 'Delete' })}
+                  {t('service.Con.Con_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -604,6 +622,6 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

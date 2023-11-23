@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -41,6 +42,20 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import { serviceUserIssuesServiceForOwnedIssuesImpl } from '~/services/data-axios';
+export type ServiceIssueIssue_TablePageActionsExtended = ServiceIssueIssue_TablePageActions & {
+  postActivateForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
+  postAddToFavoritesForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
+  postCloseVoteForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
+  postDeleteOrArchiveForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
+  postRemoveFromFavoritesForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
+};
+
+export const SERVICE_USER_ISSUES_OWNED_ISSUES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueIssue_TableActionsHook';
+export type ServiceIssueIssue_TableActionsHook = (
+  data: ServiceIssueStored[],
+  editMode: boolean,
+) => ServiceIssueIssue_TablePageActionsExtended;
 
 const ServiceIssueIssue_TablePageContainer = lazy(
   () => import('~/containers/Service/Issue/Issue_Table/ServiceIssueIssue_TablePageContainer'),
@@ -55,7 +70,7 @@ export default function ServiceUserIssuesOwnedIssuesRelationTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -68,21 +83,27 @@ export default function ServiceUserIssuesOwnedIssuesRelationTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceIssueStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueIssue_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_OWNED_ISSUES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueIssue_TablePageActionsExtended | undefined = customActionsHook?.(data, editMode);
+
   // Dialog hooks
   const openServiceIssueIssue_View_EditCloseDebateInputForm = useServiceIssueIssue_View_EditCloseDebateInputForm();
 
   // Calculated section
-  const title: string = t('Service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
+  const title: string = t('service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
 
   // Action section
-  const serviceIssueIssue_TableBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceIssueIssue_TableView = async (target?: ServiceIssueStored) => {
+  const openPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserIssuesOwnedIssuesRelationViewPage(target!.__signedIdentifier));
   };
-  const serviceIssueIssue_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -93,9 +114,7 @@ export default function ServiceUserIssuesOwnedIssuesRelationTablePage() {
       filters: newFilters,
     };
   };
-  const serviceIssueIssue_TableTableRefresh = async (
-    queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
     try {
       setIsLoading(true);
       setEditMode(false);
@@ -111,106 +130,126 @@ export default function ServiceUserIssuesOwnedIssuesRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsActivate = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForOwnedIssuesImpl.activate(target!);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
+  const closeDebateAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
+    if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
     }
   };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForOwnedIssuesImpl.closeVote(target!);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      setRefreshCounter((prev) => prev + 1);
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForOwnedIssuesImpl.deleteOrArchive(target!);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      setRefreshCounter((prev) => prev + 1);
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites = async (
-    target?: ServiceIssueStored,
-  ) => {
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
       await serviceUserIssuesServiceForOwnedIssuesImpl.removeFromFavorites(target!);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      setRefreshCounter((prev) => prev + 1);
+        setRefreshCounter((prev) => prev + 1);
+      }
     } catch (error) {
       handleError(error);
     } finally {
       setIsLoading(false);
     }
   };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
-    setRefreshCounter((prev) => prev + 1);
+  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForOwnedIssuesImpl.closeVote(target!);
+
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
-  const serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites = async (target?: ServiceIssueStored) => {
+  const deleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForOwnedIssuesImpl.deleteOrArchive(target!);
+
+      if (customActions?.postDeleteOrArchiveForIssueAction) {
+        await customActions.postDeleteOrArchiveForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const activateForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForOwnedIssuesImpl.activate(target!);
+
+      if (customActions?.postActivateForIssueAction) {
+        await customActions.postActivateForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
       await serviceUserIssuesServiceForOwnedIssuesImpl.addToFavorites(target!);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postAddToFavoritesForIssueAction) {
+        await customActions.postAddToFavoritesForIssueAction(target!);
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      setRefreshCounter((prev) => prev + 1);
+        setRefreshCounter((prev) => prev + 1);
+      }
     } catch (error) {
       handleError(error);
     } finally {
@@ -219,31 +258,37 @@ export default function ServiceUserIssuesOwnedIssuesRelationTablePage() {
   };
 
   const actions: ServiceIssueIssue_TablePageActions = {
-    serviceIssueIssue_TableBack,
-    serviceIssueIssue_TableView,
-    serviceIssueIssue_TableTableFilter,
-    serviceIssueIssue_TableTableRefresh,
-    serviceIssueIssue_View_EditActionsPageActionButtonsActivate,
-    serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote,
-    serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive,
-    serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites,
-    serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm,
-    serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites,
+    backAction,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    closeDebateAction,
+    removeFromFavoritesForIssueAction,
+    closeVoteForIssueAction,
+    deleteOrArchiveForIssueAction,
+    activateForIssueAction,
+    addToFavoritesForIssueAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceIssueIssue_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_jK5OoVq4Ee6_67aMO2jOsw)/RelationFeatureTable"
+      data-page-name="service::UserIssues::ownedIssues::Relation::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceIssueIssue_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

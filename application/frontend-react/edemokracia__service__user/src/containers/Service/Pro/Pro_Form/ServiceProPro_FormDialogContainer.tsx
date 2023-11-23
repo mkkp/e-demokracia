@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -20,15 +25,15 @@ import type { ServicePro, ServiceProStored, ServiceProQueryCustomizer } from '~/
 const ServiceProPro_Form = lazy(() => import('~/containers/Service/Pro/Pro_Form/ServiceProPro_Form'));
 
 export interface ServiceProPro_FormDialogActions extends ServiceProPro_FormActionDefinitions {
-  serviceProPro_FormGetTemplate?: () => Promise<ServicePro>;
-  serviceProPro_FormBack?: () => Promise<void>;
-  serviceProPro_FormCreate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServicePro>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
 }
 
 export interface ServiceProPro_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceProPro_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -65,7 +70,7 @@ export default function ServiceProPro_FormDialog(props: ServiceProPro_FormDialog
   } = props;
   const queryCustomizer: ServiceProQueryCustomizer = {
     _mask:
-      '{createdByName,created,upVotes,description,title,downVotes,cons{createdByName,created,description,title,upVotes,downVotes},pros{createdByName,created,description,title,upVotes,downVotes},createdBy{firstName,lastName,phone,email,isAdmin,created,userName,representation}}',
+      '{createdByName,created,description,upVotes,title,downVotes,cons{createdByName,created,description,title,upVotes,downVotes},pros{createdByName,created,description,title,upVotes,downVotes},createdBy{firstName,lastName,phone,email,isAdmin,created,userName,representation}}',
   };
 
   return (
@@ -73,7 +78,7 @@ export default function ServiceProPro_FormDialog(props: ServiceProPro_FormDialog
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceProPro_Form-dialog-close-wrapper"
+          id="User/(esm/_qLaZUGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -103,35 +108,35 @@ export default function ServiceProPro_FormDialog(props: ServiceProPro_FormDialog
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceProPro_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Pro::Pro_Form::Back"
+              id="User/(esm/_qLaZUGksEe25ONJ3V89cVA)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceProPro_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>{t('service.Pro.Pro.Form.service::Pro::Pro_Form::Back', { defaultValue: 'Back' })}</span>
+              <span>{t('service.Pro.Pro_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceProPro_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Pro::Pro_Form::Create"
+              id="User/(esm/_qLaZUGksEe25ONJ3V89cVA)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceProPro_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>{t('service.Pro.Pro.Form.service::Pro::Pro_Form::Create', { defaultValue: 'Create' })}</span>
+              <span>{t('service.Pro.Pro_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}

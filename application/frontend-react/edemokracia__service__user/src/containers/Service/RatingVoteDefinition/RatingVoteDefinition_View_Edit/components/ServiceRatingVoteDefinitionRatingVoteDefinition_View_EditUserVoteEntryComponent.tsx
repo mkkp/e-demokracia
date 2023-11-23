@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,18 +26,8 @@ import type {
   ServiceRatingVoteEntryStored,
 } from '~/services/data-api';
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete?: (
-    target: ServiceRatingVoteEntryStored,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector?: () => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset?: (
-    target: ServiceRatingVoteEntryStored,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView?: (
-    target: ServiceRatingVoteEntryStored,
-  ) => Promise<void>;
-  serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryAutocomplete?: (
+  userVoteEntryOpenPageAction?: (target: ServiceRatingVoteEntryStored) => Promise<void>;
+  userVoteEntryAutocompleteRangeAction?: (
     queryCustomizer: ServiceRatingVoteEntryQueryCustomizer,
   ) => Promise<Array<ServiceRatingVoteEntryStored>>;
 }
@@ -64,10 +54,9 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVot
       name="userVoteEntry"
       id="User/(esm/_NHnv1FsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedLink"
       label={
-        t(
-          'service.RatingVoteDefinition.RatingVoteDefinition.View.Edit.userVoteEntry.VirtualForUserVote.userVote.userVoteEntryGroup.userVoteEntryGroup::LabelWrapper.RatingVoteDefinition_View_Edit.service::RatingVoteDefinition::RatingVoteDefinition_View_Edit',
-          { defaultValue: 'Value' },
-        ) as string
+        t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.userVoteEntry', {
+          defaultValue: 'Value',
+        }) as string
       }
       labelList={[ownerData.userVoteEntry?.created?.toString() ?? '', ownerData.userVoteEntry?.value?.toString() ?? '']}
       ownerData={ownerData}
@@ -81,45 +70,10 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVot
         storeDiff('userVoteEntry', userVoteEntry);
       }}
       onView={
-        ownerData.userVoteEntry &&
-        actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView
+        ownerData.userVoteEntry && actions.userVoteEntryOpenPageAction
           ? async () => {
-              await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView!(
-                ownerData.userVoteEntry!,
-              );
+              await actions.userVoteEntryOpenPageAction!(ownerData.userVoteEntry!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate
-          ? async () => {
-              await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.userVoteEntry &&
-        actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete
-          ? async () =>
-              actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete!(
-                ownerData.userVoteEntry!,
-              )
-          : undefined
-      }
-      onSet={
-        actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector
-          ? async () => {
-              await actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.userVoteEntry &&
-        actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset
-          ? async () =>
-              actions.serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset!(
-                ownerData.userVoteEntry!,
-              )
           : undefined
       }
     ></AggregationInput>

@@ -173,6 +173,7 @@ export class ServiceUserManagerServiceForUsersImpl extends JudoAxiosService impl
       },
     });
   }
+
   async listActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
@@ -272,6 +273,7 @@ export class ServiceUserManagerServiceForUsersImpl extends JudoAxiosService impl
       },
     });
   }
+
   async getResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
@@ -452,6 +454,7 @@ export class ServiceUserManagerServiceForUsersImpl extends JudoAxiosService impl
       },
     });
   }
+
   async getResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
@@ -632,6 +635,7 @@ export class ServiceUserManagerServiceForUsersImpl extends JudoAxiosService impl
       },
     });
   }
+
   async getResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,

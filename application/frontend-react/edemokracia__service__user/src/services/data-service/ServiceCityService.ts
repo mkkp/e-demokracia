@@ -38,7 +38,7 @@ export interface ServiceCityService {
     target: JudoIdentifiable<ServiceDistrict>,
   ): Promise<ServiceDistrictStored>;
 
-  getDistricts(
+  listDistricts(
     target: JudoIdentifiable<ServiceCity>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;

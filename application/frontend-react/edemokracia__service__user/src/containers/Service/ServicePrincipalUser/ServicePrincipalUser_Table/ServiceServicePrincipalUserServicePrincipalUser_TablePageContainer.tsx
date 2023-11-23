@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const ServiceServicePrincipalUserServicePrincipalUser_Table = lazy(
 
 export interface ServiceServicePrincipalUserServicePrincipalUser_TablePageActions
   extends ServiceServicePrincipalUserServicePrincipalUser_TableActionDefinitions {
-  serviceServicePrincipalUserServicePrincipalUser_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceServicePrincipalUserServicePrincipalUser_TablePageProps {
@@ -54,24 +56,19 @@ export default function ServiceServicePrincipalUserServicePrincipalUser_TablePag
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceServicePrincipalUserServicePrincipalUser_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::ServicePrincipalUser::ServicePrincipalUser_Table::Back"
+              id="User/(esm/_ndKGgGkwEe25ONJ3V89cVA)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceServicePrincipalUserServicePrincipalUser_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.ServicePrincipalUser.ServicePrincipalUser.Table.service::ServicePrincipalUser::ServicePrincipalUser_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.ServicePrincipalUser.ServicePrincipalUser_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

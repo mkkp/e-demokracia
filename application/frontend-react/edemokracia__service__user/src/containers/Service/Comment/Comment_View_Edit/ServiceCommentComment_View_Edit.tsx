@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceComment,
@@ -54,9 +69,9 @@ import { ServiceCommentComment_View_EditCreatedByComponent } from './components/
 
 export interface ServiceCommentComment_View_EditActionDefinitions
   extends ServiceCommentComment_View_EditCreatedByComponentActionDefinitions {
-  serviceCommentComment_View_EditGroupVoteDown?: () => Promise<void>;
-  serviceCommentComment_View_EditGroupVoteUp?: () => Promise<void>;
-  serviceCommentComment_View_EditGroupVotesOpenPage?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  voteDownForCommentAction?: () => Promise<void>;
+  voteUpForCommentAction?: () => Promise<void>;
+  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceCommentComment_View_EditProps {
@@ -102,17 +117,14 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fmhTQX2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0J_J8YoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
-                  <Typography id="_fmhTQX2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.Comment.Comment.View.Edit.group::Label.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                      { defaultValue: 'Comment' },
-                    )}
+                  <MdiIcon path="group::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0J_J8YoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.Comment.Comment_View_Edit.group.Icon', { defaultValue: 'Comment' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -165,12 +177,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                         });
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                      label={
-                        t(
-                          'service.Comment.Comment.View.Edit.created.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                          { defaultValue: 'Created' },
-                        ) as string
-                      }
+                      label={t('service.Comment.Comment_View_Edit.created', { defaultValue: 'Created' }) as string}
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={true || !isFormUpdateable()}
                       disabled={isLoading}
@@ -197,12 +204,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                       name="comment"
                       id="User/(esm/_BYJGYG5WEe2wNaja8kBvcQ)/StringTypeTextArea"
                       autoFocus
-                      label={
-                        t(
-                          'service.Comment.Comment.View.Edit.comment.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                          { defaultValue: 'Comment' },
-                        ) as string
-                      }
+                      label={t('service.Comment.Comment_View_Edit.comment', { defaultValue: 'Comment' }) as string}
                       value={data.comment ?? ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
@@ -237,18 +239,13 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                       startIcon={<MdiIcon path="thumb-up" />}
                       loadingPosition="start"
                       onClick={async () => {
-                        if (actions.serviceCommentComment_View_EditGroupVoteUp) {
-                          await actions.serviceCommentComment_View_EditGroupVoteUp!();
+                        if (actions.voteUpForCommentAction) {
+                          await actions.voteUpForCommentAction!();
                         }
                       }}
-                      disabled={!actions.serviceCommentComment_View_EditGroupVoteUp || editMode}
+                      disabled={!actions.voteUpForCommentAction || editMode}
                     >
-                      <span>
-                        {t(
-                          'service.Comment.Comment.View.Edit.voteUp.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                          { defaultValue: '' },
-                        )}
-                      </span>
+                      <span>{t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: '' })}</span>
                     </LoadingButton>
                   </Grid>
 
@@ -257,12 +254,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                       required={false}
                       name="upVotes"
                       id="User/(esm/_3kpuMH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
-                      label={
-                        t(
-                          'service.Comment.Comment.View.Edit.upVotes.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                          { defaultValue: '' },
-                        ) as string
-                      }
+                      label={t('service.Comment.Comment_View_Edit.upVotes', { defaultValue: '' }) as string}
                       customInput={TextField}
                       value={data.upVotes ?? ''}
                       className={clsx({
@@ -297,18 +289,13 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                       startIcon={<MdiIcon path="thumb-down" />}
                       loadingPosition="start"
                       onClick={async () => {
-                        if (actions.serviceCommentComment_View_EditGroupVoteDown) {
-                          await actions.serviceCommentComment_View_EditGroupVoteDown!();
+                        if (actions.voteDownForCommentAction) {
+                          await actions.voteDownForCommentAction!();
                         }
                       }}
-                      disabled={!actions.serviceCommentComment_View_EditGroupVoteDown || editMode}
+                      disabled={!actions.voteDownForCommentAction || editMode}
                     >
-                      <span>
-                        {t(
-                          'service.Comment.Comment.View.Edit.voteDown.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                          { defaultValue: '' },
-                        )}
-                      </span>
+                      <span>{t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: '' })}</span>
                     </LoadingButton>
                   </Grid>
 
@@ -317,12 +304,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                       required={false}
                       name="downVotes"
                       id="User/(esm/_3k2igH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
-                      label={
-                        t(
-                          'service.Comment.Comment.View.Edit.downVotes.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                          { defaultValue: '' },
-                        ) as string
-                      }
+                      label={t('service.Comment.Comment_View_Edit.downVotes', { defaultValue: '' }) as string}
                       customInput={TextField}
                       value={data.downVotes ?? ''}
                       className={clsx({
@@ -354,13 +336,10 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                       id="User/(esm/_IgLS0IfuEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
                       variant={undefined}
                       editMode={editMode}
-                      navigateAction={actions.serviceCommentComment_View_EditGroupVotesOpenPage}
+                      navigateAction={actions.votesOpenPageAction}
                       refreshCounter={refreshCounter}
                     >
-                      {t(
-                        'service.Comment.Comment.View.Edit.votes.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-                        { defaultValue: 'Votes' },
-                      )}
+                      {t('service.Comment.Comment_View_Edit.votes', { defaultValue: 'Votes' })}
                       <MdiIcon path="arrow-right" />
                     </AssociationButton>
                   </Grid>

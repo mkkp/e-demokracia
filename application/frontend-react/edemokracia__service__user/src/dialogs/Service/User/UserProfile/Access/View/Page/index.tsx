@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -45,6 +46,17 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 import { userServiceForUserProfileImpl } from '~/services/data-axios';
+export type ServiceUserProfileUserProfile_View_EditDialogActionsExtended =
+  ServiceUserProfileUserProfile_View_EditDialogActions & {};
+
+export const SERVICE_USER_USER_PROFILE_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserProfileUserProfile_View_EditActionsHook';
+export type ServiceUserProfileUserProfile_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceUserProfileStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void,
+) => ServiceUserProfileUserProfile_View_EditDialogActionsExtended;
 
 export const useServiceUserUserProfileAccessViewPage = (): ((
   ownerData: any,
@@ -56,9 +68,9 @@ export const useServiceUserUserProfileAccessViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'lg',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -67,14 +79,14 @@ export const useServiceUserUserProfileAccessViewPage = (): ((
         children: (
           <ServiceUserUserProfileAccessViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -113,10 +125,11 @@ const ServiceUserProfileUserProfile_View_EditDialogContainer = lazy(
 export interface ServiceUserUserProfileAccessViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceUserProfileStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceUserProfileStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_NDSZcFvYEe6bTb-1BwQgmA)/AccessViewPageDefinition
 // Name: service::User::userProfile::Access::View::Page
 export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserUserProfileAccessViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -124,7 +137,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -171,6 +184,17 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       '{lastName,firstName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceUserProfileUserProfile_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_USER_PROFILE_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceUserProfileUserProfile_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceUserProfileResidentCityRelationViewPage = useServiceUserProfileResidentCityRelationViewPage();
   const openServiceUserProfileResidentCountyRelationViewPage = useServiceUserProfileResidentCountyRelationViewPage();
@@ -178,13 +202,13 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     useServiceUserProfileResidentDistrictRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.UserProfile.UserProfile_View_Edit', { defaultValue: 'My profile' });
+  const title: string = t('service.UserProfile.UserProfile_View_Edit', { defaultValue: 'My profile' });
 
   // Action section
-  const serviceUserProfileUserProfile_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceUserProfileUserProfile_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceUserProfileQueryCustomizer,
   ): Promise<ServiceUserProfileStored> => {
     try {
@@ -211,47 +235,47 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityView = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileResidentCityRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.serviceUserProfileUserProfile_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const serviceUserProfileUserProfile_View_EditAreasResidencyResidentCountyView = async (
-    target?: ServiceCountyStored,
-  ) => {
+  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
     await openServiceUserProfileResidentCountyRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceUserProfileUserProfile_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceUserProfileUserProfile_View_EditAreasResidencyResidentDistrictView = async (
-    target?: ServiceDistrictStored,
-  ) => {
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceUserProfileResidentCityRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
     await openServiceUserProfileResidentDistrictRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceUserProfileUserProfile_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
 
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
-    serviceUserProfileUserProfile_View_EditBack,
-    serviceUserProfileUserProfile_View_EditRefresh,
-    serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityView,
-    serviceUserProfileUserProfile_View_EditAreasResidencyResidentCountyView,
-    serviceUserProfileUserProfile_View_EditAreasResidencyResidentDistrictView,
+    backAction,
+    refreshAction,
+    residentCountyOpenPageAction,
+    residentCityOpenPageAction,
+    residentDistrictOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceUserProfileUserProfile_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_NDSZcFvYEe6bTb-1BwQgmA)/AccessViewPageDefinition"
+      data-page-name="service::User::userProfile::Access::View::Page"
+    >
       <Suspense>
         <ServiceUserProfileUserProfile_View_EditDialogContainer
           ownerData={ownerData}
@@ -269,6 +293,6 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

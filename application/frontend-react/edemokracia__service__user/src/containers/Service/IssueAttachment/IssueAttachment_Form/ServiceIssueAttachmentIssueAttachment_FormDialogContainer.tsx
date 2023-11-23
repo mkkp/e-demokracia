@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,15 +32,15 @@ const ServiceIssueAttachmentIssueAttachment_Form = lazy(
 
 export interface ServiceIssueAttachmentIssueAttachment_FormDialogActions
   extends ServiceIssueAttachmentIssueAttachment_FormActionDefinitions {
-  serviceIssueAttachmentIssueAttachment_FormGetTemplate?: () => Promise<ServiceIssueAttachment>;
-  serviceIssueAttachmentIssueAttachment_FormBack?: () => Promise<void>;
-  serviceIssueAttachmentIssueAttachment_FormCreate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceIssueAttachment>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueAttachmentIssueAttachment_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceIssueAttachmentIssueAttachment_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -81,7 +86,7 @@ export default function ServiceIssueAttachmentIssueAttachment_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceIssueAttachmentIssueAttachment_Form-dialog-close-wrapper"
+          id="User/(esm/_p5sXMGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -111,45 +116,35 @@ export default function ServiceIssueAttachmentIssueAttachment_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceIssueAttachmentIssueAttachment_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueAttachment::IssueAttachment_Form::Back"
+              id="User/(esm/_p5sXMGksEe25ONJ3V89cVA)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueAttachmentIssueAttachment_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.IssueAttachment.IssueAttachment.Form.service::IssueAttachment::IssueAttachment_Form::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.IssueAttachment.IssueAttachment_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueAttachmentIssueAttachment_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueAttachment::IssueAttachment_Form::Create"
+              id="User/(esm/_p5sXMGksEe25ONJ3V89cVA)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceIssueAttachmentIssueAttachment_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.IssueAttachment.IssueAttachment.Form.service::IssueAttachment::IssueAttachment_Form::Create',
-                  { defaultValue: 'Create' },
-                )}
-              </span>
+              <span>{t('service.IssueAttachment.IssueAttachment_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}

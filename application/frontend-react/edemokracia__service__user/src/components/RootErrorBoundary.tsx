@@ -2,7 +2,9 @@ import { useState } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router-dom';
 import { useTranslation, withTranslation } from 'react-i18next';
-import { Box, Typography, Button } from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { routeToDashboard } from '~/routes';
 import { MdiIcon } from './MdiIcon';
 

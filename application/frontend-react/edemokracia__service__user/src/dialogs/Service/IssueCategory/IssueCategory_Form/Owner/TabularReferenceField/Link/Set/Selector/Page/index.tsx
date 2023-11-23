@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,6 +36,17 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import { serviceIssueCategoryServiceForOwnerImpl } from '~/services/data-axios';
+export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
+  ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
+
+export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_FORM_OWNER_TABULAR_REFERENCE_FIELD_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceServiceUserServiceUser_TableSetSelectorActionsHook';
+export type ServiceServiceUserServiceUser_TableSetSelectorActionsHook = (
+  ownerData: any,
+  data: ServiceServiceUserStored[],
+  editMode: boolean,
+  selectionDiff: ServiceServiceUserStored[],
+) => ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended;
 
 export const useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage = (): ((
   ownerData: any,
@@ -47,9 +59,9 @@ export const useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceField
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -59,14 +71,14 @@ export const useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceField
           <ServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -88,10 +100,11 @@ const ServiceServiceUserServiceUser_TableSetSelectorDialogContainer = lazy(
 export interface ServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPageProps {
   ownerData: any;
   alreadySelected: ServiceServiceUserStored[];
-  onClose: () => void;
-  onSubmit: (result?: ServiceServiceUserStored[]) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored[]) => Promise<void>;
 }
 
+// XMIID: User/(esm/_8svcEIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition
 // Name: service::IssueCategory::IssueCategory_Form::owner::TabularReferenceField::Link::Set::Selector::Page
 export default function ServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage(
   props: ServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPageProps,
@@ -101,7 +114,7 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerTabularRefere
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -115,19 +128,26 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerTabularRefere
   const [data, setData] = useState<ServiceServiceUserStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceServiceUserStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableSetSelectorActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_FORM_OWNER_TABULAR_REFERENCE_FIELD_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, selectionDiff);
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
+  const title: string = t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
 
   // Action section
-  const serviceServiceUserServiceUser_TableSet = async (selected: ServiceServiceUserStored[]) => {
+  const setAction = async (selected: ServiceServiceUserStored[]) => {
     onSubmit(selected);
   };
-  const serviceServiceUserServiceUser_TableBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceServiceUserServiceUser_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -138,7 +158,7 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerTabularRefere
       filters: newFilters,
     };
   };
-  const serviceServiceUserServiceUser_TableTableRange = async (
+  const selectorRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
@@ -150,16 +170,20 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerTabularRefere
   };
 
   const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
-    serviceServiceUserServiceUser_TableSet,
-    serviceServiceUserServiceUser_TableBack,
-    serviceServiceUserServiceUser_TableTableFilter,
-    serviceServiceUserServiceUser_TableTableRange,
+    setAction,
+    backAction,
+    filterAction,
+    selectorRangeAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <>
+    <div
+      id="User/(esm/_8svcEIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+      data-page-name="service::IssueCategory::IssueCategory_Form::owner::TabularReferenceField::Link::Set::Selector::Page"
+    >
       <Suspense>
         <ServiceServiceUserServiceUser_TableSetSelectorDialogContainer
           ownerData={ownerData}
@@ -174,6 +198,6 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerTabularRefere
           alreadySelected={alreadySelected}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

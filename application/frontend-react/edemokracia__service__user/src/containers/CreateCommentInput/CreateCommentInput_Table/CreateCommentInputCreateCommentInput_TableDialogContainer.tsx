@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -26,13 +31,13 @@ const CreateCommentInputCreateCommentInput_Table = lazy(
 
 export interface CreateCommentInputCreateCommentInput_TableDialogActions
   extends CreateCommentInputCreateCommentInput_TableActionDefinitions {
-  createCommentInputCreateCommentInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CreateCommentInputCreateCommentInput_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: CreateCommentInputCreateCommentInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -54,7 +59,7 @@ export default function CreateCommentInputCreateCommentInput_TableDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="CreateCommentInputCreateCommentInput_Table-dialog-close-wrapper"
+          id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -73,23 +78,19 @@ export default function CreateCommentInputCreateCommentInput_TableDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.createCommentInputCreateCommentInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="CreateCommentInput::CreateCommentInput_Table::Back"
+              id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.createCommentInputCreateCommentInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('CreateCommentInput.CreateCommentInput.Table.CreateCommentInput::CreateCommentInput_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('CreateCommentInput.CreateCommentInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

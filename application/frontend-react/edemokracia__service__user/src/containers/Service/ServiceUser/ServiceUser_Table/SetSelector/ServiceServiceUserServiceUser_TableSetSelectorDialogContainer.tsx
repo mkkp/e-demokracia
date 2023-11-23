@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,14 +34,14 @@ const ServiceServiceUserServiceUser_TableSetSelector = lazy(
 
 export interface ServiceServiceUserServiceUser_TableSetSelectorDialogActions
   extends ServiceServiceUserServiceUser_TableSetSelectorActionDefinitions {
-  serviceServiceUserServiceUser_TableBack?: () => Promise<void>;
-  serviceServiceUserServiceUser_TableSet?: (selected: ServiceServiceUserStored[]) => Promise<void>;
+  backAction?: () => Promise<void>;
+  setAction?: (selected: ServiceServiceUserStored[]) => Promise<void>;
 }
 
 export interface ServiceServiceUserServiceUser_TableSetSelectorDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -72,7 +77,7 @@ export default function ServiceServiceUserServiceUser_TableSetSelectorDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceServiceUserServiceUser_TableSetSelector-dialog-close-wrapper"
+          id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -97,43 +102,35 @@ export default function ServiceServiceUserServiceUser_TableSetSelectorDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceServiceUserServiceUser_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::ServiceUser::ServiceUser_Table::Back"
+              id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceServiceUserServiceUser_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.ServiceUser.ServiceUser.Table.SetSelector.service::ServiceUser::ServiceUser_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.ServiceUser.ServiceUser_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceServiceUserServiceUser_TableSet && (
+        {!editMode && actions.setAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::ServiceUser::ServiceUser_Table::Set"
+              id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorSetButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
-              startIcon={<MdiIcon path="link" />}
+              startIcon={<MdiIcon path="attachment-plus" />}
               onClick={async () => {
-                await actions.serviceServiceUserServiceUser_TableSet!(selectionDiff);
+                await actions.setAction!(selectionDiff);
               }}
             >
-              <span>
-                {t('service.ServiceUser.ServiceUser.Table.SetSelector.service::ServiceUser::ServiceUser_Table::Set', {
-                  defaultValue: 'Set',
-                })}
-              </span>
+              <span>{t('service.ServiceUser.ServiceUser_Table.Set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

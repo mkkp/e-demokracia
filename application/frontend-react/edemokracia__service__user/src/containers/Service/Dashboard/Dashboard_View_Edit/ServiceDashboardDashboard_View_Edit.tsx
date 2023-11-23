@@ -13,9 +13,16 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +44,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceDashboard,
@@ -130,8 +143,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
           childTabs={[
             {
               id: 'User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupTab',
-              name: 'service.Dashboard.Dashboard.View.Edit.issues',
-              label: t('service.Dashboard.Dashboard.View.Edit.issues', { defaultValue: 'Issues' }) as string,
+              name: 'service.Dashboard.Dashboard_View_Edit.issues',
+              label: t('service.Dashboard.Dashboard_View_Edit.issues', { defaultValue: 'Issues' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'wechat',
@@ -139,8 +152,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
             },
             {
               id: 'User/(esm/_bFZdMGBVEe6M1JBD8stPIg)/GroupTab',
-              name: 'service.Dashboard.Dashboard.View.Edit.votes',
-              label: t('service.Dashboard.Dashboard.View.Edit.votes', { defaultValue: 'Votes' }) as string,
+              name: 'service.Dashboard.Dashboard_View_Edit.votes',
+              label: t('service.Dashboard.Dashboard_View_Edit.votes', { defaultValue: 'Votes' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'vote',
@@ -148,8 +161,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
             },
             {
               id: 'User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupTab',
-              name: 'service.Dashboard.Dashboard.View.Edit.votesCast',
-              label: t('service.Dashboard.Dashboard.View.Edit.votesCast', { defaultValue: 'Votes Cast' }) as string,
+              name: 'service.Dashboard.Dashboard_View_Edit.votesCast',
+              label: t('service.Dashboard.Dashboard_View_Edit.votesCast', { defaultValue: 'Votes Cast' }) as string,
               disabled: isLoading,
               hidden: false,
               icon: 'vote-outline',
@@ -175,8 +188,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                   childTabs={[
                     {
                       id: 'User/(esm/_E0b4IIyUEe2VSOmaAz6G9Q)/GroupTab',
-                      name: 'service.Dashboard.Dashboard.View.Edit.myissues',
-                      label: t('service.Dashboard.Dashboard.View.Edit.myissues', {
+                      name: 'service.Dashboard.Dashboard_View_Edit.myissues',
+                      label: t('service.Dashboard.Dashboard_View_Edit.myissues', {
                         defaultValue: 'My issues',
                       }) as string,
                       disabled: isLoading,
@@ -186,8 +199,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                     },
                     {
                       id: 'User/(esm/_wto7cFw4Ee6gN-oVBDDIOQ)/GroupTab',
-                      name: 'service.Dashboard.Dashboard.View.Edit.favoriteIssues',
-                      label: t('service.Dashboard.Dashboard.View.Edit.favoriteIssues', {
+                      name: 'service.Dashboard.Dashboard_View_Edit.favoriteIssues',
+                      label: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues', {
                         defaultValue: 'Favorite Issues',
                       }) as string,
                       disabled: isLoading,
@@ -215,7 +228,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                           justifyContent="flex-start"
                         >
                           <ServiceDashboardDashboard_View_EditOwnedIssuesComponent
-                            uniqueId={'TMP'}
+                            uniqueId={'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'}
                             actions={actions}
                             ownerData={data}
                             editMode={editMode}
@@ -246,7 +259,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                           justifyContent="flex-start"
                         >
                           <ServiceDashboardDashboard_View_EditFavoriteIssuesComponent
-                            uniqueId={'TMP'}
+                            uniqueId={'User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'}
                             actions={actions}
                             ownerData={data}
                             editMode={editMode}
@@ -281,8 +294,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                   childTabs={[
                     {
                       id: 'User/(esm/_rK5hIGBVEe6M1JBD8stPIg)/GroupTab',
-                      name: 'service.Dashboard.Dashboard.View.Edit.myVotesGroup',
-                      label: t('service.Dashboard.Dashboard.View.Edit.myVotesGroup', {
+                      name: 'service.Dashboard.Dashboard_View_Edit.myVotesGroup',
+                      label: t('service.Dashboard.Dashboard_View_Edit.myVotesGroup', {
                         defaultValue: 'My votes',
                       }) as string,
                       disabled: isLoading,
@@ -292,8 +305,8 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                     },
                     {
                       id: 'User/(esm/_wvlRsGBVEe6M1JBD8stPIg)/GroupTab',
-                      name: 'service.Dashboard.Dashboard.View.Edit.favoriteVotesGroup',
-                      label: t('service.Dashboard.Dashboard.View.Edit.favoriteVotesGroup', {
+                      name: 'service.Dashboard.Dashboard_View_Edit.favoriteVotesGroup',
+                      label: t('service.Dashboard.Dashboard_View_Edit.favoriteVotesGroup', {
                         defaultValue: 'Favorite votes',
                       }) as string,
                       disabled: isLoading,
@@ -321,7 +334,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                           justifyContent="flex-start"
                         >
                           <ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
-                            uniqueId={'TMP'}
+                            uniqueId={'User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable'}
                             actions={actions}
                             ownerData={data}
                             editMode={editMode}
@@ -352,7 +365,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                           justifyContent="flex-start"
                         >
                           <ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent
-                            uniqueId={'TMP'}
+                            uniqueId={'User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable'}
                             actions={actions}
                             ownerData={data}
                             editMode={editMode}
@@ -387,7 +400,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                   justifyContent="flex-start"
                 >
                   <ServiceDashboardDashboard_View_EditVoteEntriesComponent
-                    uniqueId={'TMP'}
+                    uniqueId={'User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable'}
                     actions={actions}
                     ownerData={data}
                     editMode={editMode}

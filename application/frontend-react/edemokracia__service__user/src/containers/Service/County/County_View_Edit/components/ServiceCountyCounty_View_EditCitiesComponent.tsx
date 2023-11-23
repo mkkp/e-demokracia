@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,27 +69,17 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCountyCounty_View_EditCitiesComponentActionDefinitions {
-  serviceCountyCounty_View_EditCitiesAddOpenSelector?: () => Promise<void>;
-  serviceCountyCounty_View_EditCitiesBulkDelete?: (
-    selectedRows: ServiceCityStored[],
-  ) => Promise<DialogResult<ServiceCityStored[]>>;
-  serviceCountyCounty_View_EditCitiesBulkRemove?: (
-    selectedRows: ServiceCityStored[],
-  ) => Promise<DialogResult<ServiceCityStored[]>>;
-  serviceCountyCounty_View_EditCitiesClear?: () => Promise<void>;
-  serviceCountyCounty_View_EditCitiesCreateOpen?: () => Promise<void>;
-  serviceCountyCounty_View_EditCitiesFilter?: (
+  citiesBulkDeleteAction?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
+  citiesOpenFormAction?: () => Promise<void>;
+  citiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCountyCounty_View_EditCitiesRefresh?: (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ) => Promise<ServiceCityStored[]>;
-  serviceCountyCounty_View_EditCitiesDelete?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
-  serviceCountyCounty_View_EditCitiesRemove?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
-  serviceCountyCounty_View_EditCitiesView?: (row: ServiceCityStored) => Promise<void>;
+  citiesRefreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored[]>;
+  citiesDeleteAction?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
+  citiesOpenPageAction?: (row: ServiceCityStored) => Promise<void>;
 }
 
 export interface ServiceCountyCounty_View_EditCitiesComponentProps {
@@ -145,7 +139,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
     {
       ...baseColumnConfig,
       field: 'name',
-      headerName: t('service.County.County.View.Edit.name', { defaultValue: 'Name' }) as string,
+      headerName: t('service.County.County_View_Edit.name', { defaultValue: 'Name' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -156,28 +150,13 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
 
   const rowActions: TableRowAction<ServiceCityStored>[] = [
     {
-      id: 'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-      label: t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceCityStored) => isLoading,
-      action: actions.serviceCountyCounty_View_EditCitiesRemove
-        ? async (rowData) => {
-            await actions.serviceCountyCounty_View_EditCitiesRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.County.County_View_Edit.cities.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceCityStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceCountyCounty_View_EditCitiesDelete
+      action: actions.citiesDeleteAction
         ? async (rowData) => {
-            await actions.serviceCountyCounty_View_EditCitiesDelete!(rowData);
+            await actions.citiesDeleteAction!(rowData);
           }
         : undefined,
     },
@@ -185,9 +164,9 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ftMjAH2GEe6V8KKnnZfChA',
+      id: '_0PYAQooAEe6F9LXBn0VWTg',
       attributeName: 'name',
-      label: t('service.County.County.View.Edit.name::Filter', { defaultValue: 'Name' }) as string,
+      label: t('service.County.County_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -253,7 +232,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
   }, [ownerData?.cities, filters]);
 
   return (
-    <>
+    <div id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable" data-table-name="cities">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -287,9 +266,8 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceCountyCounty_View_EditCitiesView
-            ? async (params: GridRowParams<ServiceCityStored>) =>
-                await actions.serviceCountyCounty_View_EditCitiesView!(params.row)
+          actions.citiesOpenPageAction
+            ? async (params: GridRowParams<ServiceCityStored>) => await actions.citiesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -299,13 +277,13 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCountyCounty_View_EditCitiesFilter && true ? (
+              {actions.citiesFilterAction && true ? (
                 <Button
                   id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCountyCounty_View_EditCitiesFilter!(
+                    const filterResults = await actions.citiesFilterAction!(
                       'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -317,110 +295,50 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.County.County_View_Edit.cities.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_View_EditCitiesRefresh && true ? (
+              {actions.citiesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_View_EditCitiesRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.citiesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.County.County_View_Edit.cities.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_View_EditCitiesCreateOpen && true ? (
+              {actions.citiesOpenFormAction && true ? (
                 <Button
                   id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_View_EditCitiesCreateOpen!();
+                    await actions.citiesOpenFormAction!();
                   }}
                   disabled={editMode || isLoading}
                 >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.County.County_View_Edit.cities.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_View_EditCitiesAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceCountyCounty_View_EditCitiesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Add', {
-                    defaultValue: 'Add',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceCountyCounty_View_EditCitiesClear && data.length ? (
-                <Button
-                  id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceCountyCounty_View_EditCitiesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::Clear', {
-                    defaultValue: 'Clear',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceCountyCounty_View_EditCitiesBulkRemove && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCountyCounty_View_EditCitiesBulkRemove!(
-                      selectedRows.current,
-                    );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceCountyCounty_View_EditCitiesBulkDelete && selectionModel.length > 0 ? (
+              {actions.citiesBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCountyCounty_View_EditCitiesBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.citiesBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.County.County.View.Edit.service::County::County_View_Edit::cities::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.County.County_View_Edit.cities.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -442,6 +360,6 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

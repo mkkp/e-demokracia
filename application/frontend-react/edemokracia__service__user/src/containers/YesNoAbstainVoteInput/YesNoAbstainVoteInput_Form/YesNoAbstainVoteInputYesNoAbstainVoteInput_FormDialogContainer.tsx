@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,17 +35,17 @@ const YesNoAbstainVoteInputYesNoAbstainVoteInput_Form = lazy(
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActions
   extends YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions {
-  yesNoAbstainVoteInputYesNoAbstainVoteInput_FormGetTemplate?: () => Promise<YesNoAbstainVoteInput>;
-  yesNoAbstainVoteInputYesNoAbstainVoteInput_FormBack?: () => Promise<void>;
-  yesNoAbstainVoteInputYesNoAbstainVoteInput_FormCreate?: () => Promise<void>;
-  serviceVoteDefinitionVoteDefinition_View_EditTabBarYesnoabstainvoteVoteYesNoAbstain?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote?: () => Promise<void>;
+  getTemplateAction?: () => Promise<YesNoAbstainVoteInput>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
+  voteYesNoAbstainForVoteDefinitionAction?: () => Promise<void>;
+  voteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
 }
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -86,7 +91,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="YesNoAbstainVoteInputYesNoAbstainVoteInput_Form-dialog-close-wrapper"
+          id="User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -116,91 +121,80 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.yesNoAbstainVoteInputYesNoAbstainVoteInput_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="YesNoAbstainVoteInput::YesNoAbstainVoteInput_Form::Back"
+              id="User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.yesNoAbstainVoteInputYesNoAbstainVoteInput_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'YesNoAbstainVoteInput.YesNoAbstainVoteInput.Form.YesNoAbstainVoteInput::YesNoAbstainVoteInput_Form::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.yesNoAbstainVoteInputYesNoAbstainVoteInput_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="YesNoAbstainVoteInput::YesNoAbstainVoteInput_Form::Create"
+              id="User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.yesNoAbstainVoteInputYesNoAbstainVoteInput_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t(
-                  'YesNoAbstainVoteInput.YesNoAbstainVoteInput.Form.YesNoAbstainVoteInput::YesNoAbstainVoteInput_Form::Create',
-                  { defaultValue: 'Create' },
-                )}
-              </span>
+              <span>{t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceVoteDefinitionVoteDefinition_View_EditTabBarYesnoabstainvoteVoteYesNoAbstain && (
+        {editMode && actions.voteForYesNoAbstainVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::VoteDefinition::VoteDefinition_View_Edit::tabBar::yesnoabstainvote::voteYesNoAbstain::OperationFormCallButton"
+              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_0IFsg4oAEe6F9LXBn0VWTg)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
-                await actions.serviceVoteDefinitionVoteDefinition_View_EditTabBarYesnoabstainvoteVoteYesNoAbstain!();
+                await actions.voteForYesNoAbstainVoteDefinitionAction!();
               }}
             >
               <span>
                 {t(
-                  'YesNoAbstainVoteInput.YesNoAbstainVoteInput.Form.service::VoteDefinition::VoteDefinition_View_Edit::tabBar::yesnoabstainvote::voteYesNoAbstain::OperationFormCallButton',
+                  'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode &&
-          actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote && (
-            <Grid className="page-action" item>
-              <LoadingButton
-                id="service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::OperationFormCallButton"
-                loading={isLoading}
-                loadingPosition="start"
-                variant={'contained'}
-                startIcon={<MdiIcon path="vote" />}
-                onClick={async () => {
-                  await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote!();
-                }}
-              >
-                <span>
-                  {t(
-                    'YesNoAbstainVoteInput.YesNoAbstainVoteInput.Form.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::OperationFormCallButton',
-                    { defaultValue: 'Submit' },
-                  )}
-                </span>
-              </LoadingButton>
-            </Grid>
-          )}
+        {editMode && actions.voteYesNoAbstainForVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_0IFsg4oAEe6F9LXBn0VWTg)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteYesNoAbstainForVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.yesnoabstainvote.voteYesNoAbstain.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
       </DialogActions>
     </>
   );

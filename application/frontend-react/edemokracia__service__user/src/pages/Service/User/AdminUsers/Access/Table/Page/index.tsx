@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,6 +36,15 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import { userServiceForAdminUsersImpl } from '~/services/data-axios';
+export type ServiceServiceUserServiceUser_TablePageActionsExtended =
+  ServiceServiceUserServiceUser_TablePageActions & {};
+
+export const SERVICE_USER_ADMIN_USERS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceServiceUserServiceUser_TableActionsHook';
+export type ServiceServiceUserServiceUser_TableActionsHook = (
+  data: ServiceServiceUserStored[],
+  editMode: boolean,
+) => ServiceServiceUserServiceUser_TablePageActionsExtended;
 
 const ServiceServiceUserServiceUser_TablePageContainer = lazy(
   () => import('~/containers/Service/ServiceUser/ServiceUser_Table/ServiceServiceUserServiceUser_TablePageContainer'),
@@ -46,7 +56,7 @@ export default function ServiceUserAdminUsersAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -59,19 +69,28 @@ export default function ServiceUserAdminUsersAccessTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceServiceUserStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_USERS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceServiceUserServiceUser_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
   const openServiceUserAdminUsersAccessViewPage = useServiceUserAdminUsersAccessViewPage();
 
   // Calculated section
-  const title: string = t('Service.ServiceUser.ServiceUser_Table', { defaultValue: 'ServiceUser Table' });
+  const title: string = t('service.ServiceUser.ServiceUser_Table', { defaultValue: 'ServiceUser Table' });
 
   // Action section
-  const serviceServiceUserServiceUser_TableView = async (target?: ServiceServiceUserStored) => {
+  const openPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceUserAdminUsersAccessViewPage(target!);
 
     setRefreshCounter((prev) => prev + 1);
   };
-  const serviceServiceUserServiceUser_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -82,7 +101,7 @@ export default function ServiceUserAdminUsersAccessTablePage() {
       filters: newFilters,
     };
   };
-  const serviceServiceUserServiceUser_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
@@ -97,7 +116,7 @@ export default function ServiceUserAdminUsersAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceServiceUserServiceUser_TableDelete = async (target: ServiceServiceUserStored, silentMode?: boolean) => {
+  const deleteAction = async (target: ServiceServiceUserStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -126,18 +145,18 @@ export default function ServiceUserAdminUsersAccessTablePage() {
       }
     }
   };
-  const serviceServiceUserServiceUser_TableBulkDelete = async (
+  const bulkDeleteAction = async (
     selectedRows: ServiceServiceUserStored[],
   ): Promise<DialogResult<Array<ServiceServiceUserStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceServiceUserStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.ServiceUser.ServiceUser_Table.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.userName!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceServiceUserServiceUser_TableDelete) {
-              await actions.serviceServiceUserServiceUser_TableDelete!(item, true);
+            if (actions.deleteAction) {
+              await actions.deleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -163,26 +182,32 @@ export default function ServiceUserAdminUsersAccessTablePage() {
   };
 
   const actions: ServiceServiceUserServiceUser_TablePageActions = {
-    serviceServiceUserServiceUser_TableView,
-    serviceServiceUserServiceUser_TableTableFilter,
-    serviceServiceUserServiceUser_TableTableRefresh,
-    serviceServiceUserServiceUser_TableDelete,
-    serviceServiceUserServiceUser_TableBulkDelete,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    deleteAction,
+    bulkDeleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceServiceUserServiceUser_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_hvVS8GkuEe25ONJ3V89cVA)/AccessTablePageDefinition"
+      data-page-name="service::User::adminUsers::Access::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceServiceUserServiceUser_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

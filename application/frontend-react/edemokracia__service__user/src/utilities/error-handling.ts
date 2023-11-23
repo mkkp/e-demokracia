@@ -40,19 +40,6 @@ export interface ValidationError {
   location: string;
 }
 
-export type ErrorProcessor<T> = (
-  error: any,
-  defaultResults: ErrorProcessResult<T>,
-  options?: ErrorHandlingOption<T>,
-  payload?: T,
-) => void;
-
-export const ERROR_PROCESSOR_HOOK_INTERFACE_KEY = 'ErrorProcessorHook';
-
-export type ErrorProcessorHook = () => ErrorProcessor<any>;
-
-// export type ErrorHandler<T> = (error: any, options?: ErrorHandlingOption<T>, payload?: T) => void;
-
 export interface ErrorProcessResult<T> {
   errorToastConfig: OptionsObject;
   toastMessage?: string | undefined;
@@ -62,8 +49,6 @@ export interface ErrorProcessResult<T> {
 export const useErrorHandler = () => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  // const { service: processorHook } = useTrackService<ErrorProcessorHook<T>>(filter);
-  // const customErrorProcessor = processorHook && processorHook();
 
   return <T>(error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
     console.error(error);
@@ -159,11 +144,6 @@ export const useErrorHandler = () => {
         }
       }
     }
-
-    // if (typeof customErrorProcessor === 'function') {
-    //     customErrorProcessor(error, errorResults, options, payload);
-    //     return;
-    // }
 
     if (errorResults.toastMessage) {
       enqueueSnackbar(errorResults.toastMessage, errorResults.errorToastConfig);

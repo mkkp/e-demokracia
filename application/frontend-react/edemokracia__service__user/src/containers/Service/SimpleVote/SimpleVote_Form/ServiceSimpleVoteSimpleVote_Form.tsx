@@ -13,26 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -54,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
 
@@ -151,12 +149,7 @@ export default function ServiceSimpleVoteSimpleVote_Form(props: ServiceSimpleVot
                 });
               }}
               views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-              label={
-                t(
-                  'service.SimpleVote.SimpleVote.Form.created.group.SimpleVote_Form.service::SimpleVote::SimpleVote_Form',
-                  { defaultValue: 'Created' },
-                ) as string
-              }
+              label={t('service.SimpleVote.SimpleVote_Form.created', { defaultValue: 'Created' }) as string}
               value={serviceDateToUiDate(data.created ?? null)}
               readOnly={false || !isFormUpdateable()}
               disabled={isLoading}
@@ -167,82 +160,11 @@ export default function ServiceSimpleVoteSimpleVote_Form(props: ServiceSimpleVot
           </Grid>
 
           <Grid item xs={12} sm={12} md={4.0}>
-            <Grid
-              id="_fotroH2GEe6V8KKnnZfChA)/LabelWrapper"
-              container
-              direction="column"
-              alignItems="center"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                  <Typography id="_fotroH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.SimpleVote.SimpleVote.Form.type::Label.type::LabelWrapper.group.SimpleVote_Form.service::SimpleVote::SimpleVote_Form',
-                      { defaultValue: 'Type' },
-                    )}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <FormControl
-                  fullWidth={true}
-                  sx={{ mt: '10px' }}
-                  className='MuiTextField-root'
-                  disabled={false || !isFormUpdateable() || isLoading}
-                  error={validation.has('type')}
-                >
-                  <InputLabel id="User/(esm/_VQXP0Gk5Ee25ONJ3V89cVA)/EnumerationTypeRadio" shrink={true} size={'small'}>
-                    {t(
-                      'service.SimpleVote.SimpleVote.Form.type.type::LabelWrapper.group.SimpleVote_Form.service::SimpleVote::SimpleVote_Form',
-                      { defaultValue: 'Type' },
-                    )}{' '}
-                    *
-                  </InputLabel>
-                  <RadioGroup
-                    sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                    name="type"
-                    id="User/(esm/_VQXP0Gk5Ee25ONJ3V89cVA)/EnumerationTypeRadio"
-                    value={data.type || ''}
-                    onChange={(event) => {
-                      storeDiff('type', event.target.value);
-                    }}
-                  >
-                    <FormControlLabel
-                      id="User/(esm/_W1kWEGkYEe25ONJ3V89cVA)/EnumerationTypeMember"
-                      value={'UP'}
-                      control={<Radio size='small' />}
-                      label={t('enumerations.SimpleVoteType.UP', { defaultValue: 'UP' })}
-                      disabled={false || !isFormUpdateable()}
-                    />
-                    <FormControlLabel
-                      id="User/(esm/_YoByMGkYEe25ONJ3V89cVA)/EnumerationTypeMember"
-                      value={'DOWN'}
-                      control={<Radio size='small' />}
-                      label={t('enumerations.SimpleVoteType.DOWN', { defaultValue: 'DOWN' })}
-                      disabled={false || !isFormUpdateable()}
-                    />
-                  </RadioGroup>
-                  {validation.has('type') && !data.type && <FormHelperText>{validation.get('type')}</FormHelperText>}
-                </FormControl>
-              </Grid>
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={true}
               name="type"
               id="User/(esm/_VQXP0Gk5Ee25ONJ3V89cVA)/EnumerationTypeCombo"
-              label={
-                t(
-                  'service.SimpleVote.SimpleVote.Form.type.group.SimpleVote_Form.service::SimpleVote::SimpleVote_Form',
-                  { defaultValue: 'Type' },
-                ) as string
-              }
+              label={t('service.SimpleVote.SimpleVote_Form.type', { defaultValue: 'Type' }) as string}
               value={data.type || ''}
               className={clsx({
                 'JUDO-viewMode': !editMode,

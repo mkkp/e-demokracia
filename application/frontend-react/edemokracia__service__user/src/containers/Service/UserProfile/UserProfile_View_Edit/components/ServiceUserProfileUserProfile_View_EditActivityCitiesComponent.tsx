@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,35 +69,14 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceUserProfileUserProfile_View_EditActivityCitiesComponentActionDefinitions {
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesAddOpenSelector?: () => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesBulkDelete?: (
-    selectedRows: ServiceCityStored[],
-  ) => Promise<DialogResult<ServiceCityStored[]>>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesBulkRemove?: (
-    selectedRows: ServiceCityStored[],
-  ) => Promise<DialogResult<ServiceCityStored[]>>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesClear?: () => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesCreateOpen?: () => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesFilter?: (
+  activityCitiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesRefresh?: (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ) => Promise<ServiceCityStored[]>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesDelete?: (
-    row: ServiceCityStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesRemove?: (
-    row: ServiceCityStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesView?: (
-    row: ServiceCityStored,
-  ) => Promise<void>;
+  activityCitiesRefreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored[]>;
+  activityCitiesOpenPageAction?: (row: ServiceCityStored) => Promise<void>;
 }
 
 export interface ServiceUserProfileUserProfile_View_EditActivityCitiesComponentProps {
@@ -155,7 +138,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
     {
       ...baseColumnConfig,
       field: 'representation',
-      headerName: t('service.UserProfile.UserProfile.View.Edit.representation', { defaultValue: 'City' }) as string,
+      headerName: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'City' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -164,46 +147,13 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
     },
   ];
 
-  const rowActions: TableRowAction<ServiceCityStored>[] = [
-    {
-      id: 'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceCityStored) => isLoading,
-      action: actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesRemove
-        ? async (rowData) => {
-            await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesRemove!(
-              rowData,
-            );
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceCityStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesDelete
-        ? async (rowData) => {
-            await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesDelete!(
-              rowData,
-            );
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceCityStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_f8hYcH2GEe6V8KKnnZfChA',
+      id: '_0dt-QooAEe6F9LXBn0VWTg',
       attributeName: 'representation',
-      label: t('service.UserProfile.UserProfile.View.Edit.representation::Filter', { defaultValue: 'City' }) as string,
+      label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -269,7 +219,10 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
   }, [ownerData?.activityCities, filters]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="activityCities"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -296,18 +249,11 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesView
+          actions.activityCitiesOpenPageAction
             ? async (params: GridRowParams<ServiceCityStored>) =>
-                await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesView!(
-                  params.row,
-                )
+                await actions.activityCitiesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -317,146 +263,43 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesFilter &&
-              true ? (
+              {actions.activityCitiesFilterAction && true ? (
                 <Button
                   id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesFilter!(
-                        'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.activityCitiesFilterAction!(
+                      'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.UserProfile.UserProfile_View_Edit.Areas.activity.activity_cities.activityCities.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesRefresh &&
-              true ? (
+              {actions.activityCitiesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.activityCitiesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Refresh',
+                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.activity_cities.activityCities.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserProfileUserProfile_View_EditAreasActivityActivity_citiesActivityCitiesBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.UserProfile.UserProfile.View.Edit.service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_cities::activityCities::BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}
@@ -479,6 +322,6 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

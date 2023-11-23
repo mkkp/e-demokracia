@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   CloseDebateOutputVoteDefinitionReference,
@@ -92,15 +107,15 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fn_S4H2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0LOgEYoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                  <Typography id="_fn_S4H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
+                  <MdiIcon path="debate::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0LOgEYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
                     {t(
-                      'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Form.debate::Label.debate::LabelWrapper.CloseDebateOutputVoteDefinitionReference_Form.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Form',
+                      'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Icon',
                       { defaultValue: 'Close debate' },
                     )}
                   </Typography>
@@ -129,10 +144,9 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           id="User/(esm/_f6jpUFv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
           autoFocus
           label={
-            t(
-              'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Form.context.CloseDebateOutputVoteDefinitionReference_Form.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Form',
-              { defaultValue: 'Context' },
-            ) as string
+            t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.context', {
+              defaultValue: 'Context',
+            }) as string
           }
           value={data.context ?? ''}
           className={clsx({

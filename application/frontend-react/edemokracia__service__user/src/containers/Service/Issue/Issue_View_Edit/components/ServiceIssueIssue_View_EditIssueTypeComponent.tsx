@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,10 @@ import type {
   ServiceIssueTypeStored,
 } from '~/services/data-api';
 export interface ServiceIssueIssue_View_EditIssueTypeComponentActionDefinitions {
-  serviceIssueIssue_View_EditIssueIssueTypeCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditIssueIssueTypeDelete?: (target: ServiceIssueTypeStored) => Promise<void>;
-  serviceIssueIssue_View_EditIssueIssueTypeSetOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditIssueIssueTypeUnset?: (target: ServiceIssueTypeStored) => Promise<void>;
-  serviceIssueIssue_View_EditIssueIssueTypeView?: (target: ServiceIssueTypeStored) => Promise<void>;
-  serviceIssueIssue_View_EditIssueIssueTypeAutocomplete?: (
+  issueTypeOpenSetSelectorAction?: () => Promise<void>;
+  issueTypeUnsetAction?: (target: ServiceIssueTypeStored) => Promise<void>;
+  issueTypeOpenPageAction?: (target: ServiceIssueTypeStored) => Promise<void>;
+  issueTypeAutocompleteRangeAction?: (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ) => Promise<Array<ServiceIssueTypeStored>>;
 }
@@ -57,12 +55,7 @@ export function ServiceIssueIssue_View_EditIssueTypeComponent(
     <AggregationInput
       name="issueType"
       id="User/(esm/_FHpVENvSEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.Issue.Issue.View.Edit.issueType.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-          { defaultValue: 'Issue Type' },
-        ) as string
-      }
+      label={t('service.Issue.Issue_View_Edit.issueType', { defaultValue: 'Issue Type' }) as string}
       labelList={[ownerData.issueType?.title?.toString() ?? '', ownerData.issueType?.description?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -75,7 +68,7 @@ export function ServiceIssueIssue_View_EditIssueTypeComponent(
         storeDiff('issueType', issueType);
       }}
       onAutoCompleteSearch={
-        actions.serviceIssueIssue_View_EditIssueIssueTypeAutocomplete
+        actions.issueTypeAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceIssueTypeQueryCustomizer = {
                 ...(searchText?.length
@@ -87,41 +80,27 @@ export function ServiceIssueIssue_View_EditIssueTypeComponent(
                 _orderBy: [{ attribute: 'title', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceIssueIssue_View_EditIssueIssueTypeAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.issueTypeAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.issueType && actions.serviceIssueIssue_View_EditIssueIssueTypeView
+        ownerData.issueType && actions.issueTypeOpenPageAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditIssueIssueTypeView!(ownerData.issueType!);
+              await actions.issueTypeOpenPageAction!(ownerData.issueType!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceIssueIssue_View_EditIssueIssueTypeCreate
-          ? async () => {
-              await actions.serviceIssueIssue_View_EditIssueIssueTypeCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.issueType && actions.serviceIssueIssue_View_EditIssueIssueTypeDelete
-          ? async () => actions.serviceIssueIssue_View_EditIssueIssueTypeDelete!(ownerData.issueType!)
           : undefined
       }
       onSet={
-        actions.serviceIssueIssue_View_EditIssueIssueTypeSetOpenSelector
+        actions.issueTypeOpenSetSelectorAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditIssueIssueTypeSetOpenSelector!();
+              await actions.issueTypeOpenSetSelectorAction!();
             }
           : undefined
       }
       onUnset={
-        ownerData.issueType && actions.serviceIssueIssue_View_EditIssueIssueTypeUnset
-          ? async () => actions.serviceIssueIssue_View_EditIssueIssueTypeUnset!(ownerData.issueType!)
+        ownerData.issueType && actions.issueTypeUnsetAction
+          ? async () => actions.issueTypeUnsetAction!(ownerData.issueType!)
           : undefined
       }
     ></AggregationInput>

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,6 +36,17 @@ import type {
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
 import { serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from '~/services/data-axios';
+export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActionsExtended =
+  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions & {};
+
+export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_VOTE_SELECTIONS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionsHook';
+export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionsHook = (
+  ownerData: any,
+  data: ServiceSelectAnswerVoteSelectionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceSelectAnswerVoteSelection, value: any) => void,
+) => ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActionsExtended;
 
 export const useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage = (): ((
   ownerData: any,
@@ -46,9 +58,9 @@ export const useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage 
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -57,14 +69,14 @@ export const useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage 
         children: (
           <ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -103,10 +115,11 @@ const ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogContai
 export interface ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceSelectAnswerVoteSelectionStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceSelectAnswerVoteSelectionStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_-cKskFtqEe6Mx9dH3yj5gQ)/RelationFeatureForm
 // Name: service::SelectAnswerVoteDefinition::voteSelections::Relation::Form::Page
 export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
   props: ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPageProps,
@@ -116,7 +129,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -161,18 +174,26 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_DEFINITION_VOTE_SELECTIONS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form', {
+  const title: string = t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form', {
     defaultValue: 'SelectAnswerVoteSelection Form',
   });
 
   // Action section
-  const serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormCreate = async () => {
+  const createAction = async () => {
     try {
       setIsLoading(true);
       const res = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.create(ownerData, data);
@@ -189,36 +210,39 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
       setIsLoading(false);
     }
   };
-  const serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormGetTemplate =
-    async (): Promise<ServiceSelectAnswerVoteSelection> => {
-      try {
-        setIsLoading(true);
-        const result = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.getTemplate();
+  const getTemplateAction = async (): Promise<ServiceSelectAnswerVoteSelection> => {
+    try {
+      setIsLoading(true);
+      const result = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.getTemplate();
 
-        setData(result as ServiceSelectAnswerVoteSelectionStored);
+      setData(result as ServiceSelectAnswerVoteSelectionStored);
 
-        return result;
-      } catch (error) {
-        handleError(error);
-        return Promise.reject(error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions = {
-    serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormBack,
-    serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormCreate,
-    serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormGetTemplate,
+    backAction,
+    createAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_-cKskFtqEe6Mx9dH3yj5gQ)/RelationFeatureForm"
+      data-page-name="service::SelectAnswerVoteDefinition::voteSelections::Relation::Form::Page"
+    >
       <Suspense>
         <ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogContainer
           ownerData={ownerData}
@@ -236,6 +260,6 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

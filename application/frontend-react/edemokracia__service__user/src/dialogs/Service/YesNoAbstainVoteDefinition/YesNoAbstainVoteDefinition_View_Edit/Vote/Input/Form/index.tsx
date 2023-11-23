@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -34,6 +35,22 @@ import type {
   YesNoAbstainVoteValue,
 } from '~/services/data-api';
 import { serviceYesNoAbstainVoteDefinitionServiceImpl } from '~/services/data-axios';
+export type YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActionsExtended =
+  YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActions & {
+    postVoteForYesNoAbstainVoteDefinitionAction?: (
+      onSubmit: (result?: YesNoAbstainVoteInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_YES_NO_ABSTAIN_VOTE_DEFINITION_VIEW_EDIT_VOTE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
+  'YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionsHook';
+export type YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionsHook = (
+  ownerData: any,
+  data: YesNoAbstainVoteInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof YesNoAbstainVoteInput, value: any) => void,
+) => YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActionsExtended;
 
 export const useServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm = (): ((
   ownerData: any,
@@ -45,9 +62,9 @@ export const useServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -56,14 +73,14 @@ export const useServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
         children: (
           <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={() => {
-              closeDialog();
+            onSubmit={async () => {
+              await closeDialog();
               resolve({
                 result: 'submit',
               });
@@ -101,10 +118,11 @@ const YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogContainer = lazy(
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputFormProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: YesNoAbstainVoteInputStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: YesNoAbstainVoteInputStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationUnmappedInputPageDefinition
 // Name: service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit::vote::Input::Form
 export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(
   props: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputFormProps,
@@ -114,7 +132,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -160,6 +178,13 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_YES_NO_ABSTAIN_VOTE_DEFINITION_VIEW_EDIT_VOTE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
@@ -168,15 +193,20 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   });
 
   // Action section
-  const yesNoAbstainVoteInputYesNoAbstainVoteInput_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote =
-    async () => {
-      try {
-        setIsLoading(true);
-        await serviceYesNoAbstainVoteDefinitionServiceImpl.vote(ownerData, data);
+  const voteForYesNoAbstainVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceYesNoAbstainVoteDefinitionServiceImpl.vote(ownerData, data);
 
+      if (customActions?.postVoteForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postVoteForYesNoAbstainVoteDefinitionAction(
+          onSubmit,
+          onClose,
+        );
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -186,13 +216,14 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
         );
 
         onSubmit();
-      } catch (error) {
-        handleError<YesNoAbstainVoteInput>(error, { setValidation }, data);
-      } finally {
-        setIsLoading(false);
       }
-    };
-  const yesNoAbstainVoteInputYesNoAbstainVoteInput_FormGetTemplate = async (): Promise<YesNoAbstainVoteInput> => {
+    } catch (error) {
+      handleError<YesNoAbstainVoteInput>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const getTemplateAction = async (): Promise<YesNoAbstainVoteInput> => {
     try {
       setIsLoading(true);
       const result = await serviceYesNoAbstainVoteDefinitionServiceImpl.getTemplateForVote();
@@ -209,18 +240,22 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   };
 
   const actions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActions = {
-    yesNoAbstainVoteInputYesNoAbstainVoteInput_FormBack,
-    serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVote,
-    yesNoAbstainVoteInputYesNoAbstainVoteInput_FormGetTemplate,
+    backAction,
+    voteForYesNoAbstainVoteDefinitionAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.yesNoAbstainVoteInputYesNoAbstainVoteInput_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationUnmappedInputPageDefinition"
+      data-page-name="service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit::vote::Input::Form"
+    >
       <Suspense>
         <YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogContainer
           ownerData={ownerData}
@@ -238,6 +273,6 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

@@ -8,7 +8,7 @@
 
 import { styled } from '@mui/material/styles';
 import type { AppBarProps } from '@mui/material';
-import { AppBar } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
 import { DRAWER_WIDTH } from '~/config';
 
 export interface AppBarStyledProps extends AppBarProps {

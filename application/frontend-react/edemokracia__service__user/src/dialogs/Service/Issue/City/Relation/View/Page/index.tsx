@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -39,7 +40,16 @@ import type {
   ServiceIssue,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForCityImpl } from '~/services/data-axios';
+import { serviceCityServiceImpl } from '~/services/data-axios';
+export type ServiceCityCity_View_EditDialogActionsExtended = ServiceCityCity_View_EditDialogActions & {};
+
+export const SERVICE_ISSUE_CITY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceCityCity_View_EditActionsHook';
+export type ServiceCityCity_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceCityStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCity, value: any) => void,
+) => ServiceCityCity_View_EditDialogActionsExtended;
 
 export const useServiceIssueCityRelationViewPage = (): ((
   ownerData: any,
@@ -51,9 +61,9 @@ export const useServiceIssueCityRelationViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -62,14 +72,14 @@ export const useServiceIssueCityRelationViewPage = (): ((
         children: (
           <ServiceIssueCityRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -102,10 +112,11 @@ const ServiceCityCity_View_EditDialogContainer = lazy(
 export interface ServiceIssueCityRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceCityStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceCityStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/__tg8wNvTEe2Bgcx6em3jZg)/RelationFeatureView
 // Name: service::Issue::city::Relation::View::Page
 export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCityRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -113,7 +124,7 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -157,6 +168,17 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
     _mask: '{name,districts{name}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCityCity_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_CITY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCityCity_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceCityDistrictsRelationFormPage = useServiceCityDistrictsRelationFormPage();
   const openServiceCityDistrictsRelationViewPage = useServiceCityDistrictsRelationViewPage();
@@ -165,16 +187,14 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
   const title: string = data.representation as string;
 
   // Action section
-  const serviceCityCity_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceCityCity_View_EditRefresh = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored> => {
+  const refreshAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueServiceForCityImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceCityServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -195,14 +215,14 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceCityCity_View_EditDistrictsView = async (target?: ServiceDistrictStored) => {
+  const districtsOpenPageAction = async (target?: ServiceDistrictStored) => {
     await openServiceCityDistrictsRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceCityCity_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceCityCity_View_EditDistrictsFilter = async (
+  const districtsFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -213,13 +233,13 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
       filters: newFilters,
     };
   };
-  const serviceCityCity_View_EditDistrictsCreateOpen = async () => {
+  const districtsOpenFormAction = async () => {
     const { result, data: returnedData } = await openServiceCityDistrictsRelationFormPage(data);
-    if (!editMode) {
-      await actions.serviceCityCity_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceCityCity_View_EditDistrictsDelete = async (target: ServiceDistrictStored, silentMode?: boolean) => {
+  const districtsDeleteAction = async (target: ServiceDistrictStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -231,7 +251,7 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
           )
         : true;
       if (confirmed) {
-        await serviceIssueServiceForCityImpl.deleteDistricts(target);
+        await serviceCityServiceImpl.deleteDistricts(target);
 
         if (!silentMode) {
           enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
@@ -239,7 +259,7 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
             ...toastConfig.success,
           });
 
-          serviceCityCity_View_EditRefresh(pageQueryCustomizer);
+          refreshAction(pageQueryCustomizer);
         }
       }
     } catch (error) {
@@ -248,18 +268,18 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
       }
     }
   };
-  const serviceCityCity_View_EditDistrictsBulkDelete = async (
+  const districtsBulkDeleteAction = async (
     selectedRows: ServiceDistrictStored[],
   ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceDistrictStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.City.City_View_Edit.districts.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.name!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceCityCity_View_EditDistrictsDelete) {
-              await actions.serviceCityCity_View_EditDistrictsDelete!(item, true);
+            if (actions.districtsDeleteAction) {
+              await actions.districtsDeleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -268,8 +288,8 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
         },
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
-            if (actions.serviceCityCity_View_EditRefresh) {
-              await actions.serviceCityCity_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
             }
             resolve({
               result: 'submit',
@@ -287,22 +307,26 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
   };
 
   const actions: ServiceCityCity_View_EditDialogActions = {
-    serviceCityCity_View_EditBack,
-    serviceCityCity_View_EditRefresh,
-    serviceCityCity_View_EditDistrictsView,
-    serviceCityCity_View_EditDistrictsFilter,
-    serviceCityCity_View_EditDistrictsCreateOpen,
-    serviceCityCity_View_EditDistrictsDelete,
-    serviceCityCity_View_EditDistrictsBulkDelete,
+    backAction,
+    refreshAction,
+    districtsOpenPageAction,
+    districtsFilterAction,
+    districtsOpenFormAction,
+    districtsDeleteAction,
+    districtsBulkDeleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceCityCity_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/__tg8wNvTEe2Bgcx6em3jZg)/RelationFeatureView"
+      data-page-name="service::Issue::city::Relation::View::Page"
+    >
       <Suspense>
         <ServiceCityCity_View_EditDialogContainer
           ownerData={ownerData}
@@ -320,6 +344,6 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

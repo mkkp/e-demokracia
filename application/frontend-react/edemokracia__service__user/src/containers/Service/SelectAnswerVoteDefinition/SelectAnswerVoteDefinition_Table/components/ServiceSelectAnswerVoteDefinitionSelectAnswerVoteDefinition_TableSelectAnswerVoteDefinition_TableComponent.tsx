@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,42 +66,29 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentActionDefinitions {
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableAddOpenSelector?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: ServiceSelectAnswerVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceSelectAnswerVoteDefinitionStored[]>>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: ServiceSelectAnswerVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceSelectAnswerVoteDefinitionStored[]>>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableClear?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableCreateOpen?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableRefresh?: (
+  refreshAction?: (
     queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceSelectAnswerVoteDefinitionStored[]>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableDelete?: (
-    row: ServiceSelectAnswerVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableRemove?: (
-    row: ServiceSelectAnswerVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableView?: (
-    row: ServiceSelectAnswerVoteDefinitionStored,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote?: (
-    row: ServiceSelectAnswerVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOperationFormTableRowCallButtonOpenSelector?: (
-    row: ServiceSelectAnswerVoteDefinitionStored,
-  ) => Promise<void>;
+  deleteAction?: (row: ServiceSelectAnswerVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceSelectAnswerVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceSelectAnswerVoteDefinitionStored) => Promise<void>;
+  takeBackVoteForSelectAnswerVoteDefinitionAction?: (row: ServiceSelectAnswerVoteDefinitionStored) => Promise<void>;
+  voteAction?: (row: ServiceSelectAnswerVoteDefinitionStored) => Promise<void>;
 }
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentProps {
@@ -161,7 +152,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.title', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -173,7 +164,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.created', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -200,7 +191,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.description', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -212,7 +203,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.status', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
         defaultValue: 'Status',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -233,7 +224,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     {
       ...baseColumnConfig,
       field: 'closeAt',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.closeAt', {
+      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -262,98 +253,90 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
   const rowActions: TableRowAction<ServiceSelectAnswerVoteDefinitionStored>[] = [
     {
       id: 'User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Remove', {
+        defaultValue: 'Remove',
+      }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Delete', {
+        defaultValue: 'Delete',
+      }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.__deleteable || isLoading,
-      action: actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.vote', {
-        defaultValue: 'vote',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action:
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOperationFormTableRowCallButtonOpenSelector
-          ? async (rowData) => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOperationFormTableRowCallButtonOpenSelector!(
-                rowData,
-              );
-            }
-          : undefined,
-    },
-    {
-      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowButtonGroup)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.takeBackVote', {
+      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
         defaultValue: 'takeBackVote',
       }) as string,
       icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action:
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote
-          ? async (rowData) => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote!(
-                rowData,
-              );
-            }
-          : undefined,
+      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.vote', {
+        defaultValue: 'vote',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
     },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fj75UX2GEe6V8KKnnZfChA',
+      id: '_0Hl9QooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.title::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
         defaultValue: 'Title',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fj8gYH2GEe6V8KKnnZfChA',
+      id: '_0HmkU4oAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.created::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
         defaultValue: 'Created',
       }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fj8gZH2GEe6V8KKnnZfChA',
+      id: '_0HnLYIoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.description::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
         defaultValue: 'Description',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fj9Hcn2GEe6V8KKnnZfChA',
+      id: '_0HnLZIoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.status::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
         defaultValue: 'Status',
       }) as string,
       filterType: FilterType.enumeration,
@@ -361,9 +344,9 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_fj9ugH2GEe6V8KKnnZfChA',
+      id: '_0HnycIoAEe6F9LXBn0VWTg',
       attributeName: 'closeAt',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.closeAt::Filter', {
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
       }) as string,
       filterType: FilterType.dateTime,
@@ -439,9 +422,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -467,7 +448,10 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable"
+      data-table-name="SelectAnswerVoteDefinition_Table"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -500,9 +484,9 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableView
+          actions.openPageAction
             ? async (params: GridRowParams<ServiceSelectAnswerVoteDefinitionStored>) =>
-                await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableView!(params.row)
+                await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -512,142 +496,124 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableFilter!(
-                        'User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.filterAction!(
+                      'User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Table.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Table.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableCreateOpen && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableCreateOpen!();
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Add', {
+                    defaultValue: 'Add',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Set', {
+                    defaultValue: 'Set',
+                  })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Clear', {
+                    defaultValue: 'Clear',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBulkRemove &&
-              selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.BulkRemove', {
+                    defaultValue: 'Remove',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.BulkDelete', {
+                    defaultValue: 'Delete',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -678,6 +644,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

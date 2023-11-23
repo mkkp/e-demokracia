@@ -40,3 +40,5 @@ export const debounceInputs: number = 500;
 export const animationDuration: number = 0.8;
 
 export const delayDuration: number = 0.2;
+
+export const dialogStackCloseDelay: number = 50;

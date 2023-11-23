@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,13 +34,13 @@ const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionRef
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDialogActions
   extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableActionDefinitions {
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -57,7 +62,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
       <DialogTitle>
         {title}
         <IconButton
-          id="CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_Table-dialog-close-wrapper"
+          id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -79,28 +84,26 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode &&
-          actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBack && (
-            <Grid className="page-action" item>
-              <LoadingButton
-                id="CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Back"
-                loading={isLoading}
-                loadingPosition="start"
-                variant={'text'}
-                startIcon={<MdiIcon path="arrow-left" />}
-                onClick={async () => {
-                  await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBack!();
-                }}
-              >
-                <span>
-                  {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Back',
-                    { defaultValue: 'Back' },
-                  )}
-                </span>
-              </LoadingButton>
-            </Grid>
-          )}
+        {!editMode && actions.backAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableBackButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'text'}
+              startIcon={<MdiIcon path="arrow-left" />}
+              onClick={async () => {
+                await actions.backAction!();
+              }}
+            >
+              <span>
+                {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Back', {
+                  defaultValue: 'Back',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
       </DialogActions>
     </>
   );

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -40,12 +41,30 @@ import type {
   ServiceDistrict,
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
+  ServiceIssue,
   ServiceIssueStored,
   ServiceIssueType,
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueTypeStored,
 } from '~/services/data-api';
 import { serviceUserIssuesServiceImpl } from '~/services/data-axios';
+export type ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended =
+  ServiceCreateIssueInputCreateIssueInput_FormDialogActions & {
+    postCreateIssueForUserIssuesAction?: (
+      output: ServiceIssue,
+      onSubmit: (result?: ServiceIssueStored) => Promise<void>,
+      onClose: () => Promise<void>,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCreateIssueInputCreateIssueInput_FormActionsHook';
+export type ServiceCreateIssueInputCreateIssueInput_FormActionsHook = (
+  ownerData: any,
+  data: ServiceCreateIssueInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void,
+) => ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended;
 
 export const useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm = (): ((
   ownerData: any,
@@ -57,9 +76,9 @@ export const useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm = (): 
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -68,14 +87,14 @@ export const useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm = (): 
         children: (
           <ServiceUserIssuesUserIssues_View_EditCreateIssueInputForm
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -114,10 +133,11 @@ const ServiceCreateIssueInputCreateIssueInput_FormDialogContainer = lazy(
 export interface ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationUnmappedInputPageDefinition
 // Name: service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form
 export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputForm(
   props: ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps,
@@ -127,7 +147,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -172,34 +192,49 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCreateIssueInputCreateIssueInput_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.CreateIssueInput.CreateIssueInput_Form', { defaultValue: 'CreateIssueInput Form' });
+  const title: string = t('service.CreateIssueInput.CreateIssueInput_Form', { defaultValue: 'CreateIssueInput Form' });
 
   // Action section
-  const serviceCreateIssueInputCreateIssueInput_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssue = async () => {
+  const createIssueForUserIssuesAction = async () => {
     try {
       setIsLoading(true);
       const result = await serviceUserIssuesServiceImpl.createIssue(
         data,
       );
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (result) {
-        onSubmit(result);
+      if (customActions?.postCreateIssueForUserIssuesAction) {
+        await customActions.postCreateIssueForUserIssuesAction(
+          result,
+          onSubmit,
+          onClose,
+        );
       } else {
-        onSubmit();
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (result) {
+          onSubmit(result);
+        } else {
+          onSubmit();
+        }
       }
     } catch (error) {
       handleError<ServiceCreateIssueInput>(error, { setValidation }, data);
@@ -207,7 +242,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       setIsLoading(false);
     }
   };
-  const serviceCreateIssueInputCreateIssueInput_FormGetTemplate = async (): Promise<ServiceCreateIssueInput> => {
+  const getTemplateAction = async (): Promise<ServiceCreateIssueInput> => {
     try {
       setIsLoading(true);
       const result = await serviceUserIssuesServiceImpl.getTemplateForCreateIssue();
@@ -224,18 +259,22 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   const actions: ServiceCreateIssueInputCreateIssueInput_FormDialogActions = {
-    serviceCreateIssueInputCreateIssueInput_FormBack,
-    serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssue,
-    serviceCreateIssueInputCreateIssueInput_FormGetTemplate,
+    backAction,
+    createIssueForUserIssuesAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceCreateIssueInputCreateIssueInput_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationUnmappedInputPageDefinition"
+      data-page-name="service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form"
+    >
       <Suspense>
         <ServiceCreateIssueInputCreateIssueInput_FormDialogContainer
           ownerData={ownerData}
@@ -253,6 +292,6 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -34,6 +35,16 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import { userServiceForAdminIssueTypesImpl } from '~/services/data-axios';
+export type ServiceIssueTypeIssueType_FormDialogActionsExtended = ServiceIssueTypeIssueType_FormDialogActions & {};
+
+export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueTypeIssueType_FormActionsHook';
+export type ServiceIssueTypeIssueType_FormActionsHook = (
+  ownerData: any,
+  data: ServiceIssueTypeStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+) => ServiceIssueTypeIssueType_FormDialogActionsExtended;
 
 export const useServiceUserAdminIssueTypesAccessFormPage = (): ((
   ownerData: any,
@@ -45,9 +56,9 @@ export const useServiceUserAdminIssueTypesAccessFormPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xs',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -56,14 +67,14 @@ export const useServiceUserAdminIssueTypesAccessFormPage = (): ((
         children: (
           <ServiceUserAdminIssueTypesAccessFormPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -99,10 +110,11 @@ const ServiceIssueTypeIssueType_FormDialogContainer = lazy(
 export interface ServiceUserAdminIssueTypesAccessFormPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueTypeStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition
 // Name: service::User::adminIssueTypes::Access::Form::Page
 export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceUserAdminIssueTypesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -110,7 +122,7 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -155,16 +167,27 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueTypeIssueType_FormDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.IssueType.IssueType_Form', { defaultValue: 'IssueType Form' });
+  const title: string = t('service.IssueType.IssueType_Form', { defaultValue: 'IssueType Form' });
 
   // Action section
-  const serviceIssueTypeIssueType_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueTypeIssueType_FormCreate = async () => {
+  const createAction = async () => {
     try {
       setIsLoading(true);
       const res = await userServiceForAdminIssueTypesImpl.create(data);
@@ -181,7 +204,7 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
       setIsLoading(false);
     }
   };
-  const serviceIssueTypeIssueType_FormGetTemplate = async (): Promise<ServiceIssueType> => {
+  const getTemplateAction = async (): Promise<ServiceIssueType> => {
     try {
       setIsLoading(true);
       const result = await userServiceForAdminIssueTypesImpl.getTemplate();
@@ -198,18 +221,22 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
   };
 
   const actions: ServiceIssueTypeIssueType_FormDialogActions = {
-    serviceIssueTypeIssueType_FormBack,
-    serviceIssueTypeIssueType_FormCreate,
-    serviceIssueTypeIssueType_FormGetTemplate,
+    backAction,
+    createAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceIssueTypeIssueType_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition"
+      data-page-name="service::User::adminIssueTypes::Access::Form::Page"
+    >
       <Suspense>
         <ServiceIssueTypeIssueType_FormDialogContainer
           ownerData={ownerData}
@@ -227,6 +254,6 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

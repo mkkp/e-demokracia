@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,27 +69,17 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCityCity_View_EditDistrictsComponentActionDefinitions {
-  serviceCityCity_View_EditDistrictsAddOpenSelector?: () => Promise<void>;
-  serviceCityCity_View_EditDistrictsBulkDelete?: (
-    selectedRows: ServiceDistrictStored[],
-  ) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  serviceCityCity_View_EditDistrictsBulkRemove?: (
-    selectedRows: ServiceDistrictStored[],
-  ) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  serviceCityCity_View_EditDistrictsClear?: () => Promise<void>;
-  serviceCityCity_View_EditDistrictsCreateOpen?: () => Promise<void>;
-  serviceCityCity_View_EditDistrictsFilter?: (
+  districtsBulkDeleteAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
+  districtsOpenFormAction?: () => Promise<void>;
+  districtsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCityCity_View_EditDistrictsRefresh?: (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ) => Promise<ServiceDistrictStored[]>;
-  serviceCityCity_View_EditDistrictsDelete?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
-  serviceCityCity_View_EditDistrictsRemove?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
-  serviceCityCity_View_EditDistrictsView?: (row: ServiceDistrictStored) => Promise<void>;
+  districtsRefreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<ServiceDistrictStored[]>;
+  districtsDeleteAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
+  districtsOpenPageAction?: (row: ServiceDistrictStored) => Promise<void>;
 }
 
 export interface ServiceCityCity_View_EditDistrictsComponentProps {
@@ -145,7 +139,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
     {
       ...baseColumnConfig,
       field: 'name',
-      headerName: t('service.City.City.View.Edit.name', { defaultValue: 'Name' }) as string,
+      headerName: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -156,28 +150,13 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [
     {
-      id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-      label: t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceDistrictStored) => isLoading,
-      action: actions.serviceCityCity_View_EditDistrictsRemove
-        ? async (rowData) => {
-            await actions.serviceCityCity_View_EditDistrictsRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.City.City_View_Edit.districts.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceDistrictStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceCityCity_View_EditDistrictsDelete
+      action: actions.districtsDeleteAction
         ? async (rowData) => {
-            await actions.serviceCityCity_View_EditDistrictsDelete!(rowData);
+            await actions.districtsDeleteAction!(rowData);
           }
         : undefined,
     },
@@ -185,9 +164,9 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_frpq4n2GEe6V8KKnnZfChA',
+      id: '_0OBVYIoAEe6F9LXBn0VWTg',
       attributeName: 'name',
-      label: t('service.City.City.View.Edit.name::Filter', { defaultValue: 'Name' }) as string,
+      label: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -253,7 +232,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
   }, [ownerData?.districts, filters]);
 
   return (
-    <>
+    <div id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable" data-table-name="districts">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -287,9 +266,8 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceCityCity_View_EditDistrictsView
-            ? async (params: GridRowParams<ServiceDistrictStored>) =>
-                await actions.serviceCityCity_View_EditDistrictsView!(params.row)
+          actions.districtsOpenPageAction
+            ? async (params: GridRowParams<ServiceDistrictStored>) => await actions.districtsOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -299,13 +277,13 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCityCity_View_EditDistrictsFilter && true ? (
+              {actions.districtsFilterAction && true ? (
                 <Button
                   id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCityCity_View_EditDistrictsFilter!(
+                    const filterResults = await actions.districtsFilterAction!(
                       'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -317,110 +295,50 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.City.City_View_Edit.districts.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_View_EditDistrictsRefresh && true ? (
+              {actions.districtsRefreshAction && true ? (
                 <Button
                   id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCityCity_View_EditDistrictsRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.districtsRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.City.City_View_Edit.districts.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_View_EditDistrictsCreateOpen && true ? (
+              {actions.districtsOpenFormAction && true ? (
                 <Button
                   id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCityCity_View_EditDistrictsCreateOpen!();
+                    await actions.districtsOpenFormAction!();
                   }}
                   disabled={editMode || isLoading}
                 >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.City.City_View_Edit.districts.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceCityCity_View_EditDistrictsAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceCityCity_View_EditDistrictsAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Add', {
-                    defaultValue: 'Add',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceCityCity_View_EditDistrictsClear && data.length ? (
-                <Button
-                  id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceCityCity_View_EditDistrictsClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::Clear', {
-                    defaultValue: 'Clear',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceCityCity_View_EditDistrictsBulkRemove && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCityCity_View_EditDistrictsBulkRemove!(
-                      selectedRows.current,
-                    );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceCityCity_View_EditDistrictsBulkDelete && selectionModel.length > 0 ? (
+              {actions.districtsBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCityCity_View_EditDistrictsBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.districtsBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.City.City.View.Edit.service::City::City_View_Edit::districts::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.City.City_View_Edit.districts.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -442,6 +360,6 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

@@ -13,9 +13,17 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +45,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   SelectAnswerVoteSelection,
@@ -98,10 +112,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_Form(
           id="User/(esm/_OfPXEFv5Ee6nEc5rp_Qy4A)/StringTypeTextInput"
           autoFocus
           label={
-            t(
-              'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Form.title.SelectAnswerVoteSelection_Form.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form',
-              { defaultValue: 'Title' },
-            ) as string
+            t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.title', { defaultValue: 'Title' }) as string
           }
           value={data.title ?? ''}
           className={clsx({
@@ -133,10 +144,9 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_Form(
           name="description"
           id="User/(esm/_OfPXEVv5Ee6nEc5rp_Qy4A)/StringTypeTextArea"
           label={
-            t(
-              'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Form.description.SelectAnswerVoteSelection_Form.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form',
-              { defaultValue: 'Description' },
-            ) as string
+            t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.description', {
+              defaultValue: 'Description',
+            }) as string
           }
           value={data.description ?? ''}
           className={clsx({

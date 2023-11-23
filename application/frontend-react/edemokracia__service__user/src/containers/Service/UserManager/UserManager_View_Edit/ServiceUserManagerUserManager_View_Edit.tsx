@@ -13,9 +13,15 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +43,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceServiceUser,
@@ -52,7 +64,7 @@ import { ServiceUserManagerUserManager_View_EditUsersComponent } from './compone
 
 export interface ServiceUserManagerUserManager_View_EditActionDefinitions
   extends ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions {
-  serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUserOpenForm?: () => Promise<void>;
+  createUserAction?: () => Promise<void>;
 }
 
 export interface ServiceUserManagerUserManager_View_EditProps {
@@ -106,15 +118,15 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
               startIcon={<MdiIcon path="account-plus" />}
               loadingPosition="start"
               onClick={
-                actions.serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUserOpenForm
+                actions.createUserAction
                   ? async () => {
-                      await actions.serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUserOpenForm!();
+                      await actions.createUserAction!();
                     }
                   : undefined
               }
               disabled={editMode}
             >
-              <span>{t('service.UserManager.UserManager.View.Edit.createUser', { defaultValue: 'Create User' })}</span>
+              <span>{t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}</span>
             </LoadingButton>
           </Grid>
         </Grid>
@@ -129,7 +141,7 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
           justifyContent="flex-start"
         >
           <ServiceUserManagerUserManager_View_EditUsersComponent
-            uniqueId={'TMP'}
+            uniqueId={'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'}
             actions={actions}
             ownerData={data}
             editMode={editMode}

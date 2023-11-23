@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -21,13 +26,13 @@ const ServiceCountyCounty_Table = lazy(
 );
 
 export interface ServiceCountyCounty_TableDialogActions extends ServiceCountyCounty_TableActionDefinitions {
-  serviceCountyCounty_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceCountyCounty_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceCountyCounty_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -47,7 +52,7 @@ export default function ServiceCountyCounty_TableDialog(props: ServiceCountyCoun
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceCountyCounty_Table-dialog-close-wrapper"
+          id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -66,21 +71,19 @@ export default function ServiceCountyCounty_TableDialog(props: ServiceCountyCoun
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceCountyCounty_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::County::County_Table::Back"
+              id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceCountyCounty_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.County.County.Table.service::County::County_Table::Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('service.County.County_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

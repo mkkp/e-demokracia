@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,7 +25,7 @@ const ServiceUserIssuesUserIssues_Table = lazy(
 
 export interface ServiceUserIssuesUserIssues_TablePageActions
   extends ServiceUserIssuesUserIssues_TableActionDefinitions {
-  serviceUserIssuesUserIssues_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceUserIssuesUserIssues_TablePageProps {
@@ -45,23 +47,19 @@ export default function ServiceUserIssuesUserIssues_TablePage(props: ServiceUser
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceUserIssuesUserIssues_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserIssues::UserIssues_Table::Back"
+              id="User/(esm/_jK51vlq4Ee6_67aMO2jOsw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceUserIssuesUserIssues_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.UserIssues.UserIssues.Table.service::UserIssues::UserIssues_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.UserIssues.UserIssues_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

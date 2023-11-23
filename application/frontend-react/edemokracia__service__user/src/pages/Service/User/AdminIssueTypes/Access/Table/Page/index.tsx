@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,14 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import { userServiceForAdminIssueTypesImpl } from '~/services/data-axios';
+export type ServiceIssueTypeIssueType_TablePageActionsExtended = ServiceIssueTypeIssueType_TablePageActions & {};
+
+export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueTypeIssueType_TableActionsHook';
+export type ServiceIssueTypeIssueType_TableActionsHook = (
+  data: ServiceIssueTypeStored[],
+  editMode: boolean,
+) => ServiceIssueTypeIssueType_TablePageActionsExtended;
 
 const ServiceIssueTypeIssueType_TablePageContainer = lazy(
   () => import('~/containers/Service/IssueType/IssueType_Table/ServiceIssueTypeIssueType_TablePageContainer'),
@@ -48,7 +57,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -61,20 +70,29 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceIssueTypeStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueTypeIssueType_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
   const openServiceUserAdminIssueTypesAccessFormPage = useServiceUserAdminIssueTypesAccessFormPage();
   const openServiceUserAdminIssueTypesAccessViewPage = useServiceUserAdminIssueTypesAccessViewPage();
 
   // Calculated section
-  const title: string = t('Service.IssueType.IssueType_Table', { defaultValue: 'IssueType Table' });
+  const title: string = t('service.IssueType.IssueType_Table', { defaultValue: 'IssueType Table' });
 
   // Action section
-  const serviceIssueTypeIssueType_TableView = async (target?: ServiceIssueTypeStored) => {
+  const openPageAction = async (target?: ServiceIssueTypeStored) => {
     await openServiceUserAdminIssueTypesAccessViewPage(target!);
 
     setRefreshCounter((prev) => prev + 1);
   };
-  const serviceIssueTypeIssueType_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -85,9 +103,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       filters: newFilters,
     };
   };
-  const serviceIssueTypeIssueType_TableTableRefresh = async (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored[]> => {
+  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored[]> => {
     try {
       setIsLoading(true);
       setEditMode(false);
@@ -100,11 +116,13 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceIssueTypeIssueType_TableCreateOpen = async () => {
+  const openFormAction = async () => {
     const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(data);
-    setRefreshCounter((prev) => prev + 1);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
   };
-  const serviceIssueTypeIssueType_TableDelete = async (target: ServiceIssueTypeStored, silentMode?: boolean) => {
+  const deleteAction = async (target: ServiceIssueTypeStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -133,18 +151,18 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       }
     }
   };
-  const serviceIssueTypeIssueType_TableBulkDelete = async (
+  const bulkDeleteAction = async (
     selectedRows: ServiceIssueTypeStored[],
   ): Promise<DialogResult<Array<ServiceIssueTypeStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueTypeStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.IssueType.IssueType_Table.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceIssueTypeIssueType_TableDelete) {
-              await actions.serviceIssueTypeIssueType_TableDelete!(item, true);
+            if (actions.deleteAction) {
+              await actions.deleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -170,27 +188,33 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   };
 
   const actions: ServiceIssueTypeIssueType_TablePageActions = {
-    serviceIssueTypeIssueType_TableView,
-    serviceIssueTypeIssueType_TableTableFilter,
-    serviceIssueTypeIssueType_TableTableRefresh,
-    serviceIssueTypeIssueType_TableCreateOpen,
-    serviceIssueTypeIssueType_TableDelete,
-    serviceIssueTypeIssueType_TableBulkDelete,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    openFormAction,
+    deleteAction,
+    bulkDeleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceIssueTypeIssueType_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessTablePageDefinition"
+      data-page-name="service::User::adminIssueTypes::Access::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceIssueTypeIssueType_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

@@ -13,9 +13,17 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +45,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssueCategory,
@@ -101,12 +115,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
           name="title"
           id="User/(esm/_T0LtQG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
           autoFocus
-          label={
-            t(
-              'service.IssueCategory.IssueCategory.Form.title.IssueCategory_Form.service::IssueCategory::IssueCategory_Form',
-              { defaultValue: 'Title' },
-            ) as string
-          }
+          label={t('service.IssueCategory.IssueCategory_Form.title', { defaultValue: 'Title' }) as string}
           value={data.title ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -136,12 +145,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
           required={true}
           name="description"
           id="User/(esm/_T0Rz4G49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-          label={
-            t(
-              'service.IssueCategory.IssueCategory.Form.description.IssueCategory_Form.service::IssueCategory::IssueCategory_Form',
-              { defaultValue: 'Description' },
-            ) as string
-          }
+          label={t('service.IssueCategory.IssueCategory_Form.description', { defaultValue: 'Description' }) as string}
           value={data.description ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,

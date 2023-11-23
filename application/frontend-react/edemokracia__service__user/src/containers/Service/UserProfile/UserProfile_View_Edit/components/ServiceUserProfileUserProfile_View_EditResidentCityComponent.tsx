@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,14 +26,8 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentActionDefinitions {
-  serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityCreate?: () => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityDelete?: (
-    target: ServiceCityStored,
-  ) => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetOpenSelector?: () => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityUnset?: (target: ServiceCityStored) => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityView?: (target: ServiceCityStored) => Promise<void>;
-  serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityAutocomplete?: (
+  residentCityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
+  residentCityAutocompleteRangeAction?: (
     queryCustomizer: ServiceCityQueryCustomizer,
   ) => Promise<Array<ServiceCityStored>>;
 }
@@ -59,12 +53,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
     <AggregationInput
       name="residentCity"
       id="User/(esm/_fsW_pFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.UserProfile.UserProfile.View.Edit.residentCity.Residency.Areas.Areas::LabelWrapper.UserProfile_View_Edit.service::UserProfile::UserProfile_View_Edit',
-          { defaultValue: 'Resident city' },
-        ) as string
-      }
+      label={t('service.UserProfile.UserProfile_View_Edit.residentCity', { defaultValue: 'Resident city' }) as string}
       labelList={[ownerData.residentCity?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -77,7 +66,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
         storeDiff('residentCity', residentCity);
       }}
       onAutoCompleteSearch={
-        actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityAutocomplete
+        actions.residentCityAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceCityQueryCustomizer = {
                 ...(searchText?.length
@@ -89,45 +78,15 @@ export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.residentCityAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.residentCity && actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityView
+        ownerData.residentCity && actions.residentCityOpenPageAction
           ? async () => {
-              await actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityView!(
-                ownerData.residentCity!,
-              );
+              await actions.residentCityOpenPageAction!(ownerData.residentCity!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityCreate
-          ? async () => {
-              await actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.residentCity && actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityDelete
-          ? async () =>
-              actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityDelete!(ownerData.residentCity!)
-          : undefined
-      }
-      onSet={
-        actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetOpenSelector
-          ? async () => {
-              await actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.residentCity && actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityUnset
-          ? async () =>
-              actions.serviceUserProfileUserProfile_View_EditAreasResidencyResidentCityUnset!(ownerData.residentCity!)
           : undefined
       }
     ></AggregationInput>

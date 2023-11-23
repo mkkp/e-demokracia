@@ -25,8 +25,8 @@ import {
   ServiceCountyStored,
   ServiceConQueryCustomizer,
   ServiceCounty,
-  ServiceProStored,
   CreateArgumentInput,
+  ServiceProStored,
   ServicePro,
   CloseDebateInput,
   ServiceIssueType,
@@ -122,10 +122,15 @@ export interface ServiceDashboardServiceForFavoriteIssues {
     owner: JudoIdentifiable<ServiceIssue>,
     selected: Array<JudoIdentifiable<ServiceIssueCategory>>,
   ): Promise<void>;
+
   listComments(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<Array<ServiceCommentStored>>;
+
+  voteDownForComments(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+
+  voteUpForComments(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 
   getCreatedBy(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -205,6 +210,18 @@ export interface ServiceDashboardServiceForFavoriteIssues {
 
   updateCons(owner: JudoIdentifiable<ServiceIssue>, target: Partial<ServiceConStored>): Promise<ServiceConStored>;
 
+  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForCons(): Promise<CreateArgumentInput>;
+
+  createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForCons(): Promise<CreateArgumentInput>;
+
+  voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
+
+  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
+
   listPros(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceProQueryCustomizer,
@@ -214,21 +231,25 @@ export interface ServiceDashboardServiceForFavoriteIssues {
 
   updatePros(owner: JudoIdentifiable<ServiceIssue>, target: Partial<ServiceProStored>): Promise<ServiceProStored>;
 
-  createProArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
 
-  getTemplateForCreateProArgument(): Promise<CreateArgumentInput>;
+  getTemplateForCreateProArgumentForPros(): Promise<CreateArgumentInput>;
+
+  createConArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForPros(): Promise<CreateArgumentInput>;
+
+  voteUpForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
+
+  voteDownForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
 
   createConArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
 
   getTemplateForCreateConArgument(): Promise<CreateArgumentInput>;
 
-  activate(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  createProArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
 
-  closeVote(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  deleteOrArchive(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  removeFromFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  getTemplateForCreateProArgument(): Promise<CreateArgumentInput>;
 
   closeDebate(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -236,6 +257,14 @@ export interface ServiceDashboardServiceForFavoriteIssues {
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
 
   getTemplateForCloseDebate(): Promise<CloseDebateInput>;
+
+  removeFromFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  closeVote(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchive(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activate(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
   addToFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 

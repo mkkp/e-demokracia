@@ -13,9 +13,16 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -65,10 +72,9 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_Table(
             <Grid item xs={12} sm={12}>
               <Typography id="User/(esm/_J1KA4FslEe6Mx9dH3yj5gQ)/TransferObjectTableEmpty">
                 {
-                  t(
-                    'service.RatingVoteEntry.RatingVoteEntry.Table.RatingVoteEntry_Table.RatingVoteEntry_Table.service::RatingVoteEntry::RatingVoteEntry_Table',
-                    { defaultValue: 'No columns.' },
-                  ) as string
+                  t('service.RatingVoteEntry.RatingVoteEntry_Table.RatingVoteEntry_Table', {
+                    defaultValue: 'No columns.',
+                  }) as string
                 }
               </Typography>
             </Grid>

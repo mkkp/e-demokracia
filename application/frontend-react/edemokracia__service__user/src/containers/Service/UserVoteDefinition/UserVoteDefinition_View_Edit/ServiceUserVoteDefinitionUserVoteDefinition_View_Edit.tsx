@@ -13,9 +13,15 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +43,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceUserVoteDefinition,
@@ -136,8 +148,8 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
               childTabs={[
                 {
                   id: 'User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupTab',
-                  name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.OwnedVoteDefinitionsGroup',
-                  label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.OwnedVoteDefinitionsGroup', {
+                  name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.OwnedVoteDefinitionsGroup',
+                  label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.OwnedVoteDefinitionsGroup', {
                     defaultValue: 'Owned Votes',
                   }) as string,
                   disabled: isLoading,
@@ -147,8 +159,8 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                 },
                 {
                   id: 'User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupTab',
-                  name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveGlobalVoteDefinitionsGroup',
-                  label: t('service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveGlobalVoteDefinitionsGroup', {
+                  name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveGlobalVoteDefinitionsGroup',
+                  label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveGlobalVoteDefinitionsGroup', {
                     defaultValue: 'Active Global Votes',
                   }) as string,
                   disabled: isLoading,
@@ -158,9 +170,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                 },
                 {
                   id: 'User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupTab',
-                  name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsByOwnerActivityArea',
+                  name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerActivityArea',
                   label: t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsByOwnerActivityArea',
+                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerActivityArea',
                     { defaultValue: 'Active votes bv my activity areas' },
                   ) as string,
                   disabled: isLoading,
@@ -174,9 +186,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                 },
                 {
                   id: 'User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupTab',
-                  name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsByOwnerResidentAreaGroup',
+                  name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerResidentAreaGroup',
                   label: t(
-                    'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsByOwnerResidentAreaGroup',
+                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerResidentAreaGroup',
                     { defaultValue: 'Active votes by my resident area' },
                   ) as string,
                   disabled: isLoading,
@@ -208,7 +220,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       justifyContent="flex-start"
                     >
                       <ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent
-                        uniqueId={'TMP'}
+                        uniqueId={'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'}
                         actions={actions}
                         ownerData={data}
                         editMode={editMode}
@@ -239,7 +251,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       justifyContent="flex-start"
                     >
                       <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponent
-                        uniqueId={'TMP'}
+                        uniqueId={'User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'}
                         actions={actions}
                         ownerData={data}
                         editMode={editMode}
@@ -270,9 +282,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       childTabs={[
                         {
                           id: 'User/(esm/_-qljoF5KEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
+                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
                           label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
+                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
                             { defaultValue: 'County' },
                           ) as string,
                           disabled: isLoading,
@@ -282,9 +294,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                         },
                         {
                           id: 'User/(esm/__jKxcF5KEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsInActivityCityGroup',
+                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCityGroup',
                           label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsInActivityCityGroup',
+                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCityGroup',
                             { defaultValue: 'City' },
                           ) as string,
                           disabled: isLoading,
@@ -294,9 +306,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                         },
                         {
                           id: 'User/(esm/_APhhIF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
+                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
                           label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
+                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
                             { defaultValue: 'District' },
                           ) as string,
                           disabled: isLoading,
@@ -324,7 +336,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                               justifyContent="flex-start"
                             >
                               <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCountiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -355,7 +369,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                               justifyContent="flex-start"
                             >
                               <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCitiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_59d3wF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -386,7 +402,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                               justifyContent="flex-start"
                             >
                               <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityDistrictsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -421,9 +439,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       childTabs={[
                         {
                           id: 'User/(esm/_BgLQsF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveDebatesInResidentCountyGroup',
+                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCountyGroup',
                           label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveDebatesInResidentCountyGroup',
+                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCountyGroup',
                             { defaultValue: 'County' },
                           ) as string,
                           disabled: isLoading,
@@ -433,9 +451,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                         },
                         {
                           id: 'User/(esm/_CEZ_IF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveDebatesInResidentCityGroup',
+                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCityGroup',
                           label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveDebatesInResidentCityGroup',
+                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCityGroup',
                             { defaultValue: 'City' },
                           ) as string,
                           disabled: isLoading,
@@ -445,9 +463,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                         },
                         {
                           id: 'User/(esm/_Cwu5oF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveDebatesInResidentDistrictGroup',
+                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentDistrictGroup',
                           label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition.View.Edit.ActiveDebatesInResidentDistrictGroup',
+                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentDistrictGroup',
                             { defaultValue: 'District' },
                           ) as string,
                           disabled: isLoading,
@@ -475,7 +493,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                               justifyContent="flex-start"
                             >
                               <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCountyComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -506,7 +526,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                               justifyContent="flex-start"
                             >
                               <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCityComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_yjuNkF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -537,7 +559,9 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                               justifyContent="flex-start"
                             >
                               <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentDistrictComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}

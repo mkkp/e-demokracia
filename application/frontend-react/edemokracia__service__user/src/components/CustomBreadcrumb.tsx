@@ -6,7 +6,9 @@
 // Template name: actor/src/components/CustomBreadcrumb.tsx
 // Template file: actor/src/components/CustomBreadcrumb.tsx.hbs
 
-import { Breadcrumbs, Typography, Link } from '@mui/material';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import { useState, useContext, createContext, useMemo, useEffect, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';

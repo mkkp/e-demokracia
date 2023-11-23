@@ -102,7 +102,7 @@ export class ServiceIssueCategoryServiceImpl extends JudoAxiosService implements
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getSubcategories(
+  async listSubcategories(
     target: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
   ): Promise<Array<ServiceIssueCategoryStored>> {

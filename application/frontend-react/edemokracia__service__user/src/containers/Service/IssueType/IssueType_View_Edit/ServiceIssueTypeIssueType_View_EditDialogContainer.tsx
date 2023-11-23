@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -23,19 +28,17 @@ const ServiceIssueTypeIssueType_View_Edit = lazy(
 
 export interface ServiceIssueTypeIssueType_View_EditDialogActions
   extends ServiceIssueTypeIssueType_View_EditActionDefinitions {
-  serviceIssueTypeIssueType_View_EditBack?: () => Promise<void>;
-  serviceIssueTypeIssueType_View_EditCancel?: () => Promise<void>;
-  serviceIssueTypeIssueType_View_EditDelete?: () => Promise<void>;
-  serviceIssueTypeIssueType_View_EditRefresh?: (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ) => Promise<ServiceIssueTypeStored>;
-  serviceIssueTypeIssueType_View_EditUpdate?: () => Promise<void>;
+  backAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  deleteAction?: () => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceIssueTypeQueryCustomizer) => Promise<ServiceIssueTypeStored>;
+  updateAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueTypeIssueType_View_EditDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceIssueTypeIssueType_View_EditDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -81,7 +84,7 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceIssueTypeIssueType_View_Edit-dialog-close-wrapper"
+          id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -111,50 +114,42 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceIssueTypeIssueType_View_EditBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_View_Edit::Back"
+              id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_View_EditBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.View.Edit.service::IssueType::IssueType_View_Edit::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_View_Edit.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceIssueTypeIssueType_View_EditRefresh && (
+        {!editMode && actions.refreshAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_View_Edit::Refresh"
+              id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewRefreshButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_View_EditRefresh!(processQueryCustomizer(queryCustomizer));
+                await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.View.Edit.service::IssueType::IssueType_View_Edit::Refresh', {
-                  defaultValue: 'Refresh',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_View_Edit.Refresh', { defaultValue: 'Refresh' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceIssueTypeIssueType_View_EditDelete && (
+        {!editMode && actions.deleteAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_View_Edit::Delete"
+              id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewDeleteButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -169,55 +164,43 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
                 );
 
                 if (confirmed) {
-                  actions.serviceIssueTypeIssueType_View_EditDelete!();
+                  actions.deleteAction!();
                 }
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.View.Edit.service::IssueType::IssueType_View_Edit::Delete', {
-                  defaultValue: 'Delete',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_View_Edit.Delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueTypeIssueType_View_EditCancel && (
+        {editMode && actions.cancelAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_View_Edit::Cancel"
+              id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewCancelButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_View_EditCancel!();
+                await actions.cancelAction!();
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.View.Edit.service::IssueType::IssueType_View_Edit::Cancel', {
-                  defaultValue: 'Cancel',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_View_Edit.Cancel', { defaultValue: 'Cancel' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueTypeIssueType_View_EditUpdate && (
+        {editMode && actions.updateAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_View_Edit::Update"
+              id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewUpdateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_View_EditUpdate!();
+                await actions.updateAction!();
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.View.Edit.service::IssueType::IssueType_View_Edit::Update', {
-                  defaultValue: 'Save',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_View_Edit.Update', { defaultValue: 'Save' })}</span>
             </LoadingButton>
           </Grid>
         )}

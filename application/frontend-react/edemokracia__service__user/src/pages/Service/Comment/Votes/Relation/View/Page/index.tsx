@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -36,7 +37,17 @@ import type {
   ServiceSimpleVoteStored,
   SimpleVoteType,
 } from '~/services/data-api';
-import { serviceCommentServiceForVotesImpl } from '~/services/data-axios';
+import { serviceSimpleVoteServiceImpl } from '~/services/data-axios';
+export type ServiceSimpleVoteSimpleVote_View_EditPageActionsExtended =
+  ServiceSimpleVoteSimpleVote_View_EditPageActions & {};
+
+export const SERVICE_COMMENT_VOTES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSimpleVoteSimpleVote_View_EditActionsHook';
+export type ServiceSimpleVoteSimpleVote_View_EditActionsHook = (
+  data: ServiceSimpleVoteStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void,
+) => ServiceSimpleVoteSimpleVote_View_EditPageActionsExtended;
 
 export const convertServiceCommentVotesRelationViewPagePayload = (
   attributeName: keyof ServiceSimpleVote,
@@ -69,7 +80,7 @@ export default function ServiceCommentVotesRelationViewPage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -117,22 +128,30 @@ export default function ServiceCommentVotesRelationViewPage() {
     _mask: '{created,type}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceSimpleVoteSimpleVote_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_COMMENT_VOTES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceSimpleVoteSimpleVote_View_EditPageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.SimpleVote.SimpleVote_View_Edit', { defaultValue: 'SimpleVote View / Edit' });
+  const title: string = t('service.SimpleVote.SimpleVote_View_Edit', { defaultValue: 'SimpleVote View / Edit' });
 
   // Action section
-  const serviceSimpleVoteSimpleVote_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceSimpleVoteSimpleVote_View_EditRefresh = async (
-    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<ServiceSimpleVoteStored> => {
+  const refreshAction = async (queryCustomizer: ServiceSimpleVoteQueryCustomizer): Promise<ServiceSimpleVoteStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceCommentServiceForVotesImpl.refresh(
+      const result = await serviceSimpleVoteServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         pageQueryCustomizer,
       );
@@ -158,34 +177,40 @@ export default function ServiceCommentVotesRelationViewPage() {
   };
 
   const actions: ServiceSimpleVoteSimpleVote_View_EditPageActions = {
-    serviceSimpleVoteSimpleVote_View_EditBack,
-    serviceSimpleVoteSimpleVote_View_EditRefresh,
+    backAction,
+    refreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.serviceSimpleVoteSimpleVote_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceSimpleVoteSimpleVote_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_qbA7kGksEe25ONJ3V89cVA)/RelationFeatureView"
+      data-page-name="service::Comment::votes::Relation::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceSimpleVoteSimpleVote_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

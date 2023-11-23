@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Table = lazy(
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions
   extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions {
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageProps {
@@ -54,23 +56,22 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Back"
+              id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableBack!();
+                await actions.backAction!();
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.Table.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
+                {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.Back', {
+                  defaultValue: 'Back',
+                })}
               </span>
             </LoadingButton>
           </Grid>

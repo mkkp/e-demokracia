@@ -9,17 +9,27 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   ServiceVoteDefinitionStored,
-  ServiceDashboardQueryCustomizer,
+  RatingVoteInput,
+  CloseDebateOutputVoteDefinitionReferenceStored,
   ServiceVoteDefinitionQueryCustomizer,
-  ServiceDashboard,
   ServiceVoteEntryQueryCustomizer,
   ServiceIssueQueryCustomizer,
+  YesNoAbstainVoteInput,
   ServiceVoteDefinition,
-  ServiceDashboardStored,
   ServiceIssueStored,
   ServiceVoteEntry,
   ServiceVoteEntryStored,
+  SelectAnswerVoteSelection,
   ServiceIssue,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  ServiceDashboardQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  CreateCommentInput,
+  ServiceDashboard,
+  ServiceDashboardStored,
+  CreateArgumentInput,
+  YesNoVoteInput,
+  CloseDebateInput,
 } from '../data-api';
 
 /**
@@ -31,7 +41,7 @@ export interface ServiceDashboardService {
     queryCustomizer?: ServiceDashboardQueryCustomizer,
   ): Promise<ServiceDashboardStored>;
 
-  getIssuesOwned(
+  listIssuesOwned(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
@@ -43,7 +53,36 @@ export interface ServiceDashboardService {
 
   deleteIssuesOwned(target: JudoIdentifiable<ServiceIssue>): Promise<void>;
 
-  getUserVoteEntries(
+  createConArgumentForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForIssuesOwned(): Promise<CreateArgumentInput>;
+
+  createProArgumentForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForIssuesOwned(): Promise<CreateArgumentInput>;
+
+  closeDebateForIssuesOwned(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+
+  getTemplateForCloseDebateForIssuesOwned(): Promise<CloseDebateInput>;
+
+  removeFromFavoritesForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  closeVoteForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  addToFavoritesForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForIssuesOwned(): Promise<CreateCommentInput>;
+
+  listUserVoteEntries(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceVoteEntryStored>>;
@@ -53,7 +92,7 @@ export interface ServiceDashboardService {
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceVoteEntryStored>>;
 
-  getFavoriteIssues(
+  listFavoriteIssues(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
@@ -63,7 +102,36 @@ export interface ServiceDashboardService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
 
-  getFavoriteVoteDefinitions(
+  createConArgumentForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForFavoriteIssues(): Promise<CreateArgumentInput>;
+
+  createProArgumentForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForFavoriteIssues(): Promise<CreateArgumentInput>;
+
+  closeDebateForFavoriteIssues(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CloseDebateInput,
+  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+
+  getTemplateForCloseDebateForFavoriteIssues(): Promise<CloseDebateInput>;
+
+  removeFromFavoritesForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  closeVoteForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  deleteOrArchiveForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  activateForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  addToFavoritesForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+
+  createCommentForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+
+  getTemplateForCreateCommentForFavoriteIssues(): Promise<CreateCommentInput>;
+
+  listFavoriteVoteDefinitions(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
@@ -73,7 +141,39 @@ export interface ServiceDashboardService {
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
 
-  getOwnedVoteDefinitions(
+  voteRatingForFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: RatingVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteRatingForFavoriteVoteDefinitions(): Promise<RatingVoteInput>;
+
+  voteSelectAnswerForFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: SelectAnswerVoteSelection,
+  ): Promise<void>;
+
+  getTemplateForVoteSelectAnswerForFavoriteVoteDefinitions(): Promise<SelectAnswerVoteSelection>;
+
+  getRangeForVoteSelectAnswerForFavoriteVoteDefinitions(
+    owner?: ServiceVoteDefinitionStored,
+    queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<Array<SelectAnswerVoteSelectionStored>>;
+  voteYesNoForFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: YesNoVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteYesNoForFavoriteVoteDefinitions(): Promise<YesNoVoteInput>;
+
+  voteYesNoAbstainForFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: YesNoAbstainVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteYesNoAbstainForFavoriteVoteDefinitions(): Promise<YesNoAbstainVoteInput>;
+
+  listOwnedVoteDefinitions(
     target: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
@@ -84,4 +184,36 @@ export interface ServiceDashboardService {
   ): Promise<Array<ServiceVoteDefinitionStored>>;
 
   deleteOwnedVoteDefinitions(target: JudoIdentifiable<ServiceVoteDefinition>): Promise<void>;
+
+  voteRatingForOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: RatingVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput>;
+
+  voteSelectAnswerForOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: SelectAnswerVoteSelection,
+  ): Promise<void>;
+
+  getTemplateForVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection>;
+
+  getRangeForVoteSelectAnswerForOwnedVoteDefinitions(
+    owner?: ServiceVoteDefinitionStored,
+    queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<Array<SelectAnswerVoteSelectionStored>>;
+  voteYesNoForOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: YesNoVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput>;
+
+  voteYesNoAbstainForOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: YesNoAbstainVoteInput,
+  ): Promise<void>;
+
+  getTemplateForVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput>;
 }

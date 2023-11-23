@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,35 +69,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceServiceUserServiceUser_View_EditActivityDistrictsComponentActionDefinitions {
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsAddOpenSelector?: () => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsBulkDelete?: (
+  activityDistrictsOpenAddSelectorAction?: () => Promise<void>;
+  activityDistrictsBulkRemoveAction?: (
     selectedRows: ServiceDistrictStored[],
   ) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsBulkRemove?: (
-    selectedRows: ServiceDistrictStored[],
-  ) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsClear?: () => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsCreateOpen?: () => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsFilter?: (
+  activityDistrictsClearAction?: () => Promise<void>;
+  activityDistrictsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsRefresh?: (
+  activityDistrictsRefreshAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<ServiceDistrictStored[]>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsDelete?: (
-    row: ServiceDistrictStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsRemove?: (
-    row: ServiceDistrictStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsView?: (
-    row: ServiceDistrictStored,
-  ) => Promise<void>;
+  activityDistrictsRemoveAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
+  activityDistrictsOpenPageAction?: (row: ServiceDistrictStored) => Promise<void>;
 }
 
 export interface ServiceServiceUserServiceUser_View_EditActivityDistrictsComponentProps {
@@ -155,7 +146,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
     {
       ...baseColumnConfig,
       field: 'representation',
-      headerName: t('service.ServiceUser.ServiceUser.View.Edit.representation', { defaultValue: 'District' }) as string,
+      headerName: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'District' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -167,33 +158,14 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [
     {
       id: 'User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Remove', {
+        defaultValue: 'Remove',
+      }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceDistrictStored) => isLoading,
-      action: actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsRemove
+      action: actions.activityDistrictsRemoveAction
         ? async (rowData) => {
-            await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsRemove!(
-              rowData,
-            );
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceDistrictStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsDelete
-        ? async (rowData) => {
-            await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsDelete!(
-              rowData,
-            );
+            await actions.activityDistrictsRemoveAction!(rowData);
           }
         : undefined,
     },
@@ -201,11 +173,9 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fz_HgH2GEe6V8KKnnZfChA',
+      id: '_0U29MooAEe6F9LXBn0VWTg',
       attributeName: 'representation',
-      label: t('service.ServiceUser.ServiceUser.View.Edit.representation::Filter', {
-        defaultValue: 'District',
-      }) as string,
+      label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -271,7 +241,10 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
   }, [ownerData?.activityDistricts, filters]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="activityDistricts"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -305,11 +278,9 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsView
+          actions.activityDistrictsOpenPageAction
             ? async (params: GridRowParams<ServiceDistrictStored>) =>
-                await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsView!(
-                  params.row,
-                )
+                await actions.activityDistrictsOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -319,20 +290,18 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsFilter &&
-              true ? (
+              {actions.activityDistrictsFilterAction && true ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsFilter!(
-                        'User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.activityDistrictsFilterAction!(
+                      'User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -340,93 +309,69 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
                   disabled={isLoading}
                 >
                   {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Filter',
+                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsRefresh &&
-              true ? (
+              {actions.activityDistrictsRefreshAction && true ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.activityDistrictsRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Refresh',
+                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Refresh',
                     { defaultValue: 'Refresh' },
                   )}
                 </Button>
               ) : null}
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsAddOpenSelector &&
-              true ? (
+              {actions.activityDistrictsOpenAddSelectorAction && true ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableAddSelectorOpenButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsAddOpenSelector!();
+                    await actions.activityDistrictsOpenAddSelectorAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
                   {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Add',
+                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Add',
                     { defaultValue: 'Add' },
                   )}
                 </Button>
               ) : null}
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsClear &&
-              data.length ? (
+              {actions.activityDistrictsClearAction && data.length ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsClear!();
+                    await actions.activityDistrictsClearAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
                   {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::Clear',
+                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Clear',
                     { defaultValue: 'Clear' },
                   )}
                 </Button>
               ) : null}
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsBulkRemove &&
-              selectionModel.length > 0 ? (
+              {actions.activityDistrictsBulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.activityDistrictsBulkRemoveAction!(
+                      selectedRows.current,
+                    );
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
@@ -434,31 +379,8 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
                   disabled={isLoading}
                 >
                   {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::BulkRemove',
+                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.BulkRemove',
                     { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.ServiceUser.ServiceUser.View.Edit.service::ServiceUser::ServiceUser_View_Edit::Areas::activity::activity_districts::activityDistricts::BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}
@@ -481,6 +403,6 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

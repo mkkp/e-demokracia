@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,27 +62,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceCountyCounty_TableCounty_TableComponentActionDefinitions {
-  serviceCountyCounty_TableAddOpenSelector?: () => Promise<void>;
-  serviceCountyCounty_TableBulkDelete?: (
-    selectedRows: ServiceCountyStored[],
-  ) => Promise<DialogResult<ServiceCountyStored[]>>;
-  serviceCountyCounty_TableBulkRemove?: (
-    selectedRows: ServiceCountyStored[],
-  ) => Promise<DialogResult<ServiceCountyStored[]>>;
-  serviceCountyCounty_TableClear?: () => Promise<void>;
-  serviceCountyCounty_TableCreateOpen?: () => Promise<void>;
-  serviceCountyCounty_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceCountyStored[]) => Promise<DialogResult<ServiceCountyStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceCountyStored[]) => Promise<DialogResult<ServiceCountyStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceCountyCounty_TableTableRefresh?: (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ) => Promise<ServiceCountyStored[]>;
-  serviceCountyCounty_TableDelete?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
-  serviceCountyCounty_TableRemove?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
-  serviceCountyCounty_TableView?: (row: ServiceCountyStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored[]>;
+  deleteAction?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceCountyStored) => Promise<void>;
 }
 
 export interface ServiceCountyCounty_TableCounty_TableComponentProps {
@@ -142,7 +141,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
     {
       ...baseColumnConfig,
       field: 'name',
-      headerName: t('service.County.County.Table.name', { defaultValue: 'Name' }) as string,
+      headerName: t('service.County.County_Table.name', { defaultValue: 'Name' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -154,27 +153,23 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
   const rowActions: TableRowAction<ServiceCountyStored>[] = [
     {
       id: 'User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableRowRemoveButton',
-      label: t('service.County.County.Table.service::County::County_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.County.County_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceCountyStored) => isLoading,
-      action: actions.serviceCountyCounty_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceCountyCounty_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableRowDeleteButton',
-      label: t('service.County.County.Table.service::County::County_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.County.County_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceCountyStored) => !row.__deleteable || isLoading,
-      action: actions.serviceCountyCounty_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceCountyCounty_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -182,9 +177,9 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fdprIH2GEe6V8KKnnZfChA',
+      id: '_0BQEsIoAEe6F9LXBn0VWTg',
       attributeName: 'name',
-      label: t('service.County.County.Table.name::Filter', { defaultValue: 'Name' }) as string,
+      label: t('service.County.County_Table.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -258,7 +253,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceCountyCounty_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -284,7 +279,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="County_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -317,9 +312,8 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceCountyCounty_TableView
-            ? async (params: GridRowParams<ServiceCountyStored>) =>
-                await actions.serviceCountyCounty_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceCountyStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -329,13 +323,13 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceCountyCounty_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceCountyCounty_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -347,104 +341,105 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.County.County_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.County.County_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::Create', { defaultValue: 'Create' })}
+                  {t('service.County.County_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.County.County_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.County.County_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceCountyCounty_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::Clear', { defaultValue: 'Clear' })}
+                  {t('service.County.County_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCountyCounty_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.County.County_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceCountyCounty_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceCountyCounty_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.County.County.Table.service::County::County_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.County.County_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -475,6 +470,6 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

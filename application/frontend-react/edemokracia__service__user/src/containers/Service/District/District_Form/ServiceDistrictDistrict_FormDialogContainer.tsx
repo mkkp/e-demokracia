@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,15 +27,15 @@ const ServiceDistrictDistrict_Form = lazy(
 );
 
 export interface ServiceDistrictDistrict_FormDialogActions extends ServiceDistrictDistrict_FormActionDefinitions {
-  serviceDistrictDistrict_FormGetTemplate?: () => Promise<ServiceDistrict>;
-  serviceDistrictDistrict_FormBack?: () => Promise<void>;
-  serviceDistrictDistrict_FormCreate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceDistrict>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
 }
 
 export interface ServiceDistrictDistrict_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceDistrictDistrict_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -74,7 +79,7 @@ export default function ServiceDistrictDistrict_FormDialog(props: ServiceDistric
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceDistrictDistrict_Form-dialog-close-wrapper"
+          id="User/(esm/_a0UhZH2iEe2LTNnGda5kaw)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -104,41 +109,35 @@ export default function ServiceDistrictDistrict_FormDialog(props: ServiceDistric
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceDistrictDistrict_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::District::District_Form::Back"
+              id="User/(esm/_a0UhZH2iEe2LTNnGda5kaw)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceDistrictDistrict_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.District.District.Form.service::District::District_Form::Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('service.District.District_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceDistrictDistrict_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::District::District_Form::Create"
+              id="User/(esm/_a0UhZH2iEe2LTNnGda5kaw)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceDistrictDistrict_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t('service.District.District.Form.service::District::District_Form::Create', {
-                  defaultValue: 'Create',
-                })}
-              </span>
+              <span>{t('service.District.District_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}

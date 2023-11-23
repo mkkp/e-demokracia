@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -20,7 +22,7 @@ import type { ServiceIssue, ServiceIssueStored, ServiceIssueQueryCustomizer } fr
 const ServiceIssueIssue_Table = lazy(() => import('~/containers/Service/Issue/Issue_Table/ServiceIssueIssue_Table'));
 
 export interface ServiceIssueIssue_TablePageActions extends ServiceIssueIssue_TableActionDefinitions {
-  serviceIssueIssue_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueIssue_TablePageProps {
@@ -42,19 +44,19 @@ export default function ServiceIssueIssue_TablePage(props: ServiceIssueIssue_Tab
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceIssueIssue_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Issue::Issue_Table::Back"
+              id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueIssue_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>{t('service.Issue.Issue.Table.service::Issue::Issue_Table::Back', { defaultValue: 'Back' })}</span>
+              <span>{t('service.Issue.Issue_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

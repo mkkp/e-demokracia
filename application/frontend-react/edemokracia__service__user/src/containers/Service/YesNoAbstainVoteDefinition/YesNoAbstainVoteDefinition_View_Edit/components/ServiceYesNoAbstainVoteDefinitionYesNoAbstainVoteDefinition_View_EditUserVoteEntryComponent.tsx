@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,18 +26,8 @@ import type {
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete?: (
-    target: ServiceYesNoAbstainVoteEntryStored,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset?: (
-    target: ServiceYesNoAbstainVoteEntryStored,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView?: (
-    target: ServiceYesNoAbstainVoteEntryStored,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryAutocomplete?: (
+  userVoteEntryOpenPageAction?: (target: ServiceYesNoAbstainVoteEntryStored) => Promise<void>;
+  userVoteEntryAutocompleteRangeAction?: (
     queryCustomizer: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ) => Promise<Array<ServiceYesNoAbstainVoteEntryStored>>;
 }
@@ -64,10 +54,9 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
       name="userVoteEntry"
       id="User/(esm/_7M-IOFsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedLink"
       label={
-        t(
-          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.userVoteEntry.VirtualForUserVote.userVote.userVoteEntryGroup.userVoteEntryGroup::LabelWrapper.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-          { defaultValue: 'Value' },
-        ) as string
+        t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntry', {
+          defaultValue: 'Value',
+        }) as string
       }
       labelList={[ownerData.userVoteEntry?.value?.toString() ?? '', ownerData.userVoteEntry?.created?.toString() ?? '']}
       ownerData={ownerData}
@@ -81,45 +70,10 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
         storeDiff('userVoteEntry', userVoteEntry);
       }}
       onView={
-        ownerData.userVoteEntry &&
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView
+        ownerData.userVoteEntry && actions.userVoteEntryOpenPageAction
           ? async () => {
-              await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView!(
-                ownerData.userVoteEntry!,
-              );
+              await actions.userVoteEntryOpenPageAction!(ownerData.userVoteEntry!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate
-          ? async () => {
-              await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.userVoteEntry &&
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete
-          ? async () =>
-              actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete!(
-                ownerData.userVoteEntry!,
-              )
-          : undefined
-      }
-      onSet={
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector
-          ? async () => {
-              await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.userVoteEntry &&
-        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset
-          ? async () =>
-              actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset!(
-                ownerData.userVoteEntry!,
-              )
           : undefined
       }
     ></AggregationInput>

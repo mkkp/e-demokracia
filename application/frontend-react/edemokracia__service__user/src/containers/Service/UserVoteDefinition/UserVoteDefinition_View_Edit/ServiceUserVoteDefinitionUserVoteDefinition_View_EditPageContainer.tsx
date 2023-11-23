@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -31,13 +33,13 @@ const ServiceUserVoteDefinitionUserVoteDefinition_View_Edit = lazy(
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions
   extends ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions {
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditBack?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditCancel?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditDelete?: () => Promise<void>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditRefresh?: (
+  backAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  deleteAction?: () => Promise<void>;
+  refreshAction?: (
     queryCustomizer: ServiceUserVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceUserVoteDefinitionStored>;
-  serviceUserVoteDefinitionUserVoteDefinition_View_EditUpdate?: () => Promise<void>;
+  updateAction?: () => Promise<void>;
 }
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageProps {
@@ -82,54 +84,44 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserVoteDefinition::UserVoteDefinition_View_Edit::Back"
+              id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRefresh && (
+        {!editMode && actions.refreshAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserVoteDefinition::UserVoteDefinition_View_Edit::Refresh"
+              id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewRefreshButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRefresh!(
-                  processQueryCustomizer(queryCustomizer),
-                );
+                await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
               <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::Refresh',
-                  { defaultValue: 'Refresh' },
-                )}
+                {t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.Refresh', { defaultValue: 'Refresh' })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditDelete && (
+        {!editMode && actions.deleteAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserVoteDefinition::UserVoteDefinition_View_Edit::Delete"
+              id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewDeleteButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -144,57 +136,48 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
                 );
 
                 if (confirmed) {
-                  actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditDelete!();
+                  actions.deleteAction!();
                 }
               }}
             >
               <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::Delete',
-                  { defaultValue: 'Delete' },
-                )}
+                {t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.Delete', { defaultValue: 'Delete' })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditCancel && (
+        {editMode && actions.cancelAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserVoteDefinition::UserVoteDefinition_View_Edit::Cancel"
+              id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewCancelButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditCancel!();
+                await actions.cancelAction!();
               }}
             >
               <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::Cancel',
-                  { defaultValue: 'Cancel' },
-                )}
+                {t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.Cancel', { defaultValue: 'Cancel' })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditUpdate && (
+        {editMode && actions.updateAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::UserVoteDefinition::UserVoteDefinition_View_Edit::Update"
+              id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewUpdateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditUpdate!();
+                await actions.updateAction!();
               }}
             >
               <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition.View.Edit.service::UserVoteDefinition::UserVoteDefinition_View_Edit::Update',
-                  { defaultValue: 'Save' },
-                )}
+                {t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.Update', { defaultValue: 'Save' })}
               </span>
             </LoadingButton>
           </Grid>

@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,15 +35,15 @@ const ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Form = lazy(
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions
   extends ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions {
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormGetTemplate?: () => Promise<ServiceSelectAnswerVoteSelection>;
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormBack?: () => Promise<void>;
-  serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormCreate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceSelectAnswerVoteSelection>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
 }
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -84,7 +89,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Form-dialog-close-wrapper"
+          id="User/(esm/_pSKM8FtqEe6Mx9dH3yj5gQ)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -114,44 +119,40 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form::Back"
+              id="User/(esm/_pSKM8FtqEe6Mx9dH3yj5gQ)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormBack!();
+                await actions.backAction!();
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.Form.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form::Back',
-                  { defaultValue: 'Back' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.Back', { defaultValue: 'Back' })}
               </span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form::Create"
+              id="User/(esm/_pSKM8FtqEe6Mx9dH3yj5gQ)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormCreate!();
+                await actions.createAction!();
               }}
             >
               <span>
-                {t(
-                  'service.SelectAnswerVoteSelection.SelectAnswerVoteSelection.Form.service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form::Create',
-                  { defaultValue: 'Create' },
-                )}
+                {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.Create', {
+                  defaultValue: 'Create',
+                })}
               </span>
             </LoadingButton>
           </Grid>

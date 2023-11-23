@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,33 +66,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_TableComponentActionDefinitions {
-  createArgumentInputCreateArgumentInput_TableAddOpenSelector?: () => Promise<void>;
-  createArgumentInputCreateArgumentInput_TableBulkDelete?: (
-    selectedRows: CreateArgumentInputStored[],
-  ) => Promise<DialogResult<CreateArgumentInputStored[]>>;
-  createArgumentInputCreateArgumentInput_TableBulkRemove?: (
-    selectedRows: CreateArgumentInputStored[],
-  ) => Promise<DialogResult<CreateArgumentInputStored[]>>;
-  createArgumentInputCreateArgumentInput_TableClear?: () => Promise<void>;
-  createArgumentInputCreateArgumentInput_TableCreateOpen?: () => Promise<void>;
-  createArgumentInputCreateArgumentInput_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: CreateArgumentInputStored[]) => Promise<DialogResult<CreateArgumentInputStored[]>>;
+  bulkRemoveAction?: (selectedRows: CreateArgumentInputStored[]) => Promise<DialogResult<CreateArgumentInputStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  createArgumentInputCreateArgumentInput_TableTableRefresh?: (
-    queryCustomizer: CreateArgumentInputQueryCustomizer,
-  ) => Promise<CreateArgumentInputStored[]>;
-  createArgumentInputCreateArgumentInput_TableDelete?: (
-    row: CreateArgumentInputStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  createArgumentInputCreateArgumentInput_TableRemove?: (
-    row: CreateArgumentInputStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  createArgumentInputCreateArgumentInput_TableView?: (row: CreateArgumentInputStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: CreateArgumentInputQueryCustomizer) => Promise<CreateArgumentInputStored[]>;
+  deleteAction?: (row: CreateArgumentInputStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: CreateArgumentInputStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: CreateArgumentInputStored) => Promise<void>;
 }
 
 export interface CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_TableComponentProps {
@@ -152,7 +145,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('CreateArgumentInput.CreateArgumentInput.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('CreateArgumentInput.CreateArgumentInput_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -166,7 +159,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('CreateArgumentInput.CreateArgumentInput.Table.description', {
+      headerName: t('CreateArgumentInput.CreateArgumentInput_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -184,27 +177,23 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
   const rowActions: TableRowAction<CreateArgumentInputStored>[] = [
     {
       id: 'User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableRowRemoveButton',
-      label: t('CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('CreateArgumentInput.CreateArgumentInput_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: CreateArgumentInputStored) => isLoading,
-      action: actions.createArgumentInputCreateArgumentInput_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.createArgumentInputCreateArgumentInput_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableRowDeleteButton',
-      label: t('CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('CreateArgumentInput.CreateArgumentInput_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: CreateArgumentInputStored) => !row.__deleteable || isLoading,
-      action: actions.createArgumentInputCreateArgumentInput_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.createArgumentInputCreateArgumentInput_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -281,9 +270,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
       setIsLoading(true);
 
       try {
-        const res = await actions.createArgumentInputCreateArgumentInput_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -309,7 +296,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="CreateArgumentInput_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -342,9 +329,8 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.createArgumentInputCreateArgumentInput_TableView
-            ? async (params: GridRowParams<CreateArgumentInputStored>) =>
-                await actions.createArgumentInputCreateArgumentInput_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<CreateArgumentInputStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -354,13 +340,13 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.createArgumentInputCreateArgumentInput_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.createArgumentInputCreateArgumentInput_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -372,117 +358,105 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.createArgumentInputCreateArgumentInput_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.createArgumentInputCreateArgumentInput_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.createArgumentInputCreateArgumentInput_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.createArgumentInputCreateArgumentInput_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.createArgumentInputCreateArgumentInput_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.createArgumentInputCreateArgumentInput_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.createArgumentInputCreateArgumentInput_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.createArgumentInputCreateArgumentInput_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.createArgumentInputCreateArgumentInput_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.createArgumentInputCreateArgumentInput_TableBulkRemove!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.createArgumentInputCreateArgumentInput_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.createArgumentInputCreateArgumentInput_TableBulkDelete!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'CreateArgumentInput.CreateArgumentInput.Table.CreateArgumentInput::CreateArgumentInput_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('CreateArgumentInput.CreateArgumentInput_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -513,6 +487,6 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

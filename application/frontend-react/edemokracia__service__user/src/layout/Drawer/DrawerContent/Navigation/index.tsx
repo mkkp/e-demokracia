@@ -8,7 +8,9 @@
 
 import { useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Box, Typography, useMediaQuery } from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { usePrincipal } from '~/auth';
 import { ServiceServicePrincipalUserStored } from '~/services/data-api';
 import { useConfig } from '~/hooks';

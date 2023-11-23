@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -38,7 +39,18 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceRatingVoteDefinitionServiceForUserVoteEntryImpl } from '~/services/data-axios';
+import { serviceRatingVoteEntryServiceImpl } from '~/services/data-axios';
+export type ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended =
+  ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions & {};
+
+export const SERVICE_RATING_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook';
+export type ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceRatingVoteEntryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void,
+) => ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended;
 
 export const useServiceRatingVoteDefinitionUserVoteEntryRelationViewPage = (): ((
   ownerData: any,
@@ -50,9 +62,9 @@ export const useServiceRatingVoteDefinitionUserVoteEntryRelationViewPage = (): (
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -61,14 +73,14 @@ export const useServiceRatingVoteDefinitionUserVoteEntryRelationViewPage = (): (
         children: (
           <ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -107,10 +119,11 @@ const ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogContainer = lazy(
 export interface ServiceRatingVoteDefinitionUserVoteEntryRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceRatingVoteEntryStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceRatingVoteEntryStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_3FFXoFslEe6Mx9dH3yj5gQ)/RelationFeatureView
 // Name: service::RatingVoteDefinition::userVoteEntry::Relation::View::Page
 export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(
   props: ServiceRatingVoteDefinitionUserVoteEntryRelationViewPageProps,
@@ -120,7 +133,7 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -169,28 +182,32 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     _mask: '{created,value}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_RATING_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
   const openServiceRatingVoteEntryOwnerRelationViewPage = useServiceRatingVoteEntryOwnerRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.RatingVoteEntry.RatingVoteEntry_View_Edit', {
+  const title: string = t('service.RatingVoteEntry.RatingVoteEntry_View_Edit', {
     defaultValue: 'RatingVoteEntry View / Edit',
   });
 
   // Action section
-  const serviceRatingVoteEntryRatingVoteEntry_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceRatingVoteEntryRatingVoteEntry_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceRatingVoteEntryQueryCustomizer,
   ): Promise<ServiceRatingVoteEntryStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceRatingVoteDefinitionServiceForUserVoteEntryImpl.refresh(
-        ownerData,
-        pageQueryCustomizer,
-      );
+      const result = await serviceRatingVoteEntryServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -211,29 +228,31 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerView = async (target?: ServiceServiceUserStored) => {
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceRatingVoteEntryOwnerRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceRatingVoteEntryRatingVoteEntry_View_EditRefresh!(
-        processQueryCustomizer(pageQueryCustomizer),
-      );
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
 
   const actions: ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions = {
-    serviceRatingVoteEntryRatingVoteEntry_View_EditBack,
-    serviceRatingVoteEntryRatingVoteEntry_View_EditRefresh,
-    serviceRatingVoteEntryRatingVoteEntry_View_EditOwnerView,
+    backAction,
+    refreshAction,
+    ownerOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceRatingVoteEntryRatingVoteEntry_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_3FFXoFslEe6Mx9dH3yj5gQ)/RelationFeatureView"
+      data-page-name="service::RatingVoteDefinition::userVoteEntry::Relation::View::Page"
+    >
       <Suspense>
         <ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogContainer
           ownerData={ownerData}
@@ -251,6 +270,6 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

@@ -13,28 +13,21 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -56,7 +49,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceVoteDefinition,
@@ -114,12 +113,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
           name="title"
           id="User/(esm/_T5VWYI4jEe29qs15q2b6yw)/StringTypeTextInput"
           autoFocus
-          label={
-            t(
-              'service.VoteDefinition.VoteDefinition.Form.title.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-              { defaultValue: 'Title' },
-            ) as string
-          }
+          label={t('service.VoteDefinition.VoteDefinition_Form.title', { defaultValue: 'Title' }) as string}
           value={data.title ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -183,12 +177,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             });
           }}
           views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-          label={
-            t(
-              'service.VoteDefinition.VoteDefinition.Form.created.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-              { defaultValue: 'Created' },
-            ) as string
-          }
+          label={t('service.VoteDefinition.VoteDefinition_Form.created', { defaultValue: 'Created' }) as string}
           value={serviceDateToUiDate(data.created ?? null)}
           readOnly={false || !isFormUpdateable()}
           disabled={isLoading}
@@ -203,12 +192,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
           required={true}
           name="description"
           id="User/(esm/_T5l1EI4jEe29qs15q2b6yw)/StringTypeTextInput"
-          label={
-            t(
-              'service.VoteDefinition.VoteDefinition.Form.description.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-              { defaultValue: 'Description' },
-            ) as string
-          }
+          label={t('service.VoteDefinition.VoteDefinition_Form.description', { defaultValue: 'Description' }) as string}
           value={data.description ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -234,103 +218,11 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Grid
-          id="_fovg0H2GEe6V8KKnnZfChA)/LabelWrapper"
-          container
-          direction="column"
-          alignItems="center"
-          justifyContent="flex-start"
-          spacing={2}
-        >
-          <Grid item xs={12} sm={12}>
-            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="list" sx={{ marginRight: 1 }} />
-              <Typography id="_fovg0H2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                {t(
-                  'service.VoteDefinition.VoteDefinition.Form.status::Label.status::LabelWrapper.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-                  { defaultValue: 'Status' },
-                )}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item xs={12} sm={12}>
-            <FormControl
-              fullWidth={true}
-              sx={{ mt: '10px' }}
-              className='MuiTextField-root'
-              disabled={false || !isFormUpdateable() || isLoading}
-              error={validation.has('status')}
-            >
-              <InputLabel id="User/(esm/_T5tw4I4jEe29qs15q2b6yw)/EnumerationTypeRadio" shrink={true} size={'small'}>
-                {t(
-                  'service.VoteDefinition.VoteDefinition.Form.status.status::LabelWrapper.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-                  { defaultValue: 'Status' },
-                )}{' '}
-                *
-              </InputLabel>
-              <RadioGroup
-                sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                name="status"
-                id="User/(esm/_T5tw4I4jEe29qs15q2b6yw)/EnumerationTypeRadio"
-                value={data.status || ''}
-                onChange={(event) => {
-                  storeDiff('status', event.target.value);
-                }}
-              >
-                <FormControlLabel
-                  id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                  value={'CREATED'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-                <FormControlLabel
-                  id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                  value={'PENDING'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-                <FormControlLabel
-                  id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                  value={'ACTIVE'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-                <FormControlLabel
-                  id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                  value={'CLOSED'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-                <FormControlLabel
-                  id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember"
-                  value={'ARCHIVED'}
-                  control={<Radio size='small' />}
-                  label={t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
-                  disabled={false || !isFormUpdateable()}
-                />
-              </RadioGroup>
-              {validation.has('status') && !data.status && <FormHelperText>{validation.get('status')}</FormHelperText>}
-            </FormControl>
-          </Grid>
-        </Grid>
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
         <TextField
           required={true}
           name="status"
           id="User/(esm/_T5tw4I4jEe29qs15q2b6yw)/EnumerationTypeCombo"
-          label={
-            t(
-              'service.VoteDefinition.VoteDefinition.Form.status.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-              { defaultValue: 'Status' },
-            ) as string
-          }
+          label={t('service.VoteDefinition.VoteDefinition_Form.status', { defaultValue: 'Status' }) as string}
           value={data.status || ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -410,12 +302,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             });
           }}
           views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-          label={
-            t(
-              'service.VoteDefinition.VoteDefinition.Form.closeAt.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-              { defaultValue: 'CloseAt' },
-            ) as string
-          }
+          label={t('service.VoteDefinition.VoteDefinition_Form.closeAt', { defaultValue: 'CloseAt' }) as string}
           value={serviceDateToUiDate(data.closeAt ?? null)}
           readOnly={false || !isFormUpdateable()}
           disabled={isLoading}
@@ -440,10 +327,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               />
             }
             label={
-              t(
-                'service.VoteDefinition.VoteDefinition.Form.isRatingType.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-                { defaultValue: 'IsRatingType' },
-              ) as string
+              t('service.VoteDefinition.VoteDefinition_Form.isRatingType', { defaultValue: 'IsRatingType' }) as string
             }
           />
         </FormGroup>
@@ -464,10 +348,9 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               />
             }
             label={
-              t(
-                'service.VoteDefinition.VoteDefinition.Form.isSelectAnswerType.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-                { defaultValue: 'IsSelectAnswerType' },
-              ) as string
+              t('service.VoteDefinition.VoteDefinition_Form.isSelectAnswerType', {
+                defaultValue: 'IsSelectAnswerType',
+              }) as string
             }
           />
         </FormGroup>
@@ -488,10 +371,9 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               />
             }
             label={
-              t(
-                'service.VoteDefinition.VoteDefinition.Form.isYesNoAbstainType.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-                { defaultValue: 'IsYesNoAbstainType' },
-              ) as string
+              t('service.VoteDefinition.VoteDefinition_Form.isYesNoAbstainType', {
+                defaultValue: 'IsYesNoAbstainType',
+              }) as string
             }
           />
         </FormGroup>
@@ -512,10 +394,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               />
             }
             label={
-              t(
-                'service.VoteDefinition.VoteDefinition.Form.isYesNoType.VoteDefinition_Form.service::VoteDefinition::VoteDefinition_Form',
-                { defaultValue: 'IsYesNoType' },
-              ) as string
+              t('service.VoteDefinition.VoteDefinition_Form.isYesNoType', { defaultValue: 'IsYesNoType' }) as string
             }
           />
         </FormGroup>

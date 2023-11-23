@@ -13,26 +13,19 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  FormControlLabel,
-  FormHelperText,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Radio,
-  RadioGroup,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -54,7 +47,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssue,
@@ -74,14 +73,10 @@ import { ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUs
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionDefinitions
   extends ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
     ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssueOpenPage?: (
-    target?: ServiceIssueStored,
-  ) => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssuePreFetch?: (
-    target?: ServiceIssueStored,
-  ) => Promise<ServiceIssueStored>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenForm?: () => Promise<void>;
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote?: () => Promise<void>;
+  issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
+  issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
+  voteAction?: () => Promise<void>;
+  takeBackVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
 }
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditProps {
@@ -129,14 +124,14 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fnu0MX2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0LC54IoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_fnu0MX2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
+                  <Typography id="_0LC54IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
                     {t(
-                      'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.userVoteEntryGroup::Label.userVoteEntryGroup::LabelWrapper.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
+                      'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                       { defaultValue: 'My vote entry' },
                     )}
                   </Typography>
@@ -179,21 +174,19 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                                 startIcon={<MdiIcon path="delete" />}
                                 loadingPosition="start"
                                 onClick={async () => {
-                                  if (
-                                    actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote
-                                  ) {
-                                    await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote!();
+                                  if (actions.takeBackVoteForYesNoAbstainVoteDefinitionAction) {
+                                    await actions.takeBackVoteForYesNoAbstainVoteDefinitionAction!();
                                   }
                                 }}
                                 disabled={
-                                  !actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote ||
+                                  !actions.takeBackVoteForYesNoAbstainVoteDefinitionAction ||
                                   !data.userHasVoteEntry ||
                                   editMode
                                 }
                               >
                                 <span>
                                   {t(
-                                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.takeBackVote.VirtualForUserVote.userVote.userVoteEntryGroup.userVoteEntryGroup::LabelWrapper.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
+                                    'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.takeBackVote',
                                     { defaultValue: 'TakeBackVote' },
                                   )}
                                 </span>
@@ -257,10 +250,9 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       id="User/(esm/_7M-IIlsnEe6Mx9dH3yj5gQ)/StringTypeTextInput"
                       autoFocus
                       label={
-                        t(
-                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.title.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                          { defaultValue: 'Title' },
-                        ) as string
+                        t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.title', {
+                          defaultValue: 'Title',
+                        }) as string
                       }
                       value={data.title ?? ''}
                       className={clsx({
@@ -326,10 +318,9 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                       label={
-                        t(
-                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.closeAt.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                          { defaultValue: 'CloseAt' },
-                        ) as string
+                        t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.closeAt', {
+                          defaultValue: 'CloseAt',
+                        }) as string
                       }
                       value={serviceDateToUiDate(data.closeAt ?? null)}
                       readOnly={false || !isFormUpdateable()}
@@ -341,108 +332,14 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={4.0}>
-                    <Grid
-                      id="_foxWAH2GEe6V8KKnnZfChA)/LabelWrapper"
-                      container
-                      direction="column"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="list" sx={{ marginRight: 1 }} />
-                          <Typography id="_foxWAH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t(
-                              'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.status::Label.status::LabelWrapper.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                              { defaultValue: 'Status' },
-                            )}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <FormControl
-                          fullWidth={true}
-                          sx={{ mt: '10px' }}
-                          className='MuiTextField-root'
-                          disabled={false || !isFormUpdateable() || isLoading}
-                          error={validation.has('status')}
-                        >
-                          <InputLabel
-                            id="User/(esm/_7M-IJFsnEe6Mx9dH3yj5gQ)/EnumerationTypeRadio"
-                            shrink={true}
-                            size={'small'}
-                          >
-                            {t(
-                              'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.status.status::LabelWrapper.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                              { defaultValue: 'Status' },
-                            )}{' '}
-                            *
-                          </InputLabel>
-                          <RadioGroup
-                            sx={{ justifyContent: 'space-between', pl: '12px', pt: '6px' }}
-                            name="status"
-                            id="User/(esm/_7M-IJFsnEe6Mx9dH3yj5gQ)/EnumerationTypeRadio"
-                            value={data.status || ''}
-                            onChange={(event) => {
-                              storeDiff('status', event.target.value);
-                            }}
-                          >
-                            <FormControlLabel
-                              id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'CREATED'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'PENDING'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'ACTIVE'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                              value={'CLOSED'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                            <FormControlLabel
-                              id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember"
-                              value={'ARCHIVED'}
-                              control={<Radio size='small' />}
-                              label={t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
-                              disabled={false || !isFormUpdateable()}
-                            />
-                          </RadioGroup>
-                          {validation.has('status') && !data.status && (
-                            <FormHelperText>{validation.get('status')}</FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={true}
                       name="status"
                       id="User/(esm/_7M-IJFsnEe6Mx9dH3yj5gQ)/EnumerationTypeCombo"
                       label={
-                        t(
-                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.status.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                          { defaultValue: 'Status' },
-                        ) as string
+                        t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.status', {
+                          defaultValue: 'Status',
+                        }) as string
                       }
                       value={data.status || ''}
                       className={clsx({
@@ -489,18 +386,13 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       id="User/(esm/_7M-IKlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldButton"
                       variant={undefined}
                       editMode={editMode}
-                      navigateAction={
-                        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssueOpenPage
-                      }
+                      navigateAction={actions.issueOpenPageAction}
                       refreshCounter={refreshCounter}
-                      fetchCall={
-                        actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntryBaseVirtualIssuePreFetch
-                      }
+                      fetchCall={actions.issuePreFetchAction}
                     >
-                      {t(
-                        'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.issue.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                        { defaultValue: 'Issue' },
-                      )}
+                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.issue', {
+                        defaultValue: 'Issue',
+                      })}
                       <MdiIcon path="arrow-right" />
                     </AssociationButton>
                   </Grid>
@@ -545,10 +437,9 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       }}
                       views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
                       label={
-                        t(
-                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.created.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                          { defaultValue: 'Created' },
-                        ) as string
+                        t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
+                          defaultValue: 'Created',
+                        }) as string
                       }
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={false || !isFormUpdateable()}
@@ -565,10 +456,9 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       name="description"
                       id="User/(esm/_7M-IM1snEe6Mx9dH3yj5gQ)/StringTypeTextArea"
                       label={
-                        t(
-                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.description.virtual.VoteEntryBase.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                          { defaultValue: 'Description' },
-                        ) as string
+                        t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.description', {
+                          defaultValue: 'Description',
+                        }) as string
                       }
                       value={data.description ?? ''}
                       className={clsx({
@@ -604,7 +494,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_fnyekH2GEe6V8KKnnZfChA)/LabelWrapper"
+          id="_0LF9MYoAEe6F9LXBn0VWTg)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -613,11 +503,10 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_fnyekH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                {t(
-                  'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.View.Edit.entries::Label.entries::LabelWrapper.YesNoAbstainVoteDefinition_View_Edit.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit',
-                  { defaultValue: 'Entries' },
-                )}
+              <Typography id="_0LF9MYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.entries.Label', {
+                  defaultValue: 'Entries',
+                })}
               </Typography>
             </Grid>
           </Grid>
@@ -640,7 +529,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                   justifyContent="flex-start"
                 >
                   <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponent
-                    uniqueId={'TMP'}
+                    uniqueId={'User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable'}
                     actions={actions}
                     ownerData={data}
                     editMode={editMode}

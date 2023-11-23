@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,27 +62,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceDistrictDistrict_TableDistrict_TableComponentActionDefinitions {
-  serviceDistrictDistrict_TableAddOpenSelector?: () => Promise<void>;
-  serviceDistrictDistrict_TableBulkDelete?: (
-    selectedRows: ServiceDistrictStored[],
-  ) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  serviceDistrictDistrict_TableBulkRemove?: (
-    selectedRows: ServiceDistrictStored[],
-  ) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  serviceDistrictDistrict_TableClear?: () => Promise<void>;
-  serviceDistrictDistrict_TableCreateOpen?: () => Promise<void>;
-  serviceDistrictDistrict_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceDistrictDistrict_TableTableRefresh?: (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ) => Promise<ServiceDistrictStored[]>;
-  serviceDistrictDistrict_TableDelete?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
-  serviceDistrictDistrict_TableRemove?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
-  serviceDistrictDistrict_TableView?: (row: ServiceDistrictStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<ServiceDistrictStored[]>;
+  deleteAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceDistrictStored) => Promise<void>;
 }
 
 export interface ServiceDistrictDistrict_TableDistrict_TableComponentProps {
@@ -142,7 +141,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
     {
       ...baseColumnConfig,
       field: 'county',
-      headerName: t('service.District.District.Table.county', { defaultValue: 'County' }) as string,
+      headerName: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -152,7 +151,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
     {
       ...baseColumnConfig,
       field: 'city',
-      headerName: t('service.District.District.Table.city', { defaultValue: 'City' }) as string,
+      headerName: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -162,7 +161,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
     {
       ...baseColumnConfig,
       field: 'name',
-      headerName: t('service.District.District.Table.name', { defaultValue: 'District name' }) as string,
+      headerName: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -174,27 +173,23 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [
     {
       id: 'User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableRowRemoveButton',
-      label: t('service.District.District.Table.service::District::District_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.District.District_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceDistrictStored) => isLoading,
-      action: actions.serviceDistrictDistrict_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceDistrictDistrict_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableRowDeleteButton',
-      label: t('service.District.District.Table.service::District::District_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.District.District_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceDistrictStored) => !row.__deleteable || isLoading,
-      action: actions.serviceDistrictDistrict_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceDistrictDistrict_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -202,23 +197,23 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gB_HQH2GEe6V8KKnnZfChA',
+      id: '_0kIvUIoAEe6F9LXBn0VWTg',
       attributeName: 'county',
-      label: t('service.District.District.Table.county::Filter', { defaultValue: 'County' }) as string,
+      label: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gCFN4H2GEe6V8KKnnZfChA',
+      id: '_0kOO4IoAEe6F9LXBn0VWTg',
       attributeName: 'city',
-      label: t('service.District.District.Table.city::Filter', { defaultValue: 'City' }) as string,
+      label: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gCLUgH2GEe6V8KKnnZfChA',
+      id: '_0kWKsIoAEe6F9LXBn0VWTg',
       attributeName: 'name',
-      label: t('service.District.District.Table.name::Filter', { defaultValue: 'District name' }) as string,
+      label: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -292,7 +287,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceDistrictDistrict_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -318,7 +313,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="District_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -351,9 +346,8 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceDistrictDistrict_TableView
-            ? async (params: GridRowParams<ServiceDistrictStored>) =>
-                await actions.serviceDistrictDistrict_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceDistrictStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -363,13 +357,13 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceDistrictDistrict_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceDistrictDistrict_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -381,108 +375,105 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::Table::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.District.District_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceDistrictDistrict_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDistrictDistrict_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::Table::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.District.District_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceDistrictDistrict_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDistrictDistrict_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.District.District_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceDistrictDistrict_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDistrictDistrict_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.District.District_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceDistrictDistrict_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.District.District_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDistrictDistrict_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('service.District.District_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceDistrictDistrict_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceDistrictDistrict_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('service.District.District_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceDistrictDistrict_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceDistrictDistrict_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.District.District.Table.service::District::District_Table::BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('service.District.District_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -513,6 +504,6 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

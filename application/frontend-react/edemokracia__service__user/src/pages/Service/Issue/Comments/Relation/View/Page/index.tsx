@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -43,7 +44,19 @@ import type {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForCommentsImpl } from '~/services/data-axios';
+import { serviceCommentServiceImpl } from '~/services/data-axios';
+export type ServiceCommentComment_View_EditPageActionsExtended = ServiceCommentComment_View_EditPageActions & {
+  postVoteDownForCommentAction?: () => Promise<void>;
+  postVoteUpForCommentAction?: () => Promise<void>;
+};
+
+export const SERVICE_ISSUE_COMMENTS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCommentComment_View_EditActionsHook';
+export type ServiceCommentComment_View_EditActionsHook = (
+  data: ServiceCommentStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceComment, value: any) => void,
+) => ServiceCommentComment_View_EditPageActionsExtended;
 
 export const convertServiceIssueCommentsRelationViewPagePayload = (
   attributeName: keyof ServiceComment,
@@ -75,7 +88,7 @@ export default function ServiceIssueCommentsRelationViewPage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -123,23 +136,31 @@ export default function ServiceIssueCommentsRelationViewPage() {
     _mask: '{created,upVotes,comment,downVotes,createdBy{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCommentComment_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_COMMENTS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCommentComment_View_EditPageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceCommentCreatedByRelationViewPage = useServiceCommentCreatedByRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.Comment.Comment_View_Edit', { defaultValue: 'Comment View / Edit' });
+  const title: string = t('service.Comment.Comment_View_Edit', { defaultValue: 'Comment View / Edit' });
 
   // Action section
-  const serviceCommentComment_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceCommentComment_View_EditRefresh = async (
-    queryCustomizer: ServiceCommentQueryCustomizer,
-  ): Promise<ServiceCommentStored> => {
+  const refreshAction = async (queryCustomizer: ServiceCommentQueryCustomizer): Promise<ServiceCommentStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueServiceForCommentsImpl.refresh(
+      const result = await serviceCommentServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         pageQueryCustomizer,
       );
@@ -163,21 +184,25 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceCommentComment_View_EditGroupVoteUp = async () => {
+  const voteDownForCommentAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceForCommentsImpl.voteUp(data);
+      await serviceCommentServiceImpl.voteDown(data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postVoteDownForCommentAction) {
+        await customActions.postVoteDownForCommentAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      if (!editMode) {
-        await actions.serviceCommentComment_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
       }
     } catch (error) {
       handleError<ServiceComment>(error, { setValidation }, data);
@@ -185,21 +210,25 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setIsLoading(false);
     }
   };
-  const serviceCommentComment_View_EditGroupVoteDown = async () => {
+  const voteUpForCommentAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceForCommentsImpl.voteDown(data);
+      await serviceCommentServiceImpl.voteUp(data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postVoteUpForCommentAction) {
+        await customActions.postVoteUpForCommentAction();
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      if (!editMode) {
-        await actions.serviceCommentComment_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
       }
     } catch (error) {
       handleError<ServiceComment>(error, { setValidation }, data);
@@ -207,51 +236,57 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setIsLoading(false);
     }
   };
-  const serviceCommentComment_View_EditGroupVotesOpenPage = async (target?: ServiceSimpleVoteStored) => {
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceCommentVotesRelationTablePage((target || data).__signedIdentifier));
   };
-  const serviceCommentComment_View_EditGroupCreatedByView = async (target?: ServiceServiceUserStored) => {
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceCommentCreatedByRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceCommentComment_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
 
   const actions: ServiceCommentComment_View_EditPageActions = {
-    serviceCommentComment_View_EditBack,
-    serviceCommentComment_View_EditRefresh,
-    serviceCommentComment_View_EditGroupVoteUp,
-    serviceCommentComment_View_EditGroupVoteDown,
-    serviceCommentComment_View_EditGroupVotesOpenPage,
-    serviceCommentComment_View_EditGroupCreatedByView,
+    backAction,
+    refreshAction,
+    voteDownForCommentAction,
+    voteUpForCommentAction,
+    votesOpenPageAction,
+    createdByOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.serviceCommentComment_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceCommentComment_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_UjefsIybEe2VSOmaAz6G9Q)/RelationFeatureView"
+      data-page-name="service::Issue::comments::Relation::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceCommentComment_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

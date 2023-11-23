@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,15 +66,13 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSetSelectorComponentActionDefinitions {
-  serviceServiceUserServiceUser_TableTableFilter?: (
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceServiceUserServiceUser_TableTableRange?: (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ) => Promise<ServiceServiceUserStored[]>;
+  selectorRangeAction?: (queryCustomizer: ServiceServiceUserQueryCustomizer) => Promise<ServiceServiceUserStored[]>;
 }
 
 export interface ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSetSelectorComponentProps {
@@ -136,7 +138,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'userName',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.userName', {
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.userName', {
         defaultValue: 'Username',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -148,7 +150,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'isAdmin',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.isAdmin', {
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.isAdmin', {
         defaultValue: 'Has admin access',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -169,7 +171,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'firstName',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.firstName', {
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.firstName', {
         defaultValue: 'First name',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -181,7 +183,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'lastName',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.lastName', {
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.lastName', {
         defaultValue: 'Last name',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -193,7 +195,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'phone',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.phone', { defaultValue: 'Phone' }) as string,
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.phone', { defaultValue: 'Phone' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -203,7 +205,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'email',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.email', { defaultValue: 'Email' }) as string,
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.email', { defaultValue: 'Email' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -213,7 +215,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.ServiceUser.ServiceUser.Table.SetSelector.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.ServiceUser.ServiceUser_Table.SetSelector.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -241,61 +243,53 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fMKShH2GEe6V8KKnnZfChA',
+      id: '_zvyhQIoAEe6F9LXBn0VWTg',
       attributeName: 'userName',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.userName::Filter', {
-        defaultValue: 'Username',
-      }) as string,
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.userName', { defaultValue: 'Username' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fMK5k32GEe6V8KKnnZfChA',
+      id: '_zvzIUIoAEe6F9LXBn0VWTg',
       attributeName: 'isAdmin',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.isAdmin::Filter', {
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.isAdmin', {
         defaultValue: 'Has admin access',
       }) as string,
       filterType: FilterType.boolean,
     },
 
     {
-      id: '_fMLgoX2GEe6V8KKnnZfChA',
+      id: '_zvzvYYoAEe6F9LXBn0VWTg',
       attributeName: 'firstName',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.firstName::Filter', {
-        defaultValue: 'First name',
-      }) as string,
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.firstName', { defaultValue: 'First name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fMLgpX2GEe6V8KKnnZfChA',
+      id: '_zv0WcooAEe6F9LXBn0VWTg',
       attributeName: 'lastName',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.lastName::Filter', {
-        defaultValue: 'Last name',
-      }) as string,
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.lastName', { defaultValue: 'Last name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fMMHsn2GEe6V8KKnnZfChA',
+      id: '_zv09gooAEe6F9LXBn0VWTg',
       attributeName: 'phone',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.phone::Filter', { defaultValue: 'Phone' }) as string,
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fMMuwX2GEe6V8KKnnZfChA',
+      id: '_zv1kkooAEe6F9LXBn0VWTg',
       attributeName: 'email',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.email::Filter', { defaultValue: 'Email' }) as string,
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fMMuxX2GEe6V8KKnnZfChA',
+      id: '_zv2ysIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.ServiceUser.ServiceUser.Table.SetSelector.created::Filter', {
-        defaultValue: 'Created',
-      }) as string,
+      label: t('service.ServiceUser.ServiceUser_Table.SetSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
   ];
@@ -361,21 +355,34 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
   }
 
   const handleIsRowSelectable = (params: GridRowParams<ServiceServiceUserStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !false, alreadySelected);
+    return isRowSelectable(params.row, !true, alreadySelected);
   };
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;
-    if (newSelectionModel.length === 0) {
-      setSelectionModel([]);
-      setSelectionDiff([]);
-      return;
+    // added new items
+    if (newSelectionModel.length > selectionModel.length) {
+      const diff = newSelectionModel.length - selectionModel.length;
+      const newItemsId = [...newSelectionModel].slice(diff * -1);
+      const newItems = data.filter((value) => newItemsId.indexOf(value.__identifier as GridRowId) !== -1);
+      setSelectionDiff((prevSelectedItems: ServiceServiceUserStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
+
+        return [...prevSelectedItems, ...newItems];
+      });
     }
 
-    const lastId = newSelectionModel[newSelectionModel.length - 1];
+    // removed items
+    if (newSelectionModel.length < selectionModel.length) {
+      const removedItemsId = selectionModel.filter((value) => newSelectionModel.indexOf(value) === -1);
+      setSelectionDiff((prevSelectedItems: ServiceServiceUserStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
 
-    setSelectionModel([lastId]);
-    setSelectionDiff([data.find((value) => value.__identifier === lastId)!]);
+        return [...prevSelectedItems.filter((value) => removedItemsId.indexOf(value.__identifier as GridRowId) === -1)];
+      });
+    }
+
+    setSelectionModel(newSelectionModel);
   };
 
   async function fetchData() {
@@ -383,9 +390,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceServiceUserServiceUser_TableTableRange!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -411,7 +416,10 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable"
+      data-table-name="ServiceUser_Table::Set::Selector"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -438,7 +446,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
         ]}
         disableRowSelectionOnClick
         isRowSelectable={handleIsRowSelectable}
-        hideFooterSelectedRowCount={!false}
+        hideFooterSelectedRowCount={!true}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleOnSelection}
@@ -450,13 +458,13 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceServiceUserServiceUser_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceServiceUserServiceUser_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -468,29 +476,21 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.ServiceUser.ServiceUser.Table.SetSelector.service::ServiceUser::ServiceUser_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.ServiceUser.ServiceUser_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceServiceUserServiceUser_TableTableRange && true ? (
+              {actions.selectorRangeAction && true ? (
                 <Button
                   id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceServiceUserServiceUser_TableTableRange!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.ServiceUser.ServiceUser.Table.SetSelector.service::ServiceUser::ServiceUser_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.ServiceUser.ServiceUser_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -521,6 +521,6 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

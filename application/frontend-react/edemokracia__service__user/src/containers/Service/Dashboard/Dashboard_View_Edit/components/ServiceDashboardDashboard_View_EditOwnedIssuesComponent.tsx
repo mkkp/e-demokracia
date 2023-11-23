@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,56 +68,22 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDefinitions {
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesAddOpenSelector?: () => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesBulkDelete?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesBulkRemove?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesClear?: () => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesCreateOpen?: () => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesFilter?: (
+  issuesOwnedBulkDeleteAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
+  issuesOwnedFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRefresh?: (
-    queryCustomizer: ServiceIssueQueryCustomizer,
-  ) => Promise<ServiceIssueStored[]>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsActivate?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm?: (row: ServiceIssueStored) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesDelete?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRemove?: (
-    row: ServiceIssueStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesView?: (
-    row: ServiceIssueStored,
-  ) => Promise<void>;
+  issuesOwnedRefreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  issuesOwnedActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedCloseVoteForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  issuesOwnedDeleteAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
+  issuesOwnedOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
 export interface ServiceDashboardDashboard_View_EditOwnedIssuesComponentProps {
@@ -180,7 +150,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'scope',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.scope', { defaultValue: 'Scope' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -199,7 +169,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'countyRepresentation',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.countyRepresentation', {
+      headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -211,7 +181,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'cityRepresentation',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.cityRepresentation', {
+      headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -223,7 +193,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'districtRepresentation',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.districtRepresentation', {
+      headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -235,7 +205,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -245,7 +215,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -270,7 +240,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     {
       ...baseColumnConfig,
       field: 'status',
-      headerName: t('service.Dashboard.Dashboard.View.Edit.status', { defaultValue: 'Status' }) as string,
+      headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -290,102 +260,83 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
     {
-      id: 'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRemove
-        ? async (rowData) => {
-            await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRemove!(
-              rowData,
-            );
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Delete', {
+        defaultValue: 'Delete',
+      }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesDelete
+      action: actions.issuesOwnedDeleteAction
         ? async (rowData) => {
-            await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesDelete!(
-              rowData,
-            );
+            await actions.issuesOwnedDeleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard.View.Edit.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate
+      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
+      action: actions.issuesOwnedCloseDebateAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsActivate!(rowData);
+            await actions.issuesOwnedCloseDebateAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard.View.Edit.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseVote!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard.View.Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsDeleteOrArchive!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard.View.Edit.removeFromFavorites', {
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      label: t('service.Dashboard.Dashboard_View_Edit.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
       }) as string,
       icon: <MdiIcon path="star-minus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites
+      action: actions.issuesOwnedRemoveFromFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsRemoveFromFavorites!(rowData);
+            await actions.issuesOwnedRemoveFromFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard.View.Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
+      action: actions.issuesOwnedCloseVoteForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsCloseDebateOpenForm!(rowData);
+            await actions.issuesOwnedCloseVoteForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard.View.Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
+      action: actions.issuesOwnedDeleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.issuesOwnedDeleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
+      action: actions.issuesOwnedActivateForIssueAction
+        ? async (rowData) => {
+            await actions.issuesOwnedActivateForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_0Pet8IoAEe6F9LXBn0VWTg)',
+      label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites
+      action: actions.issuesOwnedAddToFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditActionsPageActionButtonsAddToFavorites!(rowData);
+            await actions.issuesOwnedAddToFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -393,58 +344,58 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ftQNYn2GEe6V8KKnnZfChA',
+      id: '_0PacgooAEe6F9LXBn0VWTg',
       attributeName: 'scope',
-      label: t('service.Dashboard.Dashboard.View.Edit.scope::Filter', { defaultValue: 'Scope' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
     },
 
     {
-      id: '_ftQ0cn2GEe6V8KKnnZfChA',
+      id: '_0PbDkIoAEe6F9LXBn0VWTg',
       attributeName: 'countyRepresentation',
-      label: t('service.Dashboard.Dashboard.View.Edit.countyRepresentation::Filter', {
+      label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ftRbgn2GEe6V8KKnnZfChA',
+      id: '_0PbDlIoAEe6F9LXBn0VWTg',
       attributeName: 'cityRepresentation',
-      label: t('service.Dashboard.Dashboard.View.Edit.cityRepresentation::Filter', {
+      label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ftSCkH2GEe6V8KKnnZfChA',
+      id: '_0PbqoooAEe6F9LXBn0VWTg',
       attributeName: 'districtRepresentation',
-      label: t('service.Dashboard.Dashboard.View.Edit.districtRepresentation::Filter', {
+      label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ftSpoH2GEe6V8KKnnZfChA',
+      id: '_0PcRsIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Dashboard.Dashboard.View.Edit.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ftSppH2GEe6V8KKnnZfChA',
+      id: '_0PcRtIoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Dashboard.Dashboard.View.Edit.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ftTQsn2GEe6V8KKnnZfChA',
+      id: '_0Pc4wYoAEe6F9LXBn0VWTg',
       attributeName: 'status',
-      label: t('service.Dashboard.Dashboard.View.Edit.status::Filter', { defaultValue: 'Status' }) as string,
+      label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
       enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
     },
@@ -519,10 +470,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       setIsLoading(true);
 
       try {
-        const res =
-          await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRefresh!(
-            processQueryCustomizer(queryCustomizer),
-          );
+        const res = await actions.issuesOwnedRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -548,7 +496,10 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+      data-table-name="ownedIssues"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -582,11 +533,8 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesView
-            ? async (params: GridRowParams<ServiceIssueStored>) =>
-                await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesView!(
-                  params.row,
-                )
+          actions.issuesOwnedOpenPageAction
+            ? async (params: GridRowParams<ServiceIssueStored>) => await actions.issuesOwnedOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -596,136 +544,52 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesFilter && true ? (
+              {actions.issuesOwnedFilterAction && true ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesFilter!(
-                        'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.issuesOwnedFilterAction!(
+                      'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRefresh &&
-              true ? (
+              {actions.issuesOwnedRefreshAction && true ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.issuesOwnedRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesCreateOpen &&
-              true ? (
-                <Button
-                  id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesAddOpenSelector &&
-              true ? (
-                <Button
-                  id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesClear &&
-              data.length ? (
-                <Button
-                  id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.issuesOwnedBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceDashboardDashboard_View_EditSelectorIssuesIssueTabBarMyissuesOwnedIssuesBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.issuesOwnedBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
@@ -733,7 +597,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
                   {t(
-                    'service.Dashboard.Dashboard.View.Edit.service::Dashboard::Dashboard_View_Edit::Selector::issues::IssueTabBar::myissues::ownedIssues::BulkDelete',
+                    'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkDelete',
                     { defaultValue: 'Delete' },
                   )}
                 </Button>
@@ -766,6 +630,6 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

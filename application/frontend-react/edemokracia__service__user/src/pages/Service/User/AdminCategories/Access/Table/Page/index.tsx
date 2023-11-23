@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -36,6 +37,15 @@ import type {
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
 import { userServiceForAdminCategoriesImpl } from '~/services/data-axios';
+export type ServiceIssueCategoryIssueCategory_TablePageActionsExtended =
+  ServiceIssueCategoryIssueCategory_TablePageActions & {};
+
+export const SERVICE_USER_ADMIN_CATEGORIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_TableActionsHook';
+export type ServiceIssueCategoryIssueCategory_TableActionsHook = (
+  data: ServiceIssueCategoryStored[],
+  editMode: boolean,
+) => ServiceIssueCategoryIssueCategory_TablePageActionsExtended;
 
 const ServiceIssueCategoryIssueCategory_TablePageContainer = lazy(
   () =>
@@ -50,7 +60,7 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -63,20 +73,29 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceIssueCategoryStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueCategoryIssueCategory_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_CATEGORIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueCategoryIssueCategory_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
   const openServiceUserAdminCategoriesAccessFormPage = useServiceUserAdminCategoriesAccessFormPage();
   const openServiceUserAdminCategoriesAccessViewPage = useServiceUserAdminCategoriesAccessViewPage();
 
   // Calculated section
-  const title: string = t('Service.IssueCategory.IssueCategory_Table', { defaultValue: 'IssueCategory Table' });
+  const title: string = t('service.IssueCategory.IssueCategory_Table', { defaultValue: 'IssueCategory Table' });
 
   // Action section
-  const serviceIssueCategoryIssueCategory_TableView = async (target?: ServiceIssueCategoryStored) => {
+  const openPageAction = async (target?: ServiceIssueCategoryStored) => {
     await openServiceUserAdminCategoriesAccessViewPage(target!);
 
     setRefreshCounter((prev) => prev + 1);
   };
-  const serviceIssueCategoryIssueCategory_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -87,7 +106,7 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
       filters: newFilters,
     };
   };
-  const serviceIssueCategoryIssueCategory_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
   ): Promise<ServiceIssueCategoryStored[]> => {
     try {
@@ -102,14 +121,13 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceIssueCategoryIssueCategory_TableCreateOpen = async () => {
+  const openFormAction = async () => {
     const { result, data: returnedData } = await openServiceUserAdminCategoriesAccessFormPage(data);
-    setRefreshCounter((prev) => prev + 1);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
   };
-  const serviceIssueCategoryIssueCategory_TableDelete = async (
-    target: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => {
+  const deleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -138,18 +156,18 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
       }
     }
   };
-  const serviceIssueCategoryIssueCategory_TableBulkDelete = async (
+  const bulkDeleteAction = async (
     selectedRows: ServiceIssueCategoryStored[],
   ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueCategoryStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.IssueCategory.IssueCategory_Table.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceIssueCategoryIssueCategory_TableDelete) {
-              await actions.serviceIssueCategoryIssueCategory_TableDelete!(item, true);
+            if (actions.deleteAction) {
+              await actions.deleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -175,27 +193,33 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
   };
 
   const actions: ServiceIssueCategoryIssueCategory_TablePageActions = {
-    serviceIssueCategoryIssueCategory_TableView,
-    serviceIssueCategoryIssueCategory_TableTableFilter,
-    serviceIssueCategoryIssueCategory_TableTableRefresh,
-    serviceIssueCategoryIssueCategory_TableCreateOpen,
-    serviceIssueCategoryIssueCategory_TableDelete,
-    serviceIssueCategoryIssueCategory_TableBulkDelete,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    openFormAction,
+    deleteAction,
+    bulkDeleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceIssueCategoryIssueCategory_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessTablePageDefinition"
+      data-page-name="service::User::adminCategories::Access::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceIssueCategoryIssueCategory_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

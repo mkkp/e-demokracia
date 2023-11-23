@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -65,35 +69,16 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueIssue_View_EditCommentsComponentActionDefinitions {
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsAddOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsBulkDelete?: (
-    selectedRows: ServiceCommentStored[],
-  ) => Promise<DialogResult<ServiceCommentStored[]>>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsBulkRemove?: (
-    selectedRows: ServiceCommentStored[],
-  ) => Promise<DialogResult<ServiceCommentStored[]>>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsClear?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsCreateOpen?: () => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsFilter?: (
+  commentsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsRefresh?: (
-    queryCustomizer: ServiceCommentQueryCustomizer,
-  ) => Promise<ServiceCommentStored[]>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsDelete?: (
-    row: ServiceCommentStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsRemove?: (
-    row: ServiceCommentStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueIssue_View_EditOtherCommentsActionsCommentsView?: (row: ServiceCommentStored) => Promise<void>;
-  serviceCommentComment_View_EditGroupVoteDown?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
-  serviceCommentComment_View_EditGroupVoteUp?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
+  commentsRefreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<ServiceCommentStored[]>;
+  commentsOpenPageAction?: (row: ServiceCommentStored) => Promise<void>;
+  commentsVoteDownForCommentAction?: (row: ServiceCommentStored) => Promise<void>;
+  commentsVoteUpForCommentAction?: (row: ServiceCommentStored) => Promise<void>;
 }
 
 export interface ServiceIssueIssue_View_EditCommentsComponentProps {
@@ -153,7 +138,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     {
       ...baseColumnConfig,
       field: 'comment',
-      headerName: t('service.Issue.Issue.View.Edit.comment', { defaultValue: 'Comment' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -163,7 +148,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Issue.Issue.View.Edit.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -188,7 +173,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     {
       ...baseColumnConfig,
       field: 'createdByName',
-      headerName: t('service.Issue.Issue.View.Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -198,7 +183,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     {
       ...baseColumnConfig,
       field: 'upVotes',
-      headerName: t('service.Issue.Issue.View.Edit.upVotes', { defaultValue: 'up' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -211,7 +196,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     {
       ...baseColumnConfig,
       field: 'downVotes',
-      headerName: t('service.Issue.Issue.View.Edit.downVotes', { defaultValue: 'down' }) as string,
+      headerName: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -225,52 +210,24 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   const rowActions: TableRowAction<ServiceCommentStored>[] = [
     {
-      id: 'User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsRemove
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceCommentStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsDelete
-        ? async (rowData) => {
-            await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsDelete!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue.View.Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.serviceCommentComment_View_EditGroupVoteUp
-        ? async (rowData) => {
-            await actions.serviceCommentComment_View_EditGroupVoteUp!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue.View.Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_0Sqk04oAEe6F9LXBn0VWTg)',
+      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.serviceCommentComment_View_EditGroupVoteDown
+      action: actions.commentsVoteDownForCommentAction
         ? async (rowData) => {
-            await actions.serviceCommentComment_View_EditGroupVoteDown!(rowData);
+            await actions.commentsVoteDownForCommentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_0Sqk04oAEe6F9LXBn0VWTg)',
+      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceCommentStored) => editMode || isLoading,
+      action: actions.commentsVoteUpForCommentAction
+        ? async (rowData) => {
+            await actions.commentsVoteUpForCommentAction!(rowData);
           }
         : undefined,
     },
@@ -278,37 +235,37 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fwz3sn2GEe6V8KKnnZfChA',
+      id: '_0SoIkooAEe6F9LXBn0VWTg',
       attributeName: 'comment',
-      label: t('service.Issue.Issue.View.Edit.comment::Filter', { defaultValue: 'Comment' }) as string,
+      label: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fw0ew32GEe6V8KKnnZfChA',
+      id: '_0SovoYoAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Issue.Issue.View.Edit.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_fw1F0X2GEe6V8KKnnZfChA',
+      id: '_0SovpYoAEe6F9LXBn0VWTg',
       attributeName: 'createdByName',
-      label: t('service.Issue.Issue.View.Edit.createdByName::Filter', { defaultValue: 'CreatedByName' }) as string,
+      label: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fw1F1X2GEe6V8KKnnZfChA',
+      id: '_0SpWsooAEe6F9LXBn0VWTg',
       attributeName: 'upVotes',
-      label: t('service.Issue.Issue.View.Edit.upVotes::Filter', { defaultValue: 'up' }) as string,
+      label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_fw1s432GEe6V8KKnnZfChA',
+      id: '_0SpWtooAEe6F9LXBn0VWTg',
       attributeName: 'downVotes',
-      label: t('service.Issue.Issue.View.Edit.downVotes::Filter', { defaultValue: 'down' }) as string,
+      label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
     },
   ];
@@ -374,7 +331,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   }, [ownerData?.comments, filters]);
 
   return (
-    <>
+    <div id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable" data-table-name="comments">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -401,16 +358,10 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsView
-            ? async (params: GridRowParams<ServiceCommentStored>) =>
-                await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsView!(params.row)
+          actions.commentsOpenPageAction
+            ? async (params: GridRowParams<ServiceCommentStored>) => await actions.commentsOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -420,13 +371,13 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsFilter && true ? (
+              {actions.commentsFilterAction && true ? (
                 <Button
                   id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsFilter!(
+                    const filterResults = await actions.commentsFilterAction!(
                       'User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -438,123 +389,25 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.comments.actions.comments.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsRefresh && true ? (
+              {actions.commentsRefreshAction && true ? (
                 <Button
                   id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.commentsRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsClear && data.length ? (
-                <Button
-                  id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsBulkRemove &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsBulkRemove!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsBulkDelete &&
-              selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceIssueIssue_View_EditOtherCommentsActionsCommentsBulkDelete!(
-                        selectedRows.current,
-                      );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.Issue.Issue.View.Edit.service::Issue::Issue_View_Edit::other::comments::actions::comments::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.Issue.Issue_View_Edit.other.comments.actions.comments.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -576,6 +429,6 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

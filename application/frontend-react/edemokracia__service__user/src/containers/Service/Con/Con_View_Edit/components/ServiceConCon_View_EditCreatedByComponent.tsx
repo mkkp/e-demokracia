@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceConCon_View_EditCreatedByComponentActionDefinitions {
-  serviceConCon_View_EditConCreatedByCreate?: () => Promise<void>;
-  serviceConCon_View_EditConCreatedByDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceConCon_View_EditConCreatedBySetOpenSelector?: () => Promise<void>;
-  serviceConCon_View_EditConCreatedByUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceConCon_View_EditConCreatedByView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceConCon_View_EditConCreatedByAutocomplete?: (
+  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -55,11 +51,7 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
     <AggregationInput
       name="createdBy"
       id="User/(esm/_WifZAIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t('service.Con.Con.View.Edit.createdBy.con.con::LabelWrapper.Con_View_Edit.service::Con::Con_View_Edit', {
-          defaultValue: 'Created by',
-        }) as string
-      }
+      label={t('service.Con.Con_View_Edit.createdBy', { defaultValue: 'Created by' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -72,7 +64,7 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
         storeDiff('createdBy', createdBy);
       }}
       onAutoCompleteSearch={
-        actions.serviceConCon_View_EditConCreatedByAutocomplete
+        actions.createdByAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -84,41 +76,15 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceConCon_View_EditConCreatedByAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.createdByAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.createdBy && actions.serviceConCon_View_EditConCreatedByView
+        ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.serviceConCon_View_EditConCreatedByView!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceConCon_View_EditConCreatedByCreate
-          ? async () => {
-              await actions.serviceConCon_View_EditConCreatedByCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.createdBy && actions.serviceConCon_View_EditConCreatedByDelete
-          ? async () => actions.serviceConCon_View_EditConCreatedByDelete!(ownerData.createdBy!)
-          : undefined
-      }
-      onSet={
-        actions.serviceConCon_View_EditConCreatedBySetOpenSelector
-          ? async () => {
-              await actions.serviceConCon_View_EditConCreatedBySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.createdBy && actions.serviceConCon_View_EditConCreatedByUnset
-          ? async () => actions.serviceConCon_View_EditConCreatedByUnset!(ownerData.createdBy!)
           : undefined
       }
     ></AggregationInput>

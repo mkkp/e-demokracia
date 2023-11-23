@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,18 +26,8 @@ import type {
   ServiceSelectAnswerVoteEntryStored,
 } from '~/services/data-api';
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete?: (
-    target: ServiceSelectAnswerVoteEntryStored,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector?: () => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset?: (
-    target: ServiceSelectAnswerVoteEntryStored,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView?: (
-    target: ServiceSelectAnswerVoteEntryStored,
-  ) => Promise<void>;
-  serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryAutocomplete?: (
+  userVoteEntryOpenPageAction?: (target: ServiceSelectAnswerVoteEntryStored) => Promise<void>;
+  userVoteEntryAutocompleteRangeAction?: (
     queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ) => Promise<Array<ServiceSelectAnswerVoteEntryStored>>;
 }
@@ -64,10 +54,9 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       name="userVoteEntry"
       id="User/(esm/_0SJy1FtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedLink"
       label={
-        t(
-          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition.View.Edit.userVoteEntry.VirtualForUserVote.userVote.userVoteEntryGroup.userVoteEntryGroup::LabelWrapper.SelectAnswerVoteDefinition_View_Edit.service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit',
-          { defaultValue: 'Value' },
-        ) as string
+        t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntry', {
+          defaultValue: 'Value',
+        }) as string
       }
       labelList={[
         ownerData.userVoteEntry?.valueRepresentation?.toString() ?? '',
@@ -84,7 +73,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         storeDiff('userVoteEntry', userVoteEntry);
       }}
       onAutoCompleteSearch={
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryAutocomplete
+        actions.userVoteEntryAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer = {
                 ...(searchText?.length
@@ -96,52 +85,15 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                 _orderBy: [{ attribute: 'valueRepresentation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.userVoteEntryAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.userVoteEntry &&
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView
+        ownerData.userVoteEntry && actions.userVoteEntryOpenPageAction
           ? async () => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView!(
-                ownerData.userVoteEntry!,
-              );
+              await actions.userVoteEntryOpenPageAction!(ownerData.userVoteEntry!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate
-          ? async () => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.userVoteEntry &&
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete
-          ? async () =>
-              actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryDelete!(
-                ownerData.userVoteEntry!,
-              )
-          : undefined
-      }
-      onSet={
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector
-          ? async () => {
-              await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntrySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.userVoteEntry &&
-        actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset
-          ? async () =>
-              actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryUnset!(
-                ownerData.userVoteEntry!,
-              )
           : undefined
       }
     ></AggregationInput>

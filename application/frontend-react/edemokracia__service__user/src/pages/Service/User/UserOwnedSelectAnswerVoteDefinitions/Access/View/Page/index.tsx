@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -49,7 +50,19 @@ import type {
   ServiceSelectAnswerVoteSelectionStored,
   VoteStatus,
 } from '~/services/data-api';
-import { userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios';
+import { serviceSelectAnswerVoteDefinitionServiceImpl } from '~/services/data-axios';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended =
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions & {
+    postTakeBackVoteForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  };
+
+export const SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionsHook';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionsHook = (
+  data: ServiceSelectAnswerVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceSelectAnswerVoteDefinition, value: any) => void,
+) => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended;
 
 export const convertServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPagePayload = (
   attributeName: keyof ServiceSelectAnswerVoteDefinition,
@@ -88,7 +101,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -140,6 +153,15 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       '{userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended
+    | undefined = customActionsHook?.(data, editMode, storeDiff);
+
   // Dialog hooks
   const openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector =
     useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector();
@@ -153,21 +175,21 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
     useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit', {
+  const title: string = t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit', {
     defaultValue: 'SelectAnswerVoteDefinition View / Edit',
   });
 
   // Action section
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteDefinitionStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.refresh(
+      const result = await serviceSelectAnswerVoteDefinitionServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         pageQueryCustomizer,
       );
@@ -191,17 +213,15 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh(
-      processQueryCustomizer(pageQueryCustomizer),
-    );
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.update(payloadDiff.current);
+      const res = await serviceSelectAnswerVoteDefinitionServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -209,9 +229,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceSelectAnswerVoteDefinition, string>());
-        await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-          pageQueryCustomizer,
-        );
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -220,26 +238,14 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenSelector =
-    async () => {
-      const { result, data: returnedData } =
-        await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
-          data,
-        );
-      if (result === 'submit') {
-        if (!editMode) {
-          await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-            processQueryCustomizer(pageQueryCustomizer),
-          );
-        }
-      }
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote =
-    async () => {
-      try {
-        setIsLoading(true);
-        await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.takeBackVote(data);
+  const takeBackVoteForSelectAnswerVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceSelectAnswerVoteDefinitionServiceImpl.takeBackVote(data);
 
+      if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction();
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -249,43 +255,34 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
         );
 
         if (!editMode) {
-          await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-            processQueryCustomizer(pageQueryCustomizer),
-          );
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
         }
-      } catch (error) {
-        handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
-      } finally {
-        setIsLoading(false);
       }
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualIssueOpenPage = async (
-    target?: ServiceIssueStored,
-  ) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualIssuePreFetch =
-    async (): Promise<ServiceIssueStored> => {
-      return userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.getIssue(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        {
-          _mask: '{}',
-        },
-      );
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditEntriesVoteEntriesView = async (
-    target?: ServiceSelectAnswerVoteEntryStored,
-  ) => {
-    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-        processQueryCustomizer(pageQueryCustomizer),
-      );
+    } catch (error) {
+      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditEntriesVoteEntriesFilter = async (
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
+        data,
+      );
+    if (result === 'submit') {
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      }
+    }
+  };
+  const voteSelectionsOpenPageAction = async (target?: ServiceSelectAnswerVoteSelectionStored) => {
+    await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteSelectionsFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -296,177 +293,179 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       filters: newFilters,
     };
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditEntriesVoteEntriesRefresh = async (
+  const voteSelectionsOpenFormAction = async () => {
+    const { result, data: returnedData } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteSelectionsDeleteAction = async (target: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceSelectAnswerVoteDefinitionServiceImpl.deleteVoteSelections(target);
+
+        if (!silentMode) {
+          enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
+            variant: 'success',
+            ...toastConfig.success,
+          });
+
+          refreshAction(pageQueryCustomizer);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceSelectAnswerVoteSelection>(error, undefined, target);
+      }
+    }
+  };
+  const voteSelectionsBulkDeleteAction = async (
+    selectedRows: ServiceSelectAnswerVoteSelectionStored[],
+  ): Promise<DialogResult<Array<ServiceSelectAnswerVoteSelectionStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceSelectAnswerVoteSelectionStored>({
+        dialogTitle: t(
+          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkDelete',
+          { defaultValue: 'Delete' },
+        ),
+        itemTitleFn: (item) => item.description!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.voteSelectionsDeleteAction) {
+              await actions.voteSelectionsDeleteAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+              data: [],
+            });
+          }
+        },
+      });
+    });
+  };
+  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
+    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteEntriesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const voteEntriesRefreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteEntryStored[]> => {
-    return userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.listVoteEntries(
+    return serviceSelectAnswerVoteDefinitionServiceImpl.listVoteEntries(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,
     );
   };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsView =
-    async (target?: ServiceSelectAnswerVoteSelectionStored) => {
-      await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
+  const userVoteEntryOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
+    await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
 
-      if (!editMode) {
-        await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-          processQueryCustomizer(pageQueryCustomizer),
-        );
-      }
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsFilter =
-    async (
-      id: string,
-      filterOptions: FilterOption[],
-      model?: GridFilterModel,
-      filters?: Filter[],
-    ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-      const newFilters = await openFilterDialog(id, filterOptions, filters);
-      return {
-        filters: newFilters,
-      };
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsCreateOpen =
-    async () => {
-      const { result, data: returnedData } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
-        data,
-      );
-      if (!editMode) {
-        await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-          processQueryCustomizer(pageQueryCustomizer),
-        );
-      }
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete =
-    async (target: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => {
-      try {
-        const confirmed = !silentMode
-          ? await openConfirmDialog(
-              'row-delete-action',
-              t('judo.modal.confirm.confirm-delete', {
-                defaultValue: 'Are you sure you would like to delete the selected element?',
-              }),
-              t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-            )
-          : true;
-        if (confirmed) {
-          await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.deleteVoteSelections(target);
-
-          if (!silentMode) {
-            enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
-              variant: 'success',
-              ...toastConfig.success,
-            });
-
-            serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh(pageQueryCustomizer);
-          }
-        }
-      } catch (error) {
-        if (!silentMode) {
-          handleError<ServiceSelectAnswerVoteSelection>(error, undefined, target);
-        }
-      }
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkDelete =
-    async (
-      selectedRows: ServiceSelectAnswerVoteSelectionStored[],
-    ): Promise<DialogResult<Array<ServiceSelectAnswerVoteSelectionStored>>> => {
-      return new Promise((resolve) => {
-        openCRUDDialog<ServiceSelectAnswerVoteSelectionStored>({
-          dialogTitle: t('TMP', { defaultValue: 'Delete' }),
-          itemTitleFn: (item) => item.description!,
-          selectedItems: selectedRows,
-          action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-            try {
-              if (
-                actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete
-              ) {
-                await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete!(
-                  item,
-                  true,
-                );
-              }
-              successHandler();
-            } catch (error) {
-              errorHandler(error);
-            }
-          },
-          onClose: async (needsRefresh) => {
-            if (needsRefresh) {
-              if (actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh) {
-                await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-                  processQueryCustomizer(pageQueryCustomizer),
-                );
-              }
-              resolve({
-                result: 'submit',
-                data: [],
-              });
-            } else {
-              resolve({
-                result: 'close',
-                data: [],
-              });
-            }
-          },
-        });
-      });
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView =
-    async (target?: ServiceSelectAnswerVoteEntryStored) => {
-      await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
-
-      if (!editMode) {
-        await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(
-          processQueryCustomizer(pageQueryCustomizer),
-        );
-      }
-    };
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions = {
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditBack,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditCancel,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUpdate,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteOpenSelector,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteTakeBackVote,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualIssueOpenPage,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualIssuePreFetch,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditEntriesVoteEntriesView,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditEntriesVoteEntriesFilter,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditEntriesVoteEntriesRefresh,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsView,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsFilter,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsCreateOpen,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsDelete,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualVoteSelectionsBulkDelete,
-    serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupUserVoteVirtualForUserVoteUserVoteEntryView,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    takeBackVoteForSelectAnswerVoteDefinitionAction,
+    voteAction,
+    voteSelectionsOpenPageAction,
+    voteSelectionsFilterAction,
+    voteSelectionsOpenFormAction,
+    voteSelectionsDeleteAction,
+    voteSelectionsBulkDeleteAction,
+    voteEntriesOpenPageAction,
+    voteEntriesFilterAction,
+    voteEntriesRefreshAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    userVoteEntryOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessViewPageDefinition"
+      data-page-name="service::User::userOwnedSelectAnswerVoteDefinitions::Access::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

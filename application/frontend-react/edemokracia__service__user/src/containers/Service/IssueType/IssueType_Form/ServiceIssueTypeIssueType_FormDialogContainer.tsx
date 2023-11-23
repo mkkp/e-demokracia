@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,15 +27,15 @@ const ServiceIssueTypeIssueType_Form = lazy(
 );
 
 export interface ServiceIssueTypeIssueType_FormDialogActions extends ServiceIssueTypeIssueType_FormActionDefinitions {
-  serviceIssueTypeIssueType_FormGetTemplate?: () => Promise<ServiceIssueType>;
-  serviceIssueTypeIssueType_FormBack?: () => Promise<void>;
-  serviceIssueTypeIssueType_FormCreate?: () => Promise<void>;
+  getTemplateAction?: () => Promise<ServiceIssueType>;
+  backAction?: () => Promise<void>;
+  createAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueTypeIssueType_FormDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceIssueTypeIssueType_FormDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -74,7 +79,7 @@ export default function ServiceIssueTypeIssueType_FormDialog(props: ServiceIssue
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceIssueTypeIssueType_Form-dialog-close-wrapper"
+          id="User/(esm/_J4WCwNu4Ee2Bgcx6em3jZg)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -104,43 +109,35 @@ export default function ServiceIssueTypeIssueType_FormDialog(props: ServiceIssue
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {editMode && actions.serviceIssueTypeIssueType_FormBack && (
+        {editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_Form::Back"
+              id="User/(esm/_J4WCwNu4Ee2Bgcx6em3jZg)/TransferObjectFormBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_FormBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.Form.service::IssueType::IssueType_Form::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_Form.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceIssueTypeIssueType_FormCreate && (
+        {editMode && actions.createAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_Form::Create"
+              id="User/(esm/_J4WCwNu4Ee2Bgcx6em3jZg)/TransferObjectFormCreateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_FormCreate!();
+                await actions.createAction!();
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.Form.service::IssueType::IssueType_Form::Create', {
-                  defaultValue: 'Create',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_Form.Create', { defaultValue: 'Create' })}</span>
             </LoadingButton>
           </Grid>
         )}

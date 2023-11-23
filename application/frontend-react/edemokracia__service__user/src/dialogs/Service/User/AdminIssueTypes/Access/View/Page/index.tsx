@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -33,7 +34,18 @@ import type {
   ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
-import { userServiceForAdminIssueTypesImpl } from '~/services/data-axios';
+import { serviceIssueTypeServiceImpl } from '~/services/data-axios';
+export type ServiceIssueTypeIssueType_View_EditDialogActionsExtended =
+  ServiceIssueTypeIssueType_View_EditDialogActions & {};
+
+export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueTypeIssueType_View_EditActionsHook';
+export type ServiceIssueTypeIssueType_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceIssueTypeStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+) => ServiceIssueTypeIssueType_View_EditDialogActionsExtended;
 
 export const useServiceUserAdminIssueTypesAccessViewPage = (): ((
   ownerData: any,
@@ -45,9 +57,9 @@ export const useServiceUserAdminIssueTypesAccessViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -56,14 +68,14 @@ export const useServiceUserAdminIssueTypesAccessViewPage = (): ((
         children: (
           <ServiceUserAdminIssueTypesAccessViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -99,10 +111,11 @@ const ServiceIssueTypeIssueType_View_EditDialogContainer = lazy(
 export interface ServiceUserAdminIssueTypesAccessViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueTypeStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessViewPageDefinition
 // Name: service::User::adminIssueTypes::Access::View::Page
 export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceUserAdminIssueTypesAccessViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -110,7 +123,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -159,22 +172,31 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
     _mask: '{voteType,description,title}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueTypeIssueType_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
+  const title: string = t('service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
 
   // Action section
-  const serviceIssueTypeIssueType_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueTypeIssueType_View_EditRefresh = async (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored> => {
+  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForAdminIssueTypesImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceIssueTypeServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -195,15 +217,15 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceIssueTypeIssueType_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceIssueTypeIssueType_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceIssueTypeIssueType_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await userServiceForAdminIssueTypesImpl.update(payloadDiff.current);
+      const res = await serviceIssueTypeServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -211,7 +233,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceIssueType, string>());
-        await actions.serviceIssueTypeIssueType_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -220,7 +242,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
       setIsLoading(false);
     }
   };
-  const serviceIssueTypeIssueType_View_EditDelete = async () => {
+  const deleteAction = async () => {
     try {
       const confirmed = await openConfirmDialog(
         'row-delete-action',
@@ -230,7 +252,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
         t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
       );
       if (confirmed) {
-        await userServiceForAdminIssueTypesImpl.delete(data);
+        await serviceIssueTypeServiceImpl.delete(data);
 
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
@@ -245,20 +267,24 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
   };
 
   const actions: ServiceIssueTypeIssueType_View_EditDialogActions = {
-    serviceIssueTypeIssueType_View_EditBack,
-    serviceIssueTypeIssueType_View_EditRefresh,
-    serviceIssueTypeIssueType_View_EditCancel,
-    serviceIssueTypeIssueType_View_EditUpdate,
-    serviceIssueTypeIssueType_View_EditDelete,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    deleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceIssueTypeIssueType_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessViewPageDefinition"
+      data-page-name="service::User::adminIssueTypes::Access::View::Page"
+    >
       <Suspense>
         <ServiceIssueTypeIssueType_View_EditDialogContainer
           ownerData={ownerData}
@@ -276,6 +302,6 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

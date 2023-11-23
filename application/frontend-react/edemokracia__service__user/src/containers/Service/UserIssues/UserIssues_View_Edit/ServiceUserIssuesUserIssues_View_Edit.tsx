@@ -13,9 +13,16 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +44,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssue,
@@ -73,7 +86,7 @@ export interface ServiceUserIssuesUserIssues_View_EditActionDefinitions
     ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentActionDefinitions,
     ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComponentActionDefinitions,
     ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponentActionDefinitions {
-  serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssueOpenForm?: () => Promise<void>;
+  createIssueAction?: () => Promise<void>;
 }
 
 export interface ServiceUserIssuesUserIssues_View_EditProps {
@@ -136,16 +149,16 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                   startIcon={<MdiIcon path="wechat" />}
                   loadingPosition="start"
                   onClick={
-                    actions.serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssueOpenForm
+                    actions.createIssueAction
                       ? async () => {
-                          await actions.serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssueOpenForm!();
+                          await actions.createIssueAction!();
                         }
                       : undefined
                   }
                   disabled={editMode}
                 >
                   <span>
-                    {t('service.UserIssues.UserIssues.View.Edit.createIssue', { defaultValue: 'Create issue' })}
+                    {t('service.UserIssues.UserIssues_View_Edit.createIssue', { defaultValue: 'Create issue' })}
                   </span>
                 </LoadingButton>
               </Grid>
@@ -161,8 +174,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
               childTabs={[
                 {
                   id: 'User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupTab',
-                  name: 'service.UserIssues.UserIssues.View.Edit.ownedIssuesGroup',
-                  label: t('service.UserIssues.UserIssues.View.Edit.ownedIssuesGroup', {
+                  name: 'service.UserIssues.UserIssues_View_Edit.ownedIssuesGroup',
+                  label: t('service.UserIssues.UserIssues_View_Edit.ownedIssuesGroup', {
                     defaultValue: 'Owned issues',
                   }) as string,
                   disabled: isLoading,
@@ -172,8 +185,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                 },
                 {
                   id: 'User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupTab',
-                  name: 'service.UserIssues.UserIssues.View.Edit.activeGlobalIssues',
-                  label: t('service.UserIssues.UserIssues.View.Edit.activeGlobalIssues', {
+                  name: 'service.UserIssues.UserIssues_View_Edit.activeGlobalIssues',
+                  label: t('service.UserIssues.UserIssues_View_Edit.activeGlobalIssues', {
                     defaultValue: 'Active global issues',
                   }) as string,
                   disabled: isLoading,
@@ -183,8 +196,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                 },
                 {
                   id: 'User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupTab',
-                  name: 'service.UserIssues.UserIssues.View.Edit.activeIssuesByActivityArea',
-                  label: t('service.UserIssues.UserIssues.View.Edit.activeIssuesByActivityArea', {
+                  name: 'service.UserIssues.UserIssues_View_Edit.activeIssuesByActivityArea',
+                  label: t('service.UserIssues.UserIssues_View_Edit.activeIssuesByActivityArea', {
                     defaultValue: 'Active issues by my activity areas',
                   }) as string,
                   disabled: isLoading,
@@ -198,8 +211,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                 },
                 {
                   id: 'User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupTab',
-                  name: 'service.UserIssues.UserIssues.View.Edit.activeIssuesByResidentArea',
-                  label: t('service.UserIssues.UserIssues.View.Edit.activeIssuesByResidentArea', {
+                  name: 'service.UserIssues.UserIssues_View_Edit.activeIssuesByResidentArea',
+                  label: t('service.UserIssues.UserIssues_View_Edit.activeIssuesByResidentArea', {
                     defaultValue: 'Active issues by my resident area',
                   }) as string,
                   disabled: isLoading,
@@ -231,7 +244,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                       justifyContent="flex-start"
                     >
                       <ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent
-                        uniqueId={'TMP'}
+                        uniqueId={'User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable'}
                         actions={actions}
                         ownerData={data}
                         editMode={editMode}
@@ -255,7 +268,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                 >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="_fn5zUH2GEe6V8KKnnZfChA)/LabelWrapper"
+                      id="_0LKOoIoAEe6F9LXBn0VWTg)/LabelWrapper"
                       container
                       direction="column"
                       alignItems="center"
@@ -264,11 +277,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <Typography id="_fn5zUH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                            {t(
-                              'service.UserIssues.UserIssues.View.Edit.activeGlobal::Label.activeGlobal::LabelWrapper.activeGlobalIssues',
-                              { defaultValue: 'Global' },
-                            )}
+                          <Typography id="_0LKOoIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                            {t('service.UserIssues.UserIssues_View_Edit.activeGlobal.Label', {
+                              defaultValue: 'Global',
+                            })}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -291,7 +303,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -326,8 +340,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                       childTabs={[
                         {
                           id: 'User/(esm/_4JbF8FrXEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues.View.Edit.activeByActivityInCounty',
-                          label: t('service.UserIssues.UserIssues.View.Edit.activeByActivityInCounty', {
+                          name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInCounty',
+                          label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInCounty', {
                             defaultValue: 'County',
                           }) as string,
                           disabled: isLoading,
@@ -337,8 +351,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                         },
                         {
                           id: 'User/(esm/_u6ZqQFraEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues.View.Edit.activeByActivityInCity',
-                          label: t('service.UserIssues.UserIssues.View.Edit.activeByActivityInCity', {
+                          name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInCity',
+                          label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInCity', {
                             defaultValue: 'City',
                           }) as string,
                           disabled: isLoading,
@@ -348,8 +362,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                         },
                         {
                           id: 'User/(esm/_od5rcFrbEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues.View.Edit.activeByActivityInDistrict',
-                          label: t('service.UserIssues.UserIssues.View.Edit.activeByActivityInDistrict', {
+                          name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInDistrict',
+                          label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInDistrict', {
                             defaultValue: 'District',
                           }) as string,
                           disabled: isLoading,
@@ -377,7 +391,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -408,7 +424,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitiesComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_zR1kkFraEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -439,7 +457,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityDistrictsComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_tRA1IFrbEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -474,8 +494,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                       childTabs={[
                         {
                           id: 'User/(esm/_BZzvYFrcEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues.View.Edit.activeByResidentInCounty',
-                          label: t('service.UserIssues.UserIssues.View.Edit.activeByResidentInCounty', {
+                          name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInCounty',
+                          label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInCounty', {
                             defaultValue: 'County',
                           }) as string,
                           disabled: isLoading,
@@ -485,8 +505,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                         },
                         {
                           id: 'User/(esm/_BZzIUFrcEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues.View.Edit.activeByResidentInCity',
-                          label: t('service.UserIssues.UserIssues.View.Edit.activeByResidentInCity', {
+                          name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInCity',
+                          label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInCity', {
                             defaultValue: 'City',
                           }) as string,
                           disabled: isLoading,
@@ -496,8 +516,8 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                         },
                         {
                           id: 'User/(esm/_BZzIV1rcEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues.View.Edit.activeByResidentInDistrict',
-                          label: t('service.UserIssues.UserIssues.View.Edit.activeByResidentInDistrict', {
+                          name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInDistrict',
+                          label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInDistrict', {
                             defaultValue: 'District',
                           }) as string,
                           disabled: isLoading,
@@ -525,7 +545,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -556,7 +578,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}
@@ -587,7 +611,9 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                               justifyContent="flex-start"
                             >
                               <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComponent
-                                uniqueId={'TMP'}
+                                uniqueId={
+                                  'User/(esm/_BZzIWFrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                }
                                 actions={actions}
                                 ownerData={data}
                                 editMode={editMode}

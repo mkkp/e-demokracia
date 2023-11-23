@@ -55,7 +55,7 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getActivityCounties(
+  async listActivityCounties(
     target: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>> {
@@ -135,7 +135,7 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getActivityCities(
+  async listActivityCities(
     target: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>> {
@@ -215,7 +215,7 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getActivityDistricts(
+  async listActivityDistricts(
     target: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>> {

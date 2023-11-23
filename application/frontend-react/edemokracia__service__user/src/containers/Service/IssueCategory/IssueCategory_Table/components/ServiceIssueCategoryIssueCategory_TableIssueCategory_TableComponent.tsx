@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,33 +66,26 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceIssueCategoryIssueCategory_TableIssueCategory_TableComponentActionDefinitions {
-  serviceIssueCategoryIssueCategory_TableAddOpenSelector?: () => Promise<void>;
-  serviceIssueCategoryIssueCategory_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  serviceIssueCategoryIssueCategory_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  serviceIssueCategoryIssueCategory_TableClear?: () => Promise<void>;
-  serviceIssueCategoryIssueCategory_TableCreateOpen?: () => Promise<void>;
-  serviceIssueCategoryIssueCategory_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceIssueCategoryIssueCategory_TableTableRefresh?: (
-    queryCustomizer: ServiceIssueCategoryQueryCustomizer,
-  ) => Promise<ServiceIssueCategoryStored[]>;
-  serviceIssueCategoryIssueCategory_TableDelete?: (
-    row: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueCategoryIssueCategory_TableRemove?: (
-    row: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceIssueCategoryIssueCategory_TableView?: (row: ServiceIssueCategoryStored) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceIssueCategoryQueryCustomizer) => Promise<ServiceIssueCategoryStored[]>;
+  deleteAction?: (row: ServiceIssueCategoryStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceIssueCategoryStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceIssueCategoryStored) => Promise<void>;
 }
 
 export interface ServiceIssueCategoryIssueCategory_TableIssueCategory_TableComponentProps {
@@ -152,7 +149,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.IssueCategory.IssueCategory.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.IssueCategory.IssueCategory_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -162,7 +159,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.IssueCategory.IssueCategory.Table.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.IssueCategory.IssueCategory_Table.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -174,27 +171,23 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
   const rowActions: TableRowAction<ServiceIssueCategoryStored>[] = [
     {
       id: 'User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
+      label: t('service.IssueCategory.IssueCategory_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceIssueCategoryStored) => isLoading,
-      action: actions.serviceIssueCategoryIssueCategory_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceIssueCategoryIssueCategory_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.IssueCategory.IssueCategory_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceIssueCategoryStored) => !row.__deleteable || isLoading,
-      action: actions.serviceIssueCategoryIssueCategory_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceIssueCategoryIssueCategory_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -202,18 +195,16 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fdCAEn2GEe6V8KKnnZfChA',
+      id: '_0AkvQooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.IssueCategory.IssueCategory.Table.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.IssueCategory.IssueCategory_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fdCnIn2GEe6V8KKnnZfChA',
+      id: '_0AlWUooAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.IssueCategory.IssueCategory.Table.description::Filter', {
-        defaultValue: 'Description',
-      }) as string,
+      label: t('service.IssueCategory.IssueCategory_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
   ];
@@ -287,9 +278,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceIssueCategoryIssueCategory_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -315,7 +304,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="IssueCategory_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -348,9 +337,8 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceIssueCategoryIssueCategory_TableView
-            ? async (params: GridRowParams<ServiceIssueCategoryStored>) =>
-                await actions.serviceIssueCategoryIssueCategory_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceIssueCategoryStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -360,13 +348,13 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceIssueCategoryIssueCategory_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceIssueCategoryIssueCategory_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -378,116 +366,105 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('service.IssueCategory.IssueCategory_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('service.IssueCategory.IssueCategory_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.IssueCategory.IssueCategory_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceIssueCategoryIssueCategory_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('service.IssueCategory.IssueCategory_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceIssueCategoryIssueCategory_TableBulkRemove!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceIssueCategoryIssueCategory_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceIssueCategoryIssueCategory_TableBulkDelete!(
-                      selectedRows.current,
-                    );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.IssueCategory.IssueCategory_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -518,6 +495,6 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

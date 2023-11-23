@@ -9,7 +9,10 @@
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { AppBar, Toolbar, useMediaQuery, IconButton } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import IconButton from '@mui/material/IconButton';
 import type { AppBarProps } from '@mui/material';
 import { useConfig } from '~/hooks';
 import { MenuOrientation, ThemeMode } from '~/config';

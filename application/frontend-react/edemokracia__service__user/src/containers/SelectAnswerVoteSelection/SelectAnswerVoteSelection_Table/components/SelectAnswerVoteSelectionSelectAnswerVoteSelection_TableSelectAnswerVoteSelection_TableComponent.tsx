@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,35 +66,28 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponentActionDefinitions {
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableAddOpenSelector?: () => Promise<void>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: SelectAnswerVoteSelectionStored[],
   ) => Promise<DialogResult<SelectAnswerVoteSelectionStored[]>>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: SelectAnswerVoteSelectionStored[],
   ) => Promise<DialogResult<SelectAnswerVoteSelectionStored[]>>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableClear?: () => Promise<void>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableCreateOpen?: () => Promise<void>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableRefresh?: (
+  refreshAction?: (
     queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer,
   ) => Promise<SelectAnswerVoteSelectionStored[]>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableDelete?: (
-    row: SelectAnswerVoteSelectionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableRemove?: (
-    row: SelectAnswerVoteSelectionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  selectAnswerVoteSelectionSelectAnswerVoteSelection_TableView?: (
-    row: SelectAnswerVoteSelectionStored,
-  ) => Promise<void>;
+  deleteAction?: (row: SelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: SelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: SelectAnswerVoteSelectionStored) => Promise<void>;
 }
 
 export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponentProps {
@@ -154,7 +151,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.title', {
+      headerName: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
         defaultValue: 'Title',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -166,7 +163,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.description', {
+      headerName: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
         defaultValue: 'Description',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -180,29 +177,27 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
   const rowActions: TableRowAction<SelectAnswerVoteSelectionStored>[] = [
     {
       id: 'User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Remove', {
+        defaultValue: 'Remove',
+      }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: SelectAnswerVoteSelectionStored) => isLoading,
-      action: actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Delete', {
+        defaultValue: 'Delete',
+      }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: SelectAnswerVoteSelectionStored) => !row.__deleteable || isLoading,
-      action: actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -210,18 +205,16 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gDotEH2GEe6V8KKnnZfChA',
+      id: '_0nas0IoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.title::Filter', {
-        defaultValue: 'Title',
-      }) as string,
+      label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gDuzsH2GEe6V8KKnnZfChA',
+      id: '_0ngMYIoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.description::Filter', {
+      label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
         defaultValue: 'Description',
       }) as string,
       filterType: FilterType.string,
@@ -297,9 +290,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
       setIsLoading(true);
 
       try {
-        const res = await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -325,7 +316,10 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTable"
+      data-table-name="SelectAnswerVoteSelection_Table"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -358,9 +352,9 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableView
+          actions.openPageAction
             ? async (params: GridRowParams<SelectAnswerVoteSelectionStored>) =>
-                await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableView!(params.row)
+                await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -370,142 +364,131 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableFilter!(
-                        'User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.filterAction!(
+                      'User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Table::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Table.Filter', {
+                    defaultValue: 'Set Filters',
+                  })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Table::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Table.Refresh', {
+                    defaultValue: 'Refresh',
+                  })}
                 </Button>
               ) : null}
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBulkRemove &&
-              selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.BulkRemove', {
+                    defaultValue: 'Remove',
+                  })}
                 </Button>
               ) : null}
-              {actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.selectAnswerVoteSelectionSelectAnswerVoteSelection_TableBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'SelectAnswerVoteSelection.SelectAnswerVoteSelection.Table.SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.BulkDelete', {
+                    defaultValue: 'Delete',
+                  })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -536,6 +519,6 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

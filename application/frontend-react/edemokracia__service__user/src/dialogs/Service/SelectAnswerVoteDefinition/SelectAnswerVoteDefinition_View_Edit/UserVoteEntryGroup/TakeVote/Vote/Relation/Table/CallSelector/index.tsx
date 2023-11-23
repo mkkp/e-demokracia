@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -33,6 +34,20 @@ import type {
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
 import { serviceSelectAnswerVoteDefinitionServiceImpl } from '~/services/data-axios';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActionsExtended =
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActions & {
+    postVoteForSelectAnswerVoteDefinitionAction?: (onClose: () => Promise<void>) => Promise<void>;
+  };
+
+export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_USER_VOTE_ENTRY_GROUP_TAKE_VOTE_VOTE_RELATION_TABLE_CALL_SELECTOR_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationActionsHook';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationActionsHook =
+  (
+    ownerData: any,
+    data: SelectAnswerVoteSelectionStored[],
+    editMode: boolean,
+    selectionDiff: SelectAnswerVoteSelectionStored[],
+  ) => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActionsExtended;
 
 export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector =
   (): ((ownerData: any) => Promise<DialogResult<SelectAnswerVoteSelectionStored[]>>) => {
@@ -43,9 +58,9 @@ export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         createDialog({
           fullWidth: true,
           maxWidth: 'md',
-          onClose: (event: object, reason: string) => {
+          onClose: async (event: object, reason: string) => {
             if (reason !== 'backdropClick') {
-              closeDialog();
+              await closeDialog();
               resolve({
                 result: 'close',
               });
@@ -54,14 +69,14 @@ export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
           children: (
             <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector
               ownerData={ownerData}
-              onClose={() => {
-                closeDialog();
+              onClose={async () => {
+                await closeDialog();
                 resolve({
                   result: 'close',
                 });
               }}
-              onSubmit={(result) => {
-                closeDialog();
+              onSubmit={async (result) => {
+                await closeDialog();
                 resolve({
                   result: 'submit',
                   data: result,
@@ -84,10 +99,11 @@ const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserV
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelectorProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: SelectAnswerVoteSelectionStored[]) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: SelectAnswerVoteSelectionStored[]) => Promise<void>;
 }
 
+// XMIID: User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputSelectorCallOperationPageDefinition
 // Name: service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::Relation::Table::CallSelector
 export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
   props: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelectorProps,
@@ -97,7 +113,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -111,23 +127,36 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   const [data, setData] = useState<SelectAnswerVoteSelectionStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<SelectAnswerVoteSelectionStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_USER_VOTE_ENTRY_GROUP_TAKE_VOTE_VOTE_RELATION_TABLE_CALL_SELECTOR_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff);
+
   // Dialog hooks
   const openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector =
     useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector();
 
   // Calculated section
   const title: string = t(
-    'Service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.UserVoteEntryGroup.TakeVote.Vote.CallOperation',
+    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.CallOperation',
     { defaultValue: 'Select Input' },
   );
 
   // Action section
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperation =
-    async () => {
-      try {
-        setIsLoading(true);
-        await serviceSelectAnswerVoteDefinitionServiceImpl.vote(ownerData, selectionDiff[0]);
+  const voteForSelectAnswerVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceSelectAnswerVoteDefinitionServiceImpl.vote(ownerData, selectionDiff[0]);
 
+      if (customActions?.postVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postVoteForSelectAnswerVoteDefinitionAction(
+          onClose,
+        );
+      } else {
         enqueueSnackbar(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
           {
@@ -137,50 +166,54 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
         );
 
         onSubmit(selectionDiff);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsLoading(false);
       }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const backAction = async () => {
+    onClose();
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
     };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteBack =
-    async () => {
-      onClose();
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteTableFilter =
-    async (
-      id: string,
-      filterOptions: FilterOption[],
-      model?: GridFilterModel,
-      filters?: Filter[],
-    ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-      const newFilters = await openFilterDialog(id, filterOptions, filters);
-      return {
-        filters: newFilters,
-      };
-    };
-  const serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteTableRange =
-    async (queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer): Promise<SelectAnswerVoteSelectionStored[]> => {
-      try {
-        return serviceSelectAnswerVoteDefinitionServiceImpl.getRangeForVote(ownerData, queryCustomizer);
-      } catch (error) {
-        handleError(error);
-        return Promise.resolve([]);
-      }
-    };
+  };
+  const selectorRangeAction = async (
+    queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<SelectAnswerVoteSelectionStored[]> => {
+    try {
+      return serviceSelectAnswerVoteDefinitionServiceImpl.getRangeForVote(ownerData, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActions =
     {
-      serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperation,
-      serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteBack,
-      serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteTableFilter,
-      serviceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteTableRange,
+      voteForSelectAnswerVoteDefinitionAction,
+      backAction,
+      filterAction,
+      selectorRangeAction,
+      ...(customActions ?? {}),
     };
 
   // Effect section
 
   return (
-    <>
+    <div
+      id="User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputSelectorCallOperationPageDefinition"
+      data-page-name="service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::Relation::Table::CallSelector"
+    >
       <Suspense>
         <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogContainer
           ownerData={ownerData}
@@ -194,6 +227,6 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           setSelectionDiff={setSelectionDiff}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

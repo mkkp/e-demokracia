@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -34,6 +35,16 @@ import type {
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
 import { closeDebateOutputVoteDefinitionReferenceServiceImpl } from '~/services/data-axios';
+export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended =
+  CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions & {};
+
+export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_OUTPUT_VIEW_ACTIONS_HOOK_INTERFACE_KEY =
+  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionsHook';
+export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionsHook = (
+  data: CloseDebateOutputVoteDefinitionReferenceStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void,
+) => CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended;
 
 export const convertServiceIssueIssue_View_EditCloseDebateOutputViewPayload = (
   attributeName: keyof CloseDebateOutputVoteDefinitionReference,
@@ -68,7 +79,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -119,6 +130,15 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
     _mask: '{context}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_OUTPUT_VIEW_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended
+    | undefined = customActionsHook?.(data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
@@ -128,7 +148,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   );
 
   // Action section
-  const closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored> => {
     try {
@@ -161,35 +181,39 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
 
   const actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions =
     {
-      closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditRefresh,
+      refreshAction,
+      ...(customActions ?? {}),
     };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditRefresh!(
-        pageQueryCustomizer,
-      );
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationOutputPageDefinition"
+      data-page-name="service::Issue::Issue_View_Edit::closeDebate::Output::View"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

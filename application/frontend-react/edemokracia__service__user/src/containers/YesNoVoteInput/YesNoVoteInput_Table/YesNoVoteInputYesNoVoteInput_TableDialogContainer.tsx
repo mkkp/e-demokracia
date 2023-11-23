@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,13 +27,13 @@ const YesNoVoteInputYesNoVoteInput_Table = lazy(
 
 export interface YesNoVoteInputYesNoVoteInput_TableDialogActions
   extends YesNoVoteInputYesNoVoteInput_TableActionDefinitions {
-  yesNoVoteInputYesNoVoteInput_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface YesNoVoteInputYesNoVoteInput_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: YesNoVoteInputYesNoVoteInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -48,7 +53,7 @@ export default function YesNoVoteInputYesNoVoteInput_TableDialog(props: YesNoVot
       <DialogTitle>
         {title}
         <IconButton
-          id="YesNoVoteInputYesNoVoteInput_Table-dialog-close-wrapper"
+          id="User/(esm/_-1R8hHWyEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -67,23 +72,19 @@ export default function YesNoVoteInputYesNoVoteInput_TableDialog(props: YesNoVot
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.yesNoVoteInputYesNoVoteInput_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="YesNoVoteInput::YesNoVoteInput_Table::Back"
+              id="User/(esm/_-1R8hHWyEe2LTNnGda5kaw)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.yesNoVoteInputYesNoVoteInput_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('YesNoVoteInput.YesNoVoteInput.Table.YesNoVoteInput::YesNoVoteInput_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('YesNoVoteInput.YesNoVoteInput_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

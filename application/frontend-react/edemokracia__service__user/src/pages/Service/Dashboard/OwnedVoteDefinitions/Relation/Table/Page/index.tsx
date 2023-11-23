@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -40,6 +41,15 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import { serviceDashboardServiceForOwnedVoteDefinitionsImpl } from '~/services/data-axios';
+export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
+  ServiceVoteDefinitionVoteDefinition_TablePageActions & {};
+
+export const SERVICE_DASHBOARD_OWNED_VOTE_DEFINITIONS_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceVoteDefinitionVoteDefinition_TableActionsHook';
+export type ServiceVoteDefinitionVoteDefinition_TableActionsHook = (
+  data: ServiceVoteDefinitionStored[],
+  editMode: boolean,
+) => ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended;
 
 const ServiceVoteDefinitionVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -57,7 +67,7 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -70,20 +80,29 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceVoteDefinitionStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceVoteDefinitionVoteDefinition_TableActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_DASHBOARD_OWNED_VOTE_DEFINITIONS_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
+  const title: string = t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
 
   // Action section
-  const serviceVoteDefinitionVoteDefinition_TableBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceVoteDefinitionVoteDefinition_TableView = async (target?: ServiceVoteDefinitionStored) => {
+  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceDashboardOwnedVoteDefinitionsRelationViewPage(target!.__signedIdentifier));
   };
-  const serviceVoteDefinitionVoteDefinition_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -94,7 +113,7 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
       filters: newFilters,
     };
   };
-  const serviceVoteDefinitionVoteDefinition_TableTableRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored[]> => {
     try {
@@ -112,10 +131,7 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceVoteDefinitionVoteDefinition_TableDelete = async (
-    target: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => {
+  const deleteAction = async (target: ServiceVoteDefinitionStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -144,18 +160,18 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
       }
     }
   };
-  const serviceVoteDefinitionVoteDefinition_TableBulkDelete = async (
+  const bulkDeleteAction = async (
     selectedRows: ServiceVoteDefinitionStored[],
   ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceVoteDefinitionStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.VoteDefinition.VoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceVoteDefinitionVoteDefinition_TableDelete) {
-              await actions.serviceVoteDefinitionVoteDefinition_TableDelete!(item, true);
+            if (actions.deleteAction) {
+              await actions.deleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -181,27 +197,33 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
-    serviceVoteDefinitionVoteDefinition_TableBack,
-    serviceVoteDefinitionVoteDefinition_TableView,
-    serviceVoteDefinitionVoteDefinition_TableTableFilter,
-    serviceVoteDefinitionVoteDefinition_TableTableRefresh,
-    serviceVoteDefinitionVoteDefinition_TableDelete,
-    serviceVoteDefinitionVoteDefinition_TableBulkDelete,
+    backAction,
+    openPageAction,
+    filterAction,
+    refreshAction,
+    deleteAction,
+    bulkDeleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceVoteDefinitionVoteDefinition_TablePageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_LYtscGBWEe6M1JBD8stPIg)/RelationFeatureTable"
+      data-page-name="service::Dashboard::ownedVoteDefinitions::Relation::Table::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceVoteDefinitionVoteDefinition_TablePageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -38,7 +39,18 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceIssueCategoryServiceForSubcategoriesImpl } from '~/services/data-axios';
+import { serviceIssueCategoryServiceImpl } from '~/services/data-axios';
+export type ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended =
+  ServiceIssueCategoryIssueCategory_View_EditDialogActions & {};
+
+export const SERVICE_ISSUE_CATEGORY_SUBCATEGORIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_View_EditActionsHook';
+export type ServiceIssueCategoryIssueCategory_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceIssueCategoryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+) => ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended;
 
 export const useServiceIssueCategorySubcategoriesRelationViewPage = (): ((
   ownerData: any,
@@ -50,9 +62,9 @@ export const useServiceIssueCategorySubcategoriesRelationViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -61,14 +73,14 @@ export const useServiceIssueCategorySubcategoriesRelationViewPage = (): ((
         children: (
           <ServiceIssueCategorySubcategoriesRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -107,10 +119,11 @@ const ServiceIssueCategoryIssueCategory_View_EditDialogContainer = lazy(
 export interface ServiceIssueCategorySubcategoriesRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceIssueCategoryStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationFeatureView
 // Name: service::IssueCategory::subcategories::Relation::View::Page
 export default function ServiceIssueCategorySubcategoriesRelationViewPage(
   props: ServiceIssueCategorySubcategoriesRelationViewPageProps,
@@ -120,7 +133,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -169,6 +182,13 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
     _mask: '{description,title,subcategories{title,description},owner{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceIssueCategoryIssueCategory_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_SUBCATEGORIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
   const openServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage =
     useServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage();
@@ -177,21 +197,21 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
   const openServiceIssueCategorySubcategoriesRelationViewPage = useServiceIssueCategorySubcategoriesRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.IssueCategory.IssueCategory_View_Edit', {
+  const title: string = t('service.IssueCategory.IssueCategory_View_Edit', {
     defaultValue: 'IssueCategory View / Edit',
   });
 
   // Action section
-  const serviceIssueCategoryIssueCategory_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceIssueCategoryIssueCategory_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
   ): Promise<ServiceIssueCategoryStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueCategoryServiceForSubcategoriesImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceIssueCategoryServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -212,15 +232,15 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceIssueCategoryIssueCategory_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceIssueCategoryIssueCategory_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceIssueCategoryIssueCategory_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await serviceIssueCategoryServiceForSubcategoriesImpl.update(payloadDiff.current);
+      const res = await serviceIssueCategoryServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -228,7 +248,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceIssueCategory, string>());
-        await actions.serviceIssueCategoryIssueCategory_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -237,7 +257,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
       setIsLoading(false);
     }
   };
-  const serviceIssueCategoryIssueCategory_View_EditDelete = async () => {
+  const deleteAction = async () => {
     try {
       const confirmed = await openConfirmDialog(
         'row-delete-action',
@@ -247,7 +267,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
         t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
       );
       if (confirmed) {
-        await serviceIssueCategoryServiceForSubcategoriesImpl.delete(data);
+        await serviceIssueCategoryServiceImpl.delete(data);
 
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
@@ -260,14 +280,46 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
       handleError(error, undefined, data);
     }
   };
-  const serviceIssueCategoryIssueCategory_View_EditSubcategoriesView = async (target?: ServiceIssueCategoryStored) => {
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const ownerOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+      }
+    }
+  };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
+  const subcategoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
     await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceIssueCategoryIssueCategory_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceIssueCategoryIssueCategory_View_EditSubcategoriesFilter = async (
+  const subcategoriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -278,16 +330,13 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
       filters: newFilters,
     };
   };
-  const serviceIssueCategoryIssueCategory_View_EditSubcategoriesCreateOpen = async () => {
+  const subcategoriesOpenFormAction = async () => {
     const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
-    if (!editMode) {
-      await actions.serviceIssueCategoryIssueCategory_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete = async (
-    target: ServiceIssueCategoryStored,
-    silentMode?: boolean,
-  ) => {
+  const subcategoriesDeleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -299,7 +348,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
           )
         : true;
       if (confirmed) {
-        await serviceIssueCategoryServiceForSubcategoriesImpl.deleteSubcategories(target);
+        await serviceIssueCategoryServiceImpl.deleteSubcategories(target);
 
         if (!silentMode) {
           enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
@@ -307,7 +356,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
             ...toastConfig.success,
           });
 
-          serviceIssueCategoryIssueCategory_View_EditRefresh(pageQueryCustomizer);
+          refreshAction(pageQueryCustomizer);
         }
       }
     } catch (error) {
@@ -316,18 +365,20 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
       }
     }
   };
-  const serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkDelete = async (
+  const subcategoriesBulkDeleteAction = async (
     selectedRows: ServiceIssueCategoryStored[],
   ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueCategoryStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.BulkDelete', {
+          defaultValue: 'Delete',
+        }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete) {
-              await actions.serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete!(item, true);
+            if (actions.subcategoriesDeleteAction) {
+              await actions.subcategoriesDeleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -336,10 +387,8 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
         },
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
-            if (actions.serviceIssueCategoryIssueCategory_View_EditRefresh) {
-              await actions.serviceIssueCategoryIssueCategory_View_EditRefresh!(
-                processQueryCustomizer(pageQueryCustomizer),
-              );
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
             }
             resolve({
               result: 'submit',
@@ -355,63 +404,35 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
       });
     });
   };
-  const serviceIssueCategoryIssueCategory_View_EditOwnerView = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.serviceIssueCategoryIssueCategory_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const serviceIssueCategoryIssueCategory_View_EditOwnerSetOpenSelector = async () => {
-    const { result, data: returnedData } =
-      await openServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage(
-        data,
-        data.owner ? [data.owner] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
-      }
-    }
-  };
-  const serviceIssueCategoryIssueCategory_View_EditOwnerAutocomplete = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      return serviceIssueCategoryServiceForSubcategoriesImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const serviceIssueCategoryIssueCategory_View_EditOwnerUnset = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
-  };
 
   const actions: ServiceIssueCategoryIssueCategory_View_EditDialogActions = {
-    serviceIssueCategoryIssueCategory_View_EditBack,
-    serviceIssueCategoryIssueCategory_View_EditRefresh,
-    serviceIssueCategoryIssueCategory_View_EditCancel,
-    serviceIssueCategoryIssueCategory_View_EditUpdate,
-    serviceIssueCategoryIssueCategory_View_EditDelete,
-    serviceIssueCategoryIssueCategory_View_EditSubcategoriesView,
-    serviceIssueCategoryIssueCategory_View_EditSubcategoriesFilter,
-    serviceIssueCategoryIssueCategory_View_EditSubcategoriesCreateOpen,
-    serviceIssueCategoryIssueCategory_View_EditSubcategoriesDelete,
-    serviceIssueCategoryIssueCategory_View_EditSubcategoriesBulkDelete,
-    serviceIssueCategoryIssueCategory_View_EditOwnerView,
-    serviceIssueCategoryIssueCategory_View_EditOwnerSetOpenSelector,
-    serviceIssueCategoryIssueCategory_View_EditOwnerAutocomplete,
-    serviceIssueCategoryIssueCategory_View_EditOwnerUnset,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    deleteAction,
+    ownerOpenPageAction,
+    ownerOpenSetSelectorAction,
+    ownerAutocompleteRangeAction,
+    ownerUnsetAction,
+    subcategoriesOpenPageAction,
+    subcategoriesFilterAction,
+    subcategoriesOpenFormAction,
+    subcategoriesDeleteAction,
+    subcategoriesBulkDeleteAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceIssueCategoryIssueCategory_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationFeatureView"
+      data-page-name="service::IssueCategory::subcategories::Relation::View::Page"
+    >
       <Suspense>
         <ServiceIssueCategoryIssueCategory_View_EditDialogContainer
           ownerData={ownerData}
@@ -429,6 +450,6 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

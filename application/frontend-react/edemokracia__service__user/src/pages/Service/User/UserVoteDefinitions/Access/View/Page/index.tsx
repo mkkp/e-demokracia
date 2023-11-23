@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -37,6 +38,16 @@ import type {
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
 import { userServiceForUserVoteDefinitionsImpl } from '~/services/data-axios';
+export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExtended =
+  ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions & {};
+
+export const SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
+export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook = (
+  data: ServiceUserVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserVoteDefinition, value: any) => void,
+) => ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExtended;
 
 export const convertServiceUserUserVoteDefinitionsAccessViewPagePayload = (
   attributeName: keyof ServiceUserVoteDefinition,
@@ -71,7 +82,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -123,18 +134,26 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
     _mask: '{}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } =
+    useTrackService<ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExtended | undefined =
+    customActionsHook?.(data, editMode, storeDiff);
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.UserVoteDefinition.UserVoteDefinition_View_Edit', {
+  const title: string = t('service.UserVoteDefinition.UserVoteDefinition_View_Edit', {
     defaultValue: 'UserVoteDefinition View / Edit',
   });
 
   // Action section
-  const serviceUserVoteDefinitionUserVoteDefinition_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceUserVoteDefinitionUserVoteDefinition_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceUserVoteDefinitionQueryCustomizer,
   ): Promise<ServiceUserVoteDefinitionStored> => {
     try {
@@ -171,8 +190,9 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
 
   const actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions = {
-    serviceUserVoteDefinitionUserVoteDefinition_View_EditBack,
-    serviceUserVoteDefinitionUserVoteDefinition_View_EditRefresh,
+    backAction,
+    refreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
@@ -185,27 +205,32 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
         navigate('*');
         return;
       }
-      await actions.serviceUserVoteDefinitionUserVoteDefinition_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_mNnPsF5QEe6vsex_cZNQbQ)/AccessViewPageDefinition"
+      data-page-name="service::User::userVoteDefinitions::Access::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -38,6 +39,16 @@ import type {
   ServiceUserIssuesStored,
 } from '~/services/data-api';
 import { userServiceForUserIssuesImpl } from '~/services/data-axios';
+export type ServiceUserIssuesUserIssues_View_EditPageActionsExtended =
+  ServiceUserIssuesUserIssues_View_EditPageActions & {};
+
+export const SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserIssuesUserIssues_View_EditActionsHook';
+export type ServiceUserIssuesUserIssues_View_EditActionsHook = (
+  data: ServiceUserIssuesStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserIssues, value: any) => void,
+) => ServiceUserIssuesUserIssues_View_EditPageActionsExtended;
 
 export const convertServiceUserUserIssuesAccessViewPagePayload = (
   attributeName: keyof ServiceUserIssues,
@@ -70,7 +81,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -119,20 +130,28 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     _mask: '{}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceUserIssuesUserIssues_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceUserIssuesUserIssues_View_EditPageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceUserIssuesUserIssues_View_EditCreateIssueInputForm =
     useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm();
 
   // Calculated section
-  const title: string = t('Service.UserIssues.UserIssues_View_Edit', { defaultValue: 'UserIssues View / Edit' });
+  const title: string = t('service.UserIssues.UserIssues_View_Edit', { defaultValue: 'UserIssues View / Edit' });
 
   // Action section
-  const serviceUserIssuesUserIssues_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceUserIssuesUserIssues_View_EditRefresh = async (
-    queryCustomizer: ServiceUserIssuesQueryCustomizer,
-  ): Promise<ServiceUserIssuesStored> => {
+  const refreshAction = async (queryCustomizer: ServiceUserIssuesQueryCustomizer): Promise<ServiceUserIssuesStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
@@ -160,10 +179,10 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssueOpenForm = async () => {
+  const createIssueAction = async () => {
     const { result, data: returnedData } = await openServiceUserIssuesUserIssues_View_EditCreateIssueInputForm(data);
-    if (!editMode) {
-      await actions.serviceUserIssuesUserIssues_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
@@ -173,9 +192,10 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
 
   const actions: ServiceUserIssuesUserIssues_View_EditPageActions = {
-    serviceUserIssuesUserIssues_View_EditBack,
-    serviceUserIssuesUserIssues_View_EditRefresh,
-    serviceUserIssuesUserIssues_View_EditRootActionGroupCreateIssueOpenForm,
+    backAction,
+    refreshAction,
+    createIssueAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
@@ -188,27 +208,32 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         navigate('*');
         return;
       }
-      await actions.serviceUserIssuesUserIssues_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceUserIssuesUserIssues_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_UUu7kFrMEe6_67aMO2jOsw)/AccessViewPageDefinition"
+      data-page-name="service::User::userIssues::Access::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceUserIssuesUserIssues_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

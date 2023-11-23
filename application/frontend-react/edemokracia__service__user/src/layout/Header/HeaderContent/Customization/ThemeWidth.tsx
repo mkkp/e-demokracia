@@ -7,7 +7,9 @@
 // Template file: actor/src/layout/Header/HeaderContent/Customization/ThemeWidth.tsx.hbs
 
 import { useTheme } from '@mui/material/styles';
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import { useConfig } from '~/hooks';
 
 export const ThemeWidth = () => {

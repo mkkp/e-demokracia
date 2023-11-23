@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   CreateArgumentInput,
@@ -46,8 +61,8 @@ import {
 } from '~/services/data-api';
 
 export interface CreateArgumentInputCreateArgumentInput_FormActionDefinitions {
-  createArgumentInputCreateArgumentInput_FormButtonsCancelBack?: () => Promise<void>;
-  createArgumentInputCreateArgumentInput_FormButtonsOkAction?: () => Promise<void>;
+  backAction?: () => Promise<void>;
+  okAction?: () => Promise<void>;
 }
 
 export interface CreateArgumentInputCreateArgumentInput_FormProps {
@@ -95,17 +110,14 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fn-Ew32GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0LN5AIoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="account-voice" sx={{ marginRight: 1 }} />
-                  <Typography id="_fn-Ew32GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'CreateArgumentInput.CreateArgumentInput.Form.group::Label.group::LabelWrapper.CreateArgumentInput_Form.CreateArgumentInput::CreateArgumentInput_Form',
-                      { defaultValue: 'Add argument' },
-                    )}
+                  <MdiIcon path="group::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0LN5AIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('CreateArgumentInput.CreateArgumentInput_Form.group.Icon', { defaultValue: 'Add argument' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -126,10 +138,7 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                       id="User/(esm/_3m5J4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
                       autoFocus
                       label={
-                        t(
-                          'CreateArgumentInput.CreateArgumentInput.Form.title.group.group::LabelWrapper.CreateArgumentInput_Form.CreateArgumentInput::CreateArgumentInput_Form',
-                          { defaultValue: 'Title' },
-                        ) as string
+                        t('CreateArgumentInput.CreateArgumentInput_Form.title', { defaultValue: 'Title' }) as string
                       }
                       value={data.title ?? ''}
                       className={clsx({
@@ -161,10 +170,9 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                       name="description"
                       id="User/(esm/_3nC64H4bEe2j59SYy0JH0Q)/StringTypeTextArea"
                       label={
-                        t(
-                          'CreateArgumentInput.CreateArgumentInput.Form.description.group.group::LabelWrapper.CreateArgumentInput_Form.CreateArgumentInput::CreateArgumentInput_Form',
-                          { defaultValue: 'Description' },
-                        ) as string
+                        t('CreateArgumentInput.CreateArgumentInput_Form.description', {
+                          defaultValue: 'Description',
+                        }) as string
                       }
                       value={data.description ?? ''}
                       className={clsx({

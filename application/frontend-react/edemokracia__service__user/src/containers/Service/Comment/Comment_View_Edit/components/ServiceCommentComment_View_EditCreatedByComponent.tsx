@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,8 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceCommentComment_View_EditCreatedByComponentActionDefinitions {
-  serviceCommentComment_View_EditGroupCreatedByCreate?: () => Promise<void>;
-  serviceCommentComment_View_EditGroupCreatedByDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceCommentComment_View_EditGroupCreatedBySetOpenSelector?: () => Promise<void>;
-  serviceCommentComment_View_EditGroupCreatedByUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceCommentComment_View_EditGroupCreatedByView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceCommentComment_View_EditGroupCreatedByAutocomplete?: (
+  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -57,12 +53,7 @@ export function ServiceCommentComment_View_EditCreatedByComponent(
     <AggregationInput
       name="createdBy"
       id="User/(esm/_IgQyYIfuEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.Comment.Comment.View.Edit.createdBy.group.group::LabelWrapper.Comment_View_Edit.service::Comment::Comment_View_Edit',
-          { defaultValue: 'CreatedBy' },
-        ) as string
-      }
+      label={t('service.Comment.Comment_View_Edit.createdBy', { defaultValue: 'CreatedBy' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -75,7 +66,7 @@ export function ServiceCommentComment_View_EditCreatedByComponent(
         storeDiff('createdBy', createdBy);
       }}
       onAutoCompleteSearch={
-        actions.serviceCommentComment_View_EditGroupCreatedByAutocomplete
+        actions.createdByAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -87,41 +78,15 @@ export function ServiceCommentComment_View_EditCreatedByComponent(
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceCommentComment_View_EditGroupCreatedByAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.createdByAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.createdBy && actions.serviceCommentComment_View_EditGroupCreatedByView
+        ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.serviceCommentComment_View_EditGroupCreatedByView!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceCommentComment_View_EditGroupCreatedByCreate
-          ? async () => {
-              await actions.serviceCommentComment_View_EditGroupCreatedByCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.createdBy && actions.serviceCommentComment_View_EditGroupCreatedByDelete
-          ? async () => actions.serviceCommentComment_View_EditGroupCreatedByDelete!(ownerData.createdBy!)
-          : undefined
-      }
-      onSet={
-        actions.serviceCommentComment_View_EditGroupCreatedBySetOpenSelector
-          ? async () => {
-              await actions.serviceCommentComment_View_EditGroupCreatedBySetOpenSelector!();
-            }
-          : undefined
-      }
-      onUnset={
-        ownerData.createdBy && actions.serviceCommentComment_View_EditGroupCreatedByUnset
-          ? async () => actions.serviceCommentComment_View_EditGroupCreatedByUnset!(ownerData.createdBy!)
           : undefined
       }
     ></AggregationInput>

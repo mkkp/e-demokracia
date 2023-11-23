@@ -2,22 +2,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { JudoStored } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
-import { LoadingButton } from '@mui/lab';
-import {
-  DialogContent,
-  Grid,
-  DialogTitle,
-  IconButton,
-  Box,
-  LinearProgress,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  DialogActions,
-  Button,
-} from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
+import DialogContent from '@mui/material/DialogContent';
+import Grid from '@mui/material/Grid';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 import type { LinearProgressProps } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import { useDialog } from '~/components/dialog';
@@ -45,10 +43,10 @@ export const useCRUDDialog: UseCRUDDialog = () => {
       fullWidth: true,
       maxWidth: 'sm',
       onClose: (event: object, reason: string) => {
-        /*if (reason !== 'backdropClick') {
+        if (reason !== 'backdropClick') {
           closeDialog();
           onClose(false);
-        }*/
+        }
       },
       children: (
         <CRUDDialog

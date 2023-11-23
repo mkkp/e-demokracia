@@ -21,9 +21,9 @@ import {
   ServiceProQueryCustomizer,
   ServiceProParentStored,
   ServiceConQueryCustomizer,
+  CreateArgumentInput,
   ServiceProStored,
   ServiceProParent,
-  CreateArgumentInput,
   ServiceServiceUserQueryCustomizer,
   ServicePro,
   ServiceSimpleVoteQueryCustomizer,
@@ -39,7 +39,7 @@ export interface ServiceConService {
 
   update(target: Partial<ServiceConStored>): Promise<ServiceConStored>;
 
-  getVotes(
+  listVotes(
     target: JudoIdentifiable<ServiceCon>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
@@ -59,7 +59,7 @@ export interface ServiceConService {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
 
-  getCons(
+  listCons(
     target: JudoIdentifiable<ServiceCon>,
     queryCustomizer?: ServiceConQueryCustomizer,
   ): Promise<Array<ServiceConStored>>;
@@ -71,7 +71,19 @@ export interface ServiceConService {
 
   deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void>;
 
-  getPros(
+  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForCons(): Promise<CreateArgumentInput>;
+
+  createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForCons(): Promise<CreateArgumentInput>;
+
+  voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
+
+  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
+
+  listPros(
     target: JudoIdentifiable<ServiceCon>,
     queryCustomizer?: ServiceProQueryCustomizer,
   ): Promise<Array<ServiceProStored>>;
@@ -82,6 +94,18 @@ export interface ServiceConService {
   ): Promise<Array<ServiceProStored>>;
 
   deletePros(target: JudoIdentifiable<ServicePro>): Promise<void>;
+
+  createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateProArgumentForPros(): Promise<CreateArgumentInput>;
+
+  createConArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgumentForPros(): Promise<CreateArgumentInput>;
+
+  voteUpForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
+
+  voteDownForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
 
   getParentCon(
     target: JudoIdentifiable<ServiceCon>,
@@ -103,13 +127,13 @@ export interface ServiceConService {
     queryCustomizer?: ServiceProParentQueryCustomizer,
   ): Promise<Array<ServiceProParentStored>>;
 
-  createConArgument(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateConArgument(): Promise<CreateArgumentInput>;
-
   createProArgument(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
 
   getTemplateForCreateProArgument(): Promise<CreateArgumentInput>;
+
+  createConArgument(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
+
+  getTemplateForCreateConArgument(): Promise<CreateArgumentInput>;
 
   voteDown(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
 

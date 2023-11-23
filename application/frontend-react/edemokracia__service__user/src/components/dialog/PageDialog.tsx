@@ -6,7 +6,10 @@
 // Template name: actor/src/components/dialog/PageDialog.tsx
 // Template file: actor/src/components/dialog/PageDialog.tsx.hbs
 
-import { Dialog, DialogContent, DialogActions, Button } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Button from '@mui/material/Button';
 import { useEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { SlideUpTransition } from '~/theme/animations';

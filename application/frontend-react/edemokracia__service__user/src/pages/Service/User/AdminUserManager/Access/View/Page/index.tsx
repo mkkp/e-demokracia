@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -39,6 +40,16 @@ import type {
   ServiceUserManagerStored,
 } from '~/services/data-api';
 import { userServiceForAdminUserManagerImpl } from '~/services/data-axios';
+export type ServiceUserManagerUserManager_View_EditPageActionsExtended =
+  ServiceUserManagerUserManager_View_EditPageActions & {};
+
+export const SERVICE_USER_ADMIN_USER_MANAGER_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserManagerUserManager_View_EditActionsHook';
+export type ServiceUserManagerUserManager_View_EditActionsHook = (
+  data: ServiceUserManagerStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserManager, value: any) => void,
+) => ServiceUserManagerUserManager_View_EditPageActionsExtended;
 
 export const convertServiceUserAdminUserManagerAccessViewPagePayload = (
   attributeName: keyof ServiceUserManager,
@@ -73,7 +84,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -125,19 +136,29 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     _mask: '{}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceUserManagerUserManager_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_USER_MANAGER_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceUserManagerUserManager_View_EditPageActionsExtended | undefined = customActionsHook?.(
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceUserManagerUserManager_View_EditCreateUserInputForm =
     useServiceUserManagerUserManager_View_EditCreateUserInputForm();
   const openServiceUserManagerUsersRelationViewPage = useServiceUserManagerUsersRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.UserManager.UserManager_View_Edit', { defaultValue: 'UserManager View / Edit' });
+  const title: string = t('service.UserManager.UserManager_View_Edit', { defaultValue: 'UserManager View / Edit' });
 
   // Action section
-  const serviceUserManagerUserManager_View_EditBack = async () => {
-    back();
+  const backAction = async () => {
+    navigateBack();
   };
-  const serviceUserManagerUserManager_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceUserManagerQueryCustomizer,
   ): Promise<ServiceUserManagerStored> => {
     try {
@@ -167,11 +188,11 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceUserManagerUserManager_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceUserManagerUserManager_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceUserManagerUserManager_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
@@ -183,7 +204,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceUserManager, string>());
-        await actions.serviceUserManagerUserManager_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -192,20 +213,20 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUserOpenForm = async () => {
+  const createUserAction = async () => {
     const { result, data: returnedData } = await openServiceUserManagerUserManager_View_EditCreateUserInputForm(data);
-    if (!editMode) {
-      await actions.serviceUserManagerUserManager_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceUserManagerUserManager_View_EditUsersView = async (target?: ServiceServiceUserStored) => {
+  const usersOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceUserManagerUsersRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceUserManagerUserManager_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceUserManagerUserManager_View_EditUsersFilter = async (
+  const usersFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -216,7 +237,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       filters: newFilters,
     };
   };
-  const serviceUserManagerUserManager_View_EditUsersRefresh = async (
+  const usersRefreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     return userServiceForAdminUserManagerImpl.listUsers(
@@ -231,14 +252,15 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   };
 
   const actions: ServiceUserManagerUserManager_View_EditPageActions = {
-    serviceUserManagerUserManager_View_EditBack,
-    serviceUserManagerUserManager_View_EditRefresh,
-    serviceUserManagerUserManager_View_EditCancel,
-    serviceUserManagerUserManager_View_EditUpdate,
-    serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUserOpenForm,
-    serviceUserManagerUserManager_View_EditUsersView,
-    serviceUserManagerUserManager_View_EditUsersFilter,
-    serviceUserManagerUserManager_View_EditUsersRefresh,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    createUserAction,
+    usersOpenPageAction,
+    usersFilterAction,
+    usersRefreshAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
@@ -251,27 +273,32 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
         navigate('*');
         return;
       }
-      await actions.serviceUserManagerUserManager_View_EditRefresh!(pageQueryCustomizer);
+      await actions.refreshAction!(pageQueryCustomizer);
     })();
   }, []);
 
   return (
-    <Suspense>
-      <PageContainerTransition>
-        <ServiceUserManagerUserManager_View_EditPageContainer
-          title={title}
-          actions={actions}
-          isLoading={isLoading}
-          editMode={editMode}
-          refreshCounter={refreshCounter}
-          data={data}
-          storeDiff={storeDiff}
-          isFormUpdateable={isFormUpdateable}
-          isFormDeleteable={isFormDeleteable}
-          validation={validation}
-          setValidation={setValidation}
-        />
-      </PageContainerTransition>
-    </Suspense>
+    <div
+      id="User/(esm/_mGqscFvaEe6bTb-1BwQgmA)/AccessViewPageDefinition"
+      data-page-name="service::User::adminUserManager::Access::View::Page"
+    >
+      <Suspense>
+        <PageContainerTransition>
+          <ServiceUserManagerUserManager_View_EditPageContainer
+            title={title}
+            actions={actions}
+            isLoading={isLoading}
+            editMode={editMode}
+            refreshCounter={refreshCounter}
+            data={data}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+          />
+        </PageContainerTransition>
+      </Suspense>
+    </div>
   );
 }

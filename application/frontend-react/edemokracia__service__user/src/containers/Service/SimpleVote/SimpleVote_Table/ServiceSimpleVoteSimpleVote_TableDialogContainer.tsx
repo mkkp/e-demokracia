@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,13 +27,13 @@ const ServiceSimpleVoteSimpleVote_Table = lazy(
 
 export interface ServiceSimpleVoteSimpleVote_TableDialogActions
   extends ServiceSimpleVoteSimpleVote_TableActionDefinitions {
-  serviceSimpleVoteSimpleVote_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceSimpleVoteSimpleVote_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceSimpleVoteSimpleVote_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -48,7 +53,7 @@ export default function ServiceSimpleVoteSimpleVote_TableDialog(props: ServiceSi
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceSimpleVoteSimpleVote_Table-dialog-close-wrapper"
+          id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -67,23 +72,19 @@ export default function ServiceSimpleVoteSimpleVote_TableDialog(props: ServiceSi
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceSimpleVoteSimpleVote_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::SimpleVote::SimpleVote_Table::Back"
+              id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceSimpleVoteSimpleVote_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.SimpleVote.SimpleVote.Table.service::SimpleVote::SimpleVote_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.SimpleVote.SimpleVote_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

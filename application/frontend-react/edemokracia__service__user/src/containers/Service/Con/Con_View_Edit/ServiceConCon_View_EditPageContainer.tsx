@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -21,11 +23,11 @@ import type { ServiceCon, ServiceConStored, ServiceConQueryCustomizer } from '~/
 const ServiceConCon_View_Edit = lazy(() => import('~/containers/Service/Con/Con_View_Edit/ServiceConCon_View_Edit'));
 
 export interface ServiceConCon_View_EditPageActions extends ServiceConCon_View_EditActionDefinitions {
-  serviceConCon_View_EditBack?: () => Promise<void>;
-  serviceConCon_View_EditCancel?: () => Promise<void>;
-  serviceConCon_View_EditDelete?: () => Promise<void>;
-  serviceConCon_View_EditRefresh?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored>;
-  serviceConCon_View_EditUpdate?: () => Promise<void>;
+  backAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  deleteAction?: () => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored>;
+  updateAction?: () => Promise<void>;
 }
 
 export interface ServiceConCon_View_EditPageProps {
@@ -63,50 +65,48 @@ export default function ServiceConCon_View_EditPage(props: ServiceConCon_View_Ed
   } = props;
   const queryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{created,description,upVotes,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,upVotes,description,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceConCon_View_EditBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_View_Edit::Back"
+              id="User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceConCon_View_EditBack!();
+                await actions.backAction!();
               }}
             >
-              <span>{t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Back', { defaultValue: 'Back' })}</span>
+              <span>{t('service.Con.Con_View_Edit.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceConCon_View_EditRefresh && (
+        {!editMode && actions.refreshAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_View_Edit::Refresh"
+              id="User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewRefreshButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
-                await actions.serviceConCon_View_EditRefresh!(processQueryCustomizer(queryCustomizer));
+                await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
-              <span>
-                {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Refresh', { defaultValue: 'Refresh' })}
-              </span>
+              <span>{t('service.Con.Con_View_Edit.Refresh', { defaultValue: 'Refresh' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceConCon_View_EditDelete && (
+        {!editMode && actions.deleteAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_View_Edit::Delete"
+              id="User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewDeleteButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -121,49 +121,43 @@ export default function ServiceConCon_View_EditPage(props: ServiceConCon_View_Ed
                 );
 
                 if (confirmed) {
-                  actions.serviceConCon_View_EditDelete!();
+                  actions.deleteAction!();
                 }
               }}
             >
-              <span>
-                {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Delete', { defaultValue: 'Delete' })}
-              </span>
+              <span>{t('service.Con.Con_View_Edit.Delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceConCon_View_EditCancel && (
+        {editMode && actions.cancelAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_View_Edit::Cancel"
+              id="User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewCancelButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
-                await actions.serviceConCon_View_EditCancel!();
+                await actions.cancelAction!();
               }}
             >
-              <span>
-                {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Cancel', { defaultValue: 'Cancel' })}
-              </span>
+              <span>{t('service.Con.Con_View_Edit.Cancel', { defaultValue: 'Cancel' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.serviceConCon_View_EditUpdate && (
+        {editMode && actions.updateAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_View_Edit::Update"
+              id="User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewUpdateButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
-                await actions.serviceConCon_View_EditUpdate!();
+                await actions.updateAction!();
               }}
             >
-              <span>
-                {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Update', { defaultValue: 'Save' })}
-              </span>
+              <span>{t('service.Con.Con_View_Edit.Update', { defaultValue: 'Save' })}</span>
             </LoadingButton>
           </Grid>
         )}

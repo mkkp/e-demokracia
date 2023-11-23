@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -35,6 +36,16 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import { serviceServiceUserServiceForResidentCityImpl } from '~/services/data-axios';
+export type ServiceCityCity_TableSetSelectorDialogActionsExtended = ServiceCityCity_TableSetSelectorDialogActions & {};
+
+export const SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_CITY_TABULAR_REFERENCE_FIELD_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCityCity_TableSetSelectorActionsHook';
+export type ServiceCityCity_TableSetSelectorActionsHook = (
+  ownerData: any,
+  data: ServiceCityStored[],
+  editMode: boolean,
+  selectionDiff: ServiceCityStored[],
+) => ServiceCityCity_TableSetSelectorDialogActionsExtended;
 
 export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPage =
   (): ((ownerData: any, alreadySelected: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>) => {
@@ -45,9 +56,9 @@ export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCit
         createDialog({
           fullWidth: true,
           maxWidth: 'md',
-          onClose: (event: object, reason: string) => {
+          onClose: async (event: object, reason: string) => {
             if (reason !== 'backdropClick') {
-              closeDialog();
+              await closeDialog();
               resolve({
                 result: 'close',
               });
@@ -57,14 +68,14 @@ export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCit
             <ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPage
               ownerData={ownerData}
               alreadySelected={alreadySelected}
-              onClose={() => {
-                closeDialog();
+              onClose={async () => {
+                await closeDialog();
                 resolve({
                   result: 'close',
                 });
               }}
-              onSubmit={(result) => {
-                closeDialog();
+              onSubmit={async (result) => {
+                await closeDialog();
                 resolve({
                   result: 'submit',
                   data: result,
@@ -83,10 +94,11 @@ const ServiceCityCity_TableSetSelectorDialogContainer = lazy(
 export interface ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPageProps {
   ownerData: any;
   alreadySelected: ServiceCityStored[];
-  onClose: () => void;
-  onSubmit: (result?: ServiceCityStored[]) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceCityStored[]) => Promise<void>;
 }
 
+// XMIID: User/(esm/_I-5hoIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition
 // Name: service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCity::TabularReferenceField::Link::Set::Selector::Page
 export default function ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPage(
   props: ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPageProps,
@@ -96,7 +108,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -110,19 +122,30 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   const [data, setData] = useState<ServiceCityStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceCityStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCityCity_TableSetSelectorActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_CITY_TABULAR_REFERENCE_FIELD_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCityCity_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    selectionDiff,
+  );
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
+  const title: string = t('service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
 
   // Action section
-  const serviceCityCity_TableSet = async (selected: ServiceCityStored[]) => {
+  const setAction = async (selected: ServiceCityStored[]) => {
     onSubmit(selected);
   };
-  const serviceCityCity_TableBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceCityCity_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -133,9 +156,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
       filters: newFilters,
     };
   };
-  const serviceCityCity_TableTableRange = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored[]> => {
+  const selectorRangeAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored[]> => {
     try {
       return serviceServiceUserServiceForResidentCityImpl.getRangeForResidentCity(ownerData, queryCustomizer);
     } catch (error) {
@@ -145,16 +166,20 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   };
 
   const actions: ServiceCityCity_TableSetSelectorDialogActions = {
-    serviceCityCity_TableSet,
-    serviceCityCity_TableBack,
-    serviceCityCity_TableTableFilter,
-    serviceCityCity_TableTableRange,
+    setAction,
+    backAction,
+    filterAction,
+    selectorRangeAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <>
+    <div
+      id="User/(esm/_I-5hoIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+      data-page-name="service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCity::TabularReferenceField::Link::Set::Selector::Page"
+    >
       <Suspense>
         <ServiceCityCity_TableSetSelectorDialogContainer
           ownerData={ownerData}
@@ -169,6 +194,6 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
           alreadySelected={alreadySelected}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

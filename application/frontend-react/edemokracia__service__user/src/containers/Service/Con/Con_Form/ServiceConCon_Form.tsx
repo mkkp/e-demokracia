@@ -13,9 +13,18 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import { Box, Container, Grid, Button, Card, CardContent, InputAdornment, TextField, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -37,7 +46,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCon,
@@ -63,7 +78,7 @@ export interface ServiceConCon_FormActionDefinitions
   extends ServiceConCon_FormConsComponentActionDefinitions,
     ServiceConCon_FormCreatedByComponentActionDefinitions,
     ServiceConCon_FormProsComponentActionDefinitions {
-  serviceConCon_FormVotesOpenPage?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
 }
 
 export interface ServiceConCon_FormProps {
@@ -113,11 +128,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           required={false}
           name="createdByName"
           id="User/(esm/_EuIKwG5WEe2wNaja8kBvcQ)/StringTypeTextInput"
-          label={
-            t('service.Con.Con.Form.createdByName.Con_Form.service::Con::Con_Form', {
-              defaultValue: 'CreatedByName',
-            }) as string
-          }
+          label={t('service.Con.Con_Form.createdByName', { defaultValue: 'CreatedByName' }) as string}
           value={data.createdByName ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -182,9 +193,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
             });
           }}
           views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-          label={
-            t('service.Con.Con.Form.created.Con_Form.service::Con::Con_Form', { defaultValue: 'Created' }) as string
-          }
+          label={t('service.Con.Con_Form.created', { defaultValue: 'Created' }) as string}
           value={serviceDateToUiDate(data.created ?? null)}
           readOnly={false || !isFormUpdateable()}
           disabled={isLoading}
@@ -199,11 +208,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           required={true}
           name="description"
           id="User/(esm/_3nWc4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-          label={
-            t('service.Con.Con.Form.description.Con_Form.service::Con::Con_Form', {
-              defaultValue: 'Description',
-            }) as string
-          }
+          label={t('service.Con.Con_Form.description', { defaultValue: 'Description' }) as string}
           value={data.description ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -233,7 +238,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           required={true}
           name="title"
           id="User/(esm/_3ng08H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-          label={t('service.Con.Con.Form.title.Con_Form.service::Con::Con_Form', { defaultValue: 'Title' }) as string}
+          label={t('service.Con.Con_Form.title', { defaultValue: 'Title' }) as string}
           value={data.title ?? ''}
           className={clsx({
             'JUDO-viewMode': !editMode,
@@ -263,9 +268,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           required={false}
           name="upVotes"
           id="User/(esm/_cIeKEIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-          label={
-            t('service.Con.Con.Form.upVotes.Con_Form.service::Con::Con_Form', { defaultValue: 'UpVotes' }) as string
-          }
+          label={t('service.Con.Con_Form.upVotes', { defaultValue: 'UpVotes' }) as string}
           customInput={TextField}
           value={data.upVotes ?? ''}
           className={clsx({
@@ -298,9 +301,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           required={false}
           name="downVotes"
           id="User/(esm/_cIh0cIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-          label={
-            t('service.Con.Con.Form.downVotes.Con_Form.service::Con::Con_Form', { defaultValue: 'DownVotes' }) as string
-          }
+          label={t('service.Con.Con_Form.downVotes', { defaultValue: 'DownVotes' }) as string}
           customInput={TextField}
           value={data.downVotes ?? ''}
           className={clsx({
@@ -333,10 +334,10 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           id="User/(esm/_cImF4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
           variant={undefined}
           editMode={editMode}
-          navigateAction={actions.serviceConCon_FormVotesOpenPage}
+          navigateAction={actions.votesOpenPageAction}
           refreshCounter={refreshCounter}
         >
-          {t('service.Con.Con.Form.votes.Con_Form.service::Con::Con_Form', { defaultValue: 'Votes' })}
+          {t('service.Con.Con_Form.votes', { defaultValue: 'Votes' })}
           <MdiIcon path="arrow-right" />
         </AssociationButton>
       </Grid>
@@ -354,7 +355,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable)/LabelWrapper"
+          id="_0ODKkYoAEe6F9LXBn0VWTg)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -363,15 +364,9 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-              <Typography
-                id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable)/Label"
-                variant="h5"
-                component="h1"
-              >
-                {t('service.Con.Con.Form.cons::Label.cons::LabelWrapper.Con_Form.service::Con::Con_Form', {
-                  defaultValue: 'Cons',
-                })}
+              <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
+              <Typography id="_0ODKkYoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                {t('service.Con.Con_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>
           </Grid>
@@ -385,7 +380,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               justifyContent="flex-start"
             >
               <ServiceConCon_FormConsComponent
-                uniqueId={'TMP'}
+                uniqueId={'User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'}
                 actions={actions}
                 ownerData={data}
                 editMode={editMode}
@@ -400,7 +395,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable)/LabelWrapper"
+          id="_0OZI0IoAEe6F9LXBn0VWTg)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -409,15 +404,9 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-              <Typography
-                id="User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable)/Label"
-                variant="h5"
-                component="h1"
-              >
-                {t('service.Con.Con.Form.pros::Label.pros::LabelWrapper.Con_Form.service::Con::Con_Form', {
-                  defaultValue: 'Pros',
-                })}
+              <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
+              <Typography id="_0OZI0IoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                {t('service.Con.Con_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>
           </Grid>
@@ -431,7 +420,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               justifyContent="flex-start"
             >
               <ServiceConCon_FormProsComponent
-                uniqueId={'TMP'}
+                uniqueId={'User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'}
                 actions={actions}
                 ownerData={data}
                 editMode={editMode}

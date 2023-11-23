@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,7 @@ const ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Table = lazy(
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActions
   extends ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableActionDefinitions {
-  serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageProps {
@@ -54,23 +56,22 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Back"
+              id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableBack!();
+                await actions.backAction!();
               }}
             >
               <span>
-                {t(
-                  'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition.Table.service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
+                {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.Back', {
+                  defaultValue: 'Back',
+                })}
               </span>
             </LoadingButton>
           </Grid>

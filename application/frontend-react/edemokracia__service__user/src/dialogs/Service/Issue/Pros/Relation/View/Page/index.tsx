@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -27,6 +28,8 @@ import {
 } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { routeToServiceProVotesRelationTablePage } from '~/routes';
+import { useServiceConCon_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Con/Con_View_Edit/CreateConArgument/Input/Form';
+import { useServiceConCon_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Con/Con_View_Edit/CreateProArgument/Input/Form';
 import { useServiceProPro_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateConArgument/Input/Form';
 import { useServiceProPro_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateProArgument/Input/Form';
 import { useServiceProConsRelationViewPage } from '~/dialogs/Service/Pro/Cons/Relation/View/Page';
@@ -49,7 +52,39 @@ import type {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForProsImpl } from '~/services/data-axios';
+import { serviceProServiceImpl } from '~/services/data-axios';
+export type ServiceProPro_View_EditDialogActionsExtended = ServiceProPro_View_EditDialogActions & {
+  postConsVoteDownForConAction?: (
+    target: ServiceConStored,
+
+    onClose: () => Promise<void>,
+  ) => Promise<void>;
+  postConsVoteUpForConAction?: (
+    target: ServiceConStored,
+
+    onClose: () => Promise<void>,
+  ) => Promise<void>;
+  postVoteDownForProAction?: (onClose: () => Promise<void>) => Promise<void>;
+  postProsVoteDownForProAction?: (
+    target: ServiceProStored,
+
+    onClose: () => Promise<void>,
+  ) => Promise<void>;
+  postVoteUpForProAction?: (onClose: () => Promise<void>) => Promise<void>;
+  postProsVoteUpForProAction?: (
+    target: ServiceProStored,
+
+    onClose: () => Promise<void>,
+  ) => Promise<void>;
+};
+
+export const SERVICE_ISSUE_PROS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceProPro_View_EditActionsHook';
+export type ServiceProPro_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceProStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServicePro, value: any) => void,
+) => ServiceProPro_View_EditDialogActionsExtended;
 
 export const useServiceIssueProsRelationViewPage = (): ((
   ownerData: any,
@@ -61,9 +96,9 @@ export const useServiceIssueProsRelationViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'xl',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -72,14 +107,14 @@ export const useServiceIssueProsRelationViewPage = (): ((
         children: (
           <ServiceIssueProsRelationViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -112,10 +147,11 @@ const ServiceProPro_View_EditDialogContainer = lazy(
 export interface ServiceIssueProsRelationViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceProStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceProStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_7XpxEH2fEe2LTNnGda5kaw)/RelationFeatureView
 // Name: service::Issue::pros::Relation::View::Page
 export default function ServiceIssueProsRelationViewPage(props: ServiceIssueProsRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -123,7 +159,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -166,7 +202,20 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       '{created,upVotes,description,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceProPro_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_PROS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceProPro_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
+  const openServiceConCon_View_EditCreateConArgumentInputForm = useServiceConCon_View_EditCreateConArgumentInputForm();
+  const openServiceConCon_View_EditCreateProArgumentInputForm = useServiceConCon_View_EditCreateProArgumentInputForm();
   const openServiceProPro_View_EditCreateConArgumentInputForm = useServiceProPro_View_EditCreateConArgumentInputForm();
   const openServiceProPro_View_EditCreateProArgumentInputForm = useServiceProPro_View_EditCreateProArgumentInputForm();
   const openServiceProConsRelationViewPage = useServiceProConsRelationViewPage();
@@ -174,19 +223,17 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
   const openServiceProProsRelationViewPage = useServiceProProsRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.Pro.Pro_View_Edit', { defaultValue: 'Pro View / Edit' });
+  const title: string = t('service.Pro.Pro_View_Edit', { defaultValue: 'Pro View / Edit' });
 
   // Action section
-  const serviceProPro_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceProPro_View_EditRefresh = async (
-    queryCustomizer: ServiceProQueryCustomizer,
-  ): Promise<ServiceProStored> => {
+  const refreshAction = async (queryCustomizer: ServiceProQueryCustomizer): Promise<ServiceProStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueServiceForProsImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceProServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -207,15 +254,15 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceProPro_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceProPro_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceProPro_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await serviceIssueServiceForProsImpl.update(payloadDiff.current);
+      const res = await serviceProServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -223,7 +270,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServicePro, string>());
-        await actions.serviceProPro_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -232,7 +279,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       setIsLoading(false);
     }
   };
-  const serviceProPro_View_EditDelete = async () => {
+  const deleteAction = async () => {
     try {
       const confirmed = await openConfirmDialog(
         'row-delete-action',
@@ -242,7 +289,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
         t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
       );
       if (confirmed) {
-        await serviceIssueServiceForProsImpl.delete(data);
+        await serviceProServiceImpl.delete(data);
 
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
@@ -255,21 +302,27 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       handleError(error, undefined, data);
     }
   };
-  const serviceProPro_View_EditProVoteUp = async () => {
+  const voteUpForProAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceForProsImpl.voteUp(data);
+      await serviceProServiceImpl.voteUp(data);
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
+      if (customActions?.postVoteUpForProAction) {
+        await customActions.postVoteUpForProAction(
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
 
-      if (!editMode) {
-        await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
       }
     } catch (error) {
       handleError<ServicePro>(error, { setValidation }, data);
@@ -277,60 +330,59 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       setIsLoading(false);
     }
   };
-  const serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm = async () => {
-    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(data);
-    if (!editMode) {
-      await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+  const voteDownForProAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteDown(data);
+
+      if (customActions?.postVoteDownForProAction) {
+        await customActions.postVoteDownForProAction(
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
-  const serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm = async () => {
+  const createProArgumentAction = async () => {
     const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(data);
-    if (!editMode) {
-      await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceProPro_View_EditProVoteDown = async () => {
-    try {
-      setIsLoading(true);
-      await serviceIssueServiceForProsImpl.voteDown(data);
-
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (!editMode) {
-        await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    } catch (error) {
-      handleError<ServicePro>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
+  const createConArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceProPro_View_EditProCreatedByView = async (target?: ServiceServiceUserStored) => {
-    await openServiceProCreatedByRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const serviceProPro_View_EditProVotesOpenPage = async (target?: ServiceSimpleVoteStored) => {
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceProVotesRelationTablePage((target || data).__signedIdentifier));
     onClose();
   };
-  const serviceProPro_View_EditArgumentsProsTableProsView = async (target?: ServiceProStored) => {
+  const prosOpenPageAction = async (target?: ServiceProStored) => {
     await openServiceProProsRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceProPro_View_EditArgumentsProsTableProsFilter = async (
+  const prosFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -341,10 +393,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       filters: newFilters,
     };
   };
-  const serviceProPro_View_EditArgumentsProsTableProsDelete = async (
-    target: ServiceProStored,
-    silentMode?: boolean,
-  ) => {
+  const prosDeleteAction = async (target: ServiceProStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -356,7 +405,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
           )
         : true;
       if (confirmed) {
-        await serviceIssueServiceForProsImpl.deletePros(target);
+        await serviceProServiceImpl.deletePros(target);
 
         if (!silentMode) {
           enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
@@ -364,7 +413,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
             ...toastConfig.success,
           });
 
-          serviceProPro_View_EditRefresh(pageQueryCustomizer);
+          refreshAction(pageQueryCustomizer);
         }
       }
     } catch (error) {
@@ -373,18 +422,18 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       }
     }
   };
-  const serviceProPro_View_EditArgumentsProsTableProsBulkDelete = async (
+  const prosBulkDeleteAction = async (
     selectedRows: ServiceProStored[],
   ): Promise<DialogResult<Array<ServiceProStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceProStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.Pro.Pro_View_Edit.Arguments.pros.table.pros.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceProPro_View_EditArgumentsProsTableProsDelete) {
-              await actions.serviceProPro_View_EditArgumentsProsTableProsDelete!(item, true);
+            if (actions.prosDeleteAction) {
+              await actions.prosDeleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -393,8 +442,8 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
         },
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
-            if (actions.serviceProPro_View_EditRefresh) {
-              await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
             }
             resolve({
               result: 'submit',
@@ -410,14 +459,86 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       });
     });
   };
-  const serviceProPro_View_EditArgumentsConsTableConsView = async (target?: ServiceConStored) => {
+  const prosVoteUpForProAction = async (target?: ServiceProStored) => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteUpForPros(target!);
+
+      if (customActions?.postProsVoteUpForProAction) {
+        await customActions.postProsVoteUpForProAction(
+          target!,
+
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const prosVoteDownForProAction = async (target?: ServiceProStored) => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteDownForPros(target!);
+
+      if (customActions?.postProsVoteDownForProAction) {
+        await customActions.postProsVoteDownForProAction(
+          target!,
+
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const prosCreateProArgumentAction = async (target: ServiceProStored) => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const prosCreateConArgumentAction = async (target: ServiceProStored) => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const consOpenPageAction = async (target?: ServiceConStored) => {
     await openServiceProConsRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceProPro_View_EditArgumentsConsTableConsFilter = async (
+  const consFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -428,10 +549,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       filters: newFilters,
     };
   };
-  const serviceProPro_View_EditArgumentsConsTableConsDelete = async (
-    target: ServiceConStored,
-    silentMode?: boolean,
-  ) => {
+  const consDeleteAction = async (target: ServiceConStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -443,7 +561,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
           )
         : true;
       if (confirmed) {
-        await serviceIssueServiceForProsImpl.deleteCons(target);
+        await serviceProServiceImpl.deleteCons(target);
 
         if (!silentMode) {
           enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
@@ -451,7 +569,7 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
             ...toastConfig.success,
           });
 
-          serviceProPro_View_EditRefresh(pageQueryCustomizer);
+          refreshAction(pageQueryCustomizer);
         }
       }
     } catch (error) {
@@ -460,18 +578,18 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       }
     }
   };
-  const serviceProPro_View_EditArgumentsConsTableConsBulkDelete = async (
+  const consBulkDeleteAction = async (
     selectedRows: ServiceConStored[],
   ): Promise<DialogResult<Array<ServiceConStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceConStored>({
-        dialogTitle: t('TMP', { defaultValue: 'Delete' }),
+        dialogTitle: t('service.Pro.Pro_View_Edit.Arguments.cons.table.cons.BulkDelete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.serviceProPro_View_EditArgumentsConsTableConsDelete) {
-              await actions.serviceProPro_View_EditArgumentsConsTableConsDelete!(item, true);
+            if (actions.consDeleteAction) {
+              await actions.consDeleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -480,8 +598,8 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
         },
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
-            if (actions.serviceProPro_View_EditRefresh) {
-              await actions.serviceProPro_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
             }
             resolve({
               result: 'submit',
@@ -497,36 +615,127 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
       });
     });
   };
+  const consCreateProArgumentAction = async (target: ServiceConStored) => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const consVoteDownForConAction = async (target?: ServiceConStored) => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteDownForCons(target!);
+
+      if (customActions?.postConsVoteDownForConAction) {
+        await customActions.postConsVoteDownForConAction(
+          target!,
+
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const consVoteUpForConAction = async (target?: ServiceConStored) => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteUpForCons(target!);
+
+      if (customActions?.postConsVoteUpForConAction) {
+        await customActions.postConsVoteUpForConAction(
+          target!,
+
+          onClose,
+        );
+      } else {
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const consCreateConArgumentAction = async (target: ServiceConStored) => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceProCreatedByRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
 
   const actions: ServiceProPro_View_EditDialogActions = {
-    serviceProPro_View_EditBack,
-    serviceProPro_View_EditRefresh,
-    serviceProPro_View_EditCancel,
-    serviceProPro_View_EditUpdate,
-    serviceProPro_View_EditDelete,
-    serviceProPro_View_EditProVoteUp,
-    serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm,
-    serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm,
-    serviceProPro_View_EditProVoteDown,
-    serviceProPro_View_EditProCreatedByView,
-    serviceProPro_View_EditProVotesOpenPage,
-    serviceProPro_View_EditArgumentsProsTableProsView,
-    serviceProPro_View_EditArgumentsProsTableProsFilter,
-    serviceProPro_View_EditArgumentsProsTableProsDelete,
-    serviceProPro_View_EditArgumentsProsTableProsBulkDelete,
-    serviceProPro_View_EditArgumentsConsTableConsView,
-    serviceProPro_View_EditArgumentsConsTableConsFilter,
-    serviceProPro_View_EditArgumentsConsTableConsDelete,
-    serviceProPro_View_EditArgumentsConsTableConsBulkDelete,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    deleteAction,
+    voteUpForProAction,
+    voteDownForProAction,
+    createProArgumentAction,
+    createConArgumentAction,
+    votesOpenPageAction,
+    prosOpenPageAction,
+    prosFilterAction,
+    prosDeleteAction,
+    prosBulkDeleteAction,
+    prosVoteUpForProAction,
+    prosVoteDownForProAction,
+    prosCreateProArgumentAction,
+    prosCreateConArgumentAction,
+    consOpenPageAction,
+    consFilterAction,
+    consDeleteAction,
+    consBulkDeleteAction,
+    consCreateProArgumentAction,
+    consVoteDownForConAction,
+    consVoteUpForConAction,
+    consCreateConArgumentAction,
+    createdByOpenPageAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceProPro_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_7XpxEH2fEe2LTNnGda5kaw)/RelationFeatureView"
+      data-page-name="service::Issue::pros::Relation::View::Page"
+    >
       <Suspense>
         <ServiceProPro_View_EditDialogContainer
           ownerData={ownerData}
@@ -544,6 +753,6 @@ export default function ServiceIssueProsRelationViewPage(props: ServiceIssuePros
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

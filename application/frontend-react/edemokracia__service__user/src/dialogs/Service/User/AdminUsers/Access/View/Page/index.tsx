@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -51,7 +52,18 @@ import type {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
-import { userServiceForAdminUsersImpl } from '~/services/data-axios';
+import { serviceServiceUserServiceImpl } from '~/services/data-axios';
+export type ServiceServiceUserServiceUser_View_EditDialogActionsExtended =
+  ServiceServiceUserServiceUser_View_EditDialogActions & {};
+
+export const SERVICE_USER_ADMIN_USERS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceServiceUserServiceUser_View_EditActionsHook';
+export type ServiceServiceUserServiceUser_View_EditActionsHook = (
+  ownerData: any,
+  data: ServiceServiceUserStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceServiceUser, value: any) => void,
+) => ServiceServiceUserServiceUser_View_EditDialogActionsExtended;
 
 export const useServiceUserAdminUsersAccessViewPage = (): ((
   ownerData: any,
@@ -63,9 +75,9 @@ export const useServiceUserAdminUsersAccessViewPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'lg',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -74,14 +86,14 @@ export const useServiceUserAdminUsersAccessViewPage = (): ((
         children: (
           <ServiceUserAdminUsersAccessViewPage
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -120,10 +132,11 @@ const ServiceServiceUserServiceUser_View_EditDialogContainer = lazy(
 export interface ServiceUserAdminUsersAccessViewPageProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceServiceUserStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_hvVS8GkuEe25ONJ3V89cVA)/AccessViewPageDefinition
 // Name: service::User::adminUsers::Access::View::Page
 export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAdminUsersAccessViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
@@ -131,7 +144,7 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -178,6 +191,17 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
       '{lastName,firstName,phone,created,isAdmin,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_View_EditActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_USERS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceServiceUserServiceUser_View_EditDialogActionsExtended | undefined = customActionsHook?.(
+    ownerData,
+    data,
+    editMode,
+    storeDiff,
+  );
+
   // Dialog hooks
   const openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPage =
     useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPage();
@@ -191,19 +215,19 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
     useServiceServiceUserResidentDistrictRelationViewPage();
 
   // Calculated section
-  const title: string = t('Service.ServiceUser.ServiceUser_View_Edit', { defaultValue: 'ServiceUser View / Edit' });
+  const title: string = t('service.ServiceUser.ServiceUser_View_Edit', { defaultValue: 'ServiceUser View / Edit' });
 
   // Action section
-  const serviceServiceUserServiceUser_View_EditBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceServiceUserServiceUser_View_EditRefresh = async (
+  const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForAdminUsersImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceServiceUserServiceImpl.refresh(ownerData, pageQueryCustomizer);
 
       setData(result);
 
@@ -224,15 +248,15 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const serviceServiceUserServiceUser_View_EditCancel = async () => {
+  const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await serviceServiceUserServiceUser_View_EditRefresh(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const serviceServiceUserServiceUser_View_EditUpdate = async () => {
+  const updateAction = async () => {
     setIsLoading(true);
 
     try {
-      const res = await userServiceForAdminUsersImpl.update(payloadDiff.current);
+      const res = await serviceServiceUserServiceImpl.update(payloadDiff.current);
 
       if (res) {
         enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
@@ -240,7 +264,7 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
           ...toastConfig.success,
         });
         setValidation(new Map<keyof ServiceServiceUser, string>());
-        await actions.serviceServiceUserServiceUser_View_EditRefresh!(pageQueryCustomizer);
+        await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
       }
     } catch (error) {
@@ -249,7 +273,7 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
       setIsLoading(false);
     }
   };
-  const serviceServiceUserServiceUser_View_EditDelete = async () => {
+  const deleteAction = async () => {
     try {
       const confirmed = await openConfirmDialog(
         'row-delete-action',
@@ -259,7 +283,7 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
         t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
       );
       if (confirmed) {
-        await userServiceForAdminUsersImpl.delete(data);
+        await serviceServiceUserServiceImpl.delete(data);
 
         enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
           variant: 'success',
@@ -272,14 +296,14 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
       handleError(error, undefined, data);
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCityView = async (target?: ServiceCityStored) => {
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
     await openServiceServiceUserResidentCityRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceServiceUserServiceUser_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCitySetOpenSelector = async () => {
+  const residentCityOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
       await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityTabularReferenceFieldLinkSetSelectorPage(
         data,
@@ -291,70 +315,27 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
       }
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCityAutocomplete = async (
+  const residentCityAutocompleteRangeAction = async (
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return userServiceForAdminUsersImpl.getRangeForResidentCity(data, queryCustomizer);
+      return serviceServiceUserServiceImpl.getRangeForResidentCity(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCityUnset = async (target: ServiceCityStored) => {
+  const residentCityUnsetAction = async (target: ServiceCityStored) => {
     storeDiff('residentCity', null);
   };
-  const serviceServiceUserServiceUser_View_EditPersonalVotesOpenPage = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceServiceUserVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
-  };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictView = async (
-    target?: ServiceDistrictStored,
-  ) => {
-    await openServiceServiceUserResidentDistrictRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.serviceServiceUserServiceUser_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictSetOpenSelector = async () => {
-    const { result, data: returnedData } =
-      await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictTabularReferenceFieldLinkSetSelectorPage(
-        data,
-        data.residentDistrict ? [data.residentDistrict] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('residentDistrict', returnedData[0]);
-      }
-    }
-  };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictAutocomplete = async (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
-    try {
-      return userServiceForAdminUsersImpl.getRangeForResidentDistrict(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictUnset = async (
-    target: ServiceDistrictStored,
-  ) => {
-    storeDiff('residentDistrict', null);
-  };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountyView = async (
-    target?: ServiceCountyStored,
-  ) => {
+  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
     await openServiceServiceUserResidentCountyRelationViewPage(target!);
 
     if (!editMode) {
-      await actions.serviceServiceUserServiceUser_View_EditRefresh!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountySetOpenSelector = async () => {
+  const residentCountyOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
       await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyTabularReferenceFieldLinkSetSelectorPage(
         data,
@@ -366,50 +347,89 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
       }
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountyAutocomplete = async (
+  const residentCountyAutocompleteRangeAction = async (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return userServiceForAdminUsersImpl.getRangeForResidentCounty(data, queryCustomizer);
+      return serviceServiceUserServiceImpl.getRangeForResidentCounty(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
-  const serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountyUnset = async (
-    target: ServiceCountyStored,
-  ) => {
+  const residentCountyUnsetAction = async (target: ServiceCountyStored) => {
     storeDiff('residentCounty', null);
+  };
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceServiceUserVotesRelationTablePage((target || data).__signedIdentifier));
+    onClose();
+  };
+  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceServiceUserResidentDistrictRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const residentDistrictOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictTabularReferenceFieldLinkSetSelectorPage(
+        data,
+        data.residentDistrict ? [data.residentDistrict] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('residentDistrict', returnedData[0]);
+      }
+    }
+  };
+  const residentDistrictAutocompleteRangeAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<ServiceDistrictStored[]> => {
+    try {
+      return serviceServiceUserServiceImpl.getRangeForResidentDistrict(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const residentDistrictUnsetAction = async (target: ServiceDistrictStored) => {
+    storeDiff('residentDistrict', null);
   };
 
   const actions: ServiceServiceUserServiceUser_View_EditDialogActions = {
-    serviceServiceUserServiceUser_View_EditBack,
-    serviceServiceUserServiceUser_View_EditRefresh,
-    serviceServiceUserServiceUser_View_EditCancel,
-    serviceServiceUserServiceUser_View_EditUpdate,
-    serviceServiceUserServiceUser_View_EditDelete,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCityView,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCitySetOpenSelector,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCityAutocomplete,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCityUnset,
-    serviceServiceUserServiceUser_View_EditPersonalVotesOpenPage,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictView,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictSetOpenSelector,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictAutocomplete,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictUnset,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountyView,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountySetOpenSelector,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountyAutocomplete,
-    serviceServiceUserServiceUser_View_EditAreasResidencyResidentCountyUnset,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    deleteAction,
+    residentCityOpenPageAction,
+    residentCityOpenSetSelectorAction,
+    residentCityAutocompleteRangeAction,
+    residentCityUnsetAction,
+    residentCountyOpenPageAction,
+    residentCountyOpenSetSelectorAction,
+    residentCountyAutocompleteRangeAction,
+    residentCountyUnsetAction,
+    votesOpenPageAction,
+    residentDistrictOpenPageAction,
+    residentDistrictOpenSetSelectorAction,
+    residentDistrictAutocompleteRangeAction,
+    residentDistrictUnsetAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceServiceUserServiceUser_View_EditRefresh!(pageQueryCustomizer);
+    actions.refreshAction!(pageQueryCustomizer);
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_hvVS8GkuEe25ONJ3V89cVA)/AccessViewPageDefinition"
+      data-page-name="service::User::adminUsers::Access::View::Page"
+    >
       <Suspense>
         <ServiceServiceUserServiceUser_View_EditDialogContainer
           ownerData={ownerData}
@@ -427,6 +447,6 @@ export default function ServiceUserAdminUsersAccessViewPage(props: ServiceUserAd
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -27,7 +29,7 @@ const ServiceIssueCategoryIssueCategory_Table = lazy(
 
 export interface ServiceIssueCategoryIssueCategory_TablePageActions
   extends ServiceIssueCategoryIssueCategory_TableActionDefinitions {
-  serviceIssueCategoryIssueCategory_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueCategoryIssueCategory_TablePageProps {
@@ -51,23 +53,19 @@ export default function ServiceIssueCategoryIssueCategory_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceIssueCategoryIssueCategory_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueCategory::IssueCategory_Table::Back"
+              id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueCategoryIssueCategory_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.IssueCategory.IssueCategory.Table.service::IssueCategory::IssueCategory_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.IssueCategory.IssueCategory_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

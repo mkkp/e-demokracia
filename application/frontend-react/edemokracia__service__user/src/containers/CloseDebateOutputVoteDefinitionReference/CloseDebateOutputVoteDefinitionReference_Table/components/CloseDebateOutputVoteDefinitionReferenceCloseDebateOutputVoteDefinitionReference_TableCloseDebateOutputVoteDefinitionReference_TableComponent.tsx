@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -62,35 +66,28 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponentActionDefinitions {
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableAddOpenSelector?: () => Promise<void>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBulkDelete?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (
     selectedRows: CloseDebateOutputVoteDefinitionReferenceStored[],
   ) => Promise<DialogResult<CloseDebateOutputVoteDefinitionReferenceStored[]>>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBulkRemove?: (
+  bulkRemoveAction?: (
     selectedRows: CloseDebateOutputVoteDefinitionReferenceStored[],
   ) => Promise<DialogResult<CloseDebateOutputVoteDefinitionReferenceStored[]>>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableClear?: () => Promise<void>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCreateOpen?: () => Promise<void>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableFilter?: (
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableRefresh?: (
+  refreshAction?: (
     queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   ) => Promise<CloseDebateOutputVoteDefinitionReferenceStored[]>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDelete?: (
-    row: CloseDebateOutputVoteDefinitionReferenceStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableRemove?: (
-    row: CloseDebateOutputVoteDefinitionReferenceStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableView?: (
-    row: CloseDebateOutputVoteDefinitionReferenceStored,
-  ) => Promise<void>;
+  deleteAction?: (row: CloseDebateOutputVoteDefinitionReferenceStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: CloseDebateOutputVoteDefinitionReferenceStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: CloseDebateOutputVoteDefinitionReferenceStored) => Promise<void>;
 }
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponentProps {
@@ -154,7 +151,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
     {
       ...baseColumnConfig,
       field: 'context',
-      headerName: t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.context', {
+      headerName: t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.context', {
         defaultValue: 'Context',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -172,33 +169,27 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
   const rowActions: TableRowAction<CloseDebateOutputVoteDefinitionReferenceStored>[] = [
     {
       id: 'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableRowRemoveButton',
-      label: t(
-        'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
+      label: t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Remove', {
+        defaultValue: 'Remove',
+      }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: CloseDebateOutputVoteDefinitionReferenceStored) => isLoading,
-      action: actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableRemove!(
-              rowData,
-            );
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableRowDeleteButton',
-      label: t(
-        'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
+      label: t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Delete', {
+        defaultValue: 'Delete',
+      }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: CloseDebateOutputVoteDefinitionReferenceStored) => !row.__deleteable || isLoading,
-      action: actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDelete!(
-              rowData,
-            );
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
@@ -275,10 +266,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
       setIsLoading(true);
 
       try {
-        const res =
-          await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableRefresh!(
-            processQueryCustomizer(queryCustomizer),
-          );
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -304,7 +292,10 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div
+      id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable"
+      data-table-name="CloseDebateOutputVoteDefinitionReference_Table"
+    >
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -337,11 +328,9 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableView
+          actions.openPageAction
             ? async (params: GridRowParams<CloseDebateOutputVoteDefinitionReferenceStored>) =>
-                await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableView!(
-                  params.row,
-                )
+                await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -351,20 +340,18 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableFilter &&
-              true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults =
-                      await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableFilter!(
-                        'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTableFilterButton',
-                        filterOptions,
-                        filterModel,
-                        filters,
-                      );
+                    const filterResults = await actions.filterAction!(
+                      'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTableFilterButton',
+                      filterOptions,
+                      filterModel,
+                      filters,
+                    );
                     if (Array.isArray(filterResults.filters)) {
                       handleFiltersChange([...filterResults.filters!]);
                     }
@@ -372,93 +359,95 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
                   disabled={isLoading}
                 >
                   {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Table::Filter',
+                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Table.Filter',
                     { defaultValue: 'Set Filters' },
                   )}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableRefresh &&
-              true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableTableRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
                   {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Table::Refresh',
+                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Table.Refresh',
                     { defaultValue: 'Refresh' },
                   )}
                 </Button>
               ) : null}
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCreateOpen &&
-              true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Create', {
+                    defaultValue: 'Create',
+                  })}
                 </Button>
               ) : null}
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableAddOpenSelector &&
-              true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Add', {
+                    defaultValue: 'Add',
+                  })}
                 </Button>
               ) : null}
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableClear &&
-              data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Set', {
+                    defaultValue: 'Set',
+                  })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
+                  {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Clear', {
+                    defaultValue: 'Clear',
+                  })}
                 </Button>
               ) : null}
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBulkRemove &&
-              selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBulkRemove!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
@@ -466,22 +455,18 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
                   disabled={isLoading}
                 >
                   {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::BulkRemove',
+                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.BulkRemove',
                     { defaultValue: 'Remove' },
                   )}
                 </Button>
               ) : null}
-              {actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBulkDelete &&
-              selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.closeDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableBulkDelete!(
-                        selectedRows.current,
-                      );
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
@@ -489,7 +474,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
                   {t(
-                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference.Table.CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table::BulkDelete',
+                    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.BulkDelete',
                     { defaultValue: 'Delete' },
                   )}
                 </Button>
@@ -522,6 +507,6 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

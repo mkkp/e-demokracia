@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,14 +27,14 @@ const ServiceDistrictDistrict_TableSetSelector = lazy(
 
 export interface ServiceDistrictDistrict_TableSetSelectorDialogActions
   extends ServiceDistrictDistrict_TableSetSelectorActionDefinitions {
-  serviceDistrictDistrict_TableBack?: () => Promise<void>;
-  serviceDistrictDistrict_TableSet?: (selected: ServiceDistrictStored[]) => Promise<void>;
+  backAction?: () => Promise<void>;
+  setAction?: (selected: ServiceDistrictStored[]) => Promise<void>;
 }
 
 export interface ServiceDistrictDistrict_TableSetSelectorDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceDistrictDistrict_TableSetSelectorDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -65,7 +70,7 @@ export default function ServiceDistrictDistrict_TableSetSelectorDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceDistrictDistrict_TableSetSelector-dialog-close-wrapper"
+          id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -90,43 +95,35 @@ export default function ServiceDistrictDistrict_TableSetSelectorDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceDistrictDistrict_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::District::District_Table::Back"
+              id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceDistrictDistrict_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.District.District.Table.SetSelector.service::District::District_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.District.District_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceDistrictDistrict_TableSet && (
+        {!editMode && actions.setAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::District::District_Table::Set"
+              id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorSetButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
-              startIcon={<MdiIcon path="link" />}
+              startIcon={<MdiIcon path="attachment-plus" />}
               onClick={async () => {
-                await actions.serviceDistrictDistrict_TableSet!(selectionDiff);
+                await actions.setAction!(selectionDiff);
               }}
             >
-              <span>
-                {t('service.District.District.Table.SetSelector.service::District::District_Table::Set', {
-                  defaultValue: 'Set',
-                })}
-              </span>
+              <span>{t('service.District.District_Table.Set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

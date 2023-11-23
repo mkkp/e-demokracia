@@ -6,23 +6,21 @@
 // Template name: actor/src/components/widgets/AggregationInput.tsx
 // Template file: actor/src/components/widgets/AggregationInput.tsx.hbs
 
-import {
-  Autocomplete,
-  Button,
-  ButtonGroup,
-  Box,
-  CircularProgress,
-  Grid,
-  IconButton,
-  InputAdornment,
-  TextField,
-  ClickAwayListener,
-  Grow,
-  Paper,
-  Popper,
-  MenuItem,
-  MenuList,
-} from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
 import { debounce } from '@mui/material/utils';
 import { useTranslation } from 'react-i18next';
 import type { JudoStored } from '@judo/data-api-common';

@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -32,9 +33,27 @@ import type {
   ServiceCreateUserInput,
   ServiceCreateUserInputQueryCustomizer,
   ServiceCreateUserInputStored,
+  ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import { serviceUserManagerServiceImpl } from '~/services/data-axios';
+export type ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended =
+  ServiceCreateUserInputCreateUserInput_FormDialogActions & {
+    postCreateUserForUserManagerAction?: (
+      output: ServiceServiceUser,
+      onSubmit: (result?: ServiceServiceUserStored) => Promise<void>,
+      onClose: () => Promise<void>,
+    ) => Promise<void>;
+  };
+
+export const SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CREATE_USER_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCreateUserInputCreateUserInput_FormActionsHook';
+export type ServiceCreateUserInputCreateUserInput_FormActionsHook = (
+  ownerData: any,
+  data: ServiceCreateUserInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void,
+) => ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended;
 
 export const useServiceUserManagerUserManager_View_EditCreateUserInputForm = (): ((
   ownerData: any,
@@ -46,9 +65,9 @@ export const useServiceUserManagerUserManager_View_EditCreateUserInputForm = ():
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -57,14 +76,14 @@ export const useServiceUserManagerUserManager_View_EditCreateUserInputForm = ():
         children: (
           <ServiceUserManagerUserManager_View_EditCreateUserInputForm
             ownerData={ownerData}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -103,10 +122,11 @@ const ServiceCreateUserInputCreateUserInput_FormDialogContainer = lazy(
 export interface ServiceUserManagerUserManager_View_EditCreateUserInputFormProps {
   ownerData: any;
 
-  onClose: () => void;
-  onSubmit: (result?: ServiceServiceUserStored) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored) => Promise<void>;
 }
 
+// XMIID: User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition
 // Name: service::UserManager::UserManager_View_Edit::createUser::Input::Form
 export default function ServiceUserManagerUserManager_View_EditCreateUserInputForm(
   props: ServiceUserManagerUserManager_View_EditCreateUserInputFormProps,
@@ -116,7 +136,7 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -161,36 +181,51 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
     return false;
   }, [data]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceCreateUserInputCreateUserInput_FormActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CREATE_USER_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, storeDiff);
+
   // Dialog hooks
   const openServiceUserManagerUserManager_View_EditCreateUserOutputView =
     useServiceUserManagerUserManager_View_EditCreateUserOutputView();
 
   // Calculated section
-  const title: string = t('Service.CreateUserInput.CreateUserInput_Form', { defaultValue: 'CreateUserInput Form' });
+  const title: string = t('service.CreateUserInput.CreateUserInput_Form', { defaultValue: 'CreateUserInput Form' });
 
   // Action section
-  const serviceCreateUserInputCreateUserInput_FormBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUser = async () => {
+  const createUserForUserManagerAction = async () => {
     try {
       setIsLoading(true);
       const result = await serviceUserManagerServiceImpl.createUser(
         data,
       );
 
-      enqueueSnackbar(
-        t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        {
-          variant: 'success',
-          ...toastConfig.success,
-        },
-      );
-
-      if (result) {
-        onSubmit(result);
+      if (customActions?.postCreateUserForUserManagerAction) {
+        await customActions.postCreateUserForUserManagerAction(
+          result,
+          onSubmit,
+          onClose,
+        );
       } else {
-        onSubmit();
+        enqueueSnackbar(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+          {
+            variant: 'success',
+            ...toastConfig.success,
+          },
+        );
+
+        if (result) {
+          onSubmit(result);
+        } else {
+          onSubmit();
+        }
       }
     } catch (error) {
       handleError<ServiceCreateUserInput>(error, { setValidation }, data);
@@ -198,7 +233,7 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
       setIsLoading(false);
     }
   };
-  const serviceCreateUserInputCreateUserInput_FormGetTemplate = async (): Promise<ServiceCreateUserInput> => {
+  const getTemplateAction = async (): Promise<ServiceCreateUserInput> => {
     try {
       setIsLoading(true);
       const result = await serviceUserManagerServiceImpl.getTemplateForCreateUser();
@@ -215,18 +250,22 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   };
 
   const actions: ServiceCreateUserInputCreateUserInput_FormDialogActions = {
-    serviceCreateUserInputCreateUserInput_FormBack,
-    serviceUserManagerUserManager_View_EditUserManagerActionGroupCreateUser,
-    serviceCreateUserInputCreateUserInput_FormGetTemplate,
+    backAction,
+    createUserForUserManagerAction,
+    getTemplateAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
   useEffect(() => {
-    actions.serviceCreateUserInputCreateUserInput_FormGetTemplate!();
+    actions.getTemplateAction!();
   }, []);
 
   return (
-    <>
+    <div
+      id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition"
+      data-page-name="service::UserManager::UserManager_View_Edit::createUser::Input::Form"
+    >
       <Suspense>
         <ServiceCreateUserInputCreateUserInput_FormDialogContainer
           ownerData={ownerData}
@@ -244,6 +283,6 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
           setValidation={setValidation}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

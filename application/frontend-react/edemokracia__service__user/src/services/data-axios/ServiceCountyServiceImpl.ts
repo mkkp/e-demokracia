@@ -102,7 +102,7 @@ export class ServiceCountyServiceImpl extends JudoAxiosService implements Servic
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getCities(
+  async listCities(
     target: JudoIdentifiable<ServiceCounty>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>> {

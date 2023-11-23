@@ -27,26 +27,6 @@ export interface ConfirmDialogProviderContext {
   ) => Promise<boolean>;
 }
 
-export interface OpenRangeDialogProps<T extends JudoStored<T>, U extends QueryCustomizer<T>> {
-  id: string;
-  columns: GridColDef<T>[];
-  defaultSortField: GridSortItem;
-  rangeCall: (queryCustomizer: U) => Promise<Array<T>>;
-  single?: boolean;
-  alreadySelectedItems?: T[];
-  initialQueryCustomizer: U;
-  initialFilters?: Filter[];
-  filterOptions: FilterOption[];
-  createTrigger?: () => Promise<T | undefined>;
-  editMode?: boolean;
-}
-
-export interface RangeDialogProviderContext {
-  openRangeDialog: <T extends JudoStored<T>, U extends QueryCustomizer<T>>(
-    props: OpenRangeDialogProps<T, U>,
-  ) => Promise<{ value: T[] | T; resolveSource: 'selection' | 'create' }>;
-}
-
 export interface FilterDialogProviderContext {
   openFilterDialog: (id: string, filterOptions: FilterOption[], filters?: Filter[]) => Promise<Filter[]>;
 }

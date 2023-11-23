@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
@@ -36,6 +37,17 @@ import type {
   SimpleVoteType,
 } from '~/services/data-api';
 import { serviceServiceUserServiceForVotesImpl } from '~/services/data-axios';
+export type ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActionsExtended =
+  ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActions & {};
+
+export const SERVICE_SERVICE_USER_VOTES_RELATION_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSimpleVoteSimpleVote_TableAddSelectorActionsHook';
+export type ServiceSimpleVoteSimpleVote_TableAddSelectorActionsHook = (
+  ownerData: any,
+  data: ServiceSimpleVoteStored[],
+  editMode: boolean,
+  selectionDiff: ServiceSimpleVoteStored[],
+) => ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActionsExtended;
 
 export const useServiceServiceUserVotesRelationTableAddSelectorPage = (): ((
   ownerData: any,
@@ -48,9 +60,9 @@ export const useServiceServiceUserVotesRelationTableAddSelectorPage = (): ((
       createDialog({
         fullWidth: true,
         maxWidth: 'md',
-        onClose: (event: object, reason: string) => {
+        onClose: async (event: object, reason: string) => {
           if (reason !== 'backdropClick') {
-            closeDialog();
+            await closeDialog();
             resolve({
               result: 'close',
             });
@@ -60,14 +72,14 @@ export const useServiceServiceUserVotesRelationTableAddSelectorPage = (): ((
           <ServiceServiceUserVotesRelationTableAddSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
-            onClose={() => {
-              closeDialog();
+            onClose={async () => {
+              await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={(result) => {
-              closeDialog();
+            onSubmit={async (result) => {
+              await closeDialog();
               resolve({
                 result: 'submit',
                 data: result,
@@ -89,10 +101,11 @@ const ServiceSimpleVoteSimpleVote_TableAddSelectorDialogContainer = lazy(
 export interface ServiceServiceUserVotesRelationTableAddSelectorPageProps {
   ownerData: any;
   alreadySelected: ServiceSimpleVoteStored[];
-  onClose: () => void;
-  onSubmit: (result?: ServiceSimpleVoteStored[]) => void;
+  onClose: () => Promise<void>;
+  onSubmit: (result?: ServiceSimpleVoteStored[]) => Promise<void>;
 }
 
+// XMIID: User/(esm/_qcneEGksEe25ONJ3V89cVA)/RelationFeatureTableAddSelectorPageDefinition
 // Name: service::ServiceUser::votes::Relation::Table::Add::Selector::Page
 export default function ServiceServiceUserVotesRelationTableAddSelectorPage(
   props: ServiceServiceUserVotesRelationTableAddSelectorPageProps,
@@ -102,7 +115,7 @@ export default function ServiceServiceUserVotesRelationTableAddSelectorPage(
   // Hooks section
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
-  const { navigate, back } = useJudoNavigation();
+  const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
@@ -116,19 +129,26 @@ export default function ServiceServiceUserVotesRelationTableAddSelectorPage(
   const [data, setData] = useState<ServiceSimpleVoteStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceSimpleVoteStored[]>([]);
 
+  // Pandino Action overrides
+  const { service: customActionsHook } = useTrackService<ServiceSimpleVoteSimpleVote_TableAddSelectorActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_VOTES_RELATION_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, selectionDiff);
+
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('Service.SimpleVote.SimpleVote_Table.AddSelector', { defaultValue: 'SimpleVote Table' });
+  const title: string = t('service.SimpleVote.SimpleVote_Table.AddSelector', { defaultValue: 'SimpleVote Table' });
 
   // Action section
-  const serviceSimpleVoteSimpleVote_TableAdd = async (selected: ServiceSimpleVoteStored[]) => {
+  const addAction = async (selected: ServiceSimpleVoteStored[]) => {
     onSubmit(selected);
   };
-  const serviceSimpleVoteSimpleVote_TableBack = async () => {
+  const backAction = async () => {
     onClose();
   };
-  const serviceSimpleVoteSimpleVote_TableTableFilter = async (
+  const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -139,7 +159,7 @@ export default function ServiceServiceUserVotesRelationTableAddSelectorPage(
       filters: newFilters,
     };
   };
-  const serviceSimpleVoteSimpleVote_TableTableRange = async (
+  const selectorRangeAction = async (
     queryCustomizer: ServiceSimpleVoteQueryCustomizer,
   ): Promise<ServiceSimpleVoteStored[]> => {
     try {
@@ -151,16 +171,20 @@ export default function ServiceServiceUserVotesRelationTableAddSelectorPage(
   };
 
   const actions: ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActions = {
-    serviceSimpleVoteSimpleVote_TableAdd,
-    serviceSimpleVoteSimpleVote_TableBack,
-    serviceSimpleVoteSimpleVote_TableTableFilter,
-    serviceSimpleVoteSimpleVote_TableTableRange,
+    addAction,
+    backAction,
+    filterAction,
+    selectorRangeAction,
+    ...(customActions ?? {}),
   };
 
   // Effect section
 
   return (
-    <>
+    <div
+      id="User/(esm/_qcneEGksEe25ONJ3V89cVA)/RelationFeatureTableAddSelectorPageDefinition"
+      data-page-name="service::ServiceUser::votes::Relation::Table::Add::Selector::Page"
+    >
       <Suspense>
         <ServiceSimpleVoteSimpleVote_TableAddSelectorDialogContainer
           ownerData={ownerData}
@@ -175,6 +199,6 @@ export default function ServiceServiceUserVotesRelationTableAddSelectorPage(
           alreadySelected={alreadySelected}
         />
       </Suspense>
-    </>
+    </div>
   );
 }

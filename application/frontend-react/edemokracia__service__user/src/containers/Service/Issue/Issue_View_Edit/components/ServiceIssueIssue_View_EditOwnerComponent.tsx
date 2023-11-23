@@ -7,7 +7,7 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import {
@@ -26,12 +26,10 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceIssueIssue_View_EditOwnerComponentActionDefinitions {
-  serviceIssueIssue_View_EditIssueOwnerCreate?: () => Promise<void>;
-  serviceIssueIssue_View_EditIssueOwnerDelete?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceIssueIssue_View_EditIssueOwnerSetOpenSelector?: () => Promise<void>;
-  serviceIssueIssue_View_EditIssueOwnerUnset?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceIssueIssue_View_EditIssueOwnerView?: (target: ServiceServiceUserStored) => Promise<void>;
-  serviceIssueIssue_View_EditIssueOwnerAutocomplete?: (
+  ownerOpenSetSelectorAction?: () => Promise<void>;
+  ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
 }
@@ -55,12 +53,7 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
     <AggregationInput
       name="owner"
       id="User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink"
-      label={
-        t(
-          'service.Issue.Issue.View.Edit.owner.issue.issue::LabelWrapper.Issue_View_Edit.service::Issue::Issue_View_Edit',
-          { defaultValue: 'Owner' },
-        ) as string
-      }
+      label={t('service.Issue.Issue_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
       ownerData={ownerData}
       error={!!validationError}
@@ -73,7 +66,7 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
         storeDiff('owner', owner);
       }}
       onAutoCompleteSearch={
-        actions.serviceIssueIssue_View_EditIssueOwnerAutocomplete
+        actions.ownerAutocompleteRangeAction
           ? async (searchText: string) => {
               const queryCustomizer: ServiceServiceUserQueryCustomizer = {
                 ...(searchText?.length
@@ -85,41 +78,27 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
                 _orderBy: [{ attribute: 'representation', descending: false }],
                 _seek: { limit: 10 },
               };
-              return await actions.serviceIssueIssue_View_EditIssueOwnerAutocomplete!(
-                processQueryCustomizer(queryCustomizer),
-              );
+              return await actions.ownerAutocompleteRangeAction!(processQueryCustomizer(queryCustomizer));
             }
           : undefined
       }
       onView={
-        ownerData.owner && actions.serviceIssueIssue_View_EditIssueOwnerView
+        ownerData.owner && actions.ownerOpenPageAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditIssueOwnerView!(ownerData.owner!);
+              await actions.ownerOpenPageAction!(ownerData.owner!);
             }
-          : undefined
-      }
-      onCreate={
-        actions.serviceIssueIssue_View_EditIssueOwnerCreate
-          ? async () => {
-              await actions.serviceIssueIssue_View_EditIssueOwnerCreate!();
-            }
-          : undefined
-      }
-      onDelete={
-        ownerData.owner && actions.serviceIssueIssue_View_EditIssueOwnerDelete
-          ? async () => actions.serviceIssueIssue_View_EditIssueOwnerDelete!(ownerData.owner!)
           : undefined
       }
       onSet={
-        actions.serviceIssueIssue_View_EditIssueOwnerSetOpenSelector
+        actions.ownerOpenSetSelectorAction
           ? async () => {
-              await actions.serviceIssueIssue_View_EditIssueOwnerSetOpenSelector!();
+              await actions.ownerOpenSetSelectorAction!();
             }
           : undefined
       }
       onUnset={
-        ownerData.owner && actions.serviceIssueIssue_View_EditIssueOwnerUnset
-          ? async () => actions.serviceIssueIssue_View_EditIssueOwnerUnset!(ownerData.owner!)
+        ownerData.owner && actions.ownerUnsetAction
+          ? async () => actions.ownerUnsetAction!(ownerData.owner!)
           : undefined
       }
     ></AggregationInput>

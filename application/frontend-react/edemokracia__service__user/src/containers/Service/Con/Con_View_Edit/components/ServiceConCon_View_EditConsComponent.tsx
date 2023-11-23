@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -59,31 +63,20 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceConCon_View_EditConsComponentActionDefinitions {
-  serviceConCon_View_EditArgumentsConsTableConsAddOpenSelector?: () => Promise<void>;
-  serviceConCon_View_EditArgumentsConsTableConsBulkDelete?: (
-    selectedRows: ServiceConStored[],
-  ) => Promise<DialogResult<ServiceConStored[]>>;
-  serviceConCon_View_EditArgumentsConsTableConsBulkRemove?: (
-    selectedRows: ServiceConStored[],
-  ) => Promise<DialogResult<ServiceConStored[]>>;
-  serviceConCon_View_EditArgumentsConsTableConsClear?: () => Promise<void>;
-  serviceConCon_View_EditArgumentsConsTableConsCreateOpen?: () => Promise<void>;
-  serviceConCon_View_EditArgumentsConsTableConsFilter?: (
+  consBulkDeleteAction?: (selectedRows: ServiceConStored[]) => Promise<DialogResult<ServiceConStored[]>>;
+  consFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceConCon_View_EditArgumentsConsTableConsRefresh?: (
-    queryCustomizer: ServiceConQueryCustomizer,
-  ) => Promise<ServiceConStored[]>;
-  serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm?: (row: ServiceConStored) => Promise<void>;
-  serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm?: (row: ServiceConStored) => Promise<void>;
-  serviceConCon_View_EditArgumentsConsTableConsDelete?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  serviceConCon_View_EditArgumentsConsTableConsRemove?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  serviceConCon_View_EditArgumentsConsTableConsView?: (row: ServiceConStored) => Promise<void>;
-  serviceConCon_View_EditConVoteDown?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  serviceConCon_View_EditConVoteUp?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
+  consRefreshAction?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored[]>;
+  consCreateConArgumentAction?: (row: ServiceConStored) => Promise<void>;
+  consCreateProArgumentAction?: (row: ServiceConStored) => Promise<void>;
+  consDeleteAction?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
+  consOpenPageAction?: (row: ServiceConStored) => Promise<void>;
+  consVoteDownForConAction?: (row: ServiceConStored) => Promise<void>;
+  consVoteUpForConAction?: (row: ServiceConStored) => Promise<void>;
 }
 
 export interface ServiceConCon_View_EditConsComponentProps {
@@ -143,7 +136,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Con.Con.View.Edit.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -153,7 +146,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     {
       ...baseColumnConfig,
       field: 'upVotes',
-      headerName: t('service.Con.Con.View.Edit.upVotes', { defaultValue: 'up' }) as string,
+      headerName: t('service.Con.Con_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -166,7 +159,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     {
       ...baseColumnConfig,
       field: 'downVotes',
-      headerName: t('service.Con.Con.View.Edit.downVotes', { defaultValue: 'down' }) as string,
+      headerName: t('service.Con.Con_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -180,72 +173,57 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
 
   const rowActions: TableRowAction<ServiceConStored>[] = [
     {
-      id: 'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowRemoveButton',
-      label: t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.serviceConCon_View_EditArgumentsConsTableConsRemove
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditArgumentsConsTableConsRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
+      label: t('service.Con.Con_View_Edit.Arguments.cons.table.cons.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceConStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceConCon_View_EditArgumentsConsTableConsDelete
+      action: actions.consDeleteAction
         ? async (rowData) => {
-            await actions.serviceConCon_View_EditArgumentsConsTableConsDelete!(rowData);
+            await actions.consDeleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con.View.Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditArgumentsConsActionsCreateConArgumentOpenForm!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con.View.Edit.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.serviceConCon_View_EditConVoteDown
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditConVoteDown!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con.View.Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.serviceConCon_View_EditConVoteUp
-        ? async (rowData) => {
-            await actions.serviceConCon_View_EditConVoteUp!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con.View.Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0PG6hYoAEe6F9LXBn0VWTg)',
+      label: t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
       icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm
+      action: actions.consCreateProArgumentAction
         ? async (rowData) => {
-            await actions.serviceConCon_View_EditArgumentsProsActionsCreateProArgumentOpenForm!(rowData);
+            await actions.consCreateProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_0PG6hYoAEe6F9LXBn0VWTg)',
+      label: t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consVoteDownForConAction
+        ? async (rowData) => {
+            await actions.consVoteDownForConAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_0PG6hYoAEe6F9LXBn0VWTg)',
+      label: t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consVoteUpForConAction
+        ? async (rowData) => {
+            await actions.consVoteUpForConAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_0PG6hYoAEe6F9LXBn0VWTg)',
+      label: t('service.Con.Con_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consCreateConArgumentAction
+        ? async (rowData) => {
+            await actions.consCreateConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -253,23 +231,23 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_fsmtIH2GEe6V8KKnnZfChA',
+      id: '_0PFFUooAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Con.Con.View.Edit.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_fsmtJH2GEe6V8KKnnZfChA',
+      id: '_0PFsY4oAEe6F9LXBn0VWTg',
       attributeName: 'upVotes',
-      label: t('service.Con.Con.View.Edit.upVotes::Filter', { defaultValue: 'up' }) as string,
+      label: t('service.Con.Con_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_fsnUMn2GEe6V8KKnnZfChA',
+      id: '_0PGTcYoAEe6F9LXBn0VWTg',
       attributeName: 'downVotes',
-      label: t('service.Con.Con.View.Edit.downVotes::Filter', { defaultValue: 'down' }) as string,
+      label: t('service.Con.Con_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
     },
   ];
@@ -335,7 +313,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
   }, [ownerData?.cons, filters]);
 
   return (
-    <>
+    <div id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable" data-table-name="cons">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -369,9 +347,8 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceConCon_View_EditArgumentsConsTableConsView
-            ? async (params: GridRowParams<ServiceConStored>) =>
-                await actions.serviceConCon_View_EditArgumentsConsTableConsView!(params.row)
+          actions.consOpenPageAction
+            ? async (params: GridRowParams<ServiceConStored>) => await actions.consOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -381,13 +358,13 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceConCon_View_EditArgumentsConsTableConsFilter && true ? (
+              {actions.consFilterAction && true ? (
                 <Button
                   id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceConCon_View_EditArgumentsConsTableConsFilter!(
+                    const filterResults = await actions.consFilterAction!(
                       'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -399,112 +376,37 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('service.Con.Con_View_Edit.Arguments.cons.table.cons.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceConCon_View_EditArgumentsConsTableConsRefresh && true ? (
+              {actions.consRefreshAction && true ? (
                 <Button
                   id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceConCon_View_EditArgumentsConsTableConsRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.consRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('service.Con.Con_View_Edit.Arguments.cons.table.cons.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceConCon_View_EditArgumentsConsTableConsCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceConCon_View_EditArgumentsConsTableConsCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Create', {
-                    defaultValue: 'Create',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceConCon_View_EditArgumentsConsTableConsAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceConCon_View_EditArgumentsConsTableConsAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Add', {
-                    defaultValue: 'Add',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceConCon_View_EditArgumentsConsTableConsClear && data.length ? (
-                <Button
-                  id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceConCon_View_EditArgumentsConsTableConsClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t('service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::Clear', {
-                    defaultValue: 'Clear',
-                  })}
-                </Button>
-              ) : null}
-              {actions.serviceConCon_View_EditArgumentsConsTableConsBulkRemove && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceConCon_View_EditArgumentsConsTableConsBulkRemove!(selectedRows.current);
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceConCon_View_EditArgumentsConsTableConsBulkDelete && selectionModel.length > 0 ? (
+              {actions.consBulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceConCon_View_EditArgumentsConsTableConsBulkDelete!(selectedRows.current);
+                    const { result: bulkResult } = await actions.consBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.Con.Con.View.Edit.service::Con::Con_View_Edit::Arguments::cons::table::cons::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.Con.Con_View_Edit.Arguments.cons.table.cons.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -526,6 +428,6 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

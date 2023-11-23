@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -19,13 +24,13 @@ import type { ServiceCon, ServiceConStored, ServiceConQueryCustomizer } from '~/
 const ServiceConCon_Table = lazy(() => import('~/containers/Service/Con/Con_Table/ServiceConCon_Table'));
 
 export interface ServiceConCon_TableDialogActions extends ServiceConCon_TableActionDefinitions {
-  serviceConCon_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceConCon_TableDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceConCon_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -45,7 +50,7 @@ export default function ServiceConCon_TableDialog(props: ServiceConCon_TableDial
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceConCon_Table-dialog-close-wrapper"
+          id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -64,19 +69,19 @@ export default function ServiceConCon_TableDialog(props: ServiceConCon_TableDial
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceConCon_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::Con::Con_Table::Back"
+              id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceConCon_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>{t('service.Con.Con.Table.service::Con::Con_Table::Back', { defaultValue: 'Back' })}</span>
+              <span>{t('service.Con.Con_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

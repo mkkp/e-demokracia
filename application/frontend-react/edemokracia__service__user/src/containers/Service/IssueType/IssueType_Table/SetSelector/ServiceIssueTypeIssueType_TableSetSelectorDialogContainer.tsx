@@ -8,8 +8,13 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Grid, Button, DialogTitle, IconButton, DialogContent, DialogActions } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -22,14 +27,14 @@ const ServiceIssueTypeIssueType_TableSetSelector = lazy(
 
 export interface ServiceIssueTypeIssueType_TableSetSelectorDialogActions
   extends ServiceIssueTypeIssueType_TableSetSelectorActionDefinitions {
-  serviceIssueTypeIssueType_TableBack?: () => Promise<void>;
-  serviceIssueTypeIssueType_TableSet?: (selected: ServiceIssueTypeStored[]) => Promise<void>;
+  backAction?: () => Promise<void>;
+  setAction?: (selected: ServiceIssueTypeStored[]) => Promise<void>;
 }
 
 export interface ServiceIssueTypeIssueType_TableSetSelectorDialogProps {
   ownerData: any;
   title: string;
-  onClose: () => void;
+  onClose: () => Promise<void>;
   actions: ServiceIssueTypeIssueType_TableSetSelectorDialogActions;
   isLoading: boolean;
   editMode: boolean;
@@ -65,7 +70,7 @@ export default function ServiceIssueTypeIssueType_TableSetSelectorDialog(
       <DialogTitle>
         {title}
         <IconButton
-          id="ServiceIssueTypeIssueType_TableSetSelector-dialog-close-wrapper"
+          id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
           onClick={onClose}
           sx={{
@@ -90,43 +95,35 @@ export default function ServiceIssueTypeIssueType_TableSetSelectorDialog(
         </Suspense>
       </DialogContent>
       <DialogActions>
-        {!editMode && actions.serviceIssueTypeIssueType_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_Table::Back"
+              id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.Table.SetSelector.service::IssueType::IssueType_Table::Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
-        {!editMode && actions.serviceIssueTypeIssueType_TableSet && (
+        {!editMode && actions.setAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueType::IssueType_Table::Set"
+              id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorSetButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
-              startIcon={<MdiIcon path="link" />}
+              startIcon={<MdiIcon path="attachment-plus" />}
               onClick={async () => {
-                await actions.serviceIssueTypeIssueType_TableSet!(selectionDiff);
+                await actions.setAction!(selectionDiff);
               }}
             >
-              <span>
-                {t('service.IssueType.IssueType.Table.SetSelector.service::IssueType::IssueType_Table::Set', {
-                  defaultValue: 'Set',
-                })}
-              </span>
+              <span>{t('service.IssueType.IssueType_Table.Set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

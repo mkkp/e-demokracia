@@ -13,23 +13,22 @@ import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
+import type { CustomFormVisualElementProps } from '~/custom';
 import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
-import {
-  Box,
-  Container,
-  Grid,
-  Button,
-  Card,
-  CardContent,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -51,7 +50,13 @@ import {
 
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import { AssociationButton, BinaryInput, CollectionAssociationButton, NumericInput } from '~/components/widgets';
+import {
+  AssociationButton,
+  BinaryInput,
+  CollectionAssociationButton,
+  NumericInput,
+  TrinaryLogicCombobox,
+} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCreateUserInput,
@@ -60,8 +65,8 @@ import {
 } from '~/services/data-api';
 
 export interface ServiceCreateUserInputCreateUserInput_FormActionDefinitions {
-  serviceCreateUserInputCreateUserInput_FormButtonsCancelAction?: () => Promise<void>;
-  serviceCreateUserInputCreateUserInput_FormButtonsOkAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  okAction?: () => Promise<void>;
 }
 
 export interface ServiceCreateUserInputCreateUserInput_FormProps {
@@ -109,17 +114,14 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_fnSvUH2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KrtgIoAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="security" sx={{ marginRight: 1 }} />
-                  <Typography id="_fnSvUH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.CreateUserInput.CreateUserInput.Form.security::Label.security::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                      { defaultValue: 'Security' },
-                    )}
+                  <MdiIcon path="security::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KrtgIoAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.CreateUserInput.CreateUserInput_Form.security.Icon', { defaultValue: 'Security' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -140,10 +142,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                       id="User/(esm/_kCfU4I1rEe29qs15q2b6yw)/StringTypeTextInput"
                       autoFocus
                       label={
-                        t(
-                          'service.CreateUserInput.CreateUserInput.Form.userName.security.security::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                          { defaultValue: 'UserName' },
-                        ) as string
+                        t('service.CreateUserInput.CreateUserInput_Form.userName', {
+                          defaultValue: 'UserName',
+                        }) as string
                       }
                       value={data.userName ?? ''}
                       className={clsx({
@@ -184,10 +185,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                           />
                         }
                         label={
-                          t(
-                            'service.CreateUserInput.CreateUserInput.Form.hasAdminAccess.security.security::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                            { defaultValue: 'IsAdmin' },
-                          ) as string
+                          t('service.CreateUserInput.CreateUserInput_Form.hasAdminAccess', {
+                            defaultValue: 'IsAdmin',
+                          }) as string
                         }
                       />
                     </FormGroup>
@@ -200,17 +200,14 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_fnTWZH2GEe6V8KKnnZfChA)/LabelWrapper">
+        <Card id="_0KsUkooAEe6F9LXBn0VWTg)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                  <Typography id="_fnTWZH2GEe6V8KKnnZfChA)/Label" variant="h5" component="h1">
-                    {t(
-                      'service.CreateUserInput.CreateUserInput.Form.personal::Label.personal::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                      { defaultValue: 'Personal' },
-                    )}
+                  <MdiIcon path="personal::Icon" sx={{ marginRight: 1 }} />
+                  <Typography id="_0KsUkooAEe6F9LXBn0VWTg)/Label" variant="h5" component="h1">
+                    {t('service.CreateUserInput.CreateUserInput_Form.personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -239,10 +236,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                           name="firstName"
                           id="User/(esm/_kCqUAI1rEe29qs15q2b6yw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.CreateUserInput.CreateUserInput.Form.firstName.name.personal.personal::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                              { defaultValue: 'FirstName' },
-                            ) as string
+                            t('service.CreateUserInput.CreateUserInput_Form.firstName', {
+                              defaultValue: 'FirstName',
+                            }) as string
                           }
                           value={data.firstName ?? ''}
                           className={clsx({
@@ -274,10 +270,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                           name="lastName"
                           id="User/(esm/_kCt-YI1rEe29qs15q2b6yw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.CreateUserInput.CreateUserInput.Form.lastName.name.personal.personal::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                              { defaultValue: 'LastName' },
-                            ) as string
+                            t('service.CreateUserInput.CreateUserInput_Form.lastName', {
+                              defaultValue: 'LastName',
+                            }) as string
                           }
                           value={data.lastName ?? ''}
                           className={clsx({
@@ -309,10 +304,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                           name="email"
                           id="User/(esm/_kCi_QI1rEe29qs15q2b6yw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.CreateUserInput.CreateUserInput.Form.email.name.personal.personal::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                              { defaultValue: 'Email' },
-                            ) as string
+                            t('service.CreateUserInput.CreateUserInput_Form.email', { defaultValue: 'Email' }) as string
                           }
                           value={data.email ?? ''}
                           className={clsx({
@@ -344,10 +336,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                           name="phone"
                           id="User/(esm/_pCywkI1sEe29qs15q2b6yw)/StringTypeTextInput"
                           label={
-                            t(
-                              'service.CreateUserInput.CreateUserInput.Form.phone.name.personal.personal::LabelWrapper.CreateUserInput_Form.service::CreateUserInput::CreateUserInput_Form',
-                              { defaultValue: 'Phone' },
-                            ) as string
+                            t('service.CreateUserInput.CreateUserInput_Form.phone', { defaultValue: 'Phone' }) as string
                           }
                           value={data.phone ?? ''}
                           className={clsx({

@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,7 +30,7 @@ const ServiceIssueAttachmentIssueAttachment_Table = lazy(
 
 export interface ServiceIssueAttachmentIssueAttachment_TablePageActions
   extends ServiceIssueAttachmentIssueAttachment_TableActionDefinitions {
-  serviceIssueAttachmentIssueAttachment_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceIssueAttachmentIssueAttachment_TablePageProps {
@@ -52,24 +54,19 @@ export default function ServiceIssueAttachmentIssueAttachment_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceIssueAttachmentIssueAttachment_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::IssueAttachment::IssueAttachment_Table::Back"
+              id="User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceIssueAttachmentIssueAttachment_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.IssueAttachment.IssueAttachment.Table.service::IssueAttachment::IssueAttachment_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.IssueAttachment.IssueAttachment_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

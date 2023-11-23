@@ -7,7 +7,7 @@
 // Template file: actor/src/layout/logo/index.tsx.hbs
 
 import { Link } from 'react-router-dom';
-import { ButtonBase } from '@mui/material';
+import ButtonBase from '@mui/material/ButtonBase';
 import type { SxProps } from '@mui/system';
 import { routeToDashboard } from '~/routes';
 import { LogoMain } from './LogoMain';

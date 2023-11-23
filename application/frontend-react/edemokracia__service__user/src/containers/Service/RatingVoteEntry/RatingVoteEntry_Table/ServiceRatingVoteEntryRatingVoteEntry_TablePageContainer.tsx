@@ -8,8 +8,10 @@
 
 import { lazy, Suspense } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { Box, Grid, Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,7 +30,7 @@ const ServiceRatingVoteEntryRatingVoteEntry_Table = lazy(
 
 export interface ServiceRatingVoteEntryRatingVoteEntry_TablePageActions
   extends ServiceRatingVoteEntryRatingVoteEntry_TableActionDefinitions {
-  serviceRatingVoteEntryRatingVoteEntry_TableBack?: () => Promise<void>;
+  backAction?: () => Promise<void>;
 }
 
 export interface ServiceRatingVoteEntryRatingVoteEntry_TablePageProps {
@@ -52,24 +54,19 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_TablePage(
   return (
     <>
       <PageHeader title={title}>
-        {!editMode && actions.serviceRatingVoteEntryRatingVoteEntry_TableBack && (
+        {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="service::RatingVoteEntry::RatingVoteEntry_Table::Back"
+              id="User/(esm/_J1KA4FslEe6Mx9dH3yj5gQ)/TransferObjectTableBackButton"
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
-                await actions.serviceRatingVoteEntryRatingVoteEntry_TableBack!();
+                await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.RatingVoteEntry.RatingVoteEntry.Table.service::RatingVoteEntry::RatingVoteEntry_Table::Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('service.RatingVoteEntry.RatingVoteEntry_Table.Back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

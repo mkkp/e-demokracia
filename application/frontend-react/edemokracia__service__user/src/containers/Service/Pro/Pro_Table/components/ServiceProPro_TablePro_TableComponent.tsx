@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -58,25 +62,26 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceProPro_TablePro_TableComponentActionDefinitions {
-  serviceProPro_TableAddOpenSelector?: () => Promise<void>;
-  serviceProPro_TableBulkDelete?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
-  serviceProPro_TableBulkRemove?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
-  serviceProPro_TableClear?: () => Promise<void>;
-  serviceProPro_TableCreateOpen?: () => Promise<void>;
-  serviceProPro_TableTableFilter?: (
+  openAddSelectorAction?: () => Promise<void>;
+  bulkDeleteAction?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
+  bulkRemoveAction?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
+  clearAction?: () => Promise<void>;
+  openFormAction?: () => Promise<void>;
+  openSetSelectorAction?: () => Promise<void>;
+  filterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceProPro_TableTableRefresh?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<ServiceProStored[]>;
-  serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm?: (row: ServiceProStored) => Promise<void>;
-  serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm?: (row: ServiceProStored) => Promise<void>;
-  serviceProPro_TableDelete?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  serviceProPro_TableRemove?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  serviceProPro_TableView?: (row: ServiceProStored) => Promise<void>;
-  serviceProPro_View_EditProVoteDown?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  serviceProPro_View_EditProVoteUp?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
+  refreshAction?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<ServiceProStored[]>;
+  createConArgumentAction?: (row: ServiceProStored) => Promise<void>;
+  createProArgumentAction?: (row: ServiceProStored) => Promise<void>;
+  deleteAction?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
+  removeAction?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
+  openPageAction?: (row: ServiceProStored) => Promise<void>;
+  voteDownForProAction?: (row: ServiceProStored) => Promise<void>;
+  voteUpForProAction?: (row: ServiceProStored) => Promise<void>;
 }
 
 export interface ServiceProPro_TablePro_TableComponentProps {
@@ -138,7 +143,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
     {
       ...baseColumnConfig,
       field: 'createdByName',
-      headerName: t('service.Pro.Pro.Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
+      headerName: t('service.Pro.Pro_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -148,7 +153,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.Pro.Pro.Table.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.Pro.Pro_Table.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -173,7 +178,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
     {
       ...baseColumnConfig,
       field: 'description',
-      headerName: t('service.Pro.Pro.Table.description', { defaultValue: 'Description' }) as string,
+      headerName: t('service.Pro.Pro_Table.description', { defaultValue: 'Description' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -183,7 +188,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
     {
       ...baseColumnConfig,
       field: 'title',
-      headerName: t('service.Pro.Pro.Table.title', { defaultValue: 'Title' }) as string,
+      headerName: t('service.Pro.Pro_Table.title', { defaultValue: 'Title' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -193,7 +198,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
     {
       ...baseColumnConfig,
       field: 'upVotes',
-      headerName: t('service.Pro.Pro.Table.upVotes', { defaultValue: 'UpVotes' }) as string,
+      headerName: t('service.Pro.Pro_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -206,7 +211,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
     {
       ...baseColumnConfig,
       field: 'downVotes',
-      headerName: t('service.Pro.Pro.Table.downVotes', { defaultValue: 'DownVotes' }) as string,
+      headerName: t('service.Pro.Pro_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -221,67 +226,67 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
   const rowActions: TableRowAction<ServiceProStored>[] = [
     {
       id: 'User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.Pro.Pro.Table.service::Pro::Pro_Table::Remove', { defaultValue: 'Remove' }) as string,
+      label: t('service.Pro.Pro_Table.Remove', { defaultValue: 'Remove' }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceProStored) => isLoading,
-      action: actions.serviceProPro_TableRemove
+      action: actions.removeAction
         ? async (rowData) => {
-            await actions.serviceProPro_TableRemove!(rowData);
+            await actions.removeAction!(rowData);
           }
         : undefined,
     },
     {
       id: 'User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.Pro.Pro.Table.service::Pro::Pro_Table::Delete', { defaultValue: 'Delete' }) as string,
+      label: t('service.Pro.Pro_Table.Delete', { defaultValue: 'Delete' }) as string,
       icon: <MdiIcon path="delete_forever" />,
       disabled: (row: ServiceProStored) => !row.__deleteable || isLoading,
-      action: actions.serviceProPro_TableDelete
+      action: actions.deleteAction
         ? async (rowData) => {
-            await actions.serviceProPro_TableDelete!(rowData);
+            await actions.deleteAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Pro.Pro_Table.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceProStored) => isLoading,
-      action: actions.serviceProPro_View_EditProVoteUp
+      action: actions.voteUpForProAction
         ? async (rowData) => {
-            await actions.serviceProPro_View_EditProVoteUp!(rowData);
+            await actions.voteUpForProAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceProStored) => isLoading,
-      action: actions.serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm
-        ? async (rowData) => {
-            await actions.serviceProPro_View_EditArgumentsConsActionsCreateConArgumentOpenForm!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceProStored) => isLoading,
-      action: actions.serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm
-        ? async (rowData) => {
-            await actions.serviceProPro_View_EditArgumentsProsActionsCreateProArgumentOpenForm!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableRowButtonGroup)',
-      label: t('service.Pro.Pro.Table.voteDown', { defaultValue: 'voteDown' }) as string,
+      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Pro.Pro_Table.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceProStored) => isLoading,
-      action: actions.serviceProPro_View_EditProVoteDown
+      action: actions.voteDownForProAction
         ? async (rowData) => {
-            await actions.serviceProPro_View_EditProVoteDown!(rowData);
+            await actions.voteDownForProAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Pro.Pro_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceProStored) => isLoading,
+      action: actions.createProArgumentAction
+        ? async (rowData) => {
+            await actions.createProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Pro.Pro_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceProStored) => isLoading,
+      action: actions.createConArgumentAction
+        ? async (rowData) => {
+            await actions.createConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -289,44 +294,44 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_gDI90n2GEe6V8KKnnZfChA',
+      id: '_0ls1kooAEe6F9LXBn0VWTg',
       attributeName: 'createdByName',
-      label: t('service.Pro.Pro.Table.createdByName::Filter', { defaultValue: 'CreatedByName' }) as string,
+      label: t('service.Pro.Pro_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gDJk432GEe6V8KKnnZfChA',
+      id: '_0ltcoooAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.Pro.Pro.Table.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.Pro.Pro_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_gDKL8n2GEe6V8KKnnZfChA',
+      id: '_0luDsIoAEe6F9LXBn0VWTg',
       attributeName: 'description',
-      label: t('service.Pro.Pro.Table.description::Filter', { defaultValue: 'Description' }) as string,
+      label: t('service.Pro.Pro_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gDNPQH2GEe6V8KKnnZfChA',
+      id: '_0luDtIoAEe6F9LXBn0VWTg',
       attributeName: 'title',
-      label: t('service.Pro.Pro.Table.title::Filter', { defaultValue: 'Title' }) as string,
+      label: t('service.Pro.Pro_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_gDN2UH2GEe6V8KKnnZfChA',
+      id: '_0l4bwIoAEe6F9LXBn0VWTg',
       attributeName: 'upVotes',
-      label: t('service.Pro.Pro.Table.upVotes::Filter', { defaultValue: 'UpVotes' }) as string,
+      label: t('service.Pro.Pro_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_gDOdYH2GEe6V8KKnnZfChA',
+      id: '_0l_wgIoAEe6F9LXBn0VWTg',
       attributeName: 'downVotes',
-      label: t('service.Pro.Pro.Table.downVotes::Filter', { defaultValue: 'DownVotes' }) as string,
+      label: t('service.Pro.Pro_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
     },
   ];
@@ -400,7 +405,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceProPro_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -426,7 +431,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Pro_Table">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -459,8 +464,8 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceProPro_TableView
-            ? async (params: GridRowParams<ServiceProStored>) => await actions.serviceProPro_TableView!(params.row)
+          actions.openPageAction
+            ? async (params: GridRowParams<ServiceProStored>) => await actions.openPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -470,13 +475,13 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceProPro_TableTableFilter && true ? (
+              {actions.filterAction && true ? (
                 <Button
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceProPro_TableTableFilter!(
+                    const filterResults = await actions.filterAction!(
                       'User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -488,92 +493,105 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::Table::Filter', { defaultValue: 'Set Filters' })}
+                  {t('service.Pro.Pro_Table.Table.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceProPro_TableTableRefresh && true ? (
+              {actions.refreshAction && true ? (
                 <Button
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceProPro_TableTableRefresh!(processQueryCustomizer(queryCustomizer));
+                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::Table::Refresh', { defaultValue: 'Refresh' })}
+                  {t('service.Pro.Pro_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.serviceProPro_TableCreateOpen && true ? (
+              {actions.openFormAction && true ? (
                 <Button
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceProPro_TableCreateOpen!();
+                    await actions.openFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::Create', { defaultValue: 'Create' })}
+                  {t('service.Pro.Pro_Table.Create', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
-              {actions.serviceProPro_TableAddOpenSelector && true ? (
+              {actions.openAddSelectorAction && true ? (
                 <Button
-                  id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorOpenButton"
+                  id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceProPro_TableAddOpenSelector!();
+                    await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::Add', { defaultValue: 'Add' })}
+                  {t('service.Pro.Pro_Table.Add', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
-              {actions.serviceProPro_TableClear && data.length ? (
+              {actions.openSetSelectorAction && true ? (
+                <Button
+                  id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.openSetSelectorAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Pro.Pro_Table.Set', { defaultValue: 'Set' })}
+                </Button>
+              ) : null}
+              {actions.clearAction && data.length ? (
                 <Button
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceProPro_TableClear!();
+                    await actions.clearAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::Clear', { defaultValue: 'Clear' })}
+                  {t('service.Pro.Pro_Table.Clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
-              {actions.serviceProPro_TableBulkRemove && selectionModel.length > 0 ? (
+              {actions.bulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceProPro_TableBulkRemove!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::BulkRemove', { defaultValue: 'Remove' })}
+                  {t('service.Pro.Pro_Table.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
-              {actions.serviceProPro_TableBulkDelete && selectionModel.length > 0 ? (
+              {actions.bulkDeleteAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableBulkDeleteButton"
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.serviceProPro_TableBulkDelete!(selectedRows.current);
+                    const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Pro.Pro.Table.service::Pro::Pro_Table::BulkDelete', { defaultValue: 'Delete' })}
+                  {t('service.Pro.Pro_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -604,6 +622,6 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }

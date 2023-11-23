@@ -1,8 +1,7 @@
+import type { ReactElement, Ref } from 'react';
 import { forwardRef } from 'react';
-import type { ReactElement, ReactNode, Ref } from 'react';
-import { useRef, createContext, useContext, useState } from 'react';
-import { Slide } from '@mui/material';
-import type { DialogProps } from '@mui/material';
+import Box from '@mui/material/Box';
+import Slide from '@mui/material/Slide';
 import type { TransitionProps } from '@mui/material/transitions';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { animationDuration, delayDuration } from '~/config/general';

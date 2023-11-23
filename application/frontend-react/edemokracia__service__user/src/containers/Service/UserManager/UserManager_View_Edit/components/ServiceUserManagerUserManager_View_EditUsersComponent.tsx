@@ -10,7 +10,11 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Box, IconButton, Button, ButtonGroup, Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Typography from '@mui/material/Typography';
 import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
 import type {
   GridColDef,
@@ -64,33 +68,14 @@ import { useDataStore } from '~/hooks';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 
 export interface ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions {
-  serviceUserManagerUserManager_View_EditUsersAddOpenSelector?: () => Promise<void>;
-  serviceUserManagerUserManager_View_EditUsersBulkDelete?: (
-    selectedRows: ServiceServiceUserStored[],
-  ) => Promise<DialogResult<ServiceServiceUserStored[]>>;
-  serviceUserManagerUserManager_View_EditUsersBulkRemove?: (
-    selectedRows: ServiceServiceUserStored[],
-  ) => Promise<DialogResult<ServiceServiceUserStored[]>>;
-  serviceUserManagerUserManager_View_EditUsersClear?: () => Promise<void>;
-  serviceUserManagerUserManager_View_EditUsersCreateOpen?: () => Promise<void>;
-  serviceUserManagerUserManager_View_EditUsersFilter?: (
+  usersFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  serviceUserManagerUserManager_View_EditUsersRefresh?: (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ) => Promise<ServiceServiceUserStored[]>;
-  serviceUserManagerUserManager_View_EditUsersDelete?: (
-    row: ServiceServiceUserStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserManagerUserManager_View_EditUsersRemove?: (
-    row: ServiceServiceUserStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
-  serviceUserManagerUserManager_View_EditUsersView?: (row: ServiceServiceUserStored) => Promise<void>;
+  usersRefreshAction?: (queryCustomizer: ServiceServiceUserQueryCustomizer) => Promise<ServiceServiceUserStored[]>;
+  usersOpenPageAction?: (row: ServiceServiceUserStored) => Promise<void>;
 }
 
 export interface ServiceUserManagerUserManager_View_EditUsersComponentProps {
@@ -157,7 +142,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'representation',
-      headerName: t('service.UserManager.UserManager.View.Edit.representation', {
+      headerName: t('service.UserManager.UserManager_View_Edit.representation', {
         defaultValue: 'Representation',
       }) as string,
       headerClassName: 'data-grid-column-header',
@@ -169,7 +154,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'userName',
-      headerName: t('service.UserManager.UserManager.View.Edit.userName', { defaultValue: 'UserName' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -179,7 +164,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'firstName',
-      headerName: t('service.UserManager.UserManager.View.Edit.firstName', { defaultValue: 'FirstName' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -189,7 +174,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'lastName',
-      headerName: t('service.UserManager.UserManager.View.Edit.lastName', { defaultValue: 'LastName' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -199,7 +184,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'phone',
-      headerName: t('service.UserManager.UserManager.View.Edit.phone', { defaultValue: 'Phone' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -209,7 +194,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'email',
-      headerName: t('service.UserManager.UserManager.View.Edit.email', { defaultValue: 'Email' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 230,
@@ -219,7 +204,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'isAdmin',
-      headerName: t('service.UserManager.UserManager.View.Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 100,
@@ -238,7 +223,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     {
       ...baseColumnConfig,
       field: 'created',
-      headerName: t('service.UserManager.UserManager.View.Edit.created', { defaultValue: 'Created' }) as string,
+      headerName: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
       headerClassName: 'data-grid-column-header',
 
       width: 170,
@@ -262,91 +247,64 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     },
   ];
 
-  const rowActions: TableRowAction<ServiceServiceUserStored>[] = [
-    {
-      id: 'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableRowRemoveButton',
-      label: t('service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Remove', {
-        defaultValue: 'Remove',
-      }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceServiceUserStored) => isLoading,
-      action: actions.serviceUserManagerUserManager_View_EditUsersRemove
-        ? async (rowData) => {
-            await actions.serviceUserManagerUserManager_View_EditUsersRemove!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableRowDeleteButton',
-      label: t('service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Delete', {
-        defaultValue: 'Delete',
-      }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceServiceUserStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.serviceUserManagerUserManager_View_EditUsersDelete
-        ? async (rowData) => {
-            await actions.serviceUserManagerUserManager_View_EditUsersDelete!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceServiceUserStored>[] = [];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_f8VLMH2GEe6V8KKnnZfChA',
+      id: '_0dmCcIoAEe6F9LXBn0VWTg',
       attributeName: 'representation',
-      label: t('service.UserManager.UserManager.View.Edit.representation::Filter', {
+      label: t('service.UserManager.UserManager_View_Edit.representation', {
         defaultValue: 'Representation',
       }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8VyQn2GEe6V8KKnnZfChA',
+      id: '_0dmpgIoAEe6F9LXBn0VWTg',
       attributeName: 'userName',
-      label: t('service.UserManager.UserManager.View.Edit.userName::Filter', { defaultValue: 'UserName' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8WZUH2GEe6V8KKnnZfChA',
+      id: '_0dmphIoAEe6F9LXBn0VWTg',
       attributeName: 'firstName',
-      label: t('service.UserManager.UserManager.View.Edit.firstName::Filter', { defaultValue: 'FirstName' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8WZVH2GEe6V8KKnnZfChA',
+      id: '_0dnQkooAEe6F9LXBn0VWTg',
       attributeName: 'lastName',
-      label: t('service.UserManager.UserManager.View.Edit.lastName::Filter', { defaultValue: 'LastName' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8XAYn2GEe6V8KKnnZfChA',
+      id: '_0dn3oIoAEe6F9LXBn0VWTg',
       attributeName: 'phone',
-      label: t('service.UserManager.UserManager.View.Edit.phone::Filter', { defaultValue: 'Phone' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8XncX2GEe6V8KKnnZfChA',
+      id: '_0dn3pIoAEe6F9LXBn0VWTg',
       attributeName: 'email',
-      label: t('service.UserManager.UserManager.View.Edit.email::Filter', { defaultValue: 'Email' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_f8YOgH2GEe6V8KKnnZfChA',
+      id: '_0doesooAEe6F9LXBn0VWTg',
       attributeName: 'isAdmin',
-      label: t('service.UserManager.UserManager.View.Edit.isAdmin::Filter', { defaultValue: 'IsAdmin' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
       filterType: FilterType.boolean,
     },
 
     {
-      id: '_f8YOhH2GEe6V8KKnnZfChA',
+      id: '_0dpFwooAEe6F9LXBn0VWTg',
       attributeName: 'created',
-      label: t('service.UserManager.UserManager.View.Edit.created::Filter', { defaultValue: 'Created' }) as string,
+      label: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
   ];
@@ -420,9 +378,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.serviceUserManagerUserManager_View_EditUsersRefresh!(
-          processQueryCustomizer(queryCustomizer),
-        );
+        const res = await actions.usersRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -448,7 +404,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   }, [queryCustomizer, refreshCounter]);
 
   return (
-    <>
+    <div id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable" data-table-name="users">
       <StripedDataGrid
         {...baseTableConfig}
         pageSizeOptions={[paginationModel.pageSize]}
@@ -475,16 +431,10 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.serviceUserManagerUserManager_View_EditUsersView
-            ? async (params: GridRowParams<ServiceServiceUserStored>) =>
-                await actions.serviceUserManagerUserManager_View_EditUsersView!(params.row)
+          actions.usersOpenPageAction
+            ? async (params: GridRowParams<ServiceServiceUserStored>) => await actions.usersOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -494,13 +444,13 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.serviceUserManagerUserManager_View_EditUsersFilter && true ? (
+              {actions.usersFilterAction && true ? (
                 <Button
                   id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.serviceUserManagerUserManager_View_EditUsersFilter!(
+                    const filterResults = await actions.usersFilterAction!(
                       'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -512,117 +462,21 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('service.UserManager.UserManager_View_Edit.users.Filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.serviceUserManagerUserManager_View_EditUsersRefresh && true ? (
+              {actions.usersRefreshAction && true ? (
                 <Button
                   id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.serviceUserManagerUserManager_View_EditUsersRefresh!(
-                      processQueryCustomizer(queryCustomizer),
-                    );
+                    await actions.usersRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserManagerUserManager_View_EditUsersCreateOpen && true ? (
-                <Button
-                  id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableCreateButton"
-                  startIcon={<MdiIcon path="note-add" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserManagerUserManager_View_EditUsersCreateOpen!();
-                  }}
-                  disabled={editMode || isLoading}
-                >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Create',
-                    { defaultValue: 'Create' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserManagerUserManager_View_EditUsersAddOpenSelector && true ? (
-                <Button
-                  id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserManagerUserManager_View_EditUsersAddOpenSelector!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserManagerUserManager_View_EditUsersClear && data.length ? (
-                <Button
-                  id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableClearButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.serviceUserManagerUserManager_View_EditUsersClear!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::Clear',
-                    { defaultValue: 'Clear' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserManagerUserManager_View_EditUsersBulkRemove && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserManagerUserManager_View_EditUsersBulkRemove!(selectedRows.current);
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.serviceUserManagerUserManager_View_EditUsersBulkDelete && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.serviceUserManagerUserManager_View_EditUsersBulkDelete!(selectedRows.current);
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.UserManager.UserManager.View.Edit.service::UserManager::UserManager_View_Edit::users::BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('service.UserManager.UserManager_View_Edit.users.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               <div>{/* Placeholder */}</div>
@@ -653,6 +507,6 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
           <Typography>{validationError}</Typography>
         </Box>
       )}
-    </>
+    </div>
   );
 }
