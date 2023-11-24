@@ -56,20 +56,20 @@ export interface ServiceProServiceForPros {
   getTemplateOnCreateConArgumentForPros(): Promise<CreateArgumentInput>;
   createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateProArgumentForPros(): Promise<CreateArgumentInput>;
-  voteDownForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
   voteUpForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
+  voteDownForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
   listCons(
     owner: JudoIdentifiable<ServicePro>,
     queryCustomizer?: ServiceConQueryCustomizer,
   ): Promise<Array<ServiceConStored>>;
   deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void>;
   updateCons(owner: JudoIdentifiable<ServicePro>, target: Partial<ServiceConStored>): Promise<ServiceConStored>;
-  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgumentForCons(): Promise<CreateArgumentInput>;
+  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
   createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateConArgumentForCons(): Promise<CreateArgumentInput>;
+  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateProArgumentForCons(): Promise<CreateArgumentInput>;
   voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
-  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
   getParentPro(
     owner: JudoIdentifiable<ServicePro>,
     queryCustomizer?: ServiceProParentQueryCustomizer,
@@ -82,6 +82,6 @@ export interface ServiceProServiceForPros {
   getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
   createProArgument(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateProArgument(): Promise<CreateArgumentInput>;
-  voteDown(owner: JudoIdentifiable<ServicePro>): Promise<void>;
   voteUp(owner: JudoIdentifiable<ServicePro>): Promise<void>;
+  voteDown(owner: JudoIdentifiable<ServicePro>): Promise<void>;
 }

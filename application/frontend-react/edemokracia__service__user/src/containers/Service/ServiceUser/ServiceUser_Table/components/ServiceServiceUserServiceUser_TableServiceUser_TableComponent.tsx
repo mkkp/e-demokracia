@@ -264,49 +264,49 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_BVvEwIsNEe6E6KmeUhRZew',
+      id: '_rk9TgIshEe6I4ZdrLoQBLA',
       attributeName: 'userName',
       label: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BVxhAIsNEe6E6KmeUhRZew',
+      id: '_rlAW0IshEe6I4ZdrLoQBLA',
       attributeName: 'isAdmin',
       label: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
       filterType: FilterType.boolean,
     },
 
     {
-      id: '_BVz9QIsNEe6E6KmeUhRZew',
+      id: '_rlCzEIshEe6I4ZdrLoQBLA',
       attributeName: 'firstName',
       label: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BV3AkIsNEe6E6KmeUhRZew',
+      id: '_rlFPUIshEe6I4ZdrLoQBLA',
       attributeName: 'lastName',
       label: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BV5c0IsNEe6E6KmeUhRZew',
+      id: '_rlHrkIshEe6I4ZdrLoQBLA',
       attributeName: 'phone',
       label: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BV8gIIsNEe6E6KmeUhRZew',
+      id: '_rlKH0IshEe6I4ZdrLoQBLA',
       attributeName: 'email',
       label: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BV-8YIsNEe6E6KmeUhRZew',
+      id: '_rlNLIIshEe6I4ZdrLoQBLA',
       attributeName: 'created',
       label: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,

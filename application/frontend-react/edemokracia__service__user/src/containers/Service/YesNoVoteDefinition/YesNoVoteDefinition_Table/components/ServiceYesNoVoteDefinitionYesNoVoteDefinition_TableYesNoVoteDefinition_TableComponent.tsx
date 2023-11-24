@@ -299,21 +299,21 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ByggUosNEe6E6KmeUhRZew',
+      id: '_sB3R8oshEe6I4ZdrLoQBLA',
       attributeName: 'title',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ByhHYYsNEe6E6KmeUhRZew',
+      id: '_sB35A4shEe6I4ZdrLoQBLA',
       attributeName: 'created',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ByhHZYsNEe6E6KmeUhRZew',
+      id: '_sB4gEoshEe6I4ZdrLoQBLA',
       attributeName: 'description',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -322,7 +322,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     },
 
     {
-      id: '_Byhuc4sNEe6E6KmeUhRZew',
+      id: '_sB5HIIshEe6I4ZdrLoQBLA',
       attributeName: 'status',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -330,7 +330,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     },
 
     {
-      id: '_ByiVgYsNEe6E6KmeUhRZew',
+      id: '_sB5HJIshEe6I4ZdrLoQBLA',
       attributeName: 'closeAt',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,

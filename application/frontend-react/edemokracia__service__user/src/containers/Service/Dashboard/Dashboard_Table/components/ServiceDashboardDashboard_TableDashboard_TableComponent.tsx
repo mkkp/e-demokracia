@@ -176,7 +176,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CZckgosNEe6E6KmeUhRZew',
+      id: '_sn268oshEe6I4ZdrLoQBLA',
       attributeName: 'welcome',
       label: t('service.Dashboard.Dashboard_Table.welcome', { defaultValue: 'Welcome' }) as string,
       filterType: FilterType.string,

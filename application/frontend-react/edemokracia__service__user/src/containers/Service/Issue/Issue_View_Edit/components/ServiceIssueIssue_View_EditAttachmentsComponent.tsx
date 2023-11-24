@@ -167,7 +167,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_CJgEAIsNEe6E6KmeUhRZew)-download"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_sXpUsIshEe6I4ZdrLoQBLA)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -178,7 +178,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_CJgEAIsNEe6E6KmeUhRZew)-view"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_sXpUsIshEe6I4ZdrLoQBLA)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -235,14 +235,14 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CJhSIIsNEe6E6KmeUhRZew',
+      id: '_sXp7woshEe6I4ZdrLoQBLA',
       attributeName: 'link',
       label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_CJh5MosNEe6E6KmeUhRZew',
+      id: '_sXrJ4IshEe6I4ZdrLoQBLA',
       attributeName: 'type',
       label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

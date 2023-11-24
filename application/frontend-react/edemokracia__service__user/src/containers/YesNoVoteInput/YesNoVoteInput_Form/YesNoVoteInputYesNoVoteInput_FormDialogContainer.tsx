@@ -147,7 +147,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteYesNoForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_Asaa8osNEe6E6KmeUhRZew)"
+              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_q9BJwoshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -168,7 +168,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteForYesNoVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_Asaa8osNEe6E6KmeUhRZew)"
+              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_q9BJwoshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

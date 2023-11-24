@@ -355,7 +355,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_CE0YVIsNEe6E6KmeUhRZew)/LabelWrapper"
+          id="_sS0fEIshEe6I4ZdrLoQBLA)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -365,7 +365,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_CE0YVIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+              <Typography id="_sS0fEIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                 {t('service.Con.Con_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>
@@ -395,7 +395,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_CFOA8IsNEe6E6KmeUhRZew)/LabelWrapper"
+          id="_sTOHsIshEe6I4ZdrLoQBLA)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -405,7 +405,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_CFOA8IsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+              <Typography id="_sTOHsIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                 {t('service.Con.Con_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>

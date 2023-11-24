@@ -192,18 +192,18 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CI2jwYsNEe6E6KmeUhRZew)',
-      label: t('service.Issue.Issue_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_sW9_QoshEe6I4ZdrLoQBLA)',
+      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
+      action: actions.consVoteUpForConAction
         ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
+            await actions.consVoteUpForConAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CI2jwYsNEe6E6KmeUhRZew)',
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_sW9_QoshEe6I4ZdrLoQBLA)',
       label: t('service.Issue.Issue_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -214,7 +214,7 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CI2jwYsNEe6E6KmeUhRZew)',
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_sW9_QoshEe6I4ZdrLoQBLA)',
       label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -225,13 +225,13 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CI2jwYsNEe6E6KmeUhRZew)',
-      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_sW9_QoshEe6I4ZdrLoQBLA)',
+      label: t('service.Issue.Issue_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
+      action: actions.consCreateProArgumentAction
         ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
+            await actions.consCreateProArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -239,21 +239,21 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CI0ukIsNEe6E6KmeUhRZew',
+      id: '_sW8KEIshEe6I4ZdrLoQBLA',
       attributeName: 'title',
       label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_CI0ulIsNEe6E6KmeUhRZew',
+      id: '_sW8KFIshEe6I4ZdrLoQBLA',
       attributeName: 'upVotes',
       label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_CI1VoosNEe6E6KmeUhRZew',
+      id: '_sW8xI4shEe6I4ZdrLoQBLA',
       attributeName: 'downVotes',
       label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,

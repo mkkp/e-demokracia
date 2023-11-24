@@ -171,7 +171,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_CZzw4osNEe6E6KmeUhRZew)-download"
+              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_soRxsYshEe6I4ZdrLoQBLA)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -182,7 +182,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_CZzw4osNEe6E6KmeUhRZew)-view"
+              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_soRxsYshEe6I4ZdrLoQBLA)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -248,14 +248,14 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CZ4CUosNEe6E6KmeUhRZew',
+      id: '_soWDIoshEe6I4ZdrLoQBLA',
       attributeName: 'link',
       label: t('service.IssueAttachment.IssueAttachment_Table.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_CZ5QcIsNEe6E6KmeUhRZew',
+      id: '_soXRQIshEe6I4ZdrLoQBLA',
       attributeName: 'type',
       label: t('service.IssueAttachment.IssueAttachment_Table.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

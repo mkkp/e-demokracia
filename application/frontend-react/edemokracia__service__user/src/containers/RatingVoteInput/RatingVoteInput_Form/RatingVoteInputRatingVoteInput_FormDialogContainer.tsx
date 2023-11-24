@@ -146,31 +146,10 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.voteRatingForVoteDefinitionAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_Asq5oIsNEe6E6KmeUhRZew)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="vote" />}
-              onClick={async () => {
-                await actions.voteRatingForVoteDefinitionAction!();
-              }}
-            >
-              <span>
-                {t(
-                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.ratingvote.voteRating.OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.voteForRatingVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_Asq5oIsNEe6E6KmeUhRZew)"
+              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_q9H3coshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -182,6 +161,27 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
               <span>
                 {t(
                   'service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.voteRatingForVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_q9H3coshEe6I4ZdrLoQBLA)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteRatingForVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.ratingvote.voteRating.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

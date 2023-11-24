@@ -331,7 +331,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_B7L7MosNEe6E6KmeUhRZew',
+      id: '_sKUqYYshEe6I4ZdrLoQBLA',
       attributeName: 'minRateValue',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
         defaultValue: 'MinRateValue',
@@ -340,7 +340,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_B7MiQosNEe6E6KmeUhRZew',
+      id: '_sKVRcIshEe6I4ZdrLoQBLA',
       attributeName: 'maxRateValue',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
         defaultValue: 'MaxRateValue',
@@ -349,14 +349,14 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_B7NJUIsNEe6E6KmeUhRZew',
+      id: '_sKVRdIshEe6I4ZdrLoQBLA',
       attributeName: 'title',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_B7NwYIsNEe6E6KmeUhRZew',
+      id: '_sKV4goshEe6I4ZdrLoQBLA',
       attributeName: 'created',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -365,7 +365,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_B7NwZIsNEe6E6KmeUhRZew',
+      id: '_sKWfkIshEe6I4ZdrLoQBLA',
       attributeName: 'description',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -374,7 +374,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_B7OXcosNEe6E6KmeUhRZew',
+      id: '_sKWflIshEe6I4ZdrLoQBLA',
       attributeName: 'status',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -382,7 +382,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_B7O-gIsNEe6E6KmeUhRZew',
+      id: '_sKXGooshEe6I4ZdrLoQBLA',
       attributeName: 'closeAt',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

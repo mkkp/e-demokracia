@@ -107,13 +107,13 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_CB7cYIsNEe6E6KmeUhRZew)/LabelWrapper">
+        <Card id="_sQIXcIshEe6I4ZdrLoQBLA)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="debate::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_CB7cYIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+                  <Typography id="_sQIXcIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                     {t(
                       'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Icon',
                       { defaultValue: 'Close debate' },

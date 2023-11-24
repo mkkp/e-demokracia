@@ -154,10 +154,30 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
+        {editMode && actions.createConArgumentForConAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_qyWK0YshEe6I4ZdrLoQBLA)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="chat-minus" />}
+              onClick={async () => {
+                await actions.createConArgumentForConAction!();
+              }}
+            >
+              <span>
+                {t('service.Con.Con_View_Edit.Arguments.cons.actions.createConArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
         {editMode && actions.createConArgumentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AhZdwYsNEe6E6KmeUhRZew)"
+              id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_qyWK0YshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -175,50 +195,10 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.createProArgumentForConAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AhZdwYsNEe6E6KmeUhRZew)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="chat-plus" />}
-              onClick={async () => {
-                await actions.createProArgumentForConAction!();
-              }}
-            >
-              <span>
-                {t('service.Con.Con_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
-                  defaultValue: 'Submit',
-                })}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {editMode && actions.createConArgumentForConAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AhZdwYsNEe6E6KmeUhRZew)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="chat-minus" />}
-              onClick={async () => {
-                await actions.createConArgumentForConAction!();
-              }}
-            >
-              <span>
-                {t('service.Con.Con_View_Edit.Arguments.cons.actions.createConArgument.OperationFormCallButton', {
-                  defaultValue: 'Submit',
-                })}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.createConArgumentForProAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AhZdwYsNEe6E6KmeUhRZew)"
+              id="User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_qyWK0YshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -235,10 +215,30 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
+        {editMode && actions.createProArgumentForConAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_qyWK0YshEe6I4ZdrLoQBLA)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="chat-plus" />}
+              onClick={async () => {
+                await actions.createProArgumentForConAction!();
+              }}
+            >
+              <span>
+                {t('service.Con.Con_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
         {editMode && actions.createProArgumentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AhZdwYsNEe6E6KmeUhRZew)"
+              id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_qyWK0YshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -259,7 +259,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
         {editMode && actions.createProArgumentForProAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AhZdwYsNEe6E6KmeUhRZew)"
+              id="User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_qyWK0YshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

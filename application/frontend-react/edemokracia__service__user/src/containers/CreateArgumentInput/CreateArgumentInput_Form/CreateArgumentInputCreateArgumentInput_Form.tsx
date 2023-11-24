@@ -110,13 +110,13 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_CB6ORYsNEe6E6KmeUhRZew)/LabelWrapper">
+        <Card id="_sQHJVYshEe6I4ZdrLoQBLA)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="group::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_CB6ORYsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+                  <Typography id="_sQHJVYshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                     {t('CreateArgumentInput.CreateArgumentInput_Form.group.Icon', { defaultValue: 'Add argument' })}
                   </Typography>
                 </Grid>

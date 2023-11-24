@@ -173,7 +173,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CMGFAosNEe6E6KmeUhRZew',
+      id: '_saRx8oshEe6I4ZdrLoQBLA',
       attributeName: 'representation',
       label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,

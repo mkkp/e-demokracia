@@ -78,7 +78,7 @@ export default function ServiceVoteDefinitionVoteDefinition_FormDialog(
     setValidation,
   } = props;
   const queryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
-    _mask: '{isYesNoAbstainType,isSelectAnswerType,created,description,title,isRatingType,closeAt,isYesNoType,status}',
+    _mask: '{isYesNoAbstainType,isSelectAnswerType,created,description,title,closeAt,isRatingType,isYesNoType,status}',
   };
 
   return (

@@ -114,13 +114,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_CBQG8IsNEe6E6KmeUhRZew)/LabelWrapper">
+        <Card id="_sPihkIshEe6I4ZdrLoQBLA)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="security::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_CBQG8IsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+                  <Typography id="_sPihkIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                     {t('service.CreateUserInput.CreateUserInput_Form.security.Icon', { defaultValue: 'Security' })}
                   </Typography>
                 </Grid>
@@ -197,13 +197,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_CBRVEIsNEe6E6KmeUhRZew)/LabelWrapper">
+        <Card id="_sPjIoIshEe6I4ZdrLoQBLA)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="personal::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_CBRVEIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+                  <Typography id="_sPjIoIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                     {t('service.CreateUserInput.CreateUserInput_Form.personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>

@@ -240,35 +240,35 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_BRe24osNEe6E6KmeUhRZew',
+      id: '_rgvh4IshEe6I4ZdrLoQBLA',
       attributeName: 'userName',
       label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BRfd8IsNEe6E6KmeUhRZew',
+      id: '_rgvh5IshEe6I4ZdrLoQBLA',
       attributeName: 'created',
       label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_BRfd9IsNEe6E6KmeUhRZew',
+      id: '_rgwI8oshEe6I4ZdrLoQBLA',
       attributeName: 'voteTitle',
       label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BRgFAosNEe6E6KmeUhRZew',
+      id: '_rgwwAIshEe6I4ZdrLoQBLA',
       attributeName: 'issueTitle',
       label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_BRgFBosNEe6E6KmeUhRZew',
+      id: '_rgwwBIshEe6I4ZdrLoQBLA',
       attributeName: 'voteStatus',
       label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,

@@ -148,7 +148,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
         {editMode && actions.closeDebateForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_AlCnoIsNEe6E6KmeUhRZew)"
+              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_q1ovYoshEe6I4ZdrLoQBLA)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

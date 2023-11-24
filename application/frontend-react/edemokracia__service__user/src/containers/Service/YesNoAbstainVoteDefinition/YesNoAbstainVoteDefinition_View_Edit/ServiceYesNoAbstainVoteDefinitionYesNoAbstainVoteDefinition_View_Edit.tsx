@@ -124,12 +124,12 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_CBuoEIsNEe6E6KmeUhRZew)/LabelWrapper">
+        <Card id="_sP8KMIshEe6I4ZdrLoQBLA)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_CBuoEIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+                  <Typography id="_sP8KMIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                     {t(
                       'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                       { defaultValue: 'My vote entry' },
@@ -491,7 +491,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_CBxrYIsNEe6E6KmeUhRZew)/LabelWrapper"
+          id="_sP_NgIshEe6I4ZdrLoQBLA)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -500,7 +500,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_CBxrYIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+              <Typography id="_sP_NgIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
                 {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.entries.Label', {
                   defaultValue: 'Entries',
                 })}

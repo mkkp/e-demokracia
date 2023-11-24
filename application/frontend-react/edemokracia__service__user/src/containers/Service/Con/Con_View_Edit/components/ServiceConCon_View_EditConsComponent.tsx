@@ -184,18 +184,18 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CGBSMosNEe6E6KmeUhRZew)',
-      label: t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_sUDOJoshEe6I4ZdrLoQBLA)',
+      label: t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
+      action: actions.consVoteUpForConAction
         ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
+            await actions.consVoteUpForConAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CGBSMosNEe6E6KmeUhRZew)',
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_sUDOJoshEe6I4ZdrLoQBLA)',
       label: t('service.Con.Con_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -206,7 +206,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CGBSMosNEe6E6KmeUhRZew)',
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_sUDOJoshEe6I4ZdrLoQBLA)',
       label: t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -217,13 +217,13 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CGBSMosNEe6E6KmeUhRZew)',
-      label: t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_sUDOJoshEe6I4ZdrLoQBLA)',
+      label: t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
+      action: actions.consCreateProArgumentAction
         ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
+            await actions.consCreateProArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -231,21 +231,21 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CF_dAIsNEe6E6KmeUhRZew',
+      id: '_sUBY8oshEe6I4ZdrLoQBLA',
       attributeName: 'title',
       label: t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_CF_dBIsNEe6E6KmeUhRZew',
+      id: '_sUCAA4shEe6I4ZdrLoQBLA',
       attributeName: 'upVotes',
       label: t('service.Con.Con_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_CGAEE4sNEe6E6KmeUhRZew',
+      id: '_sUCnEYshEe6I4ZdrLoQBLA',
       attributeName: 'downVotes',
       label: t('service.Con.Con_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,

@@ -317,20 +317,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
     {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CUJNxYsNEe6E6KmeUhRZew)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
-        defaultValue: 'voteYesNo',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
-      action: actions.activeVoteDefinitionsInActivityCitiesVoteYesNoAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsInActivityCitiesVoteYesNoAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CUJNxYsNEe6E6KmeUhRZew)',
+      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_sii9I4shEe6I4ZdrLoQBLA)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
         defaultValue: 'voteYesNoAbstain',
       }) as string,
@@ -343,20 +330,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CUJNxYsNEe6E6KmeUhRZew)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
-        defaultValue: 'voteRating',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
-      action: actions.activeVoteDefinitionsInActivityCitiesVoteRatingAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsInActivityCitiesVoteRatingAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CUJNxYsNEe6E6KmeUhRZew)',
+      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_sii9I4shEe6I4ZdrLoQBLA)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteSelectAnswer', {
         defaultValue: 'voteSelectAnswer',
       }) as string,
@@ -368,11 +342,37 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_sii9I4shEe6I4ZdrLoQBLA)',
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
+        defaultValue: 'voteYesNo',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
+      action: actions.activeVoteDefinitionsInActivityCitiesVoteYesNoAction
+        ? async (rowData) => {
+            await actions.activeVoteDefinitionsInActivityCitiesVoteYesNoAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_sii9I4shEe6I4ZdrLoQBLA)',
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
+        defaultValue: 'voteRating',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
+      action: actions.activeVoteDefinitionsInActivityCitiesVoteRatingAction
+        ? async (rowData) => {
+            await actions.activeVoteDefinitionsInActivityCitiesVoteRatingAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_CUE8UosNEe6E6KmeUhRZew',
+      id: '_sieEoIshEe6I4ZdrLoQBLA',
       attributeName: 'countyRepresentation',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
@@ -381,7 +381,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUFjYosNEe6E6KmeUhRZew',
+      id: '_siersIshEe6I4ZdrLoQBLA',
       attributeName: 'cityRepresentation',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
@@ -390,14 +390,14 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUGKcosNEe6E6KmeUhRZew',
+      id: '_siertIshEe6I4ZdrLoQBLA',
       attributeName: 'title',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_CUGxgIsNEe6E6KmeUhRZew',
+      id: '_sifSw4shEe6I4ZdrLoQBLA',
       attributeName: 'voteType',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
         defaultValue: 'VoteType',
@@ -407,7 +407,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUGxhIsNEe6E6KmeUhRZew',
+      id: '_sif504shEe6I4ZdrLoQBLA',
       attributeName: 'numberOfVotes',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
@@ -416,7 +416,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUHYkosNEe6E6KmeUhRZew',
+      id: '_sigg4oshEe6I4ZdrLoQBLA',
       attributeName: 'created',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -425,7 +425,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUH_oIsNEe6E6KmeUhRZew',
+      id: '_sihH8oshEe6I4ZdrLoQBLA',
       attributeName: 'closeAt',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
         defaultValue: 'CloseAt',
@@ -434,7 +434,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUH_pIsNEe6E6KmeUhRZew',
+      id: '_sihvAoshEe6I4ZdrLoQBLA',
       attributeName: 'scope',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -442,7 +442,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
 
     {
-      id: '_CUImsosNEe6E6KmeUhRZew',
+      id: '_siiWEIshEe6I4ZdrLoQBLA',
       attributeName: 'status',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
