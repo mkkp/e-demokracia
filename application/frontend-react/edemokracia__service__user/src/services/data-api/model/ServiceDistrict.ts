@@ -14,6 +14,7 @@ export interface ServiceDistrict {
   city?: null | string;
   representation?: null | string;
 }
+
 export type ServiceDistrictAttributes = 'name' | 'county' | 'city' | 'representation';
 
 export interface ServiceDistrictStored extends JudoStored<ServiceDistrict>, ServiceDistrict {}

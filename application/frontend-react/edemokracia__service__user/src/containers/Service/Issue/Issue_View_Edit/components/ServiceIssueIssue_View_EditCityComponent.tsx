@@ -97,6 +97,6 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
       onUnset={
         ownerData.city && actions.cityUnsetAction ? async () => actions.cityUnsetAction!(ownerData.city!) : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

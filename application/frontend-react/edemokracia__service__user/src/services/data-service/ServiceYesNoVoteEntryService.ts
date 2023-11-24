@@ -24,12 +24,10 @@ export interface ServiceYesNoVoteEntryService {
     target: JudoIdentifiable<ServiceYesNoVoteEntry>,
     queryCustomizer?: ServiceYesNoVoteEntryQueryCustomizer,
   ): Promise<ServiceYesNoVoteEntryStored>;
-
   getOwner(
     target: JudoIdentifiable<ServiceYesNoVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-
   getRangeForOwner(
     owner?: JudoIdentifiable<ServiceYesNoVoteEntry> | ServiceYesNoVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

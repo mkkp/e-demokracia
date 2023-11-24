@@ -22,11 +22,9 @@ export interface ServiceCreateIssueInputServiceForDistrict {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getRangeForDistrict(
     owner: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   getTemplate(): Promise<ServiceDistrict>;
 }

@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -132,7 +131,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
 
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -243,10 +242,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       const res = await serviceIssueCategoryServiceImpl.update(payloadDiff.current);
 
       if (res) {
-        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceIssueCategory, string>());
         await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
@@ -269,48 +265,13 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       if (confirmed) {
         await serviceIssueCategoryServiceImpl.delete(data);
 
-        enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
 
         onClose();
       }
     } catch (error) {
       handleError(error, undefined, data);
     }
-  };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownerOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage(
-        data,
-        data.owner ? [data.owner] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
-      }
-    }
-  };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
   };
   const subcategoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
     await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
@@ -351,10 +312,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
         await serviceIssueCategoryServiceImpl.deleteSubcategories(target);
 
         if (!silentMode) {
-          enqueueSnackbar(t('judo.action.delete.success', { defaultValue: 'Delete successful' }), {
-            variant: 'success',
-            ...toastConfig.success,
-          });
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
 
           refreshAction(pageQueryCustomizer);
         }
@@ -404,6 +362,41 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       });
     });
   };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const ownerOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceIssueCategoryIssueCategory_View_EditOwnerTabularReferenceFieldLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+      }
+    }
+  };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    // action service::IssueCategory::IssueCategory_View_Edit::owner::TabularReferenceFieldLinkAutocompleteRangeAction
+    // definition service::IssueCategory::IssueCategory_View_Edit::owner::Autocomplete
+    // page service::User::adminCategories::Access::View::Page
+    try {
+      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
 
   const actions: ServiceIssueCategoryIssueCategory_View_EditDialogActions = {
     backAction,
@@ -411,15 +404,15 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     cancelAction,
     updateAction,
     deleteAction,
-    ownerOpenPageAction,
-    ownerOpenSetSelectorAction,
-    ownerAutocompleteRangeAction,
-    ownerUnsetAction,
     subcategoriesOpenPageAction,
     subcategoriesFilterAction,
     subcategoriesOpenFormAction,
     subcategoriesDeleteAction,
     subcategoriesBulkDeleteAction,
+    ownerOpenPageAction,
+    ownerOpenSetSelectorAction,
+    ownerAutocompleteRangeAction,
+    ownerUnsetAction,
     ...(customActions ?? {}),
   };
 

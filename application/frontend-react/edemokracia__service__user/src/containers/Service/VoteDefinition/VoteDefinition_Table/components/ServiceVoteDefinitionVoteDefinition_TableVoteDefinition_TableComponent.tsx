@@ -352,7 +352,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_YLawMIpWEe6AtscSh_kd4w',
+      id: '_BSDeoosNEe6E6KmeUhRZew',
       attributeName: 'voteType',
       label: t('service.VoteDefinition.VoteDefinition_Table.voteType', { defaultValue: 'VoteType' }) as string,
       filterType: FilterType.enumeration,
@@ -360,14 +360,14 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     },
 
     {
-      id: '_YLbXQIpWEe6AtscSh_kd4w',
+      id: '_BSEFsosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.VoteDefinition.VoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YLb-UIpWEe6AtscSh_kd4w',
+      id: '_BSEswIsNEe6E6KmeUhRZew',
       attributeName: 'numberOfVotes',
       label: t('service.VoteDefinition.VoteDefinition_Table.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
@@ -376,14 +376,14 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     },
 
     {
-      id: '_YLb-VIpWEe6AtscSh_kd4w',
+      id: '_BSEsxIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.VoteDefinition.VoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_YLclY4pWEe6AtscSh_kd4w',
+      id: '_BSFT0osNEe6E6KmeUhRZew',
       attributeName: 'status',
       label: t('service.VoteDefinition.VoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -391,14 +391,14 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     },
 
     {
-      id: '_YLdMcopWEe6AtscSh_kd4w',
+      id: '_BSF64IsNEe6E6KmeUhRZew',
       attributeName: 'closeAt',
       label: t('service.VoteDefinition.VoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_YLdzgYpWEe6AtscSh_kd4w',
+      id: '_BSGh8IsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.VoteDefinition.VoteDefinition_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -677,7 +677,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -690,7 +690,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface VoteDefinition {}
+
 export type VoteDefinitionAttributes = '';
 
 export interface VoteDefinitionStored extends JudoStored<VoteDefinition>, VoteDefinition {}

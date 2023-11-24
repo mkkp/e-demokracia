@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -69,7 +68,7 @@ const ServiceIssueIssue_TablePageContainer = lazy(
 export default function ServiceUserActiveIssuesAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -129,20 +128,22 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const createConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await userServiceForActiveIssuesImpl.addToFavorites(target!);
+      await userServiceForActiveIssuesImpl.closeVote(target!);
 
-      if (customActions?.postAddToFavoritesForIssueAction) {
-        await customActions.postAddToFavoritesForIssueAction(target!);
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction(target!);
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         setRefreshCounter((prev) => prev + 1);
@@ -151,12 +152,6 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
       handleError(error);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const createProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
     }
   };
   const deleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
@@ -167,42 +162,8 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
       if (customActions?.postDeleteOrArchiveForIssueAction) {
         await customActions.postDeleteOrArchiveForIssueAction(target!);
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
-        );
-
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const createCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForActiveIssuesImpl.removeFromFavorites(target!);
-
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        enqueueSnackbar(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         setRefreshCounter((prev) => prev + 1);
@@ -221,12 +182,8 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
       if (customActions?.postActivateForIssueAction) {
         await customActions.postActivateForIssueAction(target!);
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         setRefreshCounter((prev) => prev + 1);
@@ -237,10 +194,30 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
       setIsLoading(false);
     }
   };
-  const createConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+  const createProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForActiveIssuesImpl.removeFromFavorites(target!);
+
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const closeDebateAction = async (target: ServiceIssueStored) => {
@@ -249,20 +226,22 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
+  const createCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await userServiceForActiveIssuesImpl.closeVote(target!);
+      await userServiceForActiveIssuesImpl.addToFavorites(target!);
 
-      if (customActions?.postCloseVoteForIssueAction) {
-        await customActions.postCloseVoteForIssueAction(target!);
+      if (customActions?.postAddToFavoritesForIssueAction) {
+        await customActions.postAddToFavoritesForIssueAction(target!);
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         setRefreshCounter((prev) => prev + 1);
@@ -278,15 +257,15 @@ export default function ServiceUserActiveIssuesAccessTablePage() {
     openPageAction,
     filterAction,
     refreshAction,
-    addToFavoritesForIssueAction,
-    createProArgumentAction,
-    deleteOrArchiveForIssueAction,
-    createCommentAction,
-    removeFromFavoritesForIssueAction,
-    activateForIssueAction,
     createConArgumentAction,
-    closeDebateAction,
     closeVoteForIssueAction,
+    deleteOrArchiveForIssueAction,
+    activateForIssueAction,
+    createProArgumentAction,
+    removeFromFavoritesForIssueAction,
+    closeDebateAction,
+    createCommentAction,
+    addToFavoritesForIssueAction,
     ...(customActions ?? {}),
   };
 

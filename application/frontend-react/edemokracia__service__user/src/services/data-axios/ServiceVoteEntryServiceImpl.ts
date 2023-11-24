@@ -106,7 +106,7 @@ export class ServiceVoteEntryServiceImpl extends JudoAxiosService implements Ser
     });
   }
 
-  async getTemplateForVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -129,7 +129,7 @@ export class ServiceVoteEntryServiceImpl extends JudoAxiosService implements Ser
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -152,7 +152,7 @@ export class ServiceVoteEntryServiceImpl extends JudoAxiosService implements Ser
     });
   }
 
-  async getTemplateForVoteRatingForVoteDefinition(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -175,7 +175,7 @@ export class ServiceVoteEntryServiceImpl extends JudoAxiosService implements Ser
     });
   }
 
-  async getTemplateForVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -185,7 +185,7 @@ export class ServiceVoteEntryServiceImpl extends JudoAxiosService implements Ser
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForVoteDefinition(
+  async getRangeOnVoteSelectAnswerForVoteDefinition(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {

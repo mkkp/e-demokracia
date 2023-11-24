@@ -153,7 +153,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZM-64opWEe6AtscSh_kd4w',
+      id: '_CSwtsosNEe6E6KmeUhRZew',
       attributeName: 'representation',
       label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'District' }) as string,
       filterType: FilterType.string,
@@ -311,7 +311,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -324,7 +324,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

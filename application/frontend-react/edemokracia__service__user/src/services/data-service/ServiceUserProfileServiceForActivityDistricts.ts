@@ -22,11 +22,9 @@ export interface ServiceUserProfileServiceForActivityDistricts {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getTemplate(): Promise<ServiceDistrict>;
 }

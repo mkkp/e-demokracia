@@ -278,19 +278,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
-        defaultValue: 'takeBackVote',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.vote', {
         defaultValue: 'vote',
@@ -303,11 +290,24 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
+        defaultValue: 'takeBackVote',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
+      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_Yzv7gopWEe6AtscSh_kd4w',
+      id: '_B6R8QosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
         defaultValue: 'Title',
@@ -316,7 +316,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_YzwikopWEe6AtscSh_kd4w',
+      id: '_B6SjUIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -325,7 +325,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_YzxJoIpWEe6AtscSh_kd4w',
+      id: '_B6SjVIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -334,7 +334,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_YzxJpIpWEe6AtscSh_kd4w',
+      id: '_B6TKYosNEe6E6KmeUhRZew',
       attributeName: 'status',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
         defaultValue: 'Status',
@@ -344,7 +344,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_Yzxws4pWEe6AtscSh_kd4w',
+      id: '_B6TxcYsNEe6E6KmeUhRZew',
       attributeName: 'closeAt',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
@@ -630,7 +630,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -643,7 +643,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

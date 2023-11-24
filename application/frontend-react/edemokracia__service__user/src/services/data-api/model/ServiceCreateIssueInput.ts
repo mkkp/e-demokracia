@@ -20,14 +20,13 @@ export interface ServiceCreateIssueInput {
   description: string;
   title: string;
   debateCloseAt: Date;
-
   issueType?: null | ServiceIssueTypeStored;
   county?: null | ServiceCountyStored;
   city?: null | ServiceCityStored;
   district?: null | ServiceDistrictStored;
 }
-export type ServiceCreateIssueInputAttributes = 'description' | 'title' | 'debateCloseAt';
 
+export type ServiceCreateIssueInputAttributes = 'description' | 'title' | 'debateCloseAt';
 export type ServiceCreateIssueInputRelations = 'issueType' | 'county' | 'city' | 'district';
 
 export interface ServiceCreateIssueInputStored extends JudoStored<ServiceCreateIssueInput>, ServiceCreateIssueInput {}

@@ -167,7 +167,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_ZDg10IpWEe6AtscSh_kd4w)-download"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_CJgEAIsNEe6E6KmeUhRZew)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -178,7 +178,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_ZDg10IpWEe6AtscSh_kd4w)-view"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_CJgEAIsNEe6E6KmeUhRZew)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -235,14 +235,14 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZDhc4opWEe6AtscSh_kd4w',
+      id: '_CJhSIIsNEe6E6KmeUhRZew',
       attributeName: 'link',
       label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZDiD84pWEe6AtscSh_kd4w',
+      id: '_CJh5MosNEe6E6KmeUhRZew',
       attributeName: 'type',
       label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -435,7 +435,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -448,7 +448,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

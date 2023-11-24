@@ -164,7 +164,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_Y-cvoopWEe6AtscSh_kd4w',
+      id: '_CEyjIYsNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -346,7 +346,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -359,7 +359,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

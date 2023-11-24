@@ -235,18 +235,18 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZEhic4pWEe6AtscSh_kd4w)',
-      label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CKgwoIsNEe6E6KmeUhRZew)',
+      label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
+      action: actions.consCreateProArgumentAction
         ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
+            await actions.consCreateProArgumentAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZEhic4pWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CKgwoIsNEe6E6KmeUhRZew)',
       label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -257,7 +257,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZEhic4pWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CKgwoIsNEe6E6KmeUhRZew)',
       label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -268,13 +268,13 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZEhic4pWEe6AtscSh_kd4w)',
-      label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CKgwoIsNEe6E6KmeUhRZew)',
+      label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
+      action: actions.consVoteUpForConAction
         ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
+            await actions.consVoteUpForConAction!(rowData);
           }
         : undefined,
     },
@@ -282,42 +282,42 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZEdRAIpWEe6AtscSh_kd4w',
+      id: '_CKb4IYsNEe6E6KmeUhRZew',
       attributeName: 'createdByName',
       label: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZEd4EIpWEe6AtscSh_kd4w',
+      id: '_CKcfMIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZEefIIpWEe6AtscSh_kd4w',
+      id: '_CKcfNIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZEefJIpWEe6AtscSh_kd4w',
+      id: '_CKdGQ4sNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZEfGMopWEe6AtscSh_kd4w',
+      id: '_CKdtUosNEe6E6KmeUhRZew',
       attributeName: 'upVotes',
       label: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZEftQIpWEe6AtscSh_kd4w',
+      id: '_CKeUYosNEe6E6KmeUhRZew',
       attributeName: 'downVotes',
       label: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
@@ -486,7 +486,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -499,7 +499,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

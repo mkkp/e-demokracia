@@ -493,7 +493,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -506,7 +506,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

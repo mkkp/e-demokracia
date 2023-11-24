@@ -171,7 +171,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_ZUFocopWEe6AtscSh_kd4w)-download"
+              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_CZzw4osNEe6E6KmeUhRZew)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -182,7 +182,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_ZUFocopWEe6AtscSh_kd4w)-view"
+              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_CZzw4osNEe6E6KmeUhRZew)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -248,14 +248,14 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZULIAYpWEe6AtscSh_kd4w',
+      id: '_CZ4CUosNEe6E6KmeUhRZew',
       attributeName: 'link',
       label: t('service.IssueAttachment.IssueAttachment_Table.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZULvEopWEe6AtscSh_kd4w',
+      id: '_CZ5QcIsNEe6E6KmeUhRZew',
       attributeName: 'type',
       label: t('service.IssueAttachment.IssueAttachment_Table.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -535,7 +535,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -548,7 +548,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

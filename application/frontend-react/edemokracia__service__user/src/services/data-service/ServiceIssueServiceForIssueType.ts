@@ -17,15 +17,11 @@ export interface ServiceIssueServiceForIssueType {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored>;
-
   getRangeForIssueType(
     owner: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>>;
-
   getTemplate(): Promise<ServiceIssueType>;
-
   setIssueType(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceIssueType>): Promise<void>;
-
   unsetIssueType(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 }

@@ -25,12 +25,10 @@ export interface ServiceCommentServiceForVotes {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<ServiceSimpleVoteStored>;
-
   getUser(
     owner: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

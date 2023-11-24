@@ -8,7 +8,6 @@
 
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceCityAttributes, ServiceDistrictAttributes } from '../model';
-
 import {} from './ServiceDistrictMaskBuilder';
 
 export class ServiceCityDistrictsMaskBuilder extends RelationMaskBuilder {

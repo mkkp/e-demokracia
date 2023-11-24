@@ -21,7 +21,6 @@ export * from './YesNoAbstainVoteValue';
 export * from './VoteTypeOnCloseDebate';
 export * from './CreateArgumentInputType';
 export * from './SelectedVoteType';
-
 export * from './CloseDebateInput';
 export * from './CloseDebateOutputVoteDefinitionReference';
 export * from './Comment';

@@ -26,6 +26,7 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 export interface ServiceUserProfileUserProfile_View_EditResidentDistrictComponentActionDefinitions {
+  residentDistrictOpenSetSelectorAction?: () => Promise<void>;
   residentDistrictOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
   residentDistrictAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
@@ -91,6 +92,13 @@ export function ServiceUserProfileUserProfile_View_EditResidentDistrictComponent
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.residentDistrictOpenSetSelectorAction
+          ? async () => {
+              await actions.residentDistrictOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

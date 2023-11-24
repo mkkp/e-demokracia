@@ -18,7 +18,6 @@ import {
  */
 export interface SelectAnswerVoteSelectionService {
   getTemplate(): Promise<SelectAnswerVoteSelection>;
-
   refresh(
     target: JudoIdentifiable<SelectAnswerVoteSelection>,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,

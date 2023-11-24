@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -27,7 +26,6 @@ import {
   useErrorHandler,
 } from '~/utilities';
 import type { DialogResult } from '~/utilities';
-import { useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_Form/Owner/TabularReferenceField/Link/Set/Selector/Page';
 import { useServiceIssueCategoryOwnerRelationViewPage } from '~/dialogs/Service/IssueCategory/Owner/Relation/View/Page';
 import type { ServiceIssueCategoryIssueCategory_FormDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_Form/ServiceIssueCategoryIssueCategory_FormDialogContainer';
 import type {
@@ -130,7 +128,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
 
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -188,8 +186,6 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   );
 
   // Dialog hooks
-  const openServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage =
-    useServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage();
   const openServiceIssueCategoryOwnerRelationViewPage = useServiceIssueCategoryOwnerRelationViewPage();
 
   // Calculated section
@@ -204,10 +200,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(true);
       const res = await userServiceForAdminCategoriesImpl.create(data);
 
-      enqueueSnackbar(t('judo.action.create.success', { defaultValue: 'Create successful' }), {
-        variant: 'success',
-        ...toastConfig.success,
-      });
+      showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
 
       onSubmit(res);
     } catch (error) {
@@ -234,28 +227,6 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceIssueCategoryOwnerRelationViewPage(target!);
   };
-  const ownerOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceIssueCategoryIssueCategory_FormOwnerTabularReferenceFieldLinkSetSelectorPage(
-        data,
-        data.owner ? [data.owner] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
-      }
-    }
-  };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      return userServiceForAdminCategoriesImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
@@ -265,8 +236,6 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     createAction,
     getTemplateAction,
     ownerOpenPageAction,
-    ownerOpenSetSelectorAction,
-    ownerAutocompleteRangeAction,
     ownerUnsetAction,
     ...(customActions ?? {}),
   };

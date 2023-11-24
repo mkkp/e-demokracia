@@ -101,6 +101,6 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
           ? async () => actions.ownerUnsetAction!(ownerData.owner!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

@@ -18,13 +18,10 @@ import {
  */
 export interface ServiceSelectAnswerVoteSelectionService {
   getTemplate(): Promise<ServiceSelectAnswerVoteSelection>;
-
   refresh(
     target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-
   delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
-
   update(target: Partial<ServiceSelectAnswerVoteSelectionStored>): Promise<ServiceSelectAnswerVoteSelectionStored>;
 }

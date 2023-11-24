@@ -25,20 +25,15 @@ export interface ServiceUserManagerService {
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
   ): Promise<ServiceUserManagerStored>;
-
   update(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored>;
-
   listUsers(
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
-
   getRangeForUsers(
     owner?: JudoIdentifiable<ServiceUserManager> | ServiceUserManager,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
-
   createUser(target: ServiceCreateUserInput): Promise<ServiceServiceUserStored>;
-
-  getTemplateForCreateUser(): Promise<ServiceCreateUserInput>;
+  getTemplateOnCreateUser(): Promise<ServiceCreateUserInput>;
 }

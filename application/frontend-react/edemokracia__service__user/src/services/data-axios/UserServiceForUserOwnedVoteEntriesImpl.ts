@@ -113,7 +113,7 @@ export class UserServiceForUserOwnedVoteEntriesImpl
     });
   }
 
-  async getTemplateForVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -137,7 +137,7 @@ export class UserServiceForUserOwnedVoteEntriesImpl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -161,7 +161,7 @@ export class UserServiceForUserOwnedVoteEntriesImpl
     });
   }
 
-  async getTemplateForVoteRatingForVoteDefinition(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -185,7 +185,7 @@ export class UserServiceForUserOwnedVoteEntriesImpl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -196,7 +196,7 @@ export class UserServiceForUserOwnedVoteEntriesImpl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForVoteDefinition(
+  async getRangeOnVoteSelectAnswerForVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {

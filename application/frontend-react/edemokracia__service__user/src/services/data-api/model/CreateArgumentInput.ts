@@ -12,6 +12,7 @@ export interface CreateArgumentInput {
   title: string;
   description: string;
 }
+
 export type CreateArgumentInputAttributes = 'title' | 'description';
 
 export interface CreateArgumentInputStored extends JudoStored<CreateArgumentInput>, CreateArgumentInput {}

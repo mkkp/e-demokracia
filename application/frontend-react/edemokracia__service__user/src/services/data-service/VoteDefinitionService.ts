@@ -27,30 +27,19 @@ export interface VoteDefinitionService {
     target: JudoIdentifiable<VoteDefinition>,
     queryCustomizer?: VoteDefinitionQueryCustomizer,
   ): Promise<VoteDefinitionStored>;
-
   voteYesNo(owner: JudoIdentifiable<VoteDefinition>, target: YesNoVoteInput): Promise<void>;
-
-  getTemplateForVoteYesNo(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNo(): Promise<YesNoVoteInput>;
   voteYesNoAbstain(owner: JudoIdentifiable<VoteDefinition>, target: YesNoAbstainVoteInput): Promise<void>;
-
-  getTemplateForVoteYesNoAbstain(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstain(): Promise<YesNoAbstainVoteInput>;
   voteSelectAnswer(owner: JudoIdentifiable<VoteDefinition>, target: SelectAnswerVoteSelection): Promise<void>;
-
-  getTemplateForVoteSelectAnswer(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswer(
+  getTemplateOnVoteSelectAnswer(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswer(
     owner?: VoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
   voteRating(owner: JudoIdentifiable<VoteDefinition>, target: RatingVoteInput): Promise<void>;
-
-  getTemplateForVoteRating(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRating(): Promise<RatingVoteInput>;
   takeBackVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-
   addToFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-
   removeFromFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
 }

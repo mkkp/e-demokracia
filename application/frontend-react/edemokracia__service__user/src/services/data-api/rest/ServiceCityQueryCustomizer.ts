@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceCity } from '../model/ServiceCity';
-
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceCityQueryCustomizer extends QueryCustomizer<ServiceCity> {

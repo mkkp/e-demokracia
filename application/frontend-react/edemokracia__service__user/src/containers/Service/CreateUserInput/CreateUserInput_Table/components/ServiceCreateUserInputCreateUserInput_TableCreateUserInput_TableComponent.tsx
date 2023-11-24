@@ -528,7 +528,7 @@ export function ServiceCreateUserInputCreateUserInput_TableCreateUserInput_Table
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -541,7 +541,7 @@ export function ServiceCreateUserInputCreateUserInput_TableCreateUserInput_Table
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

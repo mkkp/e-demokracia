@@ -26,6 +26,7 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentActionDefinitions {
+  residentCountyOpenSetSelectorAction?: () => Promise<void>;
   residentCountyOpenPageAction?: (target: ServiceCountyStored) => Promise<void>;
   residentCountyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
@@ -91,6 +92,13 @@ export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.residentCountyOpenSetSelectorAction
+          ? async () => {
+              await actions.residentCountyOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

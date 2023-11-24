@@ -14,16 +14,10 @@ import { ProStored, ProQueryCustomizer, CreateArgumentInput, Pro } from '../data
  */
 export interface ProService {
   refresh(target: JudoIdentifiable<Pro>, queryCustomizer?: ProQueryCustomizer): Promise<ProStored>;
-
   voteDown(owner: JudoIdentifiable<Pro>): Promise<void>;
-
   voteUp(owner: JudoIdentifiable<Pro>): Promise<void>;
-
   createProArgument(owner: JudoIdentifiable<Pro>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateProArgument(): Promise<CreateArgumentInput>;
-
+  getTemplateOnCreateProArgument(): Promise<CreateArgumentInput>;
   createConArgument(owner: JudoIdentifiable<Pro>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateConArgument(): Promise<CreateArgumentInput>;
+  getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
 }

@@ -211,28 +211,28 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZCwn4YpWEe6AtscSh_kd4w',
+      id: '_CIxEMosNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZCxO8IpWEe6AtscSh_kd4w',
+      id: '_CIxrQosNEe6E6KmeUhRZew',
       attributeName: 'issueTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZCxO9IpWEe6AtscSh_kd4w',
+      id: '_CIySUIsNEe6E6KmeUhRZew',
       attributeName: 'voteTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZCx2AopWEe6AtscSh_kd4w',
+      id: '_CIySVIsNEe6E6KmeUhRZew',
       attributeName: 'voteStatus',
       label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
@@ -432,7 +432,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -445,7 +445,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

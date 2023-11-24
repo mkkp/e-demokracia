@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceServicePrincipalUser } from '../model/ServiceServicePrincipalUser';
-
 import { FilterBytypesBoolean } from './FilterBytypesBoolean';
 import { FilterBytypesEmail } from './FilterBytypesEmail';
 import { FilterBytypesPhone } from './FilterBytypesPhone';

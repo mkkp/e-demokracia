@@ -189,7 +189,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZGBXQopWEe6AtscSh_kd4w',
+      id: '_CL7s8osNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.description', {
         defaultValue: 'Description',
@@ -198,7 +198,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_ZGB-UopWEe6AtscSh_kd4w',
+      id: '_CL8UAosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.title', {
         defaultValue: 'Title',
@@ -401,7 +401,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -414,7 +414,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

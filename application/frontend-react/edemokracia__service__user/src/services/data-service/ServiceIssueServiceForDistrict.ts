@@ -17,15 +17,11 @@ export interface ServiceIssueServiceForDistrict {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getRangeForDistrict(
     owner: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   getTemplate(): Promise<ServiceDistrict>;
-
   setDistrict(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceDistrict>): Promise<void>;
-
   unsetDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
 }

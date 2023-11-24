@@ -201,7 +201,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZF-7AIpWEe6AtscSh_kd4w',
+      id: '_CL5QsosNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -210,7 +210,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
 
     {
-      id: '_ZF-7BIpWEe6AtscSh_kd4w',
+      id: '_CL53wYsNEe6E6KmeUhRZew',
       attributeName: 'createdBy',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -219,7 +219,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
 
     {
-      id: '_ZF_iE4pWEe6AtscSh_kd4w',
+      id: '_CL53xYsNEe6E6KmeUhRZew',
       attributeName: 'value',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
@@ -420,7 +420,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -433,7 +433,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

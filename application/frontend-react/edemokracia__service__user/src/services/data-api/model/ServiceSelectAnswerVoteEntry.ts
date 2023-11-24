@@ -16,12 +16,11 @@ export interface ServiceSelectAnswerVoteEntry {
   created: Date;
   createdBy?: null | string;
   valueRepresentation?: null | string;
-
   owner: ServiceServiceUserStored;
   value: ServiceSelectAnswerVoteSelectionStored;
 }
-export type ServiceSelectAnswerVoteEntryAttributes = 'created' | 'createdBy' | 'valueRepresentation';
 
+export type ServiceSelectAnswerVoteEntryAttributes = 'created' | 'createdBy' | 'valueRepresentation';
 export type ServiceSelectAnswerVoteEntryRelations = 'owner' | 'value';
 
 export interface ServiceSelectAnswerVoteEntryStored

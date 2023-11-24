@@ -103,6 +103,6 @@ export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
           ? async () => actions.residentCityUnsetAction!(ownerData.residentCity!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

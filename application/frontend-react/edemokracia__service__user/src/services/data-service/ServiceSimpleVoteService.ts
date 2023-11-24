@@ -24,12 +24,10 @@ export interface ServiceSimpleVoteService {
     target: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<ServiceSimpleVoteStored>;
-
   getUser(
     target: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-
   getRangeForUser(
     owner?: JudoIdentifiable<ServiceSimpleVote> | ServiceSimpleVote,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

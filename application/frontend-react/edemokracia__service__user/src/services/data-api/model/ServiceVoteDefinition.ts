@@ -35,9 +35,9 @@ export interface ServiceVoteDefinition {
   isFavorite?: null | boolean;
   cityRepresentation?: null | string;
   isNotFavorite?: null | boolean;
-
   issue?: null | ServiceIssueStored;
 }
+
 export type ServiceVoteDefinitionAttributes =
   | 'title'
   | 'created'
@@ -60,7 +60,6 @@ export type ServiceVoteDefinitionAttributes =
   | 'isFavorite'
   | 'cityRepresentation'
   | 'isNotFavorite';
-
 export type ServiceVoteDefinitionRelations = 'issue';
 
 export interface ServiceVoteDefinitionStored extends JudoStored<ServiceVoteDefinition>, ServiceVoteDefinition {}

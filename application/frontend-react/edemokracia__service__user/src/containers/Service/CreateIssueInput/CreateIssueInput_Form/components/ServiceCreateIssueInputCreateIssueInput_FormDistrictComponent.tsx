@@ -26,6 +26,7 @@ import type {
   ServiceDistrictStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentActionDefinitions {
+  districtOpenSetSelectorAction?: () => Promise<void>;
   districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
@@ -86,6 +87,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.districtOpenSetSelectorAction
+          ? async () => {
+              await actions.districtOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

@@ -5,7 +5,7 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { useSnackbar } from 'notistack';
+import { useSnacks } from '~/hooks';
 import { useTranslation } from 'react-i18next';
 import { toastConfig } from '../../config';
 import { MdiIcon } from '../MdiIcon';
@@ -35,7 +35,7 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const fileInput = useRef<HTMLInputElement>(null);
   const { downloadFile, extractFileNameFromToken, uploadFile } = fileHandling();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { t } = useTranslation();
   const placeholderText = t('judo.files.no-file-present', { defaultValue: 'No file present' }) as string;
 
@@ -138,33 +138,22 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
                   );
                   if (uploadedData) {
                     if (uploadedData.error) {
-                      enqueueSnackbar(t('judo.files.upload-error', { defaultValue: uploadedData.error }) as string, {
-                        variant: 'error',
-                        ...toastConfig.error,
-                      });
+                      showErrorSnack(t('judo.files.upload-error', { defaultValue: uploadedData.error }) as string);
                       console.error(uploadedData);
                       return;
                     }
                     const fileName = extractFileName(uploadedData.token);
-                    enqueueSnackbar(
+                    showSuccessSnack(
                       t('judo.files.upload-success', {
                         defaultValue: '{{fileName}} successfully uploaded.',
                         fileName,
                       }) as string,
-                      {
-                        variant: 'success',
-                        ...toastConfig.success,
-                      },
                     );
                     props.uploadCallback!(uploadedData);
                   }
                 } catch (err) {
-                  enqueueSnackbar(
+                  showErrorSnack(
                     t('judo.files.upload-error', { defaultValue: 'An error occurred during file upload!' }) as string,
-                    {
-                      variant: 'error',
-                      ...toastConfig.error,
-                    },
                   );
                   console.error(err);
                 } finally {

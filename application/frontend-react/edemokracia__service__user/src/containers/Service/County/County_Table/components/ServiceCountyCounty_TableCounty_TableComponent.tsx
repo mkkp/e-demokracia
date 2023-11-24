@@ -177,7 +177,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_YSrOwIpWEe6AtscSh_kd4w',
+      id: '_BZJlIIsNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.County.County_Table.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -456,7 +456,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -469,7 +469,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

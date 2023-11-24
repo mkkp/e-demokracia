@@ -21,32 +21,24 @@ import {
  */
 export interface ServiceCityService {
   getTemplate(): Promise<ServiceCity>;
-
   refresh(
     target: JudoIdentifiable<ServiceCity>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored>;
-
   delete(target: JudoIdentifiable<ServiceCity>): Promise<void>;
-
   update(target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
-
   getTemplateForDistricts(): Promise<ServiceDistrict>;
-
   createDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: JudoIdentifiable<ServiceDistrict>,
   ): Promise<ServiceDistrictStored>;
-
   listDistricts(
     target: JudoIdentifiable<ServiceCity>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   getRangeForDistricts(
     owner?: JudoIdentifiable<ServiceCity> | ServiceCity,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   deleteDistricts(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
 }

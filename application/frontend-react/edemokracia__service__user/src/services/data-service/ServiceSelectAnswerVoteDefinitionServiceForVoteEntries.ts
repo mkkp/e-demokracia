@@ -28,21 +28,17 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForVoteEntries {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceSelectAnswerVoteEntryStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteEntryStored>;
-
   getOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-
   getValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-
   getTemplateForValue(): Promise<ServiceSelectAnswerVoteSelection>;
 }

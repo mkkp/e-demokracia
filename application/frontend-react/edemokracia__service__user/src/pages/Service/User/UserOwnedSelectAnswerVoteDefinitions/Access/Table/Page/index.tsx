@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -66,7 +65,7 @@ const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageConta
 export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTablePage() {
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -129,6 +128,14 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
+    }
+  };
   const takeBackVoteForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -137,12 +144,8 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
         await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction(target!);
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         setRefreshCounter((prev) => prev + 1);
@@ -153,21 +156,13 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setIsLoading(false);
     }
   };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
-        [],
-      );
-    if (result === 'submit') {
-    }
-  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
-    takeBackVoteForSelectAnswerVoteDefinitionAction,
     voteAction,
+    takeBackVoteForSelectAnswerVoteDefinitionAction,
     ...(customActions ?? {}),
   };
 

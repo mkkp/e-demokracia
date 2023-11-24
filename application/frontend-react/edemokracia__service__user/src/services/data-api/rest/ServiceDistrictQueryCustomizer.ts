@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceDistrict } from '../model/ServiceDistrict';
-
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceDistrictQueryCustomizer extends QueryCustomizer<ServiceDistrict> {

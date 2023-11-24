@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceUserManager } from '../model/ServiceUserManager';
-
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceUserManagerQueryCustomizer extends QueryCustomizer<ServiceUserManager> {

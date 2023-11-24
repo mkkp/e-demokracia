@@ -21,7 +21,6 @@ export interface ServiceUserProfile {
   email: string;
   phone?: null | string;
   representation?: null | string;
-
   activityCounties?: null | Array<ServiceCountyStored>;
   residentCounty?: null | ServiceCountyStored;
   activityCities?: null | Array<ServiceCityStored>;
@@ -29,8 +28,8 @@ export interface ServiceUserProfile {
   activityDistricts?: null | Array<ServiceDistrictStored>;
   residentDistrict?: null | ServiceDistrictStored;
 }
-export type ServiceUserProfileAttributes = 'lastName' | 'userName' | 'firstName' | 'email' | 'phone' | 'representation';
 
+export type ServiceUserProfileAttributes = 'lastName' | 'userName' | 'firstName' | 'email' | 'phone' | 'representation';
 export type ServiceUserProfileRelations =
   | 'activityCounties'
   | 'residentCounty'

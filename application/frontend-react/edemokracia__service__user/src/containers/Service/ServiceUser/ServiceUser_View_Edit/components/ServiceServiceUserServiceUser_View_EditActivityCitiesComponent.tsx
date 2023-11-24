@@ -169,7 +169,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZGJ6IopWEe6AtscSh_kd4w',
+      id: '_CMDowosNEe6E6KmeUhRZew',
       attributeName: 'representation',
       label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
@@ -380,7 +380,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -393,7 +393,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -17,17 +17,12 @@ export interface ServiceCityServiceForDistricts {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getTemplate(): Promise<ServiceDistrict>;
-
   create(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrictStored>;
-
   delete(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
-
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
 }

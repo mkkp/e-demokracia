@@ -101,6 +101,6 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
           ? async () => actions.districtUnsetAction!(ownerData.district!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

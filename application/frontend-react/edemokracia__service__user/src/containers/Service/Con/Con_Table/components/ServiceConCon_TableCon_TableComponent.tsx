@@ -247,13 +247,13 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
         : undefined,
     },
     {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Con.Con_Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => isLoading,
-      action: actions.voteUpForConAction
+      action: actions.createProArgumentAction
         ? async (rowData) => {
-            await actions.voteUpForConAction!(rowData);
+            await actions.createProArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -280,13 +280,13 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceConStored) => isLoading,
-      action: actions.createProArgumentAction
+      action: actions.voteUpForConAction
         ? async (rowData) => {
-            await actions.createProArgumentAction!(rowData);
+            await actions.voteUpForConAction!(rowData);
           }
         : undefined,
     },
@@ -294,42 +294,42 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZTXPsopWEe6AtscSh_kd4w',
+      id: '_CZKQoosNEe6E6KmeUhRZew',
       attributeName: 'createdByName',
       label: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZTX2w4pWEe6AtscSh_kd4w',
+      id: '_CZK3sYsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZTYd0opWEe6AtscSh_kd4w',
+      id: '_CZLewIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZTZE4opWEe6AtscSh_kd4w',
+      id: '_CZLexIsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZTZr8IpWEe6AtscSh_kd4w',
+      id: '_CZMF0osNEe6E6KmeUhRZew',
       attributeName: 'upVotes',
       label: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZTZr9IpWEe6AtscSh_kd4w',
+      id: '_CZMs4IsNEe6E6KmeUhRZew',
       attributeName: 'downVotes',
       label: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
@@ -608,7 +608,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -621,7 +621,7 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

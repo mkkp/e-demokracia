@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServicePro } from '../model/ServicePro';
-
 import { FilterBytypesInteger } from './FilterBytypesInteger';
 import { FilterBytypesString } from './FilterBytypesString';
 import { FilterBytypesText } from './FilterBytypesText';

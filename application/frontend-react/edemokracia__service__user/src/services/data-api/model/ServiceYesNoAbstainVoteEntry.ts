@@ -15,11 +15,10 @@ export interface ServiceYesNoAbstainVoteEntry {
   created: Date;
   value: YesNoAbstainVoteValue;
   createdBy?: null | string;
-
   owner: ServiceServiceUserStored;
 }
-export type ServiceYesNoAbstainVoteEntryAttributes = 'created' | 'value' | 'createdBy';
 
+export type ServiceYesNoAbstainVoteEntryAttributes = 'created' | 'value' | 'createdBy';
 export type ServiceYesNoAbstainVoteEntryRelations = 'owner';
 
 export interface ServiceYesNoAbstainVoteEntryStored

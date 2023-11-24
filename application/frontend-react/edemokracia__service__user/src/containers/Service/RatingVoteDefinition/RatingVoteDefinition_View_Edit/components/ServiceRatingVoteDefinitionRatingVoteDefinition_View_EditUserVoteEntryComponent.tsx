@@ -76,6 +76,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVot
             }
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

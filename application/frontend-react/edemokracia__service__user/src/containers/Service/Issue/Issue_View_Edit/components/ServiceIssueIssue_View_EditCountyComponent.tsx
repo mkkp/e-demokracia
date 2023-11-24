@@ -101,6 +101,6 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
           ? async () => actions.countyUnsetAction!(ownerData.county!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

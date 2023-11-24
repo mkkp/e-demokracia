@@ -147,7 +147,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_XVJPgIpWEe6AtscSh_kd4w',
+      id: '_Ae4VQosNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.County.County_Table.SetSelector.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -367,7 +367,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -380,7 +380,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -25,7 +25,6 @@ export interface ServiceServiceUser {
   created?: null | Date;
   userName: string;
   representation?: null | string;
-
   votes?: null | Array<ServiceSimpleVoteStored>;
   activityCounties?: null | Array<ServiceCountyStored>;
   residentCounty?: null | ServiceCountyStored;
@@ -34,6 +33,7 @@ export interface ServiceServiceUser {
   activityDistricts?: null | Array<ServiceDistrictStored>;
   residentDistrict?: null | ServiceDistrictStored;
 }
+
 export type ServiceServiceUserAttributes =
   | 'firstName'
   | 'lastName'
@@ -43,7 +43,6 @@ export type ServiceServiceUserAttributes =
   | 'created'
   | 'userName'
   | 'representation';
-
 export type ServiceServiceUserRelations =
   | 'votes'
   | 'activityCounties'

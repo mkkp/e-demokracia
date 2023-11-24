@@ -22,6 +22,5 @@ export interface ServiceUserProfileServiceForResidentDistrict {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getTemplate(): Promise<ServiceDistrict>;
 }

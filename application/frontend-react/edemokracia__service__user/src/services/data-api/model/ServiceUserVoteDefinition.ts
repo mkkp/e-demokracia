@@ -20,8 +20,8 @@ export interface ServiceUserVoteDefinition {
   activeVoteDefinitionsInResidentCity?: null | Array<ServiceVoteDefinitionStored>;
   activeVoteDefinitionsInResidentDistrict?: null | Array<ServiceVoteDefinitionStored>;
 }
-export type ServiceUserVoteDefinitionAttributes = '';
 
+export type ServiceUserVoteDefinitionAttributes = '';
 export type ServiceUserVoteDefinitionRelations =
   | 'ownedVoteDefinitions'
   | 'activeVoteDefinitionsGlobal'

@@ -198,7 +198,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZGFBoIpWEe6AtscSh_kd4w',
+      id: '_CL-wQosNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -207,7 +207,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_ZGFBpIpWEe6AtscSh_kd4w',
+      id: '_CL_XUosNEe6E6KmeUhRZew',
       attributeName: 'createdBy',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -216,7 +216,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_ZGFos4pWEe6AtscSh_kd4w',
+      id: '_CL_-YYsNEe6E6KmeUhRZew',
       attributeName: 'valueRepresentation',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
         defaultValue: 'ValueRepresentation',
@@ -419,7 +419,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -432,7 +432,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

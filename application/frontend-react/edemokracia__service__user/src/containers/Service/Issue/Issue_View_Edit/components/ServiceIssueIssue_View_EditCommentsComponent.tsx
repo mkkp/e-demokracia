@@ -210,18 +210,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   const rowActions: TableRowAction<ServiceCommentStored>[] = [
     {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZDrN4opWEe6AtscSh_kd4w)',
-      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.commentsVoteDownForCommentAction
-        ? async (rowData) => {
-            await actions.commentsVoteDownForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZDrN4opWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_CJp1AIsNEe6E6KmeUhRZew)',
       label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceCommentStored) => editMode || isLoading,
@@ -231,39 +220,50 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_CJp1AIsNEe6E6KmeUhRZew)',
+      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceCommentStored) => editMode || isLoading,
+      action: actions.commentsVoteDownForCommentAction
+        ? async (rowData) => {
+            await actions.commentsVoteDownForCommentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZDoKkopWEe6AtscSh_kd4w',
+      id: '_CJnYwIsNEe6E6KmeUhRZew',
       attributeName: 'comment',
       label: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZDoxoopWEe6AtscSh_kd4w',
+      id: '_CJnYxIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZDpYsopWEe6AtscSh_kd4w',
+      id: '_CJn_0osNEe6E6KmeUhRZew',
       attributeName: 'createdByName',
       label: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZDp_wIpWEe6AtscSh_kd4w',
+      id: '_CJom4IsNEe6E6KmeUhRZew',
       attributeName: 'upVotes',
       label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZDp_xIpWEe6AtscSh_kd4w',
+      id: '_CJom5IsNEe6E6KmeUhRZew',
       attributeName: 'downVotes',
       label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -415,7 +415,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -428,7 +428,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

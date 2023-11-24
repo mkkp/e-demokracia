@@ -25,21 +25,14 @@ export interface ServiceUserProfileServiceForActivityCounties {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
-
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored>;
-
   getTemplate(): Promise<ServiceCounty>;
-
   listCities(
     owner: JudoIdentifiable<ServiceCounty>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
-
   getTemplateForCities(): Promise<ServiceCity>;
-
   createCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCityStored>;
-
   deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<void>;
-
   updateCities(owner: JudoIdentifiable<ServiceCounty>, target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
 }

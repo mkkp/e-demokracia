@@ -26,6 +26,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceConCon_View_EditCreatedByComponentActionDefinitions {
+  createdByOpenSetSelectorAction?: () => Promise<void>;
   createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -87,6 +88,13 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.createdByOpenSetSelectorAction
+          ? async () => {
+              await actions.createdByOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

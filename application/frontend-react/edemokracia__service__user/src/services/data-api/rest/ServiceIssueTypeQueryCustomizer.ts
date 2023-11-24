@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceIssueType } from '../model/ServiceIssueType';
-
 import { FilterByVoteType } from './FilterByVoteType';
 import { FilterBytypesString } from './FilterBytypesString';
 import { FilterBytypesText } from './FilterBytypesText';

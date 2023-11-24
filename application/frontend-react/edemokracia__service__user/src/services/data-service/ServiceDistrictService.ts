@@ -14,13 +14,10 @@ import { ServiceDistrictQueryCustomizer, ServiceDistrict, ServiceDistrictStored 
  */
 export interface ServiceDistrictService {
   getTemplate(): Promise<ServiceDistrict>;
-
   refresh(
     target: JudoIdentifiable<ServiceDistrict>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   delete(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
-
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
 }

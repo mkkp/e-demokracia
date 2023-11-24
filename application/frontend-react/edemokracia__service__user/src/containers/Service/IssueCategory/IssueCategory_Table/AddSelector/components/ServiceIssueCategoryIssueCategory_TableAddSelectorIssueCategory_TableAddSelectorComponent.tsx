@@ -163,14 +163,14 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_Xe6PgIpWEe6AtscSh_kd4w',
+      id: '_AnT4gIsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.IssueCategory.IssueCategory_Table.AddSelector.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_Xe6PhIpWEe6AtscSh_kd4w',
+      id: '_AnT4hIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.IssueCategory.IssueCategory_Table.AddSelector.description', {
         defaultValue: 'Description',
@@ -392,7 +392,7 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -405,7 +405,7 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

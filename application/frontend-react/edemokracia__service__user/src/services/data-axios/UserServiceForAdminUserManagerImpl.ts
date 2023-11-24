@@ -116,7 +116,7 @@ export class UserServiceForAdminUserManagerImpl extends JudoAxiosService impleme
     return response.data;
   }
 
-  async getTemplateForCreateUser(): Promise<ServiceCreateUserInput> {
+  async getTemplateOnCreateUser(): Promise<ServiceCreateUserInput> {
     const path = '/service/CreateUserInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 

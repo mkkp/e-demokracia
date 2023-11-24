@@ -22,11 +22,9 @@ export interface ServiceCreateIssueInputServiceForIssueType {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored>;
-
   getRangeForIssueType(
     owner: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>>;
-
   getTemplate(): Promise<ServiceIssueType>;
 }

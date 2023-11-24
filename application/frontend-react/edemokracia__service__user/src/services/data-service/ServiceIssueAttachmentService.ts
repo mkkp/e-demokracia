@@ -18,13 +18,10 @@ import {
  */
 export interface ServiceIssueAttachmentService {
   getTemplate(): Promise<ServiceIssueAttachment>;
-
   refresh(
     target: JudoIdentifiable<ServiceIssueAttachment>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
   ): Promise<ServiceIssueAttachmentStored>;
-
   delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void>;
-
   update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored>;
 }

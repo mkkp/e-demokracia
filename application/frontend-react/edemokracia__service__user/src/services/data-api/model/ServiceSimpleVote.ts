@@ -14,11 +14,10 @@ import { SimpleVoteType } from './SimpleVoteType';
 export interface ServiceSimpleVote {
   created: Date;
   type: SimpleVoteType;
-
   user?: null | ServiceServiceUserStored;
 }
-export type ServiceSimpleVoteAttributes = 'created' | 'type';
 
+export type ServiceSimpleVoteAttributes = 'created' | 'type';
 export type ServiceSimpleVoteRelations = 'user';
 
 export interface ServiceSimpleVoteStored extends JudoStored<ServiceSimpleVote>, ServiceSimpleVote {}

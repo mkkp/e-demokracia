@@ -192,18 +192,18 @@ export function ServiceIssueIssue_View_EditProsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZDMswopWEe6AtscSh_kd4w)',
-      label: t('service.Issue.Issue_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
+      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CJNJEIsNEe6E6KmeUhRZew)',
+      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosCreateProArgumentAction
+      action: actions.prosVoteDownForProAction
         ? async (rowData) => {
-            await actions.prosCreateProArgumentAction!(rowData);
+            await actions.prosVoteDownForProAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZDMswopWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CJNJEIsNEe6E6KmeUhRZew)',
       label: t('service.Issue.Issue_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -214,7 +214,18 @@ export function ServiceIssueIssue_View_EditProsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZDMswopWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CJNJEIsNEe6E6KmeUhRZew)',
+      label: t('service.Issue.Issue_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceProStored) => editMode || isLoading,
+      action: actions.prosCreateProArgumentAction
+        ? async (rowData) => {
+            await actions.prosCreateProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CJNJEIsNEe6E6KmeUhRZew)',
       label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -224,36 +235,25 @@ export function ServiceIssueIssue_View_EditProsComponent(props: ServiceIssueIssu
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZDMswopWEe6AtscSh_kd4w)',
-      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosVoteDownForProAction
-        ? async (rowData) => {
-            await actions.prosVoteDownForProAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZDK3kIpWEe6AtscSh_kd4w',
+      id: '_CJKs0osNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZDK3lIpWEe6AtscSh_kd4w',
+      id: '_CJLT44sNEe6E6KmeUhRZew',
       attributeName: 'upVotes',
       label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZDLeoopWEe6AtscSh_kd4w',
+      id: '_CJL68YsNEe6E6KmeUhRZew',
       attributeName: 'downVotes',
       label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -428,7 +428,7 @@ export function ServiceIssueIssue_View_EditProsComponent(props: ServiceIssueIssu
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -441,7 +441,7 @@ export function ServiceIssueIssue_View_EditProsComponent(props: ServiceIssueIssu
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

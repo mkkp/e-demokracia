@@ -37,61 +37,40 @@ export interface UserServiceForUserOwnedRatingVoteDefinitions {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceRatingVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceRatingVoteDefinitionStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceRatingVoteDefinitionQueryCustomizer,
   ): Promise<ServiceRatingVoteDefinitionStored>;
-
   update(target: Partial<ServiceRatingVoteDefinitionStored>): Promise<ServiceRatingVoteDefinitionStored>;
-
   getIssue(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
-
-  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
-
   createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
-
-  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
+  getTemplateOnCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
+  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
-  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-
-  getTemplateForCreateCommentForIssue(): Promise<CreateCommentInput>;
-
-  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
+  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
-
-  getTemplateForCloseDebateForIssue(): Promise<CloseDebateInput>;
-
-  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-
+  getTemplateOnCloseDebateForIssue(): Promise<CloseDebateInput>;
+  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+  getTemplateOnCreateCommentForIssue(): Promise<CreateCommentInput>;
+  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   listVoteEntries(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceRatingVoteEntryStored>>;
-
   getUserVoteEntry(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
   ): Promise<ServiceRatingVoteEntryStored>;
-
   vote(owner: JudoIdentifiable<ServiceRatingVoteDefinition>, target: RatingVoteInput): Promise<void>;
-
-  getTemplateForVote(): Promise<RatingVoteInput>;
-
+  getTemplateOnVote(): Promise<RatingVoteInput>;
   takeBackVote(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
 }

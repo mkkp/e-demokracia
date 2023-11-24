@@ -167,21 +167,21 @@ export function ServiceDistrictDistrict_TableAddSelectorDistrict_TableAddSelecto
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_XSvbwIpWEe6AtscSh_kd4w',
+      id: '_AfDUYosNEe6E6KmeUhRZew',
       attributeName: 'county',
       label: t('service.District.District_Table.AddSelector.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_XSwp4YpWEe6AtscSh_kd4w',
+      id: '_AfD7cosNEe6E6KmeUhRZew',
       attributeName: 'city',
       label: t('service.District.District_Table.AddSelector.city', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_XSxQ8opWEe6AtscSh_kd4w',
+      id: '_AfEigosNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.District.District_Table.AddSelector.name', { defaultValue: 'District name' }) as string,
       filterType: FilterType.string,
@@ -401,7 +401,7 @@ export function ServiceDistrictDistrict_TableAddSelectorDistrict_TableAddSelecto
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -414,7 +414,7 @@ export function ServiceDistrictDistrict_TableAddSelectorDistrict_TableAddSelecto
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

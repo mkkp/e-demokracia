@@ -12,11 +12,10 @@ import { ServiceServiceUserStored } from './ServiceServiceUser';
 
 export interface ServiceUserManager {
   userName?: null | string;
-
   users?: null | Array<ServiceServiceUserStored>;
 }
-export type ServiceUserManagerAttributes = 'userName';
 
+export type ServiceUserManagerAttributes = 'userName';
 export type ServiceUserManagerRelations = 'users';
 
 export interface ServiceUserManagerStored extends JudoStored<ServiceUserManager>, ServiceUserManager {}

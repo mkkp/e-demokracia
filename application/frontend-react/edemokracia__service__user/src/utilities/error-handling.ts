@@ -10,7 +10,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTrackService } from '@pandino/react-hooks';
 import type { SnackbarMessage, OptionsObject, SnackbarKey } from 'notistack';
-import { useSnackbar } from 'notistack';
+import { useSnacks } from '~/hooks';
 import { exists } from './helper';
 import { toastConfig } from '../config';
 
@@ -48,7 +48,7 @@ export interface ErrorProcessResult<T> {
 
 export const useErrorHandler = () => {
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showErrorSnack } = useSnacks();
 
   return <T>(error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
     console.error(error);
@@ -146,7 +146,7 @@ export const useErrorHandler = () => {
     }
 
     if (errorResults.toastMessage) {
-      enqueueSnackbar(errorResults.toastMessage, errorResults.errorToastConfig);
+      showErrorSnack(errorResults.toastMessage, errorResults.errorToastConfig);
     }
 
     if (typeof options?.setValidation === 'function' && errorResults.validation) {

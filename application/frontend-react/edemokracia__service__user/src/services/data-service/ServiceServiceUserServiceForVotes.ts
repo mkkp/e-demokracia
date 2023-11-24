@@ -24,32 +24,26 @@ export interface ServiceServiceUserServiceForVotes {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<ServiceSimpleVoteStored>;
-
   getRangeForVotes(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-
   setVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
   ): Promise<void>;
-
   addVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
   ): Promise<void>;
-
   removeVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
   ): Promise<void>;
-
   getUser(
     owner: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

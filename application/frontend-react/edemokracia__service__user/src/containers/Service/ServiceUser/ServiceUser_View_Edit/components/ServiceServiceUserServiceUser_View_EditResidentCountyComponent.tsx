@@ -105,6 +105,6 @@ export function ServiceServiceUserServiceUser_View_EditResidentCountyComponent(
           ? async () => actions.residentCountyUnsetAction!(ownerData.residentCounty!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

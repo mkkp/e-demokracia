@@ -126,27 +126,6 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void> {
-    const path = '/service/SelectAnswerVoteDefinition/createProArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateForCreateProArgumentForIssue(): Promise<CreateArgumentInput> {
-    const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * From: targetRelation.target.operations
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void> {
     const path = '/service/SelectAnswerVoteDefinition/createConArgument';
     const response = await this.axios.post(this.getPathForActor(path), target, {
@@ -156,7 +135,7 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
     });
   }
 
-  async getTemplateForCreateConArgumentForIssue(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateConArgumentForIssue(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -168,8 +147,29 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/SelectAnswerVoteDefinition/addToFavorites';
+  async createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/createProArgument';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateProArgumentForIssue(): Promise<CreateArgumentInput> {
+    const path = '/CreateArgumentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * From: targetRelation.target.operations
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -196,29 +196,8 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void> {
-    const path = '/service/SelectAnswerVoteDefinition/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateForCreateCommentForIssue(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * From: targetRelation.target.operations
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/SelectAnswerVoteDefinition/removeFromFavorites';
+  async activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/activate';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -231,8 +210,8 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/SelectAnswerVoteDefinition/activate';
+  async removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -259,7 +238,7 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
     return response.data;
   }
 
-  async getTemplateForCloseDebateForIssue(): Promise<CloseDebateInput> {
+  async getTemplateOnCloseDebateForIssue(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -271,8 +250,29 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/SelectAnswerVoteDefinition/closeVote';
+  async createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForIssue(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * From: targetRelation.target.operations
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/addToFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -383,7 +383,7 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
     });
   }
 
-  async getTemplateForVote(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVote(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -394,7 +394,7 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
    * From: relation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVote(
+  async getRangeOnVote(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {

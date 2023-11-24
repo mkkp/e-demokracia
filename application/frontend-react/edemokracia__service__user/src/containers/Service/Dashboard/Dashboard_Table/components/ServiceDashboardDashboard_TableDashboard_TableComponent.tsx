@@ -176,7 +176,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZTt1AIpWEe6AtscSh_kd4w',
+      id: '_CZckgosNEe6E6KmeUhRZew',
       attributeName: 'welcome',
       label: t('service.Dashboard.Dashboard_Table.welcome', { defaultValue: 'Welcome' }) as string,
       filterType: FilterType.string,
@@ -442,7 +442,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -455,7 +455,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

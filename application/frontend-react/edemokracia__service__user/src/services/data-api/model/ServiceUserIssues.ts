@@ -12,7 +12,6 @@ import { ServiceIssueStored } from './ServiceIssue';
 
 export interface ServiceUserIssues {
   userName?: null | string;
-
   ownedIssues?: null | Array<ServiceIssueStored>;
   activeIssuesGlobal?: null | Array<ServiceIssueStored>;
   activeIssuesInActivityCounties?: null | Array<ServiceIssueStored>;
@@ -22,8 +21,8 @@ export interface ServiceUserIssues {
   activeIssuesInResidentCity?: null | Array<ServiceIssueStored>;
   activeIssuesInResidentDistrict?: null | Array<ServiceIssueStored>;
 }
-export type ServiceUserIssuesAttributes = 'userName';
 
+export type ServiceUserIssuesAttributes = 'userName';
 export type ServiceUserIssuesRelations =
   | 'ownedIssues'
   | 'activeIssuesGlobal'

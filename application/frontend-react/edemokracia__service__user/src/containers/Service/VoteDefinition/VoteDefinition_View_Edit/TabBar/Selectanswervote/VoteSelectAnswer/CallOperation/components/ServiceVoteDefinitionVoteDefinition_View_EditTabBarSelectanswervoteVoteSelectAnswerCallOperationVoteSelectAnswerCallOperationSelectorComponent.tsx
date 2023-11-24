@@ -167,7 +167,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_XlbHM4pWEe6AtscSh_kd4w',
+      id: '_AszcgosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t(
         'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.title',
@@ -177,7 +177,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
     },
 
     {
-      id: '_XlbuQ4pWEe6AtscSh_kd4w',
+      id: '_As0DkosNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t(
         'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.description',
@@ -394,7 +394,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -407,7 +407,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

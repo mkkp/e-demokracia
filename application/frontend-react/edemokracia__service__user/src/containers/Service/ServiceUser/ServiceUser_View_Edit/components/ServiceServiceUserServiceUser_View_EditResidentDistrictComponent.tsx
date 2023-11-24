@@ -105,6 +105,6 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
           ? async () => actions.residentDistrictUnsetAction!(ownerData.residentDistrict!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

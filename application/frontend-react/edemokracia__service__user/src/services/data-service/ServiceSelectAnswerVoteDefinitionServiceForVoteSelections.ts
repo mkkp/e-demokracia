@@ -22,20 +22,15 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForVoteSelections {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-
   getTemplate(): Promise<ServiceSelectAnswerVoteSelection>;
-
   create(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: ServiceSelectAnswerVoteSelection,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-
   delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
-
   update(target: Partial<ServiceSelectAnswerVoteSelectionStored>): Promise<ServiceSelectAnswerVoteSelectionStored>;
 }

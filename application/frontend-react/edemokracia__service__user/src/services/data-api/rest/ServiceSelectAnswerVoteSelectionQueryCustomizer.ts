@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceSelectAnswerVoteSelection } from '../model/ServiceSelectAnswerVoteSelection';
-
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceSelectAnswerVoteSelectionQueryCustomizer

@@ -164,7 +164,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZAJ_0YpWEe6AtscSh_kd4w',
+      id: '_CGWCUYsNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.County.County_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,
@@ -346,7 +346,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -359,7 +359,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -22,17 +22,12 @@ export interface ServiceIssueServiceForAttachments {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
   ): Promise<Array<ServiceIssueAttachmentStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
   ): Promise<ServiceIssueAttachmentStored>;
-
   getTemplate(): Promise<ServiceIssueAttachment>;
-
   create(owner: JudoIdentifiable<ServiceIssue>, target: ServiceIssueAttachment): Promise<ServiceIssueAttachmentStored>;
-
   delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void>;
-
   update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored>;
 }

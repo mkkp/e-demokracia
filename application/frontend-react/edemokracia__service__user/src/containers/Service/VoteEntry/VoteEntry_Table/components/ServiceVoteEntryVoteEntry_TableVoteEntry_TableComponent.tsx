@@ -240,35 +240,35 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_YKyeEopWEe6AtscSh_kd4w',
+      id: '_BRe24osNEe6E6KmeUhRZew',
       attributeName: 'userName',
       label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YKzFIopWEe6AtscSh_kd4w',
+      id: '_BRfd8IsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_YKzsMIpWEe6AtscSh_kd4w',
+      id: '_BRfd9IsNEe6E6KmeUhRZew',
       attributeName: 'voteTitle',
       label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YKzsNIpWEe6AtscSh_kd4w',
+      id: '_BRgFAosNEe6E6KmeUhRZew',
       attributeName: 'issueTitle',
       label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YK0TQ4pWEe6AtscSh_kd4w',
+      id: '_BRgFBosNEe6E6KmeUhRZew',
       attributeName: 'voteStatus',
       label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,
@@ -535,7 +535,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -548,7 +548,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

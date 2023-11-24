@@ -182,14 +182,14 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZDtqIIpWEe6AtscSh_kd4w',
+      id: '_CJrqMosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZDtqJIpWEe6AtscSh_kd4w',
+      id: '_CJsRQYsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.IssueCategory.IssueCategory_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -381,7 +381,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -394,7 +394,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface ServiceProParent {}
+
 export type ServiceProParentAttributes = '';
 
 export interface ServiceProParentStored extends JudoStored<ServiceProParent>, ServiceProParent {}

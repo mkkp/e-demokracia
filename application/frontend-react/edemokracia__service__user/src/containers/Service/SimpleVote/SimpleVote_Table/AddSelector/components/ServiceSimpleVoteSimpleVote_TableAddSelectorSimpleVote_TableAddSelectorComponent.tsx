@@ -181,14 +181,14 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_XWhIgIpWEe6AtscSh_kd4w',
+      id: '_Afc9AIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_XWi9sIpWEe6AtscSh_kd4w',
+      id: '_Afh1gIsNEe6E6KmeUhRZew',
       attributeName: 'type',
       label: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,
@@ -409,7 +409,7 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -422,7 +422,7 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

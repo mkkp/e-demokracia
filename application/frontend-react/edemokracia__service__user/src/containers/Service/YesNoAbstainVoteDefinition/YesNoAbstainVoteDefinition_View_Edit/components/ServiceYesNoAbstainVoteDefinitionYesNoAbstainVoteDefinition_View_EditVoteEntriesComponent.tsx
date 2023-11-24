@@ -207,7 +207,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZGPZsIpWEe6AtscSh_kd4w',
+      id: '_CMIhQosNEe6E6KmeUhRZew',
       attributeName: 'value',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
@@ -217,7 +217,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
     },
 
     {
-      id: '_ZGPZtIpWEe6AtscSh_kd4w',
+      id: '_CMJIUosNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -226,7 +226,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
     },
 
     {
-      id: '_ZGQAwopWEe6AtscSh_kd4w',
+      id: '_CMJvYIsNEe6E6KmeUhRZew',
       attributeName: 'createdBy',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -429,7 +429,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -442,7 +442,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

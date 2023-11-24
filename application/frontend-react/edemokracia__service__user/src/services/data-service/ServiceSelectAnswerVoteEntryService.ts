@@ -27,24 +27,19 @@ export interface ServiceSelectAnswerVoteEntryService {
     target: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteEntryStored>;
-
   getOwner(
     target: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-
   getRangeForOwner(
     owner?: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
-
   getTemplateForValue(): Promise<ServiceSelectAnswerVoteSelection>;
-
   getValue(
     target: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-
   getRangeForValue(
     owner?: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,

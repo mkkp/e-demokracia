@@ -172,7 +172,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCountiesComponent
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZGHd4opWEe6AtscSh_kd4w',
+      id: '_CMBMgosNEe6E6KmeUhRZew',
       attributeName: 'representation',
       label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
@@ -388,7 +388,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCountiesComponent
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -401,7 +401,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCountiesComponent
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -17,11 +17,10 @@ export interface ServiceVoteEntry {
   voteTitle?: null | string;
   voteStatus?: null | VoteStatus;
   userName?: null | string;
-
   voteDefinition?: null | ServiceVoteDefinitionStored;
 }
-export type ServiceVoteEntryAttributes = 'created' | 'issueTitle' | 'voteTitle' | 'voteStatus' | 'userName';
 
+export type ServiceVoteEntryAttributes = 'created' | 'issueTitle' | 'voteTitle' | 'voteStatus' | 'userName';
 export type ServiceVoteEntryRelations = 'voteDefinition';
 
 export interface ServiceVoteEntryStored extends JudoStored<ServiceVoteEntry>, ServiceVoteEntry {}

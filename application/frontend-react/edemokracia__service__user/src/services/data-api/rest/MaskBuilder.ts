@@ -18,6 +18,7 @@ export class MaskBuilder {
     return `{${[...distinctStrings, ...distinctBuilders].join(',')}}`;
   }
 }
+
 export class RelationMaskBuilder extends MaskBuilder {
   constructor(protected name: string, protected props: Array<string | RelationMaskBuilder>) {
     super(props);

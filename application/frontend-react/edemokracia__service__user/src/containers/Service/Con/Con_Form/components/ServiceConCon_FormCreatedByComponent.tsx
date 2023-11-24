@@ -26,6 +26,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceConCon_FormCreatedByComponentActionDefinitions {
+  createdByOpenSetSelectorAction?: () => Promise<void>;
   createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -96,6 +97,13 @@ export function ServiceConCon_FormCreatedByComponent(props: ServiceConCon_FormCr
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.createdByOpenSetSelectorAction
+          ? async () => {
+              await actions.createdByOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

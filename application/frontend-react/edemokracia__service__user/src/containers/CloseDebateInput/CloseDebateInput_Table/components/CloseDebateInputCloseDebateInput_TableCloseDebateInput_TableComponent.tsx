@@ -458,7 +458,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -471,7 +471,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

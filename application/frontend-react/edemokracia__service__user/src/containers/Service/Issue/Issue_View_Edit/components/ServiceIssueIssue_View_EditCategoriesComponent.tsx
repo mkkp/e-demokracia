@@ -183,14 +183,14 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZDlHQIpWEe6AtscSh_kd4w',
+      id: '_CJkVcIsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZDlHRIpWEe6AtscSh_kd4w',
+      id: '_CJkVdIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -390,7 +390,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -403,7 +403,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

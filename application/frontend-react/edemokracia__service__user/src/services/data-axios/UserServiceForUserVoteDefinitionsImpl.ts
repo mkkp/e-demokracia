@@ -113,7 +113,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -137,7 +137,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -161,7 +161,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -185,7 +185,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -196,7 +196,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForOwnedVoteDefinitions(
+  async getRangeOnVoteSelectAnswerForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -253,7 +253,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsGlobal(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsGlobal(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -277,7 +277,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsGlobal(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsGlobal(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -301,7 +301,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsGlobal(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsGlobal(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -325,7 +325,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsGlobal(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsGlobal(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -336,7 +336,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsGlobal(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -393,7 +393,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -417,7 +417,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -441,7 +441,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInActivityCounties(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityCounties(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -465,7 +465,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -476,7 +476,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -533,7 +533,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityCities(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityCities(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -557,7 +557,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityCities(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityCities(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -581,7 +581,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInActivityCities(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityCities(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -605,7 +605,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -616,7 +616,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -673,7 +673,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -697,7 +697,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -721,7 +721,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInActivityDistricts(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityDistricts(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -745,7 +745,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -756,7 +756,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -813,7 +813,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -837,7 +837,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -861,7 +861,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInResidentCounty(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentCounty(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -885,7 +885,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -896,7 +896,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -953,7 +953,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentCity(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentCity(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -977,7 +977,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentCity(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentCity(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1001,7 +1001,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInResidentCity(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentCity(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1025,7 +1025,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1036,7 +1036,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -1093,7 +1093,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1117,7 +1117,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1141,7 +1141,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInResidentDistrict(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentDistrict(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1165,7 +1165,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1176,7 +1176,7 @@ export class UserServiceForUserVoteDefinitionsImpl extends JudoAxiosService impl
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {

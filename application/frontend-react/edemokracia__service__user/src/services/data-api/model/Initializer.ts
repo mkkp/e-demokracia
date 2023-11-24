@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface Initializer {}
+
 export type InitializerAttributes = '';
 
 export interface InitializerStored extends JudoStored<Initializer>, Initializer {}

@@ -12,6 +12,7 @@ import { YesNoAbstainVoteValue } from './YesNoAbstainVoteValue';
 export interface YesNoAbstainVoteInput {
   value?: null | YesNoAbstainVoteValue;
 }
+
 export type YesNoAbstainVoteInputAttributes = 'value';
 
 export interface YesNoAbstainVoteInputStored extends JudoStored<YesNoAbstainVoteInput>, YesNoAbstainVoteInput {}

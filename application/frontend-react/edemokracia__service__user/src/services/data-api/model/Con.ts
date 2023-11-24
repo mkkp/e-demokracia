@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface Con {}
+
 export type ConAttributes = '';
 
 export interface ConStored extends JudoStored<Con>, Con {}

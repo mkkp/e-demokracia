@@ -14,16 +14,10 @@ import { ConQueryCustomizer, Con, ConStored, CreateArgumentInput } from '../data
  */
 export interface ConService {
   refresh(target: JudoIdentifiable<Con>, queryCustomizer?: ConQueryCustomizer): Promise<ConStored>;
-
   voteDown(owner: JudoIdentifiable<Con>): Promise<void>;
-
   voteUp(owner: JudoIdentifiable<Con>): Promise<void>;
-
   createProArgument(owner: JudoIdentifiable<Con>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateProArgument(): Promise<CreateArgumentInput>;
-
+  getTemplateOnCreateProArgument(): Promise<CreateArgumentInput>;
   createConArgument(owner: JudoIdentifiable<Con>, target: CreateArgumentInput): Promise<void>;
-
-  getTemplateForCreateConArgument(): Promise<CreateArgumentInput>;
+  getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
 }

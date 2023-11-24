@@ -20,7 +20,6 @@ import {
   ServiceProAttributes,
   ServiceServiceUserAttributes,
 } from '../model';
-
 import {} from './ServiceIssueAttachmentMaskBuilder';
 import {
   ServiceIssueCategorySubcategoriesMaskBuilder,

@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceDashboard } from '../model/ServiceDashboard';
-
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceDashboardQueryCustomizer extends QueryCustomizer<ServiceDashboard> {

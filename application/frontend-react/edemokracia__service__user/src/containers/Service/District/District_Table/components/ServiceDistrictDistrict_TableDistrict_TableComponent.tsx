@@ -197,21 +197,21 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZT40IIpWEe6AtscSh_kd4w',
+      id: '_CZm8kIsNEe6E6KmeUhRZew',
       attributeName: 'county',
       label: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZT-TsIpWEe6AtscSh_kd4w',
+      id: '_CZtDMIsNEe6E6KmeUhRZew',
       attributeName: 'city',
       label: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZUEaUIpWEe6AtscSh_kd4w',
+      id: '_CZyiwIsNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
       filterType: FilterType.string,
@@ -490,7 +490,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -503,7 +503,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

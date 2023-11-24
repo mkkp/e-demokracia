@@ -14,13 +14,10 @@ import { ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored, ServiceIssueTy
  */
 export interface ServiceIssueTypeService {
   getTemplate(): Promise<ServiceIssueType>;
-
   refresh(
     target: JudoIdentifiable<ServiceIssueType>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored>;
-
   delete(target: JudoIdentifiable<ServiceIssueType>): Promise<void>;
-
   update(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
 }

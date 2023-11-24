@@ -17,17 +17,12 @@ export interface UserServiceForAdminIssueTypes {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored>;
-
   getTemplate(): Promise<ServiceIssueType>;
-
   create(target: ServiceIssueType): Promise<ServiceIssueTypeStored>;
-
   delete(target: JudoIdentifiable<ServiceIssueType>): Promise<void>;
-
   update(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
 }

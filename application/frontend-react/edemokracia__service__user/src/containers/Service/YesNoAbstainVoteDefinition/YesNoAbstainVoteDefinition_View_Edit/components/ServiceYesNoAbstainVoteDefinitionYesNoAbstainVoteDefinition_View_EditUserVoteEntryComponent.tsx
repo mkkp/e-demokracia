@@ -76,6 +76,6 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
             }
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

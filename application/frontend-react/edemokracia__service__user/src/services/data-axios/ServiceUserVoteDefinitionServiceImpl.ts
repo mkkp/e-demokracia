@@ -94,7 +94,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -117,7 +117,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -140,7 +140,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -163,7 +163,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -173,7 +173,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForOwnedVoteDefinitions(
+  async getRangeOnVoteSelectAnswerForOwnedVoteDefinitions(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -235,7 +235,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsGlobal(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsGlobal(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -258,7 +258,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsGlobal(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsGlobal(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -281,7 +281,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsGlobal(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsGlobal(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -304,7 +304,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsGlobal(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsGlobal(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -314,7 +314,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsGlobal(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsGlobal(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -376,7 +376,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -399,7 +399,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -422,7 +422,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInActivityCounties(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityCounties(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -445,7 +445,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -455,7 +455,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -517,7 +517,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityCities(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityCities(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -540,7 +540,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityCities(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityCities(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -563,7 +563,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInActivityCities(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityCities(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -586,7 +586,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -596,7 +596,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -658,7 +658,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -681,7 +681,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -704,7 +704,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInActivityDistricts(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityDistricts(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -727,7 +727,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -737,7 +737,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -799,7 +799,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -822,7 +822,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -845,7 +845,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInResidentCounty(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentCounty(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -868,7 +868,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -878,7 +878,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -940,7 +940,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentCity(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentCity(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -963,7 +963,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentCity(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentCity(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -986,7 +986,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInResidentCity(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentCity(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1009,7 +1009,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1019,7 +1019,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -1081,7 +1081,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1104,7 +1104,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1127,7 +1127,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteRatingForActiveVoteDefinitionsInResidentDistrict(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentDistrict(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1150,7 +1150,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
   }
 
-  async getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -1160,7 +1160,7 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
+  async getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {

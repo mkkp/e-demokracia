@@ -11,6 +11,7 @@ import type { JudoStored } from '@judo/data-api-common';
 export interface CloseDebateOutputVoteDefinitionReference {
   context?: null | string;
 }
+
 export type CloseDebateOutputVoteDefinitionReferenceAttributes = 'context';
 
 export interface CloseDebateOutputVoteDefinitionReferenceStored

@@ -107,13 +107,13 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_Y7Q4wIpWEe6AtscSh_kd4w)/LabelWrapper">
+        <Card id="_CB7cYIsNEe6E6KmeUhRZew)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="debate::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_Y7Q4wIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
+                  <Typography id="_CB7cYIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
                     {t(
                       'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Icon',
                       { defaultValue: 'Close debate' },
@@ -123,14 +123,17 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                  spacing={2}
-                ></Grid>
+                <Card id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement">
+                  <CardContent>
+                    <Grid
+                      container
+                      direction="column"
+                      alignItems="stretch"
+                      justifyContent="flex-start"
+                      spacing={2}
+                    ></Grid>
+                  </CardContent>
+                </Card>
               </Grid>
             </Grid>
           </CardContent>

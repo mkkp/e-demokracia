@@ -13,7 +13,6 @@ import {
   ServiceServiceUserAttributes,
   ServiceSimpleVoteAttributes,
 } from '../model';
-
 import {
   ServiceConCreatedByMaskBuilder,
   ServiceConConsMaskBuilder,

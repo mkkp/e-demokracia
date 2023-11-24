@@ -190,18 +190,18 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZFoVtYpWEe6AtscSh_kd4w)',
-      label: t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CLj5gosNEe6E6KmeUhRZew)',
+      label: t('service.Pro.Pro_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
+      action: actions.consCreateProArgumentAction
         ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
+            await actions.consCreateProArgumentAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZFoVtYpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_CLj5gosNEe6E6KmeUhRZew)',
       label: t('service.Pro.Pro_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -212,7 +212,7 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_ZFoVtYpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CLj5gosNEe6E6KmeUhRZew)',
       label: t('service.Pro.Pro_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -223,13 +223,13 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_ZFoVtYpWEe6AtscSh_kd4w)',
-      label: t('service.Pro.Pro_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_CLj5gosNEe6E6KmeUhRZew)',
+      label: t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
+      action: actions.consVoteUpForConAction
         ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
+            await actions.consVoteUpForConAction!(rowData);
           }
         : undefined,
     },
@@ -237,21 +237,21 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZFl5copWEe6AtscSh_kd4w',
+      id: '_CLiEUIsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.Pro.Pro_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZFmggopWEe6AtscSh_kd4w',
+      id: '_CLiEVIsNEe6E6KmeUhRZew',
       attributeName: 'upVotes',
       label: t('service.Pro.Pro_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZFnHkopWEe6AtscSh_kd4w',
+      id: '_CLirYosNEe6E6KmeUhRZew',
       attributeName: 'downVotes',
       label: t('service.Pro.Pro_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,
@@ -420,7 +420,7 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -433,7 +433,7 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

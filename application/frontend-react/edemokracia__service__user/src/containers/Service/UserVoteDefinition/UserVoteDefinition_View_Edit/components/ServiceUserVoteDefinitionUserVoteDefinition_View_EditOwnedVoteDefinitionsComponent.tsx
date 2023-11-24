@@ -330,7 +330,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
     {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZNHdwIpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CS3bYosNEe6E6KmeUhRZew)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
         defaultValue: 'voteYesNo',
       }) as string,
@@ -343,7 +343,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
         : undefined,
     },
     {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZNHdwIpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CS3bYosNEe6E6KmeUhRZew)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
         defaultValue: 'voteYesNoAbstain',
       }) as string,
@@ -356,7 +356,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
         : undefined,
     },
     {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZNHdwIpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CS3bYosNEe6E6KmeUhRZew)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
         defaultValue: 'voteRating',
       }) as string,
@@ -369,7 +369,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
         : undefined,
     },
     {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZNHdwIpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CS3bYosNEe6E6KmeUhRZew)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteSelectAnswer', {
         defaultValue: 'voteSelectAnswer',
       }) as string,
@@ -385,7 +385,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZNBXIYpWEe6AtscSh_kd4w',
+      id: '_CSyi4osNEe6E6KmeUhRZew',
       attributeName: 'scope',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -393,14 +393,14 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNB-MYpWEe6AtscSh_kd4w',
+      id: '_CSzJ8osNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZNClQIpWEe6AtscSh_kd4w',
+      id: '_CSzxAIsNEe6E6KmeUhRZew',
       attributeName: 'voteType',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
         defaultValue: 'VoteType',
@@ -410,7 +410,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNDMUIpWEe6AtscSh_kd4w',
+      id: '_CSzxBIsNEe6E6KmeUhRZew',
       attributeName: 'countyRepresentation',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
@@ -419,7 +419,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNDzYIpWEe6AtscSh_kd4w',
+      id: '_CS0YEosNEe6E6KmeUhRZew',
       attributeName: 'cityRepresentation',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
@@ -428,7 +428,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNDzZIpWEe6AtscSh_kd4w',
+      id: '_CS0_IYsNEe6E6KmeUhRZew',
       attributeName: 'districtRepresentation',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
@@ -437,7 +437,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNEacopWEe6AtscSh_kd4w',
+      id: '_CS1mMIsNEe6E6KmeUhRZew',
       attributeName: 'numberOfVotes',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
@@ -446,7 +446,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNFBgopWEe6AtscSh_kd4w',
+      id: '_CS1mNIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -455,7 +455,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNFokopWEe6AtscSh_kd4w',
+      id: '_CS2NQosNEe6E6KmeUhRZew',
       attributeName: 'closeAt',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
         defaultValue: 'CloseAt',
@@ -464,7 +464,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     },
 
     {
-      id: '_ZNGPoYpWEe6AtscSh_kd4w',
+      id: '_CS20UIsNEe6E6KmeUhRZew',
       attributeName: 'status',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -666,7 +666,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -679,7 +679,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

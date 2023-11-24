@@ -14,11 +14,10 @@ export interface ServiceCity {
   name: string;
   county?: null | string;
   representation?: null | string;
-
   districts?: null | Array<ServiceDistrictStored>;
 }
-export type ServiceCityAttributes = 'name' | 'county' | 'representation';
 
+export type ServiceCityAttributes = 'name' | 'county' | 'representation';
 export type ServiceCityRelations = 'districts';
 
 export interface ServiceCityStored extends JudoStored<ServiceCity>, ServiceCity {}

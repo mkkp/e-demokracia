@@ -15,6 +15,7 @@ export interface CloseDebateInput {
   description: string;
   closeAt: Date;
 }
+
 export type CloseDebateInputAttributes = 'voteType' | 'title' | 'description' | 'closeAt';
 
 export interface CloseDebateInputStored extends JudoStored<CloseDebateInput>, CloseDebateInput {}

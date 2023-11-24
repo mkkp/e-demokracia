@@ -36,46 +36,35 @@ export interface UserServiceForUserVoteDefinitions {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceUserVoteDefinitionQueryCustomizer,
   ): Promise<ServiceUserVoteDefinitionStored>;
-
   listOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForOwnedVoteDefinitions(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForOwnedVoteDefinitions(): Promise<YesNoAbstainVoteInput>;
   voteRatingForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForOwnedVoteDefinitions(): Promise<RatingVoteInput>;
   voteSelectAnswerForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForOwnedVoteDefinitions(
+  getTemplateOnVoteSelectAnswerForOwnedVoteDefinitions(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -83,41 +72,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsGlobal(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsGlobal(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsGlobal(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsGlobal(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsGlobal(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsGlobal(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsGlobal(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsGlobal(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsGlobal(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -125,41 +104,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityCounties(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsInActivityCounties(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityCounties(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -167,41 +136,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityCities(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityCities(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityCities(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityCities(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsInActivityCities(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityCities(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -209,41 +168,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInActivityDistricts(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsInActivityDistricts(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsInActivityDistricts(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -251,41 +200,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentCounty(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsInResidentCounty(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentCounty(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -293,41 +232,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentCity(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentCity(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentCity(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentCity(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsInResidentCity(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentCity(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
@@ -335,41 +264,31 @@ export interface UserServiceForUserVoteDefinitions {
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-
   updateActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
   ): Promise<ServiceVoteDefinitionStored>;
-
   voteYesNoForActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoVoteInput>;
-
+  getTemplateOnVoteYesNoForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoVoteInput>;
   voteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoAbstainVoteInput>;
-
+  getTemplateOnVoteYesNoAbstainForActiveVoteDefinitionsInResidentDistrict(): Promise<YesNoAbstainVoteInput>;
   voteRatingForActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void>;
-
-  getTemplateForVoteRatingForActiveVoteDefinitionsInResidentDistrict(): Promise<RatingVoteInput>;
-
+  getTemplateOnVoteRatingForActiveVoteDefinitionsInResidentDistrict(): Promise<RatingVoteInput>;
   voteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void>;
-
-  getTemplateForVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(): Promise<SelectAnswerVoteSelection>;
-
-  getRangeForVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
+  getTemplateOnVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(): Promise<SelectAnswerVoteSelection>;
+  getRangeOnVoteSelectAnswerForActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;

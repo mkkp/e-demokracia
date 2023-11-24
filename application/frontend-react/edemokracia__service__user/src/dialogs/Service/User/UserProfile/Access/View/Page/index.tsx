@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -140,7 +139,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
 
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -185,7 +184,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
 
   const pageQueryCustomizer: ServiceUserProfileQueryCustomizer = {
     _mask:
-      '{firstName,lastName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+      '{lastName,firstName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   // Pandino Action overrides
@@ -244,30 +243,19 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceUserProfileResidentCityRelationViewPage(target!);
 
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
+  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileResidentCountyRelationViewPage(target!);
 
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const activityCountiesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
   };
   const activityCitiesOpenPageAction = async (target?: ServiceCityStored) => {
     await openServiceUserProfileActivityCitiesRelationViewPage(target!);
@@ -287,6 +275,31 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       filters: newFilters,
     };
   };
+  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const activityCountiesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
     await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
 
@@ -305,33 +318,19 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       filters: newFilters,
     };
   };
-  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileResidentCountyRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileResidentCityRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
 
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
     backAction,
     refreshAction,
-    residentDistrictOpenPageAction,
-    activityCountiesOpenPageAction,
-    activityCountiesFilterAction,
+    residentCityOpenPageAction,
+    residentCountyOpenPageAction,
     activityCitiesOpenPageAction,
     activityCitiesFilterAction,
+    activityCountiesOpenPageAction,
+    activityCountiesFilterAction,
+    residentDistrictOpenPageAction,
     activityDistrictsOpenPageAction,
     activityDistrictsFilterAction,
-    residentCountyOpenPageAction,
-    residentCityOpenPageAction,
     ...(customActions ?? {}),
   };
 

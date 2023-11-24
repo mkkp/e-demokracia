@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceUserIssues } from '../model/ServiceUserIssues';
-
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceUserIssuesQueryCustomizer extends QueryCustomizer<ServiceUserIssues> {

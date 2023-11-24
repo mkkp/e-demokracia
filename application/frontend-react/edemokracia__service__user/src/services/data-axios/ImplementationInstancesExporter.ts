@@ -8,7 +8,6 @@
 
 import { judoAxiosProvider } from './JudoAxiosProvider';
 import { AccessServiceImpl } from './AccessServiceImpl';
-
 import type { CloseDebateInputService } from '../data-service';
 import type { CloseDebateOutputVoteDefinitionReferenceService } from '../data-service';
 import type { CommentService } from '../data-service';
@@ -56,7 +55,6 @@ import type { ServiceYesNoAbstainVoteDefinitionService } from '../data-service';
 import type { ServiceYesNoAbstainVoteEntryService } from '../data-service';
 import type { ServiceYesNoVoteDefinitionService } from '../data-service';
 import type { ServiceYesNoVoteEntryService } from '../data-service';
-
 import type { UserServiceForActiveIssues } from '../data-service';
 import type { UserServiceForAdminCategories } from '../data-service';
 import type { UserServiceForAdminCounties } from '../data-service';
@@ -166,7 +164,6 @@ import type { ServiceYesNoVoteDefinitionServiceForIssue } from '../data-service'
 import type { ServiceYesNoVoteDefinitionServiceForUserVoteEntry } from '../data-service';
 import type { ServiceYesNoVoteDefinitionServiceForVoteEntries } from '../data-service';
 import type { ServiceYesNoVoteEntryServiceForOwner } from '../data-service';
-
 import { CloseDebateInputServiceImpl } from './CloseDebateInputServiceImpl';
 import { CloseDebateOutputVoteDefinitionReferenceServiceImpl } from './CloseDebateOutputVoteDefinitionReferenceServiceImpl';
 import { CommentServiceImpl } from './CommentServiceImpl';
@@ -214,7 +211,6 @@ import { ServiceYesNoAbstainVoteDefinitionServiceImpl } from './ServiceYesNoAbst
 import { ServiceYesNoAbstainVoteEntryServiceImpl } from './ServiceYesNoAbstainVoteEntryServiceImpl';
 import { ServiceYesNoVoteDefinitionServiceImpl } from './ServiceYesNoVoteDefinitionServiceImpl';
 import { ServiceYesNoVoteEntryServiceImpl } from './ServiceYesNoVoteEntryServiceImpl';
-
 import { UserServiceForActiveIssuesImpl } from './UserServiceForActiveIssuesImpl';
 import { UserServiceForAdminCategoriesImpl } from './UserServiceForAdminCategoriesImpl';
 import { UserServiceForAdminCountiesImpl } from './UserServiceForAdminCountiesImpl';
@@ -326,7 +322,6 @@ import { ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl } from './ServiceYe
 import { ServiceYesNoVoteEntryServiceForOwnerImpl } from './ServiceYesNoVoteEntryServiceForOwnerImpl';
 
 export const accessServiceImpl = new AccessServiceImpl(judoAxiosProvider);
-
 export const closeDebateInputServiceImpl: CloseDebateInputService = new CloseDebateInputServiceImpl(judoAxiosProvider);
 export const closeDebateOutputVoteDefinitionReferenceServiceImpl: CloseDebateOutputVoteDefinitionReferenceService =
   new CloseDebateOutputVoteDefinitionReferenceServiceImpl(judoAxiosProvider);
@@ -414,7 +409,6 @@ export const serviceYesNoVoteDefinitionServiceImpl: ServiceYesNoVoteDefinitionSe
 export const serviceYesNoVoteEntryServiceImpl: ServiceYesNoVoteEntryService = new ServiceYesNoVoteEntryServiceImpl(
   judoAxiosProvider,
 );
-
 export const userServiceForActiveIssuesImpl: UserServiceForActiveIssues = new UserServiceForActiveIssuesImpl(
   judoAxiosProvider,
 );

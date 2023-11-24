@@ -206,14 +206,14 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_YWJZgIpWEe6AtscSh_kd4w',
+      id: '_Bci3YIsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.IssueType.IssueType_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YWMc0IpWEe6AtscSh_kd4w',
+      id: '_Bcl6sIsNEe6E6KmeUhRZew',
       attributeName: 'voteType',
       label: t('service.IssueType.IssueType_Table.voteType', { defaultValue: 'Default vote type' }) as string,
       filterType: FilterType.enumeration,
@@ -221,7 +221,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
     },
 
     {
-      id: '_YWPgIIpWEe6AtscSh_kd4w',
+      id: '_Bco-AIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.IssueType.IssueType_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -500,7 +500,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -513,7 +513,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

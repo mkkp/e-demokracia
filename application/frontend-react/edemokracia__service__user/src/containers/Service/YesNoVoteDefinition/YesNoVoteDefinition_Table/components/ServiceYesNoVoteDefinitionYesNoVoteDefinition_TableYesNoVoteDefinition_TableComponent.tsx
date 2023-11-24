@@ -299,21 +299,21 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_YsDYEIpWEe6AtscSh_kd4w',
+      id: '_ByggUosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YsDYFIpWEe6AtscSh_kd4w',
+      id: '_ByhHYYsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_YsD_IopWEe6AtscSh_kd4w',
+      id: '_ByhHZYsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -322,7 +322,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     },
 
     {
-      id: '_YsEmMIpWEe6AtscSh_kd4w',
+      id: '_Byhuc4sNEe6E6KmeUhRZew',
       attributeName: 'status',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -330,7 +330,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     },
 
     {
-      id: '_YsEmNIpWEe6AtscSh_kd4w',
+      id: '_ByiVgYsNEe6E6KmeUhRZew',
       attributeName: 'closeAt',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
@@ -601,7 +601,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -614,7 +614,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

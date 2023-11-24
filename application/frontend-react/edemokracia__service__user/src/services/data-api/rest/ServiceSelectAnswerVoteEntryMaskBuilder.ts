@@ -12,7 +12,6 @@ import {
   ServiceSelectAnswerVoteSelectionAttributes,
   ServiceServiceUserAttributes,
 } from '../model';
-
 import {} from './ServiceSelectAnswerVoteSelectionMaskBuilder';
 
 export class ServiceSelectAnswerVoteEntryValueMaskBuilder extends RelationMaskBuilder {

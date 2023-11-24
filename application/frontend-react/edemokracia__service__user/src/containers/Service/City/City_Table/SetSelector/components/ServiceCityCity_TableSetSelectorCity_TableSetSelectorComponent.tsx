@@ -157,14 +157,14 @@ export function ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_XWBZQIpWEe6AtscSh_kd4w',
+      id: '_AgFPIIsNEe6E6KmeUhRZew',
       attributeName: 'county',
       label: t('service.City.City_Table.SetSelector.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_XWCAUYpWEe6AtscSh_kd4w',
+      id: '_AgHEUIsNEe6E6KmeUhRZew',
       attributeName: 'name',
       label: t('service.City.City_Table.SetSelector.name', { defaultValue: 'City name' }) as string,
       filterType: FilterType.string,
@@ -384,7 +384,7 @@ export function ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -397,7 +397,7 @@ export function ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

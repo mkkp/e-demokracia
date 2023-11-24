@@ -17,6 +17,7 @@ export interface ServiceServicePrincipalUser {
   phone?: null | string;
   created?: null | Date;
 }
+
 export type ServiceServicePrincipalUserAttributes =
   | 'userName'
   | 'email'

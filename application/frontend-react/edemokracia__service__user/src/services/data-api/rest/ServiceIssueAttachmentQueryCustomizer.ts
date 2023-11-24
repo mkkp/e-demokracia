@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceIssueAttachment } from '../model/ServiceIssueAttachment';
-
 import { FilterByAttachmentType } from './FilterByAttachmentType';
 import { FilterBytypesURL } from './FilterBytypesURL';
 

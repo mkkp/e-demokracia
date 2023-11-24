@@ -26,6 +26,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentActionDefinitions {
+  ownerOpenSetSelectorAction?: () => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -91,6 +92,13 @@ export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwner
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.ownerOpenSetSelectorAction
+          ? async () => {
+              await actions.ownerOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

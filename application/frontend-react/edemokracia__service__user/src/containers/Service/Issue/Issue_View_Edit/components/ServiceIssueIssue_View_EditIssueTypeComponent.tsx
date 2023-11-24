@@ -103,6 +103,6 @@ export function ServiceIssueIssue_View_EditIssueTypeComponent(
           ? async () => actions.issueTypeUnsetAction!(ownerData.issueType!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

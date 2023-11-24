@@ -26,6 +26,7 @@ import type {
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions {
+  ownerOpenSetSelectorAction?: () => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -91,6 +92,13 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserC
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.ownerOpenSetSelectorAction
+          ? async () => {
+              await actions.ownerOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

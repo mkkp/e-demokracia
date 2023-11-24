@@ -55,7 +55,6 @@ export interface ServiceIssue {
   isIssueNotDeletable?: null | boolean;
   isIssueInVoting?: null | boolean;
   isIssueNotInVoting?: null | boolean;
-
   attachments?: null | Array<ServiceIssueAttachmentStored>;
   owner?: null | ServiceServiceUserStored;
   categories?: null | Array<ServiceIssueCategoryStored>;
@@ -68,6 +67,7 @@ export interface ServiceIssue {
   cons?: null | Array<ServiceConStored>;
   pros?: null | Array<ServiceProStored>;
 }
+
 export type ServiceIssueAttributes =
   | 'created'
   | 'title'
@@ -92,7 +92,6 @@ export type ServiceIssueAttributes =
   | 'isIssueNotDeletable'
   | 'isIssueInVoting'
   | 'isIssueNotInVoting';
-
 export type ServiceIssueRelations =
   | 'attachments'
   | 'owner'

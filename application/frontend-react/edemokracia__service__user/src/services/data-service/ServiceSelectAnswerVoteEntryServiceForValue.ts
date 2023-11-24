@@ -22,6 +22,5 @@ export interface ServiceSelectAnswerVoteEntryServiceForValue {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-
   getTemplate(): Promise<ServiceSelectAnswerVoteSelection>;
 }

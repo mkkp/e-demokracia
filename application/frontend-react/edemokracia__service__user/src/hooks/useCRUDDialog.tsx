@@ -17,7 +17,7 @@ import ListItemText from '@mui/material/ListItemText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import type { LinearProgressProps } from '@mui/material';
-import { useSnackbar } from 'notistack';
+import { useSnacks } from '~/hooks';
 import { useDialog } from '~/components/dialog';
 import { MdiIcon } from '~/components';
 import { toastConfig } from '~/config';
@@ -91,7 +91,7 @@ export type CRUDDialogProps = {
 
 export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSuccess, faultPrefix }: CRUDDialogProps) {
   const MAX_PROGRESS = 100;
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack, showWarningSnack } = useSnacks();
   const { t } = useTranslation();
   const runCount = useRef<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
@@ -190,25 +190,17 @@ export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSucces
     if (runCount.current > 0 && !inProgress) {
       if (queue.every((i) => i.status === 'success')) {
         setProgress(MAX_PROGRESS); // in case round did not end up with full value :)
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.dialogs.crud-bulk.toast.success', { defaultValue: 'Operation(s) executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
         if (autoCloseOnSuccess) {
           close(runCount.current > 0);
         }
       } else {
-        enqueueSnackbar(
+        showWarningSnack(
           t('judo.dialogs.crud-bulk.toast.warn', {
             defaultValue: 'Not all operations executed successfully!',
           }) as string,
-          {
-            variant: 'warning',
-            ...toastConfig.warning,
-          },
         );
       }
     }

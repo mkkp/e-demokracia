@@ -227,407 +227,395 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
               ]}
             >
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable"
-                      container
-                      direction="column"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                    >
-                      <ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent
-                        uniqueId={'User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable'}
-                        actions={actions}
-                        ownerData={data}
-                        editMode={editMode}
-                        isFormUpdateable={isFormUpdateable}
-                        validationError={validation.get('ownedIssues')}
-                        refreshCounter={refreshCounter}
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="_Y7Hu0IpWEe6AtscSh_kd4w)/LabelWrapper"
-                      container
-                      direction="column"
-                      alignItems="center"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <Typography id="_Y7Hu0IpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
-                            {t('service.UserIssues.UserIssues_View_Edit.activeGlobal.Label', {
-                              defaultValue: 'Global',
-                            })}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
+                <Card id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="User/(esm/_ZNCGQFrXEe6gN-oVBDDIOQ)/GroupVisualElement"
+                          id="User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable"
                           container
-                          direction="row"
+                          direction="column"
                           alignItems="stretch"
                           justifyContent="flex-start"
+                        >
+                          <ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent
+                            uniqueId={'User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable'}
+                            actions={actions}
+                            ownerData={data}
+                            editMode={editMode}
+                            isFormUpdateable={isFormUpdateable}
+                            validationError={validation.get('ownedIssues')}
+                            refreshCounter={refreshCounter}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Card id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="_CB180osNEe6E6KmeUhRZew)/LabelWrapper"
+                          container
+                          direction="column"
+                          alignItems="center"
+                          justifyContent="flex-start"
                           spacing={2}
                         >
                           <Grid item xs={12} sm={12}>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <Typography id="_CB180osNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
+                                {t('service.UserIssues.UserIssues_View_Edit.activeGlobal.Label', {
+                                  defaultValue: 'Global',
+                                })}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_ZNCGQFrXEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
+                              direction="row"
                               alignItems="stretch"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
-                                uniqueId={
-                                  'User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesGlobal')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
+                                    uniqueId={
+                                      'User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesGlobal')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
                     </Grid>
-                  </Grid>
-                </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid container item xs={12} sm={12}>
-                    <ModeledTabs
-                      id="User/(esm/_W_R1QFrXEe6gN-oVBDDIOQ)/TabBarVisualElement"
-                      ownerData={data}
-                      validation={validation}
-                      orientation='vertical'
-                      childTabs={[
-                        {
-                          id: 'User/(esm/_4JbF8FrXEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInCounty',
-                          label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInCounty', {
-                            defaultValue: 'County',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'castle',
-                          nestedDataKeys: ['activeIssuesInActivityCounties'],
-                        },
-                        {
-                          id: 'User/(esm/_u6ZqQFraEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInCity',
-                          label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInCity', {
-                            defaultValue: 'City',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'city',
-                          nestedDataKeys: ['activeIssuesInActivityCities'],
-                        },
-                        {
-                          id: 'User/(esm/_od5rcFrbEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInDistrict',
-                          label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInDistrict', {
-                            defaultValue: 'District',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'home-city',
-                          nestedDataKeys: ['activeIssuesInActivityDistricts'],
-                        },
-                      ]}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_4JbF8FrXEe6gN-oVBDDIOQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
+                <Card id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid container item xs={12} sm={12}>
+                        <ModeledTabs
+                          id="User/(esm/_W_R1QFrXEe6gN-oVBDDIOQ)/TabBarVisualElement"
+                          ownerData={data}
+                          validation={validation}
+                          orientation='vertical'
+                          childTabs={[
+                            {
+                              id: 'User/(esm/_4JbF8FrXEe6gN-oVBDDIOQ)/GroupTab',
+                              name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInCounty',
+                              label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInCounty', {
+                                defaultValue: 'County',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'castle',
+                              nestedDataKeys: ['activeIssuesInActivityCounties'],
+                            },
+                            {
+                              id: 'User/(esm/_u6ZqQFraEe6gN-oVBDDIOQ)/GroupTab',
+                              name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInCity',
+                              label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInCity', {
+                                defaultValue: 'City',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'city',
+                              nestedDataKeys: ['activeIssuesInActivityCities'],
+                            },
+                            {
+                              id: 'User/(esm/_od5rcFrbEe6gN-oVBDDIOQ)/GroupTab',
+                              name: 'service.UserIssues.UserIssues_View_Edit.activeByActivityInDistrict',
+                              label: t('service.UserIssues.UserIssues_View_Edit.activeByActivityInDistrict', {
+                                defaultValue: 'District',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'home-city',
+                              nestedDataKeys: ['activeIssuesInActivityDistricts'],
+                            },
+                          ]}
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_4JbF8FrXEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponent
-                                uniqueId={
-                                  'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesInActivityCounties')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponent
+                                    uniqueId={
+                                      'User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesInActivityCounties')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_u6ZqQFraEe6gN-oVBDDIOQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_zR1kkFraEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_u6ZqQFraEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitiesComponent
-                                uniqueId={
-                                  'User/(esm/_zR1kkFraEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesInActivityCities')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_zR1kkFraEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitiesComponent
+                                    uniqueId={
+                                      'User/(esm/_zR1kkFraEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesInActivityCities')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_od5rcFrbEe6gN-oVBDDIOQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_tRA1IFrbEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_od5rcFrbEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityDistrictsComponent
-                                uniqueId={
-                                  'User/(esm/_tRA1IFrbEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesInActivityDistricts')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_tRA1IFrbEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityDistrictsComponent
+                                    uniqueId={
+                                      'User/(esm/_tRA1IFrbEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesInActivityDistricts')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
+                        </ModeledTabs>
                       </Grid>
-                    </ModeledTabs>
-                  </Grid>
-                </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid container item xs={12} sm={12}>
-                    <ModeledTabs
-                      id="User/(esm/_l86f8FrcEe6gN-oVBDDIOQ)/TabBarVisualElement"
-                      ownerData={data}
-                      validation={validation}
-                      orientation='vertical'
-                      childTabs={[
-                        {
-                          id: 'User/(esm/_BZzvYFrcEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInCounty',
-                          label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInCounty', {
-                            defaultValue: 'County',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'castle',
-                          nestedDataKeys: ['activeIssuesInResidentCounty'],
-                        },
-                        {
-                          id: 'User/(esm/_BZzIUFrcEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInCity',
-                          label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInCity', {
-                            defaultValue: 'City',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'city',
-                          nestedDataKeys: ['activeIssuesInResidentCity'],
-                        },
-                        {
-                          id: 'User/(esm/_BZzIV1rcEe6gN-oVBDDIOQ)/GroupTab',
-                          name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInDistrict',
-                          label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInDistrict', {
-                            defaultValue: 'District',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'home-city',
-                          nestedDataKeys: ['activeIssuesInResidentDistrict'],
-                        },
-                      ]}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_BZzvYFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
+                <Card id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid container item xs={12} sm={12}>
+                        <ModeledTabs
+                          id="User/(esm/_l86f8FrcEe6gN-oVBDDIOQ)/TabBarVisualElement"
+                          ownerData={data}
+                          validation={validation}
+                          orientation='vertical'
+                          childTabs={[
+                            {
+                              id: 'User/(esm/_BZzvYFrcEe6gN-oVBDDIOQ)/GroupTab',
+                              name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInCounty',
+                              label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInCounty', {
+                                defaultValue: 'County',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'castle',
+                              nestedDataKeys: ['activeIssuesInResidentCounty'],
+                            },
+                            {
+                              id: 'User/(esm/_BZzIUFrcEe6gN-oVBDDIOQ)/GroupTab',
+                              name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInCity',
+                              label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInCity', {
+                                defaultValue: 'City',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'city',
+                              nestedDataKeys: ['activeIssuesInResidentCity'],
+                            },
+                            {
+                              id: 'User/(esm/_BZzIV1rcEe6gN-oVBDDIOQ)/GroupTab',
+                              name: 'service.UserIssues.UserIssues_View_Edit.activeByResidentInDistrict',
+                              label: t('service.UserIssues.UserIssues_View_Edit.activeByResidentInDistrict', {
+                                defaultValue: 'District',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'home-city',
+                              nestedDataKeys: ['activeIssuesInResidentDistrict'],
+                            },
+                          ]}
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_BZzvYFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent
-                                uniqueId={
-                                  'User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesInResidentCounty')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent
+                                    uniqueId={
+                                      'User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesInResidentCounty')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_BZzIUFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_BZzIUFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponent
-                                uniqueId={
-                                  'User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesInResidentCity')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponent
+                                    uniqueId={
+                                      'User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesInResidentCity')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_BZzIV1rcEe6gN-oVBDDIOQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_BZzIWFrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_BZzIV1rcEe6gN-oVBDDIOQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComponent
-                                uniqueId={
-                                  'User/(esm/_BZzIWFrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeIssuesInResidentDistrict')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_BZzIWFrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComponent
+                                    uniqueId={
+                                      'User/(esm/_BZzIWFrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeIssuesInResidentDistrict')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
+                        </ModeledTabs>
                       </Grid>
-                    </ModeledTabs>
-                  </Grid>
-                </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
             </ModeledTabs>
           </Grid>

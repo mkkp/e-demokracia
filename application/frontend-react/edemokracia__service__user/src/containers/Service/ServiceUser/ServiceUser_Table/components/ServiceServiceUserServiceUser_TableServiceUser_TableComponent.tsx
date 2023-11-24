@@ -264,49 +264,49 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_YPMc8IpWEe6AtscSh_kd4w',
+      id: '_BVvEwIsNEe6E6KmeUhRZew',
       attributeName: 'userName',
       label: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YPO5MIpWEe6AtscSh_kd4w',
+      id: '_BVxhAIsNEe6E6KmeUhRZew',
       attributeName: 'isAdmin',
       label: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
       filterType: FilterType.boolean,
     },
 
     {
-      id: '_YPRVcIpWEe6AtscSh_kd4w',
+      id: '_BVz9QIsNEe6E6KmeUhRZew',
       attributeName: 'firstName',
       label: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YPUYwIpWEe6AtscSh_kd4w',
+      id: '_BV3AkIsNEe6E6KmeUhRZew',
       attributeName: 'lastName',
       label: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YPW1AIpWEe6AtscSh_kd4w',
+      id: '_BV5c0IsNEe6E6KmeUhRZew',
       attributeName: 'phone',
       label: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YPZRQIpWEe6AtscSh_kd4w',
+      id: '_BV8gIIsNEe6E6KmeUhRZew',
       attributeName: 'email',
       label: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_YPbtgIpWEe6AtscSh_kd4w',
+      id: '_BV-8YIsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
@@ -572,7 +572,7 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -585,7 +585,7 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

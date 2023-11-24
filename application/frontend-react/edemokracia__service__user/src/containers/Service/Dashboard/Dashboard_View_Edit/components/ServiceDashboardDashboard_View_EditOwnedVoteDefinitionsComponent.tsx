@@ -334,7 +334,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
         : undefined,
     },
     {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZB8vlYpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CIAPNosNEe6E6KmeUhRZew)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteYesNo', { defaultValue: 'voteYesNo' }) as string,
       icon: <MdiIcon path="vote" />,
       disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
@@ -345,7 +345,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
         : undefined,
     },
     {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZB8vlYpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CIAPNosNEe6E6KmeUhRZew)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteYesNoAbstain', {
         defaultValue: 'voteYesNoAbstain',
       }) as string,
@@ -358,7 +358,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
         : undefined,
     },
     {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZB8vlYpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CIAPNosNEe6E6KmeUhRZew)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteRating', { defaultValue: 'voteRating' }) as string,
       icon: <MdiIcon path="vote" />,
       disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
@@ -369,7 +369,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
         : undefined,
     },
     {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_ZB8vlYpWEe6AtscSh_kd4w)',
+      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_CIAPNosNEe6E6KmeUhRZew)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteSelectAnswer', {
         defaultValue: 'voteSelectAnswer',
       }) as string,
@@ -385,7 +385,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZB2o8YpWEe6AtscSh_kd4w',
+      id: '_CH6voosNEe6E6KmeUhRZew',
       attributeName: 'scope',
       label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -393,7 +393,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
     },
 
     {
-      id: '_ZB3QAYpWEe6AtscSh_kd4w',
+      id: '_CH7WsosNEe6E6KmeUhRZew',
       attributeName: 'countyRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
@@ -402,7 +402,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
     },
 
     {
-      id: '_ZB33EYpWEe6AtscSh_kd4w',
+      id: '_CH79wosNEe6E6KmeUhRZew',
       attributeName: 'cityRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
@@ -411,7 +411,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
     },
 
     {
-      id: '_ZB4eIYpWEe6AtscSh_kd4w',
+      id: '_CH8k0YsNEe6E6KmeUhRZew',
       attributeName: 'districtRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
@@ -420,14 +420,14 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
     },
 
     {
-      id: '_ZB5FMYpWEe6AtscSh_kd4w',
+      id: '_CH9L4YsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZB5sQYpWEe6AtscSh_kd4w',
+      id: '_CH9y8IsNEe6E6KmeUhRZew',
       attributeName: 'voteType',
       label: t('service.Dashboard.Dashboard_View_Edit.voteType', { defaultValue: 'VoteType' }) as string,
       filterType: FilterType.enumeration,
@@ -435,28 +435,28 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
     },
 
     {
-      id: '_ZB6TUIpWEe6AtscSh_kd4w',
+      id: '_CH9y9IsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZB66YIpWEe6AtscSh_kd4w',
+      id: '_CH-aA4sNEe6E6KmeUhRZew',
       attributeName: 'closeAt',
       label: t('service.Dashboard.Dashboard_View_Edit.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZB7hcIpWEe6AtscSh_kd4w',
+      id: '_CH_BEosNEe6E6KmeUhRZew',
       attributeName: 'numberOfVotes',
       label: t('service.Dashboard.Dashboard_View_Edit.numberOfVotes', { defaultValue: 'NumberOfVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZB7hdIpWEe6AtscSh_kd4w',
+      id: '_CH_oIYsNEe6E6KmeUhRZew',
       attributeName: 'status',
       label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -684,7 +684,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -697,7 +697,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

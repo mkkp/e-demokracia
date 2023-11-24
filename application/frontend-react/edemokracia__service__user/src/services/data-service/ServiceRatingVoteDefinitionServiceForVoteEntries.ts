@@ -25,12 +25,10 @@ export interface ServiceRatingVoteDefinitionServiceForVoteEntries {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceRatingVoteEntryStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
   ): Promise<ServiceRatingVoteEntryStored>;
-
   getOwner(
     owner: JudoIdentifiable<ServiceRatingVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

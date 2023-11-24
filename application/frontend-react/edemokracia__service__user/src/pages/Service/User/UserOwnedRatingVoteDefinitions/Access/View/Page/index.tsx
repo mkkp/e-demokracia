@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -97,7 +96,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
 
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -147,7 +146,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
 
   const pageQueryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,maxRateValue,created,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
+      '{userHasVoteEntry,created,maxRateValue,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
   };
 
   // Pandino Action overrides
@@ -216,10 +215,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       const res = await serviceRatingVoteDefinitionServiceImpl.update(payloadDiff.current);
 
       if (res) {
-        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceRatingVoteDefinition, string>());
         await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
@@ -245,12 +241,8 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       if (customActions?.postTakeBackVoteForRatingVoteDefinitionAction) {
         await customActions.postTakeBackVoteForRatingVoteDefinitionAction();
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         if (!editMode) {
@@ -261,6 +253,13 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const userVoteEntryOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
+    await openServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const issueOpenPageAction = async (target?: ServiceIssueStored) => {
@@ -274,13 +273,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
         _mask: '{}',
       },
     );
-  };
-  const userVoteEntryOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
-    await openServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
   };
   const voteEntriesOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
     await openServiceRatingVoteDefinitionVoteEntriesRelationViewPage(target!);
@@ -316,9 +308,9 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
     updateAction,
     voteAction,
     takeBackVoteForRatingVoteDefinitionAction,
+    userVoteEntryOpenPageAction,
     issueOpenPageAction,
     issuePreFetchAction,
-    userVoteEntryOpenPageAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,

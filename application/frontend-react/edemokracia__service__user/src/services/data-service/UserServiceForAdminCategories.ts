@@ -24,54 +24,40 @@ export interface UserServiceForAdminCategories {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
   ): Promise<Array<ServiceIssueCategoryStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
   ): Promise<ServiceIssueCategoryStored>;
-
   getTemplate(): Promise<ServiceIssueCategory>;
-
   create(target: ServiceIssueCategory): Promise<ServiceIssueCategoryStored>;
-
   delete(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
-
   update(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
-
   listSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
   ): Promise<Array<ServiceIssueCategoryStored>>;
-
   getTemplateForSubcategories(): Promise<ServiceIssueCategory>;
-
   createSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
   ): Promise<ServiceIssueCategoryStored>;
-
   deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
-
   updateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
   ): Promise<ServiceIssueCategoryStored>;
-
   getOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-
   getRangeForOwner(
     owner: JudoIdentifiable<ServiceIssueCategory> | ServiceIssueCategory,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
-
   setOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     selected: JudoIdentifiable<ServiceServiceUser>,
   ): Promise<void>;
-
   unsetOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: JudoIdentifiable<ServiceServiceUser>,

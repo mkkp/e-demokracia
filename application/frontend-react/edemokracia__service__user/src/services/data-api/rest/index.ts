@@ -53,7 +53,6 @@ export * from './ServiceYesNoAbstainVoteDefinitionQueryCustomizer';
 export * from './ServiceYesNoAbstainVoteEntryQueryCustomizer';
 export * from './ServiceYesNoVoteDefinitionQueryCustomizer';
 export * from './ServiceYesNoVoteEntryQueryCustomizer';
-
 export * from './CloseDebateInputMaskBuilder';
 export * from './CloseDebateOutputVoteDefinitionReferenceMaskBuilder';
 export * from './CommentMaskBuilder';
@@ -101,7 +100,6 @@ export * from './ServiceYesNoAbstainVoteDefinitionMaskBuilder';
 export * from './ServiceYesNoAbstainVoteEntryMaskBuilder';
 export * from './ServiceYesNoVoteDefinitionMaskBuilder';
 export * from './ServiceYesNoVoteEntryMaskBuilder';
-
 export * from './FilterByAttachmentType';
 export * from './FilterByIssueScope';
 export * from './FilterByIssueStatus';

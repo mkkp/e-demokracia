@@ -307,7 +307,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_Y0UjQopWEe6AtscSh_kd4w',
+      id: '_B62kAosNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
         defaultValue: 'Title',
@@ -316,7 +316,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_Y0VKUopWEe6AtscSh_kd4w',
+      id: '_B63LEosNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -325,7 +325,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_Y0VxYopWEe6AtscSh_kd4w',
+      id: '_B63yIIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -334,7 +334,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_Y0WYcIpWEe6AtscSh_kd4w',
+      id: '_B63yJIsNEe6E6KmeUhRZew',
       attributeName: 'status',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
         defaultValue: 'Status',
@@ -344,7 +344,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_Y0WYdIpWEe6AtscSh_kd4w',
+      id: '_B64ZMosNEe6E6KmeUhRZew',
       attributeName: 'closeAt',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',
@@ -630,7 +630,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -643,7 +643,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

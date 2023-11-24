@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceIssueCategory } from '../model/ServiceIssueCategory';
-
 import { FilterBytypesString } from './FilterBytypesString';
 import { FilterBytypesText } from './FilterBytypesText';
 

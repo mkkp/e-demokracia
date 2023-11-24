@@ -203,379 +203,367 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
               ]}
             >
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
-                      container
-                      direction="column"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                    >
-                      <ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent
-                        uniqueId={'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'}
-                        actions={actions}
-                        ownerData={data}
-                        editMode={editMode}
-                        isFormUpdateable={isFormUpdateable}
-                        validationError={validation.get('ownedVoteDefinitions')}
-                        refreshCounter={refreshCounter}
-                      />
+                <Card id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                          container
+                          direction="column"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                        >
+                          <ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent
+                            uniqueId={'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'}
+                            actions={actions}
+                            ownerData={data}
+                            editMode={editMode}
+                            isFormUpdateable={isFormUpdateable}
+                            validationError={validation.get('ownedVoteDefinitions')}
+                            refreshCounter={refreshCounter}
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
-                      container
-                      direction="column"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                    >
-                      <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponent
-                        uniqueId={'User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'}
-                        actions={actions}
-                        ownerData={data}
-                        editMode={editMode}
-                        isFormUpdateable={isFormUpdateable}
-                        validationError={validation.get('activeVoteDefinitionsGlobal')}
-                        refreshCounter={refreshCounter}
-                      />
+                <Card id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                          container
+                          direction="column"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                        >
+                          <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponent
+                            uniqueId={'User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'}
+                            actions={actions}
+                            ownerData={data}
+                            editMode={editMode}
+                            isFormUpdateable={isFormUpdateable}
+                            validationError={validation.get('activeVoteDefinitionsGlobal')}
+                            refreshCounter={refreshCounter}
+                          />
+                        </Grid>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid container item xs={12} sm={12}>
-                    <ModeledTabs
-                      id="User/(esm/_75CCAF5KEe6vsex_cZNQbQ)/TabBarVisualElement"
-                      ownerData={data}
-                      validation={validation}
-                      orientation='vertical'
-                      childTabs={[
-                        {
-                          id: 'User/(esm/_-qljoF5KEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
-                          label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
-                            { defaultValue: 'County' },
-                          ) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'castle',
-                          nestedDataKeys: ['activeVoteDefinitionsInActivityCounties'],
-                        },
-                        {
-                          id: 'User/(esm/__jKxcF5KEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCityGroup',
-                          label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCityGroup',
-                            { defaultValue: 'City' },
-                          ) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'city',
-                          nestedDataKeys: ['activeVoteDefinitionsInActivityCities'],
-                        },
-                        {
-                          id: 'User/(esm/_APhhIF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
-                          label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
-                            { defaultValue: 'District' },
-                          ) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'home-city',
-                          nestedDataKeys: ['activeVoteDefinitionsInActivityDistricts'],
-                        },
-                      ]}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_-qljoF5KEe6vsex_cZNQbQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
+                <Card id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid container item xs={12} sm={12}>
+                        <ModeledTabs
+                          id="User/(esm/_75CCAF5KEe6vsex_cZNQbQ)/TabBarVisualElement"
+                          ownerData={data}
+                          validation={validation}
+                          orientation='vertical'
+                          childTabs={[
+                            {
+                              id: 'User/(esm/_-qljoF5KEe6vsex_cZNQbQ)/GroupTab',
+                              name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
+                              label: t(
+                                'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCountiesGroup',
+                                { defaultValue: 'County' },
+                              ) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'castle',
+                              nestedDataKeys: ['activeVoteDefinitionsInActivityCounties'],
+                            },
+                            {
+                              id: 'User/(esm/__jKxcF5KEe6vsex_cZNQbQ)/GroupTab',
+                              name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCityGroup',
+                              label: t(
+                                'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityCityGroup',
+                                { defaultValue: 'City' },
+                              ) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'city',
+                              nestedDataKeys: ['activeVoteDefinitionsInActivityCities'],
+                            },
+                            {
+                              id: 'User/(esm/_APhhIF5LEe6vsex_cZNQbQ)/GroupTab',
+                              name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
+                              label: t(
+                                'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsInActivityDistrictGroup',
+                                { defaultValue: 'District' },
+                              ) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'home-city',
+                              nestedDataKeys: ['activeVoteDefinitionsInActivityDistricts'],
+                            },
+                          ]}
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_-qljoF5KEe6vsex_cZNQbQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCountiesComponent
-                                uniqueId={
-                                  'User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeVoteDefinitionsInActivityCounties')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCountiesComponent
+                                    uniqueId={
+                                      'User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeVoteDefinitionsInActivityCounties')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/__jKxcF5KEe6vsex_cZNQbQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_59d3wF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/__jKxcF5KEe6vsex_cZNQbQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCitiesComponent
-                                uniqueId={
-                                  'User/(esm/_59d3wF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeVoteDefinitionsInActivityCities')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_59d3wF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCitiesComponent
+                                    uniqueId={
+                                      'User/(esm/_59d3wF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeVoteDefinitionsInActivityCities')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_APhhIF5LEe6vsex_cZNQbQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_APhhIF5LEe6vsex_cZNQbQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityDistrictsComponent
-                                uniqueId={
-                                  'User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeVoteDefinitionsInActivityDistricts')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityDistrictsComponent
+                                    uniqueId={
+                                      'User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeVoteDefinitionsInActivityDistricts')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
+                        </ModeledTabs>
                       </Grid>
-                    </ModeledTabs>
-                  </Grid>
-                </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="flex-start"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid container item xs={12} sm={12}>
-                    <ModeledTabs
-                      id="User/(esm/_9cDT8F5KEe6vsex_cZNQbQ)/TabBarVisualElement"
-                      ownerData={data}
-                      validation={validation}
-                      orientation='vertical'
-                      childTabs={[
-                        {
-                          id: 'User/(esm/_BgLQsF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCountyGroup',
-                          label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCountyGroup',
-                            { defaultValue: 'County' },
-                          ) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'castle',
-                          nestedDataKeys: ['activeVoteDefinitionsInResidentCounty'],
-                        },
-                        {
-                          id: 'User/(esm/_CEZ_IF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCityGroup',
-                          label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCityGroup',
-                            { defaultValue: 'City' },
-                          ) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'city',
-                          nestedDataKeys: ['activeVoteDefinitionsInResidentCity'],
-                        },
-                        {
-                          id: 'User/(esm/_Cwu5oF5LEe6vsex_cZNQbQ)/GroupTab',
-                          name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentDistrictGroup',
-                          label: t(
-                            'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentDistrictGroup',
-                            { defaultValue: 'District' },
-                          ) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'home-city',
-                          nestedDataKeys: ['activeVoteDefinitionsInResidentDistrict'],
-                        },
-                      ]}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_BgLQsF5LEe6vsex_cZNQbQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
+                <Card id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid container item xs={12} sm={12}>
+                        <ModeledTabs
+                          id="User/(esm/_9cDT8F5KEe6vsex_cZNQbQ)/TabBarVisualElement"
+                          ownerData={data}
+                          validation={validation}
+                          orientation='vertical'
+                          childTabs={[
+                            {
+                              id: 'User/(esm/_BgLQsF5LEe6vsex_cZNQbQ)/GroupTab',
+                              name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCountyGroup',
+                              label: t(
+                                'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCountyGroup',
+                                { defaultValue: 'County' },
+                              ) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'castle',
+                              nestedDataKeys: ['activeVoteDefinitionsInResidentCounty'],
+                            },
+                            {
+                              id: 'User/(esm/_CEZ_IF5LEe6vsex_cZNQbQ)/GroupTab',
+                              name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCityGroup',
+                              label: t(
+                                'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentCityGroup',
+                                { defaultValue: 'City' },
+                              ) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'city',
+                              nestedDataKeys: ['activeVoteDefinitionsInResidentCity'],
+                            },
+                            {
+                              id: 'User/(esm/_Cwu5oF5LEe6vsex_cZNQbQ)/GroupTab',
+                              name: 'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentDistrictGroup',
+                              label: t(
+                                'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveDebatesInResidentDistrictGroup',
+                                { defaultValue: 'District' },
+                              ) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'home-city',
+                              nestedDataKeys: ['activeVoteDefinitionsInResidentDistrict'],
+                            },
+                          ]}
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_BgLQsF5LEe6vsex_cZNQbQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCountyComponent
-                                uniqueId={
-                                  'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeVoteDefinitionsInResidentCounty')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCountyComponent
+                                    uniqueId={
+                                      'User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeVoteDefinitionsInResidentCounty')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_CEZ_IF5LEe6vsex_cZNQbQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_yjuNkF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_CEZ_IF5LEe6vsex_cZNQbQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCityComponent
-                                uniqueId={
-                                  'User/(esm/_yjuNkF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeVoteDefinitionsInResidentCity')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_yjuNkF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCityComponent
+                                    uniqueId={
+                                      'User/(esm/_yjuNkF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeVoteDefinitionsInResidentCity')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_Cwu5oF5LEe6vsex_cZNQbQ)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                              id="User/(esm/_Cwu5oF5LEe6vsex_cZNQbQ)/GroupVisualElement"
                               container
-                              direction="column"
-                              alignItems="stretch"
+                              direction="row"
+                              alignItems="flex-start"
                               justifyContent="flex-start"
+                              spacing={2}
                             >
-                              <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentDistrictComponent
-                                uniqueId={
-                                  'User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activeVoteDefinitionsInResidentDistrict')}
-                                refreshCounter={refreshCounter}
-                              />
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentDistrictComponent
+                                    uniqueId={
+                                      'User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activeVoteDefinitionsInResidentDistrict')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
+                        </ModeledTabs>
                       </Grid>
-                    </ModeledTabs>
-                  </Grid>
-                </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
             </ModeledTabs>
           </Grid>

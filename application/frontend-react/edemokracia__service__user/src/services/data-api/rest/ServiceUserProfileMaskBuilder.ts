@@ -13,7 +13,6 @@ import {
   ServiceDistrictAttributes,
   ServiceUserProfileAttributes,
 } from '../model';
-
 import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';

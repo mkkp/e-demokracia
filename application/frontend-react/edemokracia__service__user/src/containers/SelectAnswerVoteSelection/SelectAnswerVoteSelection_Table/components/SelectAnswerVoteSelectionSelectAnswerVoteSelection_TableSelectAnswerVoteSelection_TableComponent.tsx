@@ -205,14 +205,14 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZVgkwIpWEe6AtscSh_kd4w',
+      id: '_CbLC0IsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZVmrYIpWEe6AtscSh_kd4w',
+      id: '_CbRJcIsNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
         defaultValue: 'Description',
@@ -505,7 +505,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -518,7 +518,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

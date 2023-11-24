@@ -22,31 +22,24 @@ export interface ServiceServiceUserServiceForActivityDistricts {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getRangeForActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   getTemplate(): Promise<ServiceDistrict>;
-
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
-
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
   ): Promise<void>;
-
   addActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
   ): Promise<void>;
-
   removeActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,

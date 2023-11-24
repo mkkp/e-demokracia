@@ -8,7 +8,6 @@
 
 import type { QueryCustomizer } from '@judo/data-api-common';
 import { ServiceRatingVoteDefinition } from '../model/ServiceRatingVoteDefinition';
-
 import { FilterByVoteStatus } from './FilterByVoteStatus';
 import { FilterBytypesBoolean } from './FilterBytypesBoolean';
 import { FilterBytypesInteger } from './FilterBytypesInteger';

@@ -25,12 +25,10 @@ export interface ServiceYesNoAbstainVoteDefinitionServiceForVoteEntries {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceYesNoAbstainVoteEntryStored>>;
-
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ): Promise<ServiceYesNoAbstainVoteEntryStored>;
-
   getOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

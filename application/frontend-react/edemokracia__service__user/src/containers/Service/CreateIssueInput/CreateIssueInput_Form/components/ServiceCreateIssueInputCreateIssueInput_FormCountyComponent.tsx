@@ -26,6 +26,7 @@ import type {
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActionDefinitions {
+  countyOpenSetSelectorAction?: () => Promise<void>;
   countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
@@ -81,6 +82,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.countyOpenSetSelectorAction
+          ? async () => {
+              await actions.countyOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

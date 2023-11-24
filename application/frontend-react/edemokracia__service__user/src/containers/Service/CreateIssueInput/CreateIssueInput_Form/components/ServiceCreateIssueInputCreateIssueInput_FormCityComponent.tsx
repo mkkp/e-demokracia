@@ -26,6 +26,7 @@ import type {
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentActionDefinitions {
+  cityOpenSetSelectorAction?: () => Promise<void>;
   cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
 }
 
@@ -83,6 +84,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
             }
           : undefined
       }
-    ></AggregationInput>
+      onSet={
+        actions.cityOpenSetSelectorAction
+          ? async () => {
+              await actions.cityOpenSetSelectorAction!();
+            }
+          : undefined
+      }
+    />
   );
 }

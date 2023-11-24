@@ -8,7 +8,6 @@
 
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceIssueCategoryAttributes, ServiceServiceUserAttributes } from '../model';
-
 import {
   ServiceServiceUserActivityCountiesMaskBuilder,
   ServiceServiceUserResidentCountyMaskBuilder,

@@ -13,7 +13,6 @@ import {
   ServiceServiceUserAttributes,
   ServiceYesNoAbstainVoteEntryAttributes,
 } from '../model';
-
 import { ServiceYesNoAbstainVoteEntryOwnerMaskBuilder } from './ServiceYesNoAbstainVoteEntryMaskBuilder';
 
 export class ServiceYesNoAbstainVoteDefinitionUserVoteEntryMaskBuilder extends RelationMaskBuilder {

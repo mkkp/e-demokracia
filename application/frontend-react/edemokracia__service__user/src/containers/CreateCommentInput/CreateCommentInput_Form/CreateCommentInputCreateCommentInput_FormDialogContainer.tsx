@@ -152,7 +152,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
         {editMode && actions.createCommentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_Xcf0sIpWEe6AtscSh_kd4w)"
+              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_AlMYoYsNEe6E6KmeUhRZew)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

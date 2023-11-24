@@ -12,13 +12,12 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import { toastConfig } from '~/config';
-import { useCRUDDialog } from '~/hooks';
+import { useSnacks, useCRUDDialog } from '~/hooks';
 import {
   passesLocalValidation,
   processQueryCustomizer,
@@ -97,7 +96,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
 
   // Hooks section
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack } = useSnacks();
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
@@ -217,10 +216,7 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       const res = await serviceYesNoAbstainVoteDefinitionServiceImpl.update(payloadDiff.current);
 
       if (res) {
-        enqueueSnackbar(t('judo.action.save.success', { defaultValue: 'Changes saved' }), {
-          variant: 'success',
-          ...toastConfig.success,
-        });
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceYesNoAbstainVoteDefinition, string>());
         await actions.refreshAction!(pageQueryCustomizer);
         setEditMode(false);
@@ -239,12 +235,8 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       if (customActions?.postTakeBackVoteForYesNoAbstainVoteDefinitionAction) {
         await customActions.postTakeBackVoteForYesNoAbstainVoteDefinitionAction();
       } else {
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
 
         if (!editMode) {
@@ -263,25 +255,6 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
-    await openServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationViewPage(target!);
-
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceYesNoAbstainVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceYesNoAbstainVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
   };
   const voteEntriesOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
     await openServiceYesNoAbstainVoteDefinitionVoteEntriesRelationViewPage(target!);
@@ -309,6 +282,25 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
       queryCustomizer,
     );
   };
+  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoAbstainVoteEntryStored) => {
+    await openServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationViewPage(target!);
+
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceYesNoAbstainVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceYesNoAbstainVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
 
   const actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActions = {
     backAction,
@@ -317,12 +309,12 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessVie
     updateAction,
     takeBackVoteForYesNoAbstainVoteDefinitionAction,
     voteAction,
-    userVoteEntryOpenPageAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
+    userVoteEntryOpenPageAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
     ...(customActions ?? {}),
   };
 

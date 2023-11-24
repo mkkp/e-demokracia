@@ -25,7 +25,6 @@ export interface ServicePro {
   title: string;
   upVotes?: null | number;
   downVotes?: null | number;
-
   votes?: null | Array<ServiceSimpleVoteStored>;
   createdBy?: null | ServiceServiceUserStored;
   pros?: null | Array<ServiceProStored>;
@@ -33,8 +32,8 @@ export interface ServicePro {
   parentPro?: null | ServiceProParentStored;
   parentCon?: null | ServiceConParentStored;
 }
-export type ServiceProAttributes = 'createdByName' | 'created' | 'description' | 'title' | 'upVotes' | 'downVotes';
 
+export type ServiceProAttributes = 'createdByName' | 'created' | 'description' | 'title' | 'upVotes' | 'downVotes';
 export type ServiceProRelations = 'votes' | 'createdBy' | 'pros' | 'cons' | 'parentPro' | 'parentCon';
 
 export interface ServiceProStored extends JudoStored<ServicePro>, ServicePro {}

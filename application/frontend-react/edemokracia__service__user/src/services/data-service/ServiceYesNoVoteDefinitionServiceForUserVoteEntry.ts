@@ -25,7 +25,6 @@ export interface ServiceYesNoVoteDefinitionServiceForUserVoteEntry {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoVoteEntryQueryCustomizer,
   ): Promise<ServiceYesNoVoteEntryStored>;
-
   getOwner(
     owner: JudoIdentifiable<ServiceYesNoVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

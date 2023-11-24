@@ -123,7 +123,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     });
   }
 
-  async getTemplateForVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -147,7 +147,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     });
   }
 
-  async getTemplateForVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -171,7 +171,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     });
   }
 
-  async getTemplateForVoteRatingForVoteDefinition(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -195,7 +195,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     });
   }
 
-  async getTemplateForVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -206,7 +206,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
    * From: targetRelation.target.operations operation.isInputRangeable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswerForVoteDefinition(
+  async getRangeOnVoteSelectAnswerForVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {

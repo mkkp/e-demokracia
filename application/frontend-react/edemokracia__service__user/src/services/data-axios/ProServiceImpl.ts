@@ -68,7 +68,7 @@ export class ProServiceImpl extends JudoAxiosService implements ProService {
     });
   }
 
-  async getTemplateForCreateProArgument(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateProArgument(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -88,7 +88,7 @@ export class ProServiceImpl extends JudoAxiosService implements ProService {
     });
   }
 
-  async getTemplateForCreateConArgument(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateConArgument(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 

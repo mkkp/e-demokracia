@@ -15,6 +15,7 @@ export interface ServiceIssueType {
   voteType?: null | VoteType;
   representation?: null | string;
 }
+
 export type ServiceIssueTypeAttributes = 'description' | 'title' | 'voteType' | 'representation';
 
 export interface ServiceIssueTypeStored extends JudoStored<ServiceIssueType>, ServiceIssueType {}

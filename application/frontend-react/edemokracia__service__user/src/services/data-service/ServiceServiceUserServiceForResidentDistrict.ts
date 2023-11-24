@@ -22,20 +22,15 @@ export interface ServiceServiceUserServiceForResidentDistrict {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored>;
-
   getRangeForResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
-
   getTemplate(): Promise<ServiceDistrict>;
-
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
-
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceDistrict>,
   ): Promise<void>;
-
   unsetResidentDistrict(owner: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
 }

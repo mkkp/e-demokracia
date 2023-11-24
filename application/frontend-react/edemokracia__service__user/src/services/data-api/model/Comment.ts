@@ -9,6 +9,7 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface Comment {}
+
 export type CommentAttributes = '';
 
 export interface CommentStored extends JudoStored<Comment>, Comment {}

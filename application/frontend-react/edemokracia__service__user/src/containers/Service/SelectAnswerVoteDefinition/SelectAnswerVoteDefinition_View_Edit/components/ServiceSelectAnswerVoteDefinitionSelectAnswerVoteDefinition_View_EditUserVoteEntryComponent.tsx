@@ -96,6 +96,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
             }
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

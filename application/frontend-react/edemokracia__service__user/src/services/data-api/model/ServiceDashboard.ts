@@ -16,15 +16,14 @@ import { ServiceVoteEntryStored } from './ServiceVoteEntry';
 
 export interface ServiceDashboard {
   welcome?: null | string;
-
   issuesOwned?: null | Array<ServiceIssueStored>;
   userVoteEntries?: null | Array<ServiceVoteEntryStored>;
   favoriteIssues?: null | Array<ServiceIssueStored>;
   favoriteVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
   ownedVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
 }
-export type ServiceDashboardAttributes = 'welcome';
 
+export type ServiceDashboardAttributes = 'welcome';
 export type ServiceDashboardRelations =
   | 'issuesOwned'
   | 'userVoteEntries'

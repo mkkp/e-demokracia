@@ -237,17 +237,6 @@ export function ServiceCommentComment_TableComment_TableComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Comment.Comment_Table.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.voteDownForCommentAction
-        ? async (rowData) => {
-            await actions.voteDownForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
@@ -258,39 +247,50 @@ export function ServiceCommentComment_TableComment_TableComponent(
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Comment.Comment_Table.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceCommentStored) => isLoading,
+      action: actions.voteDownForCommentAction
+        ? async (rowData) => {
+            await actions.voteDownForCommentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZSiJQIpWEe6AtscSh_kd4w',
+      id: '_CYQ4wYsNEe6E6KmeUhRZew',
       attributeName: 'createdByName',
       label: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZSiJRIpWEe6AtscSh_kd4w',
+      id: '_CYRf0osNEe6E6KmeUhRZew',
       attributeName: 'comment',
       label: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_ZSiwUopWEe6AtscSh_kd4w',
+      id: '_CYSG4YsNEe6E6KmeUhRZew',
       attributeName: 'created',
       label: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_ZSjXYYpWEe6AtscSh_kd4w',
+      id: '_CYSt8IsNEe6E6KmeUhRZew',
       attributeName: 'upVotes',
       label: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_ZSj-cIpWEe6AtscSh_kd4w',
+      id: '_CYSt9IsNEe6E6KmeUhRZew',
       attributeName: 'downVotes',
       label: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
@@ -569,7 +569,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -582,7 +582,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

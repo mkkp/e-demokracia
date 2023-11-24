@@ -180,14 +180,14 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_XfI5A4pWEe6AtscSh_kd4w',
+      id: '_AncbYIsNEe6E6KmeUhRZew',
       attributeName: 'title',
       label: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_XfJgEopWEe6AtscSh_kd4w',
+      id: '_AncbZIsNEe6E6KmeUhRZew',
       attributeName: 'voteType',
       label: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
         defaultValue: 'Default vote type',
@@ -197,7 +197,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     },
 
     {
-      id: '_XfKHIopWEe6AtscSh_kd4w',
+      id: '_AndCcosNEe6E6KmeUhRZew',
       attributeName: 'description',
       label: t('service.IssueType.IssueType_Table.SetSelector.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
@@ -417,7 +417,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -430,7 +430,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -16,6 +16,7 @@ export interface ServiceCreateUserInput {
   lastName: string;
   phone?: null | string;
 }
+
 export type ServiceCreateUserInputAttributes =
   | 'userName'
   | 'email'

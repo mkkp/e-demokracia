@@ -151,7 +151,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_ZM9FsopWEe6AtscSh_kd4w',
+      id: '_CSu4gosNEe6E6KmeUhRZew',
       attributeName: 'representation',
       label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
@@ -308,7 +308,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
           ),
         }}
       />
-      {validationError && (
+      {validationError ? (
         <Box
           sx={{
             color: (theme) => theme.palette.error.main,
@@ -321,7 +321,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
           <MdiIcon path="alert-circle-outline" sx={{ mr: 1 }} />
           <Typography>{validationError}</Typography>
         </Box>
-      )}
+      ) : null}
     </div>
   );
 }

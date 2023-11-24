@@ -117,233 +117,230 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_Y5iacIpWEe6AtscSh_kd4w)/LabelWrapper">
+        <Card id="_CAJTsIsNEe6E6KmeUhRZew)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="group::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_Y5iacIpWEe6AtscSh_kd4w)/Label" variant="h5" component="h1">
+                  <Typography id="_CAJTsIsNEe6E6KmeUhRZew)/Label" variant="h5" component="h1">
                     {t('service.Comment.Comment_View_Edit.group.Icon', { defaultValue: 'Comment' })}
                   </Typography>
                 </Grid>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12} md={4.0}>
-                    <DateTimePicker
-                      ampm={false}
-                      ampmInClock={false}
-                      className={clsx({
-                        'JUDO-viewMode': !editMode,
-                        'JUDO-required': false,
-                      })}
-                      slotProps={{
-                        textField: {
-                          id: 'User/(esm/_BYP0EG5WEe2wNaja8kBvcQ)/TimestampTypeDateTimeInput',
-                          required: false,
-                          helperText: validation.get('created'),
-                          error: !!validation.get('created'),
-                          InputProps: {
+                <Card id="User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/GroupVisualElement">
+                  <CardContent>
+                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                      <Grid item xs={12} sm={12}>
+                        <DateTimePicker
+                          ampm={false}
+                          ampmInClock={false}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': false,
+                          })}
+                          slotProps={{
+                            textField: {
+                              id: 'User/(esm/_BYP0EG5WEe2wNaja8kBvcQ)/TimestampTypeDateTimeInput',
+                              required: false,
+                              helperText: validation.get('created'),
+                              error: !!validation.get('created'),
+                              InputProps: {
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="schedule" />
+                                  </InputAdornment>
+                                ),
+                              },
+                            },
+                          }}
+                          onError={(newError: DateTimeValidationError, value: any) => {
+                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                            setValidation((prevValidation) => {
+                              const copy = new Map<keyof ServiceComment, string>(prevValidation);
+                              copy.set(
+                                'created',
+                                newError === 'invalidDate'
+                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                      defaultValue: 'Value does not match the pattern requirements.',
+                                    }) as string)
+                                  : '',
+                              );
+                              return copy;
+                            });
+                          }}
+                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                          label={t('service.Comment.Comment_View_Edit.created', { defaultValue: 'Created' }) as string}
+                          value={serviceDateToUiDate(data.created ?? null)}
+                          readOnly={true || !isFormUpdateable()}
+                          disabled={isLoading}
+                          onChange={(newValue: Date) => {
+                            storeDiff('created', newValue);
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <ServiceCommentComment_View_EditCreatedByComponent
+                          disabled={true || !isFormUpdateable()}
+                          ownerData={data}
+                          editMode={editMode}
+                          storeDiff={storeDiff}
+                          validationError={validation.get('createdBy')}
+                          actions={actions}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <TextField
+                          required={true}
+                          name="comment"
+                          id="User/(esm/_BYJGYG5WEe2wNaja8kBvcQ)/StringTypeTextArea"
+                          autoFocus
+                          label={t('service.Comment.Comment_View_Edit.comment', { defaultValue: 'Comment' }) as string}
+                          value={data.comment ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': true,
+                          })}
+                          disabled={isLoading}
+                          multiline
+                          minRows={4.0}
+                          error={!!validation.get('comment')}
+                          helperText={validation.get('comment')}
+                          onChange={(event) => {
+                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                            storeDiff('comment', realValue);
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            readOnly: false || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
-                                <MdiIcon path="schedule" />
+                                <MdiIcon path="text_fields" />
                               </InputAdornment>
                             ),
-                          },
-                        },
-                      }}
-                      onError={(newError: DateTimeValidationError, value: any) => {
-                        // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                        setValidation((prevValidation) => {
-                          const copy = new Map<keyof ServiceComment, string>(prevValidation);
-                          copy.set(
-                            'created',
-                            newError === 'invalidDate'
-                              ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                  defaultValue: 'Value does not match the pattern requirements.',
-                                }) as string)
-                              : '',
-                          );
-                          return copy;
-                        });
-                      }}
-                      views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                      label={t('service.Comment.Comment_View_Edit.created', { defaultValue: 'Created' }) as string}
-                      value={serviceDateToUiDate(data.created ?? null)}
-                      readOnly={true || !isFormUpdateable()}
-                      disabled={isLoading}
-                      onChange={(newValue: Date) => {
-                        storeDiff('created', newValue);
-                      }}
-                    />
-                  </Grid>
+                          }}
+                        />
+                      </Grid>
 
-                  <Grid item xs={12} sm={12} md={4.0}>
-                    <ServiceCommentComment_View_EditCreatedByComponent
-                      disabled={true || !isFormUpdateable()}
-                      ownerData={data}
-                      editMode={editMode}
-                      storeDiff={storeDiff}
-                      validationError={validation.get('createdBy')}
-                      actions={actions}
-                    />
-                  </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <LoadingButton
+                          id="User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormVisualElement"
+                          loading={isLoading}
+                          variant={undefined}
+                          startIcon={<MdiIcon path="thumb-up" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            if (actions.voteUpForCommentAction) {
+                              await actions.voteUpForCommentAction!();
+                            }
+                          }}
+                          disabled={!actions.voteUpForCommentAction || editMode}
+                        >
+                          <span>{t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: '' })}</span>
+                        </LoadingButton>
+                      </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <TextField
-                      required={true}
-                      name="comment"
-                      id="User/(esm/_BYJGYG5WEe2wNaja8kBvcQ)/StringTypeTextArea"
-                      autoFocus
-                      label={t('service.Comment.Comment_View_Edit.comment', { defaultValue: 'Comment' }) as string}
-                      value={data.comment ?? ''}
-                      className={clsx({
-                        'JUDO-viewMode': !editMode,
-                        'JUDO-required': true,
-                      })}
-                      disabled={isLoading}
-                      multiline
-                      minRows={4.0}
-                      error={!!validation.get('comment')}
-                      helperText={validation.get('comment')}
-                      onChange={(event) => {
-                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                        storeDiff('comment', realValue);
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{
-                        readOnly: false || !isFormUpdateable(),
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <MdiIcon path="text_fields" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <NumericInput
+                          required={false}
+                          name="upVotes"
+                          id="User/(esm/_3kpuMH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
+                          label={t('service.Comment.Comment_View_Edit.upVotes', { defaultValue: '' }) as string}
+                          customInput={TextField}
+                          value={data.upVotes ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': false,
+                          })}
+                          disabled={isLoading}
+                          error={!!validation.get('upVotes')}
+                          helperText={validation.get('upVotes')}
+                          onValueChange={(values, sourceInfo) => {
+                            const newValue = values.floatValue === undefined ? null : values.floatValue;
+                            if (data.upVotes !== newValue) {
+                              storeDiff('upVotes', newValue);
+                            }
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            readOnly: true || !isFormUpdateable(),
+                          }}
+                        />
+                      </Grid>
 
-                  <Grid item xs={12} sm={12} md={1.0}>
-                    <LoadingButton
-                      id="User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormVisualElement"
-                      loading={isLoading}
-                      variant={undefined}
-                      startIcon={<MdiIcon path="thumb-up" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        if (actions.voteUpForCommentAction) {
-                          await actions.voteUpForCommentAction!();
-                        }
-                      }}
-                      disabled={!actions.voteUpForCommentAction || editMode}
-                    >
-                      <span>{t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: '' })}</span>
-                    </LoadingButton>
-                  </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container sx={{ height: DIVIDER_HEIGHT }}></Grid>
+                      </Grid>
 
-                  <Grid item xs={12} sm={12} md={1.0}>
-                    <NumericInput
-                      required={false}
-                      name="upVotes"
-                      id="User/(esm/_3kpuMH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
-                      label={t('service.Comment.Comment_View_Edit.upVotes', { defaultValue: '' }) as string}
-                      customInput={TextField}
-                      value={data.upVotes ?? ''}
-                      className={clsx({
-                        'JUDO-viewMode': !editMode,
-                        'JUDO-required': false,
-                      })}
-                      disabled={isLoading}
-                      error={!!validation.get('upVotes')}
-                      helperText={validation.get('upVotes')}
-                      onValueChange={(values, sourceInfo) => {
-                        const newValue = values.floatValue === undefined ? null : values.floatValue;
-                        if (data.upVotes !== newValue) {
-                          storeDiff('upVotes', newValue);
-                        }
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{
-                        readOnly: true || !isFormUpdateable(),
-                      }}
-                    />
-                  </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <LoadingButton
+                          id="User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormVisualElement"
+                          loading={isLoading}
+                          variant={undefined}
+                          startIcon={<MdiIcon path="thumb-down" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            if (actions.voteDownForCommentAction) {
+                              await actions.voteDownForCommentAction!();
+                            }
+                          }}
+                          disabled={!actions.voteDownForCommentAction || editMode}
+                        >
+                          <span>{t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: '' })}</span>
+                        </LoadingButton>
+                      </Grid>
 
-                  <Grid item xs={12} sm={12} md={1.0}>
-                    <Grid container sx={{ height: DIVIDER_HEIGHT }}></Grid>
-                  </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <NumericInput
+                          required={false}
+                          name="downVotes"
+                          id="User/(esm/_3k2igH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
+                          label={t('service.Comment.Comment_View_Edit.downVotes', { defaultValue: '' }) as string}
+                          customInput={TextField}
+                          value={data.downVotes ?? ''}
+                          className={clsx({
+                            'JUDO-viewMode': !editMode,
+                            'JUDO-required': false,
+                          })}
+                          disabled={isLoading}
+                          error={!!validation.get('downVotes')}
+                          helperText={validation.get('downVotes')}
+                          onValueChange={(values, sourceInfo) => {
+                            const newValue = values.floatValue === undefined ? null : values.floatValue;
+                            if (data.downVotes !== newValue) {
+                              storeDiff('downVotes', newValue);
+                            }
+                          }}
+                          InputLabelProps={{ shrink: true }}
+                          InputProps={{
+                            readOnly: true || !isFormUpdateable(),
+                          }}
+                        />
+                      </Grid>
 
-                  <Grid item xs={12} sm={12} md={1.0}>
-                    <LoadingButton
-                      id="User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormVisualElement"
-                      loading={isLoading}
-                      variant={undefined}
-                      startIcon={<MdiIcon path="thumb-down" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        if (actions.voteDownForCommentAction) {
-                          await actions.voteDownForCommentAction!();
-                        }
-                      }}
-                      disabled={!actions.voteDownForCommentAction || editMode}
-                    >
-                      <span>{t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: '' })}</span>
-                    </LoadingButton>
-                  </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <Grid container sx={{ height: DIVIDER_HEIGHT }}></Grid>
+                      </Grid>
 
-                  <Grid item xs={12} sm={12} md={1.0}>
-                    <NumericInput
-                      required={false}
-                      name="downVotes"
-                      id="User/(esm/_3k2igH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
-                      label={t('service.Comment.Comment_View_Edit.downVotes', { defaultValue: '' }) as string}
-                      customInput={TextField}
-                      value={data.downVotes ?? ''}
-                      className={clsx({
-                        'JUDO-viewMode': !editMode,
-                        'JUDO-required': false,
-                      })}
-                      disabled={isLoading}
-                      error={!!validation.get('downVotes')}
-                      helperText={validation.get('downVotes')}
-                      onValueChange={(values, sourceInfo) => {
-                        const newValue = values.floatValue === undefined ? null : values.floatValue;
-                        if (data.downVotes !== newValue) {
-                          storeDiff('downVotes', newValue);
-                        }
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{
-                        readOnly: true || !isFormUpdateable(),
-                      }}
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={1.0}>
-                    <Grid container sx={{ height: DIVIDER_HEIGHT }}></Grid>
-                  </Grid>
-
-                  <Grid item xs={12} sm={12} md={2.0}>
-                    <AssociationButton
-                      id="User/(esm/_IgLS0IfuEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
-                      variant={undefined}
-                      editMode={editMode}
-                      navigateAction={actions.votesOpenPageAction}
-                      refreshCounter={refreshCounter}
-                    >
-                      {t('service.Comment.Comment_View_Edit.votes', { defaultValue: 'Votes' })}
-                      <MdiIcon path="arrow-right" />
-                    </AssociationButton>
-                  </Grid>
-                </Grid>
+                      <Grid item xs={12} sm={12}>
+                        <AssociationButton
+                          id="User/(esm/_IgLS0IfuEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
+                          variant={undefined}
+                          editMode={editMode}
+                          navigateAction={actions.votesOpenPageAction}
+                          refreshCounter={refreshCounter}
+                        >
+                          {t('service.Comment.Comment_View_Edit.votes', { defaultValue: 'Votes' })}
+                          <MdiIcon path="arrow-right" />
+                        </AssociationButton>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Card>
               </Grid>
             </Grid>
           </CardContent>

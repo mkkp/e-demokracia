@@ -27,28 +27,22 @@ export interface ServiceCommentService {
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<ServiceCommentStored>;
-
   listVotes(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-
   getRangeForVotes(
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-
   getCreatedBy(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-
   getRangeForCreatedBy(
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
-
-  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
-
   voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 }

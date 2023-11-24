@@ -12,6 +12,7 @@ export interface ServiceSelectAnswerVoteSelection {
   description?: null | string;
   title: string;
 }
+
 export type ServiceSelectAnswerVoteSelectionAttributes = 'description' | 'title';
 
 export interface ServiceSelectAnswerVoteSelectionStored

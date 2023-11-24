@@ -103,6 +103,6 @@ export function ServiceIssueCategoryIssueCategory_View_EditOwnerComponent(
           ? async () => actions.ownerUnsetAction!(ownerData.owner!)
           : undefined
       }
-    ></AggregationInput>
+    />
   );
 }

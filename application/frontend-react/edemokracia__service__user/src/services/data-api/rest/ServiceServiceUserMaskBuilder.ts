@@ -14,7 +14,6 @@ import {
   ServiceServiceUserAttributes,
   ServiceSimpleVoteAttributes,
 } from '../model';
-
 import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';

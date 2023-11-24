@@ -55,7 +55,7 @@ export class VoteDefinitionServiceImpl extends JudoAxiosService implements VoteD
     });
   }
 
-  async getTemplateForVoteYesNo(): Promise<YesNoVoteInput> {
+  async getTemplateOnVoteYesNo(): Promise<YesNoVoteInput> {
     const path = '/YesNoVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -75,7 +75,7 @@ export class VoteDefinitionServiceImpl extends JudoAxiosService implements VoteD
     });
   }
 
-  async getTemplateForVoteYesNoAbstain(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVoteYesNoAbstain(): Promise<YesNoAbstainVoteInput> {
     const path = '/YesNoAbstainVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -95,7 +95,7 @@ export class VoteDefinitionServiceImpl extends JudoAxiosService implements VoteD
     });
   }
 
-  async getTemplateForVoteSelectAnswer(): Promise<SelectAnswerVoteSelection> {
+  async getTemplateOnVoteSelectAnswer(): Promise<SelectAnswerVoteSelection> {
     const path = '/SelectAnswerVoteSelection/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -105,7 +105,7 @@ export class VoteDefinitionServiceImpl extends JudoAxiosService implements VoteD
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVoteSelectAnswer(
+  async getRangeOnVoteSelectAnswer(
     owner?: VoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>> {
@@ -130,7 +130,7 @@ export class VoteDefinitionServiceImpl extends JudoAxiosService implements VoteD
     });
   }
 
-  async getTemplateForVoteRating(): Promise<RatingVoteInput> {
+  async getTemplateOnVoteRating(): Promise<RatingVoteInput> {
     const path = '/RatingVoteInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 

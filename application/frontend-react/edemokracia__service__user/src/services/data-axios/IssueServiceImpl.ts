@@ -50,7 +50,7 @@ export class IssueServiceImpl extends JudoAxiosService implements IssueService {
     });
   }
 
-  async getTemplateForCreateComment(): Promise<CreateCommentInput> {
+  async getTemplateOnCreateComment(): Promise<CreateCommentInput> {
     const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -101,7 +101,7 @@ export class IssueServiceImpl extends JudoAxiosService implements IssueService {
     return response.data;
   }
 
-  async getTemplateForCloseDebate(): Promise<CloseDebateInput> {
+  async getTemplateOnCloseDebate(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -121,7 +121,7 @@ export class IssueServiceImpl extends JudoAxiosService implements IssueService {
     });
   }
 
-  async getTemplateForCreateProArgument(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateProArgument(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -141,7 +141,7 @@ export class IssueServiceImpl extends JudoAxiosService implements IssueService {
     });
   }
 
-  async getTemplateForCreateConArgument(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateConArgument(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 

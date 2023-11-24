@@ -14,6 +14,7 @@ export interface ServiceIssueAttachment {
   file?: null | any;
   type: AttachmentType;
 }
+
 export type ServiceIssueAttachmentAttributes = 'link' | 'file' | 'type';
 
 export interface ServiceIssueAttachmentStored extends JudoStored<ServiceIssueAttachment>, ServiceIssueAttachment {}

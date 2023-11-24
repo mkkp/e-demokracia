@@ -22,24 +22,17 @@ import {
  */
 export interface ServiceCreateIssueInputServiceForCounty {
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored>;
-
   getRangeForCounty(
     owner: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
-
   getTemplate(): Promise<ServiceCounty>;
-
   listCities(
     owner: JudoIdentifiable<ServiceCounty>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
-
   getTemplateForCities(): Promise<ServiceCity>;
-
   createCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCityStored>;
-
   deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<void>;
-
   updateCities(owner: JudoIdentifiable<ServiceCounty>, target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
 }
