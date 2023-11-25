@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { singleSelectColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -51,12 +41,9 @@ import type {
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
   fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -105,7 +92,6 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
   const filtersKey = `User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
   const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
@@ -171,7 +157,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_soRxsYshEe6I4ZdrLoQBLA)-download"
+              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_HG0oc4ujEe6laYH8Xw7WEw)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -182,7 +168,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_soRxsYshEe6I4ZdrLoQBLA)-view"
+              id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_HG0oc4ujEe6laYH8Xw7WEw)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -248,14 +234,14 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_soWDIoshEe6I4ZdrLoQBLA',
+      id: '_HG454IujEe6laYH8Xw7WEw',
       attributeName: 'link',
       label: t('service.IssueAttachment.IssueAttachment_Table.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_soXRQIshEe6I4ZdrLoQBLA',
+      id: '_HG5g8oujEe6laYH8Xw7WEw',
       attributeName: 'type',
       label: t('service.IssueAttachment.IssueAttachment_Table.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

@@ -12,19 +12,10 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions } from '~/containers/CloseDebateOutputVoteDefinitionReference/CloseDebateOutputVoteDefinitionReference_View_Edit/CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer';
@@ -49,16 +40,6 @@ export const convertServiceIssueIssue_View_EditCloseDebateOutputViewPayload = (
   attributeName: keyof CloseDebateOutputVoteDefinitionReference,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
-  const dateTimeTypes: string[] = [];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
-    return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
-  }
   return value;
 };
 
@@ -83,7 +64,6 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);

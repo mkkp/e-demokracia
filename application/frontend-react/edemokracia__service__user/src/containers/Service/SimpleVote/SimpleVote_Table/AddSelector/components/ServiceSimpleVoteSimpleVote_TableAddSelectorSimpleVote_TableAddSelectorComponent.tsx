@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -50,9 +46,7 @@ import type { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimple
 import { useL10N } from '~/l10n/l10n-context';
 import {
   isRowSelectable,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -93,7 +87,6 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -181,14 +174,14 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_qvE0YIshEe6I4ZdrLoQBLA',
+      id: '_FPyOUIujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_qvGpkIshEe6I4ZdrLoQBLA',
+      id: '_FPzccIujEe6laYH8Xw7WEw',
       attributeName: 'type',
       label: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

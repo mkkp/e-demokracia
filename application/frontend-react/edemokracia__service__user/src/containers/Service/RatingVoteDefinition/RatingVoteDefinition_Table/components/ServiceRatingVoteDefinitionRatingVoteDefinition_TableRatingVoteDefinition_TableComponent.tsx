@@ -33,12 +33,9 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
   numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -54,9 +51,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -109,7 +104,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -304,17 +298,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.voteAction
-        ? async (rowData) => {
-            await actions.voteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.takeBackVote', {
         defaultValue: 'takeBackVote',
@@ -327,11 +310,22 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sKUqYYshEe6I4ZdrLoQBLA',
+      id: '_GqVgwoujEe6laYH8Xw7WEw',
       attributeName: 'minRateValue',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
         defaultValue: 'MinRateValue',
@@ -340,7 +334,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_sKVRcIshEe6I4ZdrLoQBLA',
+      id: '_GqWH0IujEe6laYH8Xw7WEw',
       attributeName: 'maxRateValue',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
         defaultValue: 'MaxRateValue',
@@ -349,14 +343,14 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_sKVRdIshEe6I4ZdrLoQBLA',
+      id: '_GqWH1IujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sKV4goshEe6I4ZdrLoQBLA',
+      id: '_GqWu4oujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -365,7 +359,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_sKWfkIshEe6I4ZdrLoQBLA',
+      id: '_GqXV8IujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -374,7 +368,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_sKWflIshEe6I4ZdrLoQBLA',
+      id: '_GqXV9IujEe6laYH8Xw7WEw',
       attributeName: 'status',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -382,7 +376,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_sKXGooshEe6I4ZdrLoQBLA',
+      id: '_GqX9AoujEe6laYH8Xw7WEw',
       attributeName: 'closeAt',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { useJudoNavigation, MdiIcon } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceServiceUserServiceUser_View_EditActionDefinitions } from './ServiceServiceUserServiceUser_View_Edit';
@@ -81,7 +81,7 @@ export default function ServiceServiceUserServiceUser_View_EditDialog(
   } = props;
   const queryCustomizer: ServiceServiceUserQueryCustomizer = {
     _mask:
-      '{firstName,lastName,phone,created,isAdmin,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+      '{lastName,firstName,phone,created,isAdmin,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   return (

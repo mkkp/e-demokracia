@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { useJudoNavigation, MdiIcon } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions } from './ServiceCreateIssueInputCreateIssueInput_Form';
@@ -154,7 +154,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
         {editMode && actions.createIssueForUserIssuesAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_rvWloIshEe6I4ZdrLoQBLA)"
+              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_GPMc4IujEe6laYH8Xw7WEw)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -56,9 +52,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -101,7 +95,6 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -211,28 +204,28 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sW4fsoshEe6I4ZdrLoQBLA',
+      id: '_G2VVYoujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_sW5GwoshEe6I4ZdrLoQBLA',
+      id: '_G2V8cIujEe6laYH8Xw7WEw',
       attributeName: 'issueTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sW5GxoshEe6I4ZdrLoQBLA',
+      id: '_G2V8dIujEe6laYH8Xw7WEw',
       attributeName: 'voteTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sW5t0oshEe6I4ZdrLoQBLA',
+      id: '_G2WjgoujEe6laYH8Xw7WEw',
       attributeName: 'voteStatus',
       label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,

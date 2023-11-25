@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -53,16 +43,11 @@ import type {
   ServiceIssueCategoryStored,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
   applyInMemoryFilters,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
-  useErrorHandler,
 } from '~/utilities';
 import type { DialogResult, TableRowAction } from '~/utilities';
 import { useDataStore } from '~/hooks';
@@ -107,10 +92,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
   const filtersKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
-  const handleError = useErrorHandler();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueCategoryStored>[]>(ownerData?.categories || []);
@@ -183,14 +165,14 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sXtmIIshEe6I4ZdrLoQBLA',
+      id: '_G3H_kIujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sXuNMIshEe6I4ZdrLoQBLA',
+      id: '_G3H_lIujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

@@ -16,15 +16,8 @@ import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { useServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_View_Edit/Owner/LinkSetSelectorPage';
 import { useServiceIssueCategoryOwnerRelationViewPage } from '~/dialogs/Service/IssueCategory/Owner/RelationViewPage';
@@ -98,16 +91,6 @@ export const convertServiceIssueCategoriesRelationViewPagePayload = (
   attributeName: keyof ServiceIssueCategory,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
-  const dateTimeTypes: string[] = [];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
-    return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
-  }
   return value;
 };
 
@@ -226,40 +209,6 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownerOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage(
-        data,
-        data.owner ? [data.owner] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
-      }
-    }
-  };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    // action service::IssueCategory::IssueCategory_View_Edit::owner::TabularReferenceFieldLinkAutocompleteRangeAction
-    // definition service::IssueCategory::IssueCategory_View_Edit::owner::Autocomplete
-    // page service::Issue::categories::RelationViewPage
-    try {
-      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
-  };
   const subcategoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
     await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
     if (!editMode) {
@@ -346,19 +295,53 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       });
     });
   };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const ownerOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+      }
+    }
+  };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    // action service::IssueCategory::IssueCategory_View_Edit::owner::TabularReferenceFieldLinkAutocompleteRangeAction
+    // definition service::IssueCategory::IssueCategory_View_Edit::owner::Autocomplete
+    // page service::Issue::categories::RelationViewPage
+    try {
+      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
 
   const actions: ServiceIssueCategoryIssueCategory_View_EditDialogActions = {
     backAction,
     refreshAction,
-    ownerOpenPageAction,
-    ownerOpenSetSelectorAction,
-    ownerAutocompleteRangeAction,
-    ownerUnsetAction,
     subcategoriesOpenPageAction,
     subcategoriesFilterAction,
     subcategoriesOpenFormAction,
     subcategoriesDeleteAction,
     subcategoriesBulkDeleteAction,
+    ownerOpenPageAction,
+    ownerOpenSetSelectorAction,
+    ownerAutocompleteRangeAction,
+    ownerUnsetAction,
     ...(customActions ?? {}),
   };
 

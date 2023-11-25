@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { singleSelectColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -53,16 +43,12 @@ import type {
   ServiceIssueAttachmentStored,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
   applyInMemoryFilters,
   fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
-  useErrorHandler,
 } from '~/utilities';
 import type { DialogResult, TableRowAction } from '~/utilities';
 import { useDataStore } from '~/hooks';
@@ -106,10 +92,8 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const filtersKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
   const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
-  const handleError = useErrorHandler();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueAttachmentStored>[]>(ownerData?.attachments || []);
@@ -167,7 +151,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
         return params.row.file ? (
           <ButtonGroup size="small" variant="outlined">
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_sXpUsIshEe6I4ZdrLoQBLA)-download"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_G3DuIIujEe6laYH8Xw7WEw)-download"
               startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
               onClick={(event: any) => {
                 event.preventDefault();
@@ -178,7 +162,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
               {extractFileNameFromToken(params.row.file)}
             </Button>
             <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_sXpUsIshEe6I4ZdrLoQBLA)-view"
+              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_G3DuIIujEe6laYH8Xw7WEw)-view"
               onClick={(event: any) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -235,14 +219,14 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sXp7woshEe6I4ZdrLoQBLA',
+      id: '_G3EVMoujEe6laYH8Xw7WEw',
       attributeName: 'link',
       label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sXrJ4IshEe6I4ZdrLoQBLA',
+      id: '_G3FjUYujEe6laYH8Xw7WEw',
       attributeName: 'type',
       label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

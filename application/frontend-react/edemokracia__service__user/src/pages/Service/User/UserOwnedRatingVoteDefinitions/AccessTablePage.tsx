@@ -6,25 +6,17 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage } from '~/routes';
@@ -67,7 +59,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -123,13 +114,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const voteAction = async (target: ServiceRatingVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const takeBackVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -148,13 +132,20 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setIsLoading(false);
     }
   };
+  const voteAction = async (target: ServiceRatingVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
-    voteAction,
     takeBackVoteForRatingVoteDefinitionAction,
+    voteAction,
     ...(customActions ?? {}),
   };
 

@@ -16,15 +16,8 @@ import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { useServiceCountyCitiesRelationFormPage } from '~/dialogs/Service/County/Cities/RelationFormPage';
 import { useServiceCountyCitiesRelationViewPage } from '~/dialogs/Service/County/Cities/RelationViewPage';
@@ -95,16 +88,6 @@ export const convertServiceServiceUserActivityCountiesRelationViewPagePayload = 
   attributeName: keyof ServiceCounty,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
-  const dateTimeTypes: string[] = [];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
-    return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
-  }
   return value;
 };
 

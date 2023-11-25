@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { dateTimeColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -56,9 +46,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -101,7 +89,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -198,7 +185,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_saKdMoshEe6I4ZdrLoQBLA',
+      id: '_G5k2ooujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -207,7 +194,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_saLEQYshEe6I4ZdrLoQBLA',
+      id: '_G5ldsoujEe6laYH8Xw7WEw',
       attributeName: 'createdBy',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -216,7 +203,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     },
 
     {
-      id: '_saLrUIshEe6I4ZdrLoQBLA',
+      id: '_G5mEwIujEe6laYH8Xw7WEw',
       attributeName: 'valueRepresentation',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
         defaultValue: 'ValueRepresentation',

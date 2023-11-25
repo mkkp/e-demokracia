@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { useJudoNavigation, MdiIcon } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditActionDefinitions } from './ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edit';
@@ -86,7 +86,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
   } = props;
   const queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,maxRateValue,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
+      '{userHasVoteEntry,maxRateValue,created,description,userHasNoVoteEntry,title,minRateValue,closeAt,status,userVoteEntry{created,value}}',
   };
 
   return (

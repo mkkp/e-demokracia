@@ -6,25 +6,17 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import type { ServiceVoteEntryVoteEntry_TablePageActions } from '~/containers/Service/VoteEntry/VoteEntry_Table/ServiceVoteEntryVoteEntry_TablePageContainer';
@@ -59,7 +51,6 @@ export default function ServiceUserUserOwnedVoteEntriesAccessTablePage() {
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);

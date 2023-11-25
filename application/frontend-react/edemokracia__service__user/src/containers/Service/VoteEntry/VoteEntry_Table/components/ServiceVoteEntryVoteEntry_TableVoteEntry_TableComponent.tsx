@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -50,9 +46,7 @@ import type { ServiceVoteEntry, ServiceVoteEntryQueryCustomizer, ServiceVoteEntr
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -97,7 +91,6 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -240,35 +233,35 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_rgvh4IshEe6I4ZdrLoQBLA',
+      id: '_GAXWsYujEe6laYH8Xw7WEw',
       attributeName: 'userName',
       label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_rgvh5IshEe6I4ZdrLoQBLA',
+      id: '_GAXWtYujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_rgwI8oshEe6I4ZdrLoQBLA',
+      id: '_GAX9woujEe6laYH8Xw7WEw',
       attributeName: 'voteTitle',
       label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_rgwwAIshEe6I4ZdrLoQBLA',
+      id: '_GAYk0IujEe6laYH8Xw7WEw',
       attributeName: 'issueTitle',
       label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_rgwwBIshEe6I4ZdrLoQBLA',
+      id: '_GAYk1IujEe6laYH8Xw7WEw',
       attributeName: 'voteStatus',
       label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,

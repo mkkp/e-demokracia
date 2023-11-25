@@ -16,15 +16,8 @@ import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { routeToServiceConVotesRelationTablePage } from '~/routes';
 import { useServiceConCon_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Con/Con_View_Edit/CreateConArgument/Input/Form';
@@ -99,15 +92,9 @@ export const useServiceConConsRelationViewPage = (): ((ownerData: any) => Promis
 };
 
 export const convertServiceConConsRelationViewPagePayload = (attributeName: keyof ServiceCon, value: any): any => {
-  const dateTypes: string[] = [];
   const dateTimeTypes: string[] = ['created'];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
+  if (dateTimeTypes.includes(attributeName as string)) {
     return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
   }
   return value;
 };
@@ -171,7 +158,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
 
   const pageQueryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{created,description,upVotes,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,upVotes,description,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   // Pandino Action overrides
@@ -259,6 +246,12 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       handleError(error, undefined, data);
     }
   };
+  const createProArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const voteUpForConAction = async () => {
     try {
       setIsLoading(true);
@@ -307,18 +300,6 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       handleError<ServiceCon>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const createProArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceConCreatedByRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const prosOpenPageAction = async (target?: ServiceProStored) => {
@@ -399,6 +380,11 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       });
     });
   };
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceConVotesRelationTablePage((target || data).__signedIdentifier));
+    onClose();
+  };
   const consOpenPageAction = async (target?: ServiceConStored) => {
     await openServiceConConsRelationViewPage(target!);
     if (!editMode) {
@@ -477,10 +463,11 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       });
     });
   };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceConVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceConCreatedByRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
   };
 
   const actions: ServiceConCon_View_EditDialogActions = {
@@ -489,20 +476,20 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
     cancelAction,
     updateAction,
     deleteAction,
+    createProArgumentAction,
     voteUpForConAction,
     createConArgumentAction,
     voteDownForConAction,
-    createProArgumentAction,
-    createdByOpenPageAction,
     prosOpenPageAction,
     prosFilterAction,
     prosDeleteAction,
     prosBulkDeleteAction,
+    votesOpenPageAction,
     consOpenPageAction,
     consFilterAction,
     consDeleteAction,
     consBulkDeleteAction,
-    votesOpenPageAction,
+    createdByOpenPageAction,
     ...(customActions ?? {}),
   };
 

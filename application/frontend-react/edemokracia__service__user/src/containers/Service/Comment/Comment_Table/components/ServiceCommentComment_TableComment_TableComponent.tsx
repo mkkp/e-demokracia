@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
   numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -50,9 +46,7 @@ import type { ServiceComment, ServiceCommentQueryCustomizer, ServiceCommentStore
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -100,7 +94,6 @@ export function ServiceCommentComment_TableComment_TableComponent(
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -237,17 +230,6 @@ export function ServiceCommentComment_TableComment_TableComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.voteUpForCommentAction
-        ? async (rowData) => {
-            await actions.voteUpForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Comment.Comment_Table.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
@@ -258,39 +240,50 @@ export function ServiceCommentComment_TableComment_TableComponent(
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceCommentStored) => isLoading,
+      action: actions.voteUpForCommentAction
+        ? async (rowData) => {
+            await actions.voteUpForCommentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_smwHsYshEe6I4ZdrLoQBLA',
+      id: '_HFYeAoujEe6laYH8Xw7WEw',
       attributeName: 'createdByName',
       label: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_smwHtYshEe6I4ZdrLoQBLA',
+      id: '_HFZFEIujEe6laYH8Xw7WEw',
       attributeName: 'comment',
       label: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_smwuw4shEe6I4ZdrLoQBLA',
+      id: '_HFZFFIujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_smxV0oshEe6I4ZdrLoQBLA',
+      id: '_HFZsIoujEe6laYH8Xw7WEw',
       attributeName: 'upVotes',
       label: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_smx84YshEe6I4ZdrLoQBLA',
+      id: '_HFaTMIujEe6laYH8Xw7WEw',
       attributeName: 'downVotes',
       label: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,

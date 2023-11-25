@@ -12,19 +12,10 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceCommentVotesRelationTablePage } from '~/routes';
@@ -61,15 +52,9 @@ export const convertServiceIssueCommentsRelationViewPagePayload = (
   attributeName: keyof ServiceComment,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
   const dateTimeTypes: string[] = [];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
+  if (dateTimeTypes.includes(attributeName as string)) {
     return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
   }
   return value;
 };
@@ -92,7 +77,6 @@ export default function ServiceIssueCommentsRelationViewPage() {
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -180,12 +164,12 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const voteUpForCommentAction = async () => {
+  const voteDownForCommentAction = async () => {
     try {
       setIsLoading(true);
-      await serviceCommentServiceImpl.voteUp(data);
-      if (customActions?.postVoteUpForCommentAction) {
-        await customActions.postVoteUpForCommentAction();
+      await serviceCommentServiceImpl.voteDown(data);
+      if (customActions?.postVoteDownForCommentAction) {
+        await customActions.postVoteDownForCommentAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -200,12 +184,12 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setIsLoading(false);
     }
   };
-  const voteDownForCommentAction = async () => {
+  const voteUpForCommentAction = async () => {
     try {
       setIsLoading(true);
-      await serviceCommentServiceImpl.voteDown(data);
-      if (customActions?.postVoteDownForCommentAction) {
-        await customActions.postVoteDownForCommentAction();
+      await serviceCommentServiceImpl.voteUp(data);
+      if (customActions?.postVoteUpForCommentAction) {
+        await customActions.postVoteUpForCommentAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -234,8 +218,8 @@ export default function ServiceIssueCommentsRelationViewPage() {
   const actions: ServiceCommentComment_View_EditPageActions = {
     backAction,
     refreshAction,
-    voteUpForCommentAction,
     voteDownForCommentAction,
+    voteUpForCommentAction,
     createdByOpenPageAction,
     votesOpenPageAction,
     ...(customActions ?? {}),

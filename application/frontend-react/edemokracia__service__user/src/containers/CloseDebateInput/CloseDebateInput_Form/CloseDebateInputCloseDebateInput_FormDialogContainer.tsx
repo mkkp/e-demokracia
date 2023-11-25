@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { useJudoNavigation, MdiIcon } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 import type { CloseDebateInputCloseDebateInput_FormActionDefinitions } from './CloseDebateInputCloseDebateInput_Form';
@@ -148,7 +148,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
         {editMode && actions.closeDebateForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_q1ovYoshEe6I4ZdrLoQBLA)"
+              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FTcmUoujEe6laYH8Xw7WEw)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

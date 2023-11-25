@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -51,12 +41,8 @@ import type {
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -107,8 +93,6 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
   const filtersKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -205,7 +189,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_spWIsoshEe6I4ZdrLoQBLA',
+      id: '_HH4YYIujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
         defaultValue: 'Title',
@@ -214,7 +198,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
     },
 
     {
-      id: '_spWvwIshEe6I4ZdrLoQBLA',
+      id: '_HH4_cIujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
         defaultValue: 'Description',

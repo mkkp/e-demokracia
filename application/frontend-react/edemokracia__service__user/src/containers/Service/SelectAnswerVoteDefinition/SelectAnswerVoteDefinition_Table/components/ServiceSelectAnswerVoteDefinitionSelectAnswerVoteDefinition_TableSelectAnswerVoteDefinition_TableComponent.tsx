@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -54,9 +50,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -109,7 +103,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -307,7 +300,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sJWaAoshEe6I4ZdrLoQBLA',
+      id: '_GpkEsoujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
         defaultValue: 'Title',
@@ -316,7 +309,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_sJXBEIshEe6I4ZdrLoQBLA',
+      id: '_GpkrwIujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -325,7 +318,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_sJXBFIshEe6I4ZdrLoQBLA',
+      id: '_GpkrxIujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -334,7 +327,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_sJXoIoshEe6I4ZdrLoQBLA',
+      id: '_GplS0YujEe6laYH8Xw7WEw',
       attributeName: 'status',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
         defaultValue: 'Status',
@@ -344,7 +337,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_sJYPMIshEe6I4ZdrLoQBLA',
+      id: '_GplS1YujEe6laYH8Xw7WEw',
       attributeName: 'closeAt',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

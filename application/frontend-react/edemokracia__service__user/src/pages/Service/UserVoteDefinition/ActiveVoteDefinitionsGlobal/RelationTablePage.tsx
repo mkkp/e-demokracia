@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -15,16 +15,9 @@ import { useParams } from 'react-router-dom';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRelationViewPage } from '~/routes';
@@ -75,7 +68,6 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -142,9 +134,10 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+  const voteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      target,
+    );
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -157,18 +150,17 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
     if (result === 'submit') {
     }
   };
-  const voteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
       target,
     );
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
+  const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -179,10 +171,10 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
     openPageAction,
     filterAction,
     refreshAction,
-    voteYesNoAbstainAction,
-    voteSelectAnswerAction,
     voteYesNoAction,
+    voteSelectAnswerAction,
     voteRatingAction,
+    voteYesNoAbstainAction,
     ...(customActions ?? {}),
   };
 

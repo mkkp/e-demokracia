@@ -16,15 +16,8 @@ import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { routeToServiceServiceUserVotesRelationTablePage } from '~/routes';
 import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCity/LinkSetSelectorPage';
@@ -116,15 +109,9 @@ export const convertServiceUserManagerUsersRelationViewPagePayload = (
   attributeName: keyof ServiceServiceUser,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
   const dateTimeTypes: string[] = ['created'];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
+  if (dateTimeTypes.includes(attributeName as string)) {
     return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
   }
   return value;
 };
@@ -195,7 +182,7 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
 
   const pageQueryCustomizer: ServiceServiceUserQueryCustomizer = {
     _mask:
-      '{firstName,lastName,phone,created,isAdmin,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+      '{lastName,firstName,phone,created,isAdmin,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   // Pandino Action overrides
@@ -283,6 +270,40 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
       setIsLoading(false);
     }
   };
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceServiceUserResidentCityRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const residentCityOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage(
+        data,
+        data.residentCity ? [data.residentCity] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('residentCity', returnedData[0]);
+      }
+    }
+  };
+  const residentCityAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored[]> => {
+    // action service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCity::TabularReferenceFieldLinkAutocompleteRangeAction
+    // definition service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCity::Autocomplete
+    // page service::UserManager::users::RelationViewPage
+    try {
+      return serviceServiceUserServiceImpl.getRangeForResidentCity(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const residentCityUnsetAction = async (target: ServiceCityStored) => {
+    storeDiff('residentCity', null);
+  };
   const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
     await openServiceServiceUserResidentDistrictRelationViewPage(target!);
     if (!editMode) {
@@ -317,11 +338,6 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
   const residentDistrictUnsetAction = async (target: ServiceDistrictStored) => {
     storeDiff('residentDistrict', null);
   };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceServiceUserVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
-  };
   const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
     await openServiceServiceUserResidentCountyRelationViewPage(target!);
     if (!editMode) {
@@ -355,40 +371,6 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
   };
   const residentCountyUnsetAction = async (target: ServiceCountyStored) => {
     storeDiff('residentCounty', null);
-  };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceServiceUserResidentCityRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const residentCityOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage(
-        data,
-        data.residentCity ? [data.residentCity] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('residentCity', returnedData[0]);
-      }
-    }
-  };
-  const residentCityAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored[]> => {
-    // action service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCity::TabularReferenceFieldLinkAutocompleteRangeAction
-    // definition service::ServiceUser::ServiceUser_View_Edit::Areas::Residency::residentCity::Autocomplete
-    // page service::UserManager::users::RelationViewPage
-    try {
-      return serviceServiceUserServiceImpl.getRangeForResidentCity(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const residentCityUnsetAction = async (target: ServiceCityStored) => {
-    storeDiff('residentCity', null);
   };
   const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
     await openServiceServiceUserActivityCountiesRelationViewPage(target!);
@@ -436,58 +418,6 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
       const selectedIds = selectedRows.map((r) => r.__identifier);
       const newList = (data?.activityCounties ?? []).filter((c) => !selectedIds.includes(c.__identifier));
       storeDiff('activityCounties', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
-  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceServiceUserActivityDistrictsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activityDistrictsFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const activityDistrictsOpenAddSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableSetSelectorPage(
-        data,
-        data.activityDistricts ?? [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('activityDistricts', [...(data.activityDistricts || []), ...returnedData]);
-      }
-    }
-  };
-
-  const activityDistrictsClearAction = async () => {
-    storeDiff('activityDistricts', []);
-  };
-  const activityDistrictsRemoveAction = async (target?: ServiceDistrictStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.activityDistricts ?? []).filter((c) => c.__identifier !== target!.__identifier);
-      storeDiff('activityDistricts', newList);
-    }
-  };
-  const activityDistrictsBulkRemoveAction = async (
-    selectedRows: ServiceDistrictStored[],
-  ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityDistricts ?? []).filter((c) => !selectedIds.includes(c.__identifier));
-      storeDiff('activityDistricts', newList);
       resolve({
         result: 'submit',
         data: [],
@@ -546,43 +476,100 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
       });
     });
   };
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceServiceUserVotesRelationTablePage((target || data).__signedIdentifier));
+    onClose();
+  };
+  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceServiceUserActivityDistrictsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const activityDistrictsFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const activityDistrictsOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableSetSelectorPage(
+        data,
+        data.activityDistricts ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('activityDistricts', [...(data.activityDistricts || []), ...returnedData]);
+      }
+    }
+  };
+
+  const activityDistrictsClearAction = async () => {
+    storeDiff('activityDistricts', []);
+  };
+  const activityDistrictsRemoveAction = async (target?: ServiceDistrictStored, silentMode?: boolean) => {
+    if (target) {
+      const newList = (data?.activityDistricts ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      storeDiff('activityDistricts', newList);
+    }
+  };
+  const activityDistrictsBulkRemoveAction = async (
+    selectedRows: ServiceDistrictStored[],
+  ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
+    return new Promise((resolve) => {
+      const selectedIds = selectedRows.map((r) => r.__identifier);
+      const newList = (data?.activityDistricts ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      storeDiff('activityDistricts', newList);
+      resolve({
+        result: 'submit',
+        data: [],
+      });
+    });
+  };
 
   const actions: ServiceServiceUserServiceUser_View_EditDialogActions = {
     backAction,
     refreshAction,
     cancelAction,
     updateAction,
-    residentDistrictOpenPageAction,
-    residentDistrictOpenSetSelectorAction,
-    residentDistrictAutocompleteRangeAction,
-    residentDistrictUnsetAction,
-    votesOpenPageAction,
-    residentCountyOpenPageAction,
-    residentCountyOpenSetSelectorAction,
-    residentCountyAutocompleteRangeAction,
-    residentCountyUnsetAction,
     residentCityOpenPageAction,
     residentCityOpenSetSelectorAction,
     residentCityAutocompleteRangeAction,
     residentCityUnsetAction,
+    residentDistrictOpenPageAction,
+    residentDistrictOpenSetSelectorAction,
+    residentDistrictAutocompleteRangeAction,
+    residentDistrictUnsetAction,
+    residentCountyOpenPageAction,
+    residentCountyOpenSetSelectorAction,
+    residentCountyAutocompleteRangeAction,
+    residentCountyUnsetAction,
     activityCountiesOpenPageAction,
     activityCountiesFilterAction,
     activityCountiesOpenAddSelectorAction,
     activityCountiesClearAction,
     activityCountiesRemoveAction,
     activityCountiesBulkRemoveAction,
-    activityDistrictsOpenPageAction,
-    activityDistrictsFilterAction,
-    activityDistrictsOpenAddSelectorAction,
-    activityDistrictsClearAction,
-    activityDistrictsRemoveAction,
-    activityDistrictsBulkRemoveAction,
     activityCitiesOpenPageAction,
     activityCitiesFilterAction,
     activityCitiesOpenAddSelectorAction,
     activityCitiesClearAction,
     activityCitiesRemoveAction,
     activityCitiesBulkRemoveAction,
+    votesOpenPageAction,
+    activityDistrictsOpenPageAction,
+    activityDistrictsFilterAction,
+    activityDistrictsOpenAddSelectorAction,
+    activityDistrictsClearAction,
+    activityDistrictsRemoveAction,
+    activityDistrictsBulkRemoveAction,
     ...(customActions ?? {}),
   };
 

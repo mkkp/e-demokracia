@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { numericColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -57,12 +47,8 @@ import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
   applyInMemoryFilters,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
-  useErrorHandler,
 } from '~/utilities';
 import type { DialogResult, TableRowAction } from '~/utilities';
 import { useDataStore } from '~/hooks';
@@ -104,9 +90,7 @@ export function ServiceConCon_View_EditProsComponent(props: ServiceConCon_View_E
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
-  const handleError = useErrorHandler();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceProStored>[]>(ownerData?.pros || []);
@@ -190,18 +174,7 @@ export function ServiceConCon_View_EditProsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_sTt28IshEe6I4ZdrLoQBLA)',
-      label: t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosVoteUpForProAction
-        ? async (rowData) => {
-            await actions.prosVoteUpForProAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_sTt28IshEe6I4ZdrLoQBLA)',
+      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_GzIQZYujEe6laYH8Xw7WEw)',
       label: t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -212,7 +185,7 @@ export function ServiceConCon_View_EditProsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_sTt28IshEe6I4ZdrLoQBLA)',
+      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_GzIQZYujEe6laYH8Xw7WEw)',
       label: t('service.Con.Con_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -223,7 +196,18 @@ export function ServiceConCon_View_EditProsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_sTt28IshEe6I4ZdrLoQBLA)',
+      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_GzIQZYujEe6laYH8Xw7WEw)',
+      label: t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceProStored) => editMode || isLoading,
+      action: actions.prosVoteUpForProAction
+        ? async (rowData) => {
+            await actions.prosVoteUpForProAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_GzIQZYujEe6laYH8Xw7WEw)',
       label: t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
       icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -237,21 +221,21 @@ export function ServiceConCon_View_EditProsComponent(props: ServiceConCon_View_E
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sTqzoYshEe6I4ZdrLoQBLA',
+      id: '_GzGbMoujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sTrasoshEe6I4ZdrLoQBLA',
+      id: '_GzHCQoujEe6laYH8Xw7WEw',
       attributeName: 'upVotes',
       label: t('service.Con.Con_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_sTso0IshEe6I4ZdrLoQBLA',
+      id: '_GzHpUIujEe6laYH8Xw7WEw',
       attributeName: 'downVotes',
       label: t('service.Con.Con_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,

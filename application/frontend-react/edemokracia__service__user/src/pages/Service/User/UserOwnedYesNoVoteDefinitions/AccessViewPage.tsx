@@ -15,16 +15,9 @@ import { useParams } from 'react-router-dom';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceYesNoVoteDefinitionIssueRelationViewPage } from '~/routes';
@@ -62,19 +55,13 @@ export const convertServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPagePayloa
   attributeName: keyof ServiceYesNoVoteDefinition,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
   const dateTimeTypes: string[] = [
     'closeAt',
 
     'created',
   ];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
+  if (dateTimeTypes.includes(attributeName as string)) {
     return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
   }
   return value;
 };
@@ -100,7 +87,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -219,6 +205,13 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       setIsLoading(false);
     }
   };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const takeBackVoteForYesNoVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -237,31 +230,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceYesNoVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceYesNoVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
-  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
-    await openServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const voteEntriesOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
@@ -289,20 +257,38 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       queryCustomizer,
     );
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceYesNoVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceYesNoVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
+  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
+    await openServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
 
   const actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
     cancelAction,
     updateAction,
-    takeBackVoteForYesNoVoteDefinitionAction,
     voteAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
-    userVoteEntryOpenPageAction,
+    takeBackVoteForYesNoVoteDefinitionAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    userVoteEntryOpenPageAction,
     ...(customActions ?? {}),
   };
 

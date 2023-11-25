@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
   numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -56,9 +52,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -101,7 +95,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -201,7 +194,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_saE9ooshEe6I4ZdrLoQBLA',
+      id: '_G5fXEoujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -210,7 +203,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
 
     {
-      id: '_saFksoshEe6I4ZdrLoQBLA',
+      id: '_G5f-IoujEe6laYH8Xw7WEw',
       attributeName: 'createdBy',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',
@@ -219,7 +212,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     },
 
     {
-      id: '_saGLwIshEe6I4ZdrLoQBLA',
+      id: '_G5glMIujEe6laYH8Xw7WEw',
       attributeName: 'value',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',

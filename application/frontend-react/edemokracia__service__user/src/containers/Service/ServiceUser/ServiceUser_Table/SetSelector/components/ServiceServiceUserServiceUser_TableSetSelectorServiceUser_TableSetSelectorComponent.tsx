@@ -34,11 +34,7 @@ import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
   booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -54,9 +50,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   isRowSelectable,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -97,7 +91,6 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -243,14 +236,14 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_q3XNsoshEe6I4ZdrLoQBLA',
+      id: '_FUw09IujEe6laYH8Xw7WEw',
       attributeName: 'userName',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.userName', { defaultValue: 'Username' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_q3X0wIshEe6I4ZdrLoQBLA',
+      id: '_FUxcA4ujEe6laYH8Xw7WEw',
       attributeName: 'isAdmin',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.isAdmin', {
         defaultValue: 'Has admin access',
@@ -259,35 +252,35 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     },
 
     {
-      id: '_q3X0xIshEe6I4ZdrLoQBLA',
+      id: '_FUyDEIujEe6laYH8Xw7WEw',
       attributeName: 'firstName',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.firstName', { defaultValue: 'First name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_q3Yb0oshEe6I4ZdrLoQBLA',
+      id: '_FUyDFIujEe6laYH8Xw7WEw',
       attributeName: 'lastName',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.lastName', { defaultValue: 'Last name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_q3Yb1oshEe6I4ZdrLoQBLA',
+      id: '_FUyqIoujEe6laYH8Xw7WEw',
       attributeName: 'phone',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_q3ZC4oshEe6I4ZdrLoQBLA',
+      id: '_FUyqJoujEe6laYH8Xw7WEw',
       attributeName: 'email',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_q3Zp8IshEe6I4ZdrLoQBLA',
+      id: '_FUzRMoujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,

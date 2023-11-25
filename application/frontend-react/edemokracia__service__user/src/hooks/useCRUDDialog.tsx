@@ -20,7 +20,6 @@ import type { LinearProgressProps } from '@mui/material';
 import { useSnacks } from '~/hooks';
 import { useDialog } from '~/components/dialog';
 import { MdiIcon } from '~/components';
-import { toastConfig } from '~/config';
 import { isErrorOperationFault } from '~/utilities';
 
 export type CRUDDialogOpenProps<T extends JudoStored<any>> = {

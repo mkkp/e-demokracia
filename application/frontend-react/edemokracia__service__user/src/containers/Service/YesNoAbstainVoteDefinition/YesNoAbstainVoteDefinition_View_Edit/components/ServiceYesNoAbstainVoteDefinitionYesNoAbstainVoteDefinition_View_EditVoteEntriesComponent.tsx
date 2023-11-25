@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -56,9 +52,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -101,7 +95,6 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -207,7 +200,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_saUOMoshEe6I4ZdrLoQBLA',
+      id: '_G5uAkoujEe6laYH8Xw7WEw',
       attributeName: 'value',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.value', {
         defaultValue: 'Value',
@@ -217,7 +210,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
     },
 
     {
-      id: '_saU1QYshEe6I4ZdrLoQBLA',
+      id: '_G5unooujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -226,7 +219,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
     },
 
     {
-      id: '_saU1RYshEe6I4ZdrLoQBLA',
+      id: '_G5vOsIujEe6laYH8Xw7WEw',
       attributeName: 'createdBy',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',

@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
   numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -50,9 +46,7 @@ import type { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -100,7 +94,6 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -247,6 +240,17 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
         : undefined,
     },
     {
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceConStored) => isLoading,
+      action: actions.createProArgumentAction
+        ? async (rowData) => {
+            await actions.createProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
       id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Con.Con_Table.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
@@ -279,57 +283,46 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.createProArgumentAction
-        ? async (rowData) => {
-            await actions.createProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_snknEoshEe6I4ZdrLoQBLA',
+      id: '_HGJTAoujEe6laYH8Xw7WEw',
       attributeName: 'createdByName',
       label: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_snlOIoshEe6I4ZdrLoQBLA',
+      id: '_HGJ6EoujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_snl1MIshEe6I4ZdrLoQBLA',
+      id: '_HGKhIIujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_snl1NIshEe6I4ZdrLoQBLA',
+      id: '_HGKhJIujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_snmcQoshEe6I4ZdrLoQBLA',
+      id: '_HGLIMoujEe6laYH8Xw7WEw',
       attributeName: 'upVotes',
       label: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_snnDUYshEe6I4ZdrLoQBLA',
+      id: '_HGLvQIujEe6laYH8Xw7WEw',
       attributeName: 'downVotes',
       label: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,

@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { useJudoNavigation, MdiIcon } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 import type { YesNoVoteInputYesNoVoteInput_FormActionDefinitions } from './YesNoVoteInputYesNoVoteInput_Form';
@@ -147,7 +147,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteYesNoForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_q9BJwoshEe6I4ZdrLoQBLA)"
+              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_FabYEIujEe6laYH8Xw7WEw)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -168,7 +168,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteForYesNoVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_q9BJwoshEe6I4ZdrLoQBLA)"
+              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_FabYEIujEe6laYH8Xw7WEw)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

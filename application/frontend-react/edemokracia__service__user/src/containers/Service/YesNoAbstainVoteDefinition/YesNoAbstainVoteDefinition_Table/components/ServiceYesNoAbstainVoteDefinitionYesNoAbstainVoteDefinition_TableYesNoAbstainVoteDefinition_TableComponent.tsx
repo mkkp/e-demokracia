@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -54,9 +50,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -109,7 +103,6 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -307,7 +300,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sJ6asIshEe6I4ZdrLoQBLA',
+      id: '_GqCl0IujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
         defaultValue: 'Title',
@@ -316,7 +309,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_sJ6atIshEe6I4ZdrLoQBLA',
+      id: '_GqCl1IujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -325,7 +318,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_sJ7BwoshEe6I4ZdrLoQBLA',
+      id: '_GqDM4oujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -334,7 +327,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_sJ7o0IshEe6I4ZdrLoQBLA',
+      id: '_GqDM5oujEe6laYH8Xw7WEw',
       attributeName: 'status',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
         defaultValue: 'Status',
@@ -344,7 +337,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
     },
 
     {
-      id: '_sJ7o1IshEe6I4ZdrLoQBLA',
+      id: '_GqDz84ujEe6laYH8Xw7WEw',
       attributeName: 'closeAt',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

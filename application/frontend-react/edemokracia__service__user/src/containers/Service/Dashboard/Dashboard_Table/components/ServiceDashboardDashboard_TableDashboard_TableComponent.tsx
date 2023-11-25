@@ -32,27 +32,13 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
 import type { ServiceDashboard, ServiceDashboardQueryCustomizer, ServiceDashboardStored } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -96,8 +82,6 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
   const filtersKey = `User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -176,7 +160,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sn268oshEe6I4ZdrLoQBLA',
+      id: '_HGa_0IujEe6laYH8Xw7WEw',
       attributeName: 'welcome',
       label: t('service.Dashboard.Dashboard_Table.welcome', { defaultValue: 'Welcome' }) as string,
       filterType: FilterType.string,

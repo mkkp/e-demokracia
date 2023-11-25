@@ -9,19 +9,13 @@
 import type { Dispatch, SetStateAction, FC } from 'react';
 import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
-import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import type { CustomFormVisualElementProps } from '~/custom';
-import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
@@ -29,34 +23,15 @@ import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import type { GridFilterModel } from '@mui/x-data-grid';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import { useL10N } from '~/l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
-import { mainContainerPadding } from '~/theme';
-import { DIVIDER_HEIGHT } from '~/config';
-import type { Filter } from '~/components-api';
 import { MdiIcon, ModeledTabs, DropdownButton, useJudoNavigation } from '~/components';
-import {
-  isErrorOperationFault,
-  useErrorHandler,
-  fileHandling,
-  uiDateToServiceDate,
-  serviceDateToUiDate,
-  uiTimeToServiceTime,
-  serviceTimeToUiTime,
-  stringToBooleanSelect,
-  booleanToStringSelect,
-} from '~/utilities';
+import { isErrorOperationFault, useErrorHandler, uiDateToServiceDate, serviceDateToUiDate } from '~/utilities';
 
-import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
-import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import {
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  NumericInput,
-  TrinaryLogicCombobox,
-} from '~/components/widgets';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import type { DateTimeValidationError } from '@mui/x-date-pickers';
+import { AssociationButton } from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCity,
@@ -140,13 +115,13 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_sP4f0YshEe6I4ZdrLoQBLA)/LabelWrapper">
+        <Card id="_Gva1EIujEe6laYH8Xw7WEw)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="Security::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_sP4f0YshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
+                  <Typography id="_Gva1EIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
                     {t('service.ServiceUser.ServiceUser_View_Edit.Security.Icon', { defaultValue: 'Security' })}
                   </Typography>
                 </Grid>
@@ -276,13 +251,13 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_sP5G5YshEe6I4ZdrLoQBLA)/LabelWrapper">
+        <Card id="_GvbcIoujEe6laYH8Xw7WEw)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="personal::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_sP5G5YshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
+                  <Typography id="_GvbcIoujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
                     {t('service.ServiceUser.ServiceUser_View_Edit.personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>
@@ -472,13 +447,13 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_sO5BUIshEe6I4ZdrLoQBLA)/LabelWrapper">
+        <Card id="_GuluoIujEe6laYH8Xw7WEw)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="Areas::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_sO5BUIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
+                  <Typography id="_GuluoIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
                     {t('service.ServiceUser.ServiceUser_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
                   </Typography>
                 </Grid>

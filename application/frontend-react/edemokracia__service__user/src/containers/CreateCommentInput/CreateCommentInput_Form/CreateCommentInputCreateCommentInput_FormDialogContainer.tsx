@@ -16,7 +16,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { useJudoNavigation, MdiIcon } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 import type { CreateCommentInputCreateCommentInput_FormActionDefinitions } from './CreateCommentInputCreateCommentInput_Form';
@@ -152,7 +152,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
         {editMode && actions.createCommentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_q15OEIshEe6I4ZdrLoQBLA)"
+              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_FTkiIYujEe6laYH8Xw7WEw)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

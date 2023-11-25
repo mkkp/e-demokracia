@@ -11,20 +11,10 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/City/LinkSetSelectorPage';
 import { useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/County/LinkSetSelectorPage';
@@ -113,15 +103,9 @@ export const convertServiceUserIssuesUserIssues_View_EditCreateIssueInputFormPay
   attributeName: keyof ServiceCreateIssueInput,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
   const dateTimeTypes: string[] = ['debateCloseAt'];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
+  if (dateTimeTypes.includes(attributeName as string)) {
     return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
   }
   return value;
 };
@@ -260,51 +244,26 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       setIsLoading(false);
     }
   };
-  const cityOpenSetSelectorAction = async () => {
+  const countyOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage(
         data,
-        data.city ? [data.city] : [],
+        data.county ? [data.county] : [],
       );
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('city', returnedData[0]);
+        storeDiff('county', returnedData[0]);
       }
     }
   };
-  const cityAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored[]> => {
-    // action service::CreateIssueInput::CreateIssueInput_Form::issue::city::TabularReferenceFieldLinkAutocompleteRangeAction
-    // definition service::CreateIssueInput::CreateIssueInput_Form::issue::city::Autocomplete
+  const countyAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<ServiceCountyStored[]> => {
+    // action service::CreateIssueInput::CreateIssueInput_Form::issue::county::TabularReferenceFieldLinkAutocompleteRangeAction
+    // definition service::CreateIssueInput::CreateIssueInput_Form::issue::county::Autocomplete
     // page service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const districtOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage(
-        data,
-        data.district ? [data.district] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('district', returnedData[0]);
-      }
-    }
-  };
-  const districtAutocompleteRangeAction = async (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
-    // action service::CreateIssueInput::CreateIssueInput_Form::issue::district::TabularReferenceFieldLinkAutocompleteRangeAction
-    // definition service::CreateIssueInput::CreateIssueInput_Form::issue::district::Autocomplete
-    // page service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -335,26 +294,51 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       return Promise.resolve([]);
     }
   };
-  const countyOpenSetSelectorAction = async () => {
+  const districtOpenSetSelectorAction = async () => {
     const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage(
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage(
         data,
-        data.county ? [data.county] : [],
+        data.district ? [data.district] : [],
       );
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('county', returnedData[0]);
+        storeDiff('district', returnedData[0]);
       }
     }
   };
-  const countyAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored[]> => {
-    // action service::CreateIssueInput::CreateIssueInput_Form::issue::county::TabularReferenceFieldLinkAutocompleteRangeAction
-    // definition service::CreateIssueInput::CreateIssueInput_Form::issue::county::Autocomplete
+  const districtAutocompleteRangeAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<ServiceDistrictStored[]> => {
+    // action service::CreateIssueInput::CreateIssueInput_Form::issue::district::TabularReferenceFieldLinkAutocompleteRangeAction
+    // definition service::CreateIssueInput::CreateIssueInput_Form::issue::district::Autocomplete
     // page service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const cityOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
+        data,
+        data.city ? [data.city] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('city', returnedData[0]);
+      }
+    }
+  };
+  const cityAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored[]> => {
+    // action service::CreateIssueInput::CreateIssueInput_Form::issue::city::TabularReferenceFieldLinkAutocompleteRangeAction
+    // definition service::CreateIssueInput::CreateIssueInput_Form::issue::city::Autocomplete
+    // page service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -365,14 +349,14 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     backAction,
     createIssueForUserIssuesAction,
     getTemplateAction,
-    cityOpenSetSelectorAction,
-    cityAutocompleteRangeAction,
-    districtOpenSetSelectorAction,
-    districtAutocompleteRangeAction,
-    issueTypeOpenSetSelectorAction,
-    issueTypeAutocompleteRangeAction,
     countyOpenSetSelectorAction,
     countyAutocompleteRangeAction,
+    issueTypeOpenSetSelectorAction,
+    issueTypeAutocompleteRangeAction,
+    districtOpenSetSelectorAction,
+    districtAutocompleteRangeAction,
+    cityOpenSetSelectorAction,
+    cityAutocompleteRangeAction,
     ...(customActions ?? {}),
   };
 

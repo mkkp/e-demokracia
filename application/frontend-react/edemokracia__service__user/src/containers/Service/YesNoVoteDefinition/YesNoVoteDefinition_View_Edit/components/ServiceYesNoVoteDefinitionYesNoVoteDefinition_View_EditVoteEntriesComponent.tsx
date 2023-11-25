@@ -33,12 +33,8 @@ import type {
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
-  booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
   singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -56,9 +52,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -101,7 +95,6 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -207,7 +200,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_saXRgIshEe6I4ZdrLoQBLA',
+      id: '_G5wc0oujEe6laYH8Xw7WEw',
       attributeName: 'value',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.value', { defaultValue: 'Value' }) as string,
       filterType: FilterType.enumeration,
@@ -215,7 +208,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     },
 
     {
-      id: '_saXRhIshEe6I4ZdrLoQBLA',
+      id: '_G5xD4YujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.created', {
         defaultValue: 'Created',
@@ -224,7 +217,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     },
 
     {
-      id: '_saX4koshEe6I4ZdrLoQBLA',
+      id: '_G5xD5YujEe6laYH8Xw7WEw',
       attributeName: 'createdBy',
       label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.createdBy', {
         defaultValue: 'CreatedBy',

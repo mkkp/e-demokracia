@@ -34,11 +34,7 @@ import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
 import {
   booleanColumnOperators,
-  dateColumnOperators,
   dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
   columnsActionCalculator,
   ContextMenu,
   StripedDataGrid,
@@ -56,9 +52,7 @@ import type {
 import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
   serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -99,7 +93,6 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -251,7 +244,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sg9owoshEe6I4ZdrLoQBLA',
+      id: '_HADSEYujEe6laYH8Xw7WEw',
       attributeName: 'representation',
       label: t('service.UserManager.UserManager_View_Edit.representation', {
         defaultValue: 'Representation',
@@ -260,49 +253,49 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     },
 
     {
-      id: '_sg-P0oshEe6I4ZdrLoQBLA',
+      id: '_HAD5IIujEe6laYH8Xw7WEw',
       attributeName: 'userName',
       label: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sg-24IshEe6I4ZdrLoQBLA',
+      id: '_HAD5JIujEe6laYH8Xw7WEw',
       attributeName: 'firstName',
       label: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sg-25IshEe6I4ZdrLoQBLA',
+      id: '_HAEgMoujEe6laYH8Xw7WEw',
       attributeName: 'lastName',
       label: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sg_d8YshEe6I4ZdrLoQBLA',
+      id: '_HAEgNoujEe6laYH8Xw7WEw',
       attributeName: 'phone',
       label: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sg_d9YshEe6I4ZdrLoQBLA',
+      id: '_HAFHQ4ujEe6laYH8Xw7WEw',
       attributeName: 'email',
       label: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_shAFAoshEe6I4ZdrLoQBLA',
+      id: '_HAFuUYujEe6laYH8Xw7WEw',
       attributeName: 'isAdmin',
       label: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
       filterType: FilterType.boolean,
     },
 
     {
-      id: '_shAsEYshEe6I4ZdrLoQBLA',
+      id: '_HAFuVYujEe6laYH8Xw7WEw',
       attributeName: 'created',
       label: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,

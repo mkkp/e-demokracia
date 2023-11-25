@@ -112,8 +112,8 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
-    const path = '/service/Comment/voteUp';
+  async voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
+    const path = '/service/Comment/voteDown';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -125,8 +125,8 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
-    const path = '/service/Comment/voteDown';
+  async voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
+    const path = '/service/Comment/voteUp';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,

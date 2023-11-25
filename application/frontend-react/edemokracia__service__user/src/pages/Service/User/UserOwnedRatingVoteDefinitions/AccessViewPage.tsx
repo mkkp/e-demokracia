@@ -15,16 +15,9 @@ import { useParams } from 'react-router-dom';
 import type { GridFilterModel } from '@mui/x-data-grid';
 import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
-import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { toastConfig } from '~/config';
+import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import { useSnacks, useCRUDDialog } from '~/hooks';
-import {
-  passesLocalValidation,
-  processQueryCustomizer,
-  uiDateToServiceDate,
-  uiTimeToServiceTime,
-  useErrorHandler,
-} from '~/utilities';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import { PageContainerTransition } from '~/theme/animations';
 import { routeToServiceRatingVoteDefinitionIssueRelationViewPage } from '~/routes';
@@ -62,19 +55,13 @@ export const convertServiceUserUserOwnedRatingVoteDefinitionsAccessViewPagePaylo
   attributeName: keyof ServiceRatingVoteDefinition,
   value: any,
 ): any => {
-  const dateTypes: string[] = [];
   const dateTimeTypes: string[] = [
     'closeAt',
 
     'created',
   ];
-  const timeTypes: string[] = [];
-  if (dateTypes.includes(attributeName as string)) {
-    return uiDateToServiceDate(value);
-  } else if (dateTimeTypes.includes(attributeName as string)) {
+  if (dateTimeTypes.includes(attributeName as string)) {
     return value;
-  } else if (timeTypes.includes(attributeName as string)) {
-    return uiTimeToServiceTime(value);
   }
   return value;
 };
@@ -100,7 +87,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
   const { openConfirmDialog } = useConfirmDialog();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
-  const [createDialog, closeDialog] = useDialog();
 
   // State section
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -144,7 +130,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
 
   const pageQueryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,maxRateValue,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
+      '{userHasVoteEntry,maxRateValue,created,description,userHasNoVoteEntry,title,minRateValue,closeAt,status,userVoteEntry{created,value}}',
   };
 
   // Pandino Action overrides
@@ -219,13 +205,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       setIsLoading(false);
     }
   };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const takeBackVoteForRatingVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -246,23 +225,18 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       setIsLoading(false);
     }
   };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const userVoteEntryOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
     await openServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceRatingVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceRatingVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
   };
   const voteEntriesOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
     await openServiceRatingVoteDefinitionVoteEntriesRelationViewPage(target!);
@@ -289,20 +263,32 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       queryCustomizer,
     );
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceRatingVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceRatingVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
     cancelAction,
     updateAction,
-    voteAction,
     takeBackVoteForRatingVoteDefinitionAction,
+    voteAction,
     userVoteEntryOpenPageAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
     ...(customActions ?? {}),
   };
 

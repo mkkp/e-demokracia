@@ -9,50 +9,23 @@
 import type { Dispatch, SetStateAction, FC } from 'react';
 import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NumericFormat } from 'react-number-format';
 import { LoadingButton } from '@mui/lab';
-import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { JudoIdentifiable } from '@judo/data-api-common';
-import type { CustomFormVisualElementProps } from '~/custom';
-import { ComponentProxy } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import type { GridFilterModel } from '@mui/x-data-grid';
 import { useL10N } from '~/l10n/l10n-context';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
-import { mainContainerPadding } from '~/theme';
-import { DIVIDER_HEIGHT } from '~/config';
-import type { Filter } from '~/components-api';
-import { MdiIcon, ModeledTabs, DropdownButton, useJudoNavigation } from '~/components';
-import {
-  isErrorOperationFault,
-  useErrorHandler,
-  fileHandling,
-  uiDateToServiceDate,
-  serviceDateToUiDate,
-  uiTimeToServiceTime,
-  serviceTimeToUiTime,
-  stringToBooleanSelect,
-  booleanToStringSelect,
-} from '~/utilities';
+import { MdiIcon, DropdownButton, useJudoNavigation } from '~/components';
+import { isErrorOperationFault, useErrorHandler, uiDateToServiceDate, serviceDateToUiDate } from '~/utilities';
 
-import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
-import type { DateValidationError, DateTimeValidationError, TimeValidationError } from '@mui/x-date-pickers';
-import {
-  AssociationButton,
-  BinaryInput,
-  CollectionAssociationButton,
-  NumericInput,
-  TrinaryLogicCombobox,
-} from '~/components/widgets';
+import { DateTimePicker } from '@mui/x-date-pickers';
+import type { DateTimeValidationError } from '@mui/x-date-pickers';
+import { AssociationButton, NumericInput } from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCon,
@@ -355,7 +328,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_sS0fEIshEe6I4ZdrLoQBLA)/LabelWrapper"
+          id="_GyU_IoujEe6laYH8Xw7WEw)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -365,7 +338,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_sS0fEIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
+              <Typography id="_GyU_IoujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
                 {t('service.Con.Con_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>
@@ -395,7 +368,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_sTOHsIshEe6I4ZdrLoQBLA)/LabelWrapper"
+          id="_GysykIujEe6laYH8Xw7WEw)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -405,7 +378,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_sTOHsIshEe6I4ZdrLoQBLA)/Label" variant="h5" component="h1">
+              <Typography id="_GysykIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
                 {t('service.Con.Con_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>

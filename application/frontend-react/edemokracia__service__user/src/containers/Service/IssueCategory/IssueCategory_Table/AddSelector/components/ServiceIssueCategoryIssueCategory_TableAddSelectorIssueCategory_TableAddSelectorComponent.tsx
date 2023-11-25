@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -51,12 +41,8 @@ import type {
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   isRowSelectable,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -96,8 +82,6 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
   const filtersKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -163,14 +147,14 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_q34LEIshEe6I4ZdrLoQBLA',
+      id: '_FVGMIoujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.IssueCategory.IssueCategory_Table.AddSelector.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_q34LFIshEe6I4ZdrLoQBLA',
+      id: '_FVGzMYujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.IssueCategory.IssueCategory_Table.AddSelector.description', {
         defaultValue: 'Description',

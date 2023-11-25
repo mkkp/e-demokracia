@@ -79,7 +79,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
   } = props;
   const queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,maxRateValue,description,userHasNoVoteEntry,title,closeAt,minRateValue,status,userVoteEntry{created,value}}',
+      '{userHasVoteEntry,maxRateValue,created,description,userHasNoVoteEntry,title,minRateValue,closeAt,status,userVoteEntry{created,value}}',
   };
 
   return (

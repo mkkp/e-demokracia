@@ -32,27 +32,13 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
 import type { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -97,8 +83,6 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
   const filtersKey = `User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -197,21 +181,21 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_soBTAIshEe6I4ZdrLoQBLA',
+      id: '_HGkJwIujEe6laYH8Xw7WEw',
       attributeName: 'county',
       label: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_soLEAIshEe6I4ZdrLoQBLA',
+      id: '_HGt6wIujEe6laYH8Xw7WEw',
       attributeName: 'city',
       label: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_soQjkIshEe6I4ZdrLoQBLA',
+      id: '_HGzaUIujEe6laYH8Xw7WEw',
       attributeName: 'name',
       label: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
       filterType: FilterType.string,

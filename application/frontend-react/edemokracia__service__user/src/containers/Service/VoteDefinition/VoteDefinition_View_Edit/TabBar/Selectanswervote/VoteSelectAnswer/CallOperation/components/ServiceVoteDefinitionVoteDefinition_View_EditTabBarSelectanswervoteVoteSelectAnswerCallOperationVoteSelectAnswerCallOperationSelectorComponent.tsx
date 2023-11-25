@@ -32,17 +32,7 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
@@ -51,12 +41,8 @@ import type {
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   isRowSelectable,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -96,8 +82,6 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
   const filtersKey = `User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -167,7 +151,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_q88RQoshEe6I4ZdrLoQBLA',
+      id: '_FalJEoujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t(
         'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.title',
@@ -177,7 +161,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
     },
 
     {
-      id: '_q884UoshEe6I4ZdrLoQBLA',
+      id: '_FalJFoujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t(
         'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.description',

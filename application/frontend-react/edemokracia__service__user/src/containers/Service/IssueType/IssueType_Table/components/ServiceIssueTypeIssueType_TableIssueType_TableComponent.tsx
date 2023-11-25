@@ -32,27 +32,13 @@ import type {
 } from '@mui/x-data-grid';
 import { baseColumnConfig, baseTableConfig } from '~/config';
 import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateColumnOperators,
-  dateTimeColumnOperators,
-  numericColumnOperators,
-  singleSelectColumnOperators,
-  stringColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
+import { singleSelectColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
 import type { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
 import {
   getUpdatedRowsSelected,
-  fileHandling,
-  serviceDateToUiDate,
-  serviceTimeToUiTime,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
@@ -97,8 +83,6 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
   const filtersKey = `User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTable-${uniqueId}-filters`;
 
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
-  const { locale: l10nLocale } = useL10N();
-  const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
@@ -206,14 +190,14 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_rrmHAIshEe6I4ZdrLoQBLA',
+      id: '_GLY68IujEe6laYH8Xw7WEw',
       attributeName: 'title',
       label: t('service.IssueType.IssueType_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_rrpKUIshEe6I4ZdrLoQBLA',
+      id: '_GLbXMIujEe6laYH8Xw7WEw',
       attributeName: 'voteType',
       label: t('service.IssueType.IssueType_Table.voteType', { defaultValue: 'Default vote type' }) as string,
       filterType: FilterType.enumeration,
@@ -221,7 +205,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
     },
 
     {
-      id: '_rrsNoIshEe6I4ZdrLoQBLA',
+      id: '_GLeagIujEe6laYH8Xw7WEw',
       attributeName: 'description',
       label: t('service.IssueType.IssueType_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

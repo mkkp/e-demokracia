@@ -69,23 +69,3 @@ export function AssociationButton({
     </Button>
   );
 }
-
-export interface CollectionAssociationButtonProps extends AssociationBaseProps {
-  navigateAction: () => void;
-  isLoading?: boolean;
-}
-
-export function CollectionAssociationButton<O>({
-  id,
-  variant,
-  editMode,
-  isLoading,
-  navigateAction,
-  children,
-}: CollectionAssociationButtonProps) {
-  return (
-    <Button id={id} variant={variant ?? 'text'} onClick={() => navigateAction()} disabled={isLoading || editMode}>
-      {children}
-    </Button>
-  );
-}
