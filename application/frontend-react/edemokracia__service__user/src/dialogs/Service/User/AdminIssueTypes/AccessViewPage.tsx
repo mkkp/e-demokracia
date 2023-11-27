@@ -149,7 +149,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
   }, [data]);
 
   const pageQueryCustomizer: ServiceIssueTypeQueryCustomizer = {
-    _mask: '{voteType,description,title}',
+    _mask: '{description,title,voteType}',
   };
 
   // Pandino Action overrides

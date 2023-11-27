@@ -116,7 +116,7 @@ export default function ServiceIssueCommentsRelationViewPage() {
   }, [data]);
 
   const pageQueryCustomizer: ServiceCommentQueryCustomizer = {
-    _mask: '{created,upVotes,comment,downVotes,createdBy{representation}}',
+    _mask: '{comment,created,downVotes,upVotes,createdBy{representation}}',
   };
 
   // Pandino Action overrides

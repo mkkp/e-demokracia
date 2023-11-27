@@ -149,7 +149,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
         {editMode && actions.voteForRatingVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_uYw9gI0GEe6vroMdQ80Hug)"
+              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_sXQA0I1KEe6sgdrBpAinBQ)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -170,7 +170,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
         {editMode && actions.voteRatingForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_uYw9gI0GEe6vroMdQ80Hug)"
+              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_sXQA0I1KEe6sgdrBpAinBQ)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

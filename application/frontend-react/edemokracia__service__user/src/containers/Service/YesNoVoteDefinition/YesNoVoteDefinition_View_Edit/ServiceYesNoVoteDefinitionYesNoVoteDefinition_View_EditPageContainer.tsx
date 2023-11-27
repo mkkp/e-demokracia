@@ -79,7 +79,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditP
   } = props;
   const queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,userVoteEntry{value,created}}',
+      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{value,created}}',
   };
 
   return (

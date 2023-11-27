@@ -74,7 +74,7 @@ export default function ServiceUserProfileUserProfile_View_EditPage(
   } = props;
   const queryCustomizer: ServiceUserProfileQueryCustomizer = {
     _mask:
-      '{firstName,lastName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+      '{email,firstName,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   return (

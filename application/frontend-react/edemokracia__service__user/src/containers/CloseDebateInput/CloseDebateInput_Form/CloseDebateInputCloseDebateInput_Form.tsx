@@ -77,200 +77,195 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_v2vXYI0GEe6vroMdQ80Hug)/LabelWrapper">
+        <Card id="_tw8XoI1KEe6sgdrBpAinBQ)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="debate::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_v2vXYI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+                  <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
+                  <Typography id="_tw8XoI1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                     {t('CloseDebateInput.CloseDebateInput_Form.debate.Icon', { defaultValue: 'Close debate' })}
                   </Typography>
                 </Grid>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Card id="User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/GroupVisualElement">
-                  <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="voteType"
-                          id="User/(esm/_yfDhAH5VEe2kLcMqsIbMgQ)/EnumerationTypeCombo"
-                          autoFocus
-                          label={
-                            t('CloseDebateInput.CloseDebateInput_Form.voteType', { defaultValue: 'VoteType' }) as string
-                          }
-                          value={data.voteType || ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('voteType')}
-                          helperText={validation.get('voteType')}
-                          onChange={(event) => {
-                            storeDiff('voteType', event.target.value);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
+                <Grid
+                  id="User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/GroupVisualElement"
+                  container
+                  direction="row"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                  spacing={2}
+                >
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <TextField
+                      required={true}
+                      name="voteType"
+                      id="User/(esm/_yfDhAH5VEe2kLcMqsIbMgQ)/EnumerationTypeCombo"
+                      autoFocus
+                      label={
+                        t('CloseDebateInput.CloseDebateInput_Form.voteType', { defaultValue: 'VoteType' }) as string
+                      }
+                      value={data.voteType || ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('voteType')}
+                      helperText={validation.get('voteType')}
+                      onChange={(event) => {
+                        storeDiff('voteType', event.target.value);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="list" />
+                          </InputAdornment>
+                        ),
+                      }}
+                      select
+                    >
+                      <MenuItem id="User/(esm/_6eNosXMMEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'YES_NO'}>
+                        {t('enumerations.VoteTypeOnCloseDebate.YES_NO', { defaultValue: 'YES_NO' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_6eNosnMMEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'YES_NO_ABSTAIN'}>
+                        {t('enumerations.VoteTypeOnCloseDebate.YES_NO_ABSTAIN', { defaultValue: 'YES_NO_ABSTAIN' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_6eNos3MMEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'SELECT_ANSWER'}>
+                        {t('enumerations.VoteTypeOnCloseDebate.SELECT_ANSWER', { defaultValue: 'SELECT_ANSWER' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_6eNotHMMEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'RATE'}>
+                        {t('enumerations.VoteTypeOnCloseDebate.RATE', { defaultValue: 'RATE' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_XjfVwHMNEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'NO_VOTE'}>
+                        {t('enumerations.VoteTypeOnCloseDebate.NO_VOTE', { defaultValue: 'NO_VOTE' })}
+                      </MenuItem>
+                    </TextField>
+                  </Grid>
+
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <DateTimePicker
+                      ampm={false}
+                      ampmInClock={false}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      slotProps={{
+                        textField: {
+                          id: 'User/(esm/_uZqe8IfXEe2u0fVmwtP5bA)/TimestampTypeDateTimeInput',
+                          required: true,
+                          helperText: validation.get('closeAt'),
+                          error: !!validation.get('closeAt'),
+                          InputProps: {
                             startAdornment: (
                               <InputAdornment position="start">
-                                <MdiIcon path="list" />
+                                <MdiIcon path="schedule" />
                               </InputAdornment>
                             ),
-                          }}
-                          select
-                        >
-                          <MenuItem id="User/(esm/_6eNosXMMEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'YES_NO'}>
-                            {t('enumerations.VoteTypeOnCloseDebate.YES_NO', { defaultValue: 'YES_NO' })}
-                          </MenuItem>
-                          <MenuItem
-                            id="User/(esm/_6eNosnMMEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                            value={'YES_NO_ABSTAIN'}
-                          >
-                            {t('enumerations.VoteTypeOnCloseDebate.YES_NO_ABSTAIN', { defaultValue: 'YES_NO_ABSTAIN' })}
-                          </MenuItem>
-                          <MenuItem
-                            id="User/(esm/_6eNos3MMEe2wNaja8kBvcQ)/EnumerationTypeMember"
-                            value={'SELECT_ANSWER'}
-                          >
-                            {t('enumerations.VoteTypeOnCloseDebate.SELECT_ANSWER', { defaultValue: 'SELECT_ANSWER' })}
-                          </MenuItem>
-                          <MenuItem id="User/(esm/_6eNotHMMEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'RATE'}>
-                            {t('enumerations.VoteTypeOnCloseDebate.RATE', { defaultValue: 'RATE' })}
-                          </MenuItem>
-                          <MenuItem id="User/(esm/_XjfVwHMNEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'NO_VOTE'}>
-                            {t('enumerations.VoteTypeOnCloseDebate.NO_VOTE', { defaultValue: 'NO_VOTE' })}
-                          </MenuItem>
-                        </TextField>
-                      </Grid>
+                          },
+                        },
+                      }}
+                      onError={(newError: DateTimeValidationError, value: any) => {
+                        // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                        setValidation((prevValidation) => {
+                          const copy = new Map<keyof CloseDebateInput, string>(prevValidation);
+                          copy.set(
+                            'closeAt',
+                            newError === 'invalidDate'
+                              ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                  defaultValue: 'Value does not match the pattern requirements.',
+                                }) as string)
+                              : '',
+                          );
+                          return copy;
+                        });
+                      }}
+                      views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                      label={
+                        t('CloseDebateInput.CloseDebateInput_Form.closeAt', { defaultValue: 'Vote close at' }) as string
+                      }
+                      value={serviceDateToUiDate(data.closeAt ?? null)}
+                      readOnly={false || !isFormUpdateable()}
+                      disabled={isLoading}
+                      onChange={(newValue: Date) => {
+                        storeDiff('closeAt', newValue);
+                      }}
+                    />
+                  </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <DateTimePicker
-                          ampm={false}
-                          ampmInClock={false}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          slotProps={{
-                            textField: {
-                              id: 'User/(esm/_uZqe8IfXEe2u0fVmwtP5bA)/TimestampTypeDateTimeInput',
-                              required: true,
-                              helperText: validation.get('closeAt'),
-                              error: !!validation.get('closeAt'),
-                              InputProps: {
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="schedule" />
-                                  </InputAdornment>
-                                ),
-                              },
-                            },
-                          }}
-                          onError={(newError: DateTimeValidationError, value: any) => {
-                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                            setValidation((prevValidation) => {
-                              const copy = new Map<keyof CloseDebateInput, string>(prevValidation);
-                              copy.set(
-                                'closeAt',
-                                newError === 'invalidDate'
-                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                      defaultValue: 'Value does not match the pattern requirements.',
-                                    }) as string)
-                                  : '',
-                              );
-                              return copy;
-                            });
-                          }}
-                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                          label={
-                            t('CloseDebateInput.CloseDebateInput_Form.closeAt', {
-                              defaultValue: 'Vote close at',
-                            }) as string
-                          }
-                          value={serviceDateToUiDate(data.closeAt ?? null)}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
-                          onChange={(newValue: Date) => {
-                            storeDiff('closeAt', newValue);
-                          }}
-                        />
-                      </Grid>
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="title"
+                      id="User/(esm/_uZrGAYfXEe2u0fVmwtP5bA)/StringTypeTextInput"
+                      label={
+                        t('CloseDebateInput.CloseDebateInput_Form.title', { defaultValue: 'Vote title' }) as string
+                      }
+                      value={data.title ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('title')}
+                      helperText={validation.get('title')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('title', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="title"
-                          id="User/(esm/_uZrGAYfXEe2u0fVmwtP5bA)/StringTypeTextInput"
-                          label={
-                            t('CloseDebateInput.CloseDebateInput_Form.title', { defaultValue: 'Vote title' }) as string
-                          }
-                          value={data.title ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('title')}
-                          helperText={validation.get('title')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('title', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="description"
-                          id="User/(esm/_uZrGAIfXEe2u0fVmwtP5bA)/StringTypeTextArea"
-                          label={
-                            t('CloseDebateInput.CloseDebateInput_Form.description', {
-                              defaultValue: 'Vote description',
-                            }) as string
-                          }
-                          value={data.description ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          multiline
-                          minRows={4.0}
-                          error={!!validation.get('description')}
-                          helperText={validation.get('description')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('description', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="description"
+                      id="User/(esm/_uZrGAIfXEe2u0fVmwtP5bA)/StringTypeTextArea"
+                      label={
+                        t('CloseDebateInput.CloseDebateInput_Form.description', {
+                          defaultValue: 'Vote description',
+                        }) as string
+                      }
+                      value={data.description ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      multiline
+                      minRows={4.0}
+                      error={!!validation.get('description')}
+                      helperText={validation.get('description')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('description', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

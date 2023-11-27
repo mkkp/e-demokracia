@@ -185,7 +185,7 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
 
   const pageQueryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{created,description,upVotes,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,description,downVotes,title,upVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   // Pandino Action overrides
@@ -275,16 +275,26 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
       handleError(error, undefined, data);
     }
   };
-  const createConArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const createProArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const voteDownForConAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceConServiceImpl.voteDown(data);
+      if (customActions?.postVoteDownForConAction) {
+        await customActions.postVoteDownForConAction(
+          onClose,
+        );
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceCon>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const voteUpForConAction = async () => {
@@ -309,27 +319,22 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
       setIsLoading(false);
     }
   };
-  const voteDownForConAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceConServiceImpl.voteDown(data);
-      if (customActions?.postVoteDownForConAction) {
-        await customActions.postVoteDownForConAction(
-          onClose,
-        );
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceCon>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
+  const createProArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
+  };
+  const createConArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceConVotesRelationTablePage((target || data).__signedIdentifier));
+    onClose();
   };
   const prosOpenPageAction = async (target?: ServiceProStored) => {
     await openServiceConProsRelationViewPage(target!);
@@ -409,6 +414,18 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
       });
     });
   };
+  const prosCreateConArgumentAction = async (target: ServiceProStored) => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const prosCreateProArgumentAction = async (target: ServiceProStored) => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const prosVoteUpForProAction = async (target?: ServiceProStored) => {
     try {
       setIsLoading(true);
@@ -457,28 +474,11 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
       setIsLoading(false);
     }
   };
-  const prosCreateProArgumentAction = async (target: ServiceProStored) => {
-    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const prosCreateConArgumentAction = async (target: ServiceProStored) => {
-    const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceConCreatedByRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceConVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
   };
   const consOpenPageAction = async (target?: ServiceConStored) => {
     await openServiceConConsRelationViewPage(target!);
@@ -558,16 +558,28 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
       });
     });
   };
-  const consCreateConArgumentAction = async (target: ServiceConStored) => {
-    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const consCreateProArgumentAction = async (target: ServiceConStored) => {
-    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const consVoteDownForConAction = async (target?: ServiceConStored) => {
+    try {
+      setIsLoading(true);
+      await serviceConServiceImpl.voteDownForCons(target!);
+      if (customActions?.postConsVoteDownForConAction) {
+        await customActions.postConsVoteDownForConAction(
+          target!,
+
+          onClose,
+        );
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceCon>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const consVoteUpForConAction = async (target?: ServiceConStored) => {
@@ -594,28 +606,16 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
       setIsLoading(false);
     }
   };
-  const consVoteDownForConAction = async (target?: ServiceConStored) => {
-    try {
-      setIsLoading(true);
-      await serviceConServiceImpl.voteDownForCons(target!);
-      if (customActions?.postConsVoteDownForConAction) {
-        await customActions.postConsVoteDownForConAction(
-          target!,
-
-          onClose,
-        );
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceCon>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
+  const consCreateProArgumentAction = async (target: ServiceConStored) => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const consCreateConArgumentAction = async (target: ServiceConStored) => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
 
@@ -625,28 +625,28 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
     cancelAction,
     updateAction,
     deleteAction,
-    createConArgumentAction,
-    createProArgumentAction,
-    voteUpForConAction,
     voteDownForConAction,
+    voteUpForConAction,
+    createProArgumentAction,
+    createConArgumentAction,
+    votesOpenPageAction,
     prosOpenPageAction,
     prosFilterAction,
     prosDeleteAction,
     prosBulkDeleteAction,
+    prosCreateConArgumentAction,
+    prosCreateProArgumentAction,
     prosVoteUpForProAction,
     prosVoteDownForProAction,
-    prosCreateProArgumentAction,
-    prosCreateConArgumentAction,
     createdByOpenPageAction,
-    votesOpenPageAction,
     consOpenPageAction,
     consFilterAction,
     consDeleteAction,
     consBulkDeleteAction,
-    consCreateConArgumentAction,
-    consCreateProArgumentAction,
-    consVoteUpForConAction,
     consVoteDownForConAction,
+    consVoteUpForConAction,
+    consCreateProArgumentAction,
+    consCreateConArgumentAction,
     ...(customActions ?? {}),
   };
 

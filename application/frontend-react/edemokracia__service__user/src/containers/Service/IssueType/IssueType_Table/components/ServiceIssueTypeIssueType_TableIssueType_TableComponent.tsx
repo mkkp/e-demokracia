@@ -190,14 +190,14 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_vPtzoI0GEe6vroMdQ80Hug',
+      id: '_tKv6UI1KEe6sgdrBpAinBQ',
       attributeName: 'title',
       label: t('service.IssueType.IssueType_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_vPw28I0GEe6vroMdQ80Hug',
+      id: '_tKy9oI1KEe6sgdrBpAinBQ',
       attributeName: 'voteType',
       label: t('service.IssueType.IssueType_Table.voteType', { defaultValue: 'Default vote type' }) as string,
       filterType: FilterType.enumeration,
@@ -205,7 +205,7 @@ export function ServiceIssueTypeIssueType_TableIssueType_TableComponent(
     },
 
     {
-      id: '_vPz6QI0GEe6vroMdQ80Hug',
+      id: '_tK2A8I1KEe6sgdrBpAinBQ',
       attributeName: 'description',
       label: t('service.IssueType.IssueType_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

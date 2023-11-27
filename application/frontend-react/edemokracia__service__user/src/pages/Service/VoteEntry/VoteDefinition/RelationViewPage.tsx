@@ -124,7 +124,7 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
 
   const pageQueryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
     _mask:
-      '{created,isSelectAnswerType,isNotRatingType,description,isNotYesNoType,title,closeAt,isRatingType,isYesNoType,isYesNoAbstainType,isNotSelectAnswerType,isNotYesNoAbstainType,status}',
+      '{closeAt,created,description,isNotRatingType,isNotSelectAnswerType,isNotYesNoAbstainType,isNotYesNoType,isRatingType,isSelectAnswerType,isYesNoAbstainType,isYesNoType,status,title}',
   };
 
   // Pandino Action overrides
@@ -180,6 +180,14 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const voteRatingAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const voteYesNoAction = async () => {
     const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
       data,
@@ -206,14 +214,6 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const voteRatingAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const issueOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
@@ -230,10 +230,10 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
+    voteRatingAction,
     voteYesNoAction,
     voteSelectAnswerAction,
     voteYesNoAbstainAction,
-    voteRatingAction,
     issueOpenPageAction,
     issuePreFetchAction,
     ...(customActions ?? {}),

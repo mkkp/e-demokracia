@@ -278,15 +278,15 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
+      id: 'User/(esm/_JTH2lXr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeVote', {
+        defaultValue: 'closeVote',
       }) as string,
-      icon: <MdiIcon path="delete" />,
+      icon: <MdiIcon path="lock-check" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
+      action: actions.closeVoteForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
-            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!(rowData);
+            await actions.closeVoteForSelectAnswerVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -304,15 +304,28 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
+      id: 'User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
       }) as string,
-      icon: <MdiIcon path="lock-open" />,
+      icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.activateForSelectAnswerVoteDefinitionAction
+      action: actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
-            await actions.activateForSelectAnswerVoteDefinitionAction!(rowData);
+            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.vote', {
+        defaultValue: 'vote',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
           }
         : undefined,
     },
@@ -330,15 +343,15 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_JTH2lXr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeVote', {
-        defaultValue: 'closeVote',
+      id: 'User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.activate', {
+        defaultValue: 'activate',
       }) as string,
-      icon: <MdiIcon path="lock-check" />,
+      icon: <MdiIcon path="lock-open" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.closeVoteForSelectAnswerVoteDefinitionAction
+      action: actions.activateForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
-            await actions.closeVoteForSelectAnswerVoteDefinitionAction!(rowData);
+            await actions.activateForSelectAnswerVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -355,24 +368,11 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.vote', {
-        defaultValue: 'vote',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.voteAction
-        ? async (rowData) => {
-            await actions.voteAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_vuxuMo0GEe6vroMdQ80Hug',
+      id: '_to518I1KEe6sgdrBpAinBQ',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
         defaultValue: 'Title',
@@ -381,7 +381,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_vuyVQo0GEe6vroMdQ80Hug',
+      id: '_to6dAI1KEe6sgdrBpAinBQ',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -390,7 +390,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_vuy8Uo0GEe6vroMdQ80Hug',
+      id: '_to6dBI1KEe6sgdrBpAinBQ',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -399,7 +399,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_vuzjYI0GEe6vroMdQ80Hug',
+      id: '_to7EEo1KEe6sgdrBpAinBQ',
       attributeName: 'status',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
         defaultValue: 'Status',
@@ -409,7 +409,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_vu0KcI0GEe6vroMdQ80Hug',
+      id: '_to7rIY1KEe6sgdrBpAinBQ',
       attributeName: 'closeAt',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

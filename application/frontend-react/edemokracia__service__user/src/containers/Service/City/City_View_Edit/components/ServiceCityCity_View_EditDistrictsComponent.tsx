@@ -146,7 +146,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_v55ZEY0GEe6vroMdQ80Hug',
+      id: '_tz2hso1KEe6sgdrBpAinBQ',
       attributeName: 'name',
       label: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
       filterType: FilterType.string,

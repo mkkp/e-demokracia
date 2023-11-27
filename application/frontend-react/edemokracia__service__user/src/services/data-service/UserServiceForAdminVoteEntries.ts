@@ -42,6 +42,8 @@ export interface UserServiceForAdminVoteEntries {
     owner: JudoIdentifiable<ServiceVoteEntry>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored>;
+  voteRatingForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
+  getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput>;
   voteYesNoForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: YesNoVoteInput): Promise<void>;
   getTemplateOnVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput>;
   voteSelectAnswerForVoteDefinition(
@@ -58,6 +60,4 @@ export interface UserServiceForAdminVoteEntries {
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
   getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput>;
-  voteRatingForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
-  getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput>;
 }

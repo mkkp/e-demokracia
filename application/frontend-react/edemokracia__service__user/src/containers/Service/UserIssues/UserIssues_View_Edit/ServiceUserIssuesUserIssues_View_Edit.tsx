@@ -235,7 +235,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid
-                          id="_v2rtAI0GEe6vroMdQ80Hug)/LabelWrapper"
+                          id="_tw3fIo1KEe6sgdrBpAinBQ)/LabelWrapper"
                           container
                           direction="column"
                           alignItems="center"
@@ -244,7 +244,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                         >
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <Typography id="_v2rtAI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+                              <Typography id="_tw3fIo1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                                 {t('service.UserIssues.UserIssues_View_Edit.activeGlobal.Label', {
                                   defaultValue: 'Global',
                                 })}

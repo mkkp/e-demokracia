@@ -253,12 +253,12 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_v2YyEI0GEe6vroMdQ80Hug)/LabelWrapper">
+        <Card id="_twg50I1KEe6sgdrBpAinBQ)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_v2YyEI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+                  <Typography id="_twg50I1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                     {t(
                       'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                       { defaultValue: 'My vote entry' },
@@ -269,88 +269,91 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
               {!data.isVoteNotOpen && (
                 <Grid item xs={12} sm={12}>
-                  <Card id="User/(esm/_0SJy0FtuEe6Mx9dH3yj5gQ)/GroupVisualElement">
-                    <CardContent>
-                      <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                        {!data.userHasNoVoteEntry && (
+                  <Grid
+                    id="User/(esm/_0SJy0FtuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                    container
+                    direction="row"
+                    alignItems="stretch"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    {!data.userHasNoVoteEntry && (
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_0SJy0VtuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_0SJy0VtuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                              id="User/(esm/_0SJy0ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
                               container
                               direction="row"
                               alignItems="flex-start"
                               justifyContent="flex-start"
                               spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
-                                <Grid
-                                  id="User/(esm/_0SJy0ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                                  container
-                                  direction="row"
-                                  alignItems="flex-start"
-                                  justifyContent="flex-start"
-                                  spacing={2}
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <LoadingButton
+                                  id="User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
+                                  loading={isLoading}
+                                  variant={undefined}
+                                  startIcon={<MdiIcon path="delete" />}
+                                  loadingPosition="start"
+                                  onClick={async () => {
+                                    if (actions.takeBackVoteForSelectAnswerVoteDefinitionAction) {
+                                      await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!();
+                                    }
+                                  }}
+                                  disabled={
+                                    !actions.takeBackVoteForSelectAnswerVoteDefinitionAction ||
+                                    !data.userHasVoteEntry ||
+                                    editMode
+                                  }
                                 >
-                                  <Grid item xs={12} sm={12} md={4.0}>
-                                    <LoadingButton
-                                      id="User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
-                                      loading={isLoading}
-                                      variant={undefined}
-                                      startIcon={<MdiIcon path="delete" />}
-                                      loadingPosition="start"
-                                      onClick={async () => {
-                                        if (actions.takeBackVoteForSelectAnswerVoteDefinitionAction) {
-                                          await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!();
-                                        }
-                                      }}
-                                      disabled={
-                                        !actions.takeBackVoteForSelectAnswerVoteDefinitionAction ||
-                                        !data.userHasVoteEntry ||
-                                        editMode
-                                      }
-                                    >
-                                      <span>
-                                        {t(
-                                          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.takeBackVote',
-                                          { defaultValue: 'TakeBackVote' },
-                                        )}
-                                      </span>
-                                    </LoadingButton>
-                                  </Grid>
+                                  <span>
+                                    {t(
+                                      'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.takeBackVote',
+                                      { defaultValue: 'TakeBackVote' },
+                                    )}
+                                  </span>
+                                </LoadingButton>
+                              </Grid>
 
-                                  <Grid item xs={12} sm={12} md={4.0}>
-                                    <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent
-                                      disabled={true || !isFormUpdateable()}
-                                      ownerData={data}
-                                      editMode={editMode}
-                                      storeDiff={storeDiff}
-                                      validationError={validation.get('userVoteEntry')}
-                                      actions={actions}
-                                    />
-                                  </Grid>
-                                </Grid>
+                              <Grid item xs={12} sm={12} md={4.0}>
+                                <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent
+                                  disabled={true || !isFormUpdateable()}
+                                  ownerData={data}
+                                  editMode={editMode}
+                                  storeDiff={storeDiff}
+                                  validationError={validation.get('userVoteEntry')}
+                                  actions={actions}
+                                />
                               </Grid>
                             </Grid>
                           </Grid>
-                        )}
-
-                        {!data.userHasVoteEntry && (
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="User/(esm/_0SJy1ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}></Grid>
-                            </Grid>
-                          </Grid>
-                        )}
+                        </Grid>
                       </Grid>
-                    </CardContent>
-                  </Card>
+                    )}
+
+                    {!data.userHasVoteEntry && (
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_0SJy1ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}></Grid>
+                        </Grid>
+                      </Grid>
+                    )}
+                  </Grid>
                 </Grid>
               )}
             </Grid>
@@ -627,7 +630,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="_wBf15I0GEe6vroMdQ80Hug)/LabelWrapper"
+                      id="_t6_EcY1KEe6sgdrBpAinBQ)/LabelWrapper"
                       container
                       direction="column"
                       alignItems="center"
@@ -636,8 +639,8 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                     >
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                          <MdiIcon path="voteSelections::Icon" sx={{ marginRight: 1 }} />
-                          <Typography id="_wBf15I0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+                          <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
+                          <Typography id="_t6_EcY1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                             {t(
                               'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.voteSelections.Icon',
                               { defaultValue: 'VoteSelections' },
@@ -676,7 +679,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_v2cccI0GEe6vroMdQ80Hug)/LabelWrapper"
+          id="_twlLQY1KEe6sgdrBpAinBQ)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -685,7 +688,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_v2cccI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+              <Typography id="_twlLQY1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                 {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.entries.Label', {
                   defaultValue: 'Entries',
                 })}

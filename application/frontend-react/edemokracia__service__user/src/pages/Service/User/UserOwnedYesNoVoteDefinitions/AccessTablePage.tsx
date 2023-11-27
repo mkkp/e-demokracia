@@ -119,6 +119,31 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const activateForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.activate(target!);
+      if (customActions?.postActivateForYesNoVoteDefinitionAction) {
+        await customActions.postActivateForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
   const takeBackVoteForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -191,31 +216,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
       setIsLoading(false);
     }
   };
-  const activateForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.activate(target!);
-      if (customActions?.postActivateForYesNoVoteDefinitionAction) {
-        await customActions.postActivateForYesNoVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const deleteOrArchiveForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -239,12 +239,12 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
     openPageAction,
     filterAction,
     refreshAction,
+    activateForYesNoVoteDefinitionAction,
+    voteAction,
     takeBackVoteForYesNoVoteDefinitionAction,
     removeFromFavoritesForYesNoVoteDefinitionAction,
     addToFavoritesForYesNoVoteDefinitionAction,
     closeVoteForYesNoVoteDefinitionAction,
-    activateForYesNoVoteDefinitionAction,
-    voteAction,
     deleteOrArchiveForYesNoVoteDefinitionAction,
     ...(customActions ?? {}),
   };

@@ -85,93 +85,96 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_v2v-co0GEe6vroMdQ80Hug)/LabelWrapper">
+        <Card id="_tw-z4I1KEe6sgdrBpAinBQ)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="group::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_v2v-co0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+                  <MdiIcon path="account-voice" sx={{ marginRight: 1 }} />
+                  <Typography id="_tw-z4I1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                     {t('CreateArgumentInput.CreateArgumentInput_Form.group.Icon', { defaultValue: 'Add argument' })}
                   </Typography>
                 </Grid>
               </Grid>
 
               <Grid item xs={12} sm={12}>
-                <Card id="User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/GroupVisualElement">
-                  <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="title"
-                          id="User/(esm/_3m5J4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-                          autoFocus
-                          label={
-                            t('CreateArgumentInput.CreateArgumentInput_Form.title', { defaultValue: 'Title' }) as string
-                          }
-                          value={data.title ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('title')}
-                          helperText={validation.get('title')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('title', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
+                <Grid
+                  id="User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/GroupVisualElement"
+                  container
+                  direction="row"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                  spacing={2}
+                >
+                  <Grid item xs={12} sm={12} md={8.0}>
+                    <TextField
+                      required={true}
+                      name="title"
+                      id="User/(esm/_3m5J4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
+                      autoFocus
+                      label={
+                        t('CreateArgumentInput.CreateArgumentInput_Form.title', { defaultValue: 'Title' }) as string
+                      }
+                      value={data.title ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('title')}
+                      helperText={validation.get('title')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('title', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={true}
-                          name="description"
-                          id="User/(esm/_3nC64H4bEe2j59SYy0JH0Q)/StringTypeTextArea"
-                          label={
-                            t('CreateArgumentInput.CreateArgumentInput_Form.description', {
-                              defaultValue: 'Description',
-                            }) as string
-                          }
-                          value={data.description ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          multiline
-                          minRows={4.0}
-                          error={!!validation.get('description')}
-                          helperText={validation.get('description')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('description', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="description"
+                      id="User/(esm/_3nC64H4bEe2j59SYy0JH0Q)/StringTypeTextArea"
+                      label={
+                        t('CreateArgumentInput.CreateArgumentInput_Form.description', {
+                          defaultValue: 'Description',
+                        }) as string
+                      }
+                      value={data.description ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      multiline
+                      minRows={4.0}
+                      error={!!validation.get('description')}
+                      helperText={validation.get('description')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('description', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

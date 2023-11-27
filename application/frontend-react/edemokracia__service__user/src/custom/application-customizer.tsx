@@ -18,6 +18,5 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
     registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context);
     registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context);
-
   }
 }

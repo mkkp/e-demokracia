@@ -76,7 +76,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditPage(
     setValidation,
   } = props;
   const queryCustomizer: ServiceCreateUserInputQueryCustomizer = {
-    _mask: '{lastName,firstName,userName,email,hasAdminAccess}',
+    _mask: '{email,firstName,hasAdminAccess,lastName,userName}',
   };
 
   return (

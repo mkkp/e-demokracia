@@ -70,7 +70,7 @@ export default function ServiceConCon_FormDialog(props: ServiceConCon_FormDialog
   } = props;
   const queryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{createdByName,created,description,upVotes,title,downVotes,cons{createdByName,created,description,title,upVotes,downVotes},pros{createdByName,created,description,title,upVotes,downVotes},createdBy{firstName,lastName,phone,email,isAdmin,created,userName,representation}}',
+      '{created,createdByName,description,downVotes,title,upVotes,cons{createdByName,created,description,title,upVotes,downVotes},pros{createdByName,created,description,title,upVotes,downVotes},createdBy{firstName,lastName,phone,email,isAdmin,created,userName,representation}}',
   };
 
   return (

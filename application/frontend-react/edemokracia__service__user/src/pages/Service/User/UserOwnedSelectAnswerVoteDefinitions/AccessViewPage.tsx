@@ -145,7 +145,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
 
   const pageQueryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
     _mask:
-      '{isVoteNotOpen,userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
+      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
   };
 
   // Pandino Action overrides
@@ -229,12 +229,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const deleteOrArchiveForSelectAnswerVoteDefinitionAction = async () => {
+  const closeVoteForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.deleteOrArchive(data);
-      if (customActions?.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction) {
-        await customActions.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction();
+      await serviceSelectAnswerVoteDefinitionServiceImpl.closeVote(data);
+      if (customActions?.postCloseVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postCloseVoteForSelectAnswerVoteDefinitionAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -269,12 +269,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const activateForSelectAnswerVoteDefinitionAction = async () => {
+  const deleteOrArchiveForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.activate(data);
-      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
-        await customActions.postActivateForSelectAnswerVoteDefinitionAction();
+      await serviceSelectAnswerVoteDefinitionServiceImpl.deleteOrArchive(data);
+      if (customActions?.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -287,6 +287,17 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
+        data,
+      );
+    if (result === 'submit') {
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      }
     }
   };
   const addToFavoritesForSelectAnswerVoteDefinitionAction = async () => {
@@ -309,12 +320,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const closeVoteForSelectAnswerVoteDefinitionAction = async () => {
+  const activateForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.closeVote(data);
-      if (customActions?.postCloseVoteForSelectAnswerVoteDefinitionAction) {
-        await customActions.postCloseVoteForSelectAnswerVoteDefinitionAction();
+      await serviceSelectAnswerVoteDefinitionServiceImpl.activate(data);
+      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
+        await customActions.postActivateForSelectAnswerVoteDefinitionAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -349,53 +360,11 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
-        data,
-      );
-    if (result === 'submit') {
-      if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
-  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
-    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
+  const userVoteEntryOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
+    await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const voteEntriesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const voteEntriesRefreshAction = async (
-    queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteEntryStored[]> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.listVoteEntries(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      queryCustomizer,
-    );
   };
   const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceSelectAnswerVoteDefinitionOwnerRelationViewPage(target!);
@@ -431,11 +400,17 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const userVoteEntryOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
-    await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
   };
   const voteSelectionsOpenPageAction = async (target?: ServiceSelectAnswerVoteSelectionStored) => {
     await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
@@ -526,34 +501,59 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       });
     });
   };
+  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
+    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteEntriesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const voteEntriesRefreshAction = async (
+    queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<ServiceSelectAnswerVoteEntryStored[]> => {
+    return serviceSelectAnswerVoteDefinitionServiceImpl.listVoteEntries(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      queryCustomizer,
+    );
+  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
     cancelAction,
     updateAction,
-    deleteOrArchiveForSelectAnswerVoteDefinitionAction,
-    takeBackVoteForSelectAnswerVoteDefinitionAction,
-    activateForSelectAnswerVoteDefinitionAction,
-    addToFavoritesForSelectAnswerVoteDefinitionAction,
     closeVoteForSelectAnswerVoteDefinitionAction,
-    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
+    takeBackVoteForSelectAnswerVoteDefinitionAction,
+    deleteOrArchiveForSelectAnswerVoteDefinitionAction,
     voteAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
-    voteEntriesOpenPageAction,
-    voteEntriesFilterAction,
-    voteEntriesRefreshAction,
+    addToFavoritesForSelectAnswerVoteDefinitionAction,
+    activateForSelectAnswerVoteDefinitionAction,
+    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
+    userVoteEntryOpenPageAction,
     ownerOpenPageAction,
     ownerOpenSetSelectorAction,
     ownerAutocompleteRangeAction,
     ownerUnsetAction,
-    userVoteEntryOpenPageAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
     voteSelectionsOpenPageAction,
     voteSelectionsFilterAction,
     voteSelectionsOpenFormAction,
     voteSelectionsDeleteAction,
     voteSelectionsBulkDeleteAction,
+    voteEntriesOpenPageAction,
+    voteEntriesFilterAction,
+    voteEntriesRefreshAction,
     ...(customActions ?? {}),
   };
 

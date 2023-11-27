@@ -133,7 +133,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_wI1M8I0GEe6vroMdQ80Hug',
+      id: '_uB1TUY1KEe6sgdrBpAinBQ',
       attributeName: 'representation',
       label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,

@@ -168,29 +168,18 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_v7OOxI0GEe6vroMdQ80Hug)',
-      label: t('service.Con.Con_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_t1F30o1KEe6sgdrBpAinBQ)',
+      label: t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateConArgumentAction
+      action: actions.consVoteDownForConAction
         ? async (rowData) => {
-            await actions.consCreateConArgumentAction!(rowData);
+            await actions.consVoteDownForConAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_v7OOxI0GEe6vroMdQ80Hug)',
-      label: t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_v7OOxI0GEe6vroMdQ80Hug)',
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_t1F30o1KEe6sgdrBpAinBQ)',
       label: t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -201,13 +190,24 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
         : undefined,
     },
     {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_v7OOxI0GEe6vroMdQ80Hug)',
-      label: t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_t1F30o1KEe6sgdrBpAinBQ)',
+      label: t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteDownForConAction
+      action: actions.consCreateProArgumentAction
         ? async (rowData) => {
-            await actions.consVoteDownForConAction!(rowData);
+            await actions.consCreateProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_t1F30o1KEe6sgdrBpAinBQ)',
+      label: t('service.Con.Con_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consCreateConArgumentAction
+        ? async (rowData) => {
+            await actions.consCreateConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -215,21 +215,21 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_v7MZkI0GEe6vroMdQ80Hug',
+      id: '_t1ECoI1KEe6sgdrBpAinBQ',
       attributeName: 'title',
       label: t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_v7NAoI0GEe6vroMdQ80Hug',
+      id: '_t1ECpI1KEe6sgdrBpAinBQ',
       attributeName: 'upVotes',
       label: t('service.Con.Con_View_Edit.upVotes', { defaultValue: 'up' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_v7NApI0GEe6vroMdQ80Hug',
+      id: '_t1Epso1KEe6sgdrBpAinBQ',
       attributeName: 'downVotes',
       label: t('service.Con.Con_View_Edit.downVotes', { defaultValue: 'down' }) as string,
       filterType: FilterType.numeric,

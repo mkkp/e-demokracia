@@ -310,7 +310,18 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
     {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_v9xMco0GEe6vroMdQ80Hug)',
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_t3fEg41KEe6sgdrBpAinBQ)',
+      label: t('service.Dashboard.Dashboard_View_Edit.voteRating', { defaultValue: 'voteRating' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
+      action: actions.favoriteVoteDefinitionsVoteRatingAction
+        ? async (rowData) => {
+            await actions.favoriteVoteDefinitionsVoteRatingAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_t3fEg41KEe6sgdrBpAinBQ)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteYesNo', { defaultValue: 'voteYesNo' }) as string,
       icon: <MdiIcon path="vote" />,
       disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
@@ -321,7 +332,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
         : undefined,
     },
     {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_v9xMco0GEe6vroMdQ80Hug)',
+      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_t3fEg41KEe6sgdrBpAinBQ)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteSelectAnswer', {
         defaultValue: 'voteSelectAnswer',
       }) as string,
@@ -334,7 +345,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
         : undefined,
     },
     {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_v9xMco0GEe6vroMdQ80Hug)',
+      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_t3fEg41KEe6sgdrBpAinBQ)',
       label: t('service.Dashboard.Dashboard_View_Edit.voteYesNoAbstain', {
         defaultValue: 'voteYesNoAbstain',
       }) as string,
@@ -346,22 +357,11 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_v9xMco0GEe6vroMdQ80Hug)',
-      label: t('service.Dashboard.Dashboard_View_Edit.voteRating', { defaultValue: 'voteRating' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
-      action: actions.favoriteVoteDefinitionsVoteRatingAction
-        ? async (rowData) => {
-            await actions.favoriteVoteDefinitionsVoteRatingAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_v9rs4I0GEe6vroMdQ80Hug',
+      id: '_t3Zk8o1KEe6sgdrBpAinBQ',
       attributeName: 'scope',
       label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -369,7 +369,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     },
 
     {
-      id: '_v9rs5I0GEe6vroMdQ80Hug',
+      id: '_t3aMAo1KEe6sgdrBpAinBQ',
       attributeName: 'countyRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
         defaultValue: 'CountyRepresentation',
@@ -378,7 +378,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     },
 
     {
-      id: '_v9sT8o0GEe6vroMdQ80Hug',
+      id: '_t3azEo1KEe6sgdrBpAinBQ',
       attributeName: 'cityRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
         defaultValue: 'CityRepresentation',
@@ -387,7 +387,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     },
 
     {
-      id: '_v9s7A40GEe6vroMdQ80Hug',
+      id: '_t3baIY1KEe6sgdrBpAinBQ',
       attributeName: 'districtRepresentation',
       label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
         defaultValue: 'DistrictRepresentation',
@@ -396,14 +396,14 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     },
 
     {
-      id: '_v9tiEo0GEe6vroMdQ80Hug',
+      id: '_t3cBMI1KEe6sgdrBpAinBQ',
       attributeName: 'title',
       label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_v9uJIo0GEe6vroMdQ80Hug',
+      id: '_t3coQI1KEe6sgdrBpAinBQ',
       attributeName: 'voteType',
       label: t('service.Dashboard.Dashboard_View_Edit.voteType', { defaultValue: 'VoteType' }) as string,
       filterType: FilterType.enumeration,
@@ -411,28 +411,28 @@ export function ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsCompon
     },
 
     {
-      id: '_v9uwMY0GEe6vroMdQ80Hug',
+      id: '_t3coRI1KEe6sgdrBpAinBQ',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_v9vXQI0GEe6vroMdQ80Hug',
+      id: '_t3dPUo1KEe6sgdrBpAinBQ',
       attributeName: 'closeAt',
       label: t('service.Dashboard.Dashboard_View_Edit.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_v9v-UI0GEe6vroMdQ80Hug',
+      id: '_t3d2YY1KEe6sgdrBpAinBQ',
       attributeName: 'numberOfVotes',
       label: t('service.Dashboard.Dashboard_View_Edit.numberOfVotes', { defaultValue: 'NumberOfVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_v9v-VI0GEe6vroMdQ80Hug',
+      id: '_t3edcI1KEe6sgdrBpAinBQ',
       attributeName: 'status',
       label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,

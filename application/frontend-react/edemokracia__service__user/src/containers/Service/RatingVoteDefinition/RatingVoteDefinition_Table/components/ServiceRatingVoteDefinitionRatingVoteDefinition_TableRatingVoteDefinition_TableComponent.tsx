@@ -303,45 +303,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_Vd5qBHsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeVote', {
-        defaultValue: 'closeVote',
-      }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
-      action: actions.closeVoteForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.closeVoteForRatingVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
-      action: actions.removeFromFavoritesForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.removeFromFavoritesForRatingVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.takeBackVote', {
-        defaultValue: 'takeBackVote',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action: actions.takeBackVoteForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.takeBackVoteForRatingVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
       icon: <MdiIcon path="vote" />,
@@ -349,19 +310,6 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
       action: actions.voteAction
         ? async (rowData) => {
             await actions.voteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
-      }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
-      action: actions.activateForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.activateForRatingVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -379,6 +327,32 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
         : undefined,
     },
     {
+      id: 'User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.activate', {
+        defaultValue: 'activate',
+      }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
+      action: actions.activateForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.activateForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.removeFromFavorites', {
+        defaultValue: 'removeFromFavorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
+      action: actions.removeFromFavoritesForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.removeFromFavoritesForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
       id: 'User/(esm/_Vd5qBnsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.deleteOrArchive', {
         defaultValue: 'deleteOrArchive',
@@ -391,11 +365,37 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_Vd5qBHsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeVote', {
+        defaultValue: 'closeVote',
+      }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
+      action: actions.closeVoteForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.closeVoteForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.takeBackVote', {
+        defaultValue: 'takeBackVote',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
+      action: actions.takeBackVoteForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_vwRjAY0GEe6vroMdQ80Hug',
+      id: '_tqQg0o1KEe6sgdrBpAinBQ',
       attributeName: 'minRateValue',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
         defaultValue: 'MinRateValue',
@@ -404,7 +404,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_vwSKEY0GEe6vroMdQ80Hug',
+      id: '_tqRH4Y1KEe6sgdrBpAinBQ',
       attributeName: 'maxRateValue',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
         defaultValue: 'MaxRateValue',
@@ -413,14 +413,14 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_vwSxII0GEe6vroMdQ80Hug',
+      id: '_tqRu8I1KEe6sgdrBpAinBQ',
       attributeName: 'title',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_vwSxJI0GEe6vroMdQ80Hug',
+      id: '_tqRu9I1KEe6sgdrBpAinBQ',
       attributeName: 'created',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -429,7 +429,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_vwTYMo0GEe6vroMdQ80Hug',
+      id: '_tqSWAo1KEe6sgdrBpAinBQ',
       attributeName: 'description',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -438,7 +438,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_vwT_QI0GEe6vroMdQ80Hug',
+      id: '_tqS9EI1KEe6sgdrBpAinBQ',
       attributeName: 'status',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -446,7 +446,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
     },
 
     {
-      id: '_vwUmUY0GEe6vroMdQ80Hug',
+      id: '_tqS9FI1KEe6sgdrBpAinBQ',
       attributeName: 'closeAt',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

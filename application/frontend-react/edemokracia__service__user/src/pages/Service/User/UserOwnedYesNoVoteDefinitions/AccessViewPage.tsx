@@ -140,7 +140,7 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
 
   const pageQueryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,userVoteEntry{value,created}}',
+      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{value,created}}',
   };
 
   // Pandino Action overrides
@@ -216,6 +216,33 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const activateForYesNoVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceYesNoVoteDefinitionServiceImpl.activate(data);
+      if (customActions?.postActivateForYesNoVoteDefinitionAction) {
+        await customActions.postActivateForYesNoVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const takeBackVoteForYesNoVoteDefinitionAction = async () => {
@@ -298,33 +325,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       setIsLoading(false);
     }
   };
-  const activateForYesNoVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceYesNoVoteDefinitionServiceImpl.activate(data);
-      if (customActions?.postActivateForYesNoVoteDefinitionAction) {
-        await customActions.postActivateForYesNoVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const deleteOrArchiveForYesNoVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -344,18 +344,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
     } finally {
       setIsLoading(false);
     }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceYesNoVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceYesNoVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
   };
   const voteEntriesOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
     await openServiceYesNoVoteDefinitionVoteEntriesRelationViewPage(target!);
@@ -381,6 +369,24 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,
     );
+  };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceYesNoVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceYesNoVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
+  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
+    await openServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
   };
   const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceYesNoVoteDefinitionOwnerRelationViewPage(target!);
@@ -416,35 +422,29 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const userVoteEntryOpenPageAction = async (target?: ServiceYesNoVoteEntryStored) => {
-    await openServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
 
   const actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
     cancelAction,
     updateAction,
+    activateForYesNoVoteDefinitionAction,
+    voteAction,
     takeBackVoteForYesNoVoteDefinitionAction,
     removeFromFavoritesForYesNoVoteDefinitionAction,
     addToFavoritesForYesNoVoteDefinitionAction,
     closeVoteForYesNoVoteDefinitionAction,
-    activateForYesNoVoteDefinitionAction,
-    voteAction,
     deleteOrArchiveForYesNoVoteDefinitionAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
     voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    userVoteEntryOpenPageAction,
     ownerOpenPageAction,
     ownerOpenSetSelectorAction,
     ownerAutocompleteRangeAction,
     ownerUnsetAction,
-    userVoteEntryOpenPageAction,
     ...(customActions ?? {}),
   };
 

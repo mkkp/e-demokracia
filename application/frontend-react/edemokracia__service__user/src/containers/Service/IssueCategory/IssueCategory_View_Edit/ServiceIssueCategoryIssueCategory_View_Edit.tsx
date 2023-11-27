@@ -164,7 +164,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_v_H3UI0GEe6vroMdQ80Hug)/LabelWrapper"
+          id="_t4xd8I1KEe6sgdrBpAinBQ)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -173,8 +173,8 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="subcategories::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_v_H3UI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+              <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
+              <Typography id="_t4xd8I1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                 {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Icon', {
                   defaultValue: 'Subcategories',
                 })}

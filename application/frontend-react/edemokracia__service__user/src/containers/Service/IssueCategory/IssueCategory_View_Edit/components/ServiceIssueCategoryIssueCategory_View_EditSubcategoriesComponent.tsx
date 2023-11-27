@@ -164,14 +164,14 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_v_IeYI0GEe6vroMdQ80Hug',
+      id: '_t4yFAI1KEe6sgdrBpAinBQ',
       attributeName: 'title',
       label: t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_v_IeZI0GEe6vroMdQ80Hug',
+      id: '_t4yFBI1KEe6sgdrBpAinBQ',
       attributeName: 'description',
       label: t('service.IssueCategory.IssueCategory_View_Edit.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

@@ -153,31 +153,10 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.voteYesNoAbstainForVoteDefinitionAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_uYpBso0GEe6vroMdQ80Hug)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="vote" />}
-              onClick={async () => {
-                await actions.voteYesNoAbstainForVoteDefinitionAction!();
-              }}
-            >
-              <span>
-                {t(
-                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.yesnoabstainvote.voteYesNoAbstain.OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.voteForYesNoAbstainVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_uYpBso0GEe6vroMdQ80Hug)"
+              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_sXlYAY1KEe6sgdrBpAinBQ)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -189,6 +168,27 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
               <span>
                 {t(
                   'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.voteYesNoAbstainForVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_sXlYAY1KEe6sgdrBpAinBQ)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteYesNoAbstainForVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.yesnoabstainvote.voteYesNoAbstain.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

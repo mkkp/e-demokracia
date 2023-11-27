@@ -66,7 +66,7 @@ export default function ServiceCommentComment_View_EditPage(props: ServiceCommen
     setValidation,
   } = props;
   const queryCustomizer: ServiceCommentQueryCustomizer = {
-    _mask: '{created,upVotes,comment,downVotes,createdBy{representation}}',
+    _mask: '{comment,created,downVotes,upVotes,createdBy{representation}}',
   };
 
   return (

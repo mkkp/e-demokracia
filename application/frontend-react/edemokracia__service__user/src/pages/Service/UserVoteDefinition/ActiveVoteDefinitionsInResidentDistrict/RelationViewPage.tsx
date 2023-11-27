@@ -125,7 +125,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
 
   const pageQueryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
     _mask:
-      '{created,isSelectAnswerType,isNotRatingType,description,isNotYesNoType,title,closeAt,isRatingType,isYesNoType,isYesNoAbstainType,isNotSelectAnswerType,isNotYesNoAbstainType,status}',
+      '{closeAt,created,description,isNotRatingType,isNotSelectAnswerType,isNotYesNoAbstainType,isNotYesNoType,isRatingType,isSelectAnswerType,isYesNoAbstainType,isYesNoType,status,title}',
   };
 
   // Pandino Action overrides
@@ -201,6 +201,14 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       setIsLoading(false);
     }
   };
+  const voteRatingAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const voteYesNoAction = async () => {
     const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
       data,
@@ -227,14 +235,6 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const voteRatingAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const issueOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
@@ -253,10 +253,10 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
     refreshAction,
     cancelAction,
     updateAction,
+    voteRatingAction,
     voteYesNoAction,
     voteSelectAnswerAction,
     voteYesNoAbstainAction,
-    voteRatingAction,
     issueOpenPageAction,
     issuePreFetchAction,
     ...(customActions ?? {}),

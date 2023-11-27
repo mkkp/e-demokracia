@@ -390,7 +390,29 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                 justifyContent="flex-start"
                 spacing={2}
               >
-                {!data.isNotYesNoType && <Grid item xs={12} sm={12} md={4.0}></Grid>}
+                {!data.isNotYesNoType && (
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <LoadingButton
+                      id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormVisualElement"
+                      loading={isLoading}
+                      variant={undefined}
+                      startIcon={<MdiIcon path="vote" />}
+                      loadingPosition="start"
+                      onClick={async () => {
+                        if (actions.voteYesNoAction) {
+                          await actions.voteYesNoAction!();
+                        }
+                      }}
+                      disabled={!actions.voteYesNoAction || !data.isYesNoType || editMode}
+                    >
+                      <span>
+                        {t('service.VoteDefinition.VoteDefinition_View_Edit.voteYesNo', {
+                          defaultValue: 'Take a vote',
+                        })}
+                      </span>
+                    </LoadingButton>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
           )}
@@ -405,7 +427,29 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                 justifyContent="flex-start"
                 spacing={2}
               >
-                {!data.isNotYesNoAbstainType && <Grid item xs={12} sm={12} md={4.0}></Grid>}
+                {!data.isNotYesNoAbstainType && (
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <LoadingButton
+                      id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormVisualElement"
+                      loading={isLoading}
+                      variant={undefined}
+                      startIcon={<MdiIcon path="vote" />}
+                      loadingPosition="start"
+                      onClick={async () => {
+                        if (actions.voteYesNoAbstainAction) {
+                          await actions.voteYesNoAbstainAction!();
+                        }
+                      }}
+                      disabled={!actions.voteYesNoAbstainAction || !data.isYesNoAbstainType || editMode}
+                    >
+                      <span>
+                        {t('service.VoteDefinition.VoteDefinition_View_Edit.voteYesNoAbstain', {
+                          defaultValue: 'Take a vote',
+                        })}
+                      </span>
+                    </LoadingButton>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
           )}
@@ -435,7 +479,29 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                 justifyContent="flex-start"
                 spacing={2}
               >
-                {!data.isNotRatingType && <Grid item xs={12} sm={12} md={4.0}></Grid>}
+                {!data.isNotRatingType && (
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <LoadingButton
+                      id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormVisualElement"
+                      loading={isLoading}
+                      variant={undefined}
+                      startIcon={<MdiIcon path="vote" />}
+                      loadingPosition="start"
+                      onClick={async () => {
+                        if (actions.voteRatingAction) {
+                          await actions.voteRatingAction!();
+                        }
+                      }}
+                      disabled={!actions.voteRatingAction || !data.isRatingType || editMode}
+                    >
+                      <span>
+                        {t('service.VoteDefinition.VoteDefinition_View_Edit.voteRating', {
+                          defaultValue: 'Take a vote',
+                        })}
+                      </span>
+                    </LoadingButton>
+                  </Grid>
+                )}
               </Grid>
             </Grid>
           )}

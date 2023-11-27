@@ -328,7 +328,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_v_K6o40GEe6vroMdQ80Hug)/LabelWrapper"
+          id="_t4z6NY1KEe6sgdrBpAinBQ)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -337,8 +337,8 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_v_K6o40GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+              <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
+              <Typography id="_t4z6NY1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                 {t('service.Pro.Pro_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>
@@ -368,7 +368,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_v_56cI0GEe6vroMdQ80Hug)/LabelWrapper"
+          id="_t5gdwI1KEe6sgdrBpAinBQ)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -377,8 +377,8 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_v_56cI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
+              <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
+              <Typography id="_t5gdwI1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
                 {t('service.Pro.Pro_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>

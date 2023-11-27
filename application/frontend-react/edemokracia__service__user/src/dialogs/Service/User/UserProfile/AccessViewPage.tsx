@@ -165,7 +165,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
 
   const pageQueryCustomizer: ServiceUserProfileQueryCustomizer = {
     _mask:
-      '{firstName,lastName,phone,userName,email,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+      '{email,firstName,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   // Pandino Action overrides
@@ -221,8 +221,25 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileResidentCityRelationViewPage(target!);
+  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const activityDistrictsFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileResidentCountyRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
@@ -244,6 +261,12 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       filters: newFilters,
     };
   };
+  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
     await openServiceUserProfileActivityCountiesRelationViewPage(target!);
     if (!editMode) {
@@ -261,48 +284,25 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       filters: newFilters,
     };
   };
-  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceUserProfileResidentCityRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
-  };
-  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileResidentCountyRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activityDistrictsFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
   };
 
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
     backAction,
     refreshAction,
-    residentCityOpenPageAction,
-    activityCitiesOpenPageAction,
-    activityCitiesFilterAction,
-    activityCountiesOpenPageAction,
-    activityCountiesFilterAction,
-    residentDistrictOpenPageAction,
-    residentCountyOpenPageAction,
     activityDistrictsOpenPageAction,
     activityDistrictsFilterAction,
+    residentCountyOpenPageAction,
+    activityCitiesOpenPageAction,
+    activityCitiesFilterAction,
+    residentDistrictOpenPageAction,
+    activityCountiesOpenPageAction,
+    activityCountiesFilterAction,
+    residentCityOpenPageAction,
     ...(customActions ?? {}),
   };
 

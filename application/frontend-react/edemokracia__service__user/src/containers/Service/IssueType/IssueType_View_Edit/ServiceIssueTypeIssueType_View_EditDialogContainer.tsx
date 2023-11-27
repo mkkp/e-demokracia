@@ -76,7 +76,7 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
     setValidation,
   } = props;
   const queryCustomizer: ServiceIssueTypeQueryCustomizer = {
-    _mask: '{voteType,description,title}',
+    _mask: '{description,title,voteType}',
   };
 
   return (

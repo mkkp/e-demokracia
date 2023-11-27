@@ -132,14 +132,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const deleteOrArchiveForSelectAnswerVoteDefinitionAction = async (
-    target?: ServiceSelectAnswerVoteDefinitionStored,
-  ) => {
+  const closeVoteForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
     try {
       setIsLoading(true);
-      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.deleteOrArchive(target!);
-      if (customActions?.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction) {
-        await customActions.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction(target!);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postCloseVoteForSelectAnswerVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -170,12 +168,14 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setIsLoading(false);
     }
   };
-  const activateForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
+  const deleteOrArchiveForSelectAnswerVoteDefinitionAction = async (
+    target?: ServiceSelectAnswerVoteDefinitionStored,
+  ) => {
     try {
       setIsLoading(true);
-      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.activate(target!);
-      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
-        await customActions.postActivateForSelectAnswerVoteDefinitionAction(target!);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -186,6 +186,14 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       handleError(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
     }
   };
   const addToFavoritesForSelectAnswerVoteDefinitionAction = async (
@@ -208,12 +216,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setIsLoading(false);
     }
   };
-  const closeVoteForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
+  const activateForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
     try {
       setIsLoading(true);
-      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.closeVote(target!);
-      if (customActions?.postCloseVoteForSelectAnswerVoteDefinitionAction) {
-        await customActions.postCloseVoteForSelectAnswerVoteDefinitionAction(target!);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.activate(target!);
+      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
+        await customActions.postActivateForSelectAnswerVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -246,26 +254,18 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setIsLoading(false);
     }
   };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
-        [],
-      );
-    if (result === 'submit') {
-    }
-  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
-    deleteOrArchiveForSelectAnswerVoteDefinitionAction,
-    takeBackVoteForSelectAnswerVoteDefinitionAction,
-    activateForSelectAnswerVoteDefinitionAction,
-    addToFavoritesForSelectAnswerVoteDefinitionAction,
     closeVoteForSelectAnswerVoteDefinitionAction,
-    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
+    takeBackVoteForSelectAnswerVoteDefinitionAction,
+    deleteOrArchiveForSelectAnswerVoteDefinitionAction,
     voteAction,
+    addToFavoritesForSelectAnswerVoteDefinitionAction,
+    activateForSelectAnswerVoteDefinitionAction,
+    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
     ...(customActions ?? {}),
   };
 

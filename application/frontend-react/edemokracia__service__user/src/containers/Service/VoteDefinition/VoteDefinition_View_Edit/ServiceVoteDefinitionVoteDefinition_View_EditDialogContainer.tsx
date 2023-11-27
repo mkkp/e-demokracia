@@ -84,7 +84,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
   } = props;
   const queryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
     _mask:
-      '{created,isSelectAnswerType,isNotRatingType,description,isNotYesNoType,title,closeAt,isRatingType,isYesNoType,isYesNoAbstainType,isNotSelectAnswerType,isNotYesNoAbstainType,status}',
+      '{closeAt,created,description,isNotRatingType,isNotSelectAnswerType,isNotYesNoAbstainType,isNotYesNoType,isRatingType,isSelectAnswerType,isYesNoAbstainType,isYesNoType,status,title}',
   };
 
   return (

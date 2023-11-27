@@ -72,7 +72,7 @@ export default function ServiceConCon_View_EditDialog(props: ServiceConCon_View_
   } = props;
   const queryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{created,description,upVotes,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,description,downVotes,title,upVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   return (

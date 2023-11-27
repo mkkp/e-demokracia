@@ -85,7 +85,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
     setValidation,
   } = props;
   const queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer = {
-    _mask: '{valueRepresentation,created}',
+    _mask: '{created,valueRepresentation}',
   };
 
   return (

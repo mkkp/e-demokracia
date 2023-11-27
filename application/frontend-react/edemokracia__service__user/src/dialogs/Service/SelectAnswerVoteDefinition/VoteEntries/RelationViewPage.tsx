@@ -163,7 +163,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
   }, [data]);
 
   const pageQueryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer = {
-    _mask: '{valueRepresentation,created}',
+    _mask: '{created,valueRepresentation}',
   };
 
   // Pandino Action overrides

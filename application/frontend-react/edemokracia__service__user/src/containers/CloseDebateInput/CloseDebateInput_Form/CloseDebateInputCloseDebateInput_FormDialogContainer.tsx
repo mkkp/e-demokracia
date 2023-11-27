@@ -75,7 +75,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
     setValidation,
   } = props;
   const queryCustomizer: CloseDebateInputQueryCustomizer = {
-    _mask: '{voteType,description,title,closeAt}',
+    _mask: '{closeAt,description,title,voteType}',
   };
 
   return (
@@ -148,7 +148,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
         {editMode && actions.closeDebateForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uQdWEo0GEe6vroMdQ80Hug)"
+              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_sQfRgo1KEe6sgdrBpAinBQ)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

@@ -72,7 +72,7 @@ export default function ServiceProPro_View_EditDialog(props: ServiceProPro_View_
   } = props;
   const queryCustomizer: ServiceProQueryCustomizer = {
     _mask:
-      '{created,upVotes,description,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,description,downVotes,title,upVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   return (

@@ -255,35 +255,35 @@ export function ServiceCommentComment_TableComment_TableComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_wO4KkI0GEe6vroMdQ80Hug',
+      id: '_uHU3Uo1KEe6sgdrBpAinBQ',
       attributeName: 'createdByName',
       label: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_wO4xoI0GEe6vroMdQ80Hug',
+      id: '_uHVeYo1KEe6sgdrBpAinBQ',
       attributeName: 'comment',
       label: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_wO5YsI0GEe6vroMdQ80Hug',
+      id: '_uHWFcI1KEe6sgdrBpAinBQ',
       attributeName: 'created',
       label: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_wO5YtI0GEe6vroMdQ80Hug',
+      id: '_uHWFdI1KEe6sgdrBpAinBQ',
       attributeName: 'upVotes',
       label: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_wO5_wo0GEe6vroMdQ80Hug',
+      id: '_uHWsgo1KEe6sgdrBpAinBQ',
       attributeName: 'downVotes',
       label: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,

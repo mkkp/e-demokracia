@@ -153,7 +153,7 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
   }, [data]);
 
   const pageQueryCustomizer: ServiceIssueTypeQueryCustomizer = {
-    _mask: '{voteType,description,title}',
+    _mask: '{description,title,voteType}',
   };
 
   // Pandino Action overrides
