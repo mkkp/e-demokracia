@@ -99,7 +99,7 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
             readOnly: false || !isFormUpdateable(),
             startAdornment: (
               <InputAdornment position="start">
-                <MdiIcon path="dialpad" />
+                <MdiIcon path="calculator" />
               </InputAdornment>
             ),
           }}

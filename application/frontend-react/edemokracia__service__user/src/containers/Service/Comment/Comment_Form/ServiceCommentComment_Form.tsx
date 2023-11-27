@@ -214,7 +214,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
                 readOnly: true || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MdiIcon path="dialpad" />
+                    <MdiIcon path="calculator" />
                   </InputAdornment>
                 ),
               }}
@@ -247,7 +247,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
                 readOnly: true || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MdiIcon path="dialpad" />
+                    <MdiIcon path="calculator" />
                   </InputAdornment>
                 ),
               }}

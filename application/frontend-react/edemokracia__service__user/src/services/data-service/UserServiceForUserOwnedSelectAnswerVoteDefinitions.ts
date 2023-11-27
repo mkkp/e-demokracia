@@ -8,29 +8,32 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceSelectAnswerVoteEntryStored,
   CloseDebateOutputVoteDefinitionReferenceStored,
   ServiceSelectAnswerVoteDefinition,
-  CloseDebateOutputVoteDefinitionReference,
   ServiceIssueQueryCustomizer,
   CreateArgumentInputStored,
   ServiceIssueStored,
   SelectAnswerVoteSelection,
-  ServiceSelectAnswerVoteEntry,
   ServiceIssue,
-  ServiceSelectAnswerVoteSelectionStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
+  ServiceServiceUser,
   ServiceSelectAnswerVoteDefinitionStored,
-  CreateCommentInputStored,
   SelectAnswerVoteSelectionStored,
   CreateCommentInput,
   CreateArgumentInput,
-  CloseDebateInputStored,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   CloseDebateInput,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
   ServiceSelectAnswerVoteSelection,
+  ServiceSelectAnswerVoteEntryStored,
+  CloseDebateOutputVoteDefinitionReference,
+  ServiceServiceUserStored,
+  ServiceSelectAnswerVoteEntry,
+  ServiceSelectAnswerVoteSelectionStored,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  CreateCommentInputStored,
+  CloseDebateInputStored,
+  ServiceServiceUserQueryCustomizer,
+  ServiceSelectAnswerVoteDefinitionQueryCustomizer,
 } from '../data-api';
 
 /**
@@ -54,18 +57,18 @@ export interface UserServiceForUserOwnedSelectAnswerVoteDefinitions {
   getTemplateOnCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
   createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
-  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
   getTemplateOnCloseDebateForIssue(): Promise<CloseDebateInput>;
-  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-  getTemplateOnCreateCommentForIssue(): Promise<CreateCommentInput>;
   deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+  getTemplateOnCreateCommentForIssue(): Promise<CreateCommentInput>;
+  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   listVoteEntries(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
@@ -88,6 +91,22 @@ export interface UserServiceForUserOwnedSelectAnswerVoteDefinitions {
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  getOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
+  getRangeForOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+  setOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+  unsetOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
   vote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>, target: SelectAnswerVoteSelection): Promise<void>;
   getTemplateOnVote(): Promise<SelectAnswerVoteSelection>;
   getRangeOnVote(
@@ -95,4 +114,9 @@ export interface UserServiceForUserOwnedSelectAnswerVoteDefinitions {
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
   takeBackVote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  activate(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  addToFavorites(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  closeVote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  deleteOrArchive(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  removeFromFavorites(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
 }

@@ -262,7 +262,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
             readOnly: true || !isFormUpdateable(),
             startAdornment: (
               <InputAdornment position="start">
-                <MdiIcon path="dialpad" />
+                <MdiIcon path="calculator" />
               </InputAdornment>
             ),
           }}
@@ -295,7 +295,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
             readOnly: true || !isFormUpdateable(),
             startAdornment: (
               <InputAdornment position="start">
-                <MdiIcon path="dialpad" />
+                <MdiIcon path="calculator" />
               </InputAdornment>
             ),
           }}
@@ -328,7 +328,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_G3RJhYujEe6laYH8Xw7WEw)/LabelWrapper"
+          id="_v_K6o40GEe6vroMdQ80Hug)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -338,7 +338,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_G3RJhYujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+              <Typography id="_v_K6o40GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                 {t('service.Pro.Pro_Form.pros.Icon', { defaultValue: 'Pros' })}
               </Typography>
             </Grid>
@@ -368,7 +368,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_G4AwYIujEe6laYH8Xw7WEw)/LabelWrapper"
+          id="_v_56cI0GEe6vroMdQ80Hug)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -378,7 +378,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
               <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-              <Typography id="_G4AwYIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+              <Typography id="_v_56cI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                 {t('service.Pro.Pro_Form.cons.Icon', { defaultValue: 'Cons' })}
               </Typography>
             </Grid>

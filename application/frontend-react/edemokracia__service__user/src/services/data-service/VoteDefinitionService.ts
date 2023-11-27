@@ -42,4 +42,7 @@ export interface VoteDefinitionService {
   takeBackVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
   addToFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
   removeFromFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  activate(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  deleteOrArchive(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  closeVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
 }

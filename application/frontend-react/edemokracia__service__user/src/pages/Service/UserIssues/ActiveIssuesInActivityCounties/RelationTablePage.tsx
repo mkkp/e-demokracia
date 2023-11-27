@@ -129,32 +129,8 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.closeVote(target!);
-      if (customActions?.postCloseVoteForIssueAction) {
-        await customActions.postCloseVoteForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const closeDebateAction = async (target: ServiceIssueStored) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const createCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -177,12 +153,6 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       setIsLoading(false);
     }
   };
-  const createConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
@@ -201,12 +171,24 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const createConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const createCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      await serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -217,12 +199,6 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       handleError(error);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const createProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
     }
   };
   const activateForIssueAction = async (target?: ServiceIssueStored) => {
@@ -243,21 +219,45 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       setIsLoading(false);
     }
   };
+  const createProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceIssueIssue_TablePageActions = {
     backAction,
     openPageAction,
     filterAction,
     refreshAction,
-    closeVoteForIssueAction,
     closeDebateAction,
-    createCommentAction,
     deleteOrArchiveForIssueAction,
-    createConArgumentAction,
     addToFavoritesForIssueAction,
-    removeFromFavoritesForIssueAction,
-    createProArgumentAction,
+    createConArgumentAction,
+    createCommentAction,
+    closeVoteForIssueAction,
     activateForIssueAction,
+    createProArgumentAction,
+    removeFromFavoritesForIssueAction,
     ...(customActions ?? {}),
   };
 

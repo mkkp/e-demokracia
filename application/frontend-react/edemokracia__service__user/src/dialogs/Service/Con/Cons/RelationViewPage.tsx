@@ -158,7 +158,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
 
   const pageQueryCustomizer: ServiceConQueryCustomizer = {
     _mask:
-      '{created,upVotes,description,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+      '{created,description,upVotes,title,downVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
   };
 
   // Pandino Action overrides
@@ -246,6 +246,12 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       handleError(error, undefined, data);
     }
   };
+  const createConArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const createProArgumentAction = async () => {
     const { result, data: returnedData } = await openServiceConCon_View_EditCreateProArgumentInputForm(data);
     if (result === 'submit' && !editMode) {
@@ -272,12 +278,6 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       handleError<ServiceCon>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const createConArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceConCon_View_EditCreateConArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const voteDownForConAction = async () => {
@@ -380,6 +380,12 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       });
     });
   };
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceConCreatedByRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceConVotesRelationTablePage((target || data).__signedIdentifier));
@@ -463,12 +469,6 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       });
     });
   };
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceConCreatedByRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
 
   const actions: ServiceConCon_View_EditDialogActions = {
     backAction,
@@ -476,20 +476,20 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
     cancelAction,
     updateAction,
     deleteAction,
+    createConArgumentAction,
     createProArgumentAction,
     voteUpForConAction,
-    createConArgumentAction,
     voteDownForConAction,
     prosOpenPageAction,
     prosFilterAction,
     prosDeleteAction,
     prosBulkDeleteAction,
+    createdByOpenPageAction,
     votesOpenPageAction,
     consOpenPageAction,
     consFilterAction,
     consDeleteAction,
     consBulkDeleteAction,
-    createdByOpenPageAction,
     ...(customActions ?? {}),
   };
 

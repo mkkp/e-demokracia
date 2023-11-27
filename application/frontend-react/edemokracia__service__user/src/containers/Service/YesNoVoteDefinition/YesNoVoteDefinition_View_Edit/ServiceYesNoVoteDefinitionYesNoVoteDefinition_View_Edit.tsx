@@ -33,6 +33,9 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssue,
   ServiceIssueStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteDefinitionQueryCustomizer,
   ServiceYesNoVoteDefinitionStored,
@@ -42,14 +45,22 @@ import {
 } from '~/services/data-api';
 import type { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponentActionDefinitions } from './components/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponent';
 import { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponent } from './components/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponent';
+import type { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponentActionDefinitions } from './components/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponent';
+import { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponent } from './components/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponent';
 import type { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions } from './components/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponent';
 import { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponent } from './components/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponent';
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditActionDefinitions
-  extends ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
+  extends ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponentActionDefinitions,
+    ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
     ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
   issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
+  activateForYesNoVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForYesNoVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForYesNoVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForYesNoVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForYesNoVoteDefinitionAction?: () => Promise<void>;
   voteAction?: () => Promise<void>;
   takeBackVoteForYesNoVoteDefinitionAction?: () => Promise<void>;
 }
@@ -99,12 +110,148 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_GvhiwYujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Grid
+          id="User/(esm/_uXiyMHsCEe6bP4FWw7fjQA)/GroupVisualElement"
+          container
+          direction="row"
+          alignItems="flex-start"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              {!data.isNotFavorite && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_uXiyMnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="star-plus" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.addToFavoritesForYesNoVoteDefinitionAction
+                        ? async () => {
+                            await actions.addToFavoritesForYesNoVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.addToFavorites', {
+                        defaultValue: 'Add to favorites',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isFavorite && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_uXiyM3sCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="star-minus" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.removeFromFavoritesForYesNoVoteDefinitionAction
+                        ? async () => {
+                            await actions.removeFromFavoritesForYesNoVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.removeFromFavorites', {
+                        defaultValue: 'Remove from favorites',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isVoteNotOpen && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_uXiyNHsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="lock-check" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.closeVoteForYesNoVoteDefinitionAction
+                        ? async () => {
+                            await actions.closeVoteForYesNoVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.closeVote', {
+                        defaultValue: 'Close Vote',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isVoteNotEditable && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_uXiyNXsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="lock-open" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.activateForYesNoVoteDefinitionAction
+                        ? async () => {
+                            await actions.activateForYesNoVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.activate', {
+                        defaultValue: 'Activate',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isVoteNotDeletable && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_uXiyNnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="delete" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.deleteOrArchiveForYesNoVoteDefinitionAction
+                        ? async () => {
+                            await actions.deleteOrArchiveForYesNoVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.deleteOrArchive', {
+                        defaultValue: 'Delete',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid item xs={12} sm={12}>
+        <Card id="_v2nbkI0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_GvhiwYujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v2nbkI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.userVoteEntryGroup.Label', {
                       defaultValue: 'My vote entry',
                     })}
@@ -351,7 +498,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit(
                     </TextField>
                   </Grid>
 
-                  <Grid item xs={12} sm={12} md={6.0}>
+                  <Grid item xs={12} sm={12} md={4.0}>
                     <AssociationButton
                       id="User/(esm/_C5_asFoWEe6_67aMO2jOsw)/TabularReferenceFieldButton"
                       variant={undefined}
@@ -418,6 +565,17 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit(
                     />
                   </Grid>
 
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponent
+                      disabled={false || !isFormUpdateable()}
+                      ownerData={data}
+                      editMode={editMode}
+                      storeDiff={storeDiff}
+                      validationError={validation.get('owner')}
+                      actions={actions}
+                    />
+                  </Grid>
+
                   <Grid item xs={12} sm={12}>
                     <TextField
                       required={true}
@@ -462,7 +620,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit(
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_GvkmEIujEe6laYH8Xw7WEw)/LabelWrapper"
+          id="_v2qe4Y0GEe6vroMdQ80Hug)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -471,7 +629,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit(
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_GvkmEIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+              <Typography id="_v2qe4Y0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                 {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.entries.Label', {
                   defaultValue: 'Entries',
                 })}

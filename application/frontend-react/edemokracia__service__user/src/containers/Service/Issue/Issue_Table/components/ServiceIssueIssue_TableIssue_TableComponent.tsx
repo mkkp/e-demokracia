@@ -246,17 +246,6 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         : undefined,
     },
     {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
-      action: actions.closeVoteForIssueAction
-        ? async (rowData) => {
-            await actions.closeVoteForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Issue.Issue_Table.closeDebate', { defaultValue: 'closeDebate' }) as string,
       icon: <MdiIcon path="vote" />,
@@ -264,17 +253,6 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       action: actions.closeDebateAction
         ? async (rowData) => {
             await actions.closeDebateAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createCommentAction
-        ? async (rowData) => {
-            await actions.createCommentAction!(rowData);
           }
         : undefined,
     },
@@ -290,17 +268,6 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         : undefined,
     },
     {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createConArgumentAction
-        ? async (rowData) => {
-            await actions.createConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Issue.Issue_Table.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
@@ -312,13 +279,46 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         : undefined,
     },
     {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.removeFromFavorites', { defaultValue: 'removeFromFavorites' }) as string,
-      icon: <MdiIcon path="star-minus" />,
+      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.removeFromFavoritesForIssueAction
+      action: actions.createConArgumentAction
         ? async (rowData) => {
-            await actions.removeFromFavoritesForIssueAction!(rowData);
+            await actions.createConArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
+      icon: <MdiIcon path="comment-text-multiple" />,
+      disabled: (row: ServiceIssueStored) => isLoading,
+      action: actions.createCommentAction
+        ? async (rowData) => {
+            await actions.createCommentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
+      action: actions.closeVoteForIssueAction
+        ? async (rowData) => {
+            await actions.closeVoteForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.activate', { defaultValue: 'activate' }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceIssueStored) => !row.isIssueDraft || isLoading,
+      action: actions.activateForIssueAction
+        ? async (rowData) => {
+            await actions.activateForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -334,13 +334,13 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueDraft || isLoading,
-      action: actions.activateForIssueAction
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.removeFromFavorites', { defaultValue: 'removeFromFavorites' }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      disabled: (row: ServiceIssueStored) => isLoading,
+      action: actions.removeFromFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.activateForIssueAction!(rowData);
+            await actions.removeFromFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -348,7 +348,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_GAMXkoujEe6laYH8Xw7WEw',
+      id: '_vD_r0o0GEe6vroMdQ80Hug',
       attributeName: 'scope',
       label: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
       filterType: FilterType.enumeration,
@@ -356,14 +356,14 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     },
 
     {
-      id: '_GAM-ooujEe6laYH8Xw7WEw',
+      id: '_vEAS4o0GEe6vroMdQ80Hug',
       attributeName: 'title',
       label: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_GANlsIujEe6laYH8Xw7WEw',
+      id: '_vEA58I0GEe6vroMdQ80Hug',
       attributeName: 'status',
       label: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -371,14 +371,14 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     },
 
     {
-      id: '_GANltIujEe6laYH8Xw7WEw',
+      id: '_vEBhAI0GEe6vroMdQ80Hug',
       attributeName: 'created',
       label: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_GAOMwoujEe6laYH8Xw7WEw',
+      id: '_vEBhBI0GEe6vroMdQ80Hug',
       attributeName: 'description',
       label: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

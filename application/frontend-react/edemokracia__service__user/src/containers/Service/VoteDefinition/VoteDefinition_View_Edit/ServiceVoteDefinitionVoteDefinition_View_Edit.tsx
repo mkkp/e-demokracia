@@ -246,12 +246,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                   ampmInClock={false}
                   className={clsx({
                     'JUDO-viewMode': !editMode,
-                    'JUDO-required': true,
+                    'JUDO-required': false,
                   })}
                   slotProps={{
                     textField: {
                       id: 'User/(esm/_T5a18I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                      required: true,
+                      required: false,
                       helperText: validation.get('created'),
                       error: !!validation.get('created'),
                       InputProps: {
@@ -283,7 +283,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     t('service.VoteDefinition.VoteDefinition_View_Edit.created', { defaultValue: 'Created' }) as string
                   }
                   value={serviceDateToUiDate(data.created ?? null)}
-                  readOnly={false || !isFormUpdateable()}
+                  readOnly={true || !isFormUpdateable()}
                   disabled={isLoading}
                   onChange={(newValue: Date) => {
                     storeDiff('created', newValue);

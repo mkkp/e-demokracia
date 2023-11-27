@@ -160,7 +160,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
             readOnly: false || !isFormUpdateable(),
             startAdornment: (
               <InputAdornment position="start">
-                <MdiIcon path="numeric" />
+                <MdiIcon path="calculator" />
               </InputAdornment>
             ),
           }}

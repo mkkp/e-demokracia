@@ -31,6 +31,21 @@ import type {
 import { userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios';
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActionsExtended =
   ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions & {
+    postActivateForSelectAnswerVoteDefinitionAction?: (
+      target: ServiceSelectAnswerVoteDefinitionStored,
+    ) => Promise<void>;
+    postAddToFavoritesForSelectAnswerVoteDefinitionAction?: (
+      target: ServiceSelectAnswerVoteDefinitionStored,
+    ) => Promise<void>;
+    postCloseVoteForSelectAnswerVoteDefinitionAction?: (
+      target: ServiceSelectAnswerVoteDefinitionStored,
+    ) => Promise<void>;
+    postDeleteOrArchiveForSelectAnswerVoteDefinitionAction?: (
+      target: ServiceSelectAnswerVoteDefinitionStored,
+    ) => Promise<void>;
+    postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction?: (
+      target: ServiceSelectAnswerVoteDefinitionStored,
+    ) => Promise<void>;
     postTakeBackVoteForSelectAnswerVoteDefinitionAction?: (
       target: ServiceSelectAnswerVoteDefinitionStored,
     ) => Promise<void>;
@@ -117,12 +132,108 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const deleteOrArchiveForSelectAnswerVoteDefinitionAction = async (
+    target?: ServiceSelectAnswerVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const takeBackVoteForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
     try {
       setIsLoading(true);
       await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.takeBackVote(target!);
       if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
         await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const activateForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.activate(target!);
+      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
+        await customActions.postActivateForSelectAnswerVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const addToFavoritesForSelectAnswerVoteDefinitionAction = async (
+    target?: ServiceSelectAnswerVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.addToFavorites(target!);
+      if (customActions?.postAddToFavoritesForSelectAnswerVoteDefinitionAction) {
+        await customActions.postAddToFavoritesForSelectAnswerVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const closeVoteForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postCloseVoteForSelectAnswerVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const removeFromFavoritesForSelectAnswerVoteDefinitionAction = async (
+    target?: ServiceSelectAnswerVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -148,7 +259,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTab
     openPageAction,
     filterAction,
     refreshAction,
+    deleteOrArchiveForSelectAnswerVoteDefinitionAction,
     takeBackVoteForSelectAnswerVoteDefinitionAction,
+    activateForSelectAnswerVoteDefinitionAction,
+    addToFavoritesForSelectAnswerVoteDefinitionAction,
+    closeVoteForSelectAnswerVoteDefinitionAction,
+    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
     voteAction,
     ...(customActions ?? {}),
   };

@@ -23,4 +23,13 @@ export interface ServiceSelectAnswerVoteDefinitionQueryCustomizer
   closeAt?: Array<FilterBytypesTimestamp>;
   userHasVoteEntry?: Array<FilterBytypesBoolean>;
   userHasNoVoteEntry?: Array<FilterBytypesBoolean>;
+  isVoteEditable?: Array<FilterBytypesBoolean>;
+  isVoteOpen?: Array<FilterBytypesBoolean>;
+  isVoteNotEditable?: Array<FilterBytypesBoolean>;
+  isVoteNotOpen?: Array<FilterBytypesBoolean>;
+  isFavorite?: Array<FilterBytypesBoolean>;
+  isNotFavorite?: Array<FilterBytypesBoolean>;
+  isVoteDeletable?: Array<FilterBytypesBoolean>;
+  isVoteNotDeletable?: Array<FilterBytypesBoolean>;
+  createdBy?: Array<FilterBytypesString>;
 }

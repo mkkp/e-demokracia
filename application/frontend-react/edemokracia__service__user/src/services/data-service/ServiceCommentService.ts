@@ -43,6 +43,6 @@ export interface ServiceCommentService {
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
-  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
   voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 }

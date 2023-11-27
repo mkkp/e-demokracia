@@ -31,6 +31,11 @@ import type {
 import { userServiceForUserOwnedYesNoVoteDefinitionsImpl } from '~/services/data-axios';
 export type ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActionsExtended =
   ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActions & {
+    postActivateForYesNoVoteDefinitionAction?: (target: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+    postAddToFavoritesForYesNoVoteDefinitionAction?: (target: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+    postCloseVoteForYesNoVoteDefinitionAction?: (target: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+    postDeleteOrArchiveForYesNoVoteDefinitionAction?: (target: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+    postRemoveFromFavoritesForYesNoVoteDefinitionAction?: (target: ServiceYesNoVoteDefinitionStored) => Promise<void>;
     postTakeBackVoteForYesNoVoteDefinitionAction?: (target: ServiceYesNoVoteDefinitionStored) => Promise<void>;
   };
 
@@ -114,13 +119,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const takeBackVoteForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -139,13 +137,115 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
       setIsLoading(false);
     }
   };
+  const removeFromFavoritesForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForYesNoVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const addToFavoritesForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.addToFavorites(target!);
+      if (customActions?.postAddToFavoritesForYesNoVoteDefinitionAction) {
+        await customActions.postAddToFavoritesForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const closeVoteForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForYesNoVoteDefinitionAction) {
+        await customActions.postCloseVoteForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const activateForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.activate(target!);
+      if (customActions?.postActivateForYesNoVoteDefinitionAction) {
+        await customActions.postActivateForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const deleteOrArchiveForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForYesNoVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
-    voteAction,
     takeBackVoteForYesNoVoteDefinitionAction,
+    removeFromFavoritesForYesNoVoteDefinitionAction,
+    addToFavoritesForYesNoVoteDefinitionAction,
+    closeVoteForYesNoVoteDefinitionAction,
+    activateForYesNoVoteDefinitionAction,
+    voteAction,
+    deleteOrArchiveForYesNoVoteDefinitionAction,
     ...(customActions ?? {}),
   };
 

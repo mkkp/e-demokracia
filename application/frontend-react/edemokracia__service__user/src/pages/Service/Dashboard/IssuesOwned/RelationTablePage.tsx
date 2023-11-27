@@ -188,32 +188,8 @@ export default function ServiceDashboardIssuesOwnedRelationTablePage() {
       });
     });
   };
-  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceDashboardServiceForIssuesOwnedImpl.closeVote(target!);
-      if (customActions?.postCloseVoteForIssueAction) {
-        await customActions.postCloseVoteForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const closeDebateAction = async (target: ServiceIssueStored) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const createCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -236,12 +212,6 @@ export default function ServiceDashboardIssuesOwnedRelationTablePage() {
       setIsLoading(false);
     }
   };
-  const createConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
@@ -260,12 +230,24 @@ export default function ServiceDashboardIssuesOwnedRelationTablePage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const createConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const createCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const closeVoteForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceDashboardServiceForIssuesOwnedImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      await serviceDashboardServiceForIssuesOwnedImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -276,12 +258,6 @@ export default function ServiceDashboardIssuesOwnedRelationTablePage() {
       handleError(error);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const createProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
     }
   };
   const activateForIssueAction = async (target?: ServiceIssueStored) => {
@@ -302,6 +278,30 @@ export default function ServiceDashboardIssuesOwnedRelationTablePage() {
       setIsLoading(false);
     }
   };
+  const createProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceDashboardServiceForIssuesOwnedImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceIssueIssue_TablePageActions = {
     backAction,
@@ -310,15 +310,15 @@ export default function ServiceDashboardIssuesOwnedRelationTablePage() {
     refreshAction,
     deleteAction,
     bulkDeleteAction,
-    closeVoteForIssueAction,
     closeDebateAction,
-    createCommentAction,
     deleteOrArchiveForIssueAction,
-    createConArgumentAction,
     addToFavoritesForIssueAction,
-    removeFromFavoritesForIssueAction,
-    createProArgumentAction,
+    createConArgumentAction,
+    createCommentAction,
+    closeVoteForIssueAction,
     activateForIssueAction,
+    createProArgumentAction,
+    removeFromFavoritesForIssueAction,
     ...(customActions ?? {}),
   };
 

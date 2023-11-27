@@ -50,11 +50,11 @@ export interface ServiceVoteEntryService {
     owner?: ServiceVoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
-  voteRatingForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
-  getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput>;
   voteYesNoAbstainForVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
   getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput>;
+  voteRatingForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
+  getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput>;
 }

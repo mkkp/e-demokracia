@@ -70,7 +70,7 @@ export default function ServiceProPro_FormDialog(props: ServiceProPro_FormDialog
   } = props;
   const queryCustomizer: ServiceProQueryCustomizer = {
     _mask:
-      '{createdByName,created,description,upVotes,title,downVotes,cons{createdByName,created,description,title,upVotes,downVotes},pros{createdByName,created,description,title,upVotes,downVotes},createdBy{firstName,lastName,phone,email,isAdmin,created,userName,representation}}',
+      '{createdByName,created,upVotes,description,title,downVotes,cons{createdByName,created,description,title,upVotes,downVotes},pros{createdByName,created,description,title,upVotes,downVotes},createdBy{firstName,lastName,phone,email,isAdmin,created,userName,representation}}',
   };
 
   return (

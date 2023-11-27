@@ -151,7 +151,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_G5pvIYujEe6laYH8Xw7WEw',
+      id: '_wBqN8I0GEe6vroMdQ80Hug',
       attributeName: 'representation',
       label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'City' }) as string,
       filterType: FilterType.string,

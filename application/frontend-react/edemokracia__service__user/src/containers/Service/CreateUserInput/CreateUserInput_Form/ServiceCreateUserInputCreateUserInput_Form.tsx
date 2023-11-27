@@ -89,13 +89,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_GvGsAIujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Card id="_v2EpAI0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="security::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_GvGsAIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v2EpAI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t('service.CreateUserInput.CreateUserInput_Form.security.Icon', { defaultValue: 'Security' })}
                   </Typography>
                 </Grid>
@@ -172,13 +172,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_GvHTEIujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Card id="_v2F3II0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="personal::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_GvHTEIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v2F3II0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t('service.CreateUserInput.CreateUserInput_Form.personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>

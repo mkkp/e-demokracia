@@ -42,20 +42,31 @@ import {
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponentActionDefinitions } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponent';
 import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponent';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentActionDefinitions } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponent';
 import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponent';
+import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponentActionDefinitions } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponent';
+import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponent';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent';
 import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent';
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionDefinitions
-  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
+  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponentActionDefinitions,
+    ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
     ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentActionDefinitions,
     ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteSelectionsComponentActionDefinitions {
   issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
+  activateForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
   voteAction?: () => Promise<void>;
   takeBackVoteForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
 }
@@ -105,12 +116,149 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_GvVVgoujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Grid
+          id="User/(esm/_JTH2kHr9Ee6bP4FWw7fjQA)/GroupVisualElement"
+          container
+          direction="row"
+          alignItems="flex-start"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              {!data.isNotFavorite && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_JTH2knr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="star-plus" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.addToFavoritesForSelectAnswerVoteDefinitionAction
+                        ? async () => {
+                            await actions.addToFavoritesForSelectAnswerVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.addToFavorites', {
+                        defaultValue: 'Add to favorites',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isFavorite && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="star-minus" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction
+                        ? async () => {
+                            await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t(
+                        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.removeFromFavorites',
+                        { defaultValue: 'Remove from favorites' },
+                      )}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isVoteNotOpen && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_JTH2lXr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="lock-check" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.closeVoteForSelectAnswerVoteDefinitionAction
+                        ? async () => {
+                            await actions.closeVoteForSelectAnswerVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.closeVote', {
+                        defaultValue: 'Close Vote',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isVoteNotEditable && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="lock-open" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.activateForSelectAnswerVoteDefinitionAction
+                        ? async () => {
+                            await actions.activateForSelectAnswerVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.activate', {
+                        defaultValue: 'Activate',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+              {!data.isVoteNotDeletable && (
+                <Grid item>
+                  <LoadingButton
+                    id="User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="delete" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
+                        ? async () => {
+                            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    <span>
+                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.deleteOrArchive', {
+                        defaultValue: 'Delete',
+                      })}
+                    </span>
+                  </LoadingButton>
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid item xs={12} sm={12}>
+        <Card id="_v2YyEI0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_GvVVgoujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v2YyEI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t(
                       'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                       { defaultValue: 'My vote entry' },
@@ -119,90 +267,92 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Card id="User/(esm/_0SJy0FtuEe6Mx9dH3yj5gQ)/GroupVisualElement">
-                  <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                      {!data.userHasNoVoteEntry && (
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="User/(esm/_0SJy0VtuEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12}>
-                              <Grid
-                                id="User/(esm/_0SJy0ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              >
-                                <Grid item xs={12} sm={12} md={4.0}>
-                                  <LoadingButton
-                                    id="User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
-                                    loading={isLoading}
-                                    variant={undefined}
-                                    startIcon={<MdiIcon path="delete" />}
-                                    loadingPosition="start"
-                                    onClick={async () => {
-                                      if (actions.takeBackVoteForSelectAnswerVoteDefinitionAction) {
-                                        await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!();
+              {!data.isVoteNotOpen && (
+                <Grid item xs={12} sm={12}>
+                  <Card id="User/(esm/_0SJy0FtuEe6Mx9dH3yj5gQ)/GroupVisualElement">
+                    <CardContent>
+                      <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        {!data.userHasNoVoteEntry && (
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="User/(esm/_0SJy0VtuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_0SJy0ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                                  container
+                                  direction="row"
+                                  alignItems="flex-start"
+                                  justifyContent="flex-start"
+                                  spacing={2}
+                                >
+                                  <Grid item xs={12} sm={12} md={4.0}>
+                                    <LoadingButton
+                                      id="User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
+                                      loading={isLoading}
+                                      variant={undefined}
+                                      startIcon={<MdiIcon path="delete" />}
+                                      loadingPosition="start"
+                                      onClick={async () => {
+                                        if (actions.takeBackVoteForSelectAnswerVoteDefinitionAction) {
+                                          await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!();
+                                        }
+                                      }}
+                                      disabled={
+                                        !actions.takeBackVoteForSelectAnswerVoteDefinitionAction ||
+                                        !data.userHasVoteEntry ||
+                                        editMode
                                       }
-                                    }}
-                                    disabled={
-                                      !actions.takeBackVoteForSelectAnswerVoteDefinitionAction ||
-                                      !data.userHasVoteEntry ||
-                                      editMode
-                                    }
-                                  >
-                                    <span>
-                                      {t(
-                                        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.takeBackVote',
-                                        { defaultValue: 'TakeBackVote' },
-                                      )}
-                                    </span>
-                                  </LoadingButton>
-                                </Grid>
+                                    >
+                                      <span>
+                                        {t(
+                                          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.takeBackVote',
+                                          { defaultValue: 'TakeBackVote' },
+                                        )}
+                                      </span>
+                                    </LoadingButton>
+                                  </Grid>
 
-                                <Grid item xs={12} sm={12} md={4.0}>
-                                  <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent
-                                    disabled={true || !isFormUpdateable()}
-                                    ownerData={data}
-                                    editMode={editMode}
-                                    storeDiff={storeDiff}
-                                    validationError={validation.get('userVoteEntry')}
-                                    actions={actions}
-                                  />
+                                  <Grid item xs={12} sm={12} md={4.0}>
+                                    <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent
+                                      disabled={true || !isFormUpdateable()}
+                                      ownerData={data}
+                                      editMode={editMode}
+                                      storeDiff={storeDiff}
+                                      validationError={validation.get('userVoteEntry')}
+                                      actions={actions}
+                                    />
+                                  </Grid>
                                 </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
-                        </Grid>
-                      )}
+                        )}
 
-                      {!data.userHasVoteEntry && (
-                        <Grid item xs={12} sm={12}>
-                          <Grid
-                            id="User/(esm/_0SJy1ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12}></Grid>
+                        {!data.userHasVoteEntry && (
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="User/(esm/_0SJy1ltuEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}></Grid>
+                            </Grid>
                           </Grid>
-                        </Grid>
-                      )}
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
+                        )}
+                      </Grid>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              )}
             </Grid>
           </CardContent>
         </Card>
@@ -359,7 +509,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                     </TextField>
                   </Grid>
 
-                  <Grid item xs={12} sm={12} md={6.0}>
+                  <Grid item xs={12} sm={12} md={4.0}>
                     <AssociationButton
                       id="User/(esm/_0SJLyltuEe6Mx9dH3yj5gQ)/TabularReferenceFieldButton"
                       variant={undefined}
@@ -428,6 +578,17 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                     />
                   </Grid>
 
+                  <Grid item xs={12} sm={12} md={4.0}>
+                    <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponent
+                      disabled={false || !isFormUpdateable()}
+                      ownerData={data}
+                      editMode={editMode}
+                      storeDiff={storeDiff}
+                      validationError={validation.get('owner')}
+                      actions={actions}
+                    />
+                  </Grid>
+
                   <Grid item xs={12} sm={12}>
                     <TextField
                       required={true}
@@ -466,7 +627,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="_G5hMRIujEe6laYH8Xw7WEw)/LabelWrapper"
+                      id="_wBf15I0GEe6vroMdQ80Hug)/LabelWrapper"
                       container
                       direction="column"
                       alignItems="center"
@@ -476,7 +637,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="voteSelections::Icon" sx={{ marginRight: 1 }} />
-                          <Typography id="_G5hMRIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                          <Typography id="_wBf15I0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                             {t(
                               'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.voteSelections.Icon',
                               { defaultValue: 'VoteSelections' },
@@ -515,7 +676,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_GvYY0IujEe6laYH8Xw7WEw)/LabelWrapper"
+          id="_v2cccI0GEe6vroMdQ80Hug)/LabelWrapper"
           container
           direction="column"
           alignItems="center"
@@ -524,7 +685,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
         >
           <Grid item xs={12} sm={12}>
             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <Typography id="_GvYY0IujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+              <Typography id="_v2cccI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                 {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.entries.Label', {
                   defaultValue: 'Entries',
                 })}

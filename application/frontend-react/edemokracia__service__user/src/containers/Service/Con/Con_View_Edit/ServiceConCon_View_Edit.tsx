@@ -104,13 +104,13 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_GugPEYujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Card id="_v1VCIY0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="con::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_GugPEYujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v1VCIY0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t('service.Con.Con_View_Edit.con.Icon', { defaultValue: 'Contra' })}
                   </Typography>
                 </Grid>
@@ -374,13 +374,13 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
           spacing={2}
         >
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_GvDBoYujEe6laYH8Xw7WEw)/LabelWrapper">
+            <Card id="_v2AXkY0GEe6vroMdQ80Hug)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="pros::Icon" sx={{ marginRight: 1 }} />
-                      <Typography id="_GvDBoYujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                      <Typography id="_v2AXkY0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                         {t('service.Con.Con_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
                       </Typography>
                     </Grid>
@@ -445,13 +445,13 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
           </Grid>
 
           <Grid item xs={12} sm={12} md={6.0}>
-            <Card id="_GvE20IujEe6laYH8Xw7WEw)/LabelWrapper">
+            <Card id="_v2CMwY0GEe6vroMdQ80Hug)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="cons::Icon" sx={{ marginRight: 1 }} />
-                      <Typography id="_GvE20IujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                      <Typography id="_v2CMwY0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                         {t('service.Con.Con_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
                       </Typography>
                     </Grid>

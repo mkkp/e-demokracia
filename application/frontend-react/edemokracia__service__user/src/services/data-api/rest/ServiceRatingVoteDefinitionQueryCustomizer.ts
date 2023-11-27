@@ -25,4 +25,13 @@ export interface ServiceRatingVoteDefinitionQueryCustomizer extends QueryCustomi
   minRateValue?: Array<FilterBytypesInteger>;
   userHasVoteEntry?: Array<FilterBytypesBoolean>;
   userHasNoVoteEntry?: Array<FilterBytypesBoolean>;
+  isFavorite?: Array<FilterBytypesBoolean>;
+  isVoteEditable?: Array<FilterBytypesBoolean>;
+  isVoteNotOpen?: Array<FilterBytypesBoolean>;
+  isVoteOpen?: Array<FilterBytypesBoolean>;
+  isNotFavorite?: Array<FilterBytypesBoolean>;
+  isVoteNotDeletable?: Array<FilterBytypesBoolean>;
+  isVoteDeletable?: Array<FilterBytypesBoolean>;
+  isVoteNotEditable?: Array<FilterBytypesBoolean>;
+  createdBy?: Array<FilterBytypesString>;
 }

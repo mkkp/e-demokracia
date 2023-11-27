@@ -18,7 +18,7 @@ import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjec
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.county.County;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.district.District;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.IssueAttachedRelationsForCreate;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.IssueForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.IssueDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueType;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.User;
@@ -103,23 +103,21 @@ public class CreateIssueCustomImplementation implements party.mkkp.edemokracia.e
         String userName = variableResolver.resolve(String.class, "ACTOR", "userName");
         User user = userDao.query().filterByUserName(StringFilter.equalTo(userName)).selectOne().get();
 
-        Issue issue = Issue.builder()
+        IssueForCreate issueCreate = IssueForCreate.builder()
                 .withTitle(input.getTitle())
                 .withDescription(input.getDescription())
                 .withStatus(IssueStatus.CREATED)
                 .withCreated(LocalDateTime.now())
                 .withDebateCloseAt(input.getDebateCloseAt())
-                .build();
-
-        issue = issueDao.create(issue, IssueAttachedRelationsForCreate
-                .builder()
                 .withIssueType(input.getIssueType() != null && input.getIssueType().isPresent() ? input.getIssueType().get().adaptTo(IssueType.class) : null)
                 .withCounty(input.getCounty() != null && input.getCounty().isPresent() ? input.getCounty().get().adaptTo(County.class) : null)
                 .withCity(input.getCity() != null && input.getCity().isPresent() ? input.getCity().get().adaptTo(City.class) : null)
                 .withDistrict(input.getDistrict() != null && input.getDistrict().isPresent() ? input.getDistrict().get().adaptTo(District.class) : null)
                         .withCreatedBy(user)
                         .withOwner(user)
-                .build());
+                .build();
+
+        Issue issue = issueDao.create(issueCreate);
 
         return adminIssueDao.getById(issue.identifier().adaptTo(IssueIdentifier.class)).get();
     }

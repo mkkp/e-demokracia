@@ -31,6 +31,11 @@ import type {
 import { userServiceForUserOwnedRatingVoteDefinitionsImpl } from '~/services/data-axios';
 export type ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExtended =
   ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions & {
+    postActivateForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
+    postAddToFavoritesForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
+    postCloseVoteForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
+    postDeleteOrArchiveForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
+    postRemoveFromFavoritesForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
     postTakeBackVoteForRatingVoteDefinitionAction?: (target: ServiceRatingVoteDefinitionStored) => Promise<void>;
   };
 
@@ -114,6 +119,42 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const closeVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForRatingVoteDefinitionAction) {
+        await customActions.postCloseVoteForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const removeFromFavoritesForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const takeBackVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -139,13 +180,72 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setRefreshCounter((prev) => prev + 1);
     }
   };
+  const activateForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.activate(target!);
+      if (customActions?.postActivateForRatingVoteDefinitionAction) {
+        await customActions.postActivateForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const addToFavoritesForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.addToFavorites(target!);
+      if (customActions?.postAddToFavoritesForRatingVoteDefinitionAction) {
+        await customActions.postAddToFavoritesForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const deleteOrArchiveForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForRatingVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
+    closeVoteForRatingVoteDefinitionAction,
+    removeFromFavoritesForRatingVoteDefinitionAction,
     takeBackVoteForRatingVoteDefinitionAction,
     voteAction,
+    activateForRatingVoteDefinitionAction,
+    addToFavoritesForRatingVoteDefinitionAction,
+    deleteOrArchiveForRatingVoteDefinitionAction,
     ...(customActions ?? {}),
   };
 

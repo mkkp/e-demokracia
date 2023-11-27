@@ -114,10 +114,12 @@ import type { ServiceProServiceForParentPro } from '../data-service';
 import type { ServiceProServiceForPros } from '../data-service';
 import type { ServiceProServiceForVotes } from '../data-service';
 import type { ServiceRatingVoteDefinitionServiceForIssue } from '../data-service';
+import type { ServiceRatingVoteDefinitionServiceForOwner } from '../data-service';
 import type { ServiceRatingVoteDefinitionServiceForUserVoteEntry } from '../data-service';
 import type { ServiceRatingVoteDefinitionServiceForVoteEntries } from '../data-service';
 import type { ServiceRatingVoteEntryServiceForOwner } from '../data-service';
 import type { ServiceSelectAnswerVoteDefinitionServiceForIssue } from '../data-service';
+import type { ServiceSelectAnswerVoteDefinitionServiceForOwner } from '../data-service';
 import type { ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntry } from '../data-service';
 import type { ServiceSelectAnswerVoteDefinitionServiceForVoteEntries } from '../data-service';
 import type { ServiceSelectAnswerVoteDefinitionServiceForVoteSelections } from '../data-service';
@@ -157,10 +159,12 @@ import type { ServiceUserVoteDefinitionServiceForOwnedVoteDefinitions } from '..
 import type { ServiceVoteDefinitionServiceForIssue } from '../data-service';
 import type { ServiceVoteEntryServiceForVoteDefinition } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForIssue } from '../data-service';
+import type { ServiceYesNoAbstainVoteDefinitionServiceForOwner } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntry } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForVoteEntries } from '../data-service';
 import type { ServiceYesNoAbstainVoteEntryServiceForOwner } from '../data-service';
 import type { ServiceYesNoVoteDefinitionServiceForIssue } from '../data-service';
+import type { ServiceYesNoVoteDefinitionServiceForOwner } from '../data-service';
 import type { ServiceYesNoVoteDefinitionServiceForUserVoteEntry } from '../data-service';
 import type { ServiceYesNoVoteDefinitionServiceForVoteEntries } from '../data-service';
 import type { ServiceYesNoVoteEntryServiceForOwner } from '../data-service';
@@ -270,10 +274,12 @@ import { ServiceProServiceForParentProImpl } from './ServiceProServiceForParentP
 import { ServiceProServiceForProsImpl } from './ServiceProServiceForProsImpl';
 import { ServiceProServiceForVotesImpl } from './ServiceProServiceForVotesImpl';
 import { ServiceRatingVoteDefinitionServiceForIssueImpl } from './ServiceRatingVoteDefinitionServiceForIssueImpl';
+import { ServiceRatingVoteDefinitionServiceForOwnerImpl } from './ServiceRatingVoteDefinitionServiceForOwnerImpl';
 import { ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceRatingVoteDefinitionServiceForVoteEntriesImpl } from './ServiceRatingVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceRatingVoteEntryServiceForOwnerImpl } from './ServiceRatingVoteEntryServiceForOwnerImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForIssueImpl } from './ServiceSelectAnswerVoteDefinitionServiceForIssueImpl';
+import { ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl } from './ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl } from './ServiceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from './ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl';
@@ -313,10 +319,12 @@ import { ServiceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl } from './S
 import { ServiceVoteDefinitionServiceForIssueImpl } from './ServiceVoteDefinitionServiceForIssueImpl';
 import { ServiceVoteEntryServiceForVoteDefinitionImpl } from './ServiceVoteEntryServiceForVoteDefinitionImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl';
+import { ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForVoteEntriesImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceYesNoAbstainVoteEntryServiceForOwnerImpl } from './ServiceYesNoAbstainVoteEntryServiceForOwnerImpl';
 import { ServiceYesNoVoteDefinitionServiceForIssueImpl } from './ServiceYesNoVoteDefinitionServiceForIssueImpl';
+import { ServiceYesNoVoteDefinitionServiceForOwnerImpl } from './ServiceYesNoVoteDefinitionServiceForOwnerImpl';
 import { ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl } from './ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl';
 import { ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl } from './ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl';
 import { ServiceYesNoVoteEntryServiceForOwnerImpl } from './ServiceYesNoVoteEntryServiceForOwnerImpl';
@@ -555,6 +563,8 @@ export const serviceProServiceForVotesImpl: ServiceProServiceForVotes = new Serv
 );
 export const serviceRatingVoteDefinitionServiceForIssueImpl: ServiceRatingVoteDefinitionServiceForIssue =
   new ServiceRatingVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const serviceRatingVoteDefinitionServiceForOwnerImpl: ServiceRatingVoteDefinitionServiceForOwner =
+  new ServiceRatingVoteDefinitionServiceForOwnerImpl(judoAxiosProvider);
 export const serviceRatingVoteDefinitionServiceForUserVoteEntryImpl: ServiceRatingVoteDefinitionServiceForUserVoteEntry =
   new ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceRatingVoteDefinitionServiceForVoteEntriesImpl: ServiceRatingVoteDefinitionServiceForVoteEntries =
@@ -563,6 +573,8 @@ export const serviceRatingVoteEntryServiceForOwnerImpl: ServiceRatingVoteEntrySe
   new ServiceRatingVoteEntryServiceForOwnerImpl(judoAxiosProvider);
 export const serviceSelectAnswerVoteDefinitionServiceForIssueImpl: ServiceSelectAnswerVoteDefinitionServiceForIssue =
   new ServiceSelectAnswerVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const serviceSelectAnswerVoteDefinitionServiceForOwnerImpl: ServiceSelectAnswerVoteDefinitionServiceForOwner =
+  new ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl(judoAxiosProvider);
 export const serviceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl: ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntry =
   new ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl: ServiceSelectAnswerVoteDefinitionServiceForVoteEntries =
@@ -641,6 +653,8 @@ export const serviceVoteEntryServiceForVoteDefinitionImpl: ServiceVoteEntryServi
   new ServiceVoteEntryServiceForVoteDefinitionImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForIssueImpl: ServiceYesNoAbstainVoteDefinitionServiceForIssue =
   new ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl: ServiceYesNoAbstainVoteDefinitionServiceForOwner =
+  new ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl: ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntry =
   new ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForVoteEntriesImpl: ServiceYesNoAbstainVoteDefinitionServiceForVoteEntries =
@@ -649,6 +663,8 @@ export const serviceYesNoAbstainVoteEntryServiceForOwnerImpl: ServiceYesNoAbstai
   new ServiceYesNoAbstainVoteEntryServiceForOwnerImpl(judoAxiosProvider);
 export const serviceYesNoVoteDefinitionServiceForIssueImpl: ServiceYesNoVoteDefinitionServiceForIssue =
   new ServiceYesNoVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
+export const serviceYesNoVoteDefinitionServiceForOwnerImpl: ServiceYesNoVoteDefinitionServiceForOwner =
+  new ServiceYesNoVoteDefinitionServiceForOwnerImpl(judoAxiosProvider);
 export const serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl: ServiceYesNoVoteDefinitionServiceForUserVoteEntry =
   new ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider);
 export const serviceYesNoVoteDefinitionServiceForVoteEntriesImpl: ServiceYesNoVoteDefinitionServiceForVoteEntries =

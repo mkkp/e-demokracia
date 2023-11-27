@@ -154,17 +154,17 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
     if (result === 'submit') {
     }
   };
-  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
+  const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      target,
+    );
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -177,8 +177,8 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
     refreshAction,
     voteYesNoAction,
     voteSelectAnswerAction,
-    voteRatingAction,
     voteYesNoAbstainAction,
+    voteRatingAction,
     ...(customActions ?? {}),
   };
 

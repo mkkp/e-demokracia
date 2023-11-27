@@ -86,7 +86,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   } = props;
   const queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
     _mask:
-      '{userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
+      '{isVoteNotOpen,userHasVoteEntry,created,description,userHasNoVoteEntry,title,closeAt,status,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
   };
 
   return (

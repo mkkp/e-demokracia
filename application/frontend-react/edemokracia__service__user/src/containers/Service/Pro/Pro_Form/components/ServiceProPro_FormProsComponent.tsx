@@ -220,29 +220,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_G3aTc4ujEe6laYH8Xw7WEw)',
-      label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosVoteDownForProAction
-        ? async (rowData) => {
-            await actions.prosVoteDownForProAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_G3aTc4ujEe6laYH8Xw7WEw)',
-      label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.prosCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_G3aTc4ujEe6laYH8Xw7WEw)',
+      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_v_QaMY0GEe6vroMdQ80Hug)',
       label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -253,7 +231,18 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_G3aTc4ujEe6laYH8Xw7WEw)',
+      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_v_QaMY0GEe6vroMdQ80Hug)',
+      label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceProStored) => editMode || isLoading,
+      action: actions.prosVoteDownForProAction
+        ? async (rowData) => {
+            await actions.prosVoteDownForProAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_v_QaMY0GEe6vroMdQ80Hug)',
       label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
       icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceProStored) => editMode || isLoading,
@@ -263,46 +252,57 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_v_QaMY0GEe6vroMdQ80Hug)',
+      label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceProStored) => editMode || isLoading,
+      action: actions.prosCreateConArgumentAction
+        ? async (rowData) => {
+            await actions.prosCreateConArgumentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_G3SXoIujEe6laYH8Xw7WEw',
+      id: '_v_Lhso0GEe6vroMdQ80Hug',
       attributeName: 'createdByName',
       label: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_G3S-sIujEe6laYH8Xw7WEw',
+      id: '_v_MIwo0GEe6vroMdQ80Hug',
       attributeName: 'created',
       label: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_G3S-tIujEe6laYH8Xw7WEw',
+      id: '_v_Mv0o0GEe6vroMdQ80Hug',
       attributeName: 'description',
       label: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_G3Tlw4ujEe6laYH8Xw7WEw',
+      id: '_v_NW4I0GEe6vroMdQ80Hug',
       attributeName: 'title',
       label: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_G3UM0YujEe6laYH8Xw7WEw',
+      id: '_v_N98I0GEe6vroMdQ80Hug',
       attributeName: 'upVotes',
       label: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_G3Uz4IujEe6laYH8Xw7WEw',
+      id: '_v_N99I0GEe6vroMdQ80Hug',
       attributeName: 'downVotes',
       label: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,

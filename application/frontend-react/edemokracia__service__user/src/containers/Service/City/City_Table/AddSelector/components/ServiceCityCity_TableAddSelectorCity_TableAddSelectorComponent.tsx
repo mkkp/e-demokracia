@@ -141,14 +141,14 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_FPhIkIujEe6laYH8Xw7WEw',
+      id: '_uLcTMY0GEe6vroMdQ80Hug',
       attributeName: 'county',
       label: t('service.City.City_Table.AddSelector.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_FPhvoIujEe6laYH8Xw7WEw',
+      id: '_uLcTNY0GEe6vroMdQ80Hug',
       attributeName: 'name',
       label: t('service.City.City_Table.AddSelector.name', { defaultValue: 'City name' }) as string,
       filterType: FilterType.string,

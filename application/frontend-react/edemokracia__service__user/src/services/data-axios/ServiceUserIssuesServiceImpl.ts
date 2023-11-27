@@ -135,19 +135,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForOwnedIssues(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -164,26 +151,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForOwnedIssues(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForOwnedIssues(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -219,8 +186,28 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForOwnedIssues(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -234,6 +221,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -324,19 +324,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesGlobal(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -353,29 +340,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesGlobal(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesGlobal(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesGlobal(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -411,8 +375,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesGlobal(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesGlobal(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -426,6 +413,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -516,19 +516,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesInActivityCounties(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -545,29 +532,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesInActivityCounties(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesInActivityCounties(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesInActivityCounties(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -603,8 +567,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesInActivityCounties(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesInActivityCounties(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -618,6 +605,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -708,19 +708,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesInActivityCities(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -737,29 +724,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesInActivityCities(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesInActivityCities(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesInActivityCities(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -795,8 +759,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesInActivityCities(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesInActivityCities(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -810,6 +797,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -900,19 +900,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesInActivityDistricts(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -929,29 +916,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesInActivityDistricts(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesInActivityDistricts(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesInActivityDistricts(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -987,8 +951,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesInActivityDistricts(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesInActivityDistricts(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1002,6 +989,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1092,19 +1092,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesInResidentCounty(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -1121,29 +1108,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesInResidentCounty(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesInResidentCounty(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesInResidentCounty(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -1179,8 +1143,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesInResidentCounty(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesInResidentCounty(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1194,6 +1181,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1284,19 +1284,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesInResidentCity(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -1313,29 +1300,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesInResidentCity(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesInResidentCity(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesInResidentCity(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -1371,8 +1335,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesInResidentCity(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesInResidentCity(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1386,6 +1373,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1476,19 +1476,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async closeDebateForActiveIssuesInResidentDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
@@ -1505,29 +1492,6 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
 
   async getTemplateOnCloseDebateForActiveIssuesInResidentDistrict(): Promise<CloseDebateInput> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createCommentForActiveIssuesInResidentDistrict(
-    owner: JudoIdentifiable<ServiceIssue>,
-    target: CreateCommentInput,
-  ): Promise<void> {
-    const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateCommentForActiveIssuesInResidentDistrict(): Promise<CreateCommentInput> {
-    const path = '/CreateCommentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -1563,8 +1527,31 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/removeFromFavorites';
+  async createCommentForActiveIssuesInResidentDistrict(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<void> {
+    const path = '/service/Issue/createComment';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateCommentForActiveIssuesInResidentDistrict(): Promise<CreateCommentInput> {
+    const path = '/CreateCommentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async closeVoteForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/closeVote';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -1578,6 +1565,19 @@ export class ServiceUserIssuesServiceImpl extends JudoAxiosService implements Se
    */
   async activateForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
     const path = '/service/Issue/activate';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFromFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+    const path = '/service/Issue/removeFromFavorites';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,

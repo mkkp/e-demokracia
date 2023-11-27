@@ -9,8 +9,8 @@
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceIssueAttributes,
-  ServiceYesNoAbstainVoteDefinitionAttributes,
   ServiceServiceUserAttributes,
+  ServiceYesNoAbstainVoteDefinitionAttributes,
   ServiceYesNoAbstainVoteEntryAttributes,
 } from '../model';
 import { ServiceYesNoAbstainVoteEntryOwnerMaskBuilder } from './ServiceYesNoAbstainVoteEntryMaskBuilder';

@@ -154,50 +154,10 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.createProArgumentForConAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FQqYEoujEe6laYH8Xw7WEw)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="chat-plus" />}
-              onClick={async () => {
-                await actions.createProArgumentForConAction!();
-              }}
-            >
-              <span>
-                {t('service.Con.Con_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
-                  defaultValue: 'Submit',
-                })}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
-        {editMode && actions.createConArgumentForProAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FQqYEoujEe6laYH8Xw7WEw)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="chat-minus" />}
-              onClick={async () => {
-                await actions.createConArgumentForProAction!();
-              }}
-            >
-              <span>
-                {t('service.Pro.Pro_View_Edit.Arguments.cons.actions.createConArgument.OperationFormCallButton', {
-                  defaultValue: 'Submit',
-                })}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.createConArgumentForConAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FQqYEoujEe6laYH8Xw7WEw)"
+              id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uNXl0o0GEe6vroMdQ80Hug)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -214,10 +174,30 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
+        {editMode && actions.createProArgumentForConAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uNXl0o0GEe6vroMdQ80Hug)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="chat-plus" />}
+              onClick={async () => {
+                await actions.createProArgumentForConAction!();
+              }}
+            >
+              <span>
+                {t('service.Con.Con_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
         {editMode && actions.createConArgumentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FQqYEoujEe6laYH8Xw7WEw)"
+              id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uNXl0o0GEe6vroMdQ80Hug)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -238,7 +218,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
         {editMode && actions.createProArgumentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FQqYEoujEe6laYH8Xw7WEw)"
+              id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uNXl0o0GEe6vroMdQ80Hug)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -259,7 +239,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
         {editMode && actions.createProArgumentForProAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_FQqYEoujEe6laYH8Xw7WEw)"
+              id="User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uNXl0o0GEe6vroMdQ80Hug)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -270,6 +250,26 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
             >
               <span>
                 {t('service.Pro.Pro_View_Edit.Arguments.pros.actions.createProArgument.OperationFormCallButton', {
+                  defaultValue: 'Submit',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.createConArgumentForProAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_uNXl0o0GEe6vroMdQ80Hug)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="chat-minus" />}
+              onClick={async () => {
+                await actions.createConArgumentForProAction!();
+              }}
+            >
+              <span>
+                {t('service.Pro.Pro_View_Edit.Arguments.cons.actions.createConArgument.OperationFormCallButton', {
                   defaultValue: 'Submit',
                 })}
               </span>

@@ -53,11 +53,7 @@ export const convertServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRelation
   attributeName: keyof ServiceVoteDefinition,
   value: any,
 ): any => {
-  const dateTimeTypes: string[] = [
-    'closeAt',
-
-    'created',
-  ];
+  const dateTimeTypes: string[] = ['closeAt'];
   if (dateTimeTypes.includes(attributeName as string)) {
     return value;
   }
@@ -221,17 +217,17 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
       }
     }
   };
-  const voteRatingAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
+  const voteYesNoAbstainAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const voteYesNoAbstainAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(data);
+  const voteRatingAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      data,
+    );
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
@@ -256,8 +252,8 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
     updateAction,
     voteYesNoAction,
     voteSelectAnswerAction,
-    voteRatingAction,
     voteYesNoAbstainAction,
+    voteRatingAction,
     issueOpenPageAction,
     issuePreFetchAction,
     ...(customActions ?? {}),

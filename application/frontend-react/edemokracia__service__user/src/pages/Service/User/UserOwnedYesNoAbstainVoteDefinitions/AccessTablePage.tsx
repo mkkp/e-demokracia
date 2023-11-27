@@ -31,6 +31,21 @@ import type {
 import { userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios';
 export type ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActionsExtended =
   ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActions & {
+    postActivateForYesNoAbstainVoteDefinitionAction?: (
+      target: ServiceYesNoAbstainVoteDefinitionStored,
+    ) => Promise<void>;
+    postAddToFavoritesForYesNoAbstainVoteDefinitionAction?: (
+      target: ServiceYesNoAbstainVoteDefinitionStored,
+    ) => Promise<void>;
+    postCloseVoteForYesNoAbstainVoteDefinitionAction?: (
+      target: ServiceYesNoAbstainVoteDefinitionStored,
+    ) => Promise<void>;
+    postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction?: (
+      target: ServiceYesNoAbstainVoteDefinitionStored,
+    ) => Promise<void>;
+    postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction?: (
+      target: ServiceYesNoAbstainVoteDefinitionStored,
+    ) => Promise<void>;
     postTakeBackVoteForYesNoAbstainVoteDefinitionAction?: (
       target: ServiceYesNoAbstainVoteDefinitionStored,
     ) => Promise<void>;
@@ -117,12 +132,70 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const removeFromFavoritesForYesNoAbstainVoteDefinitionAction = async (
+    target?: ServiceYesNoAbstainVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const takeBackVoteForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
     try {
       setIsLoading(true);
       await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.takeBackVote(target!);
       if (customActions?.postTakeBackVoteForYesNoAbstainVoteDefinitionAction) {
         await customActions.postTakeBackVoteForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const deleteOrArchiveForYesNoAbstainVoteDefinitionAction = async (
+    target?: ServiceYesNoAbstainVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const closeVoteForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postCloseVoteForYesNoAbstainVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -142,13 +215,56 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       setRefreshCounter((prev) => prev + 1);
     }
   };
+  const addToFavoritesForYesNoAbstainVoteDefinitionAction = async (
+    target?: ServiceYesNoAbstainVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.addToFavorites(target!);
+      if (customActions?.postAddToFavoritesForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postAddToFavoritesForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const activateForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.activate(target!);
+      if (customActions?.postActivateForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postActivateForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActions = {
     openPageAction,
     filterAction,
     refreshAction,
+    removeFromFavoritesForYesNoAbstainVoteDefinitionAction,
     takeBackVoteForYesNoAbstainVoteDefinitionAction,
+    deleteOrArchiveForYesNoAbstainVoteDefinitionAction,
+    closeVoteForYesNoAbstainVoteDefinitionAction,
     voteAction,
+    addToFavoritesForYesNoAbstainVoteDefinitionAction,
+    activateForYesNoAbstainVoteDefinitionAction,
     ...(customActions ?? {}),
   };
 

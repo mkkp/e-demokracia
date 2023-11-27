@@ -319,17 +319,6 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
         : undefined,
     },
     {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.VoteDefinition.VoteDefinition_Table.voteRating', { defaultValue: 'voteRating' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !row.isRatingType || isLoading,
-      action: actions.voteRatingAction
-        ? async (rowData) => {
-            await actions.voteRatingAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.VoteDefinition.VoteDefinition_Table.voteYesNoAbstain', {
         defaultValue: 'voteYesNoAbstain',
@@ -342,11 +331,22 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.VoteDefinition.VoteDefinition_Table.voteRating', { defaultValue: 'voteRating' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceVoteDefinitionStored) => !row.isRatingType || isLoading,
+      action: actions.voteRatingAction
+        ? async (rowData) => {
+            await actions.voteRatingAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_GA8lgIujEe6laYH8Xw7WEw',
+      id: '_vE0yQI0GEe6vroMdQ80Hug',
       attributeName: 'voteType',
       label: t('service.VoteDefinition.VoteDefinition_Table.voteType', { defaultValue: 'VoteType' }) as string,
       filterType: FilterType.enumeration,
@@ -354,14 +354,14 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     },
 
     {
-      id: '_GA9MkIujEe6laYH8Xw7WEw',
+      id: '_vE1ZUI0GEe6vroMdQ80Hug',
       attributeName: 'title',
       label: t('service.VoteDefinition.VoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_GA9MlIujEe6laYH8Xw7WEw',
+      id: '_vE1ZVI0GEe6vroMdQ80Hug',
       attributeName: 'numberOfVotes',
       label: t('service.VoteDefinition.VoteDefinition_Table.numberOfVotes', {
         defaultValue: 'NumberOfVotes',
@@ -370,14 +370,14 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     },
 
     {
-      id: '_GA9zo4ujEe6laYH8Xw7WEw',
+      id: '_vE2AYo0GEe6vroMdQ80Hug',
       attributeName: 'created',
       label: t('service.VoteDefinition.VoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_GA-asoujEe6laYH8Xw7WEw',
+      id: '_vE2ncY0GEe6vroMdQ80Hug',
       attributeName: 'status',
       label: t('service.VoteDefinition.VoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
       filterType: FilterType.enumeration,
@@ -385,14 +385,14 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     },
 
     {
-      id: '_GA_BwoujEe6laYH8Xw7WEw',
+      id: '_vE3OgI0GEe6vroMdQ80Hug',
       attributeName: 'closeAt',
       label: t('service.VoteDefinition.VoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_GA_o0IujEe6laYH8Xw7WEw',
+      id: '_vE31kI0GEe6vroMdQ80Hug',
       attributeName: 'description',
       label: t('service.VoteDefinition.VoteDefinition_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,

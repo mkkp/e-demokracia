@@ -107,13 +107,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
   return (
     <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
       <Grid item xs={12} sm={12}>
-        <Card id="_Gvl0MIujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Card id="_v2sUEI0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="Personal::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_Gvl0MIujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v2sUEI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
                   </Typography>
                 </Grid>
@@ -325,13 +325,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
       </Grid>
 
       <Grid item xs={12} sm={12}>
-        <Card id="_Guox8IujEe6laYH8Xw7WEw)/LabelWrapper">
+        <Card id="_v1gBQI0GEe6vroMdQ80Hug)/LabelWrapper">
           <CardContent>
             <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="Areas::Icon" sx={{ marginRight: 1 }} />
-                  <Typography id="_Guox8IujEe6laYH8Xw7WEw)/Label" variant="h5" component="h1">
+                  <Typography id="_v1gBQI0GEe6vroMdQ80Hug)/Label" variant="h5" component="h1">
                     {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
                   </Typography>
                 </Grid>

@@ -240,28 +240,6 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
         : undefined,
     },
     {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Pro.Pro_Table.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceProStored) => isLoading,
-      action: actions.voteDownForProAction
-        ? async (rowData) => {
-            await actions.voteDownForProAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Pro.Pro_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceProStored) => isLoading,
-      action: actions.createConArgumentAction
-        ? async (rowData) => {
-            await actions.createConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Pro.Pro_Table.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
@@ -269,6 +247,17 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
       action: actions.voteUpForProAction
         ? async (rowData) => {
             await actions.voteUpForProAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Pro.Pro_Table.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceProStored) => isLoading,
+      action: actions.voteDownForProAction
+        ? async (rowData) => {
+            await actions.voteDownForProAction!(rowData);
           }
         : undefined,
     },
@@ -283,46 +272,57 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Pro.Pro_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceProStored) => isLoading,
+      action: actions.createConArgumentAction
+        ? async (rowData) => {
+            await actions.createConArgumentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_HHsLIIujEe6laYH8Xw7WEw',
+      id: '_wRgn0Y0GEe6vroMdQ80Hug',
       attributeName: 'createdByName',
       label: t('service.Pro.Pro_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_HHsLJIujEe6laYH8Xw7WEw',
+      id: '_wRhO4I0GEe6vroMdQ80Hug',
       attributeName: 'created',
       label: t('service.Pro.Pro_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_HHsyM4ujEe6laYH8Xw7WEw',
+      id: '_wRh18I0GEe6vroMdQ80Hug',
       attributeName: 'description',
       label: t('service.Pro.Pro_Table.description', { defaultValue: 'Description' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_HHtZQoujEe6laYH8Xw7WEw',
+      id: '_wRh19I0GEe6vroMdQ80Hug',
       attributeName: 'title',
       label: t('service.Pro.Pro_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_HHuAUYujEe6laYH8Xw7WEw',
+      id: '_wRidAo0GEe6vroMdQ80Hug',
       attributeName: 'upVotes',
       label: t('service.Pro.Pro_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_HHunYIujEe6laYH8Xw7WEw',
+      id: '_wRjEEI0GEe6vroMdQ80Hug',
       attributeName: 'downVotes',
       label: t('service.Pro.Pro_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,
