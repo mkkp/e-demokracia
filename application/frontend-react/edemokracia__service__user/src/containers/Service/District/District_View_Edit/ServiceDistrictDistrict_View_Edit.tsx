@@ -71,36 +71,47 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="name"
-          id="User/(esm/_dMOo8H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-          autoFocus
-          label={t('service.District.District_View_Edit.name', { defaultValue: 'District name' }) as string}
-          value={data.name ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('name')}
-          helperText={validation.get('name')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('name', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
+        <Grid
+          id="User/(esm/_a0UhZn2iEe2LTNnGda5kaw)/TransferObjectViewVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="name"
+              id="User/(esm/_dMOo8H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
+              autoFocus
+              label={t('service.District.District_View_Edit.name', { defaultValue: 'District name' }) as string}
+              value={data.name ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('name')}
+              helperText={validation.get('name')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('name', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

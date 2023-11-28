@@ -48,23 +48,25 @@ export default function CreateArgumentInputCreateArgumentInput_Table(
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-              >
-                <CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_TableComponent
-                  uniqueId={'User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable'}
-                  actions={actions}
-                  refreshCounter={refreshCounter}
-                />
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_TableComponent
+                    uniqueId={'User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable'}
+                    actions={actions}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

@@ -102,10 +102,6 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
   });
 
   // Action section
-  const openPageAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -132,50 +128,9 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const voteAction = async (target: ServiceYesNoAbstainVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const removeFromFavoritesForYesNoAbstainVoteDefinitionAction = async (
-    target?: ServiceYesNoAbstainVoteDefinitionStored,
-  ) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const closeVoteForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.closeVote(target!);
-      if (customActions?.postCloseVoteForYesNoAbstainVoteDefinitionAction) {
-        await customActions.postCloseVoteForYesNoAbstainVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
+  const openPageAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
   };
   const activateForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
     try {
@@ -183,26 +138,6 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.activate(target!);
       if (customActions?.postActivateForYesNoAbstainVoteDefinitionAction) {
         await customActions.postActivateForYesNoAbstainVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const deleteOrArchiveForYesNoAbstainVoteDefinitionAction = async (
-    target?: ServiceYesNoAbstainVoteDefinitionStored,
-  ) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.deleteOrArchive(target!);
-      if (customActions?.postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction) {
-        await customActions.postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -235,6 +170,71 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
       setIsLoading(false);
     }
   };
+  const closeVoteForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.closeVote(target!);
+      if (customActions?.postCloseVoteForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postCloseVoteForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const deleteOrArchiveForYesNoAbstainVoteDefinitionAction = async (
+    target?: ServiceYesNoAbstainVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const removeFromFavoritesForYesNoAbstainVoteDefinitionAction = async (
+    target?: ServiceYesNoAbstainVoteDefinitionStored,
+  ) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async (target: ServiceYesNoAbstainVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
   const takeBackVoteForYesNoAbstainVoteDefinitionAction = async (target?: ServiceYesNoAbstainVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -255,15 +255,15 @@ export default function ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTab
   };
 
   const actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TablePageActions = {
-    openPageAction,
     filterAction,
     refreshAction,
-    voteAction,
-    removeFromFavoritesForYesNoAbstainVoteDefinitionAction,
-    closeVoteForYesNoAbstainVoteDefinitionAction,
+    openPageAction,
     activateForYesNoAbstainVoteDefinitionAction,
-    deleteOrArchiveForYesNoAbstainVoteDefinitionAction,
     addToFavoritesForYesNoAbstainVoteDefinitionAction,
+    closeVoteForYesNoAbstainVoteDefinitionAction,
+    deleteOrArchiveForYesNoAbstainVoteDefinitionAction,
+    removeFromFavoritesForYesNoAbstainVoteDefinitionAction,
+    voteAction,
     takeBackVoteForYesNoAbstainVoteDefinitionAction,
     ...(customActions ?? {}),
   };

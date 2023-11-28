@@ -47,26 +47,28 @@ export default function ServiceIssueTypeIssueType_TableSetSelector(
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-              >
-                <ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSelectorComponent
-                  uniqueId={'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable'}
-                  actions={actions}
-                  selectionDiff={selectionDiff}
-                  setSelectionDiff={setSelectionDiff}
-                  alreadySelected={alreadySelected}
-                  refreshCounter={refreshCounter}
-                />
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSelectorComponent
+                    uniqueId={'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable'}
+                    actions={actions}
+                    selectionDiff={selectionDiff}
+                    setSelectionDiff={setSelectionDiff}
+                    alreadySelected={alreadySelected}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

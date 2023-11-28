@@ -112,6 +112,7 @@ export const NavGroup = ({ item }: NavGroupProps) => {
                 <Typography
                   variant="subtitle2"
                   color={theme.palette.mode === ThemeMode.DARK ? 'textSecondary' : 'text.secondary'}
+                  sx={{ mt: 1 }}
                 >
                   {t(`menuTree.${item.title}`, { defaultValue: item.title })}
                 </Typography>

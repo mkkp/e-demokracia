@@ -42,23 +42,25 @@ export default function ServiceIssueTypeIssueType_Table(props: ServiceIssueTypeI
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTable"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-              >
-                <ServiceIssueTypeIssueType_TableIssueType_TableComponent
-                  uniqueId={'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTable'}
-                  actions={actions}
-                  refreshCounter={refreshCounter}
-                />
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <ServiceIssueTypeIssueType_TableIssueType_TableComponent
+                    uniqueId={'User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableTable'}
+                    actions={actions}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

@@ -98,10 +98,6 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
   const backAction = async () => {
     navigateBack();
   };
-  const openPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceDashboardFavoriteIssuesRelationViewPage(target!.__signedIdentifier));
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -129,18 +125,34 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const createCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
+  const openPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceDashboardFavoriteIssuesRelationViewPage(target!.__signedIdentifier));
   };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const activateForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceDashboardServiceForFavoriteIssuesImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      await serviceDashboardServiceForFavoriteIssuesImpl.activate(target!);
+      if (customActions?.postActivateForIssueAction) {
+        await customActions.postActivateForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceDashboardServiceForFavoriteIssuesImpl.addToFavorites(target!);
+      if (customActions?.postAddToFavoritesForIssueAction) {
+        await customActions.postAddToFavoritesForIssueAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -177,36 +189,6 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
       setIsLoading(false);
     }
   };
-  const createProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const activateForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceDashboardServiceForFavoriteIssuesImpl.activate(target!);
-      if (customActions?.postActivateForIssueAction) {
-        await customActions.postActivateForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const createConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const deleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
@@ -225,12 +207,12 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
       setIsLoading(false);
     }
   };
-  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceDashboardServiceForFavoriteIssuesImpl.addToFavorites(target!);
-      if (customActions?.postAddToFavoritesForIssueAction) {
-        await customActions.postAddToFavoritesForIssueAction(target!);
+      await serviceDashboardServiceForFavoriteIssuesImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -243,21 +225,39 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
       setIsLoading(false);
     }
   };
+  const createConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const createProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const createCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
 
   const actions: ServiceIssueIssue_TablePageActions = {
     backAction,
-    openPageAction,
     filterAction,
     refreshAction,
-    createCommentAction,
-    removeFromFavoritesForIssueAction,
+    openPageAction,
+    activateForIssueAction,
+    addToFavoritesForIssueAction,
     closeDebateAction,
     closeVoteForIssueAction,
-    createProArgumentAction,
-    activateForIssueAction,
-    createConArgumentAction,
     deleteOrArchiveForIssueAction,
-    addToFavoritesForIssueAction,
+    removeFromFavoritesForIssueAction,
+    createConArgumentAction,
+    createProArgumentAction,
+    createCommentAction,
     ...(customActions ?? {}),
   };
 

@@ -9,11 +9,11 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface SelectAnswerVoteSelection {
-  title: string;
   description?: null | string;
+  title: string;
 }
 
-export type SelectAnswerVoteSelectionAttributes = 'title' | 'description';
+export type SelectAnswerVoteSelectionAttributes = 'description' | 'title';
 
 export interface SelectAnswerVoteSelectionStored
   extends JudoStored<SelectAnswerVoteSelection>,

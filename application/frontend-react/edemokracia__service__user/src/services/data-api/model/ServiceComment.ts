@@ -16,13 +16,13 @@ export interface ServiceComment {
   comment: string;
   created?: null | Date;
   createdByName?: null | string;
-  upVotes?: null | number;
   downVotes?: null | number;
-  votes?: null | Array<ServiceSimpleVoteStored>;
+  upVotes?: null | number;
   createdBy?: null | ServiceServiceUserStored;
+  votes?: null | Array<ServiceSimpleVoteStored>;
 }
 
-export type ServiceCommentAttributes = 'comment' | 'created' | 'createdByName' | 'upVotes' | 'downVotes';
-export type ServiceCommentRelations = 'votes' | 'createdBy';
+export type ServiceCommentAttributes = 'comment' | 'created' | 'createdByName' | 'downVotes' | 'upVotes';
+export type ServiceCommentRelations = 'createdBy' | 'votes';
 
 export interface ServiceCommentStored extends JudoStored<ServiceComment>, ServiceComment {}

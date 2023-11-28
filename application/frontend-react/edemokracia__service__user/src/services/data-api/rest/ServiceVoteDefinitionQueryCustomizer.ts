@@ -18,25 +18,25 @@ import { FilterBytypesText } from './FilterBytypesText';
 import { FilterBytypesTimestamp } from './FilterBytypesTimestamp';
 
 export interface ServiceVoteDefinitionQueryCustomizer extends QueryCustomizer<ServiceVoteDefinition> {
-  title?: Array<FilterBytypesString>;
+  cityRepresentation?: Array<FilterBytypesString>;
+  closeAt?: Array<FilterBytypesTimestamp>;
+  countyRepresentation?: Array<FilterBytypesString>;
   created?: Array<FilterBytypesTimestamp>;
   description?: Array<FilterBytypesText>;
-  status?: Array<FilterByVoteStatus>;
-  closeAt?: Array<FilterBytypesTimestamp>;
-  isRatingType?: Array<FilterBytypesBoolean>;
-  isSelectAnswerType?: Array<FilterBytypesBoolean>;
-  isYesNoAbstainType?: Array<FilterBytypesBoolean>;
-  isYesNoType?: Array<FilterBytypesBoolean>;
+  districtRepresentation?: Array<FilterBytypesString>;
+  isFavorite?: Array<FilterBytypesBoolean>;
+  isNotFavorite?: Array<FilterBytypesBoolean>;
   isNotRatingType?: Array<FilterBytypesBoolean>;
   isNotSelectAnswerType?: Array<FilterBytypesBoolean>;
   isNotYesNoAbstainType?: Array<FilterBytypesBoolean>;
   isNotYesNoType?: Array<FilterBytypesBoolean>;
+  isRatingType?: Array<FilterBytypesBoolean>;
+  isSelectAnswerType?: Array<FilterBytypesBoolean>;
+  isYesNoAbstainType?: Array<FilterBytypesBoolean>;
+  isYesNoType?: Array<FilterBytypesBoolean>;
   numberOfVotes?: Array<FilterBytypesInteger>;
-  voteType?: Array<FilterByVoteType>;
   scope?: Array<FilterByIssueScope>;
-  districtRepresentation?: Array<FilterBytypesString>;
-  countyRepresentation?: Array<FilterBytypesString>;
-  isFavorite?: Array<FilterBytypesBoolean>;
-  cityRepresentation?: Array<FilterBytypesString>;
-  isNotFavorite?: Array<FilterBytypesBoolean>;
+  status?: Array<FilterByVoteStatus>;
+  title?: Array<FilterBytypesString>;
+  voteType?: Array<FilterByVoteType>;
 }

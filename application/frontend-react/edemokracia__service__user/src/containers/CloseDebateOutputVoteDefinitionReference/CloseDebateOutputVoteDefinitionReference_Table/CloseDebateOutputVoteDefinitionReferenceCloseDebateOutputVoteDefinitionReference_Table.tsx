@@ -48,23 +48,25 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-              >
-                <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponent
-                  uniqueId={'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable'}
-                  actions={actions}
-                  refreshCounter={refreshCounter}
-                />
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponent
+                    uniqueId={'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable'}
+                    actions={actions}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

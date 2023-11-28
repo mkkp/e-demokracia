@@ -81,47 +81,60 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
-      <Grid item xs={12}>
-        <Grid container spacing={2}>
-          <Grid item>
-            <LoadingButton
-              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormVisualElement"
-              loading={isLoading}
-              startIcon={<MdiIcon path="account-plus" />}
-              loadingPosition="start"
-              onClick={
-                actions.createUserAction
-                  ? async () => {
-                      await actions.createUserAction!();
-                    }
-                  : undefined
-              }
-              disabled={editMode}
-            >
-              <span>{t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}</span>
-            </LoadingButton>
-          </Grid>
-        </Grid>
-      </Grid>
-
+    <Grid container>
       <Grid item xs={12} sm={12}>
         <Grid
-          id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+          id="User/(esm/_dGIWgFvOEe6jm_SkPSYEYw)/TransferObjectViewVisualElement"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
+          spacing={2}
         >
-          <ServiceUserManagerUserManager_View_EditUsersComponent
-            uniqueId={'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'}
-            actions={actions}
-            ownerData={data}
-            editMode={editMode}
-            isFormUpdateable={isFormUpdateable}
-            validationError={validation.get('users')}
-            refreshCounter={refreshCounter}
-          />
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item>
+                <LoadingButton
+                  id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormVisualElement"
+                  loading={isLoading}
+                  startIcon={<MdiIcon path="account-plus" />}
+                  loadingPosition="start"
+                  onClick={
+                    actions.createUserAction
+                      ? async () => {
+                          await actions.createUserAction!();
+                        }
+                      : undefined
+                  }
+                  disabled={editMode}
+                >
+                  <span>
+                    {t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}
+                  </span>
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <Grid
+              id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+              container
+              direction="column"
+              alignItems="stretch"
+              justifyContent="flex-start"
+            >
+              <ServiceUserManagerUserManager_View_EditUsersComponent
+                uniqueId={'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'}
+                actions={actions}
+                ownerData={data}
+                editMode={editMode}
+                isFormUpdateable={isFormUpdateable}
+                validationError={validation.get('users')}
+                refreshCounter={refreshCounter}
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

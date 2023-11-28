@@ -46,18 +46,20 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_Table(
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_gTjKMF4-Ee6vsex_cZNQbQ)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Typography id="User/(esm/_gTjKMF4-Ee6vsex_cZNQbQ)/TransferObjectTableEmpty">
-                {
-                  t('service.UserVoteDefinition.UserVoteDefinition_Table.UserVoteDefinition_Table', {
-                    defaultValue: 'No columns.',
-                  }) as string
-                }
-              </Typography>
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Typography id="User/(esm/_gTjKMF4-Ee6vsex_cZNQbQ)/TransferObjectTableEmpty">
+                  {
+                    t('service.UserVoteDefinition.UserVoteDefinition_Table.UserVoteDefinition_Table', {
+                      defaultValue: 'No columns.',
+                    }) as string
+                  }
+                </Typography>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>

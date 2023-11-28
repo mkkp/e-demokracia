@@ -71,39 +71,50 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <NumericInput
-          required={false}
-          name="value"
-          id="User/(esm/_UNECcOSNEe20cv3f2msZXg)/NumericTypeVisualInput"
-          autoFocus
-          label={t('RatingVoteInput.RatingVoteInput_Form.value', { defaultValue: 'Vote rate' }) as string}
-          customInput={TextField}
-          value={data.value ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': false,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('value')}
-          helperText={validation.get('value')}
-          onValueChange={(values, sourceInfo) => {
-            const newValue = values.floatValue === undefined ? null : values.floatValue;
-            if (data.value !== newValue) {
-              storeDiff('value', newValue);
-            }
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="calculator" />
-              </InputAdornment>
-            ),
-          }}
-        />
+        <Grid
+          id="User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <NumericInput
+              required={false}
+              name="value"
+              id="User/(esm/_UNECcOSNEe20cv3f2msZXg)/NumericTypeVisualInput"
+              autoFocus
+              label={t('RatingVoteInput.RatingVoteInput_Form.value', { defaultValue: 'Vote rate' }) as string}
+              customInput={TextField}
+              value={data.value ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('value')}
+              helperText={validation.get('value')}
+              onValueChange={(values, sourceInfo) => {
+                const newValue = values.floatValue === undefined ? null : values.floatValue;
+                if (data.value !== newValue) {
+                  storeDiff('value', newValue);
+                }
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="calculator" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

@@ -46,18 +46,20 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Table(
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_-1U_1HWyEe2LTNnGda5kaw)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Typography id="User/(esm/_-1U_1HWyEe2LTNnGda5kaw)/TransferObjectTableEmpty">
-                {
-                  t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Table.YesNoAbstainVoteInput_Table', {
-                    defaultValue: 'No columns.',
-                  }) as string
-                }
-              </Typography>
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Typography id="User/(esm/_-1U_1HWyEe2LTNnGda5kaw)/TransferObjectTableEmpty">
+                  {
+                    t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Table.YesNoAbstainVoteInput_Table', {
+                      defaultValue: 'No columns.',
+                    }) as string
+                  }
+                </Typography>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>

@@ -135,11 +135,11 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   const title: string = t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
 
   // Action section
-  const setAction = async (selected: ServiceCountyStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceCountyStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -162,8 +162,8 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   };
 
   const actions: ServiceCountyCounty_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

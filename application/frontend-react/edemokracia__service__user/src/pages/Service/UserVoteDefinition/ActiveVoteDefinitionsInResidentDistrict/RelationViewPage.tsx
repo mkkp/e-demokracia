@@ -154,6 +154,10 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   const backAction = async () => {
     navigateBack();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored> => {
@@ -181,10 +185,6 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
   const updateAction = async () => {
     setIsLoading(true);
     try {
@@ -201,16 +201,20 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       setIsLoading(false);
     }
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
   const voteRatingAction = async () => {
     const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const voteYesNoAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
       data,
     );
     if (result === 'submit' && !editMode) {
@@ -235,30 +239,26 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
+  const voteYesNoAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      data,
     );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
-    refreshAction,
     cancelAction,
+    refreshAction,
     updateAction,
-    voteRatingAction,
-    voteYesNoAction,
-    voteSelectAnswerAction,
-    voteYesNoAbstainAction,
     issueOpenPageAction,
     issuePreFetchAction,
+    voteRatingAction,
+    voteSelectAnswerAction,
+    voteYesNoAbstainAction,
+    voteYesNoAction,
     ...(customActions ?? {}),
   };
 

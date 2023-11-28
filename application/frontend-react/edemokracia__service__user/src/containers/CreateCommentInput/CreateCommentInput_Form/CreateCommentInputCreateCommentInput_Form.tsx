@@ -76,63 +76,74 @@ export default function CreateCommentInputCreateCommentInput_Form(
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
         <Grid
-          id="User/(esm/_QjzvsIe6Ee2kLcMqsIbMgQ)/GroupVisualElement"
+          id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormVisualElement"
           container
-          direction="row"
-          alignItems="flex-start"
+          direction="column"
+          alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <TextField
-              required={true}
-              name="comment"
-              id="User/(esm/_a5DsQIe6Ee2kLcMqsIbMgQ)/StringTypeTextArea"
-              autoFocus
-              label={t('CreateCommentInput.CreateCommentInput_Form.comment', { defaultValue: 'Comment' }) as string}
-              value={data.comment ?? ''}
-              className={clsx({
-                'JUDO-viewMode': !editMode,
-                'JUDO-required': true,
-              })}
-              disabled={isLoading}
-              multiline
-              minRows={4.0}
-              error={!!validation.get('comment')}
-              helperText={validation.get('comment')}
-              onChange={(event) => {
-                const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                storeDiff('comment', realValue);
-              }}
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                readOnly: false || !isFormUpdateable(),
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdiIcon path="text_fields" />
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <Grid
+              id="User/(esm/_QjzvsIe6Ee2kLcMqsIbMgQ)/GroupVisualElement"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12}>
+                <TextField
+                  required={true}
+                  name="comment"
+                  id="User/(esm/_a5DsQIe6Ee2kLcMqsIbMgQ)/StringTypeTextArea"
+                  autoFocus
+                  label={t('CreateCommentInput.CreateCommentInput_Form.comment', { defaultValue: 'Comment' }) as string}
+                  value={data.comment ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  multiline
+                  minRows={4.0}
+                  error={!!validation.get('comment')}
+                  helperText={validation.get('comment')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('comment', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
-      </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <Grid
-          id="User/(esm/_4fOhEIfUEe2u0fVmwtP5bA)/GroupVisualElement"
-          container
-          direction="row"
-          alignItems="flex-start"
-          justifyContent="flex-start"
-          spacing={2}
-        >
-          <Grid item xs={12} sm={12} md={4.0}></Grid>
+          <Grid item xs={12} sm={12}>
+            <Grid
+              id="User/(esm/_4fOhEIfUEe2u0fVmwtP5bA)/GroupVisualElement"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12} md={4.0}></Grid>
 
-          <Grid item xs={12} sm={12} md={4.0}></Grid>
+              <Grid item xs={12} sm={12} md={4.0}></Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

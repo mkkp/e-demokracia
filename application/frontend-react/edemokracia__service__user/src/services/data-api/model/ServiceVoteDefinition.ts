@@ -14,52 +14,52 @@ import { VoteStatus } from './VoteStatus';
 import { VoteType } from './VoteType';
 
 export interface ServiceVoteDefinition {
-  title: string;
+  cityRepresentation?: null | string;
+  closeAt: Date;
+  countyRepresentation?: null | string;
   created?: null | Date;
   description: string;
-  status: VoteStatus;
-  closeAt: Date;
-  isRatingType?: null | boolean;
-  isSelectAnswerType?: null | boolean;
-  isYesNoAbstainType?: null | boolean;
-  isYesNoType?: null | boolean;
+  districtRepresentation?: null | string;
+  isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
   isNotRatingType?: null | boolean;
   isNotSelectAnswerType?: null | boolean;
   isNotYesNoAbstainType?: null | boolean;
   isNotYesNoType?: null | boolean;
+  isRatingType?: null | boolean;
+  isSelectAnswerType?: null | boolean;
+  isYesNoAbstainType?: null | boolean;
+  isYesNoType?: null | boolean;
   numberOfVotes?: null | number;
-  voteType?: null | VoteType;
   scope?: null | IssueScope;
-  districtRepresentation?: null | string;
-  countyRepresentation?: null | string;
-  isFavorite?: null | boolean;
-  cityRepresentation?: null | string;
-  isNotFavorite?: null | boolean;
+  status: VoteStatus;
+  title: string;
+  voteType?: null | VoteType;
   issue?: null | ServiceIssueStored;
 }
 
 export type ServiceVoteDefinitionAttributes =
-  | 'title'
+  | 'cityRepresentation'
+  | 'closeAt'
+  | 'countyRepresentation'
   | 'created'
   | 'description'
-  | 'status'
-  | 'closeAt'
-  | 'isRatingType'
-  | 'isSelectAnswerType'
-  | 'isYesNoAbstainType'
-  | 'isYesNoType'
+  | 'districtRepresentation'
+  | 'isFavorite'
+  | 'isNotFavorite'
   | 'isNotRatingType'
   | 'isNotSelectAnswerType'
   | 'isNotYesNoAbstainType'
   | 'isNotYesNoType'
+  | 'isRatingType'
+  | 'isSelectAnswerType'
+  | 'isYesNoAbstainType'
+  | 'isYesNoType'
   | 'numberOfVotes'
-  | 'voteType'
   | 'scope'
-  | 'districtRepresentation'
-  | 'countyRepresentation'
-  | 'isFavorite'
-  | 'cityRepresentation'
-  | 'isNotFavorite';
+  | 'status'
+  | 'title'
+  | 'voteType';
 export type ServiceVoteDefinitionRelations = 'issue';
 
 export interface ServiceVoteDefinitionStored extends JudoStored<ServiceVoteDefinition>, ServiceVoteDefinition {}

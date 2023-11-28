@@ -230,17 +230,6 @@ export function ServiceCommentComment_TableComment_TableComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.voteUpForCommentAction
-        ? async (rowData) => {
-            await actions.voteUpForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Comment.Comment_Table.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
@@ -251,39 +240,50 @@ export function ServiceCommentComment_TableComment_TableComponent(
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceCommentStored) => isLoading,
+      action: actions.voteUpForCommentAction
+        ? async (rowData) => {
+            await actions.voteUpForCommentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_uHU3Uo1KEe6sgdrBpAinBQ',
+      id: '_9xsvwI2dEe6GJNWtqQaZ_w',
       attributeName: 'createdByName',
       label: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_uHVeYo1KEe6sgdrBpAinBQ',
+      id: '_9xtW0Y2dEe6GJNWtqQaZ_w',
       attributeName: 'comment',
       label: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_uHWFcI1KEe6sgdrBpAinBQ',
+      id: '_9xt94o2dEe6GJNWtqQaZ_w',
       attributeName: 'created',
       label: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_uHWFdI1KEe6sgdrBpAinBQ',
+      id: '_9xvMAI2dEe6GJNWtqQaZ_w',
       attributeName: 'upVotes',
       label: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
       filterType: FilterType.numeric,
     },
 
     {
-      id: '_uHWsgo1KEe6sgdrBpAinBQ',
+      id: '_9xvzEo2dEe6GJNWtqQaZ_w',
       attributeName: 'downVotes',
       label: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
       filterType: FilterType.numeric,

@@ -82,73 +82,84 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="name"
-          id="User/(esm/_dL1nYH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-          autoFocus
-          label={t('service.City.City_View_Edit.name', { defaultValue: 'City name' }) as string}
-          value={data.name ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('name')}
-          helperText={validation.get('name')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('name', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-
+    <Grid container>
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_tz16oI1KEe6sgdrBpAinBQ)/LabelWrapper"
+          id="User/(esm/_a0XkuH2iEe2LTNnGda5kaw)/TransferObjectViewVisualElement"
           container
           direction="column"
-          alignItems="center"
+          alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
-              <Typography id="_tz16oI1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
-                {t('service.City.City_View_Edit.districts.Icon', { defaultValue: 'Districts' })}
-              </Typography>
-            </Grid>
+            <TextField
+              required={true}
+              name="name"
+              id="User/(esm/_dL1nYH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
+              autoFocus
+              label={t('service.City.City_View_Edit.name', { defaultValue: 'City name' }) as string}
+              value={data.name ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('name')}
+              helperText={validation.get('name')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('name', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
+              id="(_9YCSkI2dEe6GJNWtqQaZ_w)/LabelWrapper"
               container
               direction="column"
-              alignItems="stretch"
+              alignItems="center"
               justifyContent="flex-start"
+              spacing={2}
             >
-              <ServiceCityCity_View_EditDistrictsComponent
-                uniqueId={'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
-                actions={actions}
-                ownerData={data}
-                editMode={editMode}
-                isFormUpdateable={isFormUpdateable}
-                validationError={validation.get('districts')}
-                refreshCounter={refreshCounter}
-              />
+              <Grid item xs={12} sm={12}>
+                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                  <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
+                  <Typography id="_9YCSkI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                    {t('service.City.City_View_Edit.districts.Icon', { defaultValue: 'Districts' })}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <ServiceCityCity_View_EditDistrictsComponent
+                    uniqueId={'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
+                    actions={actions}
+                    ownerData={data}
+                    editMode={editMode}
+                    isFormUpdateable={isFormUpdateable}
+                    validationError={validation.get('districts')}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

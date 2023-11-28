@@ -40,14 +40,16 @@ export default function ServiceUserIssuesUserIssues_Table(props: ServiceUserIssu
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_jK51vlq4Ee6_67aMO2jOsw)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Typography id="User/(esm/_jK51vlq4Ee6_67aMO2jOsw)/TransferObjectTableEmpty">
-                {t('service.UserIssues.UserIssues_Table.UserIssues_Table', { defaultValue: 'No columns.' }) as string}
-              </Typography>
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Typography id="User/(esm/_jK51vlq4Ee6_67aMO2jOsw)/TransferObjectTableEmpty">
+                  {t('service.UserIssues.UserIssues_Table.UserIssues_Table', { defaultValue: 'No columns.' }) as string}
+                </Typography>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>

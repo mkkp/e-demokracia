@@ -95,52 +95,30 @@ export default function ServiceUserIssuesActiveIssuesInResidentCountyRelationTab
   const title: string = t('service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
 
   // Action section
-  const backAction = async () => {
-    navigateBack();
-  };
-  const openPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserIssuesActiveIssuesInResidentCountyRelationViewPage(target!.__signedIdentifier));
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
+  const activateForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      setEditMode(false);
-      return serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.list(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        queryCustomizer,
-      );
+      await serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.activate(target!);
+      if (customActions?.postActivateForIssueAction) {
+        await customActions.postActivateForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
     } catch (error) {
       handleError(error);
-      return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const createCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      await serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.addToFavorites(target!);
+      if (customActions?.postAddToFavoritesForIssueAction) {
+        await customActions.postAddToFavoritesForIssueAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -177,36 +155,6 @@ export default function ServiceUserIssuesActiveIssuesInResidentCountyRelationTab
       setIsLoading(false);
     }
   };
-  const createProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const activateForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.activate(target!);
-      if (customActions?.postActivateForIssueAction) {
-        await customActions.postActivateForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const createConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
   const deleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
@@ -225,12 +173,12 @@ export default function ServiceUserIssuesActiveIssuesInResidentCountyRelationTab
       setIsLoading(false);
     }
   };
-  const addToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.addToFavorites(target!);
-      if (customActions?.postAddToFavoritesForIssueAction) {
-        await customActions.postAddToFavoritesForIssueAction(target!);
+      await serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -243,21 +191,73 @@ export default function ServiceUserIssuesActiveIssuesInResidentCountyRelationTab
       setIsLoading(false);
     }
   };
+  const createConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const createProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const createCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const backAction = async () => {
+    navigateBack();
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return serviceUserIssuesServiceForActiveIssuesInResidentCountyImpl.list(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        queryCustomizer,
+      );
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceUserIssuesActiveIssuesInResidentCountyRelationViewPage(target!.__signedIdentifier));
+  };
 
   const actions: ServiceIssueIssue_TablePageActions = {
-    backAction,
-    openPageAction,
-    filterAction,
-    refreshAction,
-    createCommentAction,
-    removeFromFavoritesForIssueAction,
+    activateForIssueAction,
+    addToFavoritesForIssueAction,
     closeDebateAction,
     closeVoteForIssueAction,
-    createProArgumentAction,
-    activateForIssueAction,
-    createConArgumentAction,
     deleteOrArchiveForIssueAction,
-    addToFavoritesForIssueAction,
+    removeFromFavoritesForIssueAction,
+    createConArgumentAction,
+    createProArgumentAction,
+    createCommentAction,
+    backAction,
+    filterAction,
+    refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

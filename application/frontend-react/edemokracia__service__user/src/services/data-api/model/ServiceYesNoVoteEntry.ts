@@ -13,12 +13,12 @@ import { YesNoVoteValue } from './YesNoVoteValue';
 
 export interface ServiceYesNoVoteEntry {
   created: Date;
-  value: YesNoVoteValue;
   createdBy?: null | string;
+  value: YesNoVoteValue;
   owner: ServiceServiceUserStored;
 }
 
-export type ServiceYesNoVoteEntryAttributes = 'created' | 'value' | 'createdBy';
+export type ServiceYesNoVoteEntryAttributes = 'created' | 'createdBy' | 'value';
 export type ServiceYesNoVoteEntryRelations = 'owner';
 
 export interface ServiceYesNoVoteEntryStored extends JudoStored<ServiceYesNoVoteEntry>, ServiceYesNoVoteEntry {}

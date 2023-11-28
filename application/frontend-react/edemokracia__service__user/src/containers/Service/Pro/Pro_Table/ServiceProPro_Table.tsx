@@ -41,23 +41,25 @@ export default function ServiceProPro_Table(props: ServiceProPro_TableProps) {
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable"
-                container
-                direction="column"
-                alignItems="stretch"
-                justifyContent="flex-start"
-              >
-                <ServiceProPro_TablePro_TableComponent
-                  uniqueId={'User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable'}
-                  actions={actions}
-                  refreshCounter={refreshCounter}
-                />
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <ServiceProPro_TablePro_TableComponent
+                    uniqueId={'User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable'}
+                    actions={actions}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </CardContent>

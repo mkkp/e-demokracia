@@ -236,14 +236,14 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sSvUQY1KEe6sgdrBpAinBQ',
+      id: '_7dG28I2dEe6GJNWtqQaZ_w',
       attributeName: 'userName',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.userName', { defaultValue: 'Username' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sSvURY1KEe6sgdrBpAinBQ',
+      id: '_7dHeAY2dEe6GJNWtqQaZ_w',
       attributeName: 'isAdmin',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.isAdmin', {
         defaultValue: 'Has admin access',
@@ -252,35 +252,35 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
     },
 
     {
-      id: '_sSv7U41KEe6sgdrBpAinBQ',
+      id: '_7dIFEo2dEe6GJNWtqQaZ_w',
       attributeName: 'firstName',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.firstName', { defaultValue: 'First name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sSwiYo1KEe6sgdrBpAinBQ',
+      id: '_7dJTMI2dEe6GJNWtqQaZ_w',
       attributeName: 'lastName',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.lastName', { defaultValue: 'Last name' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sSxJcI1KEe6sgdrBpAinBQ',
+      id: '_7dJ6QI2dEe6GJNWtqQaZ_w',
       attributeName: 'phone',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.phone', { defaultValue: 'Phone' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sSxJdI1KEe6sgdrBpAinBQ',
+      id: '_7dKhUo2dEe6GJNWtqQaZ_w',
       attributeName: 'email',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.email', { defaultValue: 'Email' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sSxwgo1KEe6sgdrBpAinBQ',
+      id: '_7dLvcI2dEe6GJNWtqQaZ_w',
       attributeName: 'created',
       label: t('service.ServiceUser.ServiceUser_Table.SetSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,

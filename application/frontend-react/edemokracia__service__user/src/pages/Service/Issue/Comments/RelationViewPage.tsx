@@ -136,6 +136,56 @@ export default function ServiceIssueCommentsRelationViewPage() {
   const title: string = t('service.Comment.Comment_View_Edit', { defaultValue: 'Comment View / Edit' });
 
   // Action section
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceCommentCreatedByRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteDownForCommentAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceCommentServiceImpl.voteDown(data);
+      if (customActions?.postVoteDownForCommentAction) {
+        await customActions.postVoteDownForCommentAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceComment>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteUpForCommentAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceCommentServiceImpl.voteUp(data);
+      if (customActions?.postVoteUpForCommentAction) {
+        await customActions.postVoteUpForCommentAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceComment>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceCommentVotesRelationTablePage((target || data).__signedIdentifier));
+  };
   const backAction = async () => {
     navigateBack();
   };
@@ -164,64 +214,14 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const voteUpForCommentAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceCommentServiceImpl.voteUp(data);
-      if (customActions?.postVoteUpForCommentAction) {
-        await customActions.postVoteUpForCommentAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceComment>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const voteDownForCommentAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceCommentServiceImpl.voteDown(data);
-      if (customActions?.postVoteDownForCommentAction) {
-        await customActions.postVoteDownForCommentAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceComment>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceCommentVotesRelationTablePage((target || data).__signedIdentifier));
-  };
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceCommentCreatedByRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
 
   const actions: ServiceCommentComment_View_EditPageActions = {
+    createdByOpenPageAction,
+    voteDownForCommentAction,
+    voteUpForCommentAction,
+    votesOpenPageAction,
     backAction,
     refreshAction,
-    voteUpForCommentAction,
-    voteDownForCommentAction,
-    votesOpenPageAction,
-    createdByOpenPageAction,
     ...(customActions ?? {}),
   };
 

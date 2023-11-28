@@ -134,11 +134,11 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   const title: string = t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
 
   // Action section
-  const setAction = async (selected: ServiceServiceUserStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceServiceUserStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -163,8 +163,8 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   };
 
   const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

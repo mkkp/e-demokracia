@@ -81,77 +81,90 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="title"
-          id="User/(esm/_T0LtQG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-          autoFocus
-          label={t('service.IssueCategory.IssueCategory_Form.title', { defaultValue: 'Title' }) as string}
-          value={data.title ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('title')}
-          helperText={validation.get('title')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('title', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+        <Grid
+          id="User/(esm/_qJLksGksEe25ONJ3V89cVA)/TransferObjectFormVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="title"
+              id="User/(esm/_T0LtQG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
+              autoFocus
+              label={t('service.IssueCategory.IssueCategory_Form.title', { defaultValue: 'Title' }) as string}
+              value={data.title ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('title')}
+              helperText={validation.get('title')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('title', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="description"
-          id="User/(esm/_T0Rz4G49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-          label={t('service.IssueCategory.IssueCategory_Form.description', { defaultValue: 'Description' }) as string}
-          value={data.description ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('description')}
-          helperText={validation.get('description')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('description', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="description"
+              id="User/(esm/_T0Rz4G49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
+              label={
+                t('service.IssueCategory.IssueCategory_Form.description', { defaultValue: 'Description' }) as string
+              }
+              value={data.description ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('description')}
+              helperText={validation.get('description')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('description', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <ServiceIssueCategoryIssueCategory_FormOwnerComponent
-          disabled={false || !isFormUpdateable()}
-          ownerData={data}
-          editMode={editMode}
-          storeDiff={storeDiff}
-          validationError={validation.get('owner')}
-          actions={actions}
-        />
+          <Grid item xs={12} sm={12}>
+            <ServiceIssueCategoryIssueCategory_FormOwnerComponent
+              disabled={false || !isFormUpdateable()}
+              ownerData={data}
+              editMode={editMode}
+              storeDiff={storeDiff}
+              validationError={validation.get('owner')}
+              actions={actions}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

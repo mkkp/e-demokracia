@@ -89,423 +89,440 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_3IYooI4kEe29qs15q2b6yw)/GroupVisualElement">
-          <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required={true}
-                  name="title"
-                  id="User/(esm/_T5STEI4jEe29qs15q2b6yw)/StringTypeTextInput"
-                  autoFocus
-                  label={
-                    t('service.VoteDefinition.VoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string
-                  }
-                  value={data.title ?? ''}
-                  className={clsx({
-                    'JUDO-viewMode': !editMode,
-                    'JUDO-required': true,
-                  })}
-                  disabled={isLoading}
-                  error={!!validation.get('title')}
-                  helperText={validation.get('title')}
-                  onChange={(event) => {
-                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                    storeDiff('title', realValue);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    readOnly: false || !isFormUpdateable(),
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MdiIcon path="text_fields" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <DateTimePicker
-                  ampm={false}
-                  ampmInClock={false}
-                  className={clsx({
-                    'JUDO-viewMode': !editMode,
-                    'JUDO-required': true,
-                  })}
-                  slotProps={{
-                    textField: {
-                      id: 'User/(esm/_T5260I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                      required: true,
-                      helperText: validation.get('closeAt'),
-                      error: !!validation.get('closeAt'),
-                      InputProps: {
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <MdiIcon path="schedule" />
-                          </InputAdornment>
-                        ),
-                      },
-                    },
-                  }}
-                  onError={(newError: DateTimeValidationError, value: any) => {
-                    // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                    setValidation((prevValidation) => {
-                      const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
-                      copy.set(
-                        'closeAt',
-                        newError === 'invalidDate'
-                          ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                              defaultValue: 'Value does not match the pattern requirements.',
-                            }) as string)
-                          : '',
-                      );
-                      return copy;
-                    });
-                  }}
-                  views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                  label={
-                    t('service.VoteDefinition.VoteDefinition_View_Edit.closeAt', { defaultValue: 'CloseAt' }) as string
-                  }
-                  value={serviceDateToUiDate(data.closeAt ?? null)}
-                  readOnly={false || !isFormUpdateable()}
-                  disabled={isLoading}
-                  onChange={(newValue: Date) => {
-                    storeDiff('closeAt', newValue);
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required={true}
-                  name="status"
-                  id="User/(esm/_T5rUoI4jEe29qs15q2b6yw)/EnumerationTypeCombo"
-                  label={
-                    t('service.VoteDefinition.VoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string
-                  }
-                  value={data.status || ''}
-                  className={clsx({
-                    'JUDO-viewMode': !editMode,
-                    'JUDO-required': true,
-                  })}
-                  disabled={isLoading}
-                  error={!!validation.get('status')}
-                  helperText={validation.get('status')}
-                  onChange={(event) => {
-                    storeDiff('status', event.target.value);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    readOnly: false || !isFormUpdateable(),
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MdiIcon path="list" />
-                      </InputAdornment>
-                    ),
-                  }}
-                  select
-                >
-                  <MenuItem id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CREATED'}>
-                    {t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
-                  </MenuItem>
-                  <MenuItem id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'PENDING'}>
-                    {t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
-                  </MenuItem>
-                  <MenuItem id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'ACTIVE'}>
-                    {t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-                  </MenuItem>
-                  <MenuItem id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CLOSED'}>
-                    {t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
-                  </MenuItem>
-                  <MenuItem id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember" value={'ARCHIVED'}>
-                    {t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
-                  </MenuItem>
-                </TextField>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <AssociationButton
-                  id="User/(esm/_mQ0lYFoWEe6_67aMO2jOsw)/TabularReferenceFieldButton"
-                  variant={undefined}
-                  editMode={editMode}
-                  navigateAction={actions.issueOpenPageAction}
-                  refreshCounter={refreshCounter}
-                  fetchCall={actions.issuePreFetchAction}
-                >
-                  {t('service.VoteDefinition.VoteDefinition_View_Edit.issue', { defaultValue: 'Issue' })}
-                  <MdiIcon path="arrow-right" />
-                </AssociationButton>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <DateTimePicker
-                  ampm={false}
-                  ampmInClock={false}
-                  className={clsx({
-                    'JUDO-viewMode': !editMode,
-                    'JUDO-required': false,
-                  })}
-                  slotProps={{
-                    textField: {
-                      id: 'User/(esm/_T5a18I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                      required: false,
-                      helperText: validation.get('created'),
-                      error: !!validation.get('created'),
-                      InputProps: {
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <MdiIcon path="schedule" />
-                          </InputAdornment>
-                        ),
-                      },
-                    },
-                  }}
-                  onError={(newError: DateTimeValidationError, value: any) => {
-                    // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                    setValidation((prevValidation) => {
-                      const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
-                      copy.set(
-                        'created',
-                        newError === 'invalidDate'
-                          ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                              defaultValue: 'Value does not match the pattern requirements.',
-                            }) as string)
-                          : '',
-                      );
-                      return copy;
-                    });
-                  }}
-                  views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                  label={
-                    t('service.VoteDefinition.VoteDefinition_View_Edit.created', { defaultValue: 'Created' }) as string
-                  }
-                  value={serviceDateToUiDate(data.created ?? null)}
-                  readOnly={true || !isFormUpdateable()}
-                  disabled={isLoading}
-                  onChange={(newValue: Date) => {
-                    storeDiff('created', newValue);
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <TextField
-                  required={true}
-                  name="description"
-                  id="User/(esm/_T5jY0I4jEe29qs15q2b6yw)/StringTypeTextArea"
-                  label={
-                    t('service.VoteDefinition.VoteDefinition_View_Edit.description', {
-                      defaultValue: 'Description',
-                    }) as string
-                  }
-                  value={data.description ?? ''}
-                  className={clsx({
-                    'JUDO-viewMode': !editMode,
-                    'JUDO-required': true,
-                  })}
-                  disabled={isLoading}
-                  multiline
-                  minRows={4.0}
-                  error={!!validation.get('description')}
-                  helperText={validation.get('description')}
-                  onChange={(event) => {
-                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                    storeDiff('description', realValue);
-                  }}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    readOnly: false || !isFormUpdateable(),
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MdiIcon path="text_fields" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid container item xs={12} sm={12}>
-        <ModeledTabs
-          id="User/(esm/_i6xVQI4jEe29qs15q2b6yw)/TabBarVisualElement"
-          ownerData={data}
-          validation={validation}
-          orientation='horizontal'
-          childTabs={[
-            {
-              id: 'User/(esm/_kxgNYI4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition_View_Edit.yesnovote',
-              label: t('service.VoteDefinition.VoteDefinition_View_Edit.yesnovote', {
-                defaultValue: 'Yes / No vote',
-              }) as string,
-              disabled: !data.isYesNoType || isLoading,
-              hidden: data.isNotYesNoType,
-              nestedDataKeys: [],
-            },
-            {
-              id: 'User/(esm/_z_MfkI4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote',
-              label: t('service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote', {
-                defaultValue: 'Yes / No / Abstain vote',
-              }) as string,
-              disabled: !data.isYesNoAbstainType || isLoading,
-              hidden: data.isNotYesNoAbstainType,
-              nestedDataKeys: [],
-            },
-            {
-              id: 'User/(esm/_1tyvYI4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition_View_Edit.selectanswervote',
-              label: t('service.VoteDefinition.VoteDefinition_View_Edit.selectanswervote', {
-                defaultValue: 'Select answer vote',
-              }) as string,
-              disabled: !data.isSelectAnswerType || isLoading,
-              hidden: data.isNotSelectAnswerType,
-              nestedDataKeys: [],
-            },
-            {
-              id: 'User/(esm/_31NH0I4jEe29qs15q2b6yw)/GroupTab',
-              name: 'service.VoteDefinition.VoteDefinition_View_Edit.ratingvote',
-              label: t('service.VoteDefinition.VoteDefinition_View_Edit.ratingvote', {
-                defaultValue: 'Rating vote',
-              }) as string,
-              disabled: !data.isRatingType || isLoading,
-              hidden: data.isNotRatingType,
-              nestedDataKeys: [],
-            },
-          ]}
+        <Grid
+          id="User/(esm/_-gFzIH4XEe2cB7_PsKXsHQ)/TransferObjectViewVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
         >
-          {!data.isNotYesNoType && (
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_kxgNYI4jEe29qs15q2b6yw)/GroupVisualElement"
-                container
-                direction="row"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                {!data.isNotYesNoType && (
-                  <Grid item xs={12} sm={12} md={4.0}>
-                    <LoadingButton
-                      id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormVisualElement"
-                      loading={isLoading}
-                      variant={undefined}
-                      startIcon={<MdiIcon path="vote" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        if (actions.voteYesNoAction) {
-                          await actions.voteYesNoAction!();
-                        }
+          <Grid item xs={12} sm={12}>
+            <Card id="User/(esm/_3IYooI4kEe29qs15q2b6yw)/GroupVisualElement">
+              <CardContent>
+                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="title"
+                      id="User/(esm/_T5STEI4jEe29qs15q2b6yw)/StringTypeTextInput"
+                      autoFocus
+                      label={
+                        t('service.VoteDefinition.VoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string
+                      }
+                      value={data.title ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('title')}
+                      helperText={validation.get('title')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('title', realValue);
                       }}
-                      disabled={!actions.voteYesNoAction || !data.isYesNoType || editMode}
-                    >
-                      <span>
-                        {t('service.VoteDefinition.VoteDefinition_View_Edit.voteYesNo', {
-                          defaultValue: 'Take a vote',
-                        })}
-                      </span>
-                    </LoadingButton>
-                  </Grid>
-                )}
-              </Grid>
-            </Grid>
-          )}
-
-          {!data.isNotYesNoAbstainType && (
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_z_MfkI4jEe29qs15q2b6yw)/GroupVisualElement"
-                container
-                direction="row"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                {!data.isNotYesNoAbstainType && (
-                  <Grid item xs={12} sm={12} md={4.0}>
-                    <LoadingButton
-                      id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormVisualElement"
-                      loading={isLoading}
-                      variant={undefined}
-                      startIcon={<MdiIcon path="vote" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        if (actions.voteYesNoAbstainAction) {
-                          await actions.voteYesNoAbstainAction!();
-                        }
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
                       }}
-                      disabled={!actions.voteYesNoAbstainAction || !data.isYesNoAbstainType || editMode}
-                    >
-                      <span>
-                        {t('service.VoteDefinition.VoteDefinition_View_Edit.voteYesNoAbstain', {
-                          defaultValue: 'Take a vote',
-                        })}
-                      </span>
-                    </LoadingButton>
+                    />
                   </Grid>
-                )}
-              </Grid>
-            </Grid>
-          )}
 
-          {!data.isNotSelectAnswerType && (
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_1tyvYI4jEe29qs15q2b6yw)/GroupVisualElement"
-                container
-                direction="row"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                {!data.isNotSelectAnswerType && <Grid item xs={12} sm={12} md={4.0}></Grid>}
-              </Grid>
-            </Grid>
-          )}
-
-          {!data.isNotRatingType && (
-            <Grid item xs={12} sm={12}>
-              <Grid
-                id="User/(esm/_31NH0I4jEe29qs15q2b6yw)/GroupVisualElement"
-                container
-                direction="row"
-                alignItems="flex-start"
-                justifyContent="flex-start"
-                spacing={2}
-              >
-                {!data.isNotRatingType && (
-                  <Grid item xs={12} sm={12} md={4.0}>
-                    <LoadingButton
-                      id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormVisualElement"
-                      loading={isLoading}
-                      variant={undefined}
-                      startIcon={<MdiIcon path="vote" />}
-                      loadingPosition="start"
-                      onClick={async () => {
-                        if (actions.voteRatingAction) {
-                          await actions.voteRatingAction!();
-                        }
+                  <Grid item xs={12} sm={12}>
+                    <DateTimePicker
+                      ampm={false}
+                      ampmInClock={false}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      slotProps={{
+                        textField: {
+                          id: 'User/(esm/_T5260I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
+                          required: true,
+                          helperText: validation.get('closeAt'),
+                          error: !!validation.get('closeAt'),
+                          InputProps: {
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MdiIcon path="schedule" />
+                              </InputAdornment>
+                            ),
+                          },
+                        },
                       }}
-                      disabled={!actions.voteRatingAction || !data.isRatingType || editMode}
-                    >
-                      <span>
-                        {t('service.VoteDefinition.VoteDefinition_View_Edit.voteRating', {
-                          defaultValue: 'Take a vote',
-                        })}
-                      </span>
-                    </LoadingButton>
+                      onError={(newError: DateTimeValidationError, value: any) => {
+                        // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                        setValidation((prevValidation) => {
+                          const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
+                          copy.set(
+                            'closeAt',
+                            newError === 'invalidDate'
+                              ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                  defaultValue: 'Value does not match the pattern requirements.',
+                                }) as string)
+                              : '',
+                          );
+                          return copy;
+                        });
+                      }}
+                      views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                      label={
+                        t('service.VoteDefinition.VoteDefinition_View_Edit.closeAt', {
+                          defaultValue: 'CloseAt',
+                        }) as string
+                      }
+                      value={serviceDateToUiDate(data.closeAt ?? null)}
+                      readOnly={false || !isFormUpdateable()}
+                      disabled={isLoading}
+                      onChange={(newValue: Date) => {
+                        storeDiff('closeAt', newValue);
+                      }}
+                    />
                   </Grid>
-                )}
-              </Grid>
-            </Grid>
-          )}
-        </ModeledTabs>
+
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="status"
+                      id="User/(esm/_T5rUoI4jEe29qs15q2b6yw)/EnumerationTypeCombo"
+                      label={
+                        t('service.VoteDefinition.VoteDefinition_View_Edit.status', {
+                          defaultValue: 'Status',
+                        }) as string
+                      }
+                      value={data.status || ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      error={!!validation.get('status')}
+                      helperText={validation.get('status')}
+                      onChange={(event) => {
+                        storeDiff('status', event.target.value);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="list" />
+                          </InputAdornment>
+                        ),
+                      }}
+                      select
+                    >
+                      <MenuItem id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CREATED'}>
+                        {t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'PENDING'}>
+                        {t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'ACTIVE'}>
+                        {t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CLOSED'}>
+                        {t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
+                      </MenuItem>
+                      <MenuItem id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember" value={'ARCHIVED'}>
+                        {t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
+                      </MenuItem>
+                    </TextField>
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <AssociationButton
+                      id="User/(esm/_mQ0lYFoWEe6_67aMO2jOsw)/TabularReferenceFieldButton"
+                      variant={undefined}
+                      editMode={editMode}
+                      navigateAction={actions.issueOpenPageAction}
+                      refreshCounter={refreshCounter}
+                      fetchCall={actions.issuePreFetchAction}
+                    >
+                      {t('service.VoteDefinition.VoteDefinition_View_Edit.issue', { defaultValue: 'Issue' })}
+                      <MdiIcon path="arrow-right" />
+                    </AssociationButton>
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <DateTimePicker
+                      ampm={false}
+                      ampmInClock={false}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': false,
+                      })}
+                      slotProps={{
+                        textField: {
+                          id: 'User/(esm/_T5a18I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
+                          required: false,
+                          helperText: validation.get('created'),
+                          error: !!validation.get('created'),
+                          InputProps: {
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MdiIcon path="schedule" />
+                              </InputAdornment>
+                            ),
+                          },
+                        },
+                      }}
+                      onError={(newError: DateTimeValidationError, value: any) => {
+                        // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                        setValidation((prevValidation) => {
+                          const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
+                          copy.set(
+                            'created',
+                            newError === 'invalidDate'
+                              ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                  defaultValue: 'Value does not match the pattern requirements.',
+                                }) as string)
+                              : '',
+                          );
+                          return copy;
+                        });
+                      }}
+                      views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                      label={
+                        t('service.VoteDefinition.VoteDefinition_View_Edit.created', {
+                          defaultValue: 'Created',
+                        }) as string
+                      }
+                      value={serviceDateToUiDate(data.created ?? null)}
+                      readOnly={true || !isFormUpdateable()}
+                      disabled={isLoading}
+                      onChange={(newValue: Date) => {
+                        storeDiff('created', newValue);
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={true}
+                      name="description"
+                      id="User/(esm/_T5jY0I4jEe29qs15q2b6yw)/StringTypeTextArea"
+                      label={
+                        t('service.VoteDefinition.VoteDefinition_View_Edit.description', {
+                          defaultValue: 'Description',
+                        }) as string
+                      }
+                      value={data.description ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={isLoading}
+                      multiline
+                      minRows={4.0}
+                      error={!!validation.get('description')}
+                      helperText={validation.get('description')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('description', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid container item xs={12} sm={12}>
+            <ModeledTabs
+              id="User/(esm/_i6xVQI4jEe29qs15q2b6yw)/TabBarVisualElement"
+              ownerData={data}
+              validation={validation}
+              orientation='horizontal'
+              childTabs={[
+                {
+                  id: 'User/(esm/_kxgNYI4jEe29qs15q2b6yw)/GroupTab',
+                  name: 'service.VoteDefinition.VoteDefinition_View_Edit.yesnovote',
+                  label: t('service.VoteDefinition.VoteDefinition_View_Edit.yesnovote', {
+                    defaultValue: 'Yes / No vote',
+                  }) as string,
+                  disabled: !data.isYesNoType || isLoading,
+                  hidden: data.isNotYesNoType,
+                  nestedDataKeys: [],
+                },
+                {
+                  id: 'User/(esm/_z_MfkI4jEe29qs15q2b6yw)/GroupTab',
+                  name: 'service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote',
+                  label: t('service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote', {
+                    defaultValue: 'Yes / No / Abstain vote',
+                  }) as string,
+                  disabled: !data.isYesNoAbstainType || isLoading,
+                  hidden: data.isNotYesNoAbstainType,
+                  nestedDataKeys: [],
+                },
+                {
+                  id: 'User/(esm/_1tyvYI4jEe29qs15q2b6yw)/GroupTab',
+                  name: 'service.VoteDefinition.VoteDefinition_View_Edit.selectanswervote',
+                  label: t('service.VoteDefinition.VoteDefinition_View_Edit.selectanswervote', {
+                    defaultValue: 'Select answer vote',
+                  }) as string,
+                  disabled: !data.isSelectAnswerType || isLoading,
+                  hidden: data.isNotSelectAnswerType,
+                  nestedDataKeys: [],
+                },
+                {
+                  id: 'User/(esm/_31NH0I4jEe29qs15q2b6yw)/GroupTab',
+                  name: 'service.VoteDefinition.VoteDefinition_View_Edit.ratingvote',
+                  label: t('service.VoteDefinition.VoteDefinition_View_Edit.ratingvote', {
+                    defaultValue: 'Rating vote',
+                  }) as string,
+                  disabled: !data.isRatingType || isLoading,
+                  hidden: data.isNotRatingType,
+                  nestedDataKeys: [],
+                },
+              ]}
+            >
+              {!data.isNotYesNoType && (
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="User/(esm/_kxgNYI4jEe29qs15q2b6yw)/GroupVisualElement"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    {!data.isNotYesNoType && (
+                      <Grid item xs={12} sm={12} md={4.0}>
+                        <LoadingButton
+                          id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormVisualElement"
+                          loading={isLoading}
+                          variant={undefined}
+                          startIcon={<MdiIcon path="vote" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            if (actions.voteYesNoAction) {
+                              await actions.voteYesNoAction!();
+                            }
+                          }}
+                          disabled={!actions.voteYesNoAction || !data.isYesNoType || editMode}
+                        >
+                          <span>
+                            {t('service.VoteDefinition.VoteDefinition_View_Edit.voteYesNo', {
+                              defaultValue: 'Take a vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              )}
+
+              {!data.isNotYesNoAbstainType && (
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="User/(esm/_z_MfkI4jEe29qs15q2b6yw)/GroupVisualElement"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    {!data.isNotYesNoAbstainType && (
+                      <Grid item xs={12} sm={12} md={4.0}>
+                        <LoadingButton
+                          id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormVisualElement"
+                          loading={isLoading}
+                          variant={undefined}
+                          startIcon={<MdiIcon path="vote" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            if (actions.voteYesNoAbstainAction) {
+                              await actions.voteYesNoAbstainAction!();
+                            }
+                          }}
+                          disabled={!actions.voteYesNoAbstainAction || !data.isYesNoAbstainType || editMode}
+                        >
+                          <span>
+                            {t('service.VoteDefinition.VoteDefinition_View_Edit.voteYesNoAbstain', {
+                              defaultValue: 'Take a vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              )}
+
+              {!data.isNotSelectAnswerType && (
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="User/(esm/_1tyvYI4jEe29qs15q2b6yw)/GroupVisualElement"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    {!data.isNotSelectAnswerType && <Grid item xs={12} sm={12} md={4.0}></Grid>}
+                  </Grid>
+                </Grid>
+              )}
+
+              {!data.isNotRatingType && (
+                <Grid item xs={12} sm={12}>
+                  <Grid
+                    id="User/(esm/_31NH0I4jEe29qs15q2b6yw)/GroupVisualElement"
+                    container
+                    direction="row"
+                    alignItems="flex-start"
+                    justifyContent="flex-start"
+                    spacing={2}
+                  >
+                    {!data.isNotRatingType && (
+                      <Grid item xs={12} sm={12} md={4.0}>
+                        <LoadingButton
+                          id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormVisualElement"
+                          loading={isLoading}
+                          variant={undefined}
+                          startIcon={<MdiIcon path="vote" />}
+                          loadingPosition="start"
+                          onClick={async () => {
+                            if (actions.voteRatingAction) {
+                              await actions.voteRatingAction!();
+                            }
+                          }}
+                          disabled={!actions.voteRatingAction || !data.isRatingType || editMode}
+                        >
+                          <span>
+                            {t('service.VoteDefinition.VoteDefinition_View_Edit.voteRating', {
+                              defaultValue: 'Take a vote',
+                            })}
+                          </span>
+                        </LoadingButton>
+                      </Grid>
+                    )}
+                  </Grid>
+                </Grid>
+              )}
+            </ModeledTabs>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

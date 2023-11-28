@@ -154,7 +154,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCountiesComponent
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_t7FyII1KEe6sgdrBpAinBQ',
+      id: '_9hg-so2dEe6GJNWtqQaZ_w',
       attributeName: 'representation',
       label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,

@@ -77,40 +77,52 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <TextField
-          required={false}
-          name="context"
-          id="User/(esm/_f6ew0Fv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-          autoFocus
-          label={
-            t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.context', {
-              defaultValue: 'Context',
-            }) as string
-          }
-          value={data.context ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': false,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('context')}
-          helperText={validation.get('context')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('context', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="format-size" />
-              </InputAdornment>
-            ),
-          }}
-        />
+        <Grid
+          id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={false}
+              name="context"
+              id="User/(esm/_f6ew0Fv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
+              autoFocus
+              label={
+                t(
+                  'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.context',
+                  { defaultValue: 'Context' },
+                ) as string
+              }
+              value={data.context ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('context')}
+              helperText={validation.get('context')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('context', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="format-size" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

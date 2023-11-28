@@ -147,14 +147,14 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sTGgoI1KEe6sgdrBpAinBQ',
+      id: '_7d6IMI2dEe6GJNWtqQaZ_w',
       attributeName: 'title',
       label: t('service.IssueCategory.IssueCategory_Table.AddSelector.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_sTGgpI1KEe6sgdrBpAinBQ',
+      id: '_7d6vQI2dEe6GJNWtqQaZ_w',
       attributeName: 'description',
       label: t('service.IssueCategory.IssueCategory_Table.AddSelector.description', {
         defaultValue: 'Description',

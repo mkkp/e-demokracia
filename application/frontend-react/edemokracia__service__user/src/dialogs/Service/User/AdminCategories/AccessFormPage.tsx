@@ -171,6 +171,12 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   const title: string = t('service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
 
   // Action section
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
+  };
   const backAction = async () => {
     onClose();
   };
@@ -199,19 +205,13 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(false);
     }
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-  };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
-  };
 
   const actions: ServiceIssueCategoryIssueCategory_FormDialogActions = {
+    ownerUnsetAction,
+    ownerOpenPageAction,
     backAction,
     createAction,
     getTemplateAction,
-    ownerOpenPageAction,
-    ownerUnsetAction,
     ...(customActions ?? {}),
   };
 

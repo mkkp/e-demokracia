@@ -84,63 +84,6 @@ export default function ServiceServiceUserVotesRelationTablePage() {
   const title: string = t('service.SimpleVote.SimpleVote_Table', { defaultValue: 'SimpleVote Table' });
 
   // Action section
-  const backAction = async () => {
-    navigateBack();
-  };
-  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceServiceUserVotesRelationViewPage(target!.__signedIdentifier));
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (
-    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<ServiceSimpleVoteStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return serviceServiceUserServiceForVotesImpl.list(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        queryCustomizer,
-      );
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const clearAction = async () => {
-    try {
-      await serviceServiceUserServiceForVotesImpl.setVotes(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        [],
-      );
-      setRefreshCounter((prev) => prev + 1);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-  const openSetSelectorAction = async () => {
-    const { result, data: returnedData } = await openServiceServiceUserVotesSetSelectorPage(
-      { __signedIdentifier: signedIdentifier },
-      [],
-    );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-      }
-    }
-  };
   const openAddSelectorAction = async () => {
     const { result, data: returnedData } = await openServiceServiceUserVotesAddSelectorPage(
       { __signedIdentifier: signedIdentifier },
@@ -164,29 +107,8 @@ export default function ServiceServiceUserVotesRelationTablePage() {
     }
   };
 
-  const removeAction = async (target?: ServiceSimpleVoteStored, silentMode?: boolean) => {
-    if (target) {
-      try {
-        if (!silentMode) {
-          setIsLoading(true);
-        }
-        await serviceServiceUserServiceForVotesImpl.removeVotes(
-          { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-          [target!],
-        );
-        if (!silentMode) {
-          setRefreshCounter((prev) => prev + 1);
-        }
-      } catch (error) {
-        if (!silentMode) {
-          handleError<ServiceSimpleVote>(error, undefined, target);
-        }
-      } finally {
-        if (!silentMode) {
-          setIsLoading(false);
-        }
-      }
-    }
+  const backAction = async () => {
+    navigateBack();
   };
   const bulkRemoveAction = async (
     selectedRows: ServiceSimpleVoteStored[],
@@ -222,17 +144,95 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       });
     });
   };
+  const clearAction = async () => {
+    try {
+      await serviceServiceUserServiceForVotesImpl.setVotes(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        [],
+      );
+      setRefreshCounter((prev) => prev + 1);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  const removeAction = async (target?: ServiceSimpleVoteStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await serviceServiceUserServiceForVotesImpl.removeVotes(
+          { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+          [target!],
+        );
+        if (!silentMode) {
+          setRefreshCounter((prev) => prev + 1);
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceSimpleVote>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+  const openSetSelectorAction = async () => {
+    const { result, data: returnedData } = await openServiceServiceUserVotesSetSelectorPage(
+      { __signedIdentifier: signedIdentifier },
+      [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+      }
+    }
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
+  ): Promise<ServiceSimpleVoteStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return serviceServiceUserServiceForVotesImpl.list(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        queryCustomizer,
+      );
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceServiceUserVotesRelationViewPage(target!.__signedIdentifier));
+  };
 
   const actions: ServiceSimpleVoteSimpleVote_TablePageActions = {
+    openAddSelectorAction,
     backAction,
-    openPageAction,
+    bulkRemoveAction,
+    clearAction,
+    removeAction,
+    openSetSelectorAction,
     filterAction,
     refreshAction,
-    clearAction,
-    openSetSelectorAction,
-    openAddSelectorAction,
-    removeAction,
-    bulkRemoveAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

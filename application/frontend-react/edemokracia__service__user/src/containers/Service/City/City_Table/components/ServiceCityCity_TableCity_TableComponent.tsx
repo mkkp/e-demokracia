@@ -169,14 +169,14 @@ export function ServiceCityCity_TableCity_TableComponent(props: ServiceCityCity_
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_uGvogI1KEe6sgdrBpAinBQ',
+      id: '_9xDPgI2dEe6GJNWtqQaZ_w',
       attributeName: 'county',
       label: t('service.City.City_Table.county', { defaultValue: 'County' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_uG1vII1KEe6sgdrBpAinBQ',
+      id: '_9xJ9MI2dEe6GJNWtqQaZ_w',
       attributeName: 'name',
       label: t('service.City.City_Table.name', { defaultValue: 'City name' }) as string,
       filterType: FilterType.string,

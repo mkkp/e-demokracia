@@ -180,16 +180,20 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
   const voteRatingAction = async () => {
     const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const voteYesNoAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
       data,
     );
     if (result === 'submit' && !editMode) {
@@ -214,28 +218,24 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
+  const voteYesNoAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      data,
     );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
-    voteRatingAction,
-    voteYesNoAction,
-    voteSelectAnswerAction,
-    voteYesNoAbstainAction,
     issueOpenPageAction,
     issuePreFetchAction,
+    voteRatingAction,
+    voteSelectAnswerAction,
+    voteYesNoAbstainAction,
+    voteYesNoAction,
     ...(customActions ?? {}),
   };
 

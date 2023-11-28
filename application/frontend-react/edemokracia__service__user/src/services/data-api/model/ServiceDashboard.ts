@@ -16,19 +16,19 @@ import { ServiceVoteEntryStored } from './ServiceVoteEntry';
 
 export interface ServiceDashboard {
   welcome?: null | string;
-  issuesOwned?: null | Array<ServiceIssueStored>;
-  userVoteEntries?: null | Array<ServiceVoteEntryStored>;
   favoriteIssues?: null | Array<ServiceIssueStored>;
   favoriteVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
+  issuesOwned?: null | Array<ServiceIssueStored>;
   ownedVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
+  userVoteEntries?: null | Array<ServiceVoteEntryStored>;
 }
 
 export type ServiceDashboardAttributes = 'welcome';
 export type ServiceDashboardRelations =
-  | 'issuesOwned'
-  | 'userVoteEntries'
   | 'favoriteIssues'
   | 'favoriteVoteDefinitions'
-  | 'ownedVoteDefinitions';
+  | 'issuesOwned'
+  | 'ownedVoteDefinitions'
+  | 'userVoteEntries';
 
 export interface ServiceDashboardStored extends JudoStored<ServiceDashboard>, ServiceDashboard {}

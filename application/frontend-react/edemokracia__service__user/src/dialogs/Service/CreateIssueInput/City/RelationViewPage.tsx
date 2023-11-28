@@ -178,78 +178,6 @@ export default function ServiceCreateIssueInputCityRelationViewPage(
   const title: string = data.representation as string;
 
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
-  const refreshAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceCityServiceImpl.refresh(ownerData, pageQueryCustomizer);
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceCityStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const districtsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceCityDistrictsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const districtsFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const districtsOpenFormAction = async () => {
-    const { result, data: returnedData } = await openServiceCityDistrictsRelationFormPage(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const districtsDeleteAction = async (target: ServiceDistrictStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceCityServiceImpl.deleteDistricts(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceDistrict>(error, undefined, target);
-      }
-    }
-  };
   const districtsBulkDeleteAction = async (
     selectedRows: ServiceDistrictStored[],
   ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
@@ -287,15 +215,87 @@ export default function ServiceCreateIssueInputCityRelationViewPage(
       });
     });
   };
+  const districtsOpenFormAction = async () => {
+    const { result, data: returnedData } = await openServiceCityDistrictsRelationFormPage(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const districtsFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const districtsDeleteAction = async (target: ServiceDistrictStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceCityServiceImpl.deleteDistricts(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          refreshAction(pageQueryCustomizer);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceDistrict>(error, undefined, target);
+      }
+    }
+  };
+  const districtsOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceCityDistrictsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const backAction = async () => {
+    onClose();
+  };
+  const refreshAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceCityServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceCityStored, any>;
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
 
   const actions: ServiceCityCity_View_EditDialogActions = {
+    districtsBulkDeleteAction,
+    districtsOpenFormAction,
+    districtsFilterAction,
+    districtsDeleteAction,
+    districtsOpenPageAction,
     backAction,
     refreshAction,
-    districtsOpenPageAction,
-    districtsFilterAction,
-    districtsOpenFormAction,
-    districtsDeleteAction,
-    districtsBulkDeleteAction,
     ...(customActions ?? {}),
   };
 

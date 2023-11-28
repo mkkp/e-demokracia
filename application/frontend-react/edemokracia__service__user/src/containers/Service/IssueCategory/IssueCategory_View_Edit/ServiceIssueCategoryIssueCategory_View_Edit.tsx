@@ -87,118 +87,131 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="title"
-          id="User/(esm/_T0J4EG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-          autoFocus
-          label={t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string}
-          value={data.title ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('title')}
-          helperText={validation.get('title')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('title', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="description"
-          id="User/(esm/_T0QlwG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-          label={
-            t('service.IssueCategory.IssueCategory_View_Edit.description', { defaultValue: 'Description' }) as string
-          }
-          value={data.description ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('description')}
-          helperText={validation.get('description')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('description', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <ServiceIssueCategoryIssueCategory_View_EditOwnerComponent
-          disabled={false || !isFormUpdateable()}
-          ownerData={data}
-          editMode={editMode}
-          storeDiff={storeDiff}
-          validationError={validation.get('owner')}
-          actions={actions}
-        />
-      </Grid>
-
+    <Grid container>
       <Grid item xs={12} sm={12}>
         <Grid
-          id="_t4xd8I1KEe6sgdrBpAinBQ)/LabelWrapper"
+          id="User/(esm/_qJBzsGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
           container
           direction="column"
-          alignItems="center"
+          alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-              <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
-              <Typography id="_t4xd8I1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
-                {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Icon', {
-                  defaultValue: 'Subcategories',
-                })}
-              </Typography>
-            </Grid>
+            <TextField
+              required={true}
+              name="title"
+              id="User/(esm/_T0J4EG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
+              autoFocus
+              label={t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string}
+              value={data.title ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('title')}
+              helperText={validation.get('title')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('title', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="description"
+              id="User/(esm/_T0QlwG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
+              label={
+                t('service.IssueCategory.IssueCategory_View_Edit.description', {
+                  defaultValue: 'Description',
+                }) as string
+              }
+              value={data.description ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('description')}
+              helperText={validation.get('description')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('description', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <ServiceIssueCategoryIssueCategory_View_EditOwnerComponent
+              disabled={false || !isFormUpdateable()}
+              ownerData={data}
+              editMode={editMode}
+              storeDiff={storeDiff}
+              validationError={validation.get('owner')}
+              actions={actions}
+            />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
+              id="(_9eh8II2dEe6GJNWtqQaZ_w)/LabelWrapper"
               container
               direction="column"
-              alignItems="stretch"
+              alignItems="center"
               justifyContent="flex-start"
+              spacing={2}
             >
-              <ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent
-                uniqueId={'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
-                actions={actions}
-                ownerData={data}
-                editMode={editMode}
-                isFormUpdateable={isFormUpdateable}
-                validationError={validation.get('subcategories')}
-                refreshCounter={refreshCounter}
-              />
+              <Grid item xs={12} sm={12}>
+                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                  <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
+                  <Typography id="_9eh8II2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                    {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Icon', {
+                      defaultValue: 'Subcategories',
+                    })}
+                  </Typography>
+                </Grid>
+              </Grid>
+
+              <Grid item xs={12} sm={12}>
+                <Grid
+                  id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
+                  container
+                  direction="column"
+                  alignItems="stretch"
+                  justifyContent="flex-start"
+                >
+                  <ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent
+                    uniqueId={'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
+                    actions={actions}
+                    ownerData={data}
+                    editMode={editMode}
+                    isFormUpdateable={isFormUpdateable}
+                    validationError={validation.get('subcategories')}
+                    refreshCounter={refreshCounter}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>

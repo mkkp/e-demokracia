@@ -79,114 +79,131 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
         <Grid
-          id="User/(esm/_XJwIoG5CEe2Q6M99rsfqSQ)/GroupVisualElement"
+          id="User/(esm/_p5jNQGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
           container
-          direction="row"
-          alignItems="flex-start"
+          direction="column"
+          alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12} md={4.0}>
-            <TextField
-              required={true}
-              name="type"
-              id="User/(esm/_Rd-4oG5CEe2Q6M99rsfqSQ)/EnumerationTypeCombo"
-              autoFocus
-              label={t('service.IssueAttachment.IssueAttachment_View_Edit.type', { defaultValue: 'Type' }) as string}
-              value={data.type || ''}
-              className={clsx({
-                'JUDO-viewMode': !editMode,
-                'JUDO-required': true,
-              })}
-              disabled={isLoading}
-              error={!!validation.get('type')}
-              helperText={validation.get('type')}
-              onChange={(event) => {
-                storeDiff('type', event.target.value);
-              }}
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                readOnly: false || !isFormUpdateable(),
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdiIcon path="list" />
-                  </InputAdornment>
-                ),
-              }}
-              select
+          <Grid item xs={12} sm={12}>
+            <Grid
+              id="User/(esm/_XJwIoG5CEe2Q6M99rsfqSQ)/GroupVisualElement"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
             >
-              <MenuItem id="User/(esm/_GyGMEGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'LINK'}>
-                {t('enumerations.AttachmentType.LINK', { defaultValue: 'LINK' })}
-              </MenuItem>
-              <MenuItem id="User/(esm/_IlUdMGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'IMAGE'}>
-                {t('enumerations.AttachmentType.IMAGE', { defaultValue: 'IMAGE' })}
-              </MenuItem>
-              <MenuItem id="User/(esm/_ZFYWMGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'VIDEO'}>
-                {t('enumerations.AttachmentType.VIDEO', { defaultValue: 'VIDEO' })}
-              </MenuItem>
-              <MenuItem id="User/(esm/_a1lvkGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'MAP'}>
-                {t('enumerations.AttachmentType.MAP', { defaultValue: 'MAP' })}
-              </MenuItem>
-            </TextField>
-          </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <TextField
+                  required={true}
+                  name="type"
+                  id="User/(esm/_Rd-4oG5CEe2Q6M99rsfqSQ)/EnumerationTypeCombo"
+                  autoFocus
+                  label={
+                    t('service.IssueAttachment.IssueAttachment_View_Edit.type', { defaultValue: 'Type' }) as string
+                  }
+                  value={data.type || ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('type')}
+                  helperText={validation.get('type')}
+                  onChange={(event) => {
+                    storeDiff('type', event.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="list" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  select
+                >
+                  <MenuItem id="User/(esm/_GyGMEGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'LINK'}>
+                    {t('enumerations.AttachmentType.LINK', { defaultValue: 'LINK' })}
+                  </MenuItem>
+                  <MenuItem id="User/(esm/_IlUdMGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'IMAGE'}>
+                    {t('enumerations.AttachmentType.IMAGE', { defaultValue: 'IMAGE' })}
+                  </MenuItem>
+                  <MenuItem id="User/(esm/_ZFYWMGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'VIDEO'}>
+                    {t('enumerations.AttachmentType.VIDEO', { defaultValue: 'VIDEO' })}
+                  </MenuItem>
+                  <MenuItem id="User/(esm/_a1lvkGkQEe25ONJ3V89cVA)/EnumerationTypeMember" value={'MAP'}>
+                    {t('enumerations.AttachmentType.MAP', { defaultValue: 'MAP' })}
+                  </MenuItem>
+                </TextField>
+              </Grid>
 
-          <Grid item xs={12} sm={12} md={4.0}>
-            <BinaryInput
-              required={false}
-              id="User/(esm/_Rd8cYG5CEe2Q6M99rsfqSQ)/BinaryTypeInput"
-              label={t('service.IssueAttachment.IssueAttachment_View_Edit.file', { defaultValue: 'File' }) as string}
-              icon="file-document-outline"
-              mimeType={{
-                type: '*',
-                subType: '*',
-              }}
-              editMode={editMode}
-              validation={validation}
-              data={data}
-              attributeName="file"
-              attributePath="service/IssueAttachment/file"
-              disabled={isLoading}
-              readonly={false || !isFormUpdateable()}
-              deleteCallback={async () => {
-                storeDiff('file', null);
-              }}
-              uploadCallback={async (uploadedData: { token: string }) => {
-                storeDiff('file', uploadedData.token);
-              }}
-            />
-          </Grid>
+              <Grid item xs={12} sm={12} md={4.0}>
+                <BinaryInput
+                  required={false}
+                  id="User/(esm/_Rd8cYG5CEe2Q6M99rsfqSQ)/BinaryTypeInput"
+                  label={
+                    t('service.IssueAttachment.IssueAttachment_View_Edit.file', { defaultValue: 'File' }) as string
+                  }
+                  icon="file-document-outline"
+                  mimeType={{
+                    type: '*',
+                    subType: '*',
+                  }}
+                  editMode={editMode}
+                  validation={validation}
+                  data={data}
+                  attributeName="file"
+                  attributePath="service/IssueAttachment/file"
+                  disabled={isLoading}
+                  readonly={false || !isFormUpdateable()}
+                  deleteCallback={async () => {
+                    storeDiff('file', null);
+                  }}
+                  uploadCallback={async (uploadedData: { token: string }) => {
+                    storeDiff('file', uploadedData.token);
+                  }}
+                />
+              </Grid>
 
-          <Grid item xs={12} sm={12} md={4.0}>
-            <TextField
-              required={false}
-              name="link"
-              id="User/(esm/_Rd6nMG5CEe2Q6M99rsfqSQ)/StringTypeTextInput"
-              label={t('service.IssueAttachment.IssueAttachment_View_Edit.link', { defaultValue: 'Link' }) as string}
-              value={data.link ?? ''}
-              className={clsx({
-                'JUDO-viewMode': !editMode,
-                'JUDO-required': false,
-              })}
-              disabled={isLoading}
-              error={!!validation.get('link')}
-              helperText={validation.get('link')}
-              onChange={(event) => {
-                const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                storeDiff('link', realValue);
-              }}
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                readOnly: false || !isFormUpdateable(),
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdiIcon path="text_fields" />
-                  </InputAdornment>
-                ),
-              }}
-            />
+              <Grid item xs={12} sm={12} md={4.0}>
+                <TextField
+                  required={false}
+                  name="link"
+                  id="User/(esm/_Rd6nMG5CEe2Q6M99rsfqSQ)/StringTypeTextInput"
+                  label={
+                    t('service.IssueAttachment.IssueAttachment_View_Edit.link', { defaultValue: 'Link' }) as string
+                  }
+                  value={data.link ?? ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': false,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('link')}
+                  helperText={validation.get('link')}
+                  onChange={(event) => {
+                    const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                    storeDiff('link', realValue);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="text_fields" />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

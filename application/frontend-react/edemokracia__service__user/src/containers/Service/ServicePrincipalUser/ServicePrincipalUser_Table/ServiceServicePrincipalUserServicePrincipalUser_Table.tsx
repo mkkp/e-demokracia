@@ -46,18 +46,20 @@ export default function ServiceServicePrincipalUserServicePrincipalUser_Table(
   const { locale: l10nLocale } = useL10N();
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card>
+        <Card id="User/(esm/_ndKGgGkwEe25ONJ3V89cVA)/TransferObjectTableVisualElement">
           <CardContent>
-            <Grid item xs={12} sm={12}>
-              <Typography id="User/(esm/_ndKGgGkwEe25ONJ3V89cVA)/TransferObjectTableEmpty">
-                {
-                  t('service.ServicePrincipalUser.ServicePrincipalUser_Table.ServicePrincipalUser_Table', {
-                    defaultValue: 'No columns.',
-                  }) as string
-                }
-              </Typography>
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <Typography id="User/(esm/_ndKGgGkwEe25ONJ3V89cVA)/TransferObjectTableEmpty">
+                  {
+                    t('service.ServicePrincipalUser.ServicePrincipalUser_Table.ServicePrincipalUser_Table', {
+                      defaultValue: 'No columns.',
+                    }) as string
+                  }
+                </Typography>
+              </Grid>
             </Grid>
           </CardContent>
         </Card>

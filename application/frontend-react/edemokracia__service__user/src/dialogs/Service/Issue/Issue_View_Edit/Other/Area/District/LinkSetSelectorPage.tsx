@@ -137,11 +137,11 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
   const title: string = t('service.District.District_Table.SetSelector', { defaultValue: 'District Table' });
 
   // Action section
-  const setAction = async (selected: ServiceDistrictStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceDistrictStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -166,8 +166,8 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
   };
 
   const actions: ServiceDistrictDistrict_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

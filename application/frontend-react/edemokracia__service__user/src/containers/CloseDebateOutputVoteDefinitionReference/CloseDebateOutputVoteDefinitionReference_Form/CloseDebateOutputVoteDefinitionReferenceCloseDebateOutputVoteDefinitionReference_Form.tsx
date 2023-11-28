@@ -80,71 +80,82 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card id="_txBQII1KEe6sgdrBpAinBQ)/LabelWrapper">
-          <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                  <Typography id="_txBQII1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
-                    {t(
-                      'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Icon',
-                      { defaultValue: 'Close debate' },
-                    )}
-                  </Typography>
+        <Grid
+          id="User/(esm/_YoAHuVu1Ee6Lb6PYNSnQSA)/TransferObjectFormVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <Card id="(_9SttsI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+              <CardContent>
+                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                      <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
+                      <Typography id="_9SttsI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                        {t(
+                          'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Icon',
+                          { defaultValue: 'Close debate' },
+                        )}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <Grid
+                      id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement"
+                      container
+                      direction="row"
+                      alignItems="stretch"
+                      justifyContent="flex-start"
+                      spacing={2}
+                    ></Grid>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                  spacing={2}
-                ></Grid>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={false}
-          name="context"
-          id="User/(esm/_f6jpUFv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-          autoFocus
-          label={
-            t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.context', {
-              defaultValue: 'Context',
-            }) as string
-          }
-          value={data.context ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': false,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('context')}
-          helperText={validation.get('context')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('context', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="format-size" />
-              </InputAdornment>
-            ),
-          }}
-        />
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={false}
+              name="context"
+              id="User/(esm/_f6jpUFv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
+              autoFocus
+              label={
+                t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.context', {
+                  defaultValue: 'Context',
+                }) as string
+              }
+              value={data.context ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('context')}
+              helperText={validation.get('context')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('context', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="format-size" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

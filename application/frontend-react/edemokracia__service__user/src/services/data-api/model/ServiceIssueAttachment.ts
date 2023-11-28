@@ -10,11 +10,11 @@ import type { JudoStored } from '@judo/data-api-common';
 import { AttachmentType } from './AttachmentType';
 
 export interface ServiceIssueAttachment {
-  link?: null | string;
   file?: null | any;
+  link?: null | string;
   type: AttachmentType;
 }
 
-export type ServiceIssueAttachmentAttributes = 'link' | 'file' | 'type';
+export type ServiceIssueAttachmentAttributes = 'file' | 'link' | 'type';
 
 export interface ServiceIssueAttachmentStored extends JudoStored<ServiceIssueAttachment>, ServiceIssueAttachment {}

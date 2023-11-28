@@ -18,52 +18,52 @@ import { ServiceServiceUserStored } from './ServiceServiceUser';
 import { VoteStatus } from './VoteStatus';
 
 export interface ServiceSelectAnswerVoteDefinition {
-  title: string;
-  created: Date;
-  description: string;
-  status: VoteStatus;
   closeAt: Date;
-  userHasVoteEntry?: null | boolean;
-  userHasNoVoteEntry?: null | boolean;
-  isVoteEditable?: null | boolean;
-  isVoteOpen?: null | boolean;
-  isVoteNotEditable?: null | boolean;
-  isVoteNotOpen?: null | boolean;
+  created: Date;
+  createdBy?: null | string;
+  description: string;
   isFavorite?: null | boolean;
   isNotFavorite?: null | boolean;
   isVoteDeletable?: null | boolean;
+  isVoteEditable?: null | boolean;
   isVoteNotDeletable?: null | boolean;
-  createdBy?: null | string;
+  isVoteNotEditable?: null | boolean;
+  isVoteNotOpen?: null | boolean;
+  isVoteOpen?: null | boolean;
+  status: VoteStatus;
+  title: string;
+  userHasNoVoteEntry?: null | boolean;
+  userHasVoteEntry?: null | boolean;
   issue?: null | ServiceIssueStored;
-  voteEntries?: null | Array<ServiceSelectAnswerVoteEntryStored>;
-  userVoteEntry?: null | ServiceSelectAnswerVoteEntryStored;
-  voteSelections?: null | Array<ServiceSelectAnswerVoteSelectionStored>;
   owner?: null | ServiceServiceUserStored;
+  userVoteEntry?: null | ServiceSelectAnswerVoteEntryStored;
+  voteEntries?: null | Array<ServiceSelectAnswerVoteEntryStored>;
+  voteSelections?: null | Array<ServiceSelectAnswerVoteSelectionStored>;
 }
 
 export type ServiceSelectAnswerVoteDefinitionAttributes =
-  | 'title'
-  | 'created'
-  | 'description'
-  | 'status'
   | 'closeAt'
-  | 'userHasVoteEntry'
-  | 'userHasNoVoteEntry'
-  | 'isVoteEditable'
-  | 'isVoteOpen'
-  | 'isVoteNotEditable'
-  | 'isVoteNotOpen'
+  | 'created'
+  | 'createdBy'
+  | 'description'
   | 'isFavorite'
   | 'isNotFavorite'
   | 'isVoteDeletable'
+  | 'isVoteEditable'
   | 'isVoteNotDeletable'
-  | 'createdBy';
+  | 'isVoteNotEditable'
+  | 'isVoteNotOpen'
+  | 'isVoteOpen'
+  | 'status'
+  | 'title'
+  | 'userHasNoVoteEntry'
+  | 'userHasVoteEntry';
 export type ServiceSelectAnswerVoteDefinitionRelations =
   | 'issue'
-  | 'voteEntries'
+  | 'owner'
   | 'userVoteEntry'
-  | 'voteSelections'
-  | 'owner';
+  | 'voteEntries'
+  | 'voteSelections';
 
 export interface ServiceSelectAnswerVoteDefinitionStored
   extends JudoStored<ServiceSelectAnswerVoteDefinition>,

@@ -13,12 +13,12 @@ import { YesNoAbstainVoteValue } from './YesNoAbstainVoteValue';
 
 export interface ServiceYesNoAbstainVoteEntry {
   created: Date;
-  value: YesNoAbstainVoteValue;
   createdBy?: null | string;
+  value: YesNoAbstainVoteValue;
   owner: ServiceServiceUserStored;
 }
 
-export type ServiceYesNoAbstainVoteEntryAttributes = 'created' | 'value' | 'createdBy';
+export type ServiceYesNoAbstainVoteEntryAttributes = 'created' | 'createdBy' | 'value';
 export type ServiceYesNoAbstainVoteEntryRelations = 'owner';
 
 export interface ServiceYesNoAbstainVoteEntryStored

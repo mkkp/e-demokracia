@@ -11,7 +11,7 @@ import { ServiceCity } from '../model/ServiceCity';
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceCityQueryCustomizer extends QueryCustomizer<ServiceCity> {
-  name?: Array<FilterBytypesString>;
   county?: Array<FilterBytypesString>;
+  name?: Array<FilterBytypesString>;
   representation?: Array<FilterBytypesString>;
 }

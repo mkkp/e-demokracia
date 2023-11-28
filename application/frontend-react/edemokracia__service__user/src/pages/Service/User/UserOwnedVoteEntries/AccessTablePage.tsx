@@ -73,9 +73,6 @@ export default function ServiceUserUserOwnedVoteEntriesAccessTablePage() {
   const title: string = t('service.VoteEntry.VoteEntry_Table', { defaultValue: 'VoteEntry Table' });
 
   // Action section
-  const openPageAction = async (target?: ServiceVoteEntryStored) => {
-    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -100,11 +97,14 @@ export default function ServiceUserUserOwnedVoteEntriesAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const openPageAction = async (target?: ServiceVoteEntryStored) => {
+    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
+  };
 
   const actions: ServiceVoteEntryVoteEntry_TablePageActions = {
-    openPageAction,
     filterAction,
     refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

@@ -72,114 +72,125 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
         <Grid
-          id="User/(esm/_GLaiwG5DEe2Q6M99rsfqSQ)/GroupVisualElement"
+          id="User/(esm/_p81x0GksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
           container
-          direction="row"
-          alignItems="flex-start"
+          direction="column"
+          alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12} md={4.0}>
-            <DateTimePicker
-              ampm={false}
-              ampmInClock={false}
-              className={clsx({
-                'JUDO-viewMode': !editMode,
-                'JUDO-required': true,
-              })}
-              autoFocus
-              slotProps={{
-                textField: {
-                  id: 'User/(esm/_VQQiIGk5Ee25ONJ3V89cVA)/TimestampTypeDateTimeInput',
-                  required: true,
-                  helperText: validation.get('created'),
-                  error: !!validation.get('created'),
-                  InputProps: {
+          <Grid item xs={12} sm={12}>
+            <Grid
+              id="User/(esm/_GLaiwG5DEe2Q6M99rsfqSQ)/GroupVisualElement"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            >
+              <Grid item xs={12} sm={12} md={4.0}>
+                <DateTimePicker
+                  ampm={false}
+                  ampmInClock={false}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  autoFocus
+                  slotProps={{
+                    textField: {
+                      id: 'User/(esm/_VQQiIGk5Ee25ONJ3V89cVA)/TimestampTypeDateTimeInput',
+                      required: true,
+                      helperText: validation.get('created'),
+                      error: !!validation.get('created'),
+                      InputProps: {
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="schedule" />
+                          </InputAdornment>
+                        ),
+                      },
+                    },
+                  }}
+                  onError={(newError: DateTimeValidationError, value: any) => {
+                    // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                    setValidation((prevValidation) => {
+                      const copy = new Map<keyof ServiceSimpleVote, string>(prevValidation);
+                      copy.set(
+                        'created',
+                        newError === 'invalidDate'
+                          ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                              defaultValue: 'Value does not match the pattern requirements.',
+                            }) as string)
+                          : '',
+                      );
+                      return copy;
+                    });
+                  }}
+                  views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                  label={t('service.SimpleVote.SimpleVote_View_Edit.created', { defaultValue: 'Created' }) as string}
+                  value={serviceDateToUiDate(data.created ?? null)}
+                  readOnly={false || !isFormUpdateable()}
+                  disabled={isLoading}
+                  onChange={(newValue: Date) => {
+                    storeDiff('created', newValue);
+                  }}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={4.0}>
+                <TextField
+                  required={true}
+                  name="type"
+                  id="User/(esm/_VQWBsGk5Ee25ONJ3V89cVA)/EnumerationTypeCombo"
+                  label={t('service.SimpleVote.SimpleVote_View_Edit.type', { defaultValue: 'Type' }) as string}
+                  value={data.type || ''}
+                  className={clsx({
+                    'JUDO-viewMode': !editMode,
+                    'JUDO-required': true,
+                  })}
+                  disabled={isLoading}
+                  error={!!validation.get('type')}
+                  helperText={validation.get('type')}
+                  onChange={(event) => {
+                    storeDiff('type', event.target.value);
+                  }}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    readOnly: false || !isFormUpdateable(),
                     startAdornment: (
                       <InputAdornment position="start">
-                        <MdiIcon path="schedule" />
+                        <MdiIcon path="list" />
                       </InputAdornment>
                     ),
-                  },
-                },
-              }}
-              onError={(newError: DateTimeValidationError, value: any) => {
-                // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                setValidation((prevValidation) => {
-                  const copy = new Map<keyof ServiceSimpleVote, string>(prevValidation);
-                  copy.set(
-                    'created',
-                    newError === 'invalidDate'
-                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                          defaultValue: 'Value does not match the pattern requirements.',
-                        }) as string)
-                      : '',
-                  );
-                  return copy;
-                });
-              }}
-              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-              label={t('service.SimpleVote.SimpleVote_View_Edit.created', { defaultValue: 'Created' }) as string}
-              value={serviceDateToUiDate(data.created ?? null)}
-              readOnly={false || !isFormUpdateable()}
-              disabled={isLoading}
-              onChange={(newValue: Date) => {
-                storeDiff('created', newValue);
-              }}
-            />
+                  }}
+                  select
+                >
+                  <MenuItem id="User/(esm/_W1kWEGkYEe25ONJ3V89cVA)/EnumerationTypeMember" value={'UP'}>
+                    {t('enumerations.SimpleVoteType.UP', { defaultValue: 'UP' })}
+                  </MenuItem>
+                  <MenuItem id="User/(esm/_YoByMGkYEe25ONJ3V89cVA)/EnumerationTypeMember" value={'DOWN'}>
+                    {t('enumerations.SimpleVoteType.DOWN', { defaultValue: 'DOWN' })}
+                  </MenuItem>
+                </TextField>
+              </Grid>
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={4.0}>
-            <TextField
-              required={true}
-              name="type"
-              id="User/(esm/_VQWBsGk5Ee25ONJ3V89cVA)/EnumerationTypeCombo"
-              label={t('service.SimpleVote.SimpleVote_View_Edit.type', { defaultValue: 'Type' }) as string}
-              value={data.type || ''}
-              className={clsx({
-                'JUDO-viewMode': !editMode,
-                'JUDO-required': true,
-              })}
-              disabled={isLoading}
-              error={!!validation.get('type')}
-              helperText={validation.get('type')}
-              onChange={(event) => {
-                storeDiff('type', event.target.value);
-              }}
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                readOnly: false || !isFormUpdateable(),
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdiIcon path="list" />
-                  </InputAdornment>
-                ),
-              }}
-              select
-            >
-              <MenuItem id="User/(esm/_W1kWEGkYEe25ONJ3V89cVA)/EnumerationTypeMember" value={'UP'}>
-                {t('enumerations.SimpleVoteType.UP', { defaultValue: 'UP' })}
-              </MenuItem>
-              <MenuItem id="User/(esm/_YoByMGkYEe25ONJ3V89cVA)/EnumerationTypeMember" value={'DOWN'}>
-                {t('enumerations.SimpleVoteType.DOWN', { defaultValue: 'DOWN' })}
-              </MenuItem>
-            </TextField>
+          <Grid item xs={12} sm={12}>
+            <Grid
+              id="User/(esm/_QqUxoG5DEe2Q6M99rsfqSQ)/GroupVisualElement"
+              container
+              direction="row"
+              alignItems="flex-start"
+              justifyContent="flex-start"
+              spacing={2}
+            ></Grid>
           </Grid>
         </Grid>
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <Grid
-          id="User/(esm/_QqUxoG5DEe2Q6M99rsfqSQ)/GroupVisualElement"
-          container
-          direction="row"
-          alignItems="flex-start"
-          justifyContent="flex-start"
-          spacing={2}
-        ></Grid>
       </Grid>
     </Grid>
   );

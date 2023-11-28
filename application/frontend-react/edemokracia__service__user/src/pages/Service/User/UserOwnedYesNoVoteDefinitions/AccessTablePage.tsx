@@ -89,10 +89,6 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
   });
 
   // Action section
-  const openPageAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -119,55 +115,16 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const openPageAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
+  };
   const activateForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
     try {
       setIsLoading(true);
       await userServiceForUserOwnedYesNoVoteDefinitionsImpl.activate(target!);
       if (customActions?.postActivateForYesNoVoteDefinitionAction) {
         await customActions.postActivateForYesNoVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const takeBackVoteForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.takeBackVote(target!);
-      if (customActions?.postTakeBackVoteForYesNoVoteDefinitionAction) {
-        await customActions.postTakeBackVoteForYesNoVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const removeFromFavoritesForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForYesNoVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForYesNoVoteDefinitionAction(target!);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -234,18 +191,61 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage(
       setIsLoading(false);
     }
   };
+  const removeFromFavoritesForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForYesNoVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const takeBackVoteForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedYesNoVoteDefinitionsImpl.takeBackVote(target!);
+      if (customActions?.postTakeBackVoteForYesNoVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForYesNoVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActions = {
-    openPageAction,
     filterAction,
     refreshAction,
+    openPageAction,
     activateForYesNoVoteDefinitionAction,
-    voteAction,
-    takeBackVoteForYesNoVoteDefinitionAction,
-    removeFromFavoritesForYesNoVoteDefinitionAction,
     addToFavoritesForYesNoVoteDefinitionAction,
     closeVoteForYesNoVoteDefinitionAction,
     deleteOrArchiveForYesNoVoteDefinitionAction,
+    removeFromFavoritesForYesNoVoteDefinitionAction,
+    voteAction,
+    takeBackVoteForYesNoVoteDefinitionAction,
     ...(customActions ?? {}),
   };
 

@@ -189,14 +189,14 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_uKI6wI1KEe6sgdrBpAinBQ',
+      id: '_91d1cI2dEe6GJNWtqQaZ_w',
       attributeName: 'title',
       label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', { defaultValue: 'Title' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_uKPBYI1KEe6sgdrBpAinBQ',
+      id: '_91kjII2dEe6GJNWtqQaZ_w',
       attributeName: 'description',
       label: t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
         defaultValue: 'Description',

@@ -16,22 +16,22 @@ import { FilterBytypesText } from './FilterBytypesText';
 import { FilterBytypesTimestamp } from './FilterBytypesTimestamp';
 
 export interface ServiceRatingVoteDefinitionQueryCustomizer extends QueryCustomizer<ServiceRatingVoteDefinition> {
-  title?: Array<FilterBytypesString>;
-  created?: Array<FilterBytypesTimestamp>;
-  description?: Array<FilterBytypesText>;
-  status?: Array<FilterByVoteStatus>;
   closeAt?: Array<FilterBytypesTimestamp>;
-  maxRateValue?: Array<FilterBytypesInteger>;
-  minRateValue?: Array<FilterBytypesInteger>;
-  userHasVoteEntry?: Array<FilterBytypesBoolean>;
-  userHasNoVoteEntry?: Array<FilterBytypesBoolean>;
+  created?: Array<FilterBytypesTimestamp>;
+  createdBy?: Array<FilterBytypesString>;
+  description?: Array<FilterBytypesText>;
   isFavorite?: Array<FilterBytypesBoolean>;
+  isNotFavorite?: Array<FilterBytypesBoolean>;
+  isVoteDeletable?: Array<FilterBytypesBoolean>;
   isVoteEditable?: Array<FilterBytypesBoolean>;
+  isVoteNotDeletable?: Array<FilterBytypesBoolean>;
+  isVoteNotEditable?: Array<FilterBytypesBoolean>;
   isVoteNotOpen?: Array<FilterBytypesBoolean>;
   isVoteOpen?: Array<FilterBytypesBoolean>;
-  isNotFavorite?: Array<FilterBytypesBoolean>;
-  isVoteNotDeletable?: Array<FilterBytypesBoolean>;
-  isVoteDeletable?: Array<FilterBytypesBoolean>;
-  isVoteNotEditable?: Array<FilterBytypesBoolean>;
-  createdBy?: Array<FilterBytypesString>;
+  maxRateValue?: Array<FilterBytypesInteger>;
+  minRateValue?: Array<FilterBytypesInteger>;
+  status?: Array<FilterByVoteStatus>;
+  title?: Array<FilterBytypesString>;
+  userHasNoVoteEntry?: Array<FilterBytypesBoolean>;
+  userHasVoteEntry?: Array<FilterBytypesBoolean>;
 }

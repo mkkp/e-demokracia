@@ -105,435 +105,452 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <Card id="_tw4tQI1KEe6sgdrBpAinBQ)/LabelWrapper">
-          <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                  <Typography id="_tw4tQI1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
-                    {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_WRx7kFvTEe6jm_SkPSYEYw)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item xs={12} sm={12} md={4.0}>
-                    <TextField
-                      required={false}
-                      name="userName"
-                      id="User/(esm/_WRx7kVvTEe6jm_SkPSYEYw)/StringTypeTextInput"
-                      label={
-                        t('service.UserProfile.UserProfile_View_Edit.userName', { defaultValue: 'Username' }) as string
-                      }
-                      value={data.userName ?? ''}
-                      className={clsx({
-                        'JUDO-viewMode': !editMode,
-                        'JUDO-required': false,
-                      })}
-                      disabled={isLoading}
-                      error={!!validation.get('userName')}
-                      helperText={validation.get('userName')}
-                      onChange={(event) => {
-                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                        storeDiff('userName', realValue);
-                      }}
-                      InputLabelProps={{ shrink: true }}
-                      InputProps={{
-                        readOnly: true || !isFormUpdateable(),
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <MdiIcon path="text_fields" />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  </Grid>
-
+        <Grid
+          id="User/(esm/_1QevwFvQEe6jm_SkPSYEYw)/TransferObjectViewVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <Card id="(_9SaLsI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+              <CardContent>
+                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_AEEGwlvUEe6jm_SkPSYEYw)/GroupVisualElement"
-                      container
-                      direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <TextField
-                          required={true}
-                          name="firstName"
-                          id="User/(esm/_AEEGw1vUEe6jm_SkPSYEYw)/StringTypeTextInput"
-                          autoFocus
-                          label={
-                            t('service.UserProfile.UserProfile_View_Edit.firstName', {
-                              defaultValue: 'First name',
-                            }) as string
-                          }
-                          value={data.firstName ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('firstName')}
-                          helperText={validation.get('firstName')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('firstName', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <TextField
-                          required={true}
-                          name="lastName"
-                          id="User/(esm/_AEEGxFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
-                          label={
-                            t('service.UserProfile.UserProfile_View_Edit.lastName', {
-                              defaultValue: 'Last name',
-                            }) as string
-                          }
-                          value={data.lastName ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('lastName')}
-                          helperText={validation.get('lastName')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('lastName', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
+                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                      <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
+                      <Typography id="_9SaLsI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                        {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
+                      </Typography>
                     </Grid>
                   </Grid>
 
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="User/(esm/_AEDfsFvUEe6jm_SkPSYEYw)/GroupVisualElement"
+                      id="User/(esm/_WRx7kFvTEe6jm_SkPSYEYw)/GroupVisualElement"
                       container
                       direction="row"
-                      alignItems="flex-start"
+                      alignItems="stretch"
                       justifyContent="flex-start"
                       spacing={2}
                     >
                       <Grid item xs={12} sm={12} md={4.0}>
                         <TextField
-                          required={true}
-                          name="email"
-                          id="User/(esm/_AEEGwFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
-                          label={
-                            t('service.UserProfile.UserProfile_View_Edit.email', { defaultValue: 'Email' }) as string
-                          }
-                          value={data.email ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={isLoading}
-                          error={!!validation.get('email')}
-                          helperText={validation.get('email')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('email', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="email" />
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <TextField
                           required={false}
-                          name="phone"
-                          id="User/(esm/_AEEGwVvUEe6jm_SkPSYEYw)/StringTypeTextInput"
+                          name="userName"
+                          id="User/(esm/_WRx7kVvTEe6jm_SkPSYEYw)/StringTypeTextInput"
                           label={
-                            t('service.UserProfile.UserProfile_View_Edit.phone', { defaultValue: 'Phone' }) as string
+                            t('service.UserProfile.UserProfile_View_Edit.userName', {
+                              defaultValue: 'Username',
+                            }) as string
                           }
-                          value={data.phone ?? ''}
+                          value={data.userName ?? ''}
                           className={clsx({
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
                           disabled={isLoading}
-                          error={!!validation.get('phone')}
-                          helperText={validation.get('phone')}
+                          error={!!validation.get('userName')}
+                          helperText={validation.get('userName')}
                           onChange={(event) => {
                             const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('phone', realValue);
+                            storeDiff('userName', realValue);
                           }}
                           InputLabelProps={{ shrink: true }}
                           InputProps={{
-                            readOnly: false || !isFormUpdateable(),
+                            readOnly: true || !isFormUpdateable(),
                             startAdornment: (
                               <InputAdornment position="start">
-                                <MdiIcon path="phone" />
+                                <MdiIcon path="text_fields" />
                               </InputAdornment>
                             ),
                           }}
                         />
                       </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_AEEGwlvUEe6jm_SkPSYEYw)/GroupVisualElement"
+                          container
+                          direction="row"
+                          alignItems="stretch"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <TextField
+                              required={true}
+                              name="firstName"
+                              id="User/(esm/_AEEGw1vUEe6jm_SkPSYEYw)/StringTypeTextInput"
+                              autoFocus
+                              label={
+                                t('service.UserProfile.UserProfile_View_Edit.firstName', {
+                                  defaultValue: 'First name',
+                                }) as string
+                              }
+                              value={data.firstName ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('firstName')}
+                              helperText={validation.get('firstName')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('firstName', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="text_fields" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <TextField
+                              required={true}
+                              name="lastName"
+                              id="User/(esm/_AEEGxFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
+                              label={
+                                t('service.UserProfile.UserProfile_View_Edit.lastName', {
+                                  defaultValue: 'Last name',
+                                }) as string
+                              }
+                              value={data.lastName ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('lastName')}
+                              helperText={validation.get('lastName')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('lastName', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="text_fields" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_AEDfsFvUEe6jm_SkPSYEYw)/GroupVisualElement"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <TextField
+                              required={true}
+                              name="email"
+                              id="User/(esm/_AEEGwFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
+                              label={
+                                t('service.UserProfile.UserProfile_View_Edit.email', {
+                                  defaultValue: 'Email',
+                                }) as string
+                              }
+                              value={data.email ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': true,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('email')}
+                              helperText={validation.get('email')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('email', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="email" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <TextField
+                              required={false}
+                              name="phone"
+                              id="User/(esm/_AEEGwVvUEe6jm_SkPSYEYw)/StringTypeTextInput"
+                              label={
+                                t('service.UserProfile.UserProfile_View_Edit.phone', {
+                                  defaultValue: 'Phone',
+                                }) as string
+                              }
+                              value={data.phone ?? ''}
+                              className={clsx({
+                                'JUDO-viewMode': !editMode,
+                                'JUDO-required': false,
+                              })}
+                              disabled={isLoading}
+                              error={!!validation.get('phone')}
+                              helperText={validation.get('phone')}
+                              onChange={(event) => {
+                                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                                storeDiff('phone', realValue);
+                              }}
+                              InputLabelProps={{ shrink: true }}
+                              InputProps={{
+                                readOnly: false || !isFormUpdateable(),
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    <MdiIcon path="phone" />
+                                  </InputAdornment>
+                                ),
+                              }}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
+              </CardContent>
+            </Card>
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <Card id="_tvatoY1KEe6sgdrBpAinBQ)/LabelWrapper">
-          <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                  <Typography id="_tvatoY1KEe6sgdrBpAinBQ)/Label" variant="h5" component="h1">
-                    {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
-                  </Typography>
-                </Grid>
-              </Grid>
+          <Grid item xs={12} sm={12}>
+            <Card id="(_9PKDYI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+              <CardContent>
+                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                      <MdiIcon path="map" sx={{ marginRight: 1 }} />
+                      <Typography id="_9PKDYI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                        {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
+                      </Typography>
+                    </Grid>
+                  </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_fsW_oFvTEe6jm_SkPSYEYw)/GroupVisualElement"
-                  container
-                  direction="row"
-                  alignItems="stretch"
-                  justifyContent="center"
-                  spacing={2}
-                >
                   <Grid item xs={12} sm={12}>
                     <Grid
-                      id="User/(esm/_fsW_oVvTEe6jm_SkPSYEYw)/GroupVisualElement"
+                      id="User/(esm/_fsW_oFvTEe6jm_SkPSYEYw)/GroupVisualElement"
                       container
                       direction="row"
-                      alignItems="flex-start"
-                      justifyContent="flex-start"
+                      alignItems="stretch"
+                      justifyContent="center"
                       spacing={2}
                     >
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <ServiceUserProfileUserProfile_View_EditResidentCountyComponent
-                          disabled={false || !isFormUpdateable()}
-                          ownerData={data}
-                          editMode={editMode}
-                          storeDiff={storeDiff}
-                          validationError={validation.get('residentCounty')}
-                          actions={actions}
-                        />
+                      <Grid item xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_fsW_oVvTEe6jm_SkPSYEYw)/GroupVisualElement"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <ServiceUserProfileUserProfile_View_EditResidentCountyComponent
+                              disabled={false || !isFormUpdateable()}
+                              ownerData={data}
+                              editMode={editMode}
+                              storeDiff={storeDiff}
+                              validationError={validation.get('residentCounty')}
+                              actions={actions}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <ServiceUserProfileUserProfile_View_EditResidentCityComponent
+                              disabled={false || !isFormUpdateable()}
+                              ownerData={data}
+                              editMode={editMode}
+                              storeDiff={storeDiff}
+                              validationError={validation.get('residentCity')}
+                              actions={actions}
+                            />
+                          </Grid>
+
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <ServiceUserProfileUserProfile_View_EditResidentDistrictComponent
+                              disabled={false || !isFormUpdateable()}
+                              ownerData={data}
+                              editMode={editMode}
+                              storeDiff={storeDiff}
+                              validationError={validation.get('residentDistrict')}
+                              actions={actions}
+                            />
+                          </Grid>
+                        </Grid>
                       </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <ServiceUserProfileUserProfile_View_EditResidentCityComponent
-                          disabled={false || !isFormUpdateable()}
+                      <Grid container item xs={12} sm={12}>
+                        <ModeledTabs
+                          id="User/(esm/_fsW_qFvTEe6jm_SkPSYEYw)/TabBarVisualElement"
                           ownerData={data}
-                          editMode={editMode}
-                          storeDiff={storeDiff}
-                          validationError={validation.get('residentCity')}
-                          actions={actions}
-                        />
-                      </Grid>
+                          validation={validation}
+                          orientation='horizontal'
+                          childTabs={[
+                            {
+                              id: 'User/(esm/_fsW_qVvTEe6jm_SkPSYEYw)/GroupTab',
+                              name: 'service.UserProfile.UserProfile_View_Edit.tab_activity_counties',
+                              label: t('service.UserProfile.UserProfile_View_Edit.tab_activity_counties', {
+                                defaultValue: 'Activity counties',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'castle',
+                              nestedDataKeys: ['activityCounties'],
+                            },
+                            {
+                              id: 'User/(esm/_fsW_rFvTEe6jm_SkPSYEYw)/GroupTab',
+                              name: 'service.UserProfile.UserProfile_View_Edit.activity_cities',
+                              label: t('service.UserProfile.UserProfile_View_Edit.activity_cities', {
+                                defaultValue: 'Activity cities',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'city',
+                              nestedDataKeys: ['activityCities'],
+                            },
+                            {
+                              id: 'User/(esm/_fsW_r1vTEe6jm_SkPSYEYw)/GroupTab',
+                              name: 'service.UserProfile.UserProfile_View_Edit.activity_districts',
+                              label: t('service.UserProfile.UserProfile_View_Edit.activity_districts', {
+                                defaultValue: 'Activity districts',
+                              }) as string,
+                              disabled: isLoading,
+                              hidden: false,
+                              icon: 'home-city',
+                              nestedDataKeys: ['activityDistricts'],
+                            },
+                          ]}
+                        >
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="User/(esm/_fsW_qVvTEe6jm_SkPSYEYw)/GroupVisualElement"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
+                                    uniqueId={
+                                      'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activityCounties')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
 
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <ServiceUserProfileUserProfile_View_EditResidentDistrictComponent
-                          disabled={false || !isFormUpdateable()}
-                          ownerData={data}
-                          editMode={editMode}
-                          storeDiff={storeDiff}
-                          validationError={validation.get('residentDistrict')}
-                          actions={actions}
-                        />
+                          <Grid item xs={12} sm={12} md={4.0}>
+                            <Grid
+                              id="User/(esm/_fsW_rFvTEe6jm_SkPSYEYw)/GroupVisualElement"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserProfileUserProfile_View_EditActivityCitiesComponent
+                                    uniqueId={
+                                      'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activityCities')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} sm={12}>
+                            <Grid
+                              id="User/(esm/_fsW_r1vTEe6jm_SkPSYEYw)/GroupVisualElement"
+                              container
+                              direction="row"
+                              alignItems="flex-start"
+                              justifyContent="flex-start"
+                              spacing={2}
+                            >
+                              <Grid item xs={12} sm={12}>
+                                <Grid
+                                  id="User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+                                  container
+                                  direction="column"
+                                  alignItems="stretch"
+                                  justifyContent="flex-start"
+                                >
+                                  <ServiceUserProfileUserProfile_View_EditActivityDistrictsComponent
+                                    uniqueId={
+                                      'User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
+                                    }
+                                    actions={actions}
+                                    ownerData={data}
+                                    editMode={editMode}
+                                    isFormUpdateable={isFormUpdateable}
+                                    validationError={validation.get('activityDistricts')}
+                                    refreshCounter={refreshCounter}
+                                  />
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </ModeledTabs>
                       </Grid>
                     </Grid>
                   </Grid>
-
-                  <Grid container item xs={12} sm={12}>
-                    <ModeledTabs
-                      id="User/(esm/_fsW_qFvTEe6jm_SkPSYEYw)/TabBarVisualElement"
-                      ownerData={data}
-                      validation={validation}
-                      orientation='horizontal'
-                      childTabs={[
-                        {
-                          id: 'User/(esm/_fsW_qVvTEe6jm_SkPSYEYw)/GroupTab',
-                          name: 'service.UserProfile.UserProfile_View_Edit.tab_activity_counties',
-                          label: t('service.UserProfile.UserProfile_View_Edit.tab_activity_counties', {
-                            defaultValue: 'Activity counties',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'castle',
-                          nestedDataKeys: ['activityCounties'],
-                        },
-                        {
-                          id: 'User/(esm/_fsW_rFvTEe6jm_SkPSYEYw)/GroupTab',
-                          name: 'service.UserProfile.UserProfile_View_Edit.activity_cities',
-                          label: t('service.UserProfile.UserProfile_View_Edit.activity_cities', {
-                            defaultValue: 'Activity cities',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'city',
-                          nestedDataKeys: ['activityCities'],
-                        },
-                        {
-                          id: 'User/(esm/_fsW_r1vTEe6jm_SkPSYEYw)/GroupTab',
-                          name: 'service.UserProfile.UserProfile_View_Edit.activity_districts',
-                          label: t('service.UserProfile.UserProfile_View_Edit.activity_districts', {
-                            defaultValue: 'Activity districts',
-                          }) as string,
-                          disabled: isLoading,
-                          hidden: false,
-                          icon: 'home-city',
-                          nestedDataKeys: ['activityDistricts'],
-                        },
-                      ]}
-                    >
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_fsW_qVvTEe6jm_SkPSYEYw)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
-                                uniqueId={
-                                  'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activityCounties')}
-                                refreshCounter={refreshCounter}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={4.0}>
-                        <Grid
-                          id="User/(esm/_fsW_rFvTEe6jm_SkPSYEYw)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <ServiceUserProfileUserProfile_View_EditActivityCitiesComponent
-                                uniqueId={
-                                  'User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activityCities')}
-                                refreshCounter={refreshCounter}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12}>
-                        <Grid
-                          id="User/(esm/_fsW_r1vTEe6jm_SkPSYEYw)/GroupVisualElement"
-                          container
-                          direction="row"
-                          alignItems="flex-start"
-                          justifyContent="flex-start"
-                          spacing={2}
-                        >
-                          <Grid item xs={12} sm={12}>
-                            <Grid
-                              id="User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
-                              container
-                              direction="column"
-                              alignItems="stretch"
-                              justifyContent="flex-start"
-                            >
-                              <ServiceUserProfileUserProfile_View_EditActivityDistrictsComponent
-                                uniqueId={
-                                  'User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'
-                                }
-                                actions={actions}
-                                ownerData={data}
-                                editMode={editMode}
-                                isFormUpdateable={isFormUpdateable}
-                                validationError={validation.get('activityDistricts')}
-                                refreshCounter={refreshCounter}
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      </Grid>
-                    </ModeledTabs>
-                  </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

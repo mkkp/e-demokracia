@@ -72,43 +72,54 @@ export default function YesNoVoteInputYesNoVoteInput_Form(props: YesNoVoteInputY
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <TextField
-          required={false}
-          name="value"
-          id="User/(esm/_HrXDYKlbEe2kkPT1Lcj30A)/EnumerationTypeCombo"
-          autoFocus
-          label={t('YesNoVoteInput.YesNoVoteInput_Form.value', { defaultValue: 'Vote' }) as string}
-          value={data.value || ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': false,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('value')}
-          helperText={validation.get('value')}
-          onChange={(event) => {
-            storeDiff('value', event.target.value);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="list" />
-              </InputAdornment>
-            ),
-          }}
-          select
+        <Grid
+          id="User/(esm/_-1R8g3WyEe2LTNnGda5kaw)/TransferObjectFormVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
         >
-          <MenuItem id="User/(esm/_2E9NMW6dEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'YES'}>
-            {t('enumerations.YesNoVoteValue.YES', { defaultValue: 'YES' })}
-          </MenuItem>
-          <MenuItem id="User/(esm/_2E9NMm6dEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'NO'}>
-            {t('enumerations.YesNoVoteValue.NO', { defaultValue: 'NO' })}
-          </MenuItem>
-        </TextField>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={false}
+              name="value"
+              id="User/(esm/_HrXDYKlbEe2kkPT1Lcj30A)/EnumerationTypeCombo"
+              autoFocus
+              label={t('YesNoVoteInput.YesNoVoteInput_Form.value', { defaultValue: 'Vote' }) as string}
+              value={data.value || ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('value')}
+              helperText={validation.get('value')}
+              onChange={(event) => {
+                storeDiff('value', event.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="list" />
+                  </InputAdornment>
+                ),
+              }}
+              select
+            >
+              <MenuItem id="User/(esm/_2E9NMW6dEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'YES'}>
+                {t('enumerations.YesNoVoteValue.YES', { defaultValue: 'YES' })}
+              </MenuItem>
+              <MenuItem id="User/(esm/_2E9NMm6dEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'NO'}>
+                {t('enumerations.YesNoVoteValue.NO', { defaultValue: 'NO' })}
+              </MenuItem>
+            </TextField>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

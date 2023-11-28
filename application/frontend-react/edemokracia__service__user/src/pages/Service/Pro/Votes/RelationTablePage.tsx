@@ -83,10 +83,6 @@ export default function ServiceProVotesRelationTablePage() {
   const backAction = async () => {
     navigateBack();
   };
-  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceProVotesRelationViewPage(target!.__signedIdentifier));
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -116,12 +112,16 @@ export default function ServiceProVotesRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceProVotesRelationViewPage(target!.__signedIdentifier));
+  };
 
   const actions: ServiceSimpleVoteSimpleVote_TablePageActions = {
     backAction,
-    openPageAction,
     filterAction,
     refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

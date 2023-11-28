@@ -14,69 +14,50 @@ import {
   ServiceSimpleVoteAttributes,
 } from '../model';
 import {
-  ServiceConCreatedByMaskBuilder,
   ServiceConConsMaskBuilder,
-  ServiceConProsMaskBuilder,
+  ServiceConCreatedByMaskBuilder,
   ServiceConParentConMaskBuilder,
   ServiceConParentProMaskBuilder,
+  ServiceConProsMaskBuilder,
 } from './ServiceConMaskBuilder';
 import {
-  ServiceServiceUserActivityCountiesMaskBuilder,
-  ServiceServiceUserResidentCountyMaskBuilder,
   ServiceServiceUserActivityCitiesMaskBuilder,
-  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserActivityCountiesMaskBuilder,
   ServiceServiceUserActivityDistrictsMaskBuilder,
+  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserResidentCountyMaskBuilder,
   ServiceServiceUserResidentDistrictMaskBuilder,
 } from './ServiceServiceUserMaskBuilder';
 import {} from './ServiceConParentMaskBuilder';
 import {} from './ServiceProParentMaskBuilder';
 
-export class ServiceProCreatedByMaskBuilder extends RelationMaskBuilder {
-  constructor(
-    protected props: Array<
-      | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserResidentCountyMaskBuilder
-      | ServiceServiceUserActivityCitiesMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentDistrictMaskBuilder
-    >,
-  ) {
-    super('createdBy', props);
-  }
-}
-export class ServiceProProsMaskBuilder extends RelationMaskBuilder {
-  constructor(
-    protected props: Array<
-      | ServiceProAttributes
-      | ServiceProCreatedByMaskBuilder
-      | ServiceProProsMaskBuilder
-      | ServiceProConsMaskBuilder
-      | ServiceProParentProMaskBuilder
-      | ServiceProParentConMaskBuilder
-    >,
-  ) {
-    super('pros', props);
-  }
-}
 export class ServiceProConsMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceConAttributes
-      | ServiceConCreatedByMaskBuilder
       | ServiceConConsMaskBuilder
-      | ServiceConProsMaskBuilder
+      | ServiceConCreatedByMaskBuilder
       | ServiceConParentConMaskBuilder
       | ServiceConParentProMaskBuilder
+      | ServiceConProsMaskBuilder
     >,
   ) {
     super('cons', props);
   }
 }
-export class ServiceProParentProMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<any>) {
-    super('parentPro', props);
+export class ServiceProCreatedByMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<
+      | ServiceServiceUserAttributes
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserActivityCountiesMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserResidentDistrictMaskBuilder
+    >,
+  ) {
+    super('createdBy', props);
   }
 }
 export class ServiceProParentConMaskBuilder extends RelationMaskBuilder {
@@ -84,16 +65,35 @@ export class ServiceProParentConMaskBuilder extends RelationMaskBuilder {
     super('parentCon', props);
   }
 }
+export class ServiceProParentProMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<any>) {
+    super('parentPro', props);
+  }
+}
+export class ServiceProProsMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<
+      | ServiceProAttributes
+      | ServiceProConsMaskBuilder
+      | ServiceProCreatedByMaskBuilder
+      | ServiceProParentConMaskBuilder
+      | ServiceProParentProMaskBuilder
+      | ServiceProProsMaskBuilder
+    >,
+  ) {
+    super('pros', props);
+  }
+}
 
 export class ServiceProMaskBuilder extends MaskBuilder {
   constructor(
     protected props: Array<
       | ServiceProAttributes
-      | ServiceProCreatedByMaskBuilder
-      | ServiceProProsMaskBuilder
       | ServiceProConsMaskBuilder
-      | ServiceProParentProMaskBuilder
+      | ServiceProCreatedByMaskBuilder
       | ServiceProParentConMaskBuilder
+      | ServiceProParentProMaskBuilder
+      | ServiceProProsMaskBuilder
     >,
   ) {
     super(props);

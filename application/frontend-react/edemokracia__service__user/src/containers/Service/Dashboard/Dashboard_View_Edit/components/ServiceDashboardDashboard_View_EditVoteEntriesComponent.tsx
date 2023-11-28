@@ -204,28 +204,28 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_t3z0oo1KEe6sgdrBpAinBQ',
+      id: '_9dO7oo2dEe6GJNWtqQaZ_w',
       attributeName: 'created',
       label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_t30bso1KEe6sgdrBpAinBQ',
+      id: '_9dQJwI2dEe6GJNWtqQaZ_w',
       attributeName: 'issueTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_t31CwY1KEe6sgdrBpAinBQ',
+      id: '_9dQw0I2dEe6GJNWtqQaZ_w',
       attributeName: 'voteTitle',
       label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
       filterType: FilterType.string,
     },
 
     {
-      id: '_t31p0I1KEe6sgdrBpAinBQ',
+      id: '_9dRX4o2dEe6GJNWtqQaZ_w',
       attributeName: 'voteStatus',
       label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
       filterType: FilterType.enumeration,

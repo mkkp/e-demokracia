@@ -16,50 +16,50 @@ import { ServiceServiceUserStored } from './ServiceServiceUser';
 import { VoteStatus } from './VoteStatus';
 
 export interface ServiceRatingVoteDefinition {
-  title: string;
-  created: Date;
-  description: string;
-  status: VoteStatus;
   closeAt: Date;
-  maxRateValue?: null | number;
-  minRateValue?: null | number;
-  userHasVoteEntry?: null | boolean;
-  userHasNoVoteEntry?: null | boolean;
+  created: Date;
+  createdBy?: null | string;
+  description: string;
   isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
+  isVoteDeletable?: null | boolean;
   isVoteEditable?: null | boolean;
+  isVoteNotDeletable?: null | boolean;
+  isVoteNotEditable?: null | boolean;
   isVoteNotOpen?: null | boolean;
   isVoteOpen?: null | boolean;
-  isNotFavorite?: null | boolean;
-  isVoteNotDeletable?: null | boolean;
-  isVoteDeletable?: null | boolean;
-  isVoteNotEditable?: null | boolean;
-  createdBy?: null | string;
+  maxRateValue?: null | number;
+  minRateValue?: null | number;
+  status: VoteStatus;
+  title: string;
+  userHasNoVoteEntry?: null | boolean;
+  userHasVoteEntry?: null | boolean;
   issue?: null | ServiceIssueStored;
-  voteEntries?: null | Array<ServiceRatingVoteEntryStored>;
-  userVoteEntry?: null | ServiceRatingVoteEntryStored;
   owner?: null | ServiceServiceUserStored;
+  userVoteEntry?: null | ServiceRatingVoteEntryStored;
+  voteEntries?: null | Array<ServiceRatingVoteEntryStored>;
 }
 
 export type ServiceRatingVoteDefinitionAttributes =
-  | 'title'
-  | 'created'
-  | 'description'
-  | 'status'
   | 'closeAt'
-  | 'maxRateValue'
-  | 'minRateValue'
-  | 'userHasVoteEntry'
-  | 'userHasNoVoteEntry'
+  | 'created'
+  | 'createdBy'
+  | 'description'
   | 'isFavorite'
+  | 'isNotFavorite'
+  | 'isVoteDeletable'
   | 'isVoteEditable'
+  | 'isVoteNotDeletable'
+  | 'isVoteNotEditable'
   | 'isVoteNotOpen'
   | 'isVoteOpen'
-  | 'isNotFavorite'
-  | 'isVoteNotDeletable'
-  | 'isVoteDeletable'
-  | 'isVoteNotEditable'
-  | 'createdBy';
-export type ServiceRatingVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry' | 'owner';
+  | 'maxRateValue'
+  | 'minRateValue'
+  | 'status'
+  | 'title'
+  | 'userHasNoVoteEntry'
+  | 'userHasVoteEntry';
+export type ServiceRatingVoteDefinitionRelations = 'issue' | 'owner' | 'userVoteEntry' | 'voteEntries';
 
 export interface ServiceRatingVoteDefinitionStored
   extends JudoStored<ServiceRatingVoteDefinition>,

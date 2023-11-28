@@ -77,74 +77,85 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_Form(
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="title"
-          id="User/(esm/_OfPXEFv5Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-          autoFocus
-          label={
-            t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.title', { defaultValue: 'Title' }) as string
-          }
-          value={data.title ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('title')}
-          helperText={validation.get('title')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('title', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="format-size" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
+        <Grid
+          id="User/(esm/_XwtdgG6bEe2wNaja8kBvcQ)/TransferObjectFormVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="title"
+              id="User/(esm/_OfPXEFv5Ee6nEc5rp_Qy4A)/StringTypeTextInput"
+              autoFocus
+              label={
+                t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.title', { defaultValue: 'Title' }) as string
+              }
+              value={data.title ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('title')}
+              helperText={validation.get('title')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('title', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="format-size" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={false}
-          name="description"
-          id="User/(esm/_OfPXEVv5Ee6nEc5rp_Qy4A)/StringTypeTextArea"
-          label={
-            t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.description', {
-              defaultValue: 'Description',
-            }) as string
-          }
-          value={data.description ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': false,
-          })}
-          disabled={isLoading}
-          multiline
-          minRows={4.0}
-          error={!!validation.get('description')}
-          helperText={validation.get('description')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('description', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="format-size" />
-              </InputAdornment>
-            ),
-          }}
-        />
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={false}
+              name="description"
+              id="User/(esm/_OfPXEVv5Ee6nEc5rp_Qy4A)/StringTypeTextArea"
+              label={
+                t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.description', {
+                  defaultValue: 'Description',
+                }) as string
+              }
+              value={data.description ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              disabled={isLoading}
+              multiline
+              minRows={4.0}
+              error={!!validation.get('description')}
+              helperText={validation.get('description')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('description', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="format-size" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

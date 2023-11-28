@@ -278,6 +278,19 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
+      id: 'User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.removeFromFavorites', {
+        defaultValue: 'removeFromFavorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
+      action: actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
       id: 'User/(esm/_JTH2lXr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeVote', {
         defaultValue: 'closeVote',
@@ -287,32 +300,6 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
       action: actions.closeVoteForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
             await actions.closeVoteForSelectAnswerVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
-        defaultValue: 'takeBackVote',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -356,15 +343,28 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
+      id: 'User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
       }) as string,
-      icon: <MdiIcon path="star-minus" />,
+      icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction
+      action: actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
-            await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!(rowData);
+            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
+        defaultValue: 'takeBackVote',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
+      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -372,7 +372,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_to518I1KEe6sgdrBpAinBQ',
+      id: '_9F3kgI2dEe6GJNWtqQaZ_w',
       attributeName: 'title',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
         defaultValue: 'Title',
@@ -381,7 +381,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_to6dAI1KEe6sgdrBpAinBQ',
+      id: '_9F4LkY2dEe6GJNWtqQaZ_w',
       attributeName: 'created',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
         defaultValue: 'Created',
@@ -390,7 +390,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_to6dBI1KEe6sgdrBpAinBQ',
+      id: '_9F5ZsI2dEe6GJNWtqQaZ_w',
       attributeName: 'description',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
         defaultValue: 'Description',
@@ -399,7 +399,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_to7EEo1KEe6sgdrBpAinBQ',
+      id: '_9F6AwI2dEe6GJNWtqQaZ_w',
       attributeName: 'status',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
         defaultValue: 'Status',
@@ -409,7 +409,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
     },
 
     {
-      id: '_to7rIY1KEe6sgdrBpAinBQ',
+      id: '_9F7O4I2dEe6GJNWtqQaZ_w',
       attributeName: 'closeAt',
       label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
         defaultValue: 'CloseAt',

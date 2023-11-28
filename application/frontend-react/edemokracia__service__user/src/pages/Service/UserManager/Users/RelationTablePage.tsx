@@ -84,10 +84,6 @@ export default function ServiceUserManagerUsersRelationTablePage() {
   const backAction = async () => {
     navigateBack();
   };
-  const openPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceUserManagerUsersRelationViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -117,12 +113,16 @@ export default function ServiceUserManagerUsersRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const openPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceUserManagerUsersRelationViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   const actions: ServiceServiceUserServiceUser_TablePageActions = {
     backAction,
-    openPageAction,
     filterAction,
     refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

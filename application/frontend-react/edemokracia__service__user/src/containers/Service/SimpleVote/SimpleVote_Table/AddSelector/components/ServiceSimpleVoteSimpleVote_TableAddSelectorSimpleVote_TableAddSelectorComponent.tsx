@@ -174,14 +174,14 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
 
   const filterOptions: FilterOption[] = [
     {
-      id: '_sLVrwI1KEe6sgdrBpAinBQ',
+      id: '_7S-DgI2dEe6GJNWtqQaZ_w',
       attributeName: 'created',
       label: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
       filterType: FilterType.dateTime,
     },
 
     {
-      id: '_sLXg8I1KEe6sgdrBpAinBQ',
+      id: '_7TAfwI2dEe6GJNWtqQaZ_w',
       attributeName: 'type',
       label: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
       filterType: FilterType.enumeration,

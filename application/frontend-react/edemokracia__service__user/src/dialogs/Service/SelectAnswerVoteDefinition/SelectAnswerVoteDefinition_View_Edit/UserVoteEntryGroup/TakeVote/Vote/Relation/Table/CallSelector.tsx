@@ -138,6 +138,9 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   );
 
   // Action section
+  const backAction = async () => {
+    onClose();
+  };
   const voteForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -157,9 +160,6 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
     } finally {
       setIsLoading(false);
     }
-  };
-  const backAction = async () => {
-    onClose();
   };
   const filterAction = async (
     id: string,
@@ -185,8 +185,8 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActions =
     {
-      voteForSelectAnswerVoteDefinitionAction,
       backAction,
+      voteForSelectAnswerVoteDefinitionAction,
       filterAction,
       selectorRangeAction,
       ...(customActions ?? {}),

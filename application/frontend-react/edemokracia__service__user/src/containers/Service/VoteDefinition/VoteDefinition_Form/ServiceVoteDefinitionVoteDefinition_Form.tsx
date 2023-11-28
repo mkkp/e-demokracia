@@ -79,298 +79,313 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
   );
 
   return (
-    <Grid container spacing={2} direction="column" alignItems="stretch" justifyContent="flex-start">
+    <Grid container>
       <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="title"
-          id="User/(esm/_T5VWYI4jEe29qs15q2b6yw)/StringTypeTextInput"
-          autoFocus
-          label={t('service.VoteDefinition.VoteDefinition_Form.title', { defaultValue: 'Title' }) as string}
-          value={data.title ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('title')}
-          helperText={validation.get('title')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('title', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <DateTimePicker
-          ampm={false}
-          ampmInClock={false}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': false,
-          })}
-          slotProps={{
-            textField: {
-              id: 'User/(esm/_T5dSMI4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-              required: false,
-              helperText: validation.get('created'),
-              error: !!validation.get('created'),
-              InputProps: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <MdiIcon path="schedule" />
-                  </InputAdornment>
-                ),
-              },
-            },
-          }}
-          onError={(newError: DateTimeValidationError, value: any) => {
-            // https://mui.com/x/react-date-pickers/validation/#show-the-error
-            setValidation((prevValidation) => {
-              const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
-              copy.set(
-                'created',
-                newError === 'invalidDate'
-                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                      defaultValue: 'Value does not match the pattern requirements.',
-                    }) as string)
-                  : '',
-              );
-              return copy;
-            });
-          }}
-          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-          label={t('service.VoteDefinition.VoteDefinition_Form.created', { defaultValue: 'Created' }) as string}
-          value={serviceDateToUiDate(data.created ?? null)}
-          readOnly={true || !isFormUpdateable()}
-          disabled={isLoading}
-          onChange={(newValue: Date) => {
-            storeDiff('created', newValue);
-          }}
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="description"
-          id="User/(esm/_T5l1EI4jEe29qs15q2b6yw)/StringTypeTextInput"
-          label={t('service.VoteDefinition.VoteDefinition_Form.description', { defaultValue: 'Description' }) as string}
-          value={data.description ?? ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('description')}
-          helperText={validation.get('description')}
-          onChange={(event) => {
-            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-            storeDiff('description', realValue);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="text_fields" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <TextField
-          required={true}
-          name="status"
-          id="User/(esm/_T5tw4I4jEe29qs15q2b6yw)/EnumerationTypeCombo"
-          label={t('service.VoteDefinition.VoteDefinition_Form.status', { defaultValue: 'Status' }) as string}
-          value={data.status || ''}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          disabled={isLoading}
-          error={!!validation.get('status')}
-          helperText={validation.get('status')}
-          onChange={(event) => {
-            storeDiff('status', event.target.value);
-          }}
-          InputLabelProps={{ shrink: true }}
-          InputProps={{
-            readOnly: false || !isFormUpdateable(),
-            startAdornment: (
-              <InputAdornment position="start">
-                <MdiIcon path="list" />
-              </InputAdornment>
-            ),
-          }}
-          select
+        <Grid
+          id="User/(esm/_-gL5wH4XEe2cB7_PsKXsHQ)/TransferObjectFormVisualElement"
+          container
+          direction="column"
+          alignItems="stretch"
+          justifyContent="flex-start"
+          spacing={2}
         >
-          <MenuItem id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CREATED'}>
-            {t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
-          </MenuItem>
-          <MenuItem id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'PENDING'}>
-            {t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
-          </MenuItem>
-          <MenuItem id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'ACTIVE'}>
-            {t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
-          </MenuItem>
-          <MenuItem id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CLOSED'}>
-            {t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
-          </MenuItem>
-          <MenuItem id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember" value={'ARCHIVED'}>
-            {t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
-          </MenuItem>
-        </TextField>
-      </Grid>
-
-      <Grid item xs={12} sm={12}>
-        <DateTimePicker
-          ampm={false}
-          ampmInClock={false}
-          className={clsx({
-            'JUDO-viewMode': !editMode,
-            'JUDO-required': true,
-          })}
-          slotProps={{
-            textField: {
-              id: 'User/(esm/_T55XEI4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-              required: true,
-              helperText: validation.get('closeAt'),
-              error: !!validation.get('closeAt'),
-              InputProps: {
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="title"
+              id="User/(esm/_T5VWYI4jEe29qs15q2b6yw)/StringTypeTextInput"
+              autoFocus
+              label={t('service.VoteDefinition.VoteDefinition_Form.title', { defaultValue: 'Title' }) as string}
+              value={data.title ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('title')}
+              helperText={validation.get('title')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('title', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
                 startAdornment: (
                   <InputAdornment position="start">
-                    <MdiIcon path="schedule" />
+                    <MdiIcon path="text_fields" />
                   </InputAdornment>
                 ),
-              },
-            },
-          }}
-          onError={(newError: DateTimeValidationError, value: any) => {
-            // https://mui.com/x/react-date-pickers/validation/#show-the-error
-            setValidation((prevValidation) => {
-              const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
-              copy.set(
-                'closeAt',
-                newError === 'invalidDate'
-                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                      defaultValue: 'Value does not match the pattern requirements.',
-                    }) as string)
-                  : '',
-              );
-              return copy;
-            });
-          }}
-          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-          label={t('service.VoteDefinition.VoteDefinition_Form.closeAt', { defaultValue: 'CloseAt' }) as string}
-          value={serviceDateToUiDate(data.closeAt ?? null)}
-          readOnly={false || !isFormUpdateable()}
-          disabled={isLoading}
-          onChange={(newValue: Date) => {
-            storeDiff('closeAt', newValue);
-          }}
-        />
-      </Grid>
+              }}
+            />
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <FormGroup>
-          <FormControlLabel
-            className="switch"
-            sx={{ marginTop: '6px' }}
-            disabled={true || !isFormUpdateable() || isLoading}
-            control={
-              <Checkbox
-                checked={data.isRatingType || false}
-                onChange={(event) => {
-                  storeDiff('isRatingType', event.target.checked);
-                }}
-              />
-            }
-            label={
-              t('service.VoteDefinition.VoteDefinition_Form.isRatingType', { defaultValue: 'IsRatingType' }) as string
-            }
-          />
-        </FormGroup>
-      </Grid>
+          <Grid item xs={12} sm={12}>
+            <DateTimePicker
+              ampm={false}
+              ampmInClock={false}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': false,
+              })}
+              slotProps={{
+                textField: {
+                  id: 'User/(esm/_T5dSMI4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
+                  required: false,
+                  helperText: validation.get('created'),
+                  error: !!validation.get('created'),
+                  InputProps: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="schedule" />
+                      </InputAdornment>
+                    ),
+                  },
+                },
+              }}
+              onError={(newError: DateTimeValidationError, value: any) => {
+                // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                setValidation((prevValidation) => {
+                  const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
+                  copy.set(
+                    'created',
+                    newError === 'invalidDate'
+                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                          defaultValue: 'Value does not match the pattern requirements.',
+                        }) as string)
+                      : '',
+                  );
+                  return copy;
+                });
+              }}
+              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+              label={t('service.VoteDefinition.VoteDefinition_Form.created', { defaultValue: 'Created' }) as string}
+              value={serviceDateToUiDate(data.created ?? null)}
+              readOnly={true || !isFormUpdateable()}
+              disabled={isLoading}
+              onChange={(newValue: Date) => {
+                storeDiff('created', newValue);
+              }}
+            />
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <FormGroup>
-          <FormControlLabel
-            className="switch"
-            sx={{ marginTop: '6px' }}
-            disabled={true || !isFormUpdateable() || isLoading}
-            control={
-              <Checkbox
-                checked={data.isSelectAnswerType || false}
-                onChange={(event) => {
-                  storeDiff('isSelectAnswerType', event.target.checked);
-                }}
-              />
-            }
-            label={
-              t('service.VoteDefinition.VoteDefinition_Form.isSelectAnswerType', {
-                defaultValue: 'IsSelectAnswerType',
-              }) as string
-            }
-          />
-        </FormGroup>
-      </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="description"
+              id="User/(esm/_T5l1EI4jEe29qs15q2b6yw)/StringTypeTextInput"
+              label={
+                t('service.VoteDefinition.VoteDefinition_Form.description', { defaultValue: 'Description' }) as string
+              }
+              value={data.description ?? ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('description')}
+              helperText={validation.get('description')}
+              onChange={(event) => {
+                const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                storeDiff('description', realValue);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="text_fields" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <FormGroup>
-          <FormControlLabel
-            className="switch"
-            sx={{ marginTop: '6px' }}
-            disabled={true || !isFormUpdateable() || isLoading}
-            control={
-              <Checkbox
-                checked={data.isYesNoAbstainType || false}
-                onChange={(event) => {
-                  storeDiff('isYesNoAbstainType', event.target.checked);
-                }}
-              />
-            }
-            label={
-              t('service.VoteDefinition.VoteDefinition_Form.isYesNoAbstainType', {
-                defaultValue: 'IsYesNoAbstainType',
-              }) as string
-            }
-          />
-        </FormGroup>
-      </Grid>
+          <Grid item xs={12} sm={12}>
+            <TextField
+              required={true}
+              name="status"
+              id="User/(esm/_T5tw4I4jEe29qs15q2b6yw)/EnumerationTypeCombo"
+              label={t('service.VoteDefinition.VoteDefinition_Form.status', { defaultValue: 'Status' }) as string}
+              value={data.status || ''}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              disabled={isLoading}
+              error={!!validation.get('status')}
+              helperText={validation.get('status')}
+              onChange={(event) => {
+                storeDiff('status', event.target.value);
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                readOnly: false || !isFormUpdateable(),
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <MdiIcon path="list" />
+                  </InputAdornment>
+                ),
+              }}
+              select
+            >
+              <MenuItem id="User/(esm/_oDqCMW6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CREATED'}>
+                {t('enumerations.VoteStatus.CREATED', { defaultValue: 'CREATED' })}
+              </MenuItem>
+              <MenuItem id="User/(esm/_oDqCMm6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'PENDING'}>
+                {t('enumerations.VoteStatus.PENDING', { defaultValue: 'PENDING' })}
+              </MenuItem>
+              <MenuItem id="User/(esm/_oDqCM26IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'ACTIVE'}>
+                {t('enumerations.VoteStatus.ACTIVE', { defaultValue: 'ACTIVE' })}
+              </MenuItem>
+              <MenuItem id="User/(esm/_oDqCNG6IEe2wNaja8kBvcQ)/EnumerationTypeMember" value={'CLOSED'}>
+                {t('enumerations.VoteStatus.CLOSED', { defaultValue: 'CLOSED' })}
+              </MenuItem>
+              <MenuItem id="User/(esm/_6lZ38F4_Ee6vsex_cZNQbQ)/EnumerationTypeMember" value={'ARCHIVED'}>
+                {t('enumerations.VoteStatus.ARCHIVED', { defaultValue: 'ARCHIVED' })}
+              </MenuItem>
+            </TextField>
+          </Grid>
 
-      <Grid item xs={12} sm={12}>
-        <FormGroup>
-          <FormControlLabel
-            className="switch"
-            sx={{ marginTop: '6px' }}
-            disabled={true || !isFormUpdateable() || isLoading}
-            control={
-              <Checkbox
-                checked={data.isYesNoType || false}
-                onChange={(event) => {
-                  storeDiff('isYesNoType', event.target.checked);
-                }}
+          <Grid item xs={12} sm={12}>
+            <DateTimePicker
+              ampm={false}
+              ampmInClock={false}
+              className={clsx({
+                'JUDO-viewMode': !editMode,
+                'JUDO-required': true,
+              })}
+              slotProps={{
+                textField: {
+                  id: 'User/(esm/_T55XEI4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
+                  required: true,
+                  helperText: validation.get('closeAt'),
+                  error: !!validation.get('closeAt'),
+                  InputProps: {
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <MdiIcon path="schedule" />
+                      </InputAdornment>
+                    ),
+                  },
+                },
+              }}
+              onError={(newError: DateTimeValidationError, value: any) => {
+                // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                setValidation((prevValidation) => {
+                  const copy = new Map<keyof ServiceVoteDefinition, string>(prevValidation);
+                  copy.set(
+                    'closeAt',
+                    newError === 'invalidDate'
+                      ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                          defaultValue: 'Value does not match the pattern requirements.',
+                        }) as string)
+                      : '',
+                  );
+                  return copy;
+                });
+              }}
+              views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+              label={t('service.VoteDefinition.VoteDefinition_Form.closeAt', { defaultValue: 'CloseAt' }) as string}
+              value={serviceDateToUiDate(data.closeAt ?? null)}
+              readOnly={false || !isFormUpdateable()}
+              disabled={isLoading}
+              onChange={(newValue: Date) => {
+                storeDiff('closeAt', newValue);
+              }}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <FormGroup>
+              <FormControlLabel
+                className="switch"
+                sx={{ marginTop: '6px' }}
+                disabled={true || !isFormUpdateable() || isLoading}
+                control={
+                  <Checkbox
+                    checked={data.isRatingType || false}
+                    onChange={(event) => {
+                      storeDiff('isRatingType', event.target.checked);
+                    }}
+                  />
+                }
+                label={
+                  t('service.VoteDefinition.VoteDefinition_Form.isRatingType', {
+                    defaultValue: 'IsRatingType',
+                  }) as string
+                }
               />
-            }
-            label={
-              t('service.VoteDefinition.VoteDefinition_Form.isYesNoType', { defaultValue: 'IsYesNoType' }) as string
-            }
-          />
-        </FormGroup>
+            </FormGroup>
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <FormGroup>
+              <FormControlLabel
+                className="switch"
+                sx={{ marginTop: '6px' }}
+                disabled={true || !isFormUpdateable() || isLoading}
+                control={
+                  <Checkbox
+                    checked={data.isSelectAnswerType || false}
+                    onChange={(event) => {
+                      storeDiff('isSelectAnswerType', event.target.checked);
+                    }}
+                  />
+                }
+                label={
+                  t('service.VoteDefinition.VoteDefinition_Form.isSelectAnswerType', {
+                    defaultValue: 'IsSelectAnswerType',
+                  }) as string
+                }
+              />
+            </FormGroup>
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <FormGroup>
+              <FormControlLabel
+                className="switch"
+                sx={{ marginTop: '6px' }}
+                disabled={true || !isFormUpdateable() || isLoading}
+                control={
+                  <Checkbox
+                    checked={data.isYesNoAbstainType || false}
+                    onChange={(event) => {
+                      storeDiff('isYesNoAbstainType', event.target.checked);
+                    }}
+                  />
+                }
+                label={
+                  t('service.VoteDefinition.VoteDefinition_Form.isYesNoAbstainType', {
+                    defaultValue: 'IsYesNoAbstainType',
+                  }) as string
+                }
+              />
+            </FormGroup>
+          </Grid>
+
+          <Grid item xs={12} sm={12}>
+            <FormGroup>
+              <FormControlLabel
+                className="switch"
+                sx={{ marginTop: '6px' }}
+                disabled={true || !isFormUpdateable() || isLoading}
+                control={
+                  <Checkbox
+                    checked={data.isYesNoType || false}
+                    onChange={(event) => {
+                      storeDiff('isYesNoType', event.target.checked);
+                    }}
+                  />
+                }
+                label={
+                  t('service.VoteDefinition.VoteDefinition_Form.isYesNoType', { defaultValue: 'IsYesNoType' }) as string
+                }
+              />
+            </FormGroup>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
