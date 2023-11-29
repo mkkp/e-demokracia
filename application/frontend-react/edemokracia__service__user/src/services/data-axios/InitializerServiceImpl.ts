@@ -36,8 +36,8 @@ export class InitializerServiceImpl extends JudoAxiosService implements Initiali
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initAreas(): Promise<void> {
-    const path = '/Initializer/initAreas';
+  async initUsers(): Promise<void> {
+    const path = '/Initializer/initUsers';
     const response = await this.axios.post(this.getPathForActor(path), undefined);
   }
 
@@ -54,8 +54,8 @@ export class InitializerServiceImpl extends JudoAxiosService implements Initiali
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initIssueTypes(): Promise<void> {
-    const path = '/Initializer/initIssueTypes';
+  async initAreas(): Promise<void> {
+    const path = '/Initializer/initAreas';
     const response = await this.axios.post(this.getPathForActor(path), undefined);
   }
 
@@ -63,8 +63,8 @@ export class InitializerServiceImpl extends JudoAxiosService implements Initiali
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initUsers(): Promise<void> {
-    const path = '/Initializer/initUsers';
+  async initIssueTypes(): Promise<void> {
+    const path = '/Initializer/initIssueTypes';
     const response = await this.axios.post(this.getPathForActor(path), undefined);
   }
 }

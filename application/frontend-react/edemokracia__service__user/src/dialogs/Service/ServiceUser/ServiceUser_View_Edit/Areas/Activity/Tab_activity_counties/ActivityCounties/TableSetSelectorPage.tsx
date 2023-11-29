@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceServiceUserServiceForActivityCountiesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceServiceUserServiceForActivityCountiesImpl } from '~/services/data-axios/ServiceServiceUserServiceForActivityCountiesImpl';
+
 export type ServiceCountyCounty_TableAddSelectorDialogActionsExtended =
   ServiceCountyCounty_TableAddSelectorDialogActions & {};
 
@@ -99,6 +101,12 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityTab_
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceServiceUserServiceForActivityCountiesImpl = useMemo(
+    () => new ServiceServiceUserServiceForActivityCountiesImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -131,6 +139,9 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityTab_
 
   // Calculated section
   const title: string = t('service.County.County_Table.AddSelector', { defaultValue: 'County Table' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const addAction = async (selected: ServiceCountyStored[]) => {

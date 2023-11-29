@@ -6,7 +6,8 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -37,9 +38,17 @@ import type {
   VoteStatus,
   VoteType,
 } from '~/services/data-api';
-import { serviceVoteDefinitionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
+
 export type ServiceVoteDefinitionVoteDefinition_View_EditPageActionsExtended =
-  ServiceVoteDefinitionVoteDefinition_View_EditPageActions & {};
+  ServiceVoteDefinitionVoteDefinition_View_EditPageActions & {
+    postRefreshAction?: (
+      data: ServiceVoteDefinitionStored,
+      storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceVoteDefinition, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_DASHBOARD_FAVORITE_VOTE_DEFINITIONS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceVoteDefinitionVoteDefinition_View_EditActionsHook';
@@ -72,6 +81,9 @@ const ServiceVoteDefinitionVoteDefinition_View_EditPageContainer = lazy(
 export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceVoteDefinitionServiceImpl = useMemo(() => new ServiceVoteDefinitionServiceImpl(judoAxiosProvider), []);
 
   // Hooks section
   const { t } = useTranslation();
@@ -149,6 +161,9 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
     defaultValue: 'VoteDefinition View / Edit',
   });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     navigateBack();
@@ -171,6 +186,9 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceVoteDefinitionStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -178,37 +196,6 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
     } finally {
       setIsLoading(false);
       setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
-  const voteRatingAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const voteSelectAnswerAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
-        data,
-      );
-    if (result === 'submit') {
-      if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-      }
     }
   };
   const voteYesNoAbstainAction = async () => {
@@ -226,16 +213,47 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const voteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        data,
+      );
+    if (result === 'submit') {
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      }
+    }
+  };
+  const voteRatingAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  };
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
     refreshAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
-    voteRatingAction,
-    voteSelectAnswerAction,
     voteYesNoAbstainAction,
     voteYesNoAction,
+    voteSelectAnswerAction,
+    voteRatingAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
     ...(customActions ?? {}),
   };
 
@@ -265,6 +283,7 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </PageContainerTransition>
       </Suspense>

@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -121,38 +121,41 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
 
   const selectedRows = useRef<ServiceDistrictStored[]>([]);
 
-  const columns: GridColDef<ServiceDistrictStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'county',
-      headerName: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'county',
+        headerName: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'city',
-      headerName: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'city',
+        headerName: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'name',
-      headerName: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'name',
+        headerName: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [
     {
@@ -179,28 +182,31 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9zdqUI2dEe6GJNWtqQaZ_w',
-      attributeName: 'county',
-      label: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WyMsMI7EEe6rlbj78nBB0Q',
+        attributeName: 'county',
+        label: t('service.District.District_Table.county', { defaultValue: 'County' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9zjw8I2dEe6GJNWtqQaZ_w',
-      attributeName: 'city',
-      label: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WyTZ4I7EEe6rlbj78nBB0Q',
+        attributeName: 'city',
+        label: t('service.District.District_Table.city', { defaultValue: 'City' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9zqeoI2dEe6GJNWtqQaZ_w',
-      attributeName: 'name',
-      label: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_WyZggI7EEe6rlbj78nBB0Q',
+        attributeName: 'name',
+        label: t('service.District.District_Table.name', { defaultValue: 'District name' }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

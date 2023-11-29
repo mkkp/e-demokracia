@@ -70,6 +70,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceCreateIssueInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateIssueInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -90,6 +91,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

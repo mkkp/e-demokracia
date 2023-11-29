@@ -47,6 +47,7 @@ export interface ServiceConCon_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceCon, value: any) => void;
   validation: Map<keyof ServiceCon, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCon, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::Con::Con_View_Edit
@@ -69,6 +70,7 @@ export default function ServiceConCon_View_EditDialog(props: ServiceConCon_View_
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceConQueryCustomizer = {
     _mask:
@@ -106,6 +108,7 @@ export default function ServiceConCon_View_EditDialog(props: ServiceConCon_View_
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

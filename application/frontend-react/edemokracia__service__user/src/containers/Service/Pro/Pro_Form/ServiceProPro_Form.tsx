@@ -66,6 +66,7 @@ export interface ServiceProPro_FormProps {
   editMode: boolean;
   validation: Map<keyof ServicePro, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServicePro, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_qLaZUGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
@@ -84,6 +85,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -337,7 +339,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="(_9eop0I2dEe6GJNWtqQaZ_w)/LabelWrapper"
+              id="_WhBcoo7EEe6rlbj78nBB0Q)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -347,7 +349,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-                  <Typography id="_9eop0I2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                  <Typography id="_WhBcoo7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                     {t('service.Pro.Pro_Form.pros.Icon', { defaultValue: 'Pros' })}
                   </Typography>
                 </Grid>
@@ -377,7 +379,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="(_9fiowI2dEe6GJNWtqQaZ_w)/LabelWrapper"
+              id="_WhyRoI7EEe6rlbj78nBB0Q)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -387,7 +389,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-                  <Typography id="_9fiowI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                  <Typography id="_WhyRoI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                     {t('service.Pro.Pro_Form.cons.Icon', { defaultValue: 'Cons' })}
                   </Typography>
                 </Grid>

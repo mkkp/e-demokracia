@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -133,100 +133,106 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
 
   const selectedRows = useRef<ServiceYesNoAbstainVoteEntryStored[]>([]);
 
-  const columns: GridColDef<ServiceYesNoAbstainVoteEntryStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'value',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.value', {
-        defaultValue: 'Value',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceYesNoAbstainVoteEntryStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'value',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.value', {
+          defaultValue: 'Value',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.YesNoAbstainVoteValue.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.YesNoAbstainVoteValue.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
-        defaultValue: 'Created',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
+          defaultValue: 'Created',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'createdBy',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.createdBy', {
-        defaultValue: 'CreatedBy',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'createdBy',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.createdBy', {
+          defaultValue: 'CreatedBy',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceYesNoAbstainVoteEntryStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9hvBII2dEe6GJNWtqQaZ_w',
-      attributeName: 'value',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.value', {
-        defaultValue: 'Value',
-      }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['YES', 'NO', 'ABSTAIN'],
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WjvZcI7EEe6rlbj78nBB0Q',
+        attributeName: 'value',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.value', {
+          defaultValue: 'Value',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['YES', 'NO', 'ABSTAIN'],
+      },
 
-    {
-      id: '_9hvoMY2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
-        defaultValue: 'Created',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WjvZdI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.created', {
+          defaultValue: 'Created',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9hw2UI2dEe6GJNWtqQaZ_w',
-      attributeName: 'createdBy',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.createdBy', {
-        defaultValue: 'CreatedBy',
-      }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_WjwAgo7EEe6rlbj78nBB0Q',
+        attributeName: 'createdBy',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.createdBy', {
+          defaultValue: 'CreatedBy',
+        }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

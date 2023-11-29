@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -18,7 +19,9 @@ import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import type { RatingVoteInputRatingVoteInput_FormDialogActions } from '~/containers/RatingVoteInput/RatingVoteInput_Form/RatingVoteInputRatingVoteInput_FormDialogContainer';
 import type { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
-import { serviceVoteDefinitionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
+
 export type RatingVoteInputRatingVoteInput_FormDialogActionsExtended =
   RatingVoteInputRatingVoteInput_FormDialogActions & {
     postVoteRatingForVoteDefinitionAction?: (
@@ -100,6 +103,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceVoteDefinitionServiceImpl = useMemo(() => new ServiceVoteDefinitionServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -161,6 +167,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
 
   // Calculated section
   const title: string = t('RatingVoteInput.RatingVoteInput_Form', { defaultValue: 'RatingVoteInput Form' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {
@@ -233,6 +242,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

@@ -54,6 +54,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDialogProps {
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
   validation: Map<keyof ServiceCreateIssueInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateIssueInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::CreateIssueInput::CreateIssueInput_Form
@@ -78,6 +79,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCreateIssueInputQueryCustomizer = {
     _mask:
@@ -115,6 +117,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -154,7 +157,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
         {editMode && actions.createIssueForUserIssuesAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_Vz4CwY7EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

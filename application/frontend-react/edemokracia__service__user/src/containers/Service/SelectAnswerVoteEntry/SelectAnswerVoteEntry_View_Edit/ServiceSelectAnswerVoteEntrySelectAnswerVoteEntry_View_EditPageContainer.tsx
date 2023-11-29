@@ -54,6 +54,7 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditPage
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteEntry, value: any) => void;
   validation: Map<keyof ServiceSelectAnswerVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteEntry, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::SelectAnswerVoteEntry::SelectAnswerVoteEntry_View_Edit
@@ -76,6 +77,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer = {
     _mask: '{created,valueRepresentation}',
@@ -201,6 +203,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

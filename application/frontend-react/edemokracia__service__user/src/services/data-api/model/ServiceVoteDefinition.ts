@@ -14,52 +14,52 @@ import { VoteStatus } from './VoteStatus';
 import { VoteType } from './VoteType';
 
 export interface ServiceVoteDefinition {
-  cityRepresentation?: null | string;
-  closeAt: Date;
-  countyRepresentation?: null | string;
+  title: string;
   created?: null | Date;
   description: string;
-  districtRepresentation?: null | string;
-  isFavorite?: null | boolean;
-  isNotFavorite?: null | boolean;
-  isNotRatingType?: null | boolean;
-  isNotSelectAnswerType?: null | boolean;
-  isNotYesNoAbstainType?: null | boolean;
-  isNotYesNoType?: null | boolean;
+  status: VoteStatus;
+  closeAt: Date;
   isRatingType?: null | boolean;
   isSelectAnswerType?: null | boolean;
   isYesNoAbstainType?: null | boolean;
   isYesNoType?: null | boolean;
+  isNotRatingType?: null | boolean;
+  isNotSelectAnswerType?: null | boolean;
+  isNotYesNoAbstainType?: null | boolean;
+  isNotYesNoType?: null | boolean;
   numberOfVotes?: null | number;
-  scope?: null | IssueScope;
-  status: VoteStatus;
-  title: string;
   voteType?: null | VoteType;
+  scope?: null | IssueScope;
+  districtRepresentation?: null | string;
+  countyRepresentation?: null | string;
+  isFavorite?: null | boolean;
+  cityRepresentation?: null | string;
+  isNotFavorite?: null | boolean;
   issue?: null | ServiceIssueStored;
 }
 
 export type ServiceVoteDefinitionAttributes =
-  | 'cityRepresentation'
-  | 'closeAt'
-  | 'countyRepresentation'
+  | 'title'
   | 'created'
   | 'description'
-  | 'districtRepresentation'
-  | 'isFavorite'
-  | 'isNotFavorite'
-  | 'isNotRatingType'
-  | 'isNotSelectAnswerType'
-  | 'isNotYesNoAbstainType'
-  | 'isNotYesNoType'
+  | 'status'
+  | 'closeAt'
   | 'isRatingType'
   | 'isSelectAnswerType'
   | 'isYesNoAbstainType'
   | 'isYesNoType'
+  | 'isNotRatingType'
+  | 'isNotSelectAnswerType'
+  | 'isNotYesNoAbstainType'
+  | 'isNotYesNoType'
   | 'numberOfVotes'
+  | 'voteType'
   | 'scope'
-  | 'status'
-  | 'title'
-  | 'voteType';
+  | 'districtRepresentation'
+  | 'countyRepresentation'
+  | 'isFavorite'
+  | 'cityRepresentation'
+  | 'isNotFavorite';
 export type ServiceVoteDefinitionRelations = 'issue';
 
 export interface ServiceVoteDefinitionStored extends JudoStored<ServiceVoteDefinition>, ServiceVoteDefinition {}

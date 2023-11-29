@@ -56,6 +56,7 @@ export interface ServiceCommentComment_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceComment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_p_Je8GksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
@@ -74,6 +75,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

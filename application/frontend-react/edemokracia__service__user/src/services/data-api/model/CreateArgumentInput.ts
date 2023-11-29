@@ -9,10 +9,10 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface CreateArgumentInput {
-  description: string;
   title: string;
+  description: string;
 }
 
-export type CreateArgumentInputAttributes = 'description' | 'title';
+export type CreateArgumentInputAttributes = 'title' | 'description';
 
 export interface CreateArgumentInputStored extends JudoStored<CreateArgumentInput>, CreateArgumentInput {}

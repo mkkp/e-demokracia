@@ -50,6 +50,7 @@ export interface RatingVoteInputRatingVoteInput_FormDialogProps {
   storeDiff: (attributeName: keyof RatingVoteInput, value: any) => void;
   validation: Map<keyof RatingVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof RatingVoteInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: RatingVoteInput::RatingVoteInput_Form
@@ -74,6 +75,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: RatingVoteInputQueryCustomizer = {
     _mask: '{value}',
@@ -110,6 +112,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -146,31 +149,10 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.voteRatingForVoteDefinitionAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormButtonGroup)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="vote" />}
-              onClick={async () => {
-                await actions.voteRatingForVoteDefinitionAction!();
-              }}
-            >
-              <span>
-                {t(
-                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.ratingvote.voteRating.OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.voteForRatingVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_U17Mw47EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -182,6 +164,27 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
               <span>
                 {t(
                   'service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.voteRatingForVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_U17Mw47EEe6rlbj78nBB0Q)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteRatingForVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.ratingvote.voteRating.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

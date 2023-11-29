@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -136,91 +136,94 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
 
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
-  const columns: GridColDef<ServiceIssueStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'scope',
-      headerName: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceIssueStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'scope',
+        headerName: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
     {
@@ -246,50 +249,6 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueDeletable || isLoading,
-      action: actions.deleteOrArchiveForIssueAction
-        ? async (rowData) => {
-            await actions.deleteOrArchiveForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createCommentAction
-        ? async (rowData) => {
-            await actions.createCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createConArgumentAction
-        ? async (rowData) => {
-            await actions.createConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createProArgumentAction
-        ? async (rowData) => {
-            await actions.createProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Issue.Issue_Table.closeDebate', { defaultValue: 'closeDebate' }) as string,
       icon: <MdiIcon path="vote" />,
@@ -297,17 +256,6 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       action: actions.closeDebateAction
         ? async (rowData) => {
             await actions.closeDebateAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
-      action: actions.closeVoteForIssueAction
-        ? async (rowData) => {
-            await actions.closeVoteForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -323,6 +271,39 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         : undefined,
     },
     {
+      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceIssueStored) => isLoading,
+      action: actions.createProArgumentAction
+        ? async (rowData) => {
+            await actions.createProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
+      icon: <MdiIcon path="comment-text-multiple" />,
+      disabled: (row: ServiceIssueStored) => isLoading,
+      action: actions.createCommentAction
+        ? async (rowData) => {
+            await actions.createCommentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
+      icon: <MdiIcon path="lock-check" />,
+      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
+      action: actions.closeVoteForIssueAction
+        ? async (rowData) => {
+            await actions.closeVoteForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
       id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Issue.Issue_Table.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
@@ -330,6 +311,28 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       action: actions.addToFavoritesForIssueAction
         ? async (rowData) => {
             await actions.addToFavoritesForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => !row.isIssueDeletable || isLoading,
+      action: actions.deleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.deleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceIssueStored) => isLoading,
+      action: actions.createConArgumentAction
+        ? async (rowData) => {
+            await actions.createConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -346,44 +349,47 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_8Sm7kI2dEe6GJNWtqQaZ_w',
-      attributeName: 'scope',
-      label: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Vj3Q0Y7EEe6rlbj78nBB0Q',
+        attributeName: 'scope',
+        label: t('service.Issue.Issue_Table.scope', { defaultValue: 'Scope' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
+      },
 
-    {
-      id: '_8SnioI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Vj334Y7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.Issue.Issue_Table.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8SoJso2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
-    },
+      {
+        id: '_Vj4e8o7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.Issue.Issue_Table.status', { defaultValue: 'Status' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
+      },
 
-    {
-      id: '_8SpX0I2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_Vj5GAI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.Issue.Issue_Table.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_8Sp-4I2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_Vj5GBI7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.Issue.Issue_Table.description', { defaultValue: 'Description' }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

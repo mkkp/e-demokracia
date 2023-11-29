@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,7 +26,9 @@ import type {
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl';
+
 export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActionsExtended =
   ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions & {};
 
@@ -106,6 +109,12 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl = useMemo(
+    () => new ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -169,6 +178,11 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
     defaultValue: 'SelectAnswerVoteSelection Form',
   });
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -231,6 +245,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

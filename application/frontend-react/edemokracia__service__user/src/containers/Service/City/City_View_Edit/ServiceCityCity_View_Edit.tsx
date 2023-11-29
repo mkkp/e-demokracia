@@ -53,6 +53,7 @@ export interface ServiceCityCity_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceCity, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCity, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_a0XkuH2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer
@@ -71,6 +72,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -125,7 +127,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="(_9YCSkI2dEe6GJNWtqQaZ_w)/LabelWrapper"
+              id="_WbbK8I7EEe6rlbj78nBB0Q)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -135,7 +137,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
-                  <Typography id="_9YCSkI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                  <Typography id="_WbbK8I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                     {t('service.City.City_View_Edit.districts.Icon', { defaultValue: 'Districts' })}
                   </Typography>
                 </Grid>

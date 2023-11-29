@@ -2,6 +2,7 @@
  * When navigate to selected subtypes view page on userOwedSelected
  */
 
+import { useMemo } from 'react';
 import type { BundleContext } from '@pandino/pandino-api';
 
 import { useJudoNavigation } from '~/components';
@@ -15,12 +16,11 @@ import {
 
 import type { ServiceVoteDefinitionStored } from '~/services/data-api';
 
-import {
-  userServiceForUserOwnedRatingVoteDefinitionsImpl,
-  userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl,
-  userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl,
-  userServiceForUserOwnedYesNoVoteDefinitionsImpl,
-} from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForUserOwnedRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedRatingVoteDefinitionsImpl';
+import { UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl';
+import { UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl';
+import { UserServiceForUserOwnedYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedYesNoVoteDefinitionsImpl';
 
 import {
   routeToServiceUserAdminVoteDefinitionsAccessViewPage,
@@ -41,6 +41,22 @@ const customServiceVoteDefinitionVoteDefinition_TableActionsHook: ServiceVoteDef
   () => {
     const [createDialog, closeDialog, closeAllDialogs] = useDialog();
     const { navigate } = useJudoNavigation();
+    const userServiceForUserOwnedRatingVoteDefinitionsImpl = useMemo(
+      () => new UserServiceForUserOwnedRatingVoteDefinitionsImpl(judoAxiosProvider),
+      [],
+    );
+    const userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl = useMemo(
+      () => new UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl(judoAxiosProvider),
+      [],
+    );
+    const userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl = useMemo(
+      () => new UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider),
+      [],
+    );
+    const userServiceForUserOwnedYesNoVoteDefinitionsImpl = useMemo(
+      () => new UserServiceForUserOwnedYesNoVoteDefinitionsImpl(judoAxiosProvider),
+      [],
+    );
 
     return {
       openPageAction: async (row: ServiceVoteDefinitionStored) => {
@@ -53,28 +69,28 @@ const customServiceVoteDefinitionVoteDefinition_TableActionsHook: ServiceVoteDef
           _identifier: id,
         };
 
-        if (entityType == 'edemokracia.YesNoVoteDefinition') {
+        if (entityType === 'edemokracia.YesNoVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedYesNoVoteDefinitionsImpl.list(
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
           navigate(routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
-        } else if (entityType == 'edemokracia.YesNoAbstainVoteDefinition') {
+        } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.list(
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
           navigate(routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
-        } else if (entityType == 'edemokracia.RatingVoteDefinition') {
+        } else if (entityType === 'edemokracia.RatingVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedRatingVoteDefinitionsImpl.list(
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
           navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
-        } else if (entityType == 'edemokracia.SelectAnswerVoteDefinition') {
+        } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.list(
             processQueryCustomizer(idAccessFilterCustomizer),

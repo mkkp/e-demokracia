@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceIssue,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForCountyImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueServiceForCountyImpl } from '~/services/data-axios/ServiceIssueServiceForCountyImpl';
+
 export type ServiceCountyCounty_TableSetSelectorDialogActionsExtended =
   ServiceCountyCounty_TableSetSelectorDialogActions & {};
 
@@ -101,6 +103,9 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueServiceForCountyImpl = useMemo(() => new ServiceIssueServiceForCountyImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -134,12 +139,15 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   // Calculated section
   const title: string = t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
   const setAction = async (selected: ServiceCountyStored[]) => {
     onSubmit(selected);
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -162,8 +170,8 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   };
 
   const actions: ServiceCountyCounty_TableSetSelectorDialogActions = {
-    backAction,
     setAction,
+    backAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

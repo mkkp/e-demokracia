@@ -47,6 +47,7 @@ export interface ServiceDistrictDistrict_FormDialogProps {
   storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void;
   validation: Map<keyof ServiceDistrict, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::District::District_Form
@@ -69,6 +70,7 @@ export default function ServiceDistrictDistrict_FormDialog(props: ServiceDistric
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceDistrictQueryCustomizer = {
     _mask: '{name}',
@@ -105,6 +107,7 @@ export default function ServiceDistrictDistrict_FormDialog(props: ServiceDistric
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

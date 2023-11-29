@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceServiceUserServiceForResidentDistrictImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceServiceUserServiceForResidentDistrictImpl } from '~/services/data-axios/ServiceServiceUserServiceForResidentDistrictImpl';
+
 export type ServiceDistrictDistrict_TableSetSelectorDialogActionsExtended =
   ServiceDistrictDistrict_TableSetSelectorDialogActions & {};
 
@@ -103,6 +105,12 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceServiceUserServiceForResidentDistrictImpl = useMemo(
+    () => new ServiceServiceUserServiceForResidentDistrictImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -136,12 +144,15 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   // Calculated section
   const title: string = t('service.District.District_Table.SetSelector', { defaultValue: 'District Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
   const setAction = async (selected: ServiceDistrictStored[]) => {
     onSubmit(selected);
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -166,8 +177,8 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   };
 
   const actions: ServiceDistrictDistrict_TableSetSelectorDialogActions = {
-    backAction,
     setAction,
+    backAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

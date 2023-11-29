@@ -47,6 +47,7 @@ export interface ServiceCommentComment_FormDialogProps {
   storeDiff: (attributeName: keyof ServiceComment, value: any) => void;
   validation: Map<keyof ServiceComment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::Comment::Comment_Form
@@ -69,6 +70,7 @@ export default function ServiceCommentComment_FormDialog(props: ServiceCommentCo
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCommentQueryCustomizer = {
     _mask: '{comment,created,downVotes,upVotes,createdBy{representation}}',
@@ -105,6 +107,7 @@ export default function ServiceCommentComment_FormDialog(props: ServiceCommentCo
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

@@ -8,8 +8,8 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceServiceUser,
   ServiceSimpleVoteStored,
+  ServiceServiceUser,
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceSimpleVote,
@@ -27,14 +27,6 @@ export interface ServiceCommentService {
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<ServiceCommentStored>;
-  getCreatedBy(
-    target: JudoIdentifiable<ServiceComment>,
-    queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
-  getRangeForCreatedBy(
-    owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
-    queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
   listVotes(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
@@ -43,6 +35,14 @@ export interface ServiceCommentService {
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+  getCreatedBy(
+    target: JudoIdentifiable<ServiceComment>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
+  getRangeForCreatedBy(
+    owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
   voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 }

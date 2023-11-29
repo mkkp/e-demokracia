@@ -45,6 +45,7 @@ export interface ServiceCityCity_FormDialogProps {
   storeDiff: (attributeName: keyof ServiceCity, value: any) => void;
   validation: Map<keyof ServiceCity, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCity, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::City::City_Form
@@ -67,6 +68,7 @@ export default function ServiceCityCity_FormDialog(props: ServiceCityCity_FormDi
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCityQueryCustomizer = {
     _mask: '{name}',
@@ -103,6 +105,7 @@ export default function ServiceCityCity_FormDialog(props: ServiceCityCity_FormDi
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

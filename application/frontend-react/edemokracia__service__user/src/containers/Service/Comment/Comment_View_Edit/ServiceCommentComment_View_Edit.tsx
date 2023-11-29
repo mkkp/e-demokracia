@@ -62,6 +62,7 @@ export interface ServiceCommentComment_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceComment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_p_AVAGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -80,6 +81,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -102,13 +104,13 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="(_9ObDkI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WV_4YI7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
-                      <Typography id="_9ObDkI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WV_4YI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.Comment.Comment_View_Edit.group.Icon', { defaultValue: 'Comment' })}
                       </Typography>
                     </Grid>

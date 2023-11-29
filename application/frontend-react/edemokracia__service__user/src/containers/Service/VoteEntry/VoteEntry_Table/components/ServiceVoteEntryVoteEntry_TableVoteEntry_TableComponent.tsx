@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -129,82 +129,85 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const selectedRows = useRef<ServiceVoteEntryStored[]>([]);
 
-  const columns: GridColDef<ServiceVoteEntryStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'userName',
-      headerName: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceVoteEntryStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'userName',
+        headerName: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'voteTitle',
-      headerName: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'issueTitle',
-      headerName: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'voteStatus',
-      headerName: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'voteTitle',
+        headerName: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'issueTitle',
+        headerName: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'voteStatus',
+        headerName: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceVoteEntryStored>[] = [
     {
@@ -231,43 +234,46 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_8S7Eoo2dEe6GJNWtqQaZ_w',
-      attributeName: 'userName',
-      label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_VkFTQI7EEe6rlbj78nBB0Q',
+        attributeName: 'userName',
+        label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8S8SwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_VkFTRI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_8S850I2dEe6GJNWtqQaZ_w',
-      attributeName: 'voteTitle',
-      label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_VkF6Uo7EEe6rlbj78nBB0Q',
+        attributeName: 'voteTitle',
+        label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8S9g4Y2dEe6GJNWtqQaZ_w',
-      attributeName: 'issueTitle',
-      label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_VkGhYo7EEe6rlbj78nBB0Q',
+        attributeName: 'issueTitle',
+        label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8S-H8o2dEe6GJNWtqQaZ_w',
-      attributeName: 'voteStatus',
-      label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
-    },
-  ];
+      {
+        id: '_VkHIcI7EEe6rlbj78nBB0Q',
+        attributeName: 'voteStatus',
+        label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

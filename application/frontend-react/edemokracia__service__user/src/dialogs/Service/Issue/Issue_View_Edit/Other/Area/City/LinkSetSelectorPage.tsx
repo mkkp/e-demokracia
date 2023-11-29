@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceIssue,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForCityImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueServiceForCityImpl } from '~/services/data-axios/ServiceIssueServiceForCityImpl';
+
 export type ServiceCityCity_TableSetSelectorDialogActionsExtended = ServiceCityCity_TableSetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -99,6 +101,9 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueServiceForCityImpl = useMemo(() => new ServiceIssueServiceForCityImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -132,12 +137,15 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   // Calculated section
   const title: string = t('service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
   const setAction = async (selected: ServiceCityStored[]) => {
     onSubmit(selected);
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -160,8 +168,8 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   };
 
   const actions: ServiceCityCity_TableSetSelectorDialogActions = {
-    backAction,
     setAction,
+    backAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

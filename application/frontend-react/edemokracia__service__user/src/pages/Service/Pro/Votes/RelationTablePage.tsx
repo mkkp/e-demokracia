@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -30,8 +30,12 @@ import type {
   ServiceSimpleVoteStored,
   SimpleVoteType,
 } from '~/services/data-api';
-import { serviceProServiceForVotesImpl } from '~/services/data-axios';
-export type ServiceSimpleVoteSimpleVote_TablePageActionsExtended = ServiceSimpleVoteSimpleVote_TablePageActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceProServiceForVotesImpl } from '~/services/data-axios/ServiceProServiceForVotesImpl';
+
+export type ServiceSimpleVoteSimpleVote_TablePageActionsExtended = ServiceSimpleVoteSimpleVote_TablePageActions & {
+  postRefreshAction?: (data: ServiceSimpleVoteStored[]) => Promise<void>;
+};
 
 export const SERVICE_PRO_VOTES_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceSimpleVoteSimpleVote_TableActionsHook';
@@ -49,6 +53,9 @@ const ServiceSimpleVoteSimpleVote_TablePageContainer = lazy(
 export default function ServiceProVotesRelationTablePage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceProServiceForVotesImpl = useMemo(() => new ServiceProServiceForVotesImpl(judoAxiosProvider), []);
 
   // Hooks section
   const { t } = useTranslation();
@@ -79,9 +86,16 @@ export default function ServiceProVotesRelationTablePage() {
   // Calculated section
   const title: string = t('service.SimpleVote.SimpleVote_Table', { defaultValue: 'SimpleVote Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     navigateBack();
+  };
+  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceProVotesRelationViewPage(target!.__signedIdentifier));
   };
   const filterAction = async (
     id: string,
@@ -112,16 +126,12 @@ export default function ServiceProVotesRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceProVotesRelationViewPage(target!.__signedIdentifier));
-  };
 
   const actions: ServiceSimpleVoteSimpleVote_TablePageActions = {
     backAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
     ...(customActions ?? {}),
   };
 

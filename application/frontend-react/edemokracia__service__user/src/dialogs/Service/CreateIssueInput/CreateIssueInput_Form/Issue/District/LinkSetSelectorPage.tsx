@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
 } from '~/services/data-api';
-import { serviceCreateIssueInputServiceForDistrictImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCreateIssueInputServiceForDistrictImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForDistrictImpl';
+
 export type ServiceDistrictDistrict_TableSetSelectorDialogActionsExtended =
   ServiceDistrictDistrict_TableSetSelectorDialogActions & {};
 
@@ -103,6 +105,12 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueDistric
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCreateIssueInputServiceForDistrictImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForDistrictImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -135,6 +143,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueDistric
 
   // Calculated section
   const title: string = t('service.District.District_Table.SetSelector', { defaultValue: 'District Table' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {

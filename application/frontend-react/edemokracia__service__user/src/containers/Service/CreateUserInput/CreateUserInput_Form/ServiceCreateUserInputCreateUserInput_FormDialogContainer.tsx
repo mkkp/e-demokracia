@@ -53,6 +53,7 @@ export interface ServiceCreateUserInputCreateUserInput_FormDialogProps {
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void;
   validation: Map<keyof ServiceCreateUserInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateUserInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::CreateUserInput::CreateUserInput_Form
@@ -77,6 +78,7 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCreateUserInputQueryCustomizer = {
     _mask: '{email,firstName,hasAdminAccess,lastName,phone,userName}',
@@ -113,6 +115,7 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -152,7 +155,7 @@ export default function ServiceCreateUserInputCreateUserInput_FormDialog(
         {editMode && actions.createUserForUserManagerAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormCallButton/(discriminator/User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormCallButton/(discriminator/_WDImwo7EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

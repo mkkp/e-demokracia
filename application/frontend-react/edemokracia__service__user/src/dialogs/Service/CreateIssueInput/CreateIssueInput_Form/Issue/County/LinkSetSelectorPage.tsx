@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceCreateIssueInput,
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
-import { serviceCreateIssueInputServiceForCountyImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCreateIssueInputServiceForCountyImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForCountyImpl';
+
 export type ServiceCountyCounty_TableSetSelectorDialogActionsExtended =
   ServiceCountyCounty_TableSetSelectorDialogActions & {};
 
@@ -101,6 +103,12 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCreateIssueInputServiceForCountyImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForCountyImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -133,6 +141,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
 
   // Calculated section
   const title: string = t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {

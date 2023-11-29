@@ -71,6 +71,7 @@ export interface ServiceDashboardDashboard_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceDashboard, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDashboard, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewPageContainer
@@ -89,6 +90,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

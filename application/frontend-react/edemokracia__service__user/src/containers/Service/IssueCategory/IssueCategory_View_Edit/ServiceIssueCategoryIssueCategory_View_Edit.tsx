@@ -56,6 +56,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceIssueCategory, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueCategory, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_qJBzsGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -76,6 +77,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -175,7 +177,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="(_9eh8II2dEe6GJNWtqQaZ_w)/LabelWrapper"
+              id="_Wg9yQo7EEe6rlbj78nBB0Q)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -185,7 +187,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
-                  <Typography id="_9eh8II2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                  <Typography id="_Wg9yQo7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                     {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Icon', {
                       defaultValue: 'Subcategories',
                     })}

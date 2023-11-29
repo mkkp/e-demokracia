@@ -57,6 +57,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void;
   validation: Map<keyof ServiceVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceVoteDefinition, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::VoteDefinition::VoteDefinition_View_Edit
@@ -81,6 +82,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
     _mask:
@@ -118,6 +120,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

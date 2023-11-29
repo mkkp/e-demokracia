@@ -17,8 +17,10 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -50,6 +52,7 @@ export interface ServiceVoteDefinitionVoteDefinition_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceVoteDefinition, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_-gL5wH4XEe2cB7_PsKXsHQ)/TransferObjectFormPageContainer
@@ -68,6 +71,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -297,93 +301,131 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <FormGroup>
-              <FormControlLabel
-                className="switch"
-                sx={{ marginTop: '6px' }}
-                disabled={true || !isFormUpdateable() || isLoading}
-                control={
-                  <Checkbox
-                    checked={data.isRatingType || false}
-                    onChange={(event) => {
-                      storeDiff('isRatingType', event.target.checked);
-                    }}
-                  />
-                }
-                label={
-                  t('service.VoteDefinition.VoteDefinition_Form.isRatingType', {
-                    defaultValue: 'IsRatingType',
-                  }) as string
-                }
-              />
-            </FormGroup>
+            <FormControl error={!!validation.get('isRatingType')}>
+              <FormGroup>
+                <FormControlLabel
+                  className="switch"
+                  sx={{
+                    marginTop: '6px',
+                    color: (theme) => (validation.has('isRatingType') ? theme.palette.error.main : 'primary'),
+                  }}
+                  disabled={true || !isFormUpdateable() || isLoading}
+                  control={
+                    <Checkbox
+                      checked={data.isRatingType || false}
+                      sx={{ color: (theme) => (validation.has('isRatingType') ? theme.palette.error.main : 'primary') }}
+                      onChange={(event) => {
+                        storeDiff('isRatingType', event.target.checked);
+                      }}
+                    />
+                  }
+                  label={
+                    t('service.VoteDefinition.VoteDefinition_Form.isRatingType', {
+                      defaultValue: 'IsRatingType',
+                    }) as string
+                  }
+                />
+              </FormGroup>
+              {validation.has('isRatingType') && <FormHelperText>{validation.get('isRatingType')}</FormHelperText>}
+            </FormControl>
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <FormGroup>
-              <FormControlLabel
-                className="switch"
-                sx={{ marginTop: '6px' }}
-                disabled={true || !isFormUpdateable() || isLoading}
-                control={
-                  <Checkbox
-                    checked={data.isSelectAnswerType || false}
-                    onChange={(event) => {
-                      storeDiff('isSelectAnswerType', event.target.checked);
-                    }}
-                  />
-                }
-                label={
-                  t('service.VoteDefinition.VoteDefinition_Form.isSelectAnswerType', {
-                    defaultValue: 'IsSelectAnswerType',
-                  }) as string
-                }
-              />
-            </FormGroup>
+            <FormControl error={!!validation.get('isSelectAnswerType')}>
+              <FormGroup>
+                <FormControlLabel
+                  className="switch"
+                  sx={{
+                    marginTop: '6px',
+                    color: (theme) => (validation.has('isSelectAnswerType') ? theme.palette.error.main : 'primary'),
+                  }}
+                  disabled={true || !isFormUpdateable() || isLoading}
+                  control={
+                    <Checkbox
+                      checked={data.isSelectAnswerType || false}
+                      sx={{
+                        color: (theme) => (validation.has('isSelectAnswerType') ? theme.palette.error.main : 'primary'),
+                      }}
+                      onChange={(event) => {
+                        storeDiff('isSelectAnswerType', event.target.checked);
+                      }}
+                    />
+                  }
+                  label={
+                    t('service.VoteDefinition.VoteDefinition_Form.isSelectAnswerType', {
+                      defaultValue: 'IsSelectAnswerType',
+                    }) as string
+                  }
+                />
+              </FormGroup>
+              {validation.has('isSelectAnswerType') && (
+                <FormHelperText>{validation.get('isSelectAnswerType')}</FormHelperText>
+              )}
+            </FormControl>
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <FormGroup>
-              <FormControlLabel
-                className="switch"
-                sx={{ marginTop: '6px' }}
-                disabled={true || !isFormUpdateable() || isLoading}
-                control={
-                  <Checkbox
-                    checked={data.isYesNoAbstainType || false}
-                    onChange={(event) => {
-                      storeDiff('isYesNoAbstainType', event.target.checked);
-                    }}
-                  />
-                }
-                label={
-                  t('service.VoteDefinition.VoteDefinition_Form.isYesNoAbstainType', {
-                    defaultValue: 'IsYesNoAbstainType',
-                  }) as string
-                }
-              />
-            </FormGroup>
+            <FormControl error={!!validation.get('isYesNoAbstainType')}>
+              <FormGroup>
+                <FormControlLabel
+                  className="switch"
+                  sx={{
+                    marginTop: '6px',
+                    color: (theme) => (validation.has('isYesNoAbstainType') ? theme.palette.error.main : 'primary'),
+                  }}
+                  disabled={true || !isFormUpdateable() || isLoading}
+                  control={
+                    <Checkbox
+                      checked={data.isYesNoAbstainType || false}
+                      sx={{
+                        color: (theme) => (validation.has('isYesNoAbstainType') ? theme.palette.error.main : 'primary'),
+                      }}
+                      onChange={(event) => {
+                        storeDiff('isYesNoAbstainType', event.target.checked);
+                      }}
+                    />
+                  }
+                  label={
+                    t('service.VoteDefinition.VoteDefinition_Form.isYesNoAbstainType', {
+                      defaultValue: 'IsYesNoAbstainType',
+                    }) as string
+                  }
+                />
+              </FormGroup>
+              {validation.has('isYesNoAbstainType') && (
+                <FormHelperText>{validation.get('isYesNoAbstainType')}</FormHelperText>
+              )}
+            </FormControl>
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <FormGroup>
-              <FormControlLabel
-                className="switch"
-                sx={{ marginTop: '6px' }}
-                disabled={true || !isFormUpdateable() || isLoading}
-                control={
-                  <Checkbox
-                    checked={data.isYesNoType || false}
-                    onChange={(event) => {
-                      storeDiff('isYesNoType', event.target.checked);
-                    }}
-                  />
-                }
-                label={
-                  t('service.VoteDefinition.VoteDefinition_Form.isYesNoType', { defaultValue: 'IsYesNoType' }) as string
-                }
-              />
-            </FormGroup>
+            <FormControl error={!!validation.get('isYesNoType')}>
+              <FormGroup>
+                <FormControlLabel
+                  className="switch"
+                  sx={{
+                    marginTop: '6px',
+                    color: (theme) => (validation.has('isYesNoType') ? theme.palette.error.main : 'primary'),
+                  }}
+                  disabled={true || !isFormUpdateable() || isLoading}
+                  control={
+                    <Checkbox
+                      checked={data.isYesNoType || false}
+                      sx={{ color: (theme) => (validation.has('isYesNoType') ? theme.palette.error.main : 'primary') }}
+                      onChange={(event) => {
+                        storeDiff('isYesNoType', event.target.checked);
+                      }}
+                    />
+                  }
+                  label={
+                    t('service.VoteDefinition.VoteDefinition_Form.isYesNoType', {
+                      defaultValue: 'IsYesNoType',
+                    }) as string
+                  }
+                />
+              </FormGroup>
+              {validation.has('isYesNoType') && <FormHelperText>{validation.get('isYesNoType')}</FormHelperText>}
+            </FormControl>
           </Grid>
         </Grid>
       </Grid>

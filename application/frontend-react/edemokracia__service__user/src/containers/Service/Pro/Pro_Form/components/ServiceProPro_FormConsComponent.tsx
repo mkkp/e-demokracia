@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -129,89 +129,92 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
 
   const selectedRows = useRef<ServiceConStored[]>([]);
 
-  const columns: GridColDef<ServiceConStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'createdByName',
-      headerName: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceConStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'createdByName',
+        headerName: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'upVotes',
-      headerName: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'downVotes',
-      headerName: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'upVotes',
+        headerName: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'downVotes',
+        headerName: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceConStored>[] = [
     {
@@ -226,29 +229,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
-        ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wh4YQI7EEe6rlbj78nBB0Q)',
       label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -259,7 +240,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wh4YQI7EEe6rlbj78nBB0Q)',
       label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -269,51 +250,76 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
           }
         : undefined,
     },
-  ];
-
-  const filterOptions: FilterOption[] = [
     {
-      id: '_9fj24o2dEe6GJNWtqQaZ_w',
-      attributeName: 'createdByName',
-      label: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
-      filterType: FilterType.string,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wh4YQI7EEe6rlbj78nBB0Q)',
+      label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consVoteUpForConAction
+        ? async (rowData) => {
+            await actions.consVoteUpForConAction!(rowData);
+          }
+        : undefined,
     },
-
     {
-      id: '_9flFAI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
-
-    {
-      id: '_9fmTII2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: '_9fm6MY2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: '_9fnhQo2dEe6GJNWtqQaZ_w',
-      attributeName: 'upVotes',
-      label: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
-      filterType: FilterType.numeric,
-    },
-
-    {
-      id: '_9fovYI2dEe6GJNWtqQaZ_w',
-      attributeName: 'downVotes',
-      label: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
-      filterType: FilterType.numeric,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wh4YQI7EEe6rlbj78nBB0Q)',
+      label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consCreateProArgumentAction
+        ? async (rowData) => {
+            await actions.consCreateProArgumentAction!(rowData);
+          }
+        : undefined,
     },
   ];
+
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Why4so7EEe6rlbj78nBB0Q',
+        attributeName: 'createdByName',
+        label: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_Whzfwo7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
+
+      {
+        id: '_Wh0G0o7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_Wh0t4I7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_Wh1U8I7EEe6rlbj78nBB0Q',
+        attributeName: 'upVotes',
+        label: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
+        filterType: FilterType.numeric,
+      },
+
+      {
+        id: '_Wh1U9I7EEe6rlbj78nBB0Q',
+        attributeName: 'downVotes',
+        label: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
+        filterType: FilterType.numeric,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPaginationModel((prevState) => ({

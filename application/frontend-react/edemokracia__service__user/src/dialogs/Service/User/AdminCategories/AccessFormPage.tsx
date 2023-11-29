@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -26,7 +27,9 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { userServiceForAdminCategoriesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
+
 export type ServiceIssueCategoryIssueCategory_FormDialogActionsExtended =
   ServiceIssueCategoryIssueCategory_FormDialogActions & {};
 
@@ -105,6 +108,9 @@ export interface ServiceUserAdminCategoriesAccessFormPageProps {
 export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceUserAdminCategoriesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const userServiceForAdminCategoriesImpl = useMemo(() => new UserServiceForAdminCategoriesImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -170,13 +176,12 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   // Calculated section
   const title: string = t('service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+
   // Action section
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
-  };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-  };
   const backAction = async () => {
     onClose();
   };
@@ -205,13 +210,19 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(false);
     }
   };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
 
   const actions: ServiceIssueCategoryIssueCategory_FormDialogActions = {
-    ownerUnsetAction,
-    ownerOpenPageAction,
     backAction,
     createAction,
     getTemplateAction,
+    ownerOpenPageAction,
+    ownerUnsetAction,
     ...(customActions ?? {}),
   };
 
@@ -240,6 +251,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

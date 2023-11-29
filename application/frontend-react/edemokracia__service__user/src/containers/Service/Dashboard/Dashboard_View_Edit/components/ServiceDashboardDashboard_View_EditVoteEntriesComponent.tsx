@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -133,105 +133,111 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
 
   const selectedRows = useRef<ServiceVoteEntryStored[]>([]);
 
-  const columns: GridColDef<ServiceVoteEntryStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceVoteEntryStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'issueTitle',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'issueTitle',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'voteTitle',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'voteStatus',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'voteTitle',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'voteStatus',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceVoteEntryStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9dO7oo2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Wf40Mo7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9dQJwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'issueTitle',
-      label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wf5bQo7EEe6rlbj78nBB0Q',
+        attributeName: 'issueTitle',
+        label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9dQw0I2dEe6GJNWtqQaZ_w',
-      attributeName: 'voteTitle',
-      label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wf6CUo7EEe6rlbj78nBB0Q',
+        attributeName: 'voteTitle',
+        label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9dRX4o2dEe6GJNWtqQaZ_w',
-      attributeName: 'voteStatus',
-      label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
-    },
-  ];
+      {
+        id: '_Wf6pYo7EEe6rlbj78nBB0Q',
+        attributeName: 'voteStatus',
+        label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

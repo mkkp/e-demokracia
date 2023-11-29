@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -28,7 +28,9 @@ import type {
   ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
-import { serviceIssueServiceForIssueTypeImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueServiceForIssueTypeImpl } from '~/services/data-axios/ServiceIssueServiceForIssueTypeImpl';
+
 export type ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended =
   ServiceIssueTypeIssueType_TableSetSelectorDialogActions & {};
 
@@ -104,6 +106,12 @@ export default function ServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelector
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueServiceForIssueTypeImpl = useMemo(
+    () => new ServiceIssueServiceForIssueTypeImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -133,12 +141,15 @@ export default function ServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelector
   // Calculated section
   const title: string = t('service.IssueType.IssueType_Table.SetSelector', { defaultValue: 'IssueType Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
   const setAction = async (selected: ServiceIssueTypeStored[]) => {
     onSubmit(selected);
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -163,8 +174,8 @@ export default function ServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelector
   };
 
   const actions: ServiceIssueTypeIssueType_TableSetSelectorDialogActions = {
-    backAction,
     setAction,
+    backAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

@@ -43,6 +43,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceSimpleVote, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_p81x0GksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -61,6 +62,7 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

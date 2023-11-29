@@ -46,6 +46,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   editMode: boolean;
   validation: Map<keyof CloseDebateOutputVoteDefinitionReference, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewPageContainer
@@ -66,6 +67,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

@@ -45,6 +45,7 @@ export interface CreateCommentInputCreateCommentInput_FormProps {
   editMode: boolean;
   validation: Map<keyof CreateCommentInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CreateCommentInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -65,6 +66,7 @@ export default function CreateCommentInputCreateCommentInput_Form(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

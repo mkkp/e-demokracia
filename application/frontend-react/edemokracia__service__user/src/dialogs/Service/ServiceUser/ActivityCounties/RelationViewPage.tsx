@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -32,8 +33,16 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceCountyServiceImpl } from '~/services/data-axios';
-export type ServiceCountyCounty_View_EditDialogActionsExtended = ServiceCountyCounty_View_EditDialogActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCountyServiceImpl } from '~/services/data-axios/ServiceCountyServiceImpl';
+
+export type ServiceCountyCounty_View_EditDialogActionsExtended = ServiceCountyCounty_View_EditDialogActions & {
+  postRefreshAction?: (
+    data: ServiceCountyStored,
+    storeDiff: (attributeName: keyof ServiceCounty, value: any) => void,
+    setValidation: Dispatch<SetStateAction<Map<keyof ServiceCounty, string>>>,
+  ) => Promise<void>;
+};
 
 export const SERVICE_SERVICE_USER_ACTIVITY_COUNTIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceCountyCounty_View_EditActionsHook';
@@ -109,6 +118,9 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCountyServiceImpl = useMemo(() => new ServiceCountyServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -179,7 +191,107 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
   // Calculated section
   const title: string = data.representation as string;
 
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+
   // Action section
+  const backAction = async () => {
+    onClose();
+  };
+  const refreshAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceCountyServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceCountyStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceCountyServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceCounty, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleError<ServiceCounty>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const citiesOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceCountyCitiesRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const citiesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const citiesOpenFormAction = async () => {
+    const { result, data: returnedData } = await openServiceCountyCitiesRelationFormPage(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const citiesDeleteAction = async (target: ServiceCityStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceCountyServiceImpl.deleteCities(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          refreshAction(pageQueryCustomizer);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceCity>(error, undefined, target);
+      }
+    }
+  };
   const citiesBulkDeleteAction = async (
     selectedRows: ServiceCityStored[],
   ): Promise<DialogResult<Array<ServiceCityStored>>> => {
@@ -217,109 +329,17 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
       });
     });
   };
-  const citiesOpenFormAction = async () => {
-    const { result, data: returnedData } = await openServiceCountyCitiesRelationFormPage(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const citiesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const citiesDeleteAction = async (target: ServiceCityStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceCountyServiceImpl.deleteCities(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceCity>(error, undefined, target);
-      }
-    }
-  };
-  const citiesOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceCountyCitiesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const backAction = async () => {
-    onClose();
-  };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
-  const refreshAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceCountyServiceImpl.refresh(ownerData, pageQueryCustomizer);
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceCountyStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const updateAction = async () => {
-    setIsLoading(true);
-    try {
-      const res = await serviceCountyServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceCounty, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleError<ServiceCounty>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const actions: ServiceCountyCounty_View_EditDialogActions = {
-    citiesBulkDeleteAction,
-    citiesOpenFormAction,
-    citiesFilterAction,
-    citiesDeleteAction,
-    citiesOpenPageAction,
     backAction,
-    cancelAction,
     refreshAction,
+    cancelAction,
     updateAction,
+    citiesOpenPageAction,
+    citiesFilterAction,
+    citiesOpenFormAction,
+    citiesDeleteAction,
+    citiesBulkDeleteAction,
     ...(customActions ?? {}),
   };
 
@@ -348,6 +368,7 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

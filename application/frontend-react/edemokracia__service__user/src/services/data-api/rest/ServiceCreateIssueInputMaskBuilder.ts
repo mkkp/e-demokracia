@@ -19,9 +19,9 @@ import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';
 import {} from './ServiceIssueTypeMaskBuilder';
 
-export class ServiceCreateIssueInputCityMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCityAttributes | ServiceCityDistrictsMaskBuilder>) {
-    super('city', props);
+export class ServiceCreateIssueInputIssueTypeMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceIssueTypeAttributes>) {
+    super('issueType', props);
   }
 }
 export class ServiceCreateIssueInputCountyMaskBuilder extends RelationMaskBuilder {
@@ -29,14 +29,14 @@ export class ServiceCreateIssueInputCountyMaskBuilder extends RelationMaskBuilde
     super('county', props);
   }
 }
+export class ServiceCreateIssueInputCityMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCityAttributes | ServiceCityDistrictsMaskBuilder>) {
+    super('city', props);
+  }
+}
 export class ServiceCreateIssueInputDistrictMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<ServiceDistrictAttributes>) {
     super('district', props);
-  }
-}
-export class ServiceCreateIssueInputIssueTypeMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceIssueTypeAttributes>) {
-    super('issueType', props);
   }
 }
 
@@ -44,10 +44,10 @@ export class ServiceCreateIssueInputMaskBuilder extends MaskBuilder {
   constructor(
     protected props: Array<
       | ServiceCreateIssueInputAttributes
-      | ServiceCreateIssueInputCityMaskBuilder
-      | ServiceCreateIssueInputCountyMaskBuilder
-      | ServiceCreateIssueInputDistrictMaskBuilder
       | ServiceCreateIssueInputIssueTypeMaskBuilder
+      | ServiceCreateIssueInputCountyMaskBuilder
+      | ServiceCreateIssueInputCityMaskBuilder
+      | ServiceCreateIssueInputDistrictMaskBuilder
     >,
   ) {
     super(props);

@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,9 +26,16 @@ import type {
   ServiceIssue,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { serviceDistrictServiceImpl } from '~/services/data-axios';
-export type ServiceDistrictDistrict_View_EditDialogActionsExtended =
-  ServiceDistrictDistrict_View_EditDialogActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceDistrictServiceImpl } from '~/services/data-axios/ServiceDistrictServiceImpl';
+
+export type ServiceDistrictDistrict_View_EditDialogActionsExtended = ServiceDistrictDistrict_View_EditDialogActions & {
+  postRefreshAction?: (
+    data: ServiceDistrictStored,
+    storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+    setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>,
+  ) => Promise<void>;
+};
 
 export const SERVICE_ISSUE_DISTRICT_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceDistrictDistrict_View_EditActionsHook';
@@ -101,6 +109,9 @@ export interface ServiceIssueDistrictRelationViewPageProps {
 export default function ServiceIssueDistrictRelationViewPage(props: ServiceIssueDistrictRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceDistrictServiceImpl = useMemo(() => new ServiceDistrictServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -166,6 +177,9 @@ export default function ServiceIssueDistrictRelationViewPage(props: ServiceIssue
   // Calculated section
   const title: string = data.representation as string;
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -183,6 +197,9 @@ export default function ServiceIssueDistrictRelationViewPage(props: ServiceIssue
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceDistrictStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -224,6 +241,7 @@ export default function ServiceIssueDistrictRelationViewPage(props: ServiceIssue
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

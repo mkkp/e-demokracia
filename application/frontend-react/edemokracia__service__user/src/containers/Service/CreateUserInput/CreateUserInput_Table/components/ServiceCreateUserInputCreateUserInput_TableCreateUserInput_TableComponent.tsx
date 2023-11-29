@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -129,89 +129,94 @@ export function ServiceCreateUserInputCreateUserInput_TableCreateUserInput_Table
 
   const selectedRows = useRef<ServiceCreateUserInputStored[]>([]);
 
-  const columns: GridColDef<ServiceCreateUserInputStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'userName',
-      headerName: t('service.CreateUserInput.CreateUserInput_Table.userName', { defaultValue: 'UserName' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceCreateUserInputStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'userName',
+        headerName: t('service.CreateUserInput.CreateUserInput_Table.userName', { defaultValue: 'UserName' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'email',
-      headerName: t('service.CreateUserInput.CreateUserInput_Table.email', { defaultValue: 'Email' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'hasAdminAccess',
-      headerName: t('service.CreateUserInput.CreateUserInput_Table.hasAdminAccess', {
-        defaultValue: 'IsAdmin',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'boolean',
-      filterable: false && false,
-      sortable: false,
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<any, ServiceCreateUserInputStored>) => {
-        if (params.row.hasAdminAccess === null || params.row.hasAdminAccess === undefined) {
-          return <MdiIcon className="undefined" path="minus" color="#ddd" />;
-        } else if (params.row.hasAdminAccess) {
-          return <MdiIcon className="true" path="check-circle" color="green" />;
-        }
-        return <MdiIcon className="false" path="close-circle" color="red" />;
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'firstName',
-      headerName: t('service.CreateUserInput.CreateUserInput_Table.firstName', { defaultValue: 'FirstName' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'email',
+        headerName: t('service.CreateUserInput.CreateUserInput_Table.email', { defaultValue: 'Email' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'lastName',
-      headerName: t('service.CreateUserInput.CreateUserInput_Table.lastName', { defaultValue: 'LastName' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'hasAdminAccess',
+        headerName: t('service.CreateUserInput.CreateUserInput_Table.hasAdminAccess', {
+          defaultValue: 'IsAdmin',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+        width: 100,
+        type: 'boolean',
+        filterable: false && false,
+        sortable: false,
+        align: 'center',
+        renderCell: (params: GridRenderCellParams<any, ServiceCreateUserInputStored>) => {
+          if (params.row.hasAdminAccess === null || params.row.hasAdminAccess === undefined) {
+            return <MdiIcon className="undefined" path="minus" color="#ddd" />;
+          } else if (params.row.hasAdminAccess) {
+            return <MdiIcon className="true" path="check-circle" color="green" />;
+          }
+          return <MdiIcon className="false" path="close-circle" color="red" />;
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'firstName',
+        headerName: t('service.CreateUserInput.CreateUserInput_Table.firstName', {
+          defaultValue: 'FirstName',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'lastName',
+        headerName: t('service.CreateUserInput.CreateUserInput_Table.lastName', { defaultValue: 'LastName' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceCreateUserInputStored>[] = [
     {
@@ -238,7 +243,7 @@ export function ServiceCreateUserInputCreateUserInput_TableCreateUserInput_Table
     },
   ];
 
-  const filterOptions: FilterOption[] = [];
+  const filterOptions = useMemo<FilterOption[]>(() => [], []);
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

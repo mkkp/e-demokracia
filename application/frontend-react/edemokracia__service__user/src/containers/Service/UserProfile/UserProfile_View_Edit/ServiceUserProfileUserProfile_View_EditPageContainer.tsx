@@ -49,6 +49,7 @@ export interface ServiceUserProfileUserProfile_View_EditPageProps {
   storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void;
   validation: Map<keyof ServiceUserProfile, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserProfile, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::UserProfile::UserProfile_View_Edit
@@ -71,6 +72,7 @@ export default function ServiceUserProfileUserProfile_View_EditPage(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceUserProfileQueryCustomizer = {
     _mask:
@@ -185,6 +187,7 @@ export default function ServiceUserProfileUserProfile_View_EditPage(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

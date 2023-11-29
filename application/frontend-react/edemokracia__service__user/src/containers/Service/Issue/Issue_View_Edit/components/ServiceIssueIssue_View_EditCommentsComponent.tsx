@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -125,94 +125,86 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   const selectedRows = useRef<ServiceCommentStored[]>([]);
 
-  const columns: GridColDef<ServiceCommentStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'comment',
-      headerName: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceCommentStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'comment',
+        headerName: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'createdByName',
-      headerName: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'upVotes',
-      headerName: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'downVotes',
-      headerName: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'createdByName',
+        headerName: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'upVotes',
+        headerName: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'downVotes',
+        headerName: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceCommentStored>[] = [
     {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.commentsVoteDownForCommentAction
-        ? async (rowData) => {
-            await actions.commentsVoteDownForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wg8kIY7EEe6rlbj78nBB0Q)',
       label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
       icon: <MdiIcon path="thumb-up" />,
       disabled: (row: ServiceCommentStored) => editMode || isLoading,
@@ -222,44 +214,58 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           }
         : undefined,
     },
-  ];
-
-  const filterOptions: FilterOption[] = [
     {
-      id: '_9eanYI2dEe6GJNWtqQaZ_w',
-      attributeName: 'comment',
-      label: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: '_9ebOco2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
-
-    {
-      id: '_9eb1go2dEe6GJNWtqQaZ_w',
-      attributeName: 'createdByName',
-      label: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: '_9edDoI2dEe6GJNWtqQaZ_w',
-      attributeName: 'upVotes',
-      label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
-      filterType: FilterType.numeric,
-    },
-
-    {
-      id: '_9edqsI2dEe6GJNWtqQaZ_w',
-      attributeName: 'downVotes',
-      label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
-      filterType: FilterType.numeric,
+      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wg8kIY7EEe6rlbj78nBB0Q)',
+      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+      icon: <MdiIcon path="thumb-down" />,
+      disabled: (row: ServiceCommentStored) => editMode || isLoading,
+      action: actions.commentsVoteDownForCommentAction
+        ? async (rowData) => {
+            await actions.commentsVoteDownForCommentAction!(rowData);
+          }
+        : undefined,
     },
   ];
+
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Wg5g0o7EEe6rlbj78nBB0Q',
+        attributeName: 'comment',
+        label: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_Wg6H4o7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
+
+      {
+        id: '_Wg6u8Y7EEe6rlbj78nBB0Q',
+        attributeName: 'createdByName',
+        label: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_Wg7WAI7EEe6rlbj78nBB0Q',
+        attributeName: 'upVotes',
+        label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
+        filterType: FilterType.numeric,
+      },
+
+      {
+        id: '_Wg7WBI7EEe6rlbj78nBB0Q',
+        attributeName: 'downVotes',
+        label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
+        filterType: FilterType.numeric,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPaginationModel((prevState) => ({

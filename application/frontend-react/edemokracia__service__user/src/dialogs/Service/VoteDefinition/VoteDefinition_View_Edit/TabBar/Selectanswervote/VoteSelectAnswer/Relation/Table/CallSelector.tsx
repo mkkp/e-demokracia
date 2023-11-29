@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -24,7 +24,9 @@ import type {
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { serviceVoteDefinitionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
+
 export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActionsExtended =
   ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions & {
     postVoteSelectAnswerForVoteDefinitionAction?: (onClose: () => Promise<void>) => Promise<void>;
@@ -101,6 +103,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceVoteDefinitionServiceImpl = useMemo(() => new ServiceVoteDefinitionServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -137,10 +142,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
     { defaultValue: 'Select Input' },
   );
 
-  // Action section
-  const backAction = async () => {
-    onClose();
+  // Private actions
+  const submit = async () => {
+    await voteSelectAnswerForVoteDefinitionAction();
   };
+
+  // Action section
   const voteSelectAnswerForVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -160,6 +167,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
     } finally {
       setIsLoading(false);
     }
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -185,8 +195,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions =
     {
-      backAction,
       voteSelectAnswerForVoteDefinitionAction,
+      backAction,
       filterAction,
       selectorRangeAction,
       ...(customActions ?? {}),

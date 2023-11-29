@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,9 +27,13 @@ import type {
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
-import { userServiceForAdminCategoriesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
+
 export type ServiceIssueCategoryIssueCategory_TablePageActionsExtended =
-  ServiceIssueCategoryIssueCategory_TablePageActions & {};
+  ServiceIssueCategoryIssueCategory_TablePageActions & {
+    postRefreshAction?: (data: ServiceIssueCategoryStored[]) => Promise<void>;
+  };
 
 export const SERVICE_USER_ADMIN_CATEGORIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceIssueCategoryIssueCategory_TableActionsHook';
@@ -48,6 +52,9 @@ const ServiceIssueCategoryIssueCategory_TablePageContainer = lazy(
 // XMIID: User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessTablePageDefinition
 // Name: service::User::adminCategories::AccessTablePage
 export default function ServiceUserAdminCategoriesAccessTablePage() {
+  // Services
+  const userServiceForAdminCategoriesImpl = useMemo(() => new UserServiceForAdminCategoriesImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -79,7 +86,70 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
   // Calculated section
   const title: string = t('service.IssueCategory.IssueCategory_Table', { defaultValue: 'IssueCategory Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const openPageAction = async (target?: ServiceIssueCategoryStored) => {
+    await openServiceUserAdminCategoriesAccessViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceIssueCategoryQueryCustomizer,
+  ): Promise<ServiceIssueCategoryStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForAdminCategoriesImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openFormAction = async () => {
+    const { result, data: returnedData } = await openServiceUserAdminCategoriesAccessFormPage(data);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const deleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await userServiceForAdminCategoriesImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceIssueCategory>(error, undefined, target);
+      }
+    }
+  };
   const bulkDeleteAction = async (
     selectedRows: ServiceIssueCategoryStored[],
   ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
@@ -115,74 +185,14 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
       });
     });
   };
-  const openFormAction = async () => {
-    const { result, data: returnedData } = await openServiceUserAdminCategoriesAccessFormPage(data);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const deleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await userServiceForAdminCategoriesImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceIssueCategory>(error, undefined, target);
-      }
-    }
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (
-    queryCustomizer: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<ServiceIssueCategoryStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForAdminCategoriesImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const openPageAction = async (target?: ServiceIssueCategoryStored) => {
-    await openServiceUserAdminCategoriesAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
 
   const actions: ServiceIssueCategoryIssueCategory_TablePageActions = {
-    bulkDeleteAction,
-    openFormAction,
-    deleteAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
+    openFormAction,
+    deleteAction,
+    bulkDeleteAction,
     ...(customActions ?? {}),
   };
 

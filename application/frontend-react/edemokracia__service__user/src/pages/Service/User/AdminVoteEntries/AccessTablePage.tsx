@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -26,8 +26,12 @@ import type {
   ServiceVoteEntryStored,
   VoteStatus,
 } from '~/services/data-api';
-import { userServiceForAdminVoteEntriesImpl } from '~/services/data-axios';
-export type ServiceVoteEntryVoteEntry_TablePageActionsExtended = ServiceVoteEntryVoteEntry_TablePageActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminVoteEntriesImpl } from '~/services/data-axios/UserServiceForAdminVoteEntriesImpl';
+
+export type ServiceVoteEntryVoteEntry_TablePageActionsExtended = ServiceVoteEntryVoteEntry_TablePageActions & {
+  postRefreshAction?: (data: ServiceVoteEntryStored[]) => Promise<void>;
+};
 
 export const SERVICE_USER_ADMIN_VOTE_ENTRIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceVoteEntryVoteEntry_TableActionsHook';
@@ -43,6 +47,12 @@ const ServiceVoteEntryVoteEntry_TablePageContainer = lazy(
 // XMIID: User/(esm/_X0RZIFu_Ee6HqbmdGwnUzw)/AccessTablePageDefinition
 // Name: service::User::adminVoteEntries::AccessTablePage
 export default function ServiceUserAdminVoteEntriesAccessTablePage() {
+  // Services
+  const userServiceForAdminVoteEntriesImpl = useMemo(
+    () => new UserServiceForAdminVoteEntriesImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -72,7 +82,61 @@ export default function ServiceUserAdminVoteEntriesAccessTablePage() {
   // Calculated section
   const title: string = t('service.VoteEntry.VoteEntry_Table', { defaultValue: 'VoteEntry Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const openPageAction = async (target?: ServiceVoteEntryStored) => {
+    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (queryCustomizer: ServiceVoteEntryQueryCustomizer): Promise<ServiceVoteEntryStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForAdminVoteEntriesImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const deleteAction = async (target: ServiceVoteEntryStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await userServiceForAdminVoteEntriesImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceVoteEntry>(error, undefined, target);
+      }
+    }
+  };
   const bulkDeleteAction = async (
     selectedRows: ServiceVoteEntryStored[],
   ): Promise<DialogResult<Array<ServiceVoteEntryStored>>> => {
@@ -108,64 +172,13 @@ export default function ServiceUserAdminVoteEntriesAccessTablePage() {
       });
     });
   };
-  const deleteAction = async (target: ServiceVoteEntryStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await userServiceForAdminVoteEntriesImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceVoteEntry>(error, undefined, target);
-      }
-    }
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (queryCustomizer: ServiceVoteEntryQueryCustomizer): Promise<ServiceVoteEntryStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForAdminVoteEntriesImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const openPageAction = async (target?: ServiceVoteEntryStored) => {
-    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
-  };
 
   const actions: ServiceVoteEntryVoteEntry_TablePageActions = {
-    bulkDeleteAction,
-    deleteAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
+    deleteAction,
+    bulkDeleteAction,
     ...(customActions ?? {}),
   };
 

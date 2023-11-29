@@ -22,20 +22,20 @@ import {
  */
 export interface IssueService {
   refresh(target: JudoIdentifiable<Issue>, queryCustomizer?: IssueQueryCustomizer): Promise<IssueStored>;
-  activate(owner: JudoIdentifiable<Issue>): Promise<void>;
+  createComment(owner: JudoIdentifiable<Issue>, target: CreateCommentInput): Promise<void>;
+  getTemplateOnCreateComment(): Promise<CreateCommentInput>;
+  removeFromFavorites(owner: JudoIdentifiable<Issue>): Promise<void>;
   addToFavorites(owner: JudoIdentifiable<Issue>): Promise<void>;
   closeDebate(
     owner: JudoIdentifiable<Issue>,
     target: CloseDebateInput,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
   getTemplateOnCloseDebate(): Promise<CloseDebateInput>;
-  closeVote(owner: JudoIdentifiable<Issue>): Promise<void>;
-  createComment(owner: JudoIdentifiable<Issue>, target: CreateCommentInput): Promise<void>;
-  getTemplateOnCreateComment(): Promise<CreateCommentInput>;
-  createConArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
   createProArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateProArgument(): Promise<CreateArgumentInput>;
+  createConArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
+  closeVote(owner: JudoIdentifiable<Issue>): Promise<void>;
+  activate(owner: JudoIdentifiable<Issue>): Promise<void>;
   deleteOrArchive(owner: JudoIdentifiable<Issue>): Promise<void>;
-  removeFromFavorites(owner: JudoIdentifiable<Issue>): Promise<void>;
 }

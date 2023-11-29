@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -23,7 +24,9 @@ import type {
   YesNoVoteInputStored,
   YesNoVoteValue,
 } from '~/services/data-api';
-import { serviceYesNoVoteDefinitionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceYesNoVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceImpl';
+
 export type YesNoVoteInputYesNoVoteInput_FormDialogActionsExtended = YesNoVoteInputYesNoVoteInput_FormDialogActions & {
   postVoteForYesNoVoteDefinitionAction?: (
     onSubmit: (result?: YesNoVoteInputStored) => Promise<void>,
@@ -104,6 +107,12 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceYesNoVoteDefinitionServiceImpl = useMemo(
+    () => new ServiceYesNoVoteDefinitionServiceImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -165,6 +174,9 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
 
   // Calculated section
   const title: string = t('YesNoVoteInput.YesNoVoteInput_Form', { defaultValue: 'YesNoVoteInput Form' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {
@@ -237,6 +249,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

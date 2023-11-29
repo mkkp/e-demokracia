@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -26,7 +27,9 @@ import type {
   ServiceIssueAttachmentStored,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForAttachmentsImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueServiceForAttachmentsImpl } from '~/services/data-axios/ServiceIssueServiceForAttachmentsImpl';
+
 export type ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended =
   ServiceIssueAttachmentIssueAttachment_FormDialogActions & {};
 
@@ -105,6 +108,12 @@ export interface ServiceIssueAttachmentsRelationFormPageProps {
 export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIssueAttachmentsRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueServiceForAttachmentsImpl = useMemo(
+    () => new ServiceIssueServiceForAttachmentsImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -161,6 +170,11 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
 
   // Calculated section
   const title: string = t('service.IssueAttachment.IssueAttachment_Form', { defaultValue: 'IssueAttachment Form' });
+
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
 
   // Action section
   const backAction = async () => {
@@ -224,6 +238,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

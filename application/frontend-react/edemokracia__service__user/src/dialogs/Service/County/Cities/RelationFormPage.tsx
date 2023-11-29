@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,7 +26,9 @@ import type {
   ServiceCounty,
   ServiceCountyStored,
 } from '~/services/data-api';
-import { serviceCountyServiceForCitiesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCountyServiceForCitiesImpl } from '~/services/data-axios/ServiceCountyServiceForCitiesImpl';
+
 export type ServiceCityCity_FormDialogActionsExtended = ServiceCityCity_FormDialogActions & {};
 
 export const SERVICE_COUNTY_CITIES_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceCityCity_FormActionsHook';
@@ -99,6 +102,9 @@ export interface ServiceCountyCitiesRelationFormPageProps {
 export default function ServiceCountyCitiesRelationFormPage(props: ServiceCountyCitiesRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCountyServiceForCitiesImpl = useMemo(() => new ServiceCountyServiceForCitiesImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -157,6 +163,11 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
 
   // Calculated section
   const title: string = t('service.City.City_Form', { defaultValue: 'City Form' });
+
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
 
   // Action section
   const backAction = async () => {
@@ -220,6 +231,7 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

@@ -11,13 +11,13 @@ import { ServiceServiceUser } from './ServiceServiceUser';
 import { ServiceServiceUserStored } from './ServiceServiceUser';
 
 export interface ServiceIssueCategory {
-  description: string;
   title: string;
-  owner?: null | ServiceServiceUserStored;
+  description: string;
   subcategories?: null | Array<ServiceIssueCategoryStored>;
+  owner?: null | ServiceServiceUserStored;
 }
 
-export type ServiceIssueCategoryAttributes = 'description' | 'title';
-export type ServiceIssueCategoryRelations = 'owner' | 'subcategories';
+export type ServiceIssueCategoryAttributes = 'title' | 'description';
+export type ServiceIssueCategoryRelations = 'subcategories' | 'owner';
 
 export interface ServiceIssueCategoryStored extends JudoStored<ServiceIssueCategory>, ServiceIssueCategory {}

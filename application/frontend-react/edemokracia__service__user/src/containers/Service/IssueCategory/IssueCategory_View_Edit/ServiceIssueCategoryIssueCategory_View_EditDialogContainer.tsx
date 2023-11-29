@@ -55,6 +55,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void;
   validation: Map<keyof ServiceIssueCategory, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueCategory, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::IssueCategory::IssueCategory_View_Edit
@@ -79,6 +80,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceIssueCategoryQueryCustomizer = {
     _mask: '{description,title,subcategories{title,description},owner{representation}}',
@@ -115,6 +117,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

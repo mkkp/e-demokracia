@@ -27,22 +27,22 @@ export interface VoteDefinitionService {
     target: JudoIdentifiable<VoteDefinition>,
     queryCustomizer?: VoteDefinitionQueryCustomizer,
   ): Promise<VoteDefinitionStored>;
-  activate(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-  addToFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-  closeVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-  deleteOrArchive(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-  removeFromFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-  takeBackVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
-  voteRating(owner: JudoIdentifiable<VoteDefinition>, target: RatingVoteInput): Promise<void>;
-  getTemplateOnVoteRating(): Promise<RatingVoteInput>;
+  voteYesNo(owner: JudoIdentifiable<VoteDefinition>, target: YesNoVoteInput): Promise<void>;
+  getTemplateOnVoteYesNo(): Promise<YesNoVoteInput>;
+  voteYesNoAbstain(owner: JudoIdentifiable<VoteDefinition>, target: YesNoAbstainVoteInput): Promise<void>;
+  getTemplateOnVoteYesNoAbstain(): Promise<YesNoAbstainVoteInput>;
   voteSelectAnswer(owner: JudoIdentifiable<VoteDefinition>, target: SelectAnswerVoteSelection): Promise<void>;
   getTemplateOnVoteSelectAnswer(): Promise<SelectAnswerVoteSelection>;
   getRangeOnVoteSelectAnswer(
     owner?: VoteDefinitionStored,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
-  voteYesNo(owner: JudoIdentifiable<VoteDefinition>, target: YesNoVoteInput): Promise<void>;
-  getTemplateOnVoteYesNo(): Promise<YesNoVoteInput>;
-  voteYesNoAbstain(owner: JudoIdentifiable<VoteDefinition>, target: YesNoAbstainVoteInput): Promise<void>;
-  getTemplateOnVoteYesNoAbstain(): Promise<YesNoAbstainVoteInput>;
+  voteRating(owner: JudoIdentifiable<VoteDefinition>, target: RatingVoteInput): Promise<void>;
+  getTemplateOnVoteRating(): Promise<RatingVoteInput>;
+  takeBackVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  addToFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  removeFromFavorites(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  activate(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  deleteOrArchive(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
+  closeVote(owner: JudoIdentifiable<VoteDefinition>): Promise<void>;
 }

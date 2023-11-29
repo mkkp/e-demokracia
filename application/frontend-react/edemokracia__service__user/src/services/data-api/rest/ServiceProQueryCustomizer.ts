@@ -14,10 +14,10 @@ import { FilterBytypesText } from './FilterBytypesText';
 import { FilterBytypesTimestamp } from './FilterBytypesTimestamp';
 
 export interface ServiceProQueryCustomizer extends QueryCustomizer<ServicePro> {
-  created?: Array<FilterBytypesTimestamp>;
   createdByName?: Array<FilterBytypesString>;
+  created?: Array<FilterBytypesTimestamp>;
   description?: Array<FilterBytypesText>;
-  downVotes?: Array<FilterBytypesInteger>;
   title?: Array<FilterBytypesString>;
   upVotes?: Array<FilterBytypesInteger>;
+  downVotes?: Array<FilterBytypesInteger>;
 }

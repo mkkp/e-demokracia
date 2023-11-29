@@ -9,23 +9,23 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface ServiceServicePrincipalUser {
-  created?: null | Date;
+  userName: string;
   email: string;
   firstName: string;
   isAdmin: boolean;
   lastName: string;
   phone?: null | string;
-  userName: string;
+  created?: null | Date;
 }
 
 export type ServiceServicePrincipalUserAttributes =
-  | 'created'
+  | 'userName'
   | 'email'
   | 'firstName'
   | 'isAdmin'
   | 'lastName'
   | 'phone'
-  | 'userName';
+  | 'created';
 
 export interface ServiceServicePrincipalUserStored
   extends JudoStored<ServiceServicePrincipalUser>,

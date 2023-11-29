@@ -48,6 +48,7 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceIssueAttachment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueAttachment, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_p5jNQGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -68,6 +69,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

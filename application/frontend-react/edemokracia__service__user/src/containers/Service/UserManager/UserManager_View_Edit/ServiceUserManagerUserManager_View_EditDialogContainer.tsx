@@ -54,6 +54,7 @@ export interface ServiceUserManagerUserManager_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceUserManager, value: any) => void;
   validation: Map<keyof ServiceUserManager, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserManager, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::UserManager::UserManager_View_Edit
@@ -78,6 +79,7 @@ export default function ServiceUserManagerUserManager_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceUserManagerQueryCustomizer = {
     _mask: '{}',
@@ -114,6 +116,7 @@ export default function ServiceUserManagerUserManager_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

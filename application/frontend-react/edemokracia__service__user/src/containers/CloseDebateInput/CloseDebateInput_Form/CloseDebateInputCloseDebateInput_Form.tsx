@@ -46,6 +46,7 @@ export interface CloseDebateInputCloseDebateInput_FormProps {
   editMode: boolean;
   validation: Map<keyof CloseDebateInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormPageContainer
@@ -64,6 +65,7 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -86,13 +88,13 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="(_9SlK0I2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WX9nQI7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                      <Typography id="_9SlK0I2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WX9nQI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('CloseDebateInput.CloseDebateInput_Form.debate.Icon', { defaultValue: 'Close debate' })}
                       </Typography>
                     </Grid>

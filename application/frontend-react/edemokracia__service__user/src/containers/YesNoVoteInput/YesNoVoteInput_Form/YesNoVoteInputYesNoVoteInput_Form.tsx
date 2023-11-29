@@ -43,6 +43,7 @@ export interface YesNoVoteInputYesNoVoteInput_FormProps {
   editMode: boolean;
   validation: Map<keyof YesNoVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof YesNoVoteInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_-1R8g3WyEe2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -61,6 +62,7 @@ export default function YesNoVoteInputYesNoVoteInput_Form(props: YesNoVoteInputY
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

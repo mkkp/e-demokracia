@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -28,7 +28,9 @@ import type {
   ServiceSimpleVoteStored,
   SimpleVoteType,
 } from '~/services/data-api';
-import { serviceServiceUserServiceForVotesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceServiceUserServiceForVotesImpl } from '~/services/data-axios/ServiceServiceUserServiceForVotesImpl';
+
 export type ServiceSimpleVoteSimpleVote_TableSetSelectorDialogActionsExtended =
   ServiceSimpleVoteSimpleVote_TableSetSelectorDialogActions & {};
 
@@ -102,6 +104,12 @@ export interface ServiceServiceUserVotesSetSelectorPageProps {
 export default function ServiceServiceUserVotesSetSelectorPage(props: ServiceServiceUserVotesSetSelectorPageProps) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceServiceUserServiceForVotesImpl = useMemo(
+    () => new ServiceServiceUserServiceForVotesImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -131,12 +139,15 @@ export default function ServiceServiceUserVotesSetSelectorPage(props: ServiceSer
   // Calculated section
   const title: string = t('service.SimpleVote.SimpleVote_Table.SetSelector', { defaultValue: 'SimpleVote Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
   const setAction = async (selected: ServiceSimpleVoteStored[]) => {
     onSubmit(selected);
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -161,8 +172,8 @@ export default function ServiceServiceUserVotesSetSelectorPage(props: ServiceSer
   };
 
   const actions: ServiceSimpleVoteSimpleVote_TableSetSelectorDialogActions = {
-    backAction,
     setAction,
+    backAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

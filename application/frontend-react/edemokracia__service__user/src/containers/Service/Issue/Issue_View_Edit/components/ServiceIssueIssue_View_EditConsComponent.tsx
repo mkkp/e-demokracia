@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -122,44 +122,47 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
 
   const selectedRows = useRef<ServiceConStored[]>([]);
 
-  const columns: GridColDef<ServiceConStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceConStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'upVotes',
-      headerName: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'downVotes',
-      headerName: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'upVotes',
+        headerName: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'downVotes',
+        headerName: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceConStored>[] = [
     {
@@ -176,29 +179,7 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
-        ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wf_h4I7EEe6rlbj78nBB0Q)',
       label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -209,7 +190,7 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
         : undefined,
     },
     {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wf_h4I7EEe6rlbj78nBB0Q)',
       label: t('service.Issue.Issue_View_Edit.createConArgument', { defaultValue: 'createConArgument' }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceConStored) => editMode || isLoading,
@@ -219,30 +200,55 @@ export function ServiceIssueIssue_View_EditConsComponent(props: ServiceIssueIssu
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wf_h4I7EEe6rlbj78nBB0Q)',
+      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consVoteUpForConAction
+        ? async (rowData) => {
+            await actions.consVoteUpForConAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wf_h4I7EEe6rlbj78nBB0Q)',
+      label: t('service.Issue.Issue_View_Edit.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceConStored) => editMode || isLoading,
+      action: actions.consCreateProArgumentAction
+        ? async (rowData) => {
+            await actions.consCreateProArgumentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9dVCQI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Wf9FoI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9dVpUo2dEe6GJNWtqQaZ_w',
-      attributeName: 'upVotes',
-      label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
-      filterType: FilterType.numeric,
-    },
+      {
+        id: '_Wf9ssI7EEe6rlbj78nBB0Q',
+        attributeName: 'upVotes',
+        label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
+        filterType: FilterType.numeric,
+      },
 
-    {
-      id: '_9dW3cI2dEe6GJNWtqQaZ_w',
-      attributeName: 'downVotes',
-      label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
-      filterType: FilterType.numeric,
-    },
-  ];
+      {
+        id: '_Wf9stI7EEe6rlbj78nBB0Q',
+        attributeName: 'downVotes',
+        label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
+        filterType: FilterType.numeric,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPaginationModel((prevState) => ({

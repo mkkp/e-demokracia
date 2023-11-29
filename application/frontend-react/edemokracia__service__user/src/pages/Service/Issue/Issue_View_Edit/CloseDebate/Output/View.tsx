@@ -6,7 +6,8 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -24,9 +25,17 @@ import type {
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
-import { closeDebateOutputVoteDefinitionReferenceServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { CloseDebateOutputVoteDefinitionReferenceServiceImpl } from '~/services/data-axios/CloseDebateOutputVoteDefinitionReferenceServiceImpl';
+
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended =
-  CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions & {};
+  CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions & {
+    postRefreshAction?: (
+      data: CloseDebateOutputVoteDefinitionReferenceStored,
+      storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_OUTPUT_VIEW_ACTIONS_HOOK_INTERFACE_KEY =
   'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionsHook';
@@ -55,6 +64,12 @@ const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionRef
 export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const closeDebateOutputVoteDefinitionReferenceServiceImpl = useMemo(
+    () => new CloseDebateOutputVoteDefinitionReferenceServiceImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -126,6 +141,9 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
     { defaultValue: 'CloseDebateOutputVoteDefinitionReference View / Edit' },
   );
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const refreshAction = async (
     queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
@@ -145,6 +163,9 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof CloseDebateOutputVoteDefinitionReferenceStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -187,6 +208,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </PageContainerTransition>
       </Suspense>

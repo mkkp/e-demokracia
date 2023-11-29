@@ -77,6 +77,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditProps 
   editMode: boolean;
   validation: Map<keyof ServiceRatingVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteDefinition, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_-dfLEH4XEe2cB7_PsKXsHQ)/TransferObjectViewPageContainer
@@ -97,6 +98,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -255,12 +257,12 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="(_9RaGII2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WXV8MI7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <Typography id="_9RaGII2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WXV8MI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.userVoteEntryGroup.Label', {
                           defaultValue: 'My vote entry',
                         })}
@@ -728,7 +730,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="(_9RkeMI2dEe6GJNWtqQaZ_w)/LabelWrapper"
+              id="_WXa0sI7EEe6rlbj78nBB0Q)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -737,7 +739,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
             >
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_9RkeMI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                  <Typography id="_WXa0sI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                     {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.entries.Label', {
                       defaultValue: 'Entries',
                     })}

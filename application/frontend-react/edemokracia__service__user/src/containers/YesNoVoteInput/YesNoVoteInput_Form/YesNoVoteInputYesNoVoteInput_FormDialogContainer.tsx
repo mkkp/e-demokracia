@@ -50,6 +50,7 @@ export interface YesNoVoteInputYesNoVoteInput_FormDialogProps {
   storeDiff: (attributeName: keyof YesNoVoteInput, value: any) => void;
   validation: Map<keyof YesNoVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof YesNoVoteInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: YesNoVoteInput::YesNoVoteInput_Form
@@ -72,6 +73,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: YesNoVoteInputQueryCustomizer = {
     _mask: '{value}',
@@ -108,6 +110,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -144,31 +147,10 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.voteForYesNoVoteDefinitionAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/User/(esm/_-1R8g3WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="vote" />}
-              onClick={async () => {
-                await actions.voteForYesNoVoteDefinitionAction!();
-              }}
-            >
-              <span>
-                {t(
-                  'service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.voteYesNoForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/User/(esm/_-1R8g3WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_U1txYI7EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -180,6 +162,27 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
               <span>
                 {t(
                   'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.yesnovote.voteYesNo.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.voteForYesNoVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_U1txYI7EEe6rlbj78nBB0Q)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteForYesNoVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

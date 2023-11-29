@@ -76,6 +76,7 @@ export interface ServiceUserIssuesUserIssues_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceUserIssues, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserIssues, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewPageContainer
@@ -94,6 +95,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -246,7 +248,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                         <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
-                              id="(_9SY9kI2dEe6GJNWtqQaZ_w)/LabelWrapper"
+                              id="_WX4uwI7EEe6rlbj78nBB0Q)/LabelWrapper"
                               container
                               direction="column"
                               alignItems="center"
@@ -255,7 +257,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                             >
                               <Grid item xs={12} sm={12}>
                                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                                  <Typography id="_9SY9kI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                                  <Typography id="_WX4uwI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                                     {t('service.UserIssues.UserIssues_View_Edit.activeGlobal.Label', {
                                       defaultValue: 'Global',
                                     })}

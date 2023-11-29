@@ -50,6 +50,7 @@ export interface ServiceIssueTypeIssueType_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void;
   validation: Map<keyof ServiceIssueType, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueType, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::IssueType::IssueType_View_Edit
@@ -74,6 +75,7 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceIssueTypeQueryCustomizer = {
     _mask: '{description,title,voteType}',
@@ -110,6 +112,7 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -26,9 +27,17 @@ import type {
   ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
-import { serviceIssueTypeServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueTypeServiceImpl } from '~/services/data-axios/ServiceIssueTypeServiceImpl';
+
 export type ServiceIssueTypeIssueType_View_EditDialogActionsExtended =
-  ServiceIssueTypeIssueType_View_EditDialogActions & {};
+  ServiceIssueTypeIssueType_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceIssueTypeStored,
+      storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueType, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_CREATE_ISSUE_INPUT_ISSUE_TYPE_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceIssueTypeIssueType_View_EditActionsHook';
@@ -104,6 +113,9 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueTypeServiceImpl = useMemo(() => new ServiceIssueTypeServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -172,6 +184,9 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
   // Calculated section
   const title: string = t('service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -189,6 +204,9 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceIssueTypeStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -230,6 +248,7 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

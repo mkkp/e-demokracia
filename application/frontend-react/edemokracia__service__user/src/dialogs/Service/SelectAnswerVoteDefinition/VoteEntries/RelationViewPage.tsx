@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -29,9 +30,17 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceSelectAnswerVoteEntryServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceSelectAnswerVoteEntryServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteEntryServiceImpl';
+
 export type ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActionsExtended =
-  ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActions & {};
+  ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceSelectAnswerVoteEntryStored,
+      storeDiff: (attributeName: keyof ServiceSelectAnswerVoteEntry, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteEntry, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_VOTE_ENTRIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActionsHook';
@@ -114,6 +123,12 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceSelectAnswerVoteEntryServiceImpl = useMemo(
+    () => new ServiceSelectAnswerVoteEntryServiceImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -182,6 +197,9 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
     defaultValue: 'SelectAnswerVoteEntry View / Edit',
   });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -201,6 +219,9 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceSelectAnswerVoteEntryStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -249,6 +270,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

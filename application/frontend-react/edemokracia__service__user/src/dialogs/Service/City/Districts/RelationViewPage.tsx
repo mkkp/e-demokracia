@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,9 +26,16 @@ import type {
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
 } from '~/services/data-api';
-import { serviceDistrictServiceImpl } from '~/services/data-axios';
-export type ServiceDistrictDistrict_View_EditDialogActionsExtended =
-  ServiceDistrictDistrict_View_EditDialogActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceDistrictServiceImpl } from '~/services/data-axios/ServiceDistrictServiceImpl';
+
+export type ServiceDistrictDistrict_View_EditDialogActionsExtended = ServiceDistrictDistrict_View_EditDialogActions & {
+  postRefreshAction?: (
+    data: ServiceDistrictStored,
+    storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+    setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>,
+  ) => Promise<void>;
+};
 
 export const SERVICE_CITY_DISTRICTS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceDistrictDistrict_View_EditActionsHook';
@@ -101,6 +109,9 @@ export interface ServiceCityDistrictsRelationViewPageProps {
 export default function ServiceCityDistrictsRelationViewPage(props: ServiceCityDistrictsRelationViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceDistrictServiceImpl = useMemo(() => new ServiceDistrictServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -166,13 +177,59 @@ export default function ServiceCityDistrictsRelationViewPage(props: ServiceCityD
   // Calculated section
   const title: string = data.representation as string;
 
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+
   // Action section
   const backAction = async () => {
     onClose();
   };
+  const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceDistrictServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceDistrictStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceDistrictServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceDistrict, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleError<ServiceDistrict>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
   };
   const deleteAction = async () => {
     try {
@@ -192,51 +249,13 @@ export default function ServiceCityDistrictsRelationViewPage(props: ServiceCityD
       handleError(error, undefined, data);
     }
   };
-  const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceDistrictServiceImpl.refresh(ownerData, pageQueryCustomizer);
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceDistrictStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const updateAction = async () => {
-    setIsLoading(true);
-    try {
-      const res = await serviceDistrictServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceDistrict, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleError<ServiceDistrict>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const actions: ServiceDistrictDistrict_View_EditDialogActions = {
     backAction,
-    cancelAction,
-    deleteAction,
     refreshAction,
+    cancelAction,
     updateAction,
+    deleteAction,
     ...(customActions ?? {}),
   };
 
@@ -265,6 +284,7 @@ export default function ServiceCityDistrictsRelationViewPage(props: ServiceCityD
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

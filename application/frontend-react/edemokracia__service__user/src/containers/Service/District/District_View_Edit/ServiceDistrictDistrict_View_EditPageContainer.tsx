@@ -45,6 +45,7 @@ export interface ServiceDistrictDistrict_View_EditPageProps {
   storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void;
   validation: Map<keyof ServiceDistrict, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::District::District_View_Edit
@@ -65,6 +66,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceDistrictQueryCustomizer = {
     _mask: '{name}',
@@ -178,6 +180,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

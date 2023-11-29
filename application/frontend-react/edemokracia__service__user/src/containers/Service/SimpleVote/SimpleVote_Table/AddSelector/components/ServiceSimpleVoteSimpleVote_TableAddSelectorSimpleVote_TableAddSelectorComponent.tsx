@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -123,71 +123,77 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
   const [firstItem, setFirstItem] = useState<ServiceSimpleVoteStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
-  const columns: GridColDef<ServiceSimpleVoteStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceSimpleVoteStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'type',
-      headerName: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'type',
+        headerName: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.SimpleVoteType.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.SimpleVoteType.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceSimpleVoteStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_7S-DgI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_UpTGAI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.SimpleVote.SimpleVote_Table.AddSelector.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_7TAfwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'type',
-      label: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['UP', 'DOWN'],
-    },
-  ];
+      {
+        id: '_UpUUII7EEe6rlbj78nBB0Q',
+        attributeName: 'type',
+        label: t('service.SimpleVote.SimpleVote_Table.AddSelector.type', { defaultValue: 'Type' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['UP', 'DOWN'],
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -249,9 +255,12 @@ export function ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddS
     setIsNextButtonEnabled(!isNext);
   }
 
-  const handleIsRowSelectable = (params: GridRowParams<ServiceSimpleVoteStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !true, alreadySelected);
-  };
+  const handleIsRowSelectable = useCallback(
+    (params: GridRowParams<ServiceSimpleVoteStored & { __selected?: boolean }>) => {
+      return isRowSelectable(params.row, !true, alreadySelected);
+    },
+    [],
+  );
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;

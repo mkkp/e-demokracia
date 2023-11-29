@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -29,9 +30,17 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceRatingVoteEntryServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceRatingVoteEntryServiceImpl } from '~/services/data-axios/ServiceRatingVoteEntryServiceImpl';
+
 export type ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended =
-  ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions & {};
+  ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceRatingVoteEntryStored,
+      storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteEntry, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_RATING_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook';
@@ -114,6 +123,9 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceRatingVoteEntryServiceImpl = useMemo(() => new ServiceRatingVoteEntryServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -181,6 +193,9 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     defaultValue: 'RatingVoteEntry View / Edit',
   });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -200,6 +215,9 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceRatingVoteEntryStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -248,6 +266,7 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

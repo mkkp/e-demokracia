@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -39,9 +40,17 @@ import type {
   ServiceUserProfileQueryCustomizer,
   ServiceUserProfileStored,
 } from '~/services/data-api';
-import { userServiceForUserProfileImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForUserProfileImpl } from '~/services/data-axios/UserServiceForUserProfileImpl';
+
 export type ServiceUserProfileUserProfile_View_EditDialogActionsExtended =
-  ServiceUserProfileUserProfile_View_EditDialogActions & {};
+  ServiceUserProfileUserProfile_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceUserProfileStored,
+      storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserProfile, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_USER_USER_PROFILE_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceUserProfileUserProfile_View_EditActionsHook';
@@ -118,6 +127,9 @@ export interface ServiceUserUserProfileAccessViewPageProps {
 export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserUserProfileAccessViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const userServiceForUserProfileImpl = useMemo(() => new UserServiceForUserProfileImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -193,6 +205,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   // Calculated section
   const title: string = t('service.UserProfile.UserProfile_View_Edit', { defaultValue: 'My profile' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -212,6 +227,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceUserProfileStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -221,25 +239,13 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileResidentCityRelationViewPage(target!);
+  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileResidentCountyRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activityCitiesFilterAction = async (
+  const activityCountiesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -256,6 +262,29 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const activityCitiesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileResidentCountyRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const activityDistrictsFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -267,25 +296,14 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       filters: newFilters,
     };
   };
-  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
+  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const activityCountiesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceUserProfileResidentCityRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
@@ -294,15 +312,15 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
     backAction,
     refreshAction,
-    residentCityOpenPageAction,
-    residentCountyOpenPageAction,
-    residentDistrictOpenPageAction,
-    activityCitiesFilterAction,
-    activityCitiesOpenPageAction,
-    activityDistrictsFilterAction,
-    activityDistrictsOpenPageAction,
-    activityCountiesFilterAction,
     activityCountiesOpenPageAction,
+    activityCountiesFilterAction,
+    activityCitiesOpenPageAction,
+    activityCitiesFilterAction,
+    residentCountyOpenPageAction,
+    activityDistrictsOpenPageAction,
+    activityDistrictsFilterAction,
+    residentDistrictOpenPageAction,
+    residentCityOpenPageAction,
     ...(customActions ?? {}),
   };
 
@@ -331,6 +349,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

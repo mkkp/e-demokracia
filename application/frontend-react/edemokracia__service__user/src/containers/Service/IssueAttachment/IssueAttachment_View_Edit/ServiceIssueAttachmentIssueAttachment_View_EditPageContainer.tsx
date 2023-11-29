@@ -52,6 +52,7 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditPageProps {
   storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void;
   validation: Map<keyof ServiceIssueAttachment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueAttachment, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::IssueAttachment::IssueAttachment_View_Edit
@@ -74,6 +75,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_EditPage(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceIssueAttachmentQueryCustomizer = {
     _mask: '{file,link,type}',
@@ -187,6 +189,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_EditPage(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

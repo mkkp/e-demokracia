@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -140,158 +140,146 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
 
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
-  const columns: GridColDef<ServiceIssueStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'scope',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.scope', { defaultValue: 'Scope' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceIssueStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'scope',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'countyRepresentation',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.countyRepresentation', {
-        defaultValue: 'CountyRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'countyRepresentation',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.countyRepresentation', {
+          defaultValue: 'CountyRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'cityRepresentation',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.cityRepresentation', {
-        defaultValue: 'CityRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'districtRepresentation',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.districtRepresentation', {
-        defaultValue: 'DistrictRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'cityRepresentation',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.cityRepresentation', {
+          defaultValue: 'CityRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'districtRepresentation',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.districtRepresentation', {
+          defaultValue: 'DistrictRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
     {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.ownedIssuesDeleteOrArchiveForIssueAction
+      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
+      label: t('service.UserIssues.UserIssues_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
+      action: actions.ownedIssuesCloseDebateAction
         ? async (rowData) => {
-            await actions.ownedIssuesDeleteOrArchiveForIssueAction!(rowData);
+            await actions.ownedIssuesCloseDebateAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.ownedIssuesCreateCommentAction
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
+      label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
+      action: actions.ownedIssuesActivateForIssueAction
         ? async (rowData) => {
-            await actions.ownedIssuesCreateCommentAction!(rowData);
+            await actions.ownedIssuesActivateForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.createConArgument', {
-        defaultValue: 'createConArgument',
-      }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.ownedIssuesCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.ownedIssuesCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
       label: t('service.UserIssues.UserIssues_View_Edit.createProArgument', {
         defaultValue: 'createProArgument',
       }) as string,
@@ -304,18 +292,18 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.ownedIssuesCloseDebateAction
+      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
+      label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
+      icon: <MdiIcon path="comment-text-multiple" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.ownedIssuesCreateCommentAction
         ? async (rowData) => {
-            await actions.ownedIssuesCloseDebateAction!(rowData);
+            await actions.ownedIssuesCreateCommentAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
       label: t('service.UserIssues.UserIssues_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
       icon: <MdiIcon path="lock-check" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
@@ -326,18 +314,7 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.ownedIssuesActivateForIssueAction
-        ? async (rowData) => {
-            await actions.ownedIssuesActivateForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
       label: t('service.UserIssues.UserIssues_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
@@ -348,7 +325,33 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
+      label: t('service.UserIssues.UserIssues_View_Edit.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
+      action: actions.ownedIssuesDeleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.ownedIssuesDeleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
+      label: t('service.UserIssues.UserIssues_View_Edit.createConArgument', {
+        defaultValue: 'createConArgument',
+      }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.ownedIssuesCreateConArgumentAction
+        ? async (rowData) => {
+            await actions.ownedIssuesCreateConArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_Wj5xhI7EEe6rlbj78nBB0Q)',
       label: t('service.UserIssues.UserIssues_View_Edit.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
       }) as string,
@@ -362,64 +365,67 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9h4yII2dEe6GJNWtqQaZ_w',
-      attributeName: 'scope',
-      label: t('service.UserIssues.UserIssues_View_Edit.scope', { defaultValue: 'Scope' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Wj05Ao7EEe6rlbj78nBB0Q',
+        attributeName: 'scope',
+        label: t('service.UserIssues.UserIssues_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
+      },
 
-    {
-      id: '_9h5ZMo2dEe6GJNWtqQaZ_w',
-      attributeName: 'countyRepresentation',
-      label: t('service.UserIssues.UserIssues_View_Edit.countyRepresentation', {
-        defaultValue: 'CountyRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wj1gE47EEe6rlbj78nBB0Q',
+        attributeName: 'countyRepresentation',
+        label: t('service.UserIssues.UserIssues_View_Edit.countyRepresentation', {
+          defaultValue: 'CountyRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9h6nUI2dEe6GJNWtqQaZ_w',
-      attributeName: 'cityRepresentation',
-      label: t('service.UserIssues.UserIssues_View_Edit.cityRepresentation', {
-        defaultValue: 'CityRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wj2uMI7EEe6rlbj78nBB0Q',
+        attributeName: 'cityRepresentation',
+        label: t('service.UserIssues.UserIssues_View_Edit.cityRepresentation', {
+          defaultValue: 'CityRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9h7OYo2dEe6GJNWtqQaZ_w',
-      attributeName: 'districtRepresentation',
-      label: t('service.UserIssues.UserIssues_View_Edit.districtRepresentation', {
-        defaultValue: 'DistrictRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wj3VQI7EEe6rlbj78nBB0Q',
+        attributeName: 'districtRepresentation',
+        label: t('service.UserIssues.UserIssues_View_Edit.districtRepresentation', {
+          defaultValue: 'DistrictRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9h8cgI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wj38UI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9h9DkI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_Wj4jYI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9h9qoo2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
-    },
-  ];
+      {
+        id: '_Wj5KcI7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

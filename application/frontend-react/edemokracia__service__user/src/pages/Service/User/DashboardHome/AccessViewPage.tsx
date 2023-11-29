@@ -6,7 +6,8 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -46,18 +47,25 @@ import type {
   ServiceVoteEntryQueryCustomizer,
   ServiceVoteEntryStored,
 } from '~/services/data-api';
-import { userServiceForDashboardHomeImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForDashboardHomeImpl } from '~/services/data-axios/UserServiceForDashboardHomeImpl';
+
 export type ServiceDashboardDashboard_View_EditPageActionsExtended = ServiceDashboardDashboard_View_EditPageActions & {
-  postFavoriteIssuesActivateForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postIssuesOwnedActivateForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postFavoriteIssuesAddToFavoritesForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postIssuesOwnedAddToFavoritesForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postFavoriteIssuesCloseVoteForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postIssuesOwnedCloseVoteForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postFavoriteIssuesDeleteOrArchiveForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postIssuesOwnedDeleteOrArchiveForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postFavoriteIssuesRemoveFromFavoritesForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
-  postIssuesOwnedRemoveFromFavoritesForIssueAction?: (target: ServiceIssueStored) => Promise<void>;
+  postFavoriteIssuesActivateForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postIssuesOwnedActivateForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postFavoriteIssuesAddToFavoritesForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postIssuesOwnedAddToFavoritesForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postFavoriteIssuesCloseVoteForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postIssuesOwnedCloseVoteForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postFavoriteIssuesDeleteOrArchiveForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postIssuesOwnedDeleteOrArchiveForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postFavoriteIssuesRemoveFromFavoritesForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postIssuesOwnedRemoveFromFavoritesForIssueAction?: (data: ServiceIssueStored) => Promise<void>;
+  postRefreshAction?: (
+    data: ServiceDashboardStored,
+    storeDiff: (attributeName: keyof ServiceDashboard, value: any) => void,
+    setValidation: Dispatch<SetStateAction<Map<keyof ServiceDashboard, string>>>,
+  ) => Promise<void>;
 };
 
 export const SERVICE_USER_DASHBOARD_HOME_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -82,6 +90,9 @@ const ServiceDashboardDashboard_View_EditPageContainer = lazy(
 // XMIID: User/(esm/_GgaEAIyPEe2VSOmaAz6G9Q)/AccessViewPageDefinition
 // Name: service::User::dashboardHome::AccessViewPage
 export default function ServiceUserDashboardHomeAccessViewPage() {
+  // Services
+  const userServiceForDashboardHomeImpl = useMemo(() => new UserServiceForDashboardHomeImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -160,7 +171,58 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   // Calculated section
   const title: string = t('service.Dashboard.Dashboard_View_Edit', { defaultValue: 'Dashboard View / Edit' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const backAction = async () => {
+    navigateBack();
+  };
+  const refreshAction = async (queryCustomizer: ServiceDashboardQueryCustomizer): Promise<ServiceDashboardStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await userServiceForDashboardHomeImpl.refresh(singletonHost.current, pageQueryCustomizer);
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceDashboardStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const userVoteEntriesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const userVoteEntriesRefreshAction = async (
+    queryCustomizer: ServiceVoteEntryQueryCustomizer,
+  ): Promise<ServiceVoteEntryStored[]> => {
+    return userServiceForDashboardHomeImpl.listUserVoteEntries(singletonHost.current, queryCustomizer);
+  };
+  const favoriteIssuesOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceDashboardFavoriteIssuesRelationViewPage((target || data).__signedIdentifier));
+  };
   const favoriteIssuesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -177,49 +239,187 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForDashboardHomeImpl.listFavoriteIssues(singletonHost.current, queryCustomizer);
   };
-  const favoriteIssuesOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceDashboardFavoriteIssuesRelationViewPage((target || data).__signedIdentifier));
+  const favoriteIssuesCloseDebateAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
   };
-  const issuesOwnedBulkDeleteAction = async (
-    selectedRows: ServiceIssueStored[],
-  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
-    return new Promise((resolve) => {
-      openCRUDDialog<ServiceIssueStored>({
-        dialogTitle: t(
-          'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkDelete',
-          { defaultValue: 'Delete' },
-        ),
-        itemTitleFn: (item) => item.countyRepresentation!,
-        selectedItems: selectedRows,
-        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-          try {
-            if (actions.issuesOwnedDeleteAction) {
-              await actions.issuesOwnedDeleteAction!(item, true);
-            }
-            successHandler();
-          } catch (error) {
-            errorHandler(error);
-          }
-        },
-        onClose: async (needsRefresh) => {
-          if (needsRefresh) {
-            if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-            }
-            resolve({
-              result: 'submit',
-              data: [],
-            });
-          } else {
-            resolve({
-              result: 'close',
-              data: [],
-            });
-          }
-        },
-      });
-    });
+  const favoriteIssuesActivateForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.activateForFavoriteIssues(target!);
+      if (customActions?.postFavoriteIssuesActivateForIssueAction) {
+        await customActions.postFavoriteIssuesActivateForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const favoriteIssuesCreateProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const favoriteIssuesCreateCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const favoriteIssuesCloseVoteForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.closeVoteForFavoriteIssues(target!);
+      if (customActions?.postFavoriteIssuesCloseVoteForIssueAction) {
+        await customActions.postFavoriteIssuesCloseVoteForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const favoriteIssuesAddToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.addToFavoritesForFavoriteIssues(target!);
+      if (customActions?.postFavoriteIssuesAddToFavoritesForIssueAction) {
+        await customActions.postFavoriteIssuesAddToFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const favoriteIssuesDeleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.deleteOrArchiveForFavoriteIssues(target!);
+      if (customActions?.postFavoriteIssuesDeleteOrArchiveForIssueAction) {
+        await customActions.postFavoriteIssuesDeleteOrArchiveForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const favoriteIssuesCreateConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const favoriteIssuesRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.removeFromFavoritesForFavoriteIssues(target!);
+      if (customActions?.postFavoriteIssuesRemoveFromFavoritesForIssueAction) {
+        await customActions.postFavoriteIssuesRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const favoriteVoteDefinitionsOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceDashboardFavoriteVoteDefinitionsRelationViewPage((target || data).__signedIdentifier));
+  };
+  const favoriteVoteDefinitionsFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const favoriteVoteDefinitionsRefreshAction = async (
+    queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
+  ): Promise<ServiceVoteDefinitionStored[]> => {
+    return userServiceForDashboardHomeImpl.listFavoriteVoteDefinitions(singletonHost.current, queryCustomizer);
+  };
+  const favoriteVoteDefinitionsVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const favoriteVoteDefinitionsVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      target,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const favoriteVoteDefinitionsVoteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        data,
+      );
+    if (result === 'submit') {
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      }
+    }
+  };
+  const favoriteVoteDefinitionsVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      target,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issuesOwnedOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceDashboardIssuesOwnedRelationViewPage((target || data).__signedIdentifier));
   };
   const issuesOwnedFilterAction = async (
     id: string,
@@ -261,45 +461,21 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       }
     }
   };
-  const issuesOwnedOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceDashboardIssuesOwnedRelationViewPage((target || data).__signedIdentifier));
-  };
-  const favoriteVoteDefinitionsFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const favoriteVoteDefinitionsRefreshAction = async (
-    queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
-    return userServiceForDashboardHomeImpl.listFavoriteVoteDefinitions(singletonHost.current, queryCustomizer);
-  };
-  const favoriteVoteDefinitionsOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceDashboardFavoriteVoteDefinitionsRelationViewPage((target || data).__signedIdentifier));
-  };
-  const ownedVoteDefinitionsBulkDeleteAction = async (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
+  const issuesOwnedBulkDeleteAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
     return new Promise((resolve) => {
-      openCRUDDialog<ServiceVoteDefinitionStored>({
+      openCRUDDialog<ServiceIssueStored>({
         dialogTitle: t(
-          'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.myVotesGroup.ownedVoteDefinitions.BulkDelete',
+          'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkDelete',
           { defaultValue: 'Delete' },
         ),
         itemTitleFn: (item) => item.countyRepresentation!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
           try {
-            if (actions.ownedVoteDefinitionsDeleteAction) {
-              await actions.ownedVoteDefinitionsDeleteAction!(item, true);
+            if (actions.issuesOwnedDeleteAction) {
+              await actions.issuesOwnedDeleteAction!(item, true);
             }
             successHandler();
           } catch (error) {
@@ -324,6 +500,134 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         },
       });
     });
+  };
+  const issuesOwnedCloseDebateAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issuesOwnedActivateForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.activateForIssuesOwned(target!);
+      if (customActions?.postIssuesOwnedActivateForIssueAction) {
+        await customActions.postIssuesOwnedActivateForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const issuesOwnedCreateProArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issuesOwnedCreateCommentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issuesOwnedCloseVoteForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.closeVoteForIssuesOwned(target!);
+      if (customActions?.postIssuesOwnedCloseVoteForIssueAction) {
+        await customActions.postIssuesOwnedCloseVoteForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const issuesOwnedAddToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.addToFavoritesForIssuesOwned(target!);
+      if (customActions?.postIssuesOwnedAddToFavoritesForIssueAction) {
+        await customActions.postIssuesOwnedAddToFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const issuesOwnedDeleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.deleteOrArchiveForIssuesOwned(target!);
+      if (customActions?.postIssuesOwnedDeleteOrArchiveForIssueAction) {
+        await customActions.postIssuesOwnedDeleteOrArchiveForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const issuesOwnedCreateConArgumentAction = async (target: ServiceIssueStored) => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const issuesOwnedRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.removeFromFavoritesForIssuesOwned(target!);
+      if (customActions?.postIssuesOwnedRemoveFromFavoritesForIssueAction) {
+        await customActions.postIssuesOwnedRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const ownedVoteDefinitionsOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceDashboardOwnedVoteDefinitionsRelationViewPage((target || data).__signedIdentifier));
   };
   const ownedVoteDefinitionsFilterAction = async (
     id: string,
@@ -365,324 +669,59 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       }
     }
   };
-  const ownedVoteDefinitionsOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceDashboardOwnedVoteDefinitionsRelationViewPage((target || data).__signedIdentifier));
+  const ownedVoteDefinitionsBulkDeleteAction = async (
+    selectedRows: ServiceVoteDefinitionStored[],
+  ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceVoteDefinitionStored>({
+        dialogTitle: t(
+          'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.myVotesGroup.ownedVoteDefinitions.BulkDelete',
+          { defaultValue: 'Delete' },
+        ),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.ownedVoteDefinitionsDeleteAction) {
+              await actions.ownedVoteDefinitionsDeleteAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+              data: [],
+            });
+          }
+        },
+      });
+    });
   };
-  const userVoteEntriesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const userVoteEntriesRefreshAction = async (
-    queryCustomizer: ServiceVoteEntryQueryCustomizer,
-  ): Promise<ServiceVoteEntryStored[]> => {
-    return userServiceForDashboardHomeImpl.listUserVoteEntries(singletonHost.current, queryCustomizer);
-  };
-  const favoriteIssuesActivateForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.activateForFavoriteIssues(target!);
-      if (customActions?.postFavoriteIssuesActivateForIssueAction) {
-        await customActions.postFavoriteIssuesActivateForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const issuesOwnedActivateForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.activateForIssuesOwned(target!);
-      if (customActions?.postIssuesOwnedActivateForIssueAction) {
-        await customActions.postIssuesOwnedActivateForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const favoriteIssuesAddToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.addToFavoritesForFavoriteIssues(target!);
-      if (customActions?.postFavoriteIssuesAddToFavoritesForIssueAction) {
-        await customActions.postFavoriteIssuesAddToFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const issuesOwnedAddToFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.addToFavoritesForIssuesOwned(target!);
-      if (customActions?.postIssuesOwnedAddToFavoritesForIssueAction) {
-        await customActions.postIssuesOwnedAddToFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const favoriteIssuesCloseDebateAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issuesOwnedCloseDebateAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const favoriteIssuesCloseVoteForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.closeVoteForFavoriteIssues(target!);
-      if (customActions?.postFavoriteIssuesCloseVoteForIssueAction) {
-        await customActions.postFavoriteIssuesCloseVoteForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const issuesOwnedCloseVoteForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.closeVoteForIssuesOwned(target!);
-      if (customActions?.postIssuesOwnedCloseVoteForIssueAction) {
-        await customActions.postIssuesOwnedCloseVoteForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const favoriteIssuesDeleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.deleteOrArchiveForFavoriteIssues(target!);
-      if (customActions?.postFavoriteIssuesDeleteOrArchiveForIssueAction) {
-        await customActions.postFavoriteIssuesDeleteOrArchiveForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const issuesOwnedDeleteOrArchiveForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.deleteOrArchiveForIssuesOwned(target!);
-      if (customActions?.postIssuesOwnedDeleteOrArchiveForIssueAction) {
-        await customActions.postIssuesOwnedDeleteOrArchiveForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const favoriteIssuesRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.removeFromFavoritesForFavoriteIssues(target!);
-      if (customActions?.postFavoriteIssuesRemoveFromFavoritesForIssueAction) {
-        await customActions.postFavoriteIssuesRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const issuesOwnedRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.removeFromFavoritesForIssuesOwned(target!);
-      if (customActions?.postIssuesOwnedRemoveFromFavoritesForIssueAction) {
-        await customActions.postIssuesOwnedRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const favoriteIssuesCreateConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issuesOwnedCreateConArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const favoriteIssuesCreateProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issuesOwnedCreateProArgumentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const favoriteIssuesCreateCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issuesOwnedCreateCommentAction = async (target: ServiceIssueStored) => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const backAction = async () => {
-    navigateBack();
-  };
-  const refreshAction = async (queryCustomizer: ServiceDashboardQueryCustomizer): Promise<ServiceDashboardStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await userServiceForDashboardHomeImpl.refresh(singletonHost.current, pageQueryCustomizer);
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceDashboardStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const favoriteVoteDefinitionsVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownedVoteDefinitionsVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const favoriteVoteDefinitionsVoteSelectAnswerAction = async () => {
+  const ownedVoteDefinitionsVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
     const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
-        data,
-      );
-    if (result === 'submit') {
-      if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-      }
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const ownedVoteDefinitionsVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+      target,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const ownedVoteDefinitionsVoteSelectAnswerAction = async () => {
@@ -696,30 +735,8 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       }
     }
   };
-  const favoriteVoteDefinitionsVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownedVoteDefinitionsVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const favoriteVoteDefinitionsVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
-      target,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownedVoteDefinitionsVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+  const ownedVoteDefinitionsVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
       target,
     );
     if (result === 'submit' && !editMode) {
@@ -733,52 +750,52 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   };
 
   const actions: ServiceDashboardDashboard_View_EditPageActions = {
+    backAction,
+    refreshAction,
+    userVoteEntriesFilterAction,
+    userVoteEntriesRefreshAction,
+    favoriteIssuesOpenPageAction,
     favoriteIssuesFilterAction,
     favoriteIssuesRefreshAction,
-    favoriteIssuesOpenPageAction,
-    issuesOwnedBulkDeleteAction,
+    favoriteIssuesCloseDebateAction,
+    favoriteIssuesActivateForIssueAction,
+    favoriteIssuesCreateProArgumentAction,
+    favoriteIssuesCreateCommentAction,
+    favoriteIssuesCloseVoteForIssueAction,
+    favoriteIssuesAddToFavoritesForIssueAction,
+    favoriteIssuesDeleteOrArchiveForIssueAction,
+    favoriteIssuesCreateConArgumentAction,
+    favoriteIssuesRemoveFromFavoritesForIssueAction,
+    favoriteVoteDefinitionsOpenPageAction,
+    favoriteVoteDefinitionsFilterAction,
+    favoriteVoteDefinitionsRefreshAction,
+    favoriteVoteDefinitionsVoteYesNoAbstainAction,
+    favoriteVoteDefinitionsVoteYesNoAction,
+    favoriteVoteDefinitionsVoteSelectAnswerAction,
+    favoriteVoteDefinitionsVoteRatingAction,
+    issuesOwnedOpenPageAction,
     issuesOwnedFilterAction,
     issuesOwnedRefreshAction,
     issuesOwnedDeleteAction,
-    issuesOwnedOpenPageAction,
-    favoriteVoteDefinitionsFilterAction,
-    favoriteVoteDefinitionsRefreshAction,
-    favoriteVoteDefinitionsOpenPageAction,
-    ownedVoteDefinitionsBulkDeleteAction,
+    issuesOwnedBulkDeleteAction,
+    issuesOwnedCloseDebateAction,
+    issuesOwnedActivateForIssueAction,
+    issuesOwnedCreateProArgumentAction,
+    issuesOwnedCreateCommentAction,
+    issuesOwnedCloseVoteForIssueAction,
+    issuesOwnedAddToFavoritesForIssueAction,
+    issuesOwnedDeleteOrArchiveForIssueAction,
+    issuesOwnedCreateConArgumentAction,
+    issuesOwnedRemoveFromFavoritesForIssueAction,
+    ownedVoteDefinitionsOpenPageAction,
     ownedVoteDefinitionsFilterAction,
     ownedVoteDefinitionsRefreshAction,
     ownedVoteDefinitionsDeleteAction,
-    ownedVoteDefinitionsOpenPageAction,
-    userVoteEntriesFilterAction,
-    userVoteEntriesRefreshAction,
-    favoriteIssuesActivateForIssueAction,
-    issuesOwnedActivateForIssueAction,
-    favoriteIssuesAddToFavoritesForIssueAction,
-    issuesOwnedAddToFavoritesForIssueAction,
-    favoriteIssuesCloseDebateAction,
-    issuesOwnedCloseDebateAction,
-    favoriteIssuesCloseVoteForIssueAction,
-    issuesOwnedCloseVoteForIssueAction,
-    favoriteIssuesDeleteOrArchiveForIssueAction,
-    issuesOwnedDeleteOrArchiveForIssueAction,
-    favoriteIssuesRemoveFromFavoritesForIssueAction,
-    issuesOwnedRemoveFromFavoritesForIssueAction,
-    favoriteIssuesCreateConArgumentAction,
-    issuesOwnedCreateConArgumentAction,
-    favoriteIssuesCreateProArgumentAction,
-    issuesOwnedCreateProArgumentAction,
-    favoriteIssuesCreateCommentAction,
-    issuesOwnedCreateCommentAction,
-    backAction,
-    refreshAction,
-    favoriteVoteDefinitionsVoteRatingAction,
-    ownedVoteDefinitionsVoteRatingAction,
-    favoriteVoteDefinitionsVoteSelectAnswerAction,
-    ownedVoteDefinitionsVoteSelectAnswerAction,
-    favoriteVoteDefinitionsVoteYesNoAbstainAction,
+    ownedVoteDefinitionsBulkDeleteAction,
     ownedVoteDefinitionsVoteYesNoAbstainAction,
-    favoriteVoteDefinitionsVoteYesNoAction,
     ownedVoteDefinitionsVoteYesNoAction,
+    ownedVoteDefinitionsVoteSelectAnswerAction,
+    ownedVoteDefinitionsVoteRatingAction,
     ...(customActions ?? {}),
   };
 
@@ -815,6 +832,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </PageContainerTransition>
       </Suspense>

@@ -9,11 +9,11 @@
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceCommentAttributes, ServiceServiceUserAttributes, ServiceSimpleVoteAttributes } from '../model';
 import {
-  ServiceServiceUserActivityCitiesMaskBuilder,
   ServiceServiceUserActivityCountiesMaskBuilder,
-  ServiceServiceUserActivityDistrictsMaskBuilder,
-  ServiceServiceUserResidentCityMaskBuilder,
   ServiceServiceUserResidentCountyMaskBuilder,
+  ServiceServiceUserActivityCitiesMaskBuilder,
+  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserActivityDistrictsMaskBuilder,
   ServiceServiceUserResidentDistrictMaskBuilder,
 } from './ServiceServiceUserMaskBuilder';
 
@@ -21,11 +21,11 @@ export class ServiceCommentCreatedByMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCitiesMaskBuilder
       | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
       | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
       | ServiceServiceUserResidentDistrictMaskBuilder
     >,
   ) {

@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceIssueCategoryStored,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { serviceIssueServiceForCategoriesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueServiceForCategoriesImpl } from '~/services/data-axios/ServiceIssueServiceForCategoriesImpl';
+
 export type ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActionsExtended =
   ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActions & {};
 
@@ -103,6 +105,12 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueServiceForCategoriesImpl = useMemo(
+    () => new ServiceIssueServiceForCategoriesImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -133,6 +141,9 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
   const title: string = t('service.IssueCategory.IssueCategory_Table.AddSelector', {
     defaultValue: 'IssueCategory Table',
   });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const addAction = async (selected: ServiceIssueCategoryStored[]) => {

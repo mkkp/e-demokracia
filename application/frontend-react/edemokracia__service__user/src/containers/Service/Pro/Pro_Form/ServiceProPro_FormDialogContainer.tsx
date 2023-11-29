@@ -45,6 +45,7 @@ export interface ServiceProPro_FormDialogProps {
   storeDiff: (attributeName: keyof ServicePro, value: any) => void;
   validation: Map<keyof ServicePro, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServicePro, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::Pro::Pro_Form
@@ -67,6 +68,7 @@ export default function ServiceProPro_FormDialog(props: ServiceProPro_FormDialog
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceProQueryCustomizer = {
     _mask:
@@ -104,6 +106,7 @@ export default function ServiceProPro_FormDialog(props: ServiceProPro_FormDialog
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

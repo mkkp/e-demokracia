@@ -43,6 +43,7 @@ export interface CloseDebateInputCloseDebateInput_View_EditProps {
   editMode: boolean;
   validation: Map<keyof CloseDebateInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_NG3PIG6JEe2wNaja8kBvcQ)/TransferObjectViewPageContainer
@@ -63,6 +64,7 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -18,7 +19,9 @@ import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 import type { ServiceCountyCounty_FormDialogActions } from '~/containers/Service/County/County_Form/ServiceCountyCounty_FormDialogContainer';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
-import { userServiceForAdminCountiesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminCountiesImpl } from '~/services/data-axios/UserServiceForAdminCountiesImpl';
+
 export type ServiceCountyCounty_FormDialogActionsExtended = ServiceCountyCounty_FormDialogActions & {};
 
 export const SERVICE_USER_ADMIN_COUNTIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -93,6 +96,9 @@ export interface ServiceUserAdminCountiesAccessFormPageProps {
 export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUserAdminCountiesAccessFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const userServiceForAdminCountiesImpl = useMemo(() => new UserServiceForAdminCountiesImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -153,6 +159,11 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
 
   // Calculated section
   const title: string = t('service.County.County_Form', { defaultValue: 'County Form' });
+
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
 
   // Action section
   const backAction = async () => {
@@ -216,6 +227,7 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

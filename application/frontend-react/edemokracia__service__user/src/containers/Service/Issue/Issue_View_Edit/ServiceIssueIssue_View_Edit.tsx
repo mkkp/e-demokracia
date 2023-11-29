@@ -120,6 +120,7 @@ export interface ServiceIssueIssue_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceIssue, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssue, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -138,6 +139,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -306,13 +308,13 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="(_9Q03UI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WXE2cI7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
-                      <Typography id="_9Q03UI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WXE2cI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.Issue.Issue_View_Edit.issue.Icon', { defaultValue: 'Issue' })}
                       </Typography>
                     </Grid>
@@ -638,13 +640,13 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   spacing={2}
                 >
                   <Grid item xs={12} sm={12} md={6.0}>
-                    <Card id="(_9Q5IwY2dEe6GJNWtqQaZ_w)/LabelWrapper">
+                    <Card id="_WXGroI7EEe6rlbj78nBB0Q)/LabelWrapper">
                       <CardContent>
                         <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                              <Typography id="_9Q5IwY2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                              <Typography id="_WXGroI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                                 {t('service.Issue.Issue_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
                               </Typography>
                             </Grid>
@@ -732,13 +734,13 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={6.0}>
-                    <Card id="(_9Q_2cI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+                    <Card id="_WXJu8I7EEe6rlbj78nBB0Q)/LabelWrapper">
                       <CardContent>
                         <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                              <Typography id="_9Q_2cI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                              <Typography id="_WXJu8I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                                 {t('service.Issue.Issue_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
                               </Typography>
                             </Grid>

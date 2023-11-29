@@ -9,38 +9,38 @@
 import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceIssueCategoryAttributes, ServiceServiceUserAttributes } from '../model';
 import {
-  ServiceServiceUserActivityCitiesMaskBuilder,
   ServiceServiceUserActivityCountiesMaskBuilder,
-  ServiceServiceUserActivityDistrictsMaskBuilder,
-  ServiceServiceUserResidentCityMaskBuilder,
   ServiceServiceUserResidentCountyMaskBuilder,
+  ServiceServiceUserActivityCitiesMaskBuilder,
+  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserActivityDistrictsMaskBuilder,
   ServiceServiceUserResidentDistrictMaskBuilder,
 } from './ServiceServiceUserMaskBuilder';
 
-export class ServiceIssueCategoryOwnerMaskBuilder extends RelationMaskBuilder {
-  constructor(
-    protected props: Array<
-      | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCitiesMaskBuilder
-      | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
-      | ServiceServiceUserResidentCountyMaskBuilder
-      | ServiceServiceUserResidentDistrictMaskBuilder
-    >,
-  ) {
-    super('owner', props);
-  }
-}
 export class ServiceIssueCategorySubcategoriesMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceIssueCategoryAttributes
-      | ServiceIssueCategoryOwnerMaskBuilder
       | ServiceIssueCategorySubcategoriesMaskBuilder
+      | ServiceIssueCategoryOwnerMaskBuilder
     >,
   ) {
     super('subcategories', props);
+  }
+}
+export class ServiceIssueCategoryOwnerMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<
+      | ServiceServiceUserAttributes
+      | ServiceServiceUserActivityCountiesMaskBuilder
+      | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
+      | ServiceServiceUserResidentDistrictMaskBuilder
+    >,
+  ) {
+    super('owner', props);
   }
 }
 
@@ -48,8 +48,8 @@ export class ServiceIssueCategoryMaskBuilder extends MaskBuilder {
   constructor(
     protected props: Array<
       | ServiceIssueCategoryAttributes
-      | ServiceIssueCategoryOwnerMaskBuilder
       | ServiceIssueCategorySubcategoriesMaskBuilder
+      | ServiceIssueCategoryOwnerMaskBuilder
     >,
   ) {
     super(props);

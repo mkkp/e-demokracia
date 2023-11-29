@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -133,102 +133,105 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
 
   const selectedRows = useRef<ServiceServiceUserStored[]>([]);
 
-  const columns: GridColDef<ServiceServiceUserStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'userName',
-      headerName: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceServiceUserStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'userName',
+        headerName: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'isAdmin',
-      headerName: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'boolean',
-      filterable: false && true,
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<any, ServiceServiceUserStored>) => {
-        if (params.row.isAdmin === null || params.row.isAdmin === undefined) {
-          return <MdiIcon className="undefined" path="minus" color="#ddd" />;
-        } else if (params.row.isAdmin) {
-          return <MdiIcon className="true" path="check-circle" color="green" />;
-        }
-        return <MdiIcon className="false" path="close-circle" color="red" />;
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'firstName',
-      headerName: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'isAdmin',
+        headerName: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'lastName',
-      headerName: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'phone',
-      headerName: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'email',
-      headerName: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 100,
+        type: 'boolean',
+        filterable: false && true,
+        align: 'center',
+        renderCell: (params: GridRenderCellParams<any, ServiceServiceUserStored>) => {
+          if (params.row.isAdmin === null || params.row.isAdmin === undefined) {
+            return <MdiIcon className="undefined" path="minus" color="#ddd" />;
+          } else if (params.row.isAdmin) {
+            return <MdiIcon className="true" path="check-circle" color="green" />;
+          }
+          return <MdiIcon className="false" path="close-circle" color="red" />;
+        },
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'firstName',
+        headerName: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'lastName',
+        headerName: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'phone',
+        headerName: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'email',
+        headerName: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceServiceUserStored>[] = [
     {
@@ -255,56 +258,59 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_8YPCcI2dEe6GJNWtqQaZ_w',
-      attributeName: 'userName',
-      label: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Vot7oI7EEe6rlbj78nBB0Q',
+        attributeName: 'userName',
+        label: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8YSFwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'isAdmin',
-      label: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
-      filterType: FilterType.boolean,
-    },
+      {
+        id: '_Vow-8I7EEe6rlbj78nBB0Q',
+        attributeName: 'isAdmin',
+        label: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
+        filterType: FilterType.boolean,
+      },
 
-    {
-      id: '_8YVJEI2dEe6GJNWtqQaZ_w',
-      attributeName: 'firstName',
-      label: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Vo1QYI7EEe6rlbj78nBB0Q',
+        attributeName: 'firstName',
+        label: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8YYMYI2dEe6GJNWtqQaZ_w',
-      attributeName: 'lastName',
-      label: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Vo4TsI7EEe6rlbj78nBB0Q',
+        attributeName: 'lastName',
+        label: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8YbPsI2dEe6GJNWtqQaZ_w',
-      attributeName: 'phone',
-      label: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Vo6v8I7EEe6rlbj78nBB0Q',
+        attributeName: 'phone',
+        label: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8YeTAI2dEe6GJNWtqQaZ_w',
-      attributeName: 'email',
-      label: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Vo9zQI7EEe6rlbj78nBB0Q',
+        attributeName: 'email',
+        label: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_8YhWUI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
-  ];
+      {
+        id: '_VpAPgI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

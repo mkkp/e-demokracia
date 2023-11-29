@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -125,81 +125,84 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
 
   const selectedRows = useRef<ServiceIssueAttachmentStored[]>([]);
 
-  const columns: GridColDef<ServiceIssueAttachmentStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'link',
-      headerName: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceIssueAttachmentStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'link',
+        headerName: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'file',
-      headerName: t('service.Issue.Issue_View_Edit.file', { defaultValue: 'File' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<any, ServiceIssueAttachmentStored>) => {
-        return params.row.file ? (
-          <ButtonGroup size="small" variant="outlined">
-            <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-download"
-              startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
-              onClick={(event: any) => {
-                event.preventDefault();
-                event.stopPropagation();
-                downloadFile(params.row, 'file', 'attachment');
-              }}
-            >
-              {extractFileNameFromToken(params.row.file)}
-            </Button>
-            <Button
-              id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
-              onClick={(event: any) => {
-                event.preventDefault();
-                event.stopPropagation();
-                downloadFile(params.row, 'file', 'inline');
-              }}
-            >
-              <MdiIcon path="eye" sx={{ mr: 0.5 }} />
-            </Button>
-          </ButtonGroup>
-        ) : (
-          <MdiIcon path="minus" />
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'type',
-      headerName: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'file',
+        headerName: t('service.Issue.Issue_View_Edit.file', { defaultValue: 'File' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.AttachmentType.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        align: 'center',
+        renderCell: (params: GridRenderCellParams<any, ServiceIssueAttachmentStored>) => {
+          return params.row.file ? (
+            <ButtonGroup size="small" variant="outlined">
+              <Button
+                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_WgxlAI7EEe6rlbj78nBB0Q)-download"
+                startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
+                onClick={(event: any) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  downloadFile(params.row, 'file', 'attachment');
+                }}
+              >
+                {extractFileNameFromToken(params.row.file)}
+              </Button>
+              <Button
+                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_WgxlAI7EEe6rlbj78nBB0Q)-view"
+                onClick={(event: any) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  downloadFile(params.row, 'file', 'inline');
+                }}
+              >
+                <MdiIcon path="eye" sx={{ mr: 0.5 }} />
+              </Button>
+            </ButtonGroup>
+          ) : (
+            <MdiIcon path="minus" />
+          );
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'type',
+        headerName: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.AttachmentType.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceIssueAttachmentStored>[] = [
     {
@@ -217,22 +220,25 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9eOaII2dEe6GJNWtqQaZ_w',
-      attributeName: 'link',
-      label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WgyzIY7EEe6rlbj78nBB0Q',
+        attributeName: 'link',
+        label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9ePoQI2dEe6GJNWtqQaZ_w',
-      attributeName: 'type',
-      label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['LINK', 'IMAGE', 'VIDEO', 'MAP'],
-    },
-  ];
+      {
+        id: '_WgzaMo7EEe6rlbj78nBB0Q',
+        attributeName: 'type',
+        label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['LINK', 'IMAGE', 'VIDEO', 'MAP'],
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPaginationModel((prevState) => ({

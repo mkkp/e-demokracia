@@ -42,6 +42,7 @@ export interface ServiceCountyCounty_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceCounty, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCounty, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_a0aoBn2iEe2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -60,6 +61,7 @@ export default function ServiceCountyCounty_Form(props: ServiceCountyCounty_Form
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

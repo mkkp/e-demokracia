@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -26,8 +26,12 @@ import type {
   ServiceVoteEntryStored,
   VoteStatus,
 } from '~/services/data-api';
-import { userServiceForUserOwnedVoteEntriesImpl } from '~/services/data-axios';
-export type ServiceVoteEntryVoteEntry_TablePageActionsExtended = ServiceVoteEntryVoteEntry_TablePageActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForUserOwnedVoteEntriesImpl } from '~/services/data-axios/UserServiceForUserOwnedVoteEntriesImpl';
+
+export type ServiceVoteEntryVoteEntry_TablePageActionsExtended = ServiceVoteEntryVoteEntry_TablePageActions & {
+  postRefreshAction?: (data: ServiceVoteEntryStored[]) => Promise<void>;
+};
 
 export const SERVICE_USER_USER_OWNED_VOTE_ENTRIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceVoteEntryVoteEntry_TableActionsHook';
@@ -43,6 +47,12 @@ const ServiceVoteEntryVoteEntry_TablePageContainer = lazy(
 // XMIID: User/(esm/_0CUYEORyEe2Bgcx6em3jZg)/AccessTablePageDefinition
 // Name: service::User::userOwnedVoteEntries::AccessTablePage
 export default function ServiceUserUserOwnedVoteEntriesAccessTablePage() {
+  // Services
+  const userServiceForUserOwnedVoteEntriesImpl = useMemo(
+    () => new UserServiceForUserOwnedVoteEntriesImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -72,7 +82,13 @@ export default function ServiceUserUserOwnedVoteEntriesAccessTablePage() {
   // Calculated section
   const title: string = t('service.VoteEntry.VoteEntry_Table', { defaultValue: 'VoteEntry Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const openPageAction = async (target?: ServiceVoteEntryStored) => {
+    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
+  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -97,14 +113,11 @@ export default function ServiceUserUserOwnedVoteEntriesAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceVoteEntryStored) => {
-    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
-  };
 
   const actions: ServiceVoteEntryVoteEntry_TablePageActions = {
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
     ...(customActions ?? {}),
   };
 

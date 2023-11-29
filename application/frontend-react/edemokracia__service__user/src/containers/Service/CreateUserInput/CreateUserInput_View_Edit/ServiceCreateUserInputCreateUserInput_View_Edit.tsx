@@ -17,8 +17,10 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -50,6 +52,7 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceCreateUserInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateUserInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewPageContainer
@@ -70,6 +73,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -155,26 +159,35 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <FormGroup>
-              <FormControlLabel
-                className="switch"
-                sx={{ marginTop: '6px' }}
-                disabled={false || !isFormUpdateable() || isLoading}
-                control={
-                  <Checkbox
-                    checked={data.hasAdminAccess || false}
-                    onChange={(event) => {
-                      storeDiff('hasAdminAccess', event.target.checked);
-                    }}
-                  />
-                }
-                label={
-                  t('service.CreateUserInput.CreateUserInput_View_Edit.hasAdminAccess', {
-                    defaultValue: 'IsAdmin',
-                  }) as string
-                }
-              />
-            </FormGroup>
+            <FormControl error={!!validation.get('hasAdminAccess')}>
+              <FormGroup>
+                <FormControlLabel
+                  className="switch"
+                  sx={{
+                    marginTop: '6px',
+                    color: (theme) => (validation.has('hasAdminAccess') ? theme.palette.error.main : 'primary'),
+                  }}
+                  disabled={false || !isFormUpdateable() || isLoading}
+                  control={
+                    <Checkbox
+                      checked={data.hasAdminAccess || false}
+                      sx={{
+                        color: (theme) => (validation.has('hasAdminAccess') ? theme.palette.error.main : 'primary'),
+                      }}
+                      onChange={(event) => {
+                        storeDiff('hasAdminAccess', event.target.checked);
+                      }}
+                    />
+                  }
+                  label={
+                    t('service.CreateUserInput.CreateUserInput_View_Edit.hasAdminAccess', {
+                      defaultValue: 'IsAdmin',
+                    }) as string
+                  }
+                />
+              </FormGroup>
+              {validation.has('hasAdminAccess') && <FormHelperText>{validation.get('hasAdminAccess')}</FormHelperText>}
+            </FormControl>
           </Grid>
 
           <Grid item xs={12} sm={12}>

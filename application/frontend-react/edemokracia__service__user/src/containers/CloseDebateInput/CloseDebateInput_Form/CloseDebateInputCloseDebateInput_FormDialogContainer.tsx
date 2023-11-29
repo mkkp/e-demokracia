@@ -49,6 +49,7 @@ export interface CloseDebateInputCloseDebateInput_FormDialogProps {
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void;
   validation: Map<keyof CloseDebateInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: CloseDebateInput::CloseDebateInput_Form
@@ -73,6 +74,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: CloseDebateInputQueryCustomizer = {
     _mask: '{closeAt,description,title,voteType}',
@@ -109,6 +111,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -148,7 +151,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
         {editMode && actions.closeDebateForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormCallButton/(discriminator/_UuXMMI7EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

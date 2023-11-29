@@ -46,6 +46,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPro
   editMode: boolean;
   validation: Map<keyof SelectAnswerVoteSelection, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof SelectAnswerVoteSelection, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_XwnW4G6bEe2wNaja8kBvcQ)/TransferObjectViewPageContainer
@@ -66,6 +67,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

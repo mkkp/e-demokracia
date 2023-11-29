@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,9 +26,17 @@ import type {
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { serviceSelectAnswerVoteSelectionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceSelectAnswerVoteSelectionServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteSelectionServiceImpl';
+
 export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActionsExtended =
-  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions & {};
+  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceSelectAnswerVoteSelectionStored,
+      storeDiff: (attributeName: keyof ServiceSelectAnswerVoteSelection, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteSelection, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_VOTE_SELECTIONS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionsHook';
@@ -106,6 +115,12 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceSelectAnswerVoteSelectionServiceImpl = useMemo(
+    () => new ServiceSelectAnswerVoteSelectionServiceImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -174,13 +189,61 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
     defaultValue: 'SelectAnswerVoteSelection View / Edit',
   });
 
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+
   // Action section
   const backAction = async () => {
     onClose();
   };
+  const refreshAction = async (
+    queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<ServiceSelectAnswerVoteSelectionStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceSelectAnswerVoteSelectionServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceSelectAnswerVoteSelectionStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceSelectAnswerVoteSelectionServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceSelectAnswerVoteSelection, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleError<ServiceSelectAnswerVoteSelection>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
   };
   const deleteAction = async () => {
     try {
@@ -200,53 +263,13 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
       handleError(error, undefined, data);
     }
   };
-  const refreshAction = async (
-    queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceSelectAnswerVoteSelectionServiceImpl.refresh(ownerData, pageQueryCustomizer);
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceSelectAnswerVoteSelectionStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const updateAction = async () => {
-    setIsLoading(true);
-    try {
-      const res = await serviceSelectAnswerVoteSelectionServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceSelectAnswerVoteSelection, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleError<ServiceSelectAnswerVoteSelection>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions = {
     backAction,
-    cancelAction,
-    deleteAction,
     refreshAction,
+    cancelAction,
     updateAction,
+    deleteAction,
     ...(customActions ?? {}),
   };
 
@@ -275,6 +298,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

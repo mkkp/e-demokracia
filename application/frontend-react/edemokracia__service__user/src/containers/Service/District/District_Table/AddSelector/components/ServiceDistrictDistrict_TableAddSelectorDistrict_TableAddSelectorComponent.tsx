@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -114,63 +114,69 @@ export function ServiceDistrictDistrict_TableAddSelectorDistrict_TableAddSelecto
   const [firstItem, setFirstItem] = useState<ServiceDistrictStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
-  const columns: GridColDef<ServiceDistrictStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'county',
-      headerName: t('service.District.District_Table.AddSelector.county', { defaultValue: 'County' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'county',
+        headerName: t('service.District.District_Table.AddSelector.county', { defaultValue: 'County' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'city',
-      headerName: t('service.District.District_Table.AddSelector.city', { defaultValue: 'City' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'city',
+        headerName: t('service.District.District_Table.AddSelector.city', { defaultValue: 'City' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'name',
-      headerName: t('service.District.District_Table.AddSelector.name', { defaultValue: 'District name' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'name',
+        headerName: t('service.District.District_Table.AddSelector.name', { defaultValue: 'District name' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_7QuAwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'county',
-      label: t('service.District.District_Table.AddSelector.county', { defaultValue: 'County' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Upq5co7EEe6rlbj78nBB0Q',
+        attributeName: 'county',
+        label: t('service.District.District_Table.AddSelector.county', { defaultValue: 'County' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_7QxrII2dEe6GJNWtqQaZ_w',
-      attributeName: 'city',
-      label: t('service.District.District_Table.AddSelector.city', { defaultValue: 'City' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Uprggo7EEe6rlbj78nBB0Q',
+        attributeName: 'city',
+        label: t('service.District.District_Table.AddSelector.city', { defaultValue: 'City' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_7Q18kI2dEe6GJNWtqQaZ_w',
-      attributeName: 'name',
-      label: t('service.District.District_Table.AddSelector.name', { defaultValue: 'District name' }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_UpsHkY7EEe6rlbj78nBB0Q',
+        attributeName: 'name',
+        label: t('service.District.District_Table.AddSelector.name', { defaultValue: 'District name' }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -232,9 +238,12 @@ export function ServiceDistrictDistrict_TableAddSelectorDistrict_TableAddSelecto
     setIsNextButtonEnabled(!isNext);
   }
 
-  const handleIsRowSelectable = (params: GridRowParams<ServiceDistrictStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !true, alreadySelected);
-  };
+  const handleIsRowSelectable = useCallback(
+    (params: GridRowParams<ServiceDistrictStored & { __selected?: boolean }>) => {
+      return isRowSelectable(params.row, !true, alreadySelected);
+    },
+    [],
+  );
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;

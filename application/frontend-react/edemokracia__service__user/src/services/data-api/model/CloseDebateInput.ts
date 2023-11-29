@@ -10,12 +10,12 @@ import type { JudoStored } from '@judo/data-api-common';
 import { VoteTypeOnCloseDebate } from './VoteTypeOnCloseDebate';
 
 export interface CloseDebateInput {
-  closeAt: Date;
-  description: string;
-  title: string;
   voteType: VoteTypeOnCloseDebate;
+  title: string;
+  description: string;
+  closeAt: Date;
 }
 
-export type CloseDebateInputAttributes = 'closeAt' | 'description' | 'title' | 'voteType';
+export type CloseDebateInputAttributes = 'voteType' | 'title' | 'description' | 'closeAt';
 
 export interface CloseDebateInputStored extends JudoStored<CloseDebateInput>, CloseDebateInput {}

@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -139,171 +139,174 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
 
   const selectedRows = useRef<ServiceVoteDefinitionStored[]>([]);
 
-  const columns: GridColDef<ServiceVoteDefinitionStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'countyRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
-        defaultValue: 'CountyRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceVoteDefinitionStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'countyRepresentation',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
+          defaultValue: 'CountyRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'cityRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
-        defaultValue: 'CityRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'districtRepresentation',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
-        defaultValue: 'DistrictRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', {
-        defaultValue: 'Title',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'voteType',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
-        defaultValue: 'VoteType',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteType.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'numberOfVotes',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
-        defaultValue: 'NumberOfVotes',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'cityRepresentation',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
+          defaultValue: 'CityRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
-        defaultValue: 'Created',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'districtRepresentation',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
+          defaultValue: 'DistrictRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'closeAt',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', {
+          defaultValue: 'Title',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
-        defaultValue: 'Status',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'voteType',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
+          defaultValue: 'VoteType',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteType.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'numberOfVotes',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
+          defaultValue: 'NumberOfVotes',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
+          defaultValue: 'Created',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'closeAt',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
+          defaultValue: 'Status',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
     {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WuIEgo7EEe6rlbj78nBB0Q)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
         defaultValue: 'voteYesNoAbstain',
       }) as string,
@@ -316,7 +319,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WuIEgo7EEe6rlbj78nBB0Q)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
         defaultValue: 'voteYesNo',
       }) as string,
@@ -329,7 +332,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WuIEgo7EEe6rlbj78nBB0Q)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteSelectAnswer', {
         defaultValue: 'voteSelectAnswer',
       }) as string,
@@ -342,7 +345,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BdNKUF5NEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WuIEgo7EEe6rlbj78nBB0Q)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
         defaultValue: 'voteRating',
       }) as string,
@@ -356,86 +359,91 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9trLYI2dEe6GJNWtqQaZ_w',
-      attributeName: 'countyRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
-        defaultValue: 'CountyRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WuDMAI7EEe6rlbj78nBB0Q',
+        attributeName: 'countyRepresentation',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.countyRepresentation', {
+          defaultValue: 'CountyRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9tsZgI2dEe6GJNWtqQaZ_w',
-      attributeName: 'cityRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
-        defaultValue: 'CityRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WuDzEI7EEe6rlbj78nBB0Q',
+        attributeName: 'cityRepresentation',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.cityRepresentation', {
+          defaultValue: 'CityRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9ttAkI2dEe6GJNWtqQaZ_w',
-      attributeName: 'districtRepresentation',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
-        defaultValue: 'DistrictRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WuEaII7EEe6rlbj78nBB0Q',
+        attributeName: 'districtRepresentation',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.districtRepresentation', {
+          defaultValue: 'DistrictRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9ttnoo2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WuFBMI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9tu1wI2dEe6GJNWtqQaZ_w',
-      attributeName: 'voteType',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
-        defaultValue: 'VoteType',
-      }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
-    },
+      {
+        id: '_WuFBNI7EEe6rlbj78nBB0Q',
+        attributeName: 'voteType',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
+          defaultValue: 'VoteType',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
+      },
 
-    {
-      id: '_9tvc0o2dEe6GJNWtqQaZ_w',
-      attributeName: 'numberOfVotes',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
-        defaultValue: 'NumberOfVotes',
-      }) as string,
-      filterType: FilterType.numeric,
-    },
+      {
+        id: '_WuFoQo7EEe6rlbj78nBB0Q',
+        attributeName: 'numberOfVotes',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
+          defaultValue: 'NumberOfVotes',
+        }) as string,
+        filterType: FilterType.numeric,
+      },
 
-    {
-      id: '_9twq8I2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
-        defaultValue: 'Created',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WuGPUY7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
+          defaultValue: 'Created',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9txSAY2dEe6GJNWtqQaZ_w',
-      attributeName: 'closeAt',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WuG2YI7EEe6rlbj78nBB0Q',
+        attributeName: 'closeAt',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9tygII2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', { defaultValue: 'Status' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
-    },
-  ];
+      {
+        id: '_WuG2ZI7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
+          defaultValue: 'Status',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

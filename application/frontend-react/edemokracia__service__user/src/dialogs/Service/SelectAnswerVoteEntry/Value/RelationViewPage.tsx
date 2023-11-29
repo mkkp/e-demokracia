@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,9 +26,17 @@ import type {
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { serviceSelectAnswerVoteSelectionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceSelectAnswerVoteSelectionServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteSelectionServiceImpl';
+
 export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActionsExtended =
-  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions & {};
+  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceSelectAnswerVoteSelectionStored,
+      storeDiff: (attributeName: keyof ServiceSelectAnswerVoteSelection, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteSelection, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_SELECT_ANSWER_VOTE_ENTRY_VALUE_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionsHook';
@@ -106,6 +115,12 @@ export default function ServiceSelectAnswerVoteEntryValueRelationViewPage(
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceSelectAnswerVoteSelectionServiceImpl = useMemo(
+    () => new ServiceSelectAnswerVoteSelectionServiceImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -176,6 +191,9 @@ export default function ServiceSelectAnswerVoteEntryValueRelationViewPage(
     defaultValue: 'SelectAnswerVoteSelection View / Edit',
   });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     onClose();
@@ -195,6 +213,9 @@ export default function ServiceSelectAnswerVoteEntryValueRelationViewPage(
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceSelectAnswerVoteSelectionStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -236,6 +257,7 @@ export default function ServiceSelectAnswerVoteEntryValueRelationViewPage(
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

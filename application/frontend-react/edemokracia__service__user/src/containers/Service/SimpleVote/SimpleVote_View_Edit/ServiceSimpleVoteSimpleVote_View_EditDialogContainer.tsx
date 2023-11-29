@@ -50,6 +50,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void;
   validation: Map<keyof ServiceSimpleVote, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::SimpleVote::SimpleVote_View_Edit
@@ -74,6 +75,7 @@ export default function ServiceSimpleVoteSimpleVote_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceSimpleVoteQueryCustomizer = {
     _mask: '{created,type}',
@@ -110,6 +112,7 @@ export default function ServiceSimpleVoteSimpleVote_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

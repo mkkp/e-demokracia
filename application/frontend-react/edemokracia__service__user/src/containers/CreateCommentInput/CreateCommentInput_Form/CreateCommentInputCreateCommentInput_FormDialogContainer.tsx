@@ -53,6 +53,7 @@ export interface CreateCommentInputCreateCommentInput_FormDialogProps {
   storeDiff: (attributeName: keyof CreateCommentInput, value: any) => void;
   validation: Map<keyof CreateCommentInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CreateCommentInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: CreateCommentInput::CreateCommentInput_Form
@@ -77,6 +78,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: CreateCommentInputQueryCustomizer = {
     _mask: '{comment}',
@@ -113,6 +115,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -152,7 +155,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
         {editMode && actions.createCommentForIssueAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormCallButton/(discriminator/_UujZcY7EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

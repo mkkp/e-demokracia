@@ -42,6 +42,7 @@ export interface RatingVoteInputRatingVoteInput_FormProps {
   editMode: boolean;
   validation: Map<keyof RatingVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof RatingVoteInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -60,6 +61,7 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

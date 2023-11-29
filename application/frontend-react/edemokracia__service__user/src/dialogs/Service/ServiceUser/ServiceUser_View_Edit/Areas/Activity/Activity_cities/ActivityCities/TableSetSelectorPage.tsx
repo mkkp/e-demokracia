@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceServiceUserServiceForActivityCitiesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceServiceUserServiceForActivityCitiesImpl } from '~/services/data-axios/ServiceServiceUserServiceForActivityCitiesImpl';
+
 export type ServiceCityCity_TableAddSelectorDialogActionsExtended = ServiceCityCity_TableAddSelectorDialogActions & {};
 
 export const SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_ACTIVITY_CITIES_ACTIVITY_CITIES_TABLE_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -97,6 +99,12 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityActi
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceServiceUserServiceForActivityCitiesImpl = useMemo(
+    () => new ServiceServiceUserServiceForActivityCitiesImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -129,6 +137,9 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityActi
 
   // Calculated section
   const title: string = t('service.City.City_Table.AddSelector', { defaultValue: 'City Table' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const addAction = async (selected: ServiceCityStored[]) => {

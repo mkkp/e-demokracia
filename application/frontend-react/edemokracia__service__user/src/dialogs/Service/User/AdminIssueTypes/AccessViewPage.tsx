@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -24,9 +25,17 @@ import type {
   ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
-import { serviceIssueTypeServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueTypeServiceImpl } from '~/services/data-axios/ServiceIssueTypeServiceImpl';
+
 export type ServiceIssueTypeIssueType_View_EditDialogActionsExtended =
-  ServiceIssueTypeIssueType_View_EditDialogActions & {};
+  ServiceIssueTypeIssueType_View_EditDialogActions & {
+    postRefreshAction?: (
+      data: ServiceIssueTypeStored,
+      storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueType, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceIssueTypeIssueType_View_EditActionsHook';
@@ -100,6 +109,9 @@ export interface ServiceUserAdminIssueTypesAccessViewPageProps {
 export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceUserAdminIssueTypesAccessViewPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueTypeServiceImpl = useMemo(() => new ServiceIssueTypeServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -168,13 +180,59 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
   // Calculated section
   const title: string = t('service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
 
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+
   // Action section
   const backAction = async () => {
     onClose();
   };
+  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceIssueTypeServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceIssueTypeStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceIssueTypeServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceIssueType, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleError<ServiceIssueType>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
   };
   const deleteAction = async () => {
     try {
@@ -194,51 +252,13 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
       handleError(error, undefined, data);
     }
   };
-  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceIssueTypeServiceImpl.refresh(ownerData, pageQueryCustomizer);
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceIssueTypeStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const updateAction = async () => {
-    setIsLoading(true);
-    try {
-      const res = await serviceIssueTypeServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceIssueType, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleError<ServiceIssueType>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const actions: ServiceIssueTypeIssueType_View_EditDialogActions = {
     backAction,
-    cancelAction,
-    deleteAction,
     refreshAction,
+    cancelAction,
     updateAction,
+    deleteAction,
     ...(customActions ?? {}),
   };
 
@@ -267,6 +287,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

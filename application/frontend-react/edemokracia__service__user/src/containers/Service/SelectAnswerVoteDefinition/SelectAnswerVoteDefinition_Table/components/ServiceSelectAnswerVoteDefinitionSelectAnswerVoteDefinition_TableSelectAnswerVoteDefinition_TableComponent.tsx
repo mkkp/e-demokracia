@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -148,107 +148,110 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
 
   const selectedRows = useRef<ServiceSelectAnswerVoteDefinitionStored[]>([]);
 
-  const columns: GridColDef<ServiceSelectAnswerVoteDefinitionStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceSelectAnswerVoteDefinitionStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
-        defaultValue: 'Created',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
+          defaultValue: 'Created',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
-        defaultValue: 'Status',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'closeAt',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
+          defaultValue: 'Status',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'closeAt',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceSelectAnswerVoteDefinitionStored>[] = [
     {
@@ -278,15 +281,28 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
+      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
+        defaultValue: 'takeBackVote',
       }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
+      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
-            await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!(rowData);
+            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.activate', {
+        defaultValue: 'activate',
+      }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
+      action: actions.activateForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.activateForSelectAnswerVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -300,6 +316,32 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
       action: actions.closeVoteForSelectAnswerVoteDefinitionAction
         ? async (rowData) => {
             await actions.closeVoteForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
+      action: actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.removeFromFavorites', {
+        defaultValue: 'removeFromFavorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
+      action: actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -329,94 +371,58 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tabl
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
-      }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.activateForSelectAnswerVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.activateForSelectAnswerVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => isLoading,
-      action: actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_0SJy01tuEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.takeBackVote', {
-        defaultValue: 'takeBackVote',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceSelectAnswerVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action: actions.takeBackVoteForSelectAnswerVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.takeBackVoteForSelectAnswerVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9F3kgI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WPTagI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9F4LkY2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
-        defaultValue: 'Created',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WPTahI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.created', {
+          defaultValue: 'Created',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9F5ZsI2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WPUBk47EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9F6AwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
-        defaultValue: 'Status',
-      }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
-    },
+      {
+        id: '_WPUooo7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.status', {
+          defaultValue: 'Status',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      },
 
-    {
-      id: '_9F7O4I2dEe6GJNWtqQaZ_w',
-      attributeName: 'closeAt',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
-  ];
+      {
+        id: '_WPVPso7EEe6rlbj78nBB0Q',
+        attributeName: 'closeAt',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

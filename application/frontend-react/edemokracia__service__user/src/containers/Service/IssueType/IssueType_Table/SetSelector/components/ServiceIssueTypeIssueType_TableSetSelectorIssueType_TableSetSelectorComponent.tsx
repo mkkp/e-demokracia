@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -114,79 +114,87 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
   const [firstItem, setFirstItem] = useState<ServiceIssueTypeStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
-  const columns: GridColDef<ServiceIssueTypeStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceIssueTypeStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'voteType',
-      headerName: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
-        defaultValue: 'Default vote type',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteType.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.IssueType.IssueType_Table.SetSelector.description', {
-        defaultValue: 'Description',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'voteType',
+        headerName: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
+          defaultValue: 'Default vote type',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteType.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.IssueType.IssueType_Table.SetSelector.description', {
+          defaultValue: 'Description',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceIssueTypeStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_7Z8OMo2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_UwesEI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_7Z-DYI2dEe6GJNWtqQaZ_w',
-      attributeName: 'voteType',
-      label: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
-        defaultValue: 'Default vote type',
-      }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
-    },
+      {
+        id: '_UwesFI7EEe6rlbj78nBB0Q',
+        attributeName: 'voteType',
+        label: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
+          defaultValue: 'Default vote type',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['YES_NO', 'YES_NO_ABSTAIN', 'SELECT_ANSWER', 'RATE', 'NO_VOTE'],
+      },
 
-    {
-      id: '_7Z_RgI2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.IssueType.IssueType_Table.SetSelector.description', { defaultValue: 'Description' }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_UwfTIo7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.IssueType.IssueType_Table.SetSelector.description', {
+          defaultValue: 'Description',
+        }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -248,9 +256,12 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
     setIsNextButtonEnabled(!isNext);
   }
 
-  const handleIsRowSelectable = (params: GridRowParams<ServiceIssueTypeStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !true, alreadySelected);
-  };
+  const handleIsRowSelectable = useCallback(
+    (params: GridRowParams<ServiceIssueTypeStored & { __selected?: boolean }>) => {
+      return isRowSelectable(params.row, !true, alreadySelected);
+    },
+    [],
+  );
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;

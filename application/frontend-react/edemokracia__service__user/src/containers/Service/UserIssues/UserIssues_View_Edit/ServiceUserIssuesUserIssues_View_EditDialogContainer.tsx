@@ -50,6 +50,7 @@ export interface ServiceUserIssuesUserIssues_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceUserIssues, value: any) => void;
   validation: Map<keyof ServiceUserIssues, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserIssues, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::UserIssues::UserIssues_View_Edit
@@ -74,6 +75,7 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceUserIssuesQueryCustomizer = {
     _mask: '{}',
@@ -110,6 +112,7 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

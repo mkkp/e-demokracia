@@ -53,22 +53,44 @@ export interface UserServiceForUserOwnedSelectAnswerVoteDefinitions {
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
-  activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+  createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
   closeDebateForIssue(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
   getTemplateOnCloseDebateForIssue(): Promise<CloseDebateInput>;
-  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
   getTemplateOnCreateCommentForIssue(): Promise<CreateCommentInput>;
-  createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgumentForIssue(): Promise<CreateArgumentInput>;
-  createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgumentForIssue(): Promise<CreateArgumentInput>;
+  closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  listVoteEntries(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<Array<ServiceSelectAnswerVoteEntryStored>>;
+  getUserVoteEntry(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ): Promise<ServiceSelectAnswerVoteEntryStored>;
+  listVoteSelections(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
+  getTemplateForVoteSelections(): Promise<ServiceSelectAnswerVoteSelection>;
+  createVoteSelections(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: ServiceSelectAnswerVoteSelection,
+  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  deleteVoteSelections(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
+  updateVoteSelections(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
   getOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -85,38 +107,16 @@ export interface UserServiceForUserOwnedSelectAnswerVoteDefinitions {
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: JudoIdentifiable<ServiceServiceUser>,
   ): Promise<void>;
-  getUserVoteEntry(
-    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteEntryStored>;
-  listVoteEntries(
-    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<Array<ServiceSelectAnswerVoteEntryStored>>;
-  listVoteSelections(
-    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
-  getTemplateForVoteSelections(): Promise<ServiceSelectAnswerVoteSelection>;
-  createVoteSelections(
-    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    target: ServiceSelectAnswerVoteSelection,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-  deleteVoteSelections(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
-  updateVoteSelections(
-    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
-    target: Partial<ServiceSelectAnswerVoteSelectionStored>,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-  activate(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
-  addToFavorites(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
-  closeVote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
-  deleteOrArchive(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
-  removeFromFavorites(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
-  takeBackVote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
   vote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>, target: SelectAnswerVoteSelection): Promise<void>;
   getTemplateOnVote(): Promise<SelectAnswerVoteSelection>;
   getRangeOnVote(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<SelectAnswerVoteSelectionStored>>;
+  takeBackVote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  activate(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  addToFavorites(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  closeVote(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  deleteOrArchive(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
+  removeFromFavorites(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
 }

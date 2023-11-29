@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteDefinitionStored,
 } from '~/services/data-api';
-import { serviceYesNoVoteDefinitionServiceForOwnerImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceYesNoVoteDefinitionServiceForOwnerImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceForOwnerImpl';
+
 export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
   ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
 
@@ -104,6 +106,12 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceYesNoVoteDefinitionServiceForOwnerImpl = useMemo(
+    () => new ServiceYesNoVoteDefinitionServiceForOwnerImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -133,12 +141,15 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   // Calculated section
   const title: string = t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const backAction = async () => {
-    onClose();
-  };
   const setAction = async (selected: ServiceServiceUserStored[]) => {
     onSubmit(selected);
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -163,8 +174,8 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   };
 
   const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
-    backAction,
     setAction,
+    backAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

@@ -55,6 +55,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogPr
   storeDiff: (attributeName: keyof SelectAnswerVoteSelection, value: any) => void;
   validation: Map<keyof SelectAnswerVoteSelection, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof SelectAnswerVoteSelection, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: SelectAnswerVoteSelection::SelectAnswerVoteSelection_Form
@@ -79,6 +80,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormD
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer = {
     _mask: '{description,title}',
@@ -115,6 +117,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormD
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

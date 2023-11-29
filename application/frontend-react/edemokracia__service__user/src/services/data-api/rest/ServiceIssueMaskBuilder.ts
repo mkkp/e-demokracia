@@ -22,35 +22,35 @@ import {
 } from '../model';
 import {} from './ServiceIssueAttachmentMaskBuilder';
 import {
-  ServiceIssueCategoryOwnerMaskBuilder,
   ServiceIssueCategorySubcategoriesMaskBuilder,
+  ServiceIssueCategoryOwnerMaskBuilder,
 } from './ServiceIssueCategoryMaskBuilder';
 import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCommentCreatedByMaskBuilder } from './ServiceCommentMaskBuilder';
 import {
-  ServiceConConsMaskBuilder,
   ServiceConCreatedByMaskBuilder,
+  ServiceConConsMaskBuilder,
+  ServiceConProsMaskBuilder,
   ServiceConParentConMaskBuilder,
   ServiceConParentProMaskBuilder,
-  ServiceConProsMaskBuilder,
 } from './ServiceConMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
-import {
-  ServiceServiceUserActivityCitiesMaskBuilder,
-  ServiceServiceUserActivityCountiesMaskBuilder,
-  ServiceServiceUserActivityDistrictsMaskBuilder,
-  ServiceServiceUserResidentCityMaskBuilder,
-  ServiceServiceUserResidentCountyMaskBuilder,
-  ServiceServiceUserResidentDistrictMaskBuilder,
-} from './ServiceServiceUserMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';
 import {} from './ServiceIssueTypeMaskBuilder';
 import {
-  ServiceProConsMaskBuilder,
+  ServiceServiceUserActivityCountiesMaskBuilder,
+  ServiceServiceUserResidentCountyMaskBuilder,
+  ServiceServiceUserActivityCitiesMaskBuilder,
+  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserActivityDistrictsMaskBuilder,
+  ServiceServiceUserResidentDistrictMaskBuilder,
+} from './ServiceServiceUserMaskBuilder';
+import {
   ServiceProCreatedByMaskBuilder,
-  ServiceProParentConMaskBuilder,
-  ServiceProParentProMaskBuilder,
   ServiceProProsMaskBuilder,
+  ServiceProConsMaskBuilder,
+  ServiceProParentProMaskBuilder,
+  ServiceProParentConMaskBuilder,
 } from './ServiceProMaskBuilder';
 
 export class ServiceIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
@@ -58,20 +58,30 @@ export class ServiceIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
     super('attachments', props);
   }
 }
+export class ServiceIssueOwnerMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<
+      | ServiceServiceUserAttributes
+      | ServiceServiceUserActivityCountiesMaskBuilder
+      | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
+      | ServiceServiceUserResidentDistrictMaskBuilder
+    >,
+  ) {
+    super('owner', props);
+  }
+}
 export class ServiceIssueCategoriesMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceIssueCategoryAttributes
-      | ServiceIssueCategoryOwnerMaskBuilder
       | ServiceIssueCategorySubcategoriesMaskBuilder
+      | ServiceIssueCategoryOwnerMaskBuilder
     >,
   ) {
     super('categories', props);
-  }
-}
-export class ServiceIssueCityMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCityAttributes | ServiceCityDistrictsMaskBuilder>) {
-    super('city', props);
   }
 }
 export class ServiceIssueCommentsMaskBuilder extends RelationMaskBuilder {
@@ -79,43 +89,19 @@ export class ServiceIssueCommentsMaskBuilder extends RelationMaskBuilder {
     super('comments', props);
   }
 }
-export class ServiceIssueConsMaskBuilder extends RelationMaskBuilder {
-  constructor(
-    protected props: Array<
-      | ServiceConAttributes
-      | ServiceConConsMaskBuilder
-      | ServiceConCreatedByMaskBuilder
-      | ServiceConParentConMaskBuilder
-      | ServiceConParentProMaskBuilder
-      | ServiceConProsMaskBuilder
-    >,
-  ) {
-    super('cons', props);
-  }
-}
-export class ServiceIssueCountyMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
-    super('county', props);
-  }
-}
 export class ServiceIssueCreatedByMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCitiesMaskBuilder
       | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
       | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
       | ServiceServiceUserResidentDistrictMaskBuilder
     >,
   ) {
     super('createdBy', props);
-  }
-}
-export class ServiceIssueDistrictMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceDistrictAttributes>) {
-    super('district', props);
   }
 }
 export class ServiceIssueIssueTypeMaskBuilder extends RelationMaskBuilder {
@@ -123,30 +109,44 @@ export class ServiceIssueIssueTypeMaskBuilder extends RelationMaskBuilder {
     super('issueType', props);
   }
 }
-export class ServiceIssueOwnerMaskBuilder extends RelationMaskBuilder {
+export class ServiceIssueCountyMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
+    super('county', props);
+  }
+}
+export class ServiceIssueCityMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCityAttributes | ServiceCityDistrictsMaskBuilder>) {
+    super('city', props);
+  }
+}
+export class ServiceIssueDistrictMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceDistrictAttributes>) {
+    super('district', props);
+  }
+}
+export class ServiceIssueConsMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
-      | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCitiesMaskBuilder
-      | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
-      | ServiceServiceUserResidentCountyMaskBuilder
-      | ServiceServiceUserResidentDistrictMaskBuilder
+      | ServiceConAttributes
+      | ServiceConCreatedByMaskBuilder
+      | ServiceConConsMaskBuilder
+      | ServiceConProsMaskBuilder
+      | ServiceConParentConMaskBuilder
+      | ServiceConParentProMaskBuilder
     >,
   ) {
-    super('owner', props);
+    super('cons', props);
   }
 }
 export class ServiceIssueProsMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceProAttributes
-      | ServiceProConsMaskBuilder
       | ServiceProCreatedByMaskBuilder
-      | ServiceProParentConMaskBuilder
-      | ServiceProParentProMaskBuilder
       | ServiceProProsMaskBuilder
+      | ServiceProConsMaskBuilder
+      | ServiceProParentProMaskBuilder
+      | ServiceProParentConMaskBuilder
     >,
   ) {
     super('pros', props);
@@ -158,15 +158,15 @@ export class ServiceIssueMaskBuilder extends MaskBuilder {
     protected props: Array<
       | ServiceIssueAttributes
       | ServiceIssueAttachmentsMaskBuilder
-      | ServiceIssueCategoriesMaskBuilder
-      | ServiceIssueCityMaskBuilder
-      | ServiceIssueCommentsMaskBuilder
-      | ServiceIssueConsMaskBuilder
-      | ServiceIssueCountyMaskBuilder
-      | ServiceIssueCreatedByMaskBuilder
-      | ServiceIssueDistrictMaskBuilder
-      | ServiceIssueIssueTypeMaskBuilder
       | ServiceIssueOwnerMaskBuilder
+      | ServiceIssueCategoriesMaskBuilder
+      | ServiceIssueCommentsMaskBuilder
+      | ServiceIssueCreatedByMaskBuilder
+      | ServiceIssueIssueTypeMaskBuilder
+      | ServiceIssueCountyMaskBuilder
+      | ServiceIssueCityMaskBuilder
+      | ServiceIssueDistrictMaskBuilder
+      | ServiceIssueConsMaskBuilder
       | ServiceIssueProsMaskBuilder
     >,
   ) {

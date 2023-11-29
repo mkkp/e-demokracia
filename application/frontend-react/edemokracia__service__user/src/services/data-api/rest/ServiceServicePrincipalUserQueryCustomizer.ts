@@ -15,11 +15,11 @@ import { FilterBytypesString } from './FilterBytypesString';
 import { FilterBytypesTimestamp } from './FilterBytypesTimestamp';
 
 export interface ServiceServicePrincipalUserQueryCustomizer extends QueryCustomizer<ServiceServicePrincipalUser> {
-  created?: Array<FilterBytypesTimestamp>;
+  userName?: Array<FilterBytypesString>;
   email?: Array<FilterBytypesEmail>;
   firstName?: Array<FilterBytypesString>;
   isAdmin?: Array<FilterBytypesBoolean>;
   lastName?: Array<FilterBytypesString>;
   phone?: Array<FilterBytypesPhone>;
-  userName?: Array<FilterBytypesString>;
+  created?: Array<FilterBytypesTimestamp>;
 }

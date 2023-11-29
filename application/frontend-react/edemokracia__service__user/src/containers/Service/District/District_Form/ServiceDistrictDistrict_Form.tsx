@@ -42,6 +42,7 @@ export interface ServiceDistrictDistrict_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceDistrict, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_a0UhZH2iEe2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -60,6 +61,7 @@ export default function ServiceDistrictDistrict_Form(props: ServiceDistrictDistr
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -132,89 +132,92 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
 
   const selectedRows = useRef<ServiceConStored[]>([]);
 
-  const columns: GridColDef<ServiceConStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'createdByName',
-      headerName: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceConStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'createdByName',
+        headerName: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'upVotes',
-      headerName: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'downVotes',
-      headerName: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'upVotes',
+        headerName: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'downVotes',
+        headerName: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceConStored>[] = [
     {
@@ -240,28 +243,6 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
         : undefined,
     },
     {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.createProArgumentAction
-        ? async (rowData) => {
-            await actions.createProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Con.Con_Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceConStored) => isLoading,
-      action: actions.voteUpForConAction
-        ? async (rowData) => {
-            await actions.voteUpForConAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Con.Con_Table.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
@@ -283,51 +264,76 @@ export function ServiceConCon_TableCon_TableComponent(props: ServiceConCon_Table
           }
         : undefined,
     },
-  ];
-
-  const filterOptions: FilterOption[] = [
     {
-      id: '_9yrnMo2dEe6GJNWtqQaZ_w',
-      attributeName: 'createdByName',
-      label: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
-      filterType: FilterType.string,
+      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceConStored) => isLoading,
+      action: actions.voteUpForConAction
+        ? async (rowData) => {
+            await actions.voteUpForConAction!(rowData);
+          }
+        : undefined,
     },
-
     {
-      id: '_9ys1UI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
-
-    {
-      id: '_9ytcYY2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: '_9yuDco2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
-
-    {
-      id: '_9yvRkI2dEe6GJNWtqQaZ_w',
-      attributeName: 'upVotes',
-      label: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
-      filterType: FilterType.numeric,
-    },
-
-    {
-      id: '_9yv4oI2dEe6GJNWtqQaZ_w',
-      attributeName: 'downVotes',
-      label: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
-      filterType: FilterType.numeric,
+      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Con.Con_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+      icon: <MdiIcon path="chat-plus" />,
+      disabled: (row: ServiceConStored) => isLoading,
+      action: actions.createProArgumentAction
+        ? async (rowData) => {
+            await actions.createProArgumentAction!(rowData);
+          }
+        : undefined,
     },
   ];
+
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WxpSko7EEe6rlbj78nBB0Q',
+        attributeName: 'createdByName',
+        label: t('service.Con.Con_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_Wxp5oo7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.Con.Con_Table.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
+
+      {
+        id: '_WxqgsY7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.Con.Con_Table.description', { defaultValue: 'Description' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_WxrHwI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.Con.Con_Table.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
+
+      {
+        id: '_WxrHxI7EEe6rlbj78nBB0Q',
+        attributeName: 'upVotes',
+        label: t('service.Con.Con_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
+        filterType: FilterType.numeric,
+      },
+
+      {
+        id: '_Wxru047EEe6rlbj78nBB0Q',
+        attributeName: 'downVotes',
+        label: t('service.Con.Con_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
+        filterType: FilterType.numeric,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

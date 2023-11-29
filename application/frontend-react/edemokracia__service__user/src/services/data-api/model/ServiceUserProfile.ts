@@ -15,27 +15,27 @@ import { ServiceDistrict } from './ServiceDistrict';
 import { ServiceDistrictStored } from './ServiceDistrict';
 
 export interface ServiceUserProfile {
-  email: string;
-  firstName: string;
   lastName: string;
+  userName?: null | string;
+  firstName: string;
+  email: string;
   phone?: null | string;
   representation?: null | string;
-  userName?: null | string;
-  activityCities?: null | Array<ServiceCityStored>;
   activityCounties?: null | Array<ServiceCountyStored>;
-  activityDistricts?: null | Array<ServiceDistrictStored>;
-  residentCity?: null | ServiceCityStored;
   residentCounty?: null | ServiceCountyStored;
+  activityCities?: null | Array<ServiceCityStored>;
+  residentCity?: null | ServiceCityStored;
+  activityDistricts?: null | Array<ServiceDistrictStored>;
   residentDistrict?: null | ServiceDistrictStored;
 }
 
-export type ServiceUserProfileAttributes = 'email' | 'firstName' | 'lastName' | 'phone' | 'representation' | 'userName';
+export type ServiceUserProfileAttributes = 'lastName' | 'userName' | 'firstName' | 'email' | 'phone' | 'representation';
 export type ServiceUserProfileRelations =
-  | 'activityCities'
   | 'activityCounties'
-  | 'activityDistricts'
-  | 'residentCity'
   | 'residentCounty'
+  | 'activityCities'
+  | 'residentCity'
+  | 'activityDistricts'
   | 'residentDistrict';
 
 export interface ServiceUserProfileStored extends JudoStored<ServiceUserProfile>, ServiceUserProfile {}

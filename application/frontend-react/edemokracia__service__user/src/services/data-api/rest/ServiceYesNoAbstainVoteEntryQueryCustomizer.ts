@@ -14,6 +14,6 @@ import { FilterBytypesTimestamp } from './FilterBytypesTimestamp';
 
 export interface ServiceYesNoAbstainVoteEntryQueryCustomizer extends QueryCustomizer<ServiceYesNoAbstainVoteEntry> {
   created?: Array<FilterBytypesTimestamp>;
-  createdBy?: Array<FilterBytypesString>;
   value?: Array<FilterByYesNoAbstainVoteValue>;
+  createdBy?: Array<FilterBytypesString>;
 }

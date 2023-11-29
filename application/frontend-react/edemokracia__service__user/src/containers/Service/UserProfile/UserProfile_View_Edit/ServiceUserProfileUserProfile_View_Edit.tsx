@@ -76,6 +76,7 @@ export interface ServiceUserProfileUserProfile_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceUserProfile, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserProfile, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_1QevwFvQEe6jm_SkPSYEYw)/TransferObjectViewPageContainer
@@ -94,6 +95,7 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -116,13 +118,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="(_9SaLsI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WX5V0I7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                      <Typography id="_9SaLsI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WX5V0I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
                       </Typography>
                     </Grid>
@@ -337,13 +339,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="(_9PKDYI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WWVPkI7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                      <Typography id="_9PKDYI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WWVPkI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
                       </Typography>
                     </Grid>

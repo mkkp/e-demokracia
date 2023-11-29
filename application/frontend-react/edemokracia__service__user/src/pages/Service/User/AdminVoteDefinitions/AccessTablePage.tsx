@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -33,9 +33,13 @@ import type {
   VoteStatus,
   VoteType,
 } from '~/services/data-api';
-import { userServiceForAdminVoteDefinitionsImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForAdminVoteDefinitionsImpl';
+
 export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
-  ServiceVoteDefinitionVoteDefinition_TablePageActions & {};
+  ServiceVoteDefinitionVoteDefinition_TablePageActions & {
+    postRefreshAction?: (data: ServiceVoteDefinitionStored[]) => Promise<void>;
+  };
 
 export const SERVICE_USER_ADMIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceVoteDefinitionVoteDefinition_TableActionsHook';
@@ -54,6 +58,12 @@ const ServiceVoteDefinitionVoteDefinition_TablePageContainer = lazy(
 // XMIID: User/(esm/_l9Zh4JEaEe29qs15q2b6yw)/AccessTablePageDefinition
 // Name: service::User::adminVoteDefinitions::AccessTablePage
 export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
+  // Services
+  const userServiceForAdminVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForAdminVoteDefinitionsImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -91,7 +101,14 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
   // Calculated section
   const title: string = t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
+  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -118,26 +135,6 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
-  };
-  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const voteSelectAnswerAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
-        [],
-      );
-    if (result === 'submit') {
-    }
-  };
   const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
@@ -153,15 +150,31 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
       setRefreshCounter((prev) => prev + 1);
     }
   };
+  const voteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
+    }
+  };
+  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      target,
+    );
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
-    voteRatingAction,
-    voteSelectAnswerAction,
     voteYesNoAbstainAction,
     voteYesNoAction,
+    voteSelectAnswerAction,
+    voteRatingAction,
     ...(customActions ?? {}),
   };
 

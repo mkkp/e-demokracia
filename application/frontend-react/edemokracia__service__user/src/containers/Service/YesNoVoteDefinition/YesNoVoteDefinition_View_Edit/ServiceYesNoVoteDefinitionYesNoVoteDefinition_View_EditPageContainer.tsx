@@ -54,6 +54,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageProp
   storeDiff: (attributeName: keyof ServiceYesNoVoteDefinition, value: any) => void;
   validation: Map<keyof ServiceYesNoVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceYesNoVoteDefinition, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit
@@ -76,6 +77,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditP
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer = {
     _mask:
@@ -200,6 +202,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditP
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

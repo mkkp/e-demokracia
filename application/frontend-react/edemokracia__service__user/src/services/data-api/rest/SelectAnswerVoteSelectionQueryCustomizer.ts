@@ -11,6 +11,6 @@ import { SelectAnswerVoteSelection } from '../model/SelectAnswerVoteSelection';
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface SelectAnswerVoteSelectionQueryCustomizer extends QueryCustomizer<SelectAnswerVoteSelection> {
-  description?: Array<FilterBytypesString>;
   title?: Array<FilterBytypesString>;
+  description?: Array<FilterBytypesString>;
 }

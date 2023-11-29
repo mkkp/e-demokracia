@@ -57,6 +57,7 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogProps {
   storeDiff: (attributeName: keyof YesNoAbstainVoteInput, value: any) => void;
   validation: Map<keyof YesNoAbstainVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof YesNoAbstainVoteInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: YesNoAbstainVoteInput::YesNoAbstainVoteInput_Form
@@ -81,6 +82,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: YesNoAbstainVoteInputQueryCustomizer = {
     _mask: '{value}',
@@ -117,6 +119,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>
@@ -153,31 +156,10 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
             </LoadingButton>
           </Grid>
         )}
-        {editMode && actions.voteForYesNoAbstainVoteDefinitionAction && (
-          <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
-              loading={isLoading}
-              loadingPosition="start"
-              variant={'contained'}
-              startIcon={<MdiIcon path="vote" />}
-              onClick={async () => {
-                await actions.voteForYesNoAbstainVoteDefinitionAction!();
-              }}
-            >
-              <span>
-                {t(
-                  'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
-                  { defaultValue: 'Submit' },
-                )}
-              </span>
-            </LoadingButton>
-          </Grid>
-        )}
         {editMode && actions.voteYesNoAbstainForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
+              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_U1lOgo7EEe6rlbj78nBB0Q)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -189,6 +171,27 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
               <span>
                 {t(
                   'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.yesnoabstainvote.voteYesNoAbstain.OperationFormCallButton',
+                  { defaultValue: 'Submit' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.voteForYesNoAbstainVoteDefinitionAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_U1lOgo7EEe6rlbj78nBB0Q)"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="vote" />}
+              onClick={async () => {
+                await actions.voteForYesNoAbstainVoteDefinitionAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.OperationFormCallButton',
                   { defaultValue: 'Submit' },
                 )}
               </span>

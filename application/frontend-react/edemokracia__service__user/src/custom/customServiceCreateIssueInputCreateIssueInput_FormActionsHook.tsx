@@ -3,6 +3,7 @@
  * created issue called with UserIssues 'Create new issue' button.
  */
 
+import { useMemo } from 'react';
 import type { BundleContext } from '@pandino/pandino-api';
 
 import { useJudoNavigation } from '~/components';
@@ -13,8 +14,9 @@ import {
   ServiceCreateIssueInputCreateIssueInput_FormActionsHook,
 } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
 import { ServiceIssue, ServiceIssueStored } from '~/services/data-api';
-import { userServiceForUserCreatedIssuesImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { routeToServiceUserUserCreatedIssuesAccessViewPage } from '~/routes';
+import { UserServiceForUserCreatedIssuesImpl } from '~/services/data-axios/UserServiceForUserCreatedIssuesImpl';
 
 export function registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context: BundleContext) {
   context.registerService<ServiceCreateIssueInputCreateIssueInput_FormActionsHook>(
@@ -27,6 +29,10 @@ export function registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(
 const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCreateIssueInputCreateIssueInput_FormActionsHook =
   () => {
     const { navigate } = useJudoNavigation();
+    const userServiceForUserCreatedIssuesImpl = useMemo(
+      () => new UserServiceForUserCreatedIssuesImpl(judoAxiosProvider),
+      [],
+    );
 
     return {
       postCreateIssueForUserIssuesAction: async (

@@ -14,6 +14,6 @@ import { Comment, CommentStored, CommentQueryCustomizer } from '../data-api';
  */
 export interface CommentService {
   refresh(target: JudoIdentifiable<Comment>, queryCustomizer?: CommentQueryCustomizer): Promise<CommentStored>;
-  voteDown(owner: JudoIdentifiable<Comment>): Promise<void>;
   voteUp(owner: JudoIdentifiable<Comment>): Promise<void>;
+  voteDown(owner: JudoIdentifiable<Comment>): Promise<void>;
 }

@@ -45,6 +45,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditPageProps {
   storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void;
   validation: Map<keyof ServiceSimpleVote, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::SimpleVote::SimpleVote_View_Edit
@@ -67,6 +68,7 @@ export default function ServiceSimpleVoteSimpleVote_View_EditPage(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceSimpleVoteQueryCustomizer = {
     _mask: '{created,type}',
@@ -180,6 +182,7 @@ export default function ServiceSimpleVoteSimpleVote_View_EditPage(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

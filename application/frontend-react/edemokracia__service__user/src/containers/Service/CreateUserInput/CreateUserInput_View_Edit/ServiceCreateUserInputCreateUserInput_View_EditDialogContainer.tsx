@@ -57,6 +57,7 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void;
   validation: Map<keyof ServiceCreateUserInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateUserInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::CreateUserInput::CreateUserInput_View_Edit
@@ -81,6 +82,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCreateUserInputQueryCustomizer = {
     _mask: '{email,firstName,hasAdminAccess,lastName,userName}',
@@ -117,6 +119,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

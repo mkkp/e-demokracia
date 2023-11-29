@@ -53,6 +53,7 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceYesNoVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceYesNoVoteEntry, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_LNbaEFoiEe6_67aMO2jOsw)/TransferObjectViewPageContainer
@@ -73,6 +74,7 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

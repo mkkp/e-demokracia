@@ -45,6 +45,7 @@ export interface ServiceIssueTypeIssueType_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceIssueType, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueType, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_J4WCwNu4Ee2Bgcx6em3jZg)/TransferObjectFormPageContainer
@@ -63,6 +64,7 @@ export default function ServiceIssueTypeIssueType_Form(props: ServiceIssueTypeIs
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

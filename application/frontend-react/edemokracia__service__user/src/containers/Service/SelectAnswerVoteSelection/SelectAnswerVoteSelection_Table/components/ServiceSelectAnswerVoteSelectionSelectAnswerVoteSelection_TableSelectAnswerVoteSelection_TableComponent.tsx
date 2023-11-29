@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -131,32 +131,35 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
 
   const selectedRows = useRef<ServiceSelectAnswerVoteSelectionStored[]>([]);
 
-  const columns: GridColDef<ServiceSelectAnswerVoteSelectionStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceSelectAnswerVoteSelectionStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceSelectAnswerVoteSelectionStored>[] = [
     {
@@ -187,25 +190,28 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_91K6gI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WzoPkI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_91Lhko2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_Wzo2oI7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

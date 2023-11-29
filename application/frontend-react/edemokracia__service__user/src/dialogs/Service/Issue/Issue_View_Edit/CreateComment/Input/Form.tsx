@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -22,7 +23,9 @@ import type {
   CreateCommentInputQueryCustomizer,
   CreateCommentInputStored,
 } from '~/services/data-api';
-import { serviceIssueServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
+
 export type CreateCommentInputCreateCommentInput_FormDialogActionsExtended =
   CreateCommentInputCreateCommentInput_FormDialogActions & {
     postCreateCommentForIssueAction?: (
@@ -107,6 +110,9 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceIssueServiceImpl = useMemo(() => new ServiceIssueServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -170,6 +176,11 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
 
   // Calculated section
   const title: string = t('CreateCommentInput.CreateCommentInput_Form', { defaultValue: 'CreateCommentInput Form' });
+
+  // Private actions
+  const submit = async () => {
+    await createCommentForIssueAction();
+  };
 
   // Action section
   const backAction = async () => {
@@ -242,6 +253,7 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

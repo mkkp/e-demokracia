@@ -14,7 +14,7 @@ import { FilterBytypesText } from './FilterBytypesText';
 
 export interface ServiceIssueTypeQueryCustomizer extends QueryCustomizer<ServiceIssueType> {
   description?: Array<FilterBytypesText>;
-  representation?: Array<FilterBytypesString>;
   title?: Array<FilterBytypesString>;
   voteType?: Array<FilterByVoteType>;
+  representation?: Array<FilterBytypesString>;
 }

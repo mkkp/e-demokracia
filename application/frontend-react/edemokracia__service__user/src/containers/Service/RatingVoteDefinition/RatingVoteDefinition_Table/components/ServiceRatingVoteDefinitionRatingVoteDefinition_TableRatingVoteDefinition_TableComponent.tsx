@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -147,137 +147,140 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
 
   const selectedRows = useRef<ServiceRatingVoteDefinitionStored[]>([]);
 
-  const columns: GridColDef<ServiceRatingVoteDefinitionStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'minRateValue',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
-        defaultValue: 'MinRateValue',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceRatingVoteDefinitionStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'minRateValue',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
+          defaultValue: 'MinRateValue',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'maxRateValue',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
-        defaultValue: 'MaxRateValue',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'maxRateValue',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
+          defaultValue: 'MaxRateValue',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 100,
-      type: 'number',
-      filterable: false && true,
-      valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-        return value && new Intl.NumberFormat(l10nLocale).format(value);
+        width: 100,
+        type: 'number',
+        filterable: false && true,
+        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+          return value && new Intl.NumberFormat(l10nLocale).format(value);
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
-        defaultValue: 'Created',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
+          defaultValue: 'Created',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', {
-        defaultValue: 'Status',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'closeAt',
-      headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', {
+          defaultValue: 'Status',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'closeAt',
+        headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceRatingVoteDefinitionStored>[] = [
     {
@@ -303,6 +306,30 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
         : undefined,
     },
     {
+      id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.takeBackVote', {
+        defaultValue: 'takeBackVote',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
+      action: actions.takeBackVoteForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.takeBackVoteForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
+    },
+    {
       id: 'User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
@@ -312,6 +339,32 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
       action: actions.removeFromFavoritesForRatingVoteDefinitionAction
         ? async (rowData) => {
             await actions.removeFromFavoritesForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.activate', {
+        defaultValue: 'activate',
+      }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
+      action: actions.activateForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.activateForRatingVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_Vd5qAnsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.addToFavorites', {
+        defaultValue: 'addToFavorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
+      action: actions.addToFavoritesForRatingVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.addToFavoritesForRatingVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -341,119 +394,74 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteD
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_Vd5qAnsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.addToFavorites', {
-        defaultValue: 'addToFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-plus" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
-      action: actions.addToFavoritesForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.addToFavoritesForRatingVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_NHnv01soEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.takeBackVote', {
-        defaultValue: 'takeBackVote',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action: actions.takeBackVoteForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.takeBackVoteForRatingVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
-      }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => isLoading,
-      action: actions.activateForRatingVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.activateForRatingVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_NHnv2FsoEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceRatingVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.voteAction
-        ? async (rowData) => {
-            await actions.voteAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9IQxMI2dEe6GJNWtqQaZ_w',
-      attributeName: 'minRateValue',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
-        defaultValue: 'MinRateValue',
-      }) as string,
-      filterType: FilterType.numeric,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WQyoQo7EEe6rlbj78nBB0Q',
+        attributeName: 'minRateValue',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.minRateValue', {
+          defaultValue: 'MinRateValue',
+        }) as string,
+        filterType: FilterType.numeric,
+      },
 
-    {
-      id: '_9IR_UI2dEe6GJNWtqQaZ_w',
-      attributeName: 'maxRateValue',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
-        defaultValue: 'MaxRateValue',
-      }) as string,
-      filterType: FilterType.numeric,
-    },
+      {
+        id: '_WQzPUo7EEe6rlbj78nBB0Q',
+        attributeName: 'maxRateValue',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.maxRateValue', {
+          defaultValue: 'MaxRateValue',
+        }) as string,
+        filterType: FilterType.numeric,
+      },
 
-    {
-      id: '_9ISmYY2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WQz2YY7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9IT0gI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
-        defaultValue: 'Created',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WQ0dcI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.created', {
+          defaultValue: 'Created',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9IUbko2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WQ1EgI7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9IVpsI2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
-    },
+      {
+        id: '_WQ1EhI7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.status', {
+          defaultValue: 'Status',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      },
 
-    {
-      id: '_9IWQwY2dEe6GJNWtqQaZ_w',
-      attributeName: 'closeAt',
-      label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
-  ];
+      {
+        id: '_WQ1rko7EEe6rlbj78nBB0Q',
+        attributeName: 'closeAt',
+        label: t('service.RatingVoteDefinition.RatingVoteDefinition_Table.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

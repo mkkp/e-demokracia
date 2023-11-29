@@ -52,6 +52,7 @@ export interface CreateArgumentInputCreateArgumentInput_FormProps {
   editMode: boolean;
   validation: Map<keyof CreateArgumentInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CreateArgumentInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -72,6 +73,7 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -94,13 +96,13 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="(_9So1MY2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WX_ccI7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="account-voice" sx={{ marginRight: 1 }} />
-                      <Typography id="_9So1MY2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WX_ccI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('CreateArgumentInput.CreateArgumentInput_Form.group.Icon', { defaultValue: 'Add argument' })}
                       </Typography>
                     </Grid>

@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -28,7 +28,9 @@ import type {
   ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
-import { serviceCreateIssueInputServiceForIssueTypeImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCreateIssueInputServiceForIssueTypeImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForIssueTypeImpl';
+
 export type ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended =
   ServiceIssueTypeIssueType_TableSetSelectorDialogActions & {};
 
@@ -104,6 +106,12 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCreateIssueInputServiceForIssueTypeImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForIssueTypeImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -132,6 +140,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
 
   // Calculated section
   const title: string = t('service.IssueType.IssueType_Table.SetSelector', { defaultValue: 'IssueType Table' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {

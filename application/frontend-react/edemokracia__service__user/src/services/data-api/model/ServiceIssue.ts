@@ -32,77 +32,77 @@ import { ServiceServiceUserStored } from './ServiceServiceUser';
 import { VoteType } from './VoteType';
 
 export interface ServiceIssue {
-  cityRepresentation?: null | string;
-  countyRepresentation?: null | string;
   created?: null | Date;
-  debateCloseAt: Date;
-  defaultVoteType?: null | VoteType;
+  title: string;
   description: string;
+  status: IssueStatus;
+  representation?: null | string;
+  defaultVoteType?: null | VoteType;
+  scope?: null | IssueScope;
+  countyRepresentation?: null | string;
+  cityRepresentation?: null | string;
   districtRepresentation?: null | string;
   isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
+  debateCloseAt: Date;
+  isVoteClosable?: null | boolean;
+  isIssueDraft?: null | boolean;
   isIssueActive?: null | boolean;
   isIssueDeletable?: null | boolean;
-  isIssueDraft?: null | boolean;
-  isIssueInVoting?: null | boolean;
   isIssueNotActive?: null | boolean;
-  isIssueNotDeletable?: null | boolean;
-  isIssueNotDraft?: null | boolean;
-  isIssueNotInVoting?: null | boolean;
-  isNotFavorite?: null | boolean;
-  isVoteClosable?: null | boolean;
   isVoteNotClosable?: null | boolean;
-  representation?: null | string;
-  scope?: null | IssueScope;
-  status: IssueStatus;
-  title: string;
+  isIssueNotDraft?: null | boolean;
+  isIssueNotDeletable?: null | boolean;
+  isIssueInVoting?: null | boolean;
+  isIssueNotInVoting?: null | boolean;
   attachments?: null | Array<ServiceIssueAttachmentStored>;
-  categories?: null | Array<ServiceIssueCategoryStored>;
-  city?: null | ServiceCityStored;
-  comments?: null | Array<ServiceCommentStored>;
-  cons?: null | Array<ServiceConStored>;
-  county?: null | ServiceCountyStored;
-  createdBy?: null | ServiceServiceUserStored;
-  district?: null | ServiceDistrictStored;
-  issueType?: null | ServiceIssueTypeStored;
   owner?: null | ServiceServiceUserStored;
+  categories?: null | Array<ServiceIssueCategoryStored>;
+  comments?: null | Array<ServiceCommentStored>;
+  createdBy?: null | ServiceServiceUserStored;
+  issueType?: null | ServiceIssueTypeStored;
+  county?: null | ServiceCountyStored;
+  city?: null | ServiceCityStored;
+  district?: null | ServiceDistrictStored;
+  cons?: null | Array<ServiceConStored>;
   pros?: null | Array<ServiceProStored>;
 }
 
 export type ServiceIssueAttributes =
-  | 'cityRepresentation'
-  | 'countyRepresentation'
   | 'created'
-  | 'debateCloseAt'
-  | 'defaultVoteType'
+  | 'title'
   | 'description'
+  | 'status'
+  | 'representation'
+  | 'defaultVoteType'
+  | 'scope'
+  | 'countyRepresentation'
+  | 'cityRepresentation'
   | 'districtRepresentation'
   | 'isFavorite'
+  | 'isNotFavorite'
+  | 'debateCloseAt'
+  | 'isVoteClosable'
+  | 'isIssueDraft'
   | 'isIssueActive'
   | 'isIssueDeletable'
-  | 'isIssueDraft'
-  | 'isIssueInVoting'
   | 'isIssueNotActive'
-  | 'isIssueNotDeletable'
-  | 'isIssueNotDraft'
-  | 'isIssueNotInVoting'
-  | 'isNotFavorite'
-  | 'isVoteClosable'
   | 'isVoteNotClosable'
-  | 'representation'
-  | 'scope'
-  | 'status'
-  | 'title';
+  | 'isIssueNotDraft'
+  | 'isIssueNotDeletable'
+  | 'isIssueInVoting'
+  | 'isIssueNotInVoting';
 export type ServiceIssueRelations =
   | 'attachments'
-  | 'categories'
-  | 'city'
-  | 'comments'
-  | 'cons'
-  | 'county'
-  | 'createdBy'
-  | 'district'
-  | 'issueType'
   | 'owner'
+  | 'categories'
+  | 'comments'
+  | 'createdBy'
+  | 'issueType'
+  | 'county'
+  | 'city'
+  | 'district'
+  | 'cons'
   | 'pros';
 
 export interface ServiceIssueStored extends JudoStored<ServiceIssue>, ServiceIssue {}

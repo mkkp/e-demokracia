@@ -54,6 +54,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPag
   storeDiff: (attributeName: keyof SelectAnswerVoteSelection, value: any) => void;
   validation: Map<keyof SelectAnswerVoteSelection, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof SelectAnswerVoteSelection, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit
@@ -76,6 +77,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer = {
     _mask: '{description,title}',
@@ -201,6 +203,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

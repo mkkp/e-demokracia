@@ -17,6 +17,6 @@ export interface ServiceCommentQueryCustomizer extends QueryCustomizer<ServiceCo
   comment?: Array<FilterBytypesText>;
   created?: Array<FilterBytypesTimestamp>;
   createdByName?: Array<FilterBytypesString>;
-  downVotes?: Array<FilterBytypesInteger>;
   upVotes?: Array<FilterBytypesInteger>;
+  downVotes?: Array<FilterBytypesInteger>;
 }

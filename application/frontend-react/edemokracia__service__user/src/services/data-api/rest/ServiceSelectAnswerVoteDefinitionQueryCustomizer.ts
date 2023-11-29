@@ -16,20 +16,20 @@ import { FilterBytypesTimestamp } from './FilterBytypesTimestamp';
 
 export interface ServiceSelectAnswerVoteDefinitionQueryCustomizer
   extends QueryCustomizer<ServiceSelectAnswerVoteDefinition> {
-  closeAt?: Array<FilterBytypesTimestamp>;
+  title?: Array<FilterBytypesString>;
   created?: Array<FilterBytypesTimestamp>;
-  createdBy?: Array<FilterBytypesString>;
   description?: Array<FilterBytypesText>;
+  status?: Array<FilterByVoteStatus>;
+  closeAt?: Array<FilterBytypesTimestamp>;
+  userHasVoteEntry?: Array<FilterBytypesBoolean>;
+  userHasNoVoteEntry?: Array<FilterBytypesBoolean>;
+  isVoteEditable?: Array<FilterBytypesBoolean>;
+  isVoteOpen?: Array<FilterBytypesBoolean>;
+  isVoteNotEditable?: Array<FilterBytypesBoolean>;
+  isVoteNotOpen?: Array<FilterBytypesBoolean>;
   isFavorite?: Array<FilterBytypesBoolean>;
   isNotFavorite?: Array<FilterBytypesBoolean>;
   isVoteDeletable?: Array<FilterBytypesBoolean>;
-  isVoteEditable?: Array<FilterBytypesBoolean>;
   isVoteNotDeletable?: Array<FilterBytypesBoolean>;
-  isVoteNotEditable?: Array<FilterBytypesBoolean>;
-  isVoteNotOpen?: Array<FilterBytypesBoolean>;
-  isVoteOpen?: Array<FilterBytypesBoolean>;
-  status?: Array<FilterByVoteStatus>;
-  title?: Array<FilterBytypesString>;
-  userHasNoVoteEntry?: Array<FilterBytypesBoolean>;
-  userHasVoteEntry?: Array<FilterBytypesBoolean>;
+  createdBy?: Array<FilterBytypesString>;
 }

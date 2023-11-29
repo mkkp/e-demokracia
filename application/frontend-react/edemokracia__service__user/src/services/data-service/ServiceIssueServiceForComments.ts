@@ -8,8 +8,8 @@
 
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceServiceUser,
   ServiceSimpleVoteStored,
+  ServiceServiceUser,
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceSimpleVote,
@@ -32,14 +32,14 @@ export interface ServiceIssueServiceForComments {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<ServiceCommentStored>;
-  getCreatedBy(
-    owner: JudoIdentifiable<ServiceComment>,
-    queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
   listVotes(
     owner: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
-  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+  getCreatedBy(
+    owner: JudoIdentifiable<ServiceComment>,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
   voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
 }

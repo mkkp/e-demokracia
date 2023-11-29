@@ -50,6 +50,7 @@ export interface ServiceDashboardDashboard_View_EditDialogProps {
   storeDiff: (attributeName: keyof ServiceDashboard, value: any) => void;
   validation: Map<keyof ServiceDashboard, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDashboard, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::Dashboard::Dashboard_View_Edit
@@ -74,6 +75,7 @@ export default function ServiceDashboardDashboard_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceDashboardQueryCustomizer = {
     _mask: '{}',
@@ -110,6 +112,7 @@ export default function ServiceDashboardDashboard_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

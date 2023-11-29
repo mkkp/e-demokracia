@@ -16,50 +16,50 @@ import { ServiceServiceUserStored } from './ServiceServiceUser';
 import { VoteStatus } from './VoteStatus';
 
 export interface ServiceRatingVoteDefinition {
-  closeAt: Date;
+  title: string;
   created: Date;
-  createdBy?: null | string;
   description: string;
-  isFavorite?: null | boolean;
-  isNotFavorite?: null | boolean;
-  isVoteDeletable?: null | boolean;
-  isVoteEditable?: null | boolean;
-  isVoteNotDeletable?: null | boolean;
-  isVoteNotEditable?: null | boolean;
-  isVoteNotOpen?: null | boolean;
-  isVoteOpen?: null | boolean;
+  status: VoteStatus;
+  closeAt: Date;
   maxRateValue?: null | number;
   minRateValue?: null | number;
-  status: VoteStatus;
-  title: string;
-  userHasNoVoteEntry?: null | boolean;
   userHasVoteEntry?: null | boolean;
+  userHasNoVoteEntry?: null | boolean;
+  isFavorite?: null | boolean;
+  isVoteEditable?: null | boolean;
+  isVoteNotOpen?: null | boolean;
+  isVoteOpen?: null | boolean;
+  isNotFavorite?: null | boolean;
+  isVoteNotDeletable?: null | boolean;
+  isVoteDeletable?: null | boolean;
+  isVoteNotEditable?: null | boolean;
+  createdBy?: null | string;
   issue?: null | ServiceIssueStored;
-  owner?: null | ServiceServiceUserStored;
-  userVoteEntry?: null | ServiceRatingVoteEntryStored;
   voteEntries?: null | Array<ServiceRatingVoteEntryStored>;
+  userVoteEntry?: null | ServiceRatingVoteEntryStored;
+  owner?: null | ServiceServiceUserStored;
 }
 
 export type ServiceRatingVoteDefinitionAttributes =
-  | 'closeAt'
+  | 'title'
   | 'created'
-  | 'createdBy'
   | 'description'
-  | 'isFavorite'
-  | 'isNotFavorite'
-  | 'isVoteDeletable'
-  | 'isVoteEditable'
-  | 'isVoteNotDeletable'
-  | 'isVoteNotEditable'
-  | 'isVoteNotOpen'
-  | 'isVoteOpen'
+  | 'status'
+  | 'closeAt'
   | 'maxRateValue'
   | 'minRateValue'
-  | 'status'
-  | 'title'
+  | 'userHasVoteEntry'
   | 'userHasNoVoteEntry'
-  | 'userHasVoteEntry';
-export type ServiceRatingVoteDefinitionRelations = 'issue' | 'owner' | 'userVoteEntry' | 'voteEntries';
+  | 'isFavorite'
+  | 'isVoteEditable'
+  | 'isVoteNotOpen'
+  | 'isVoteOpen'
+  | 'isNotFavorite'
+  | 'isVoteNotDeletable'
+  | 'isVoteDeletable'
+  | 'isVoteNotEditable'
+  | 'createdBy';
+export type ServiceRatingVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry' | 'owner';
 
 export interface ServiceRatingVoteDefinitionStored
   extends JudoStored<ServiceRatingVoteDefinition>,

@@ -50,6 +50,7 @@ export interface CloseDebateInputCloseDebateInput_View_EditDialogProps {
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void;
   validation: Map<keyof CloseDebateInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: CloseDebateInput::CloseDebateInput_View_Edit
@@ -74,6 +75,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditDialog(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: CloseDebateInputQueryCustomizer = {
     _mask: '{voteType}',
@@ -110,6 +112,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditDialog(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

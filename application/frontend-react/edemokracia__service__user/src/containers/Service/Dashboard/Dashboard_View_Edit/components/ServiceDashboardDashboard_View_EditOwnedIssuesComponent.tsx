@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -142,117 +142,120 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
 
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
-  const columns: GridColDef<ServiceIssueStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'scope',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceIssueStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'scope',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'countyRepresentation',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
-        defaultValue: 'CountyRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'countyRepresentation',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
+          defaultValue: 'CountyRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'cityRepresentation',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
-        defaultValue: 'CityRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'districtRepresentation',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
-        defaultValue: 'DistrictRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'cityRepresentation',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
+          defaultValue: 'CityRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
-        }
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'districtRepresentation',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
+          defaultValue: 'DistrictRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
     {
@@ -269,42 +272,29 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.issuesOwnedDeleteOrArchiveForIssueAction
+      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
+      label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
+      action: actions.issuesOwnedCloseDebateAction
         ? async (rowData) => {
-            await actions.issuesOwnedDeleteOrArchiveForIssueAction!(rowData);
+            await actions.issuesOwnedCloseDebateAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedCreateCommentAction
+      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
+      label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
+      icon: <MdiIcon path="lock-open" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
+      action: actions.issuesOwnedActivateForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedCreateCommentAction!(rowData);
+            await actions.issuesOwnedActivateForIssueAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.createConArgument', {
-        defaultValue: 'createConArgument',
-      }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.issuesOwnedCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
       label: t('service.Dashboard.Dashboard_View_Edit.createProArgument', {
         defaultValue: 'createProArgument',
       }) as string,
@@ -317,18 +307,18 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.issuesOwnedCloseDebateAction
+      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
+      label: t('service.Dashboard.Dashboard_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
+      icon: <MdiIcon path="comment-text-multiple" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.issuesOwnedCreateCommentAction
         ? async (rowData) => {
-            await actions.issuesOwnedCloseDebateAction!(rowData);
+            await actions.issuesOwnedCreateCommentAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
       label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
       icon: <MdiIcon path="lock-check" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
@@ -339,18 +329,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.issuesOwnedActivateForIssueAction
-        ? async (rowData) => {
-            await actions.issuesOwnedActivateForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
       label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
@@ -361,7 +340,31 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
+      label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
+      action: actions.issuesOwnedDeleteOrArchiveForIssueAction
+        ? async (rowData) => {
+            await actions.issuesOwnedDeleteOrArchiveForIssueAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
+      label: t('service.Dashboard.Dashboard_View_Edit.createConArgument', {
+        defaultValue: 'createConArgument',
+      }) as string,
+      icon: <MdiIcon path="chat-minus" />,
+      disabled: (row: ServiceIssueStored) => editMode || isLoading,
+      action: actions.issuesOwnedCreateConArgumentAction
+        ? async (rowData) => {
+            await actions.issuesOwnedCreateConArgumentAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/_WdTaQo7EEe6rlbj78nBB0Q)',
       label: t('service.Dashboard.Dashboard_View_Edit.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
       }) as string,
@@ -375,64 +378,67 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9aV_sI2dEe6GJNWtqQaZ_w',
-      attributeName: 'scope',
-      label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WdOhwo7EEe6rlbj78nBB0Q',
+        attributeName: 'scope',
+        label: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['GLOBAL', 'COUNTY', 'CITY', 'DISTRICT'],
+      },
 
-    {
-      id: '_9aWmwo2dEe6GJNWtqQaZ_w',
-      attributeName: 'countyRepresentation',
-      label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
-        defaultValue: 'CountyRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WdPI0o7EEe6rlbj78nBB0Q',
+        attributeName: 'countyRepresentation',
+        label: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
+          defaultValue: 'CountyRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9aX04I2dEe6GJNWtqQaZ_w',
-      attributeName: 'cityRepresentation',
-      label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
-        defaultValue: 'CityRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WdPv4o7EEe6rlbj78nBB0Q',
+        attributeName: 'cityRepresentation',
+        label: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
+          defaultValue: 'CityRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9aYb8o2dEe6GJNWtqQaZ_w',
-      attributeName: 'districtRepresentation',
-      label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
-        defaultValue: 'DistrictRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WdQW8o7EEe6rlbj78nBB0Q',
+        attributeName: 'districtRepresentation',
+        label: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
+          defaultValue: 'DistrictRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9aZqEI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WdQ-Ao7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9aaRII2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WdRlEo7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9abfQI2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
-    },
-  ];
+      {
+        id: '_WdSMIo7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED', 'VOTING'],
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

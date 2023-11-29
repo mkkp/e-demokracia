@@ -6,7 +6,8 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -34,10 +35,17 @@ import type {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
-import { serviceCommentServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCommentServiceImpl } from '~/services/data-axios/ServiceCommentServiceImpl';
+
 export type ServiceCommentComment_View_EditPageActionsExtended = ServiceCommentComment_View_EditPageActions & {
   postVoteDownForCommentAction?: () => Promise<void>;
   postVoteUpForCommentAction?: () => Promise<void>;
+  postRefreshAction?: (
+    data: ServiceCommentStored,
+    storeDiff: (attributeName: keyof ServiceComment, value: any) => void,
+    setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>,
+  ) => Promise<void>;
 };
 
 export const SERVICE_ISSUE_COMMENTS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -68,6 +76,9 @@ const ServiceCommentComment_View_EditPageContainer = lazy(
 export default function ServiceIssueCommentsRelationViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceCommentServiceImpl = useMemo(() => new ServiceCommentServiceImpl(judoAxiosProvider), []);
 
   // Hooks section
   const { t } = useTranslation();
@@ -135,31 +146,39 @@ export default function ServiceIssueCommentsRelationViewPage() {
   // Calculated section
   const title: string = t('service.Comment.Comment_View_Edit', { defaultValue: 'Comment View / Edit' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceCommentCreatedByRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
+  const backAction = async () => {
+    navigateBack();
   };
-  const voteDownForCommentAction = async () => {
+  const refreshAction = async (queryCustomizer: ServiceCommentQueryCustomizer): Promise<ServiceCommentStored> => {
     try {
       setIsLoading(true);
-      await serviceCommentServiceImpl.voteDown(data);
-      if (customActions?.postVoteDownForCommentAction) {
-        await customActions.postVoteDownForCommentAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
+      setEditMode(false);
+      const result = await serviceCommentServiceImpl.refresh(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        pageQueryCustomizer,
+      );
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceCommentStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
+      return result;
     } catch (error) {
-      handleError<ServiceComment>(error, { setValidation }, data);
+      handleError(error);
+      return Promise.reject(error);
     } finally {
       setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
   const voteUpForCommentAction = async () => {
@@ -182,46 +201,44 @@ export default function ServiceIssueCommentsRelationViewPage() {
       setIsLoading(false);
     }
   };
+  const voteDownForCommentAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceCommentServiceImpl.voteDown(data);
+      if (customActions?.postVoteDownForCommentAction) {
+        await customActions.postVoteDownForCommentAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceComment>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceCommentVotesRelationTablePage((target || data).__signedIdentifier));
   };
-  const backAction = async () => {
-    navigateBack();
-  };
-  const refreshAction = async (queryCustomizer: ServiceCommentQueryCustomizer): Promise<ServiceCommentStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceCommentServiceImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
-      );
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceCommentStored, any>;
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceCommentCreatedByRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
 
   const actions: ServiceCommentComment_View_EditPageActions = {
-    createdByOpenPageAction,
-    voteDownForCommentAction,
-    voteUpForCommentAction,
-    votesOpenPageAction,
     backAction,
     refreshAction,
+    voteUpForCommentAction,
+    voteDownForCommentAction,
+    votesOpenPageAction,
+    createdByOpenPageAction,
     ...(customActions ?? {}),
   };
 
@@ -251,6 +268,7 @@ export default function ServiceIssueCommentsRelationViewPage() {
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </PageContainerTransition>
       </Suspense>

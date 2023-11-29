@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -131,176 +131,182 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   const selectedRows = useRef<ServiceServiceUserStored[]>([]);
 
-  const columns: GridColDef<ServiceServiceUserStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'representation',
-      headerName: t('service.UserManager.UserManager_View_Edit.representation', {
-        defaultValue: 'Representation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceServiceUserStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'representation',
+        headerName: t('service.UserManager.UserManager_View_Edit.representation', {
+          defaultValue: 'Representation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'userName',
-      headerName: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'firstName',
-      headerName: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'lastName',
-      headerName: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'phone',
-      headerName: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'email',
-      headerName: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'isAdmin',
-      headerName: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 100,
-      type: 'boolean',
-      filterable: false && true,
-      align: 'center',
-      renderCell: (params: GridRenderCellParams<any, ServiceServiceUserStored>) => {
-        if (params.row.isAdmin === null || params.row.isAdmin === undefined) {
-          return <MdiIcon className="undefined" path="minus" color="#ddd" />;
-        } else if (params.row.isAdmin) {
-          return <MdiIcon className="true" path="check-circle" color="green" />;
-        }
-        return <MdiIcon className="false" path="close-circle" color="red" />;
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'userName',
+        headerName: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'firstName',
+        headerName: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'lastName',
+        headerName: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'phone',
+        headerName: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'email',
+        headerName: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'isAdmin',
+        headerName: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 100,
+        type: 'boolean',
+        filterable: false && true,
+        align: 'center',
+        renderCell: (params: GridRenderCellParams<any, ServiceServiceUserStored>) => {
+          if (params.row.isAdmin === null || params.row.isAdmin === undefined) {
+            return <MdiIcon className="undefined" path="minus" color="#ddd" />;
+          } else if (params.row.isAdmin) {
+            return <MdiIcon className="true" path="check-circle" color="green" />;
+          }
+          return <MdiIcon className="false" path="close-circle" color="red" />;
+        },
+      },
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceServiceUserStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9paWcI2dEe6GJNWtqQaZ_w',
-      attributeName: 'representation',
-      label: t('service.UserManager.UserManager_View_Edit.representation', {
-        defaultValue: 'Representation',
-      }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WqpSso7EEe6rlbj78nBB0Q',
+        attributeName: 'representation',
+        label: t('service.UserManager.UserManager_View_Edit.representation', {
+          defaultValue: 'Representation',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9pa9gI2dEe6GJNWtqQaZ_w',
-      attributeName: 'userName',
-      label: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wqp5wo7EEe6rlbj78nBB0Q',
+        attributeName: 'userName',
+        label: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9pbkkY2dEe6GJNWtqQaZ_w',
-      attributeName: 'firstName',
-      label: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wqqg0I7EEe6rlbj78nBB0Q',
+        attributeName: 'firstName',
+        label: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9pcLoo2dEe6GJNWtqQaZ_w',
-      attributeName: 'lastName',
-      label: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wqqg1I7EEe6rlbj78nBB0Q',
+        attributeName: 'lastName',
+        label: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9pdZwI2dEe6GJNWtqQaZ_w',
-      attributeName: 'phone',
-      label: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WqrH4o7EEe6rlbj78nBB0Q',
+        attributeName: 'phone',
+        label: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9peA0Y2dEe6GJNWtqQaZ_w',
-      attributeName: 'email',
-      label: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wqru8o7EEe6rlbj78nBB0Q',
+        attributeName: 'email',
+        label: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9pen4o2dEe6GJNWtqQaZ_w',
-      attributeName: 'isAdmin',
-      label: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
-      filterType: FilterType.boolean,
-    },
+      {
+        id: '_WqsWAI7EEe6rlbj78nBB0Q',
+        attributeName: 'isAdmin',
+        label: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
+        filterType: FilterType.boolean,
+      },
 
-    {
-      id: '_9pf2AI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
-      filterType: FilterType.dateTime,
-    },
-  ];
+      {
+        id: '_WqvZUI7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
+        filterType: FilterType.dateTime,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

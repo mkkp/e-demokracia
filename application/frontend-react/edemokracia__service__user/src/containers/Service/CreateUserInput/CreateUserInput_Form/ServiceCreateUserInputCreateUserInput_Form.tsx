@@ -17,8 +17,10 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
+import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
+import FormHelperText from '@mui/material/FormHelperText';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
@@ -56,6 +58,7 @@ export interface ServiceCreateUserInputCreateUserInput_FormProps {
   editMode: boolean;
   validation: Map<keyof ServiceCreateUserInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateUserInput, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormPageContainer
@@ -76,6 +79,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 
@@ -98,13 +102,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="(_9QqfQI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WW_98I7EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="security" sx={{ marginRight: 1 }} />
-                      <Typography id="_9QqfQI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WW_98I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.CreateUserInput.CreateUserInput_Form.security.Icon', { defaultValue: 'Security' })}
                       </Typography>
                     </Grid>
@@ -155,26 +159,39 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={4.0}>
-                        <FormGroup>
-                          <FormControlLabel
-                            className="switch"
-                            sx={{ marginTop: '6px' }}
-                            disabled={false || !isFormUpdateable() || isLoading}
-                            control={
-                              <Checkbox
-                                checked={data.hasAdminAccess || false}
-                                onChange={(event) => {
-                                  storeDiff('hasAdminAccess', event.target.checked);
-                                }}
-                              />
-                            }
-                            label={
-                              t('service.CreateUserInput.CreateUserInput_Form.hasAdminAccess', {
-                                defaultValue: 'IsAdmin',
-                              }) as string
-                            }
-                          />
-                        </FormGroup>
+                        <FormControl error={!!validation.get('hasAdminAccess')}>
+                          <FormGroup>
+                            <FormControlLabel
+                              className="switch"
+                              sx={{
+                                marginTop: '6px',
+                                color: (theme) =>
+                                  validation.has('hasAdminAccess') ? theme.palette.error.main : 'primary',
+                              }}
+                              disabled={false || !isFormUpdateable() || isLoading}
+                              control={
+                                <Checkbox
+                                  checked={data.hasAdminAccess || false}
+                                  sx={{
+                                    color: (theme) =>
+                                      validation.has('hasAdminAccess') ? theme.palette.error.main : 'primary',
+                                  }}
+                                  onChange={(event) => {
+                                    storeDiff('hasAdminAccess', event.target.checked);
+                                  }}
+                                />
+                              }
+                              label={
+                                t('service.CreateUserInput.CreateUserInput_Form.hasAdminAccess', {
+                                  defaultValue: 'IsAdmin',
+                                }) as string
+                              }
+                            />
+                          </FormGroup>
+                          {validation.has('hasAdminAccess') && (
+                            <FormHelperText>{validation.get('hasAdminAccess')}</FormHelperText>
+                          )}
+                        </FormControl>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -184,13 +201,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="(_9QvXwI2dEe6GJNWtqQaZ_w)/LabelWrapper">
+            <Card id="_WXBzI47EEe6rlbj78nBB0Q)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                      <Typography id="_9QvXwI2dEe6GJNWtqQaZ_w)/Label" variant="h5" component="h1">
+                      <Typography id="_WXBzI47EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
                         {t('service.CreateUserInput.CreateUserInput_Form.personal.Icon', { defaultValue: 'Personal' })}
                       </Typography>
                     </Grid>

@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -148,107 +148,110 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
 
   const selectedRows = useRef<ServiceYesNoAbstainVoteDefinitionStored[]>([]);
 
-  const columns: GridColDef<ServiceYesNoAbstainVoteDefinitionStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceYesNoAbstainVoteDefinitionStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
-        defaultValue: 'Created',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
+          defaultValue: 'Created',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'status',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
-        defaultValue: 'Status',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
-
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && true,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'closeAt',
-      headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 230,
+        type: 'string',
+        filterable: false && true,
       },
-    },
-  ];
+      {
+        ...baseColumnConfig,
+        field: 'status',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
+          defaultValue: 'Status',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && true,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'closeAt',
+        headerName: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
+
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceYesNoAbstainVoteDefinitionStored>[] = [
     {
@@ -278,15 +281,15 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
+      id: 'User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
       }) as string,
-      icon: <MdiIcon path="lock-open" />,
+      icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.activateForYesNoAbstainVoteDefinitionAction
+      action: actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
         ? async (rowData) => {
-            await actions.activateForYesNoAbstainVoteDefinitionAction!(rowData);
+            await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -304,6 +307,19 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         : undefined,
     },
     {
+      id: 'User/(esm/_9jf_AnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.addToFavorites', {
+        defaultValue: 'addToFavorites',
+      }) as string,
+      icon: <MdiIcon path="star-plus" />,
+      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
+      action: actions.addToFavoritesForYesNoAbstainVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.addToFavoritesForYesNoAbstainVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
       id: 'User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.removeFromFavorites', {
         defaultValue: 'removeFromFavorites',
@@ -317,15 +333,15 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
+      id: 'User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.activate', {
+        defaultValue: 'activate',
       }) as string,
-      icon: <MdiIcon path="delete" />,
+      icon: <MdiIcon path="lock-open" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
+      action: actions.activateForYesNoAbstainVoteDefinitionAction
         ? async (rowData) => {
-            await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!(rowData);
+            await actions.activateForYesNoAbstainVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -355,68 +371,58 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
           }
         : undefined,
     },
-    {
-      id: 'User/(esm/_9jf_AnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.addToFavorites', {
-        defaultValue: 'addToFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-plus" />,
-      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.addToFavoritesForYesNoAbstainVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.addToFavoritesForYesNoAbstainVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
   ];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9HNBQI2dEe6GJNWtqQaZ_w',
-      attributeName: 'title',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
-        defaultValue: 'Title',
-      }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WQJvEI7EEe6rlbj78nBB0Q',
+        attributeName: 'title',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
+          defaultValue: 'Title',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9HOPYI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
-        defaultValue: 'Created',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+      {
+        id: '_WQKWII7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
+          defaultValue: 'Created',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9HO2cI2dEe6GJNWtqQaZ_w',
-      attributeName: 'description',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_WQK9MI7EEe6rlbj78nBB0Q',
+        attributeName: 'description',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9HPdgo2dEe6GJNWtqQaZ_w',
-      attributeName: 'status',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
-        defaultValue: 'Status',
-      }) as string,
-      filterType: FilterType.enumeration,
-      enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
-    },
+      {
+        id: '_WQK9NI7EEe6rlbj78nBB0Q',
+        attributeName: 'status',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
+          defaultValue: 'Status',
+        }) as string,
+        filterType: FilterType.enumeration,
+        enumValues: ['CREATED', 'PENDING', 'ACTIVE', 'CLOSED', 'ARCHIVED'],
+      },
 
-    {
-      id: '_9HQroI2dEe6GJNWtqQaZ_w',
-      attributeName: 'closeAt',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
-        defaultValue: 'CloseAt',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
-  ];
+      {
+        id: '_WQLkQo7EEe6rlbj78nBB0Q',
+        attributeName: 'closeAt',
+        label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
+          defaultValue: 'CloseAt',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

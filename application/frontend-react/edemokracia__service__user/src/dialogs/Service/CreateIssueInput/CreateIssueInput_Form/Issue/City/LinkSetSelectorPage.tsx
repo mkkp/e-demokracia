@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,7 +27,9 @@ import type {
   ServiceCreateIssueInput,
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
-import { serviceCreateIssueInputServiceForCityImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCreateIssueInputServiceForCityImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForCityImpl';
+
 export type ServiceCityCity_TableSetSelectorDialogActionsExtended = ServiceCityCity_TableSetSelectorDialogActions & {};
 
 export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -99,6 +101,12 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCityLin
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCreateIssueInputServiceForCityImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForCityImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -131,6 +139,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCityLin
 
   // Calculated section
   const title: string = t('service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
+
+  // Private actions
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {

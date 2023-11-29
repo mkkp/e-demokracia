@@ -6,7 +6,8 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -27,9 +28,17 @@ import type {
   ServiceSimpleVoteStored,
   SimpleVoteType,
 } from '~/services/data-api';
-import { serviceSimpleVoteServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceSimpleVoteServiceImpl } from '~/services/data-axios/ServiceSimpleVoteServiceImpl';
+
 export type ServiceSimpleVoteSimpleVote_View_EditPageActionsExtended =
-  ServiceSimpleVoteSimpleVote_View_EditPageActions & {};
+  ServiceSimpleVoteSimpleVote_View_EditPageActions & {
+    postRefreshAction?: (
+      data: ServiceSimpleVoteStored,
+      storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_CON_VOTES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceSimpleVoteSimpleVote_View_EditActionsHook';
@@ -60,6 +69,9 @@ const ServiceSimpleVoteSimpleVote_View_EditPageContainer = lazy(
 export default function ServiceConVotesRelationViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceSimpleVoteServiceImpl = useMemo(() => new ServiceSimpleVoteServiceImpl(judoAxiosProvider), []);
 
   // Hooks section
   const { t } = useTranslation();
@@ -126,6 +138,9 @@ export default function ServiceConVotesRelationViewPage() {
   // Calculated section
   const title: string = t('service.SimpleVote.SimpleVote_View_Edit', { defaultValue: 'SimpleVote View / Edit' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     navigateBack();
@@ -146,6 +161,9 @@ export default function ServiceConVotesRelationViewPage() {
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceSimpleVoteStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -188,6 +206,7 @@ export default function ServiceConVotesRelationViewPage() {
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </PageContainerTransition>
       </Suspense>

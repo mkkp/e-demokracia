@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -127,90 +127,96 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const selectedRows = useRef<ServiceSelectAnswerVoteEntryStored[]>([]);
 
-  const columns: GridColDef<ServiceSelectAnswerVoteEntryStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'created',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
-        defaultValue: 'Created',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceSelectAnswerVoteEntryStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'created',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
+          defaultValue: 'Created',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'dateTime',
-      filterable: false && true,
-      valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-      valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-        return (
-          value &&
-          new Intl.DateTimeFormat(l10nLocale, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-          }).format(value)
-        );
+        width: 170,
+        type: 'dateTime',
+        filterable: false && true,
+        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+          return (
+            value &&
+            new Intl.DateTimeFormat(l10nLocale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            }).format(value)
+          );
+        },
       },
-    },
-    {
-      ...baseColumnConfig,
-      field: 'createdBy',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
-        defaultValue: 'CreatedBy',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+      {
+        ...baseColumnConfig,
+        field: 'createdBy',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
+          defaultValue: 'CreatedBy',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'valueRepresentation',
-      headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
-        defaultValue: 'ValueRepresentation',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'valueRepresentation',
+        headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
+          defaultValue: 'ValueRepresentation',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const rowActions: TableRowAction<ServiceSelectAnswerVoteEntryStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9hctQI2dEe6GJNWtqQaZ_w',
-      attributeName: 'created',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
-        defaultValue: 'Created',
-      }) as string,
-      filterType: FilterType.dateTime,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_WjgI4o7EEe6rlbj78nBB0Q',
+        attributeName: 'created',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
+          defaultValue: 'Created',
+        }) as string,
+        filterType: FilterType.dateTime,
+      },
 
-    {
-      id: '_9hdUUI2dEe6GJNWtqQaZ_w',
-      attributeName: 'createdBy',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
-        defaultValue: 'CreatedBy',
-      }) as string,
-      filterType: FilterType.string,
-    },
+      {
+        id: '_Wjgv8o7EEe6rlbj78nBB0Q',
+        attributeName: 'createdBy',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
+          defaultValue: 'CreatedBy',
+        }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_9hd7Yo2dEe6GJNWtqQaZ_w',
-      attributeName: 'valueRepresentation',
-      label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
-        defaultValue: 'ValueRepresentation',
-      }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_WjhXAI7EEe6rlbj78nBB0Q',
+        attributeName: 'valueRepresentation',
+        label: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
+          defaultValue: 'ValueRepresentation',
+        }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [l10nLocale],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

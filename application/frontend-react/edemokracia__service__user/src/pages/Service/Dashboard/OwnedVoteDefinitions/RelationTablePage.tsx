@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -36,9 +36,13 @@ import type {
   VoteStatus,
   VoteType,
 } from '~/services/data-api';
-import { serviceDashboardServiceForOwnedVoteDefinitionsImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceDashboardServiceForOwnedVoteDefinitionsImpl } from '~/services/data-axios/ServiceDashboardServiceForOwnedVoteDefinitionsImpl';
+
 export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
-  ServiceVoteDefinitionVoteDefinition_TablePageActions & {};
+  ServiceVoteDefinitionVoteDefinition_TablePageActions & {
+    postRefreshAction?: (data: ServiceVoteDefinitionStored[]) => Promise<void>;
+  };
 
 export const SERVICE_DASHBOARD_OWNED_VOTE_DEFINITIONS_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceVoteDefinitionVoteDefinition_TableActionsHook';
@@ -59,6 +63,12 @@ const ServiceVoteDefinitionVoteDefinition_TablePageContainer = lazy(
 export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceDashboardServiceForOwnedVoteDefinitionsImpl = useMemo(
+    () => new ServiceDashboardServiceForOwnedVoteDefinitionsImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -97,9 +107,69 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
   // Calculated section
   const title: string = t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     navigateBack();
+  };
+  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceDashboardOwnedVoteDefinitionsRelationViewPage(target!.__signedIdentifier));
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
+  ): Promise<ServiceVoteDefinitionStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return serviceDashboardServiceForOwnedVoteDefinitionsImpl.list(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        queryCustomizer,
+      );
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const deleteAction = async (target: ServiceVoteDefinitionStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceDashboardServiceForOwnedVoteDefinitionsImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceVoteDefinition>(error, undefined, target);
+      }
+    }
   };
   const bulkDeleteAction = async (
     selectedRows: ServiceVoteDefinitionStored[],
@@ -136,79 +206,6 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
       });
     });
   };
-  const deleteAction = async (target: ServiceVoteDefinitionStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceDashboardServiceForOwnedVoteDefinitionsImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceVoteDefinition>(error, undefined, target);
-      }
-    }
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (
-    queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return serviceDashboardServiceForOwnedVoteDefinitionsImpl.list(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        queryCustomizer,
-      );
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceDashboardOwnedVoteDefinitionsRelationViewPage(target!.__signedIdentifier));
-  };
-  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const voteSelectAnswerAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
-        [],
-      );
-    if (result === 'submit') {
-    }
-  };
   const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
@@ -224,18 +221,34 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
       setRefreshCounter((prev) => prev + 1);
     }
   };
+  const voteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
+    }
+  };
+  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      target,
+    );
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
     backAction,
-    bulkDeleteAction,
-    deleteAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
-    voteRatingAction,
-    voteSelectAnswerAction,
+    deleteAction,
+    bulkDeleteAction,
     voteYesNoAbstainAction,
     voteYesNoAction,
+    voteSelectAnswerAction,
+    voteRatingAction,
     ...(customActions ?? {}),
   };
 

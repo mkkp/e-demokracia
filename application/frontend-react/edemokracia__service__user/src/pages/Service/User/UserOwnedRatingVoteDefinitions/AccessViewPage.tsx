@@ -6,7 +6,8 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -42,7 +43,9 @@ import type {
   ServiceServiceUserStored,
   VoteStatus,
 } from '~/services/data-api';
-import { serviceRatingVoteDefinitionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceRatingVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceRatingVoteDefinitionServiceImpl';
+
 export type ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActionsExtended =
   ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions & {
     postActivateForRatingVoteDefinitionAction?: () => Promise<void>;
@@ -51,6 +54,11 @@ export type ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions
     postDeleteOrArchiveForRatingVoteDefinitionAction?: () => Promise<void>;
     postRemoveFromFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
     postTakeBackVoteForRatingVoteDefinitionAction?: () => Promise<void>;
+    postRefreshAction?: (
+      data: ServiceRatingVoteDefinitionStored,
+      storeDiff: (attributeName: keyof ServiceRatingVoteDefinition, value: any) => void,
+      setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteDefinition, string>>>,
+    ) => Promise<void>;
   };
 
 export const SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -88,6 +96,12 @@ const ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageContainer = l
 export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceRatingVoteDefinitionServiceImpl = useMemo(
+    () => new ServiceRatingVoteDefinitionServiceImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -167,51 +181,110 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
     defaultValue: 'RatingVoteDefinition View / Edit',
   });
 
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+
   // Action section
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceRatingVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  const backAction = async () => {
+    navigateBack();
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceRatingVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    // action service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::TabularReferenceFieldLinkAutocompleteRangeAction
-    // definition service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::Autocomplete
-    // page service::User::userOwnedRatingVoteDefinitions::AccessViewPage
+  const refreshAction = async (
+    queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
+  ): Promise<ServiceRatingVoteDefinitionStored> => {
     try {
-      return serviceRatingVoteDefinitionServiceImpl.getRangeForOwner(data, queryCustomizer);
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceRatingVoteDefinitionServiceImpl.refresh(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        pageQueryCustomizer,
+      );
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceRatingVoteDefinitionStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
     } catch (error) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const ownerOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
-        data,
-        data.owner ? [data.owner] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceRatingVoteDefinitionServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceRatingVoteDefinition, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
       }
+    } catch (error) {
+      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
+  const takeBackVoteForRatingVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceRatingVoteDefinitionServiceImpl.takeBackVote(data);
+      if (customActions?.postTakeBackVoteForRatingVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForRatingVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceRatingVoteDefinitionOwnerRelationViewPage(target!);
-    if (!editMode) {
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(data);
+    if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const removeFromFavoritesForRatingVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceRatingVoteDefinitionServiceImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const activateForRatingVoteDefinitionAction = async () => {
@@ -254,26 +327,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       setIsLoading(false);
     }
   };
-  const closeVoteForRatingVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceRatingVoteDefinitionServiceImpl.closeVote(data);
-      if (customActions?.postCloseVoteForRatingVoteDefinitionAction) {
-        await customActions.postCloseVoteForRatingVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const deleteOrArchiveForRatingVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -294,12 +347,12 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForRatingVoteDefinitionAction = async () => {
+  const closeVoteForRatingVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceRatingVoteDefinitionServiceImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction();
+      await serviceRatingVoteDefinitionServiceImpl.closeVote(data);
+      if (customActions?.postCloseVoteForRatingVoteDefinitionAction) {
+        await customActions.postCloseVoteForRatingVoteDefinitionAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -312,6 +365,12 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const voteEntriesOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
+    await openServiceRatingVoteDefinitionVoteEntriesRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const voteEntriesFilterAction = async (
@@ -333,118 +392,78 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       queryCustomizer,
     );
   };
-  const voteEntriesOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
-    await openServiceRatingVoteDefinitionVoteEntriesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const takeBackVoteForRatingVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceRatingVoteDefinitionServiceImpl.takeBackVote(data);
-      if (customActions?.postTakeBackVoteForRatingVoteDefinitionAction) {
-        await customActions.postTakeBackVoteForRatingVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const userVoteEntryOpenPageAction = async (target?: ServiceRatingVoteEntryStored) => {
     await openServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const backAction = async () => {
-    navigateBack();
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceRatingVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceRatingVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
   };
-  const refreshAction = async (
-    queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceRatingVoteDefinitionStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceRatingVoteDefinitionServiceImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceRatingVoteDefinitionOwnerRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const ownerOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
       );
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceRatingVoteDefinitionStored, any>;
-      return result;
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+      }
+    }
+  };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceRatingVoteDefinitionServiceImpl.getRangeForOwner(data, queryCustomizer);
     } catch (error) {
       handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
+      return Promise.resolve([]);
     }
   };
-  const updateAction = async () => {
-    setIsLoading(true);
-    try {
-      const res = await serviceRatingVoteDefinitionServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceRatingVoteDefinition, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
   };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions = {
-    issueOpenPageAction,
-    issuePreFetchAction,
-    ownerAutocompleteRangeAction,
-    ownerOpenSetSelectorAction,
-    ownerUnsetAction,
-    ownerOpenPageAction,
+    backAction,
+    refreshAction,
+    cancelAction,
+    updateAction,
+    takeBackVoteForRatingVoteDefinitionAction,
+    voteAction,
+    removeFromFavoritesForRatingVoteDefinitionAction,
     activateForRatingVoteDefinitionAction,
     addToFavoritesForRatingVoteDefinitionAction,
-    closeVoteForRatingVoteDefinitionAction,
     deleteOrArchiveForRatingVoteDefinitionAction,
-    removeFromFavoritesForRatingVoteDefinitionAction,
+    closeVoteForRatingVoteDefinitionAction,
+    voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
-    voteEntriesOpenPageAction,
-    voteAction,
-    takeBackVoteForRatingVoteDefinitionAction,
     userVoteEntryOpenPageAction,
-    backAction,
-    cancelAction,
-    refreshAction,
-    updateAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    ownerOpenPageAction,
+    ownerOpenSetSelectorAction,
+    ownerAutocompleteRangeAction,
+    ownerUnsetAction,
     ...(customActions ?? {}),
   };
 
@@ -474,6 +493,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </PageContainerTransition>
       </Suspense>

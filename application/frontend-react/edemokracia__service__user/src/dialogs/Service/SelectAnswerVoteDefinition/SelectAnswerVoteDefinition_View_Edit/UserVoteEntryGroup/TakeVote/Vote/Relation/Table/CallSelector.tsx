@@ -6,7 +6,7 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -24,7 +24,9 @@ import type {
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
-import { serviceSelectAnswerVoteDefinitionServiceImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceSelectAnswerVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceImpl';
+
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActionsExtended =
   ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActions & {
     postVoteForSelectAnswerVoteDefinitionAction?: (onClose: () => Promise<void>) => Promise<void>;
@@ -101,6 +103,12 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceSelectAnswerVoteDefinitionServiceImpl = useMemo(
+    () => new ServiceSelectAnswerVoteDefinitionServiceImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -137,10 +145,12 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
     { defaultValue: 'Select Input' },
   );
 
-  // Action section
-  const backAction = async () => {
-    onClose();
+  // Private actions
+  const submit = async () => {
+    await voteForSelectAnswerVoteDefinitionAction();
   };
+
+  // Action section
   const voteForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -160,6 +170,9 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
     } finally {
       setIsLoading(false);
     }
+  };
+  const backAction = async () => {
+    onClose();
   };
   const filterAction = async (
     id: string,
@@ -185,8 +198,8 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActions =
     {
-      backAction,
       voteForSelectAnswerVoteDefinitionAction,
+      backAction,
       filterAction,
       selectorRangeAction,
       ...(customActions ?? {}),

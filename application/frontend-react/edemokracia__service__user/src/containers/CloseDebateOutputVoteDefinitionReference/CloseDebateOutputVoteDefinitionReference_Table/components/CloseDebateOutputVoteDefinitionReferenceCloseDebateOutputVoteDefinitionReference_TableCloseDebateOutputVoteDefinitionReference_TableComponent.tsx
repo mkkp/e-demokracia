@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -131,24 +131,28 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
 
   const selectedRows = useRef<CloseDebateOutputVoteDefinitionReferenceStored[]>([]);
 
-  const columns: GridColDef<CloseDebateOutputVoteDefinitionReferenceStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'context',
-      headerName: t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.context', {
-        defaultValue: 'Context',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<CloseDebateOutputVoteDefinitionReferenceStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'context',
+        headerName: t(
+          'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.context',
+          { defaultValue: 'Context' },
+        ) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<CloseDebateOutputVoteDefinitionReferenceStored>[] = [
     {
@@ -179,7 +183,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
     },
   ];
 
-  const filterOptions: FilterOption[] = [];
+  const filterOptions = useMemo<FilterOption[]>(() => [], []);
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

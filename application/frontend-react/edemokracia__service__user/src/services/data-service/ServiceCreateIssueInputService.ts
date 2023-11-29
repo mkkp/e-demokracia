@@ -20,8 +20,8 @@ import {
   ServiceCounty,
   ServiceCityStored,
   ServiceIssueTypeStored,
-  ServiceCityQueryCustomizer,
   ServiceIssueType,
+  ServiceCityQueryCustomizer,
 } from '../data-api';
 
 /**
@@ -29,33 +29,6 @@ import {
  */
 export interface ServiceCreateIssueInputService {
   getTemplate(): Promise<ServiceCreateIssueInput>;
-  getTemplateForCity(): Promise<ServiceCity>;
-  getCity(
-    target: JudoIdentifiable<ServiceCreateIssueInput>,
-    queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored>;
-  getRangeForCity(
-    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
-    queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
-  getTemplateForCounty(): Promise<ServiceCounty>;
-  getCounty(
-    target: JudoIdentifiable<ServiceCreateIssueInput>,
-    queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored>;
-  getRangeForCounty(
-    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
-    queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
-  getTemplateForDistrict(): Promise<ServiceDistrict>;
-  getDistrict(
-    target: JudoIdentifiable<ServiceCreateIssueInput>,
-    queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
-  getRangeForDistrict(
-    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
-    queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
   getTemplateForIssueType(): Promise<ServiceIssueType>;
   getIssueType(
     target: JudoIdentifiable<ServiceCreateIssueInput>,
@@ -65,4 +38,31 @@ export interface ServiceCreateIssueInputService {
     owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>>;
+  getTemplateForCounty(): Promise<ServiceCounty>;
+  getCounty(
+    target: JudoIdentifiable<ServiceCreateIssueInput>,
+    queryCustomizer?: ServiceCountyQueryCustomizer,
+  ): Promise<ServiceCountyStored>;
+  getRangeForCounty(
+    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
+    queryCustomizer?: ServiceCountyQueryCustomizer,
+  ): Promise<Array<ServiceCountyStored>>;
+  getTemplateForCity(): Promise<ServiceCity>;
+  getCity(
+    target: JudoIdentifiable<ServiceCreateIssueInput>,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored>;
+  getRangeForCity(
+    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<Array<ServiceCityStored>>;
+  getTemplateForDistrict(): Promise<ServiceDistrict>;
+  getDistrict(
+    target: JudoIdentifiable<ServiceCreateIssueInput>,
+    queryCustomizer?: ServiceDistrictQueryCustomizer,
+  ): Promise<ServiceDistrictStored>;
+  getRangeForDistrict(
+    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
+    queryCustomizer?: ServiceDistrictQueryCustomizer,
+  ): Promise<Array<ServiceDistrictStored>>;
 }

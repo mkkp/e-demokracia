@@ -17,19 +17,19 @@ import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';
 
-export class ServiceUserProfileActivityCitiesMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCityAttributes | ServiceCityDistrictsMaskBuilder>) {
-    super('activityCities', props);
-  }
-}
 export class ServiceUserProfileActivityCountiesMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
     super('activityCounties', props);
   }
 }
-export class ServiceUserProfileActivityDistrictsMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceDistrictAttributes>) {
-    super('activityDistricts', props);
+export class ServiceUserProfileResidentCountyMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
+    super('residentCounty', props);
+  }
+}
+export class ServiceUserProfileActivityCitiesMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCityAttributes | ServiceCityDistrictsMaskBuilder>) {
+    super('activityCities', props);
   }
 }
 export class ServiceUserProfileResidentCityMaskBuilder extends RelationMaskBuilder {
@@ -37,9 +37,9 @@ export class ServiceUserProfileResidentCityMaskBuilder extends RelationMaskBuild
     super('residentCity', props);
   }
 }
-export class ServiceUserProfileResidentCountyMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
-    super('residentCounty', props);
+export class ServiceUserProfileActivityDistrictsMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceDistrictAttributes>) {
+    super('activityDistricts', props);
   }
 }
 export class ServiceUserProfileResidentDistrictMaskBuilder extends RelationMaskBuilder {
@@ -52,11 +52,11 @@ export class ServiceUserProfileMaskBuilder extends MaskBuilder {
   constructor(
     protected props: Array<
       | ServiceUserProfileAttributes
-      | ServiceUserProfileActivityCitiesMaskBuilder
       | ServiceUserProfileActivityCountiesMaskBuilder
-      | ServiceUserProfileActivityDistrictsMaskBuilder
-      | ServiceUserProfileResidentCityMaskBuilder
       | ServiceUserProfileResidentCountyMaskBuilder
+      | ServiceUserProfileActivityCitiesMaskBuilder
+      | ServiceUserProfileResidentCityMaskBuilder
+      | ServiceUserProfileActivityDistrictsMaskBuilder
       | ServiceUserProfileResidentDistrictMaskBuilder
     >,
   ) {

@@ -44,6 +44,7 @@ export interface ServiceCommentComment_View_EditPageProps {
   storeDiff: (attributeName: keyof ServiceComment, value: any) => void;
   validation: Map<keyof ServiceComment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::Comment::Comment_View_Edit
@@ -64,6 +65,7 @@ export default function ServiceCommentComment_View_EditPage(props: ServiceCommen
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCommentQueryCustomizer = {
     _mask: '{comment,created,downVotes,upVotes,createdBy{representation}}',
@@ -177,6 +179,7 @@ export default function ServiceCommentComment_View_EditPage(props: ServiceCommen
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

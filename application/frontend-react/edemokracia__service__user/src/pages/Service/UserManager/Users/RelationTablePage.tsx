@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -29,9 +29,12 @@ import type {
   ServiceUserManager,
   ServiceUserManagerStored,
 } from '~/services/data-api';
-import { serviceUserManagerServiceForUsersImpl } from '~/services/data-axios';
-export type ServiceServiceUserServiceUser_TablePageActionsExtended =
-  ServiceServiceUserServiceUser_TablePageActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceUserManagerServiceForUsersImpl } from '~/services/data-axios/ServiceUserManagerServiceForUsersImpl';
+
+export type ServiceServiceUserServiceUser_TablePageActionsExtended = ServiceServiceUserServiceUser_TablePageActions & {
+  postRefreshAction?: (data: ServiceServiceUserStored[]) => Promise<void>;
+};
 
 export const SERVICE_USER_MANAGER_USERS_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceServiceUserServiceUser_TableActionsHook';
@@ -49,6 +52,12 @@ const ServiceServiceUserServiceUser_TablePageContainer = lazy(
 export default function ServiceUserManagerUsersRelationTablePage() {
   // Router params section
   const { signedIdentifier } = useParams();
+
+  // Services
+  const serviceUserManagerServiceForUsersImpl = useMemo(
+    () => new ServiceUserManagerServiceForUsersImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -80,9 +89,16 @@ export default function ServiceUserManagerUsersRelationTablePage() {
   // Calculated section
   const title: string = t('service.ServiceUser.ServiceUser_Table', { defaultValue: 'ServiceUser Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
   const backAction = async () => {
     navigateBack();
+  };
+  const openPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceUserManagerUsersRelationViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
   };
   const filterAction = async (
     id: string,
@@ -113,16 +129,12 @@ export default function ServiceUserManagerUsersRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceUserManagerUsersRelationViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
 
   const actions: ServiceServiceUserServiceUser_TablePageActions = {
     backAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
     ...(customActions ?? {}),
   };
 

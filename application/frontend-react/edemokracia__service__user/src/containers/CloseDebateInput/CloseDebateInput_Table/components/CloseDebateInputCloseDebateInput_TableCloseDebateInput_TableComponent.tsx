@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -121,27 +121,30 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
 
   const selectedRows = useRef<CloseDebateInputStored[]>([]);
 
-  const columns: GridColDef<CloseDebateInputStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'voteType',
-      headerName: t('CloseDebateInput.CloseDebateInput_Table.voteType', { defaultValue: 'VoteType' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<CloseDebateInputStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'voteType',
+        headerName: t('CloseDebateInput.CloseDebateInput_Table.voteType', { defaultValue: 'VoteType' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 170,
-      type: 'singleSelect',
-      filterable: false && false,
-      sortable: false,
-      valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-        if (value !== undefined && value !== null) {
-          return t(`enumerations.VoteTypeOnCloseDebate.${value}`, { defaultValue: value });
-        }
+        width: 170,
+        type: 'singleSelect',
+        filterable: false && false,
+        sortable: false,
+        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+          if (value !== undefined && value !== null) {
+            return t(`enumerations.VoteTypeOnCloseDebate.${value}`, { defaultValue: value });
+          }
+        },
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
       },
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<CloseDebateInputStored>[] = [
     {
@@ -168,7 +171,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
     },
   ];
 
-  const filterOptions: FilterOption[] = [];
+  const filterOptions = useMemo<FilterOption[]>(() => [], []);
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

@@ -34,7 +34,7 @@ export const menus: NavItemType[] = [
     children: [],
   },
   {
-    id: '(_8bkqUo2dEe6GJNWtqQaZ_w)/Icon',
+    id: 'User/(esm/_gYSocFuaEe6T042_LMmSdQ)/MenuItemGroup',
     type: 'group',
     icon: 'texture',
     title: 'Administrative functions',
@@ -106,7 +106,7 @@ export const menus: NavItemType[] = [
     ],
   },
   {
-    id: '(_85UWQI2dEe6GJNWtqQaZ_w)/Icon',
+    id: 'User/(esm/__GjiAFuZEe6T042_LMmSdQ)/MenuItemGroup',
     type: 'item',
     icon: 'texture',
     title: 'Techical Accesses Menu Group',

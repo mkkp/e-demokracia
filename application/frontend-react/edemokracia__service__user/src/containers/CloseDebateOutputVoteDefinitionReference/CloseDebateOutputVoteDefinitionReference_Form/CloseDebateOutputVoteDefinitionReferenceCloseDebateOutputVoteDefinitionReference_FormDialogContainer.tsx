@@ -55,6 +55,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void;
   validation: Map<keyof CloseDebateOutputVoteDefinitionReference, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Form
@@ -79,6 +80,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
     _mask: '{context}',
@@ -115,6 +117,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

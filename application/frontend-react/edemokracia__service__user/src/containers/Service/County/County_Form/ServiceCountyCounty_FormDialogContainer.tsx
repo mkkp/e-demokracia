@@ -45,6 +45,7 @@ export interface ServiceCountyCounty_FormDialogProps {
   storeDiff: (attributeName: keyof ServiceCounty, value: any) => void;
   validation: Map<keyof ServiceCounty, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCounty, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::County::County_Form
@@ -67,6 +68,7 @@ export default function ServiceCountyCounty_FormDialog(props: ServiceCountyCount
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceCountyQueryCustomizer = {
     _mask: '{name}',
@@ -103,6 +105,7 @@ export default function ServiceCountyCounty_FormDialog(props: ServiceCountyCount
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Suspense>
       </DialogContent>

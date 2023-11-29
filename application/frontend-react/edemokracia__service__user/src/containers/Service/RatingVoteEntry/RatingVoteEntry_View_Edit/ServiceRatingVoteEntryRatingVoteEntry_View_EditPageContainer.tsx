@@ -52,6 +52,7 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditPageProps {
   storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void;
   validation: Map<keyof ServiceRatingVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteEntry, string>>>;
+  submit: () => Promise<void>;
 }
 
 // Name: service::RatingVoteEntry::RatingVoteEntry_View_Edit
@@ -74,6 +75,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_EditPage(
     storeDiff,
     validation,
     setValidation,
+    submit,
   } = props;
   const queryCustomizer: ServiceRatingVoteEntryQueryCustomizer = {
     _mask: '{created,value}',
@@ -187,6 +189,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_EditPage(
             isFormDeleteable={isFormDeleteable}
             validation={validation}
             setValidation={setValidation}
+            submit={submit}
           />
         </Box>
       </Suspense>

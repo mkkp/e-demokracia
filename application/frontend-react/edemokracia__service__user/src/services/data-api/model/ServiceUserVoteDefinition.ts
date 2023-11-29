@@ -11,26 +11,26 @@ import { ServiceVoteDefinition } from './ServiceVoteDefinition';
 import { ServiceVoteDefinitionStored } from './ServiceVoteDefinition';
 
 export interface ServiceUserVoteDefinition {
-  activeVoteDefinitionsGlobal?: null | Array<ServiceVoteDefinitionStored>;
-  activeVoteDefinitionsInActivityCities?: null | Array<ServiceVoteDefinitionStored>;
-  activeVoteDefinitionsInActivityCounties?: null | Array<ServiceVoteDefinitionStored>;
-  activeVoteDefinitionsInActivityDistricts?: null | Array<ServiceVoteDefinitionStored>;
-  activeVoteDefinitionsInResidentCity?: null | Array<ServiceVoteDefinitionStored>;
-  activeVoteDefinitionsInResidentCounty?: null | Array<ServiceVoteDefinitionStored>;
-  activeVoteDefinitionsInResidentDistrict?: null | Array<ServiceVoteDefinitionStored>;
   ownedVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsGlobal?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsInActivityCounties?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsInActivityCities?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsInActivityDistricts?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsInResidentCounty?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsInResidentCity?: null | Array<ServiceVoteDefinitionStored>;
+  activeVoteDefinitionsInResidentDistrict?: null | Array<ServiceVoteDefinitionStored>;
 }
 
 export type ServiceUserVoteDefinitionAttributes = '';
 export type ServiceUserVoteDefinitionRelations =
+  | 'ownedVoteDefinitions'
   | 'activeVoteDefinitionsGlobal'
-  | 'activeVoteDefinitionsInActivityCities'
   | 'activeVoteDefinitionsInActivityCounties'
+  | 'activeVoteDefinitionsInActivityCities'
   | 'activeVoteDefinitionsInActivityDistricts'
-  | 'activeVoteDefinitionsInResidentCity'
   | 'activeVoteDefinitionsInResidentCounty'
-  | 'activeVoteDefinitionsInResidentDistrict'
-  | 'ownedVoteDefinitions';
+  | 'activeVoteDefinitionsInResidentCity'
+  | 'activeVoteDefinitionsInResidentDistrict';
 
 export interface ServiceUserVoteDefinitionStored
   extends JudoStored<ServiceUserVoteDefinition>,

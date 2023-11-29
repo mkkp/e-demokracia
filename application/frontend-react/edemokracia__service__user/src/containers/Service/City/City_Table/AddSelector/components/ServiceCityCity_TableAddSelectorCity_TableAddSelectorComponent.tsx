@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -114,46 +114,52 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
   const [firstItem, setFirstItem] = useState<ServiceCityStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
-  const columns: GridColDef<ServiceCityStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'county',
-      headerName: t('service.City.City_Table.AddSelector.county', { defaultValue: 'County' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceCityStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'county',
+        headerName: t('service.City.City_Table.AddSelector.county', { defaultValue: 'County' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'name',
-      headerName: t('service.City.City_Table.AddSelector.name', { defaultValue: 'City name' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'name',
+        headerName: t('service.City.City_Table.AddSelector.name', { defaultValue: 'City name' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceCityStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_7RjHMI2dEe6GJNWtqQaZ_w',
-      attributeName: 'county',
-      label: t('service.City.City_Table.AddSelector.county', { defaultValue: 'County' }) as string,
-      filterType: FilterType.string,
-    },
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_UqFwMo7EEe6rlbj78nBB0Q',
+        attributeName: 'county',
+        label: t('service.City.City_Table.AddSelector.county', { defaultValue: 'County' }) as string,
+        filterType: FilterType.string,
+      },
 
-    {
-      id: '_7RljcI2dEe6GJNWtqQaZ_w',
-      attributeName: 'name',
-      label: t('service.City.City_Table.AddSelector.name', { defaultValue: 'City name' }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+      {
+        id: '_UqGXQI7EEe6rlbj78nBB0Q',
+        attributeName: 'name',
+        label: t('service.City.City_Table.AddSelector.name', { defaultValue: 'City name' }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);
@@ -215,9 +221,9 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
     setIsNextButtonEnabled(!isNext);
   }
 
-  const handleIsRowSelectable = (params: GridRowParams<ServiceCityStored & { __selected?: boolean }>) => {
+  const handleIsRowSelectable = useCallback((params: GridRowParams<ServiceCityStored & { __selected?: boolean }>) => {
     return isRowSelectable(params.row, !true, alreadySelected);
-  };
+  }, []);
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;

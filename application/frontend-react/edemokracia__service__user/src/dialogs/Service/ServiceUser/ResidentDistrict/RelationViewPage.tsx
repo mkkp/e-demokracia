@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,9 +26,16 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { serviceDistrictServiceImpl } from '~/services/data-axios';
-export type ServiceDistrictDistrict_View_EditDialogActionsExtended =
-  ServiceDistrictDistrict_View_EditDialogActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceDistrictServiceImpl } from '~/services/data-axios/ServiceDistrictServiceImpl';
+
+export type ServiceDistrictDistrict_View_EditDialogActionsExtended = ServiceDistrictDistrict_View_EditDialogActions & {
+  postRefreshAction?: (
+    data: ServiceDistrictStored,
+    storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+    setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>,
+  ) => Promise<void>;
+};
 
 export const SERVICE_SERVICE_USER_RESIDENT_DISTRICT_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceDistrictDistrict_View_EditActionsHook';
@@ -103,6 +111,9 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
 ) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceDistrictServiceImpl = useMemo(() => new ServiceDistrictServiceImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -171,13 +182,14 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
   // Calculated section
   const title: string = data.representation as string;
 
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+
   // Action section
   const backAction = async () => {
     onClose();
-  };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
   const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
     try {
@@ -192,6 +204,9 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
         __version: result.__version,
         __entityType: result.__entityType,
       } as Record<keyof ServiceDistrictStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -200,6 +215,10 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
       setIsLoading(false);
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
+  };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
   const updateAction = async () => {
     setIsLoading(true);
@@ -220,8 +239,8 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
 
   const actions: ServiceDistrictDistrict_View_EditDialogActions = {
     backAction,
-    cancelAction,
     refreshAction,
+    cancelAction,
     updateAction,
     ...(customActions ?? {}),
   };
@@ -251,6 +270,7 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

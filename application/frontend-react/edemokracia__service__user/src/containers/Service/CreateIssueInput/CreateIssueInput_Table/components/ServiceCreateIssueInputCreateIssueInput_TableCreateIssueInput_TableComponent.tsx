@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -129,38 +129,41 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
 
   const selectedRows = useRef<ServiceCreateIssueInputStored[]>([]);
 
-  const columns: GridColDef<ServiceCreateIssueInputStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'description',
-      headerName: t('service.CreateIssueInput.CreateIssueInput_Table.description', {
-        defaultValue: 'Description',
-      }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceCreateIssueInputStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'description',
+        headerName: t('service.CreateIssueInput.CreateIssueInput_Table.description', {
+          defaultValue: 'Description',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-    {
-      ...baseColumnConfig,
-      field: 'title',
-      headerName: t('service.CreateIssueInput.CreateIssueInput_Table.title', { defaultValue: 'Title' }) as string,
-      headerClassName: 'data-grid-column-header',
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+      {
+        ...baseColumnConfig,
+        field: 'title',
+        headerName: t('service.CreateIssueInput.CreateIssueInput_Table.title', { defaultValue: 'Title' }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && false,
-      sortable: false,
-      description: t('judo.pages.table.column.not-sortable', {
-        defaultValue: 'This column is not sortable.',
-      }) as string,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && false,
+        sortable: false,
+        description: t('judo.pages.table.column.not-sortable', {
+          defaultValue: 'This column is not sortable.',
+        }) as string,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceCreateIssueInputStored>[] = [
     {
@@ -187,7 +190,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
     },
   ];
 
-  const filterOptions: FilterOption[] = [];
+  const filterOptions = useMemo<FilterOption[]>(() => [], []);
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPage(0);

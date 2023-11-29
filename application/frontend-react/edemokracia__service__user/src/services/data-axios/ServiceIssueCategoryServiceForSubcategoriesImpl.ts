@@ -130,6 +130,64 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
     return response.data;
   }
 
+  async listSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
+  ): Promise<Array<ServiceIssueCategoryStored>> {
+    const path = '/service/IssueCategory/subcategories/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async getTemplateForSubcategories(): Promise<ServiceIssueCategory> {
+    const path = '/service/IssueCategory/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  async createSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceIssueCategory,
+  ): Promise<ServiceIssueCategoryStored> {
+    const path = '/service/IssueCategory/~update/subcategories/~create';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void> {
+    const path = '/service/IssueCategory/~delete';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+  }
+
+  async updateSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: Partial<ServiceIssueCategoryStored>,
+  ): Promise<ServiceIssueCategoryStored> {
+    const path = '/service/IssueCategory/~update/subcategories/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   async getOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -188,63 +246,5 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,
       },
     });
-  }
-
-  async listSubcategories(
-    owner: JudoIdentifiable<ServiceIssueCategory>,
-    queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<Array<ServiceIssueCategoryStored>> {
-    const path = '/service/IssueCategory/subcategories/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-
-    return response.data;
-  }
-
-  async getTemplateForSubcategories(): Promise<ServiceIssueCategory> {
-    const path = '/service/IssueCategory/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  async createSubcategories(
-    owner: JudoIdentifiable<ServiceIssueCategory>,
-    target: ServiceIssueCategory,
-  ): Promise<ServiceIssueCategoryStored> {
-    const path = '/service/IssueCategory/~update/subcategories/~create';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-
-    return response.data;
-  }
-
-  async deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void> {
-    const path = '/service/IssueCategory/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  async updateSubcategories(
-    owner: JudoIdentifiable<ServiceIssueCategory>,
-    target: Partial<ServiceIssueCategoryStored>,
-  ): Promise<ServiceIssueCategoryStored> {
-    const path = '/service/IssueCategory/~update/subcategories/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-
-    return response.data;
   }
 }

@@ -52,6 +52,7 @@ export interface ServiceUserManagerUserManager_View_EditProps {
   editMode: boolean;
   validation: Map<keyof ServiceUserManager, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserManager, string>>>;
+  submit: () => Promise<void>;
 }
 
 // XMIID: User/(esm/_dGIWgFvOEe6jm_SkPSYEYw)/TransferObjectViewPageContainer
@@ -70,6 +71,7 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
     editMode,
     validation,
     setValidation,
+    submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
 

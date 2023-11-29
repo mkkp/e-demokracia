@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -23,8 +23,12 @@ import { useServiceUserAdminCountiesAccessFormPage } from '~/dialogs/Service/Use
 import { useServiceUserAdminCountiesAccessViewPage } from '~/dialogs/Service/User/AdminCounties/AccessViewPage';
 import type { ServiceCountyCounty_TablePageActions } from '~/containers/Service/County/County_Table/ServiceCountyCounty_TablePageContainer';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
-import { userServiceForAdminCountiesImpl } from '~/services/data-axios';
-export type ServiceCountyCounty_TablePageActionsExtended = ServiceCountyCounty_TablePageActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminCountiesImpl } from '~/services/data-axios/UserServiceForAdminCountiesImpl';
+
+export type ServiceCountyCounty_TablePageActionsExtended = ServiceCountyCounty_TablePageActions & {
+  postRefreshAction?: (data: ServiceCountyStored[]) => Promise<void>;
+};
 
 export const SERVICE_USER_ADMIN_COUNTIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceCountyCounty_TableActionsHook';
@@ -40,6 +44,9 @@ const ServiceCountyCounty_TablePageContainer = lazy(
 // XMIID: User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessTablePageDefinition
 // Name: service::User::adminCounties::AccessTablePage
 export default function ServiceUserAdminCountiesAccessTablePage() {
+  // Services
+  const userServiceForAdminCountiesImpl = useMemo(() => new UserServiceForAdminCountiesImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -68,7 +75,68 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
   // Calculated section
   const title: string = t('service.County.County_Table', { defaultValue: 'County Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const openPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserAdminCountiesAccessViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForAdminCountiesImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openFormAction = async () => {
+    const { result, data: returnedData } = await openServiceUserAdminCountiesAccessFormPage(data);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const deleteAction = async (target: ServiceCountyStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await userServiceForAdminCountiesImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceCounty>(error, undefined, target);
+      }
+    }
+  };
   const bulkDeleteAction = async (
     selectedRows: ServiceCountyStored[],
   ): Promise<DialogResult<Array<ServiceCountyStored>>> => {
@@ -104,72 +172,14 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
       });
     });
   };
-  const openFormAction = async () => {
-    const { result, data: returnedData } = await openServiceUserAdminCountiesAccessFormPage(data);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const deleteAction = async (target: ServiceCountyStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await userServiceForAdminCountiesImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceCounty>(error, undefined, target);
-      }
-    }
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForAdminCountiesImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const openPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserAdminCountiesAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
 
   const actions: ServiceCountyCounty_TablePageActions = {
-    bulkDeleteAction,
-    openFormAction,
-    deleteAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
+    openFormAction,
+    deleteAction,
+    bulkDeleteAction,
     ...(customActions ?? {}),
   };
 

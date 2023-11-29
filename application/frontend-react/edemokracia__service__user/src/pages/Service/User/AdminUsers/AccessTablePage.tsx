@@ -6,7 +6,7 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, lazy, Suspense } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -26,9 +26,12 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import { userServiceForAdminUsersImpl } from '~/services/data-axios';
-export type ServiceServiceUserServiceUser_TablePageActionsExtended =
-  ServiceServiceUserServiceUser_TablePageActions & {};
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForAdminUsersImpl } from '~/services/data-axios/UserServiceForAdminUsersImpl';
+
+export type ServiceServiceUserServiceUser_TablePageActionsExtended = ServiceServiceUserServiceUser_TablePageActions & {
+  postRefreshAction?: (data: ServiceServiceUserStored[]) => Promise<void>;
+};
 
 export const SERVICE_USER_ADMIN_USERS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceServiceUserServiceUser_TableActionsHook';
@@ -44,6 +47,9 @@ const ServiceServiceUserServiceUser_TablePageContainer = lazy(
 // XMIID: User/(esm/_hvVS8GkuEe25ONJ3V89cVA)/AccessTablePageDefinition
 // Name: service::User::adminUsers::AccessTablePage
 export default function ServiceUserAdminUsersAccessTablePage() {
+  // Services
+  const userServiceForAdminUsersImpl = useMemo(() => new UserServiceForAdminUsersImpl(judoAxiosProvider), []);
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -74,7 +80,64 @@ export default function ServiceUserAdminUsersAccessTablePage() {
   // Calculated section
   const title: string = t('service.ServiceUser.ServiceUser_Table', { defaultValue: 'ServiceUser Table' });
 
+  // Private actions
+  const submit = async () => {};
+
   // Action section
+  const openPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceUserAdminUsersAccessViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForAdminUsersImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const deleteAction = async (target: ServiceServiceUserStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await userServiceForAdminUsersImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceServiceUser>(error, undefined, target);
+      }
+    }
+  };
   const bulkDeleteAction = async (
     selectedRows: ServiceServiceUserStored[],
   ): Promise<DialogResult<Array<ServiceServiceUserStored>>> => {
@@ -110,67 +173,13 @@ export default function ServiceUserAdminUsersAccessTablePage() {
       });
     });
   };
-  const deleteAction = async (target: ServiceServiceUserStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await userServiceForAdminUsersImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceServiceUser>(error, undefined, target);
-      }
-    }
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForAdminUsersImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const openPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceUserAdminUsersAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
 
   const actions: ServiceServiceUserServiceUser_TablePageActions = {
-    bulkDeleteAction,
-    deleteAction,
+    openPageAction,
     filterAction,
     refreshAction,
-    openPageAction,
+    deleteAction,
+    bulkDeleteAction,
     ...(customActions ?? {}),
   };
 

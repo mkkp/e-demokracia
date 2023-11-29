@@ -6,7 +6,8 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -25,7 +26,9 @@ import type {
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
 } from '~/services/data-api';
-import { serviceCityServiceForDistrictsImpl } from '~/services/data-axios';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { ServiceCityServiceForDistrictsImpl } from '~/services/data-axios/ServiceCityServiceForDistrictsImpl';
+
 export type ServiceDistrictDistrict_FormDialogActionsExtended = ServiceDistrictDistrict_FormDialogActions & {};
 
 export const SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
@@ -100,6 +103,12 @@ export interface ServiceCityDistrictsRelationFormPageProps {
 export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityDistrictsRelationFormPageProps) {
   const { ownerData, onClose, onSubmit } = props;
 
+  // Services
+  const serviceCityServiceForDistrictsImpl = useMemo(
+    () => new ServiceCityServiceForDistrictsImpl(judoAxiosProvider),
+    [],
+  );
+
   // Hooks section
   const { t } = useTranslation();
   const { showSuccessSnack, showErrorSnack } = useSnacks();
@@ -160,6 +169,11 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
 
   // Calculated section
   const title: string = t('service.District.District_Form', { defaultValue: 'District Form' });
+
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
 
   // Action section
   const backAction = async () => {
@@ -223,6 +237,7 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
           isFormDeleteable={isFormDeleteable}
           validation={validation}
           setValidation={setValidation}
+          submit={submit}
         />
       </Suspense>
     </div>

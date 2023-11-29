@@ -6,7 +6,7 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '@judo/data-api-common';
@@ -118,29 +118,37 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
 
   const selectedRows = useRef<ServiceDistrictStored[]>([]);
 
-  const columns: GridColDef<ServiceDistrictStored>[] = [
-    {
-      ...baseColumnConfig,
-      field: 'representation',
-      headerName: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'District' }) as string,
-      headerClassName: 'data-grid-column-header',
+  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(
+    () => [
+      {
+        ...baseColumnConfig,
+        field: 'representation',
+        headerName: t('service.UserProfile.UserProfile_View_Edit.representation', {
+          defaultValue: 'District',
+        }) as string,
+        headerClassName: 'data-grid-column-header',
 
-      width: 230,
-      type: 'string',
-      filterable: false && true,
-    },
-  ];
+        width: 230,
+        type: 'string',
+        filterable: false && true,
+      },
+    ],
+    [],
+  );
 
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [];
 
-  const filterOptions: FilterOption[] = [
-    {
-      id: '_9po_8o2dEe6GJNWtqQaZ_w',
-      attributeName: 'representation',
-      label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'District' }) as string,
-      filterType: FilterType.string,
-    },
-  ];
+  const filterOptions = useMemo<FilterOption[]>(
+    () => [
+      {
+        id: '_Wq1f8o7EEe6rlbj78nBB0Q',
+        attributeName: 'representation',
+        label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'District' }) as string,
+        filterType: FilterType.string,
+      },
+    ],
+    [],
+  );
 
   const handleFiltersChange = (newFilters: Filter[]) => {
     setPaginationModel((prevState) => ({
