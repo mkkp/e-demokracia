@@ -203,6 +203,28 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
   const backAction = async () => {
     onClose();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const deleteAction = async () => {
+    try {
+      const confirmed = await openConfirmDialog(
+        'row-delete-action',
+        t('judo.modal.confirm.confirm-delete', {
+          defaultValue: 'Are you sure you would like to delete the selected element?',
+        }),
+        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+      );
+      if (confirmed) {
+        await serviceProServiceImpl.delete(data);
+        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+        onClose();
+      }
+    } catch (error) {
+      handleError(error, undefined, data);
+    }
+  };
   const refreshAction = async (queryCustomizer: ServiceProQueryCustomizer): Promise<ServiceProStored> => {
     try {
       setIsLoading(true);
@@ -228,10 +250,6 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
   const updateAction = async () => {
     setIsLoading(true);
     try {
@@ -248,125 +266,10 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       setIsLoading(false);
     }
   };
-  const deleteAction = async () => {
-    try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
-      if (confirmed) {
-        await serviceProServiceImpl.delete(data);
-        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
-      }
-    } catch (error) {
-      handleError(error, undefined, data);
-    }
-  };
-  const voteDownForProAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceProServiceImpl.voteDown(data);
-      if (customActions?.postVoteDownForProAction) {
-        await customActions.postVoteDownForProAction(
-          onClose,
-        );
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServicePro>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const createProArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const createConArgumentAction = async () => {
     const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const voteUpForProAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceProServiceImpl.voteUp(data);
-      if (customActions?.postVoteUpForProAction) {
-        await customActions.postVoteUpForProAction(
-          onClose,
-        );
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServicePro>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceProCreatedByRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const consOpenPageAction = async (target?: ServiceConStored) => {
-    await openServiceProConsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const consFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const consDeleteAction = async (target: ServiceConStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceProServiceImpl.deleteCons(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceCon>(error, undefined, target);
-      }
     }
   };
   const consBulkDeleteAction = async (
@@ -406,13 +309,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       });
     });
   };
-  const prosOpenPageAction = async (target?: ServiceProStored) => {
-    await openServiceProProsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const prosFilterAction = async (
+  const consFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -423,7 +320,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       filters: newFilters,
     };
   };
-  const prosDeleteAction = async (target: ServiceProStored, silentMode?: boolean) => {
+  const consDeleteAction = async (target: ServiceConStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -435,7 +332,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
           )
         : true;
       if (confirmed) {
-        await serviceProServiceImpl.deletePros(target);
+        await serviceProServiceImpl.deleteCons(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
           refreshAction(pageQueryCustomizer);
@@ -443,8 +340,20 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       }
     } catch (error) {
       if (!silentMode) {
-        handleError<ServicePro>(error, undefined, target);
+        handleError<ServiceCon>(error, undefined, target);
       }
+    }
+  };
+  const consOpenPageAction = async (target?: ServiceConStored) => {
+    await openServiceProConsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const createProArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const prosBulkDeleteAction = async (
@@ -484,6 +393,97 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       });
     });
   };
+  const prosFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const prosDeleteAction = async (target: ServiceProStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceProServiceImpl.deletePros(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          refreshAction(pageQueryCustomizer);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServicePro>(error, undefined, target);
+      }
+    }
+  };
+  const prosOpenPageAction = async (target?: ServiceProStored) => {
+    await openServiceProProsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceProCreatedByRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteDownForProAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteDown(data);
+      if (customActions?.postVoteDownForProAction) {
+        await customActions.postVoteDownForProAction(
+          onClose,
+        );
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteUpForProAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceProServiceImpl.voteUp(data);
+      if (customActions?.postVoteUpForProAction) {
+        await customActions.postVoteUpForProAction(
+          onClose,
+        );
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServicePro>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceProVotesRelationTablePage((target || data).__signedIdentifier));
@@ -492,23 +492,23 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
 
   const actions: ServiceProPro_View_EditDialogActions = {
     backAction,
-    refreshAction,
     cancelAction,
-    updateAction,
     deleteAction,
-    voteDownForProAction,
-    createProArgumentAction,
+    refreshAction,
+    updateAction,
     createConArgumentAction,
-    voteUpForProAction,
-    createdByOpenPageAction,
-    consOpenPageAction,
+    consBulkDeleteAction,
     consFilterAction,
     consDeleteAction,
-    consBulkDeleteAction,
-    prosOpenPageAction,
+    consOpenPageAction,
+    createProArgumentAction,
+    prosBulkDeleteAction,
     prosFilterAction,
     prosDeleteAction,
-    prosBulkDeleteAction,
+    prosOpenPageAction,
+    createdByOpenPageAction,
+    voteDownForProAction,
+    voteUpForProAction,
     votesOpenPageAction,
     ...(customActions ?? {}),
   };

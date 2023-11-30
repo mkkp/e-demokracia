@@ -239,13 +239,25 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
+  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceUserProfileResidentCityRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const activityCountiesFilterAction = async (
+  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileResidentCountyRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const activityCitiesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -262,29 +274,6 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const activityCitiesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileResidentCountyRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const activityDistrictsFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -296,14 +285,25 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       filters: newFilters,
     };
   };
-  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileResidentCityRelationViewPage(target!);
+  const activityCountiesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
@@ -312,15 +312,15 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
     backAction,
     refreshAction,
-    activityCountiesOpenPageAction,
-    activityCountiesFilterAction,
-    activityCitiesOpenPageAction,
-    activityCitiesFilterAction,
-    residentCountyOpenPageAction,
-    activityDistrictsOpenPageAction,
-    activityDistrictsFilterAction,
-    residentDistrictOpenPageAction,
     residentCityOpenPageAction,
+    residentCountyOpenPageAction,
+    residentDistrictOpenPageAction,
+    activityCitiesFilterAction,
+    activityCitiesOpenPageAction,
+    activityDistrictsFilterAction,
+    activityDistrictsOpenPageAction,
+    activityCountiesFilterAction,
+    activityCountiesOpenPageAction,
     ...(customActions ?? {}),
   };
 

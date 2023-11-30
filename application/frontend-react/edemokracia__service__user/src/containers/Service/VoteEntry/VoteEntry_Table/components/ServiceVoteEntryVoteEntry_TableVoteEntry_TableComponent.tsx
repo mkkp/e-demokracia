@@ -237,35 +237,35 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_VkFTQI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_-W2L0OSGEe20cv3f2msZXg)/TableColumnFilter/(discriminator/User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable)',
         attributeName: 'userName',
         label: t('service.VoteEntry.VoteEntry_Table.userName', { defaultValue: 'UserName' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_VkFTRI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_C6UMcOSGEe20cv3f2msZXg)/TableColumnFilter/(discriminator/User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable)',
         attributeName: 'created',
         label: t('service.VoteEntry.VoteEntry_Table.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
-        id: '_VkF6Uo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_C6VakOSGEe20cv3f2msZXg)/TableColumnFilter/(discriminator/User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable)',
         attributeName: 'voteTitle',
         label: t('service.VoteEntry.VoteEntry_Table.voteTitle', { defaultValue: 'VoteTitle' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_VkGhYo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_C6UzgeSGEe20cv3f2msZXg)/TableColumnFilter/(discriminator/User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable)',
         attributeName: 'issueTitle',
         label: t('service.VoteEntry.VoteEntry_Table.issueTitle', { defaultValue: 'IssueTitle' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_VkHIcI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_C6UzguSGEe20cv3f2msZXg)/TableColumnFilter/(discriminator/User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable)',
         attributeName: 'voteStatus',
         label: t('service.VoteEntry.VoteEntry_Table.voteStatus', { defaultValue: 'VoteStatus' }) as string,
         filterType: FilterType.enumeration,

@@ -11,13 +11,13 @@ import { ServiceDistrict } from './ServiceDistrict';
 import { ServiceDistrictStored } from './ServiceDistrict';
 
 export interface ServiceCity {
-  name: string;
   county?: null | string;
+  name: string;
   representation?: null | string;
   districts?: null | Array<ServiceDistrictStored>;
 }
 
-export type ServiceCityAttributes = 'name' | 'county' | 'representation';
+export type ServiceCityAttributes = 'county' | 'name' | 'representation';
 export type ServiceCityRelations = 'districts';
 
 export interface ServiceCityStored extends JudoStored<ServiceCity>, ServiceCity {}

@@ -25,7 +25,7 @@ launcher/Build edemokracia Application.launch,06425f6a35aa82b149a92af8ee309827
 launcher/Compile edemokracia Custom Application.launch,589057793117e366005ba03dcbcfe284
 launcher/Run edemokracia Application.launch,c9b310d6660114eb63440620e9fa0173
 model/pom.xml,63585b6fccdfed35f1c1df2f61cb2c58
-pom.xml,e80d72f6d0b389c83bb16c4b80a5958b
+pom.xml,f34d3802aae351924434dbfa0a700303
 rest/pom.xml,ceb2b5b3dd596a7770a0f6d8e6e601c2
 schema/README.adoc,8371838b901d34b8026d10bf3399c83d
 schema/migration/gitkeep,68b329da9893e34099c7d8ad5cb9c940

@@ -141,7 +141,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wq1f8o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_fsW_sVvTEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'representation',
         label: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'District' }) as string,
         filterType: FilterType.string,

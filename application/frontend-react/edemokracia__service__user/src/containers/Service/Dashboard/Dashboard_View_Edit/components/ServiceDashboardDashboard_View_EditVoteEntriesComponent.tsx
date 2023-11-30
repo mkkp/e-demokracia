@@ -208,28 +208,28 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wf40Mo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_YR4ZYFxHEe6ma86ynyYZNw)/TableColumnFilter/(discriminator/User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'created',
         label: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
-        id: '_Wf5bQo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_YR5AcFxHEe6ma86ynyYZNw)/TableColumnFilter/(discriminator/User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'issueTitle',
         label: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wf6CUo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_YR5ngFxHEe6ma86ynyYZNw)/TableColumnFilter/(discriminator/User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'voteTitle',
         label: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wf6pYo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_YR5ngVxHEe6ma86ynyYZNw)/TableColumnFilter/(discriminator/User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'voteStatus',
         label: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
         filterType: FilterType.enumeration,

@@ -150,7 +150,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteYesNoForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_U1txYI7EEe6rlbj78nBB0Q)"
+              id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/User/(esm/_-1R8g3WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -171,7 +171,7 @@ export default function YesNoVoteInputYesNoVoteInput_FormDialog(props: YesNoVote
         {editMode && actions.voteForYesNoVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_U1txYI7EEe6rlbj78nBB0Q)"
+              id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormCallButton/(discriminator/User/(esm/_-1R8g3WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

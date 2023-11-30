@@ -102,14 +102,18 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WW_98I7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_ngqE4I1rEe29qs15q2b6yw)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="security" sx={{ marginRight: 1 }} />
-                      <Typography id="_WW_98I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.CreateUserInput.CreateUserInput_Form.security.Icon', { defaultValue: 'Security' })}
+                      <Typography
+                        id="User/(esm/_ngqE4I1rEe29qs15q2b6yw)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.CreateUserInput.CreateUserInput_Form.security.Label', { defaultValue: 'Security' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -201,14 +205,18 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WXBzI47EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_DmCbMI1sEe29qs15q2b6yw)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                      <Typography id="_WXBzI47EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.CreateUserInput.CreateUserInput_Form.personal.Icon', { defaultValue: 'Personal' })}
+                      <Typography
+                        id="User/(esm/_DmCbMI1sEe29qs15q2b6yw)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.CreateUserInput.CreateUserInput_Form.personal.Label', { defaultValue: 'Personal' })}
                       </Typography>
                     </Grid>
                   </Grid>

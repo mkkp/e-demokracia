@@ -96,14 +96,20 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WX_ccI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="account-voice" sx={{ marginRight: 1 }} />
-                      <Typography id="_WX_ccI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('CreateArgumentInput.CreateArgumentInput_Form.group.Icon', { defaultValue: 'Add argument' })}
+                      <Typography
+                        id="User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('CreateArgumentInput.CreateArgumentInput_Form.group.Label', {
+                          defaultValue: 'Add argument',
+                        })}
                       </Typography>
                     </Grid>
                   </Grid>

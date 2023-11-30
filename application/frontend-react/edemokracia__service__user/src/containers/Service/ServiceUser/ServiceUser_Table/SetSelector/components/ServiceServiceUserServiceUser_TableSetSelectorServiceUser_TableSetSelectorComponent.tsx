@@ -242,14 +242,14 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_UxagMI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_ertAAH4NEe2cB7_PsKXsHQ)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'userName',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.userName', { defaultValue: 'Username' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UxagNI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B86YQGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'isAdmin',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.isAdmin', {
           defaultValue: 'Has admin access',
@@ -258,7 +258,7 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
       },
 
       {
-        id: '_UxbHQ47EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B6R7AGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'firstName',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.firstName', {
           defaultValue: 'First name',
@@ -267,28 +267,28 @@ export function ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableS
       },
 
       {
-        id: '_UxbuUo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B63w4GkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'lastName',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.lastName', { defaultValue: 'Last name' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UxcVYY7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B7jtYGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'phone',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.phone', { defaultValue: 'Phone' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UxcVZY7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B8MmkGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'email',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.email', { defaultValue: 'Email' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Uxc8co7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B9mUwGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable)',
         attributeName: 'created',
         label: t('service.ServiceUser.ServiceUser_Table.SetSelector.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,

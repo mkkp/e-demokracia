@@ -13,10 +13,10 @@ import { FilterBytypesPhone } from './FilterBytypesPhone';
 import { FilterBytypesString } from './FilterBytypesString';
 
 export interface ServiceUserProfileQueryCustomizer extends QueryCustomizer<ServiceUserProfile> {
-  lastName?: Array<FilterBytypesString>;
-  userName?: Array<FilterBytypesString>;
-  firstName?: Array<FilterBytypesString>;
   email?: Array<FilterBytypesEmail>;
+  firstName?: Array<FilterBytypesString>;
+  lastName?: Array<FilterBytypesString>;
   phone?: Array<FilterBytypesPhone>;
   representation?: Array<FilterBytypesString>;
+  userName?: Array<FilterBytypesString>;
 }

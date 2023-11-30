@@ -93,15 +93,19 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WYB4sI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                      <Typography id="_WYB4sI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
+                      <Typography
+                        id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
                         {t(
-                          'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Icon',
+                          'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Label',
                           { defaultValue: 'Close debate' },
                         )}
                       </Typography>

@@ -9,8 +9,8 @@
 import type { JudoIdentifiable } from '@judo/data-api-common';
 import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceSimpleVoteStored,
   ServiceServiceUser,
+  ServiceSimpleVoteStored,
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceSimpleVote,
@@ -74,20 +74,6 @@ export class ServiceIssueServiceForCommentsImpl extends JudoAxiosService impleme
     return response.data;
   }
 
-  async listVotes(
-    owner: JudoIdentifiable<ServiceComment>,
-    queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>> {
-    const path = '/service/Comment/votes/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-
-    return response.data;
-  }
-
   async getCreatedBy(
     owner: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -102,13 +88,27 @@ export class ServiceIssueServiceForCommentsImpl extends JudoAxiosService impleme
     return response.data;
   }
 
+  async listVotes(
+    owner: JudoIdentifiable<ServiceComment>,
+    queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
+  ): Promise<Array<ServiceSimpleVoteStored>> {
+    const path = '/service/Comment/votes/~list';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   /**
    * From: relation.target.operations
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
-    const path = '/service/Comment/voteUp';
+  async voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
+    const path = '/service/Comment/voteDown';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -121,8 +121,8 @@ export class ServiceIssueServiceForCommentsImpl extends JudoAxiosService impleme
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
-    const path = '/service/Comment/voteDown';
+  async voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
+    const path = '/service/Comment/voteUp';
     const response = await this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,

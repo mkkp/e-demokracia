@@ -9,12 +9,12 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface ServiceDistrict {
-  name: string;
-  county?: null | string;
   city?: null | string;
+  county?: null | string;
+  name: string;
   representation?: null | string;
 }
 
-export type ServiceDistrictAttributes = 'name' | 'county' | 'city' | 'representation';
+export type ServiceDistrictAttributes = 'city' | 'county' | 'name' | 'representation';
 
 export interface ServiceDistrictStored extends JudoStored<ServiceDistrict>, ServiceDistrict {}

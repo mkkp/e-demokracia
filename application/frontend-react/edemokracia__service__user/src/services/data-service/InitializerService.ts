@@ -17,8 +17,8 @@ export interface InitializerService {
     target: JudoIdentifiable<Initializer>,
     queryCustomizer?: InitializerQueryCustomizer,
   ): Promise<InitializerStored>;
-  initUsers(): Promise<void>;
-  initCategories(): Promise<void>;
   initAreas(): Promise<void>;
+  initCategories(): Promise<void>;
   initIssueTypes(): Promise<void>;
+  initUsers(): Promise<void>;
 }

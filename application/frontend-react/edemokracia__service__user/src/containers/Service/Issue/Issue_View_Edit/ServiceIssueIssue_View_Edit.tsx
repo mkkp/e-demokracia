@@ -308,14 +308,18 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WXE2cI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_wB_RsG47Ee2siJt-xjHAyw)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
-                      <Typography id="_WXE2cI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.Issue.Issue_View_Edit.issue.Icon', { defaultValue: 'Issue' })}
+                      <Typography
+                        id="User/(esm/_wB_RsG47Ee2siJt-xjHAyw)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.Issue.Issue_View_Edit.issue.Label', { defaultValue: 'Issue' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -640,14 +644,18 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   spacing={2}
                 >
                   <Grid item xs={12} sm={12} md={6.0}>
-                    <Card id="_WXGroI7EEe6rlbj78nBB0Q)/LabelWrapper">
+                    <Card id="(User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
                       <CardContent>
                         <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                              <Typography id="_WXGroI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                                {t('service.Issue.Issue_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
+                              <Typography
+                                id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                                variant="h5"
+                                component="h1"
+                              >
+                                {t('service.Issue.Issue_View_Edit.cons.Label', { defaultValue: 'Cons' })}
                               </Typography>
                             </Grid>
                           </Grid>
@@ -734,14 +742,18 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   </Grid>
 
                   <Grid item xs={12} sm={12} md={6.0}>
-                    <Card id="_WXJu8I7EEe6rlbj78nBB0Q)/LabelWrapper">
+                    <Card id="(User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
                       <CardContent>
                         <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                              <Typography id="_WXJu8I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                                {t('service.Issue.Issue_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
+                              <Typography
+                                id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                                variant="h5"
+                                component="h1"
+                              >
+                                {t('service.Issue.Issue_View_Edit.pros.Label', { defaultValue: 'Pros' })}
                               </Typography>
                             </Grid>
                           </Grid>

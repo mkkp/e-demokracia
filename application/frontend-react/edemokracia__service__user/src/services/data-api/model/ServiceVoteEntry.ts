@@ -14,13 +14,13 @@ import { VoteStatus } from './VoteStatus';
 export interface ServiceVoteEntry {
   created: Date;
   issueTitle?: null | string;
-  voteTitle?: null | string;
-  voteStatus?: null | VoteStatus;
   userName?: null | string;
+  voteStatus?: null | VoteStatus;
+  voteTitle?: null | string;
   voteDefinition?: null | ServiceVoteDefinitionStored;
 }
 
-export type ServiceVoteEntryAttributes = 'created' | 'issueTitle' | 'voteTitle' | 'voteStatus' | 'userName';
+export type ServiceVoteEntryAttributes = 'created' | 'issueTitle' | 'userName' | 'voteStatus' | 'voteTitle';
 export type ServiceVoteEntryRelations = 'voteDefinition';
 
 export interface ServiceVoteEntryStored extends JudoStored<ServiceVoteEntry>, ServiceVoteEntry {}

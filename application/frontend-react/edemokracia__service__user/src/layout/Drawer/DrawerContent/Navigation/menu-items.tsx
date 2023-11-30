@@ -36,7 +36,6 @@ export const menus: NavItemType[] = [
   {
     id: 'User/(esm/_gYSocFuaEe6T042_LMmSdQ)/MenuItemGroup',
     type: 'group',
-    icon: 'texture',
     title: 'Administrative functions',
     children: [
       {
@@ -108,7 +107,6 @@ export const menus: NavItemType[] = [
   {
     id: 'User/(esm/__GjiAFuZEe6T042_LMmSdQ)/MenuItemGroup',
     type: 'item',
-    icon: 'texture',
     title: 'Techical Accesses Menu Group',
     hiddenBy: 'isAdmin',
     children: [],

@@ -198,6 +198,28 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
   const backAction = async () => {
     onClose();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const deleteAction = async () => {
+    try {
+      const confirmed = await openConfirmDialog(
+        'row-delete-action',
+        t('judo.modal.confirm.confirm-delete', {
+          defaultValue: 'Are you sure you would like to delete the selected element?',
+        }),
+        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+      );
+      if (confirmed) {
+        await serviceSelectAnswerVoteSelectionServiceImpl.delete(data);
+        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+        onClose();
+      }
+    } catch (error) {
+      handleError(error, undefined, data);
+    }
+  };
   const refreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteSelectionStored> => {
@@ -225,10 +247,6 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
   const updateAction = async () => {
     setIsLoading(true);
     try {
@@ -245,31 +263,13 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
       setIsLoading(false);
     }
   };
-  const deleteAction = async () => {
-    try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
-      if (confirmed) {
-        await serviceSelectAnswerVoteSelectionServiceImpl.delete(data);
-        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
-      }
-    } catch (error) {
-      handleError(error, undefined, data);
-    }
-  };
 
   const actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions = {
     backAction,
-    refreshAction,
     cancelAction,
-    updateAction,
     deleteAction,
+    refreshAction,
+    updateAction,
     ...(customActions ?? {}),
   };
 

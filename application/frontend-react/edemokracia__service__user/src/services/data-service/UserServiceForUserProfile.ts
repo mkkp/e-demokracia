@@ -31,31 +31,31 @@ export interface UserServiceForUserProfile {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceUserProfileQueryCustomizer,
   ): Promise<ServiceUserProfileStored>;
-  listActivityCounties(
-    owner: JudoIdentifiable<ServiceUserProfile>,
-    queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
-  getTemplateForActivityCounties(): Promise<ServiceCounty>;
-  getResidentCounty(
-    owner: JudoIdentifiable<ServiceUserProfile>,
-    queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored>;
-  getTemplateForResidentCounty(): Promise<ServiceCounty>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
   getTemplateForActivityCities(): Promise<ServiceCity>;
-  getResidentCity(
+  listActivityCounties(
     owner: JudoIdentifiable<ServiceUserProfile>,
-    queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored>;
-  getTemplateForResidentCity(): Promise<ServiceCity>;
+    queryCustomizer?: ServiceCountyQueryCustomizer,
+  ): Promise<Array<ServiceCountyStored>>;
+  getTemplateForActivityCounties(): Promise<ServiceCounty>;
   listActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
   getTemplateForActivityDistricts(): Promise<ServiceDistrict>;
+  getResidentCity(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored>;
+  getTemplateForResidentCity(): Promise<ServiceCity>;
+  getResidentCounty(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    queryCustomizer?: ServiceCountyQueryCustomizer,
+  ): Promise<ServiceCountyStored>;
+  getTemplateForResidentCounty(): Promise<ServiceCounty>;
   getResidentDistrict(
     owner: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,

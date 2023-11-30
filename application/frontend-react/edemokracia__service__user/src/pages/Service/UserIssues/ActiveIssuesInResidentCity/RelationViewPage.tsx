@@ -230,101 +230,12 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
   };
 
   // Action section
-  const backAction = async () => {
-    navigateBack();
-  };
-  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceIssueServiceImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
-      );
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceIssueStored, any>;
-      if (customActions?.postRefreshAction) {
-        await customActions?.postRefreshAction(result, storeDiff, setValidation);
-      }
-      return result;
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
-  const updateAction = async () => {
-    setIsLoading(true);
-    try {
-      const res = await serviceIssueServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceIssue, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const closeDebateAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const activateForIssueAction = async () => {
     try {
       setIsLoading(true);
       await serviceIssueServiceImpl.activate(data);
       if (customActions?.postActivateForIssueAction) {
         await customActions.postActivateForIssueAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const createProArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const createCommentAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const closeVoteForIssueAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceIssueServiceImpl.closeVote(data);
-      if (customActions?.postCloseVoteForIssueAction) {
-        await customActions.postCloseVoteForIssueAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -359,6 +270,32 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       setIsLoading(false);
     }
   };
+  const closeDebateAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const closeVoteForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceIssueServiceImpl.closeVote(data);
+      if (customActions?.postCloseVoteForIssueAction) {
+        await customActions.postCloseVoteForIssueAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const deleteOrArchiveForIssueAction = async () => {
     try {
       setIsLoading(true);
@@ -377,12 +314,6 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       handleError<ServiceIssue>(error, { setValidation }, data);
     } finally {
       setIsLoading(false);
-    }
-  };
-  const createConArgumentAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const removeFromFavoritesForIssueAction = async () => {
@@ -405,10 +336,104 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       setIsLoading(false);
     }
   };
-  const countyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceIssueCountyRelationViewPage(target!);
+  const issueTypeAutocompleteRangeAction = async (
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ): Promise<ServiceIssueTypeStored[]> => {
+    try {
+      return serviceIssueServiceImpl.getRangeForIssueType(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const issueTypeOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelectorPage(
+      data,
+      data.issueType ? [data.issueType] : [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('issueType', returnedData[0]);
+      }
+    }
+  };
+  const issueTypeUnsetAction = async (target: ServiceIssueTypeStored) => {
+    storeDiff('issueType', null);
+  };
+  const issueTypeOpenPageAction = async (target?: ServiceIssueTypeStored) => {
+    await openServiceIssueIssueTypeRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceIssueServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage(
+      data,
+      data.owner ? [data.owner] : [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+      }
+    }
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueOwnerRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const cityAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored[]> => {
+    try {
+      return serviceIssueServiceImpl.getRangeForCity(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const cityOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorPage(
+      data,
+      data.city ? [data.city] : [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('city', returnedData[0]);
+      }
+    }
+  };
+  const cityUnsetAction = async (target: ServiceCityStored) => {
+    storeDiff('city', null);
+  };
+  const cityOpenPageAction = async (target?: ServiceCityStored) => {
+    await openServiceIssueCityRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const countyAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<ServiceCountyStored[]> => {
+    try {
+      return serviceIssueServiceImpl.getRangeForCounty(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
     }
   };
   const countyOpenSetSelectorAction = async () => {
@@ -422,58 +447,49 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       }
     }
   };
-  const countyAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored[]> => {
+  const countyUnsetAction = async (target: ServiceCountyStored) => {
+    storeDiff('county', null);
+  };
+  const countyOpenPageAction = async (target?: ServiceCountyStored) => {
+    await openServiceIssueCountyRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const districtAutocompleteRangeAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceIssueServiceImpl.getRangeForCounty(data, queryCustomizer);
+      return serviceIssueServiceImpl.getRangeForDistrict(data, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
-  const countyUnsetAction = async (target: ServiceCountyStored) => {
-    storeDiff('county', null);
+  const districtOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage(
+      data,
+      data.district ? [data.district] : [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('district', returnedData[0]);
+      }
+    }
   };
-  const consOpenPageAction = async (target?: ServiceConStored) => {
-    await openServiceIssueConsRelationViewPage(target!);
+  const districtUnsetAction = async (target: ServiceDistrictStored) => {
+    storeDiff('district', null);
+  };
+  const districtOpenPageAction = async (target?: ServiceDistrictStored) => {
+    await openServiceIssueDistrictRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const consFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const consDeleteAction = async (target: ServiceConStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceIssueServiceImpl.deleteCons(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceCon>(error, undefined, target);
-      }
+  const createConArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const consBulkDeleteAction = async (
@@ -515,13 +531,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       });
     });
   };
-  const prosOpenPageAction = async (target?: ServiceProStored) => {
-    await openServiceIssueProsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const prosFilterAction = async (
+  const consFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -532,7 +542,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       filters: newFilters,
     };
   };
-  const prosDeleteAction = async (target: ServiceProStored, silentMode?: boolean) => {
+  const consDeleteAction = async (target: ServiceConStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -544,7 +554,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
           )
         : true;
       if (confirmed) {
-        await serviceIssueServiceImpl.deletePros(target);
+        await serviceIssueServiceImpl.deleteCons(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
           refreshAction(pageQueryCustomizer);
@@ -552,8 +562,20 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       }
     } catch (error) {
       if (!silentMode) {
-        handleError<ServicePro>(error, undefined, target);
+        handleError<ServiceCon>(error, undefined, target);
       }
+    }
+  };
+  const consOpenPageAction = async (target?: ServiceConStored) => {
+    await openServiceIssueConsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const createProArgumentAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const prosBulkDeleteAction = async (
@@ -595,73 +617,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       });
     });
   };
-  const issueTypeOpenPageAction = async (target?: ServiceIssueTypeStored) => {
-    await openServiceIssueIssueTypeRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const issueTypeOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelectorPage(
-      data,
-      data.issueType ? [data.issueType] : [],
-    );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('issueType', returnedData[0]);
-      }
-    }
-  };
-  const issueTypeAutocompleteRangeAction = async (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored[]> => {
-    try {
-      return serviceIssueServiceImpl.getRangeForIssueType(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const issueTypeUnsetAction = async (target: ServiceIssueTypeStored) => {
-    storeDiff('issueType', null);
-  };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownerOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage(
-      data,
-      data.owner ? [data.owner] : [],
-    );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
-      }
-    }
-  };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      return serviceIssueServiceImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
-  };
-  const categoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
-    await openServiceIssueCategoriesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const categoriesFilterAction = async (
+  const prosFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
@@ -672,122 +628,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       filters: newFilters,
     };
   };
-  const categoriesOpenAddSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceIssueIssue_View_EditOtherCategoriesCategoriesTableSetSelectorPage(data, data.categories ?? []);
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('categories', [...(data.categories || []), ...returnedData]);
-      }
-    }
-  };
-
-  const categoriesClearAction = async () => {
-    storeDiff('categories', []);
-  };
-  const categoriesRemoveAction = async (target?: ServiceIssueCategoryStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.categories ?? []).filter((c) => c.__identifier !== target!.__identifier);
-      storeDiff('categories', newList);
-    }
-  };
-  const categoriesBulkRemoveAction = async (
-    selectedRows: ServiceIssueCategoryStored[],
-  ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.categories ?? []).filter((c) => !selectedIds.includes(c.__identifier));
-      storeDiff('categories', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
-  const cityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceIssueCityRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const cityOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorPage(
-      data,
-      data.city ? [data.city] : [],
-    );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('city', returnedData[0]);
-      }
-    }
-  };
-  const cityAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored[]> => {
-    try {
-      return serviceIssueServiceImpl.getRangeForCity(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const cityUnsetAction = async (target: ServiceCityStored) => {
-    storeDiff('city', null);
-  };
-  const districtOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceIssueDistrictRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const districtOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage(
-      data,
-      data.district ? [data.district] : [],
-    );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('district', returnedData[0]);
-      }
-    }
-  };
-  const districtAutocompleteRangeAction = async (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
-    try {
-      return serviceIssueServiceImpl.getRangeForDistrict(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const districtUnsetAction = async (target: ServiceDistrictStored) => {
-    storeDiff('district', null);
-  };
-  const attachmentsOpenPageAction = async (target?: ServiceIssueAttachmentStored) => {
-    await openServiceIssueAttachmentsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const attachmentsFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const attachmentsOpenFormAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueAttachmentsRelationFormPage(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const attachmentsDeleteAction = async (target: ServiceIssueAttachmentStored, silentMode?: boolean) => {
+  const prosDeleteAction = async (target: ServiceProStored, silentMode?: boolean) => {
     try {
       const confirmed = !silentMode
         ? await openConfirmDialog(
@@ -799,7 +640,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
           )
         : true;
       if (confirmed) {
-        await serviceIssueServiceImpl.deleteAttachments(target);
+        await serviceIssueServiceImpl.deletePros(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
           refreshAction(pageQueryCustomizer);
@@ -807,8 +648,14 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       }
     } catch (error) {
       if (!silentMode) {
-        handleError<ServiceIssueAttachment>(error, undefined, target);
+        handleError<ServicePro>(error, undefined, target);
       }
+    }
+  };
+  const prosOpenPageAction = async (target?: ServiceProStored) => {
+    await openServiceIssueProsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
   const attachmentsBulkDeleteAction = async (
@@ -850,9 +697,101 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       });
     });
   };
-  const commentsOpenPageAction = async (target?: ServiceCommentStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceIssueCommentsRelationViewPage((target || data).__signedIdentifier));
+  const attachmentsOpenFormAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueAttachmentsRelationFormPage(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const attachmentsFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const attachmentsDeleteAction = async (target: ServiceIssueAttachmentStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceIssueServiceImpl.deleteAttachments(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          refreshAction(pageQueryCustomizer);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceIssueAttachment>(error, undefined, target);
+      }
+    }
+  };
+  const attachmentsOpenPageAction = async (target?: ServiceIssueAttachmentStored) => {
+    await openServiceIssueAttachmentsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const categoriesOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceIssueIssue_View_EditOtherCategoriesCategoriesTableSetSelectorPage(data, data.categories ?? []);
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('categories', [...(data.categories || []), ...returnedData]);
+      }
+    }
+  };
+
+  const categoriesBulkRemoveAction = async (
+    selectedRows: ServiceIssueCategoryStored[],
+  ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
+    return new Promise((resolve) => {
+      const selectedIds = selectedRows.map((r) => r.__identifier);
+      const newList = (data?.categories ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      storeDiff('categories', newList);
+      resolve({
+        result: 'submit',
+        data: [],
+      });
+    });
+  };
+  const categoriesClearAction = async () => {
+    storeDiff('categories', []);
+  };
+  const categoriesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const categoriesRemoveAction = async (target?: ServiceIssueCategoryStored, silentMode?: boolean) => {
+    if (target) {
+      const newList = (data?.categories ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      storeDiff('categories', newList);
+    }
+  };
+  const categoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
+    await openServiceIssueCategoriesRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
   };
   const commentsFilterAction = async (
     id: string,
@@ -865,62 +804,123 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       filters: newFilters,
     };
   };
+  const commentsOpenPageAction = async (target?: ServiceCommentStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceIssueCommentsRelationViewPage((target || data).__signedIdentifier));
+  };
+  const createCommentAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const backAction = async () => {
+    navigateBack();
+  };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceIssueServiceImpl.refresh(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        pageQueryCustomizer,
+      );
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceIssueStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceIssueServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceIssue, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceIssueIssue_View_EditPageActions = {
-    backAction,
-    refreshAction,
-    cancelAction,
-    updateAction,
-    closeDebateAction,
     activateForIssueAction,
-    createProArgumentAction,
-    createCommentAction,
-    closeVoteForIssueAction,
     addToFavoritesForIssueAction,
+    closeDebateAction,
+    closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    createConArgumentAction,
     removeFromFavoritesForIssueAction,
-    countyOpenPageAction,
-    countyOpenSetSelectorAction,
+    issueTypeAutocompleteRangeAction,
+    issueTypeOpenSetSelectorAction,
+    issueTypeUnsetAction,
+    issueTypeOpenPageAction,
+    ownerAutocompleteRangeAction,
+    ownerOpenSetSelectorAction,
+    ownerUnsetAction,
+    ownerOpenPageAction,
+    cityAutocompleteRangeAction,
+    cityOpenSetSelectorAction,
+    cityUnsetAction,
+    cityOpenPageAction,
     countyAutocompleteRangeAction,
+    countyOpenSetSelectorAction,
     countyUnsetAction,
-    consOpenPageAction,
+    countyOpenPageAction,
+    districtAutocompleteRangeAction,
+    districtOpenSetSelectorAction,
+    districtUnsetAction,
+    districtOpenPageAction,
+    createConArgumentAction,
+    consBulkDeleteAction,
     consFilterAction,
     consDeleteAction,
-    consBulkDeleteAction,
-    prosOpenPageAction,
+    consOpenPageAction,
+    createProArgumentAction,
+    prosBulkDeleteAction,
     prosFilterAction,
     prosDeleteAction,
-    prosBulkDeleteAction,
-    issueTypeOpenPageAction,
-    issueTypeOpenSetSelectorAction,
-    issueTypeAutocompleteRangeAction,
-    issueTypeUnsetAction,
-    ownerOpenPageAction,
-    ownerOpenSetSelectorAction,
-    ownerAutocompleteRangeAction,
-    ownerUnsetAction,
-    categoriesOpenPageAction,
-    categoriesFilterAction,
-    categoriesOpenAddSelectorAction,
-    categoriesClearAction,
-    categoriesRemoveAction,
-    categoriesBulkRemoveAction,
-    cityOpenPageAction,
-    cityOpenSetSelectorAction,
-    cityAutocompleteRangeAction,
-    cityUnsetAction,
-    districtOpenPageAction,
-    districtOpenSetSelectorAction,
-    districtAutocompleteRangeAction,
-    districtUnsetAction,
-    attachmentsOpenPageAction,
-    attachmentsFilterAction,
-    attachmentsOpenFormAction,
-    attachmentsDeleteAction,
+    prosOpenPageAction,
     attachmentsBulkDeleteAction,
-    commentsOpenPageAction,
+    attachmentsOpenFormAction,
+    attachmentsFilterAction,
+    attachmentsDeleteAction,
+    attachmentsOpenPageAction,
+    categoriesOpenAddSelectorAction,
+    categoriesBulkRemoveAction,
+    categoriesClearAction,
+    categoriesFilterAction,
+    categoriesRemoveAction,
+    categoriesOpenPageAction,
     commentsFilterAction,
+    commentsOpenPageAction,
+    createCommentAction,
+    backAction,
+    cancelAction,
+    refreshAction,
+    updateAction,
     ...(customActions ?? {}),
   };
 

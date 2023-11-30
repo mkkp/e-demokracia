@@ -88,14 +88,18 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WX9nQI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
-                      <Typography id="_WX9nQI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('CloseDebateInput.CloseDebateInput_Form.debate.Icon', { defaultValue: 'Close debate' })}
+                      <Typography
+                        id="User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('CloseDebateInput.CloseDebateInput_Form.debate.Label', { defaultValue: 'Close debate' })}
                       </Typography>
                     </Grid>
                   </Grid>

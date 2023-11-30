@@ -193,7 +193,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WzoPkI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_tyOrIFv0Ee6nEc5rp_Qy4A)/TableColumnFilter/(discriminator/User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable)',
         attributeName: 'title',
         label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.title', {
           defaultValue: 'Title',
@@ -202,7 +202,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
       },
 
       {
-        id: '_Wzo2oI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_tyNdAFv0Ee6nEc5rp_Qy4A)/TableColumnFilter/(discriminator/User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable)',
         attributeName: 'description',
         label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.description', {
           defaultValue: 'Description',

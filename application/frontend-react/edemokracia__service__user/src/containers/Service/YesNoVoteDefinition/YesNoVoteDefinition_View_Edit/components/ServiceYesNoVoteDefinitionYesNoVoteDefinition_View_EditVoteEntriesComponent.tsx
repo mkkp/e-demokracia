@@ -204,7 +204,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wjx1so7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_jinwYFovEe6_67aMO2jOsw)/TableColumnFilter/(discriminator/User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'value',
         label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.value', {
           defaultValue: 'Value',
@@ -214,7 +214,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
       },
 
       {
-        id: '_Wjycwo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_jinJUFovEe6_67aMO2jOsw)/TableColumnFilter/(discriminator/User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'created',
         label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.created', {
           defaultValue: 'Created',
@@ -223,7 +223,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
       },
 
       {
-        id: '_WjzD0Y7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_zorYgFowEe6_67aMO2jOsw)/TableColumnFilter/(discriminator/User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'createdBy',
         label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.createdBy', {
           defaultValue: 'CreatedBy',

@@ -198,65 +198,144 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
   };
 
   // Action section
-  const backAction = async () => {
-    navigateBack();
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
   };
-  const refreshAction = async (
-    queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteDefinitionStored> => {
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
+  };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
     try {
-      setIsLoading(true);
-      setEditMode(false);
-      const result = await serviceSelectAnswerVoteDefinitionServiceImpl.refresh(
-        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
-      );
-      setData(result);
-      // re-set payloadDiff
-      payloadDiff.current = {
-        __identifier: result.__identifier,
-        __signedIdentifier: result.__signedIdentifier,
-        __version: result.__version,
-        __entityType: result.__entityType,
-      } as Record<keyof ServiceSelectAnswerVoteDefinitionStored, any>;
-      if (customActions?.postRefreshAction) {
-        await customActions?.postRefreshAction(result, storeDiff, setValidation);
-      }
-      return result;
+      return serviceSelectAnswerVoteDefinitionServiceImpl.getRangeForOwner(data, queryCustomizer);
     } catch (error) {
       handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
+      return Promise.resolve([]);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  const ownerOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+      }
+    }
   };
-  const updateAction = async () => {
-    setIsLoading(true);
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceSelectAnswerVoteDefinitionOwnerRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteSelectionsBulkDeleteAction = async (
+    selectedRows: ServiceSelectAnswerVoteSelectionStored[],
+  ): Promise<DialogResult<Array<ServiceSelectAnswerVoteSelectionStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceSelectAnswerVoteSelectionStored>({
+        dialogTitle: t(
+          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkDelete',
+          { defaultValue: 'Delete' },
+        ),
+        itemTitleFn: (item) => item.description!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.voteSelectionsDeleteAction) {
+              await actions.voteSelectionsDeleteAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+              data: [],
+            });
+          }
+        },
+      });
+    });
+  };
+  const voteSelectionsOpenFormAction = async () => {
+    const { result, data: returnedData } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
+      data,
+    );
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteSelectionsFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const voteSelectionsDeleteAction = async (target: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => {
     try {
-      const res = await serviceSelectAnswerVoteDefinitionServiceImpl.update(payloadDiff.current);
-      if (res) {
-        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
-        setValidation(new Map<keyof ServiceSelectAnswerVoteDefinition, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
-        setEditMode(false);
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceSelectAnswerVoteDefinitionServiceImpl.deleteVoteSelections(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          refreshAction(pageQueryCustomizer);
+        }
       }
     } catch (error) {
-      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
+      if (!silentMode) {
+        handleError<ServiceSelectAnswerVoteSelection>(error, undefined, target);
+      }
     }
   };
-  const takeBackVoteForSelectAnswerVoteDefinitionAction = async () => {
+  const voteSelectionsOpenPageAction = async (target?: ServiceSelectAnswerVoteSelectionStored) => {
+    await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const activateForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.takeBackVote(data);
-      if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
-        await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction();
+      await serviceSelectAnswerVoteDefinitionServiceImpl.activate(data);
+      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
+        await customActions.postActivateForSelectAnswerVoteDefinitionAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -271,12 +350,12 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const activateForSelectAnswerVoteDefinitionAction = async () => {
+  const addToFavoritesForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.activate(data);
-      if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
-        await customActions.postActivateForSelectAnswerVoteDefinitionAction();
+      await serviceSelectAnswerVoteDefinitionServiceImpl.addToFavorites(data);
+      if (customActions?.postAddToFavoritesForSelectAnswerVoteDefinitionAction) {
+        await customActions.postAddToFavoritesForSelectAnswerVoteDefinitionAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -351,86 +430,6 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       setIsLoading(false);
     }
   };
-  const voteAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
-        data,
-      );
-    if (result === 'submit') {
-      if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-      }
-    }
-  };
-  const addToFavoritesForSelectAnswerVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.addToFavorites(data);
-      if (customActions?.postAddToFavoritesForSelectAnswerVoteDefinitionAction) {
-        await customActions.postAddToFavoritesForSelectAnswerVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceSelectAnswerVoteDefinitionOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const ownerOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
-        data,
-        data.owner ? [data.owner] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('owner', returnedData[0]);
-      }
-    }
-  };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      return serviceSelectAnswerVoteDefinitionServiceImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
-    storeDiff('owner', null);
-  };
-  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
-    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const voteEntriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -450,94 +449,42 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       queryCustomizer,
     );
   };
-  const voteSelectionsOpenPageAction = async (target?: ServiceSelectAnswerVoteSelectionStored) => {
-    await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
+  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
+    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const voteSelectionsFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const voteSelectionsOpenFormAction = async () => {
-    const { result, data: returnedData } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
-      data,
-    );
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const voteAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector(
+        data,
+      );
+    if (result === 'submit') {
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      }
     }
   };
-  const voteSelectionsDeleteAction = async (target: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => {
+  const takeBackVoteForSelectAnswerVoteDefinitionAction = async () => {
     try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceSelectAnswerVoteDefinitionServiceImpl.deleteVoteSelections(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
+      setIsLoading(true);
+      await serviceSelectAnswerVoteDefinitionServiceImpl.takeBackVote(data);
+      if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
         }
       }
     } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceSelectAnswerVoteSelection>(error, undefined, target);
-      }
+      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
-  };
-  const voteSelectionsBulkDeleteAction = async (
-    selectedRows: ServiceSelectAnswerVoteSelectionStored[],
-  ): Promise<DialogResult<Array<ServiceSelectAnswerVoteSelectionStored>>> => {
-    return new Promise((resolve) => {
-      openCRUDDialog<ServiceSelectAnswerVoteSelectionStored>({
-        dialogTitle: t(
-          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkDelete',
-          { defaultValue: 'Delete' },
-        ),
-        itemTitleFn: (item) => item.description!,
-        selectedItems: selectedRows,
-        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-          try {
-            if (actions.voteSelectionsDeleteAction) {
-              await actions.voteSelectionsDeleteAction!(item, true);
-            }
-            successHandler();
-          } catch (error) {
-            errorHandler(error);
-          }
-        },
-        onClose: async (needsRefresh) => {
-          if (needsRefresh) {
-            if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-            }
-            resolve({
-              result: 'submit',
-              data: [],
-            });
-          } else {
-            resolve({
-              result: 'close',
-              data: [],
-            });
-          }
-        },
-      });
-    });
   };
   const userVoteEntryOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
     await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
@@ -545,34 +492,87 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const backAction = async () => {
+    navigateBack();
+  };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
+  ): Promise<ServiceSelectAnswerVoteDefinitionStored> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      const result = await serviceSelectAnswerVoteDefinitionServiceImpl.refresh(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        pageQueryCustomizer,
+      );
+      setData(result);
+      // re-set payloadDiff
+      payloadDiff.current = {
+        __identifier: result.__identifier,
+        __signedIdentifier: result.__signedIdentifier,
+        __version: result.__version,
+        __entityType: result.__entityType,
+      } as Record<keyof ServiceSelectAnswerVoteDefinitionStored, any>;
+      if (customActions?.postRefreshAction) {
+        await customActions?.postRefreshAction(result, storeDiff, setValidation);
+      }
+      return result;
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const res = await serviceSelectAnswerVoteDefinitionServiceImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceSelectAnswerVoteDefinition, string>());
+        await actions.refreshAction!(pageQueryCustomizer);
+        setEditMode(false);
+      }
+    } catch (error) {
+      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions = {
-    backAction,
-    refreshAction,
-    cancelAction,
-    updateAction,
-    takeBackVoteForSelectAnswerVoteDefinitionAction,
+    issueOpenPageAction,
+    issuePreFetchAction,
+    ownerAutocompleteRangeAction,
+    ownerOpenSetSelectorAction,
+    ownerUnsetAction,
+    ownerOpenPageAction,
+    voteSelectionsBulkDeleteAction,
+    voteSelectionsOpenFormAction,
+    voteSelectionsFilterAction,
+    voteSelectionsDeleteAction,
+    voteSelectionsOpenPageAction,
     activateForSelectAnswerVoteDefinitionAction,
+    addToFavoritesForSelectAnswerVoteDefinitionAction,
     closeVoteForSelectAnswerVoteDefinitionAction,
     deleteOrArchiveForSelectAnswerVoteDefinitionAction,
     removeFromFavoritesForSelectAnswerVoteDefinitionAction,
-    voteAction,
-    addToFavoritesForSelectAnswerVoteDefinitionAction,
-    issueOpenPageAction,
-    issuePreFetchAction,
-    ownerOpenPageAction,
-    ownerOpenSetSelectorAction,
-    ownerAutocompleteRangeAction,
-    ownerUnsetAction,
-    voteEntriesOpenPageAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
-    voteSelectionsOpenPageAction,
-    voteSelectionsFilterAction,
-    voteSelectionsOpenFormAction,
-    voteSelectionsDeleteAction,
-    voteSelectionsBulkDeleteAction,
+    voteEntriesOpenPageAction,
+    voteAction,
+    takeBackVoteForSelectAnswerVoteDefinitionAction,
     userVoteEntryOpenPageAction,
+    backAction,
+    cancelAction,
+    refreshAction,
+    updateAction,
     ...(customActions ?? {}),
   };
 

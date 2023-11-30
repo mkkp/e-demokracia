@@ -150,7 +150,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WbbyAo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_cLEKoIXhEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'name',
         label: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
         filterType: FilterType.string,

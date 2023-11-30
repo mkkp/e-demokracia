@@ -168,14 +168,14 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_UwesEI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_DaKn8dvEEe2Bgcx6em3jZg)/TableColumnFilter/(discriminator/User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable)',
         attributeName: 'title',
         label: t('service.IssueType.IssueType_Table.SetSelector.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UwesFI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_mCUjMOMhEe2Bgcx6em3jZg)/TableColumnFilter/(discriminator/User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable)',
         attributeName: 'voteType',
         label: t('service.IssueType.IssueType_Table.SetSelector.voteType', {
           defaultValue: 'Default vote type',
@@ -185,7 +185,7 @@ export function ServiceIssueTypeIssueType_TableSetSelectorIssueType_TableSetSele
       },
 
       {
-        id: '_UwfTIo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_DaKn8NvEEe2Bgcx6em3jZg)/TableColumnFilter/(discriminator/User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorTable)',
         attributeName: 'description',
         label: t('service.IssueType.IssueType_Table.SetSelector.description', {
           defaultValue: 'Description',

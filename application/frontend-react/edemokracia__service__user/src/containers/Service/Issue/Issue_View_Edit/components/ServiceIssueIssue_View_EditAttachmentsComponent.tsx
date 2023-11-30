@@ -152,7 +152,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
           return params.row.file ? (
             <ButtonGroup size="small" variant="outlined">
               <Button
-                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_WgxlAI7EEe6rlbj78nBB0Q)-download"
+                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-download"
                 startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
                 onClick={(event: any) => {
                   event.preventDefault();
@@ -163,7 +163,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
                 {extractFileNameFromToken(params.row.file)}
               </Button>
               <Button
-                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TabularTable/(discriminator/_WgxlAI7EEe6rlbj78nBB0Q)-view"
+                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
                 onClick={(event: any) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -223,14 +223,14 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WgyzIY7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_6kmaIYd8Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'link',
         label: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_WgzaMo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_6knBMYd8Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'type',
         label: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
         filterType: FilterType.enumeration,

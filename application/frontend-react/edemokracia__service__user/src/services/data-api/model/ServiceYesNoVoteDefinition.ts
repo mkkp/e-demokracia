@@ -16,46 +16,46 @@ import { ServiceYesNoVoteEntryStored } from './ServiceYesNoVoteEntry';
 import { VoteStatus } from './VoteStatus';
 
 export interface ServiceYesNoVoteDefinition {
-  title: string;
-  created: Date;
-  description: string;
-  status: VoteStatus;
   closeAt: Date;
-  userHasVoteEntry?: null | boolean;
-  userHasNoVoteEntry?: null | boolean;
+  created: Date;
+  createdBy?: null | string;
+  description: string;
   isFavorite?: null | boolean;
+  isNotFavorite?: null | boolean;
+  isVoteDeletable?: null | boolean;
   isVoteEditable?: null | boolean;
+  isVoteNotDeletable?: null | boolean;
+  isVoteNotEditable?: null | boolean;
   isVoteNotOpen?: null | boolean;
   isVoteOpen?: null | boolean;
-  isNotFavorite?: null | boolean;
-  isVoteNotDeletable?: null | boolean;
-  isVoteDeletable?: null | boolean;
-  isVoteNotEditable?: null | boolean;
-  createdBy?: null | string;
+  status: VoteStatus;
+  title: string;
+  userHasNoVoteEntry?: null | boolean;
+  userHasVoteEntry?: null | boolean;
   issue?: null | ServiceIssueStored;
-  voteEntries?: null | Array<ServiceYesNoVoteEntryStored>;
-  userVoteEntry?: null | ServiceYesNoVoteEntryStored;
   owner?: null | ServiceServiceUserStored;
+  userVoteEntry?: null | ServiceYesNoVoteEntryStored;
+  voteEntries?: null | Array<ServiceYesNoVoteEntryStored>;
 }
 
 export type ServiceYesNoVoteDefinitionAttributes =
-  | 'title'
-  | 'created'
-  | 'description'
-  | 'status'
   | 'closeAt'
-  | 'userHasVoteEntry'
-  | 'userHasNoVoteEntry'
+  | 'created'
+  | 'createdBy'
+  | 'description'
   | 'isFavorite'
+  | 'isNotFavorite'
+  | 'isVoteDeletable'
   | 'isVoteEditable'
+  | 'isVoteNotDeletable'
+  | 'isVoteNotEditable'
   | 'isVoteNotOpen'
   | 'isVoteOpen'
-  | 'isNotFavorite'
-  | 'isVoteNotDeletable'
-  | 'isVoteDeletable'
-  | 'isVoteNotEditable'
-  | 'createdBy';
-export type ServiceYesNoVoteDefinitionRelations = 'issue' | 'voteEntries' | 'userVoteEntry' | 'owner';
+  | 'status'
+  | 'title'
+  | 'userHasNoVoteEntry'
+  | 'userHasVoteEntry';
+export type ServiceYesNoVoteDefinitionRelations = 'issue' | 'owner' | 'userVoteEntry' | 'voteEntries';
 
 export interface ServiceYesNoVoteDefinitionStored
   extends JudoStored<ServiceYesNoVoteDefinition>,

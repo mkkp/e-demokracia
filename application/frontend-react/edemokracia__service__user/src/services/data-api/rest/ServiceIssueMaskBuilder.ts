@@ -22,35 +22,35 @@ import {
 } from '../model';
 import {} from './ServiceIssueAttachmentMaskBuilder';
 import {
-  ServiceIssueCategorySubcategoriesMaskBuilder,
   ServiceIssueCategoryOwnerMaskBuilder,
+  ServiceIssueCategorySubcategoriesMaskBuilder,
 } from './ServiceIssueCategoryMaskBuilder';
 import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCommentCreatedByMaskBuilder } from './ServiceCommentMaskBuilder';
 import {
-  ServiceConCreatedByMaskBuilder,
   ServiceConConsMaskBuilder,
-  ServiceConProsMaskBuilder,
+  ServiceConCreatedByMaskBuilder,
   ServiceConParentConMaskBuilder,
   ServiceConParentProMaskBuilder,
+  ServiceConProsMaskBuilder,
 } from './ServiceConMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
+import {
+  ServiceServiceUserActivityCitiesMaskBuilder,
+  ServiceServiceUserActivityCountiesMaskBuilder,
+  ServiceServiceUserActivityDistrictsMaskBuilder,
+  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserResidentCountyMaskBuilder,
+  ServiceServiceUserResidentDistrictMaskBuilder,
+} from './ServiceServiceUserMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';
 import {} from './ServiceIssueTypeMaskBuilder';
 import {
-  ServiceServiceUserActivityCountiesMaskBuilder,
-  ServiceServiceUserResidentCountyMaskBuilder,
-  ServiceServiceUserActivityCitiesMaskBuilder,
-  ServiceServiceUserResidentCityMaskBuilder,
-  ServiceServiceUserActivityDistrictsMaskBuilder,
-  ServiceServiceUserResidentDistrictMaskBuilder,
-} from './ServiceServiceUserMaskBuilder';
-import {
-  ServiceProCreatedByMaskBuilder,
-  ServiceProProsMaskBuilder,
   ServiceProConsMaskBuilder,
-  ServiceProParentProMaskBuilder,
+  ServiceProCreatedByMaskBuilder,
   ServiceProParentConMaskBuilder,
+  ServiceProParentProMaskBuilder,
+  ServiceProProsMaskBuilder,
 } from './ServiceProMaskBuilder';
 
 export class ServiceIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
@@ -58,60 +58,15 @@ export class ServiceIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
     super('attachments', props);
   }
 }
-export class ServiceIssueOwnerMaskBuilder extends RelationMaskBuilder {
-  constructor(
-    protected props: Array<
-      | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserResidentCountyMaskBuilder
-      | ServiceServiceUserActivityCitiesMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentDistrictMaskBuilder
-    >,
-  ) {
-    super('owner', props);
-  }
-}
 export class ServiceIssueCategoriesMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceIssueCategoryAttributes
-      | ServiceIssueCategorySubcategoriesMaskBuilder
       | ServiceIssueCategoryOwnerMaskBuilder
+      | ServiceIssueCategorySubcategoriesMaskBuilder
     >,
   ) {
     super('categories', props);
-  }
-}
-export class ServiceIssueCommentsMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCommentAttributes | ServiceCommentCreatedByMaskBuilder>) {
-    super('comments', props);
-  }
-}
-export class ServiceIssueCreatedByMaskBuilder extends RelationMaskBuilder {
-  constructor(
-    protected props: Array<
-      | ServiceServiceUserAttributes
-      | ServiceServiceUserActivityCountiesMaskBuilder
-      | ServiceServiceUserResidentCountyMaskBuilder
-      | ServiceServiceUserActivityCitiesMaskBuilder
-      | ServiceServiceUserResidentCityMaskBuilder
-      | ServiceServiceUserActivityDistrictsMaskBuilder
-      | ServiceServiceUserResidentDistrictMaskBuilder
-    >,
-  ) {
-    super('createdBy', props);
-  }
-}
-export class ServiceIssueIssueTypeMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceIssueTypeAttributes>) {
-    super('issueType', props);
-  }
-}
-export class ServiceIssueCountyMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
-    super('county', props);
   }
 }
 export class ServiceIssueCityMaskBuilder extends RelationMaskBuilder {
@@ -119,34 +74,79 @@ export class ServiceIssueCityMaskBuilder extends RelationMaskBuilder {
     super('city', props);
   }
 }
-export class ServiceIssueDistrictMaskBuilder extends RelationMaskBuilder {
-  constructor(protected props: Array<ServiceDistrictAttributes>) {
-    super('district', props);
+export class ServiceIssueCommentsMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCommentAttributes | ServiceCommentCreatedByMaskBuilder>) {
+    super('comments', props);
   }
 }
 export class ServiceIssueConsMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceConAttributes
-      | ServiceConCreatedByMaskBuilder
       | ServiceConConsMaskBuilder
-      | ServiceConProsMaskBuilder
+      | ServiceConCreatedByMaskBuilder
       | ServiceConParentConMaskBuilder
       | ServiceConParentProMaskBuilder
+      | ServiceConProsMaskBuilder
     >,
   ) {
     super('cons', props);
+  }
+}
+export class ServiceIssueCountyMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceCountyAttributes | ServiceCountyCitiesMaskBuilder>) {
+    super('county', props);
+  }
+}
+export class ServiceIssueCreatedByMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<
+      | ServiceServiceUserAttributes
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserActivityCountiesMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserResidentDistrictMaskBuilder
+    >,
+  ) {
+    super('createdBy', props);
+  }
+}
+export class ServiceIssueDistrictMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceDistrictAttributes>) {
+    super('district', props);
+  }
+}
+export class ServiceIssueIssueTypeMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<ServiceIssueTypeAttributes>) {
+    super('issueType', props);
+  }
+}
+export class ServiceIssueOwnerMaskBuilder extends RelationMaskBuilder {
+  constructor(
+    protected props: Array<
+      | ServiceServiceUserAttributes
+      | ServiceServiceUserActivityCitiesMaskBuilder
+      | ServiceServiceUserActivityCountiesMaskBuilder
+      | ServiceServiceUserActivityDistrictsMaskBuilder
+      | ServiceServiceUserResidentCityMaskBuilder
+      | ServiceServiceUserResidentCountyMaskBuilder
+      | ServiceServiceUserResidentDistrictMaskBuilder
+    >,
+  ) {
+    super('owner', props);
   }
 }
 export class ServiceIssueProsMaskBuilder extends RelationMaskBuilder {
   constructor(
     protected props: Array<
       | ServiceProAttributes
-      | ServiceProCreatedByMaskBuilder
-      | ServiceProProsMaskBuilder
       | ServiceProConsMaskBuilder
-      | ServiceProParentProMaskBuilder
+      | ServiceProCreatedByMaskBuilder
       | ServiceProParentConMaskBuilder
+      | ServiceProParentProMaskBuilder
+      | ServiceProProsMaskBuilder
     >,
   ) {
     super('pros', props);
@@ -158,15 +158,15 @@ export class ServiceIssueMaskBuilder extends MaskBuilder {
     protected props: Array<
       | ServiceIssueAttributes
       | ServiceIssueAttachmentsMaskBuilder
-      | ServiceIssueOwnerMaskBuilder
       | ServiceIssueCategoriesMaskBuilder
-      | ServiceIssueCommentsMaskBuilder
-      | ServiceIssueCreatedByMaskBuilder
-      | ServiceIssueIssueTypeMaskBuilder
-      | ServiceIssueCountyMaskBuilder
       | ServiceIssueCityMaskBuilder
-      | ServiceIssueDistrictMaskBuilder
+      | ServiceIssueCommentsMaskBuilder
       | ServiceIssueConsMaskBuilder
+      | ServiceIssueCountyMaskBuilder
+      | ServiceIssueCreatedByMaskBuilder
+      | ServiceIssueDistrictMaskBuilder
+      | ServiceIssueIssueTypeMaskBuilder
+      | ServiceIssueOwnerMaskBuilder
       | ServiceIssueProsMaskBuilder
     >,
   ) {

@@ -145,14 +145,14 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_UqFwMo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_IgwWoIX2Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable)',
         attributeName: 'county',
         label: t('service.City.City_Table.AddSelector.county', { defaultValue: 'County' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UqGXQI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_dL7uAH4bEe2j59SYy0JH0Q)/TableColumnFilter/(discriminator/User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable)',
         attributeName: 'name',
         label: t('service.City.City_Table.AddSelector.name', { defaultValue: 'City name' }) as string,
         filterType: FilterType.string,

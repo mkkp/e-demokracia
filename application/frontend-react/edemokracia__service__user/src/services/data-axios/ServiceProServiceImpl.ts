@@ -12,13 +12,13 @@ import type {
   ServiceProParentQueryCustomizer,
   ServiceConParent,
   ServiceConParentQueryCustomizer,
-  ServiceSimpleVote,
   ServiceConParentStored,
+  ServiceSimpleVote,
   ServiceServiceUserStored,
   ServiceCon,
   ServiceConStored,
-  ServiceSimpleVoteStored,
   ServiceServiceUser,
+  ServiceSimpleVoteStored,
   ServiceProQueryCustomizer,
   ServiceProParentStored,
   ServiceConQueryCustomizer,
@@ -81,11 +81,11 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async listVotes(
+  async listCons(
     target: JudoIdentifiable<ServicePro>,
-    queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>> {
-    const path = '/service/Pro/votes/~list';
+    queryCustomizer?: ServiceConQueryCustomizer,
+  ): Promise<Array<ServiceConStored>> {
+    const path = '/service/Pro/cons/~list';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -98,17 +98,95 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForVotes(
+  async getRangeForCons(
     owner?: JudoIdentifiable<ServicePro> | ServicePro,
-    queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>> {
-    const path = '/service/Pro/votes/~range';
+    queryCustomizer?: ServiceConQueryCustomizer,
+  ): Promise<Array<ServiceConStored>> {
+    const path = '/service/Pro/cons/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void> {
+    const path = '/service/Con/~delete';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void> {
+    const path = '/service/Con/createConArgument';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateConArgumentForCons(): Promise<CreateArgumentInput> {
+    const path = '/CreateArgumentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void> {
+    const path = '/service/Con/createProArgument';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateProArgumentForCons(): Promise<CreateArgumentInput> {
+    const path = '/CreateArgumentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void> {
+    const path = '/service/Con/voteDown';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void> {
+    const path = '/service/Con/voteUp';
+    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**
@@ -136,6 +214,72 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>> {
     const path = '/service/Pro/createdBy/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getParentCon(
+    target: JudoIdentifiable<ServicePro>,
+    queryCustomizer?: ServiceConParentQueryCustomizer,
+  ): Promise<ServiceConParentStored> {
+    const path = '/service/Pro/parentCon/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForParentCon(
+    owner?: JudoIdentifiable<ServicePro> | ServicePro,
+    queryCustomizer?: ServiceConParentQueryCustomizer,
+  ): Promise<Array<ServiceConParentStored>> {
+    const path = '/service/Pro/parentCon/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getParentPro(
+    target: JudoIdentifiable<ServicePro>,
+    queryCustomizer?: ServiceProParentQueryCustomizer,
+  ): Promise<ServiceProParentStored> {
+    const path = '/service/Pro/parentPro/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForParentPro(
+    owner?: JudoIdentifiable<ServicePro> | ServicePro,
+    queryCustomizer?: ServiceProParentQueryCustomizer,
+  ): Promise<Array<ServiceProParentStored>> {
+    const path = '/service/Pro/parentPro/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
@@ -193,26 +337,6 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void> {
-    const path = '/service/Pro/createProArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateProArgumentForPros(): Promise<CreateArgumentInput> {
-    const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async createConArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void> {
     const path = '/service/Pro/createConArgument';
     const response = await this.axios.post(this.getPathForActor(path), target, {
@@ -223,6 +347,26 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
   }
 
   async getTemplateOnCreateConArgumentForPros(): Promise<CreateArgumentInput> {
+    const path = '/CreateArgumentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void> {
+    const path = '/service/Pro/createProArgument';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateProArgumentForPros(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
@@ -258,11 +402,11 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async listCons(
+  async listVotes(
     target: JudoIdentifiable<ServicePro>,
-    queryCustomizer?: ServiceConQueryCustomizer,
-  ): Promise<Array<ServiceConStored>> {
-    const path = '/service/Pro/cons/~list';
+    queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
+  ): Promise<Array<ServiceSimpleVoteStored>> {
+    const path = '/service/Pro/votes/~list';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -275,179 +419,15 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForCons(
+  async getRangeForVotes(
     owner?: JudoIdentifiable<ServicePro> | ServicePro,
-    queryCustomizer?: ServiceConQueryCustomizer,
-  ): Promise<Array<ServiceConStored>> {
-    const path = '/service/Pro/cons/~range';
+    queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
+  ): Promise<Array<ServiceSimpleVoteStored>> {
+    const path = '/service/Pro/votes/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
     });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void> {
-    const path = '/service/Con/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void> {
-    const path = '/service/Con/voteDown';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void> {
-    const path = '/service/Con/createConArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateConArgumentForCons(): Promise<CreateArgumentInput> {
-    const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void> {
-    const path = '/service/Con/createProArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateProArgumentForCons(): Promise<CreateArgumentInput> {
-    const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void> {
-    const path = '/service/Con/voteUp';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getParentPro(
-    target: JudoIdentifiable<ServicePro>,
-    queryCustomizer?: ServiceProParentQueryCustomizer,
-  ): Promise<ServiceProParentStored> {
-    const path = '/service/Pro/parentPro/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForParentPro(
-    owner?: JudoIdentifiable<ServicePro> | ServicePro,
-    queryCustomizer?: ServiceProParentQueryCustomizer,
-  ): Promise<Array<ServiceProParentStored>> {
-    const path = '/service/Pro/parentPro/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getParentCon(
-    target: JudoIdentifiable<ServicePro>,
-    queryCustomizer?: ServiceConParentQueryCustomizer,
-  ): Promise<ServiceConParentStored> {
-    const path = '/service/Pro/parentCon/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForParentCon(
-    owner?: JudoIdentifiable<ServicePro> | ServicePro,
-    queryCustomizer?: ServiceConParentQueryCustomizer,
-  ): Promise<Array<ServiceConParentStored>> {
-    const path = '/service/Pro/parentCon/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError}
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async createProArgument(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void> {
-    const path = '/service/Pro/createProArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  async getTemplateOnCreateProArgument(): Promise<CreateArgumentInput> {
-    const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
   }
@@ -466,6 +446,26 @@ export class ServiceProServiceImpl extends JudoAxiosService implements ServicePr
   }
 
   async getTemplateOnCreateConArgument(): Promise<CreateArgumentInput> {
+    const path = '/CreateArgumentInput/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError}
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async createProArgument(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void> {
+    const path = '/service/Pro/createProArgument';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  async getTemplateOnCreateProArgument(): Promise<CreateArgumentInput> {
     const path = '/CreateArgumentInput/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 

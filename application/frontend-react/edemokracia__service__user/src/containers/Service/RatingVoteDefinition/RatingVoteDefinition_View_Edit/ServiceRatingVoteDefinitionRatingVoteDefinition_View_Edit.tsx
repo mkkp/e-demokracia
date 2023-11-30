@@ -257,12 +257,16 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WXV8MI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_NHnv0FsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <Typography id="_WXV8MI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
+                      <Typography
+                        id="User/(esm/_NHnv0FsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
                         {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.userVoteEntryGroup.Label', {
                           defaultValue: 'My vote entry',
                         })}
@@ -730,7 +734,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="_WXa0sI7EEe6rlbj78nBB0Q)/LabelWrapper"
+              id="(User/(esm/_NHnv2VsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -739,7 +743,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
             >
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_WXa0sI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
+                  <Typography
+                    id="User/(esm/_NHnv2VsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/Label"
+                    variant="h5"
+                    component="h1"
+                  >
                     {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.entries.Label', {
                       defaultValue: 'Entries',
                     })}

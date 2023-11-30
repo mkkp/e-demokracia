@@ -9,20 +9,20 @@
 import type { JudoStored } from '@judo/data-api-common';
 
 export interface ServiceCreateUserInput {
-  userName: string;
   email: string;
-  hasAdminAccess: boolean;
   firstName: string;
+  hasAdminAccess: boolean;
   lastName: string;
   phone?: null | string;
+  userName: string;
 }
 
 export type ServiceCreateUserInputAttributes =
-  | 'userName'
   | 'email'
-  | 'hasAdminAccess'
   | 'firstName'
+  | 'hasAdminAccess'
   | 'lastName'
-  | 'phone';
+  | 'phone'
+  | 'userName';
 
 export interface ServiceCreateUserInputStored extends JudoStored<ServiceCreateUserInput>, ServiceCreateUserInput {}

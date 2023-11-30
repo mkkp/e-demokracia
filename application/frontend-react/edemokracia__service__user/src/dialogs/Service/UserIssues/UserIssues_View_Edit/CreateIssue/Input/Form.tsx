@@ -211,6 +211,94 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   // Action section
+  const cityAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const cityOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
+        data,
+        data.city ? [data.city] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('city', returnedData[0]);
+      }
+    }
+  };
+  const countyAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<ServiceCountyStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const countyOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage(
+        data,
+        data.county ? [data.county] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('county', returnedData[0]);
+      }
+    }
+  };
+  const districtAutocompleteRangeAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<ServiceDistrictStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const districtOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage(
+        data,
+        data.district ? [data.district] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('district', returnedData[0]);
+      }
+    }
+  };
+  const issueTypeAutocompleteRangeAction = async (
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ): Promise<ServiceIssueTypeStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const issueTypeOpenSetSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage(
+        data,
+        data.issueType ? [data.issueType] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('issueType', returnedData[0]);
+      }
+    }
+  };
   const backAction = async () => {
     onClose();
   };
@@ -255,107 +343,19 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       setIsLoading(false);
     }
   };
-  const districtOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage(
-        data,
-        data.district ? [data.district] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('district', returnedData[0]);
-      }
-    }
-  };
-  const districtAutocompleteRangeAction = async (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const cityOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
-        data,
-        data.city ? [data.city] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('city', returnedData[0]);
-      }
-    }
-  };
-  const cityAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const issueTypeOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage(
-        data,
-        data.issueType ? [data.issueType] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('issueType', returnedData[0]);
-      }
-    }
-  };
-  const issueTypeAutocompleteRangeAction = async (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const countyOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage(
-        data,
-        data.county ? [data.county] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('county', returnedData[0]);
-      }
-    }
-  };
-  const countyAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
 
   const actions: ServiceCreateIssueInputCreateIssueInput_FormDialogActions = {
+    cityAutocompleteRangeAction,
+    cityOpenSetSelectorAction,
+    countyAutocompleteRangeAction,
+    countyOpenSetSelectorAction,
+    districtAutocompleteRangeAction,
+    districtOpenSetSelectorAction,
+    issueTypeAutocompleteRangeAction,
+    issueTypeOpenSetSelectorAction,
     backAction,
     createIssueForUserIssuesAction,
     getTemplateAction,
-    districtOpenSetSelectorAction,
-    districtAutocompleteRangeAction,
-    cityOpenSetSelectorAction,
-    cityAutocompleteRangeAction,
-    issueTypeOpenSetSelectorAction,
-    issueTypeAutocompleteRangeAction,
-    countyOpenSetSelectorAction,
-    countyAutocompleteRangeAction,
     ...(customActions ?? {}),
   };
 

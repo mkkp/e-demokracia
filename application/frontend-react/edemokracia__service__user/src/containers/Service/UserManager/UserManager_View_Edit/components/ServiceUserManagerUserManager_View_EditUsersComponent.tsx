@@ -248,7 +248,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WqpSso7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MKAvcFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'representation',
         label: t('service.UserManager.UserManager_View_Edit.representation', {
           defaultValue: 'Representation',
@@ -257,49 +257,49 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
       },
 
       {
-        id: '_Wqp5wo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MKAIYFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'userName',
         label: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wqqg0I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MJ728FvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'firstName',
         label: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wqqg1I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MJ9FEFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'lastName',
         label: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_WqrH4o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MJ9sIFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'phone',
         label: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wqru8o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MJ-TMFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'email',
         label: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_WqsWAI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MJ-6QFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'isAdmin',
         label: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
         filterType: FilterType.boolean,
       },
 
       {
-        id: '_WqvZUI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_MJ_hUFvVEe6jm_SkPSYEYw)/TableColumnFilter/(discriminator/User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'created',
         label: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,

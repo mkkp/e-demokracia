@@ -115,14 +115,18 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WWF_AY7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_OUB-QIfiEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                      <Typography id="_WWF_AY7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.Pro.Pro_View_Edit.pro.Icon', { defaultValue: 'Pro' })}
+                      <Typography
+                        id="User/(esm/_OUB-QIfiEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.Pro.Pro_View_Edit.pro.Label', { defaultValue: 'Pro' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -273,7 +277,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           }}
                           disabled={!actions.voteUpForProAction || editMode}
                         >
-                          <span>{t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: '' })}</span>
+                          <span>{t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: 'Vote Up' })}</span>
                         </LoadingButton>
                       </Grid>
 
@@ -323,7 +327,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           }}
                           disabled={!actions.voteDownForProAction || editMode}
                         >
-                          <span>{t('service.Pro.Pro_View_Edit.voteDown', { defaultValue: '' })}</span>
+                          <span>{t('service.Pro.Pro_View_Edit.voteDown', { defaultValue: 'Vote Down' })}</span>
                         </LoadingButton>
                       </Grid>
 
@@ -388,14 +392,18 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
               spacing={2}
             >
               <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="_WXP1kI7EEe6rlbj78nBB0Q)/LabelWrapper">
+                <Card id="(User/(esm/_KRUbMXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                          <Typography id="_WXP1kI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                            {t('service.Pro.Pro_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
+                          <Typography
+                            id="User/(esm/_KRUbMXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Pro.Pro_View_Edit.pros.Label', { defaultValue: 'Pros' })}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -482,14 +490,18 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
               </Grid>
 
               <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="_WXS44I7EEe6rlbj78nBB0Q)/LabelWrapper">
+                <Card id="(User/(esm/_KRUbOXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                          <Typography id="_WXS44I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                            {t('service.Pro.Pro_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
+                          <Typography
+                            id="User/(esm/_KRUbOXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Pro.Pro_View_Edit.cons.Label', { defaultValue: 'Cons' })}
                           </Typography>
                         </Grid>
                       </Grid>

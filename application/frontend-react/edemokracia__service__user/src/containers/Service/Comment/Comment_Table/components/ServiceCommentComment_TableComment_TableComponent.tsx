@@ -233,17 +233,6 @@ export function ServiceCommentComment_TableComment_TableComponent(
         : undefined,
     },
     {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => isLoading,
-      action: actions.voteUpForCommentAction
-        ? async (rowData) => {
-            await actions.voteUpForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
       label: t('service.Comment.Comment_Table.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
@@ -254,40 +243,51 @@ export function ServiceCommentComment_TableComment_TableComponent(
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTable)',
+      label: t('service.Comment.Comment_Table.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceCommentStored) => isLoading,
+      action: actions.voteUpForCommentAction
+        ? async (rowData) => {
+            await actions.voteUpForCommentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wwwhwo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_xE0lsG5REe2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'createdByName',
         label: t('service.Comment.Comment_Table.createdByName', { defaultValue: 'CreatedByName' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_WwxI0o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_BYNX0G5WEe2wNaja8kBvcQ)/TableColumnFilter/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'comment',
         label: t('service.Comment.Comment_Table.comment', { defaultValue: 'Comment' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wwxv4I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_BYVToG5WEe2wNaja8kBvcQ)/TableColumnFilter/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'created',
         label: t('service.Comment.Comment_Table.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
-        id: '_Wwxv5I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_3kyREH4bEe2j59SYy0JH0Q)/TableColumnFilter/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'upVotes',
         label: t('service.Comment.Comment_Table.upVotes', { defaultValue: 'UpVotes' }) as string,
         filterType: FilterType.numeric,
       },
 
       {
-        id: '_WwyW847EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_3k-eUH4bEe2j59SYy0JH0Q)/TableColumnFilter/(discriminator/User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'downVotes',
         label: t('service.Comment.Comment_Table.downVotes', { defaultValue: 'DownVotes' }) as string,
         filterType: FilterType.numeric,

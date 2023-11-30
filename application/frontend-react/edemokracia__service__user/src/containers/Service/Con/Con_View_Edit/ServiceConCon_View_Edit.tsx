@@ -115,14 +115,18 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WWC7sY7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                      <Typography id="_WWC7sY7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.Con.Con_View_Edit.con.Icon', { defaultValue: 'Contra' })}
+                      <Typography
+                        id="User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.Con.Con_View_Edit.con.Label', { defaultValue: 'Contra' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -273,7 +277,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                           }}
                           disabled={!actions.voteUpForConAction || editMode}
                         >
-                          <span>{t('service.Con.Con_View_Edit.voteUp', { defaultValue: '' })}</span>
+                          <span>{t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'Vote Up' })}</span>
                         </LoadingButton>
                       </Grid>
 
@@ -323,7 +327,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                           }}
                           disabled={!actions.voteDownForConAction || editMode}
                         >
-                          <span>{t('service.Con.Con_View_Edit.voteDown', { defaultValue: '' })}</span>
+                          <span>{t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'Vote Down' })}</span>
                         </LoadingButton>
                       </Grid>
 
@@ -388,14 +392,18 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
               spacing={2}
             >
               <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="_WW5QQI7EEe6rlbj78nBB0Q)/LabelWrapper">
+                <Card id="(User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
-                          <Typography id="_WW5QQI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                            {t('service.Con.Con_View_Edit.pros.Icon', { defaultValue: 'Pros' })}
+                          <Typography
+                            id="User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Con.Con_View_Edit.pros.Label', { defaultValue: 'Pros' })}
                           </Typography>
                         </Grid>
                       </Grid>
@@ -482,14 +490,18 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
               </Grid>
 
               <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="_WW8TkI7EEe6rlbj78nBB0Q)/LabelWrapper">
+                <Card id="(User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
                   <CardContent>
                     <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
-                          <Typography id="_WW8TkI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                            {t('service.Con.Con_View_Edit.cons.Icon', { defaultValue: 'Cons' })}
+                          <Typography
+                            id="User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Con.Con_View_Edit.cons.Label', { defaultValue: 'Cons' })}
                           </Typography>
                         </Grid>
                       </Grid>

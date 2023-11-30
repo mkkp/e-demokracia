@@ -141,11 +141,11 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   const submit = async () => {};
 
   // Action section
-  const setAction = async (selected: ServiceCityStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceCityStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -168,8 +168,8 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   };
 
   const actions: ServiceCityCity_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

@@ -19,21 +19,21 @@ import { ServiceSimpleVote } from './ServiceSimpleVote';
 import { ServiceSimpleVoteStored } from './ServiceSimpleVote';
 
 export interface ServicePro {
-  createdByName?: null | string;
   created: Date;
+  createdByName?: null | string;
   description: string;
+  downVotes?: null | number;
   title: string;
   upVotes?: null | number;
-  downVotes?: null | number;
-  votes?: null | Array<ServiceSimpleVoteStored>;
-  createdBy?: null | ServiceServiceUserStored;
-  pros?: null | Array<ServiceProStored>;
   cons?: null | Array<ServiceConStored>;
-  parentPro?: null | ServiceProParentStored;
+  createdBy?: null | ServiceServiceUserStored;
   parentCon?: null | ServiceConParentStored;
+  parentPro?: null | ServiceProParentStored;
+  pros?: null | Array<ServiceProStored>;
+  votes?: null | Array<ServiceSimpleVoteStored>;
 }
 
-export type ServiceProAttributes = 'createdByName' | 'created' | 'description' | 'title' | 'upVotes' | 'downVotes';
-export type ServiceProRelations = 'votes' | 'createdBy' | 'pros' | 'cons' | 'parentPro' | 'parentCon';
+export type ServiceProAttributes = 'created' | 'createdByName' | 'description' | 'downVotes' | 'title' | 'upVotes';
+export type ServiceProRelations = 'cons' | 'createdBy' | 'parentCon' | 'parentPro' | 'pros' | 'votes';
 
 export interface ServiceProStored extends JudoStored<ServicePro>, ServicePro {}

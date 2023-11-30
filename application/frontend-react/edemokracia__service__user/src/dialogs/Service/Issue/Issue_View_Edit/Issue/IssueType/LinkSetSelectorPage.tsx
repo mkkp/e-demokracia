@@ -145,11 +145,11 @@ export default function ServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelector
   const submit = async () => {};
 
   // Action section
-  const setAction = async (selected: ServiceIssueTypeStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceIssueTypeStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -174,8 +174,8 @@ export default function ServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelector
   };
 
   const actions: ServiceIssueTypeIssueType_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

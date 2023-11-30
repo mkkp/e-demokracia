@@ -174,9 +174,7 @@ export default function ServiceProPro_View_EditCreateProArgumentInputForm(
   const title: string = t('CreateArgumentInput.CreateArgumentInput_Form', { defaultValue: 'CreateArgumentInput Form' });
 
   // Private actions
-  const submit = async () => {
-    await createProArgumentForProAction();
-  };
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {

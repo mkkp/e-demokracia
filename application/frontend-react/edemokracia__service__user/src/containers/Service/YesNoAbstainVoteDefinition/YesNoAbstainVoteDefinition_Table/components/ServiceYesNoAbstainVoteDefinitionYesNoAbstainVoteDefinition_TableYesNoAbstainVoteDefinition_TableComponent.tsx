@@ -281,28 +281,15 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
+      id: 'User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.activate', {
+        defaultValue: 'activate',
       }) as string,
-      icon: <MdiIcon path="delete" />,
+      icon: <MdiIcon path="lock-open" />,
       disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
+      action: actions.activateForYesNoAbstainVoteDefinitionAction
         ? async (rowData) => {
-            await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.vote', {
-        defaultValue: 'vote',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.voteAction
-        ? async (rowData) => {
-            await actions.voteAction!(rowData);
+            await actions.activateForYesNoAbstainVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -320,32 +307,6 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
         : undefined,
     },
     {
-      id: 'User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
-      }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
-      action: actions.activateForYesNoAbstainVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.activateForYesNoAbstainVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
       id: 'User/(esm/_9jf_BHsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
       label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeVote', {
         defaultValue: 'closeVote',
@@ -355,6 +316,32 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
       action: actions.closeVoteForYesNoAbstainVoteDefinitionAction
         ? async (rowData) => {
             await actions.closeVoteForYesNoAbstainVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.deleteOrArchive', {
+        defaultValue: 'deleteOrArchive',
+      }) as string,
+      icon: <MdiIcon path="delete" />,
+      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
+      action: actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.removeFromFavorites', {
+        defaultValue: 'removeFromFavorites',
+      }) as string,
+      icon: <MdiIcon path="star-minus" />,
+      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => isLoading,
+      action: actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction
+        ? async (rowData) => {
+            await actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction!(rowData);
           }
         : undefined,
     },
@@ -371,12 +358,25 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+      label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.vote', {
+        defaultValue: 'vote',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceYesNoAbstainVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
+      action: actions.voteAction
+        ? async (rowData) => {
+            await actions.voteAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WQJvEI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_A9IOIIXrEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable)',
         attributeName: 'title',
         label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.title', {
           defaultValue: 'Title',
@@ -385,7 +385,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
       },
 
       {
-        id: '_WQKWII7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_A9Ys0IXrEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable)',
         attributeName: 'created',
         label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.created', {
           defaultValue: 'Created',
@@ -394,7 +394,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
       },
 
       {
-        id: '_WQK9MI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_A95DIIXrEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable)',
         attributeName: 'description',
         label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.description', {
           defaultValue: 'Description',
@@ -403,7 +403,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
       },
 
       {
-        id: '_WQK9NI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_A-I6wIXrEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable)',
         attributeName: 'status',
         label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.status', {
           defaultValue: 'Status',
@@ -413,7 +413,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tabl
       },
 
       {
-        id: '_WQLkQo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_A-b1sIXrEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable)',
         attributeName: 'closeAt',
         label: t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_Table.closeAt', {
           defaultValue: 'CloseAt',

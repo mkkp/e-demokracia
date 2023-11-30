@@ -114,10 +114,6 @@ export default function ServiceUserVoteDefinitionOwnedVoteDefinitionsRelationTab
   const backAction = async () => {
     navigateBack();
   };
-  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserVoteDefinitionOwnedVoteDefinitionsRelationViewPage(target!.__signedIdentifier));
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -147,6 +143,26 @@ export default function ServiceUserVoteDefinitionOwnedVoteDefinitionsRelationTab
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceUserVoteDefinitionOwnedVoteDefinitionsRelationViewPage(target!.__signedIdentifier));
+  };
+  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+      target,
+    );
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const voteSelectAnswerAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
+        [],
+      );
+    if (result === 'submit') {
+    }
+  };
   const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
@@ -162,32 +178,16 @@ export default function ServiceUserVoteDefinitionOwnedVoteDefinitionsRelationTab
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const voteSelectAnswerAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
-        [],
-      );
-    if (result === 'submit') {
-    }
-  };
-  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
     backAction,
-    openPageAction,
     filterAction,
     refreshAction,
+    openPageAction,
+    voteRatingAction,
+    voteSelectAnswerAction,
     voteYesNoAbstainAction,
     voteYesNoAction,
-    voteSelectAnswerAction,
-    voteRatingAction,
     ...(customActions ?? {}),
   };
 

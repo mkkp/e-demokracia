@@ -87,64 +87,6 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   const submit = async () => {};
 
   // Action section
-  const openPageAction = async (target?: ServiceIssueTypeStored) => {
-    await openServiceUserAdminIssueTypesAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForAdminIssueTypesImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const openFormAction = async () => {
-    const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(data);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const deleteAction = async (target: ServiceIssueTypeStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await userServiceForAdminIssueTypesImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceIssueType>(error, undefined, target);
-      }
-    }
-  };
   const bulkDeleteAction = async (
     selectedRows: ServiceIssueTypeStored[],
   ): Promise<DialogResult<Array<ServiceIssueTypeStored>>> => {
@@ -180,14 +122,72 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       });
     });
   };
+  const openFormAction = async () => {
+    const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(data);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const deleteAction = async (target: ServiceIssueTypeStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await userServiceForAdminIssueTypesImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceIssueType>(error, undefined, target);
+      }
+    }
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForAdminIssueTypesImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openPageAction = async (target?: ServiceIssueTypeStored) => {
+    await openServiceUserAdminIssueTypesAccessViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   const actions: ServiceIssueTypeIssueType_TablePageActions = {
-    openPageAction,
-    filterAction,
-    refreshAction,
+    bulkDeleteAction,
     openFormAction,
     deleteAction,
-    bulkDeleteAction,
+    filterAction,
+    refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

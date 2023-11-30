@@ -169,14 +169,14 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wg2dgI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_LRJ3AYd9Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'title',
         label: t('service.Issue.Issue_View_Edit.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wg3EkI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_LRJ3Aod9Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'description',
         label: t('service.Issue.Issue_View_Edit.description', { defaultValue: 'Description' }) as string,
         filterType: FilterType.string,

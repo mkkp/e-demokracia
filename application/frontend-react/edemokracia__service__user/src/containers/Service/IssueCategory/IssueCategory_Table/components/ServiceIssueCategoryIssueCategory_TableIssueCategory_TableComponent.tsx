@@ -185,14 +185,14 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_VrgJ4I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_T0OJgG49Ee2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'title',
         label: t('service.IssueCategory.IssueCategory_Table.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_VrjNMI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_T0TpEG49Ee2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'description',
         label: t('service.IssueCategory.IssueCategory_Table.description', { defaultValue: 'Description' }) as string,
         filterType: FilterType.string,

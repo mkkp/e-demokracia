@@ -339,7 +339,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="_WhBcoo7EEe6rlbj78nBB0Q)/LabelWrapper"
+              id="(User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -349,8 +349,12 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-                  <Typography id="_WhBcoo7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                    {t('service.Pro.Pro_Form.pros.Icon', { defaultValue: 'Pros' })}
+                  <Typography
+                    id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
+                    variant="h5"
+                    component="h1"
+                  >
+                    {t('service.Pro.Pro_Form.pros.Label', { defaultValue: 'Pros' })}
                   </Typography>
                 </Grid>
               </Grid>
@@ -379,7 +383,7 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="_WhyRoI7EEe6rlbj78nBB0Q)/LabelWrapper"
+              id="(User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -389,8 +393,12 @@ export default function ServiceProPro_Form(props: ServiceProPro_FormProps) {
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-                  <Typography id="_WhyRoI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                    {t('service.Pro.Pro_Form.cons.Icon', { defaultValue: 'Cons' })}
+                  <Typography
+                    id="User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
+                    variant="h5"
+                    component="h1"
+                  >
+                    {t('service.Pro.Pro_Form.cons.Label', { defaultValue: 'Cons' })}
                   </Typography>
                 </Grid>
               </Grid>

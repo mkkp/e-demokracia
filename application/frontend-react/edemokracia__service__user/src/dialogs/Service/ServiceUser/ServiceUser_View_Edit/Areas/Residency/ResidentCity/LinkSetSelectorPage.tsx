@@ -144,11 +144,11 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   const submit = async () => {};
 
   // Action section
-  const setAction = async (selected: ServiceCityStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceCityStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -171,8 +171,8 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
   };
 
   const actions: ServiceCityCity_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

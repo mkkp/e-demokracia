@@ -158,7 +158,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCountiesComponent
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wjm2kY7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_cnA48IdkEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'representation',
         label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'County' }) as string,
         filterType: FilterType.string,

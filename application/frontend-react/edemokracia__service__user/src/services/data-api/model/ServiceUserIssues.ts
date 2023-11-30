@@ -12,25 +12,25 @@ import { ServiceIssueStored } from './ServiceIssue';
 
 export interface ServiceUserIssues {
   userName?: null | string;
-  ownedIssues?: null | Array<ServiceIssueStored>;
   activeIssuesGlobal?: null | Array<ServiceIssueStored>;
-  activeIssuesInActivityCounties?: null | Array<ServiceIssueStored>;
   activeIssuesInActivityCities?: null | Array<ServiceIssueStored>;
+  activeIssuesInActivityCounties?: null | Array<ServiceIssueStored>;
   activeIssuesInActivityDistricts?: null | Array<ServiceIssueStored>;
-  activeIssuesInResidentCounty?: null | Array<ServiceIssueStored>;
   activeIssuesInResidentCity?: null | Array<ServiceIssueStored>;
+  activeIssuesInResidentCounty?: null | Array<ServiceIssueStored>;
   activeIssuesInResidentDistrict?: null | Array<ServiceIssueStored>;
+  ownedIssues?: null | Array<ServiceIssueStored>;
 }
 
 export type ServiceUserIssuesAttributes = 'userName';
 export type ServiceUserIssuesRelations =
-  | 'ownedIssues'
   | 'activeIssuesGlobal'
-  | 'activeIssuesInActivityCounties'
   | 'activeIssuesInActivityCities'
+  | 'activeIssuesInActivityCounties'
   | 'activeIssuesInActivityDistricts'
-  | 'activeIssuesInResidentCounty'
   | 'activeIssuesInResidentCity'
-  | 'activeIssuesInResidentDistrict';
+  | 'activeIssuesInResidentCounty'
+  | 'activeIssuesInResidentDistrict'
+  | 'ownedIssues';
 
 export interface ServiceUserIssuesStored extends JudoStored<ServiceUserIssues>, ServiceUserIssues {}

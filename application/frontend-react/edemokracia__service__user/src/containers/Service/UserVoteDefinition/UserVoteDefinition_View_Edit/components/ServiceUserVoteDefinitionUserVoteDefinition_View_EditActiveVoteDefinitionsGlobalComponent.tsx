@@ -290,33 +290,20 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
     {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WrZgoI7EEe6rlbj78nBB0Q)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
-        defaultValue: 'voteYesNoAbstain',
+      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
+        defaultValue: 'voteRating',
       }) as string,
       icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoAbstainType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction
+      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
+      action: actions.activeVoteDefinitionsGlobalVoteRatingAction
         ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction!(rowData);
+            await actions.activeVoteDefinitionsGlobalVoteRatingAction!(rowData);
           }
         : undefined,
     },
     {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WrZgoI7EEe6rlbj78nBB0Q)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
-        defaultValue: 'voteYesNo',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteYesNoAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteYesNoAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WrZgoI7EEe6rlbj78nBB0Q)',
+      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteSelectAnswer', {
         defaultValue: 'voteSelectAnswer',
       }) as string,
@@ -329,15 +316,28 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         : undefined,
     },
     {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/_WrZgoI7EEe6rlbj78nBB0Q)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
-        defaultValue: 'voteRating',
+      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
+        defaultValue: 'voteYesNoAbstain',
       }) as string,
       icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteRatingAction
+      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoAbstainType || isLoading,
+      action: actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction
         ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteRatingAction!(rowData);
+            await actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction!(rowData);
+          }
+        : undefined,
+    },
+    {
+      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
+        defaultValue: 'voteYesNo',
+      }) as string,
+      icon: <MdiIcon path="vote" />,
+      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
+      action: actions.activeVoteDefinitionsGlobalVoteYesNoAction
+        ? async (rowData) => {
+            await actions.activeVoteDefinitionsGlobalVoteYesNoAction!(rowData);
           }
         : undefined,
     },
@@ -346,7 +346,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WrUoIo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdaO8F5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'scope',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.scope', { defaultValue: 'Scope' }) as string,
         filterType: FilterType.enumeration,
@@ -354,14 +354,14 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       },
 
       {
-        id: '_WrVPM47EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdUvYF5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'title',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_WrV2Q47EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdZn4F5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'voteType',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
           defaultValue: 'VoteType',
@@ -371,7 +371,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       },
 
       {
-        id: '_WrXEYI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdZA0V5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'numberOfVotes',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
           defaultValue: 'NumberOfVotes',
@@ -380,7 +380,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       },
 
       {
-        id: '_WrXrcI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdVWcF5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'created',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
           defaultValue: 'Created',
@@ -389,7 +389,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       },
 
       {
-        id: '_WrXrdI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdV9gV5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'closeAt',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
           defaultValue: 'CloseAt',
@@ -398,7 +398,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       },
 
       {
-        id: '_WrYSgo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_XdV9gF5JEe6vsex_cZNQbQ)/TableColumnFilter/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'status',
         label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
           defaultValue: 'Status',

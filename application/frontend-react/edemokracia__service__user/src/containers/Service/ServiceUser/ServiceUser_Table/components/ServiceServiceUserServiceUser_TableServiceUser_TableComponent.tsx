@@ -261,49 +261,49 @@ export function ServiceServiceUserServiceUser_TableServiceUser_TableComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Vot7oI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_ertAAH4NEe2cB7_PsKXsHQ)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'userName',
         label: t('service.ServiceUser.ServiceUser_Table.userName', { defaultValue: 'Username' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Vow-8I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B86YQGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'isAdmin',
         label: t('service.ServiceUser.ServiceUser_Table.isAdmin', { defaultValue: 'Has admin access' }) as string,
         filterType: FilterType.boolean,
       },
 
       {
-        id: '_Vo1QYI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B6R7AGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'firstName',
         label: t('service.ServiceUser.ServiceUser_Table.firstName', { defaultValue: 'First name' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Vo4TsI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B63w4GkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'lastName',
         label: t('service.ServiceUser.ServiceUser_Table.lastName', { defaultValue: 'Last name' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Vo6v8I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B7jtYGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'phone',
         label: t('service.ServiceUser.ServiceUser_Table.phone', { defaultValue: 'Phone' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Vo9zQI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B8MmkGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'email',
         label: t('service.ServiceUser.ServiceUser_Table.email', { defaultValue: 'Email' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_VpAPgI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_B9mUwGkwEe25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'created',
         label: t('service.ServiceUser.ServiceUser_Table.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,

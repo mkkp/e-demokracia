@@ -157,7 +157,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
         {editMode && actions.createIssueForUserIssuesAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/_Vz4CwY7EEe6rlbj78nBB0Q)"
+              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormCallButton/(discriminator/User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormButtonGroup)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

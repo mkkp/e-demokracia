@@ -153,14 +153,14 @@ export function ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_UzBCso7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_T0OJgG49Ee2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable)',
         attributeName: 'title',
         label: t('service.IssueCategory.IssueCategory_Table.AddSelector.title', { defaultValue: 'Title' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UzBpwo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_T0TpEG49Ee2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable)',
         attributeName: 'description',
         label: t('service.IssueCategory.IssueCategory_Table.AddSelector.description', {
           defaultValue: 'Description',

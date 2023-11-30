@@ -227,10 +227,14 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
     }
   };
   const ownerOpenSetSelectorAction = async () => {
@@ -245,64 +249,13 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       }
     }
   };
-  const ownerAutocompleteRangeAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const subcategoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
-    await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
+  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceIssueCategoryOwnerRelationViewPage(target!);
     if (!editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const subcategoriesFilterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const subcategoriesOpenFormAction = async () => {
-    const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const subcategoriesDeleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceIssueCategoryServiceImpl.deleteSubcategories(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceIssueCategory>(error, undefined, target);
-      }
     }
   };
   const subcategoriesBulkDeleteAction = async (
@@ -344,19 +297,66 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       });
     });
   };
+  const subcategoriesOpenFormAction = async () => {
+    const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const subcategoriesFilterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const subcategoriesDeleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await serviceIssueCategoryServiceImpl.deleteSubcategories(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          refreshAction(pageQueryCustomizer);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceIssueCategory>(error, undefined, target);
+      }
+    }
+  };
+  const subcategoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
+    await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
 
   const actions: ServiceIssueCategoryIssueCategory_View_EditDialogActions = {
     backAction,
     refreshAction,
-    ownerOpenPageAction,
-    ownerOpenSetSelectorAction,
     ownerAutocompleteRangeAction,
+    ownerOpenSetSelectorAction,
     ownerUnsetAction,
-    subcategoriesOpenPageAction,
-    subcategoriesFilterAction,
-    subcategoriesOpenFormAction,
-    subcategoriesDeleteAction,
+    ownerOpenPageAction,
     subcategoriesBulkDeleteAction,
+    subcategoriesOpenFormAction,
+    subcategoriesFilterAction,
+    subcategoriesDeleteAction,
+    subcategoriesOpenPageAction,
     ...(customActions ?? {}),
   };
 

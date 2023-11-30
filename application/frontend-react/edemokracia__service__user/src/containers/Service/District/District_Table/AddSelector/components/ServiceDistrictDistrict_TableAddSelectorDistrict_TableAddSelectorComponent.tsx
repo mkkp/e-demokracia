@@ -155,21 +155,21 @@ export function ServiceDistrictDistrict_TableAddSelectorDistrict_TableAddSelecto
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Upq5co7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_1ZdVoIX1Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable)',
         attributeName: 'county',
         label: t('service.District.District_Table.AddSelector.county', { defaultValue: 'County' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Uprggo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_1ZcukIX1Ee2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable)',
         attributeName: 'city',
         label: t('service.District.District_Table.AddSelector.city', { defaultValue: 'City' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_UpsHkY7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_dMVWoH4bEe2j59SYy0JH0Q)/TableColumnFilter/(discriminator/User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable)',
         attributeName: 'name',
         label: t('service.District.District_Table.AddSelector.name', { defaultValue: 'District name' }) as string,
         filterType: FilterType.string,

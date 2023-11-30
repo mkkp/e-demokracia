@@ -101,79 +101,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
   const submit = async () => {};
 
   // Action section
-  const openPageAction = async (target?: ServiceRatingVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (
-    queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceRatingVoteDefinitionStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForUserOwnedRatingVoteDefinitionsImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const takeBackVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedRatingVoteDefinitionsImpl.takeBackVote(target!);
-      if (customActions?.postTakeBackVoteForRatingVoteDefinitionAction) {
-        await customActions.postTakeBackVoteForRatingVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const voteAction = async (target: ServiceRatingVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
-    if (result === 'submit') {
-      setRefreshCounter((prev) => prev + 1);
-    }
-  };
-  const removeFromFavoritesForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedRatingVoteDefinitionsImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const activateForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -210,24 +137,6 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setIsLoading(false);
     }
   };
-  const deleteOrArchiveForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForUserOwnedRatingVoteDefinitionsImpl.deleteOrArchive(target!);
-      if (customActions?.postDeleteOrArchiveForRatingVoteDefinitionAction) {
-        await customActions.postDeleteOrArchiveForRatingVoteDefinitionAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const closeVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -246,18 +155,109 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage
       setIsLoading(false);
     }
   };
+  const deleteOrArchiveForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.deleteOrArchive(target!);
+      if (customActions?.postDeleteOrArchiveForRatingVoteDefinitionAction) {
+        await customActions.postDeleteOrArchiveForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const removeFromFavoritesForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const voteAction = async (target: ServiceRatingVoteDefinitionStored) => {
+    const { result, data: returnedData } =
+      await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
+    if (result === 'submit') {
+      setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const takeBackVoteForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForUserOwnedRatingVoteDefinitionsImpl.takeBackVote(target!);
+      if (customActions?.postTakeBackVoteForRatingVoteDefinitionAction) {
+        await customActions.postTakeBackVoteForRatingVoteDefinitionAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
+  ): Promise<ServiceRatingVoteDefinitionStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForUserOwnedRatingVoteDefinitionsImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openPageAction = async (target?: ServiceRatingVoteDefinitionStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
+  };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions = {
-    openPageAction,
-    filterAction,
-    refreshAction,
-    takeBackVoteForRatingVoteDefinitionAction,
-    voteAction,
-    removeFromFavoritesForRatingVoteDefinitionAction,
     activateForRatingVoteDefinitionAction,
     addToFavoritesForRatingVoteDefinitionAction,
-    deleteOrArchiveForRatingVoteDefinitionAction,
     closeVoteForRatingVoteDefinitionAction,
+    deleteOrArchiveForRatingVoteDefinitionAction,
+    removeFromFavoritesForRatingVoteDefinitionAction,
+    voteAction,
+    takeBackVoteForRatingVoteDefinitionAction,
+    filterAction,
+    refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

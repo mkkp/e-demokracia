@@ -118,14 +118,18 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WX5V0I7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_WRx7kFvTEe6jm_SkPSYEYw)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                      <Typography id="_WX5V0I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.UserProfile.UserProfile_View_Edit.Personal.Icon', { defaultValue: 'Personal' })}
+                      <Typography
+                        id="User/(esm/_WRx7kFvTEe6jm_SkPSYEYw)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.UserProfile.UserProfile_View_Edit.Personal.Label', { defaultValue: 'Personal' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -339,14 +343,18 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WWVPkI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_fsW_oFvTEe6jm_SkPSYEYw)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                      <Typography id="_WWVPkI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.UserProfile.UserProfile_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
+                      <Typography
+                        id="User/(esm/_fsW_oFvTEe6jm_SkPSYEYw)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.UserProfile.UserProfile_View_Edit.Areas.Label', { defaultValue: 'Areas' })}
                       </Typography>
                     </Grid>
                   </Grid>

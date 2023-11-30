@@ -148,6 +148,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
   };
 
   // Action section
+  const backAction = async () => {
+    onClose();
+  };
   const voteSelectAnswerForVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
@@ -167,9 +170,6 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
     } finally {
       setIsLoading(false);
     }
-  };
-  const backAction = async () => {
-    onClose();
   };
   const filterAction = async (
     id: string,
@@ -195,8 +195,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions =
     {
-      voteSelectAnswerForVoteDefinitionAction,
       backAction,
+      voteSelectAnswerForVoteDefinitionAction,
       filterAction,
       selectorRangeAction,
       ...(customActions ?? {}),

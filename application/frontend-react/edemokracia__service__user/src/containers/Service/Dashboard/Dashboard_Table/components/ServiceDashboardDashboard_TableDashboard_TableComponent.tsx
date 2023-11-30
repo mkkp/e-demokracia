@@ -164,7 +164,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WyBtEI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_Z48P4IyYEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable)',
         attributeName: 'welcome',
         label: t('service.Dashboard.Dashboard_Table.welcome', { defaultValue: 'Welcome' }) as string,
         filterType: FilterType.string,

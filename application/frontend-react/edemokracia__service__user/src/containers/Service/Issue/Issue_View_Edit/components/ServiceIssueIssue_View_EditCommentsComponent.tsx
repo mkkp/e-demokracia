@@ -204,18 +204,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   const rowActions: TableRowAction<ServiceCommentStored>[] = [
     {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wg8kIY7EEe6rlbj78nBB0Q)',
-      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.commentsVoteUpForCommentAction
-        ? async (rowData) => {
-            await actions.commentsVoteUpForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/_Wg8kIY7EEe6rlbj78nBB0Q)',
+      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
       label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
       icon: <MdiIcon path="thumb-down" />,
       disabled: (row: ServiceCommentStored) => editMode || isLoading,
@@ -225,40 +214,51 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
           }
         : undefined,
     },
+    {
+      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
+      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+      icon: <MdiIcon path="thumb-up" />,
+      disabled: (row: ServiceCommentStored) => editMode || isLoading,
+      action: actions.commentsVoteUpForCommentAction
+        ? async (rowData) => {
+            await actions.commentsVoteUpForCommentAction!(rowData);
+          }
+        : undefined,
+    },
   ];
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_Wg5g0o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_mvrxcIybEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'comment',
         label: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wg6H4o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_mvvb0IybEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'created',
         label: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
-        id: '_Wg6u8Y7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_mvzGMIybEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'createdByName',
         label: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wg7WAI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_mv2JgIybEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'upVotes',
         label: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
         filterType: FilterType.numeric,
       },
 
       {
-        id: '_Wg7WBI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_mv5z4IybEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'downVotes',
         label: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
         filterType: FilterType.numeric,

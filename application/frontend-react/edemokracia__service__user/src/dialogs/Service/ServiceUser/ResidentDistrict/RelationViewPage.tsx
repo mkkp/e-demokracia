@@ -191,6 +191,10 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
   const backAction = async () => {
     onClose();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
   const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
     try {
       setIsLoading(true);
@@ -216,10 +220,6 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
   const updateAction = async () => {
     setIsLoading(true);
     try {
@@ -239,8 +239,8 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
 
   const actions: ServiceDistrictDistrict_View_EditDialogActions = {
     backAction,
-    refreshAction,
     cancelAction,
+    refreshAction,
     updateAction,
     ...(customActions ?? {}),
   };

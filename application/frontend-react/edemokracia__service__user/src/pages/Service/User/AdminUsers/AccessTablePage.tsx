@@ -84,60 +84,6 @@ export default function ServiceUserAdminUsersAccessTablePage() {
   const submit = async () => {};
 
   // Action section
-  const openPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceUserAdminUsersAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
-  };
-  const filterAction = async (
-    id: string,
-    filterOptions: FilterOption[],
-    model?: GridFilterModel,
-    filters?: Filter[],
-  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
-    const newFilters = await openFilterDialog(id, filterOptions, filters);
-    return {
-      filters: newFilters,
-    };
-  };
-  const refreshAction = async (
-    queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
-    try {
-      setIsLoading(true);
-      setEditMode(false);
-      return userServiceForAdminUsersImpl.list(undefined, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.reject(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
-    }
-  };
-  const deleteAction = async (target: ServiceServiceUserStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await userServiceForAdminUsersImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceServiceUser>(error, undefined, target);
-      }
-    }
-  };
   const bulkDeleteAction = async (
     selectedRows: ServiceServiceUserStored[],
   ): Promise<DialogResult<Array<ServiceServiceUserStored>>> => {
@@ -173,13 +119,67 @@ export default function ServiceUserAdminUsersAccessTablePage() {
       });
     });
   };
+  const deleteAction = async (target: ServiceServiceUserStored, silentMode?: boolean) => {
+    try {
+      const confirmed = !silentMode
+        ? await openConfirmDialog(
+            'row-delete-action',
+            t('judo.modal.confirm.confirm-delete', {
+              defaultValue: 'Are you sure you would like to delete the selected element?',
+            }),
+            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+          )
+        : true;
+      if (confirmed) {
+        await userServiceForAdminUsersImpl.delete(target);
+        if (!silentMode) {
+          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+          setRefreshCounter((prev) => prev + 1);
+        }
+      }
+    } catch (error) {
+      if (!silentMode) {
+        handleError<ServiceServiceUser>(error, undefined, target);
+      }
+    }
+  };
+  const filterAction = async (
+    id: string,
+    filterOptions: FilterOption[],
+    model?: GridFilterModel,
+    filters?: Filter[],
+  ): Promise<{ model?: GridFilterModel; filters?: Filter[] }> => {
+    const newFilters = await openFilterDialog(id, filterOptions, filters);
+    return {
+      filters: newFilters,
+    };
+  };
+  const refreshAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      setIsLoading(true);
+      setEditMode(false);
+      return userServiceForAdminUsersImpl.list(undefined, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.reject(error);
+    } finally {
+      setIsLoading(false);
+      setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const openPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceUserAdminUsersAccessViewPage(target!);
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   const actions: ServiceServiceUserServiceUser_TablePageActions = {
-    openPageAction,
+    bulkDeleteAction,
+    deleteAction,
     filterAction,
     refreshAction,
-    deleteAction,
-    bulkDeleteAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

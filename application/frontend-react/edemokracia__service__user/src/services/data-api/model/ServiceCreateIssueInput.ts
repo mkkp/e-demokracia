@@ -17,16 +17,16 @@ import { ServiceIssueType } from './ServiceIssueType';
 import { ServiceIssueTypeStored } from './ServiceIssueType';
 
 export interface ServiceCreateIssueInput {
+  debateCloseAt: Date;
   description: string;
   title: string;
-  debateCloseAt: Date;
-  issueType?: null | ServiceIssueTypeStored;
-  county?: null | ServiceCountyStored;
   city?: null | ServiceCityStored;
+  county?: null | ServiceCountyStored;
   district?: null | ServiceDistrictStored;
+  issueType?: null | ServiceIssueTypeStored;
 }
 
-export type ServiceCreateIssueInputAttributes = 'description' | 'title' | 'debateCloseAt';
-export type ServiceCreateIssueInputRelations = 'issueType' | 'county' | 'city' | 'district';
+export type ServiceCreateIssueInputAttributes = 'debateCloseAt' | 'description' | 'title';
+export type ServiceCreateIssueInputRelations = 'city' | 'county' | 'district' | 'issueType';
 
 export interface ServiceCreateIssueInputStored extends JudoStored<ServiceCreateIssueInput>, ServiceCreateIssueInput {}

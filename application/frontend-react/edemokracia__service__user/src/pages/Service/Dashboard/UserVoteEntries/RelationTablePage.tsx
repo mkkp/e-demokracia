@@ -95,9 +95,6 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
   const backAction = async () => {
     navigateBack();
   };
-  const openPageAction = async (target?: ServiceVoteEntryStored) => {
-    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
-  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -125,12 +122,15 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const openPageAction = async (target?: ServiceVoteEntryStored) => {
+    // There was no .targetPageDefinition for this action. Target Page is most likely empty in the model!
+  };
 
   const actions: ServiceVoteEntryVoteEntry_TablePageActions = {
     backAction,
-    openPageAction,
     filterAction,
     refreshAction,
+    openPageAction,
     ...(customActions ?? {}),
   };
 

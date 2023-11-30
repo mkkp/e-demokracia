@@ -17,39 +17,39 @@ import { ServiceSimpleVote } from './ServiceSimpleVote';
 import { ServiceSimpleVoteStored } from './ServiceSimpleVote';
 
 export interface ServiceServiceUser {
+  created?: null | Date;
+  email: string;
   firstName: string;
+  isAdmin: boolean;
   lastName: string;
   phone?: null | string;
-  email: string;
-  isAdmin: boolean;
-  created?: null | Date;
-  userName: string;
   representation?: null | string;
-  votes?: null | Array<ServiceSimpleVoteStored>;
-  activityCounties?: null | Array<ServiceCountyStored>;
-  residentCounty?: null | ServiceCountyStored;
+  userName: string;
   activityCities?: null | Array<ServiceCityStored>;
-  residentCity?: null | ServiceCityStored;
+  activityCounties?: null | Array<ServiceCountyStored>;
   activityDistricts?: null | Array<ServiceDistrictStored>;
+  residentCity?: null | ServiceCityStored;
+  residentCounty?: null | ServiceCountyStored;
   residentDistrict?: null | ServiceDistrictStored;
+  votes?: null | Array<ServiceSimpleVoteStored>;
 }
 
 export type ServiceServiceUserAttributes =
+  | 'created'
+  | 'email'
   | 'firstName'
+  | 'isAdmin'
   | 'lastName'
   | 'phone'
-  | 'email'
-  | 'isAdmin'
-  | 'created'
-  | 'userName'
-  | 'representation';
+  | 'representation'
+  | 'userName';
 export type ServiceServiceUserRelations =
-  | 'votes'
-  | 'activityCounties'
-  | 'residentCounty'
   | 'activityCities'
-  | 'residentCity'
+  | 'activityCounties'
   | 'activityDistricts'
-  | 'residentDistrict';
+  | 'residentCity'
+  | 'residentCounty'
+  | 'residentDistrict'
+  | 'votes';
 
 export interface ServiceServiceUserStored extends JudoStored<ServiceServiceUser>, ServiceServiceUser {}

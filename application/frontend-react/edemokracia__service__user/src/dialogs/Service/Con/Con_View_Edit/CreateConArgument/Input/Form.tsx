@@ -174,7 +174,9 @@ export default function ServiceConCon_View_EditCreateConArgumentInputForm(
   const title: string = t('CreateArgumentInput.CreateArgumentInput_Form', { defaultValue: 'CreateArgumentInput Form' });
 
   // Private actions
-  const submit = async () => {};
+  const submit = async () => {
+    await createConArgumentForConAction();
+  };
 
   // Action section
   const backAction = async () => {

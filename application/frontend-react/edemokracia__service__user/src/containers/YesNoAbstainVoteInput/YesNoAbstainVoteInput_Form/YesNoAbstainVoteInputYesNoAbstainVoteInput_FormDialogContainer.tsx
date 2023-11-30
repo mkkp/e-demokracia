@@ -159,7 +159,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
         {editMode && actions.voteYesNoAbstainForVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/_U1lOgo7EEe6rlbj78nBB0Q)"
+              id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormCallButton/(discriminator/User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
@@ -180,7 +180,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
         {editMode && actions.voteForYesNoAbstainVoteDefinitionAction && (
           <Grid className="page-action" item>
             <LoadingButton
-              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/_U1lOgo7EEe6rlbj78nBB0Q)"
+              id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormCallButton/(discriminator/User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormButtonGroup)"
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}

@@ -155,7 +155,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_U127UI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_S9ttgFv5Ee6nEc5rp_Qy4A)/TableColumnFilter/(discriminator/User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorTable)',
         attributeName: 'title',
         label: t(
           'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.title',
@@ -165,7 +165,7 @@ export function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
       },
 
       {
-        id: '_U127VI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_U3eEcFv5Ee6nEc5rp_Qy4A)/TableColumnFilter/(discriminator/User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorTable)',
         attributeName: 'description',
         label: t(
           'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation.description',

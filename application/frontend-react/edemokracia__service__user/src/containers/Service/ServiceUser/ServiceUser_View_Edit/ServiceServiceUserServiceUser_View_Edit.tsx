@@ -128,14 +128,18 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WXjXkY7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_oUYE0IXsEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="security" sx={{ marginRight: 1 }} />
-                      <Typography id="_WXjXkY7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.ServiceUser.ServiceUser_View_Edit.Security.Icon', { defaultValue: 'Security' })}
+                      <Typography
+                        id="User/(esm/_oUYE0IXsEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.ServiceUser.ServiceUser_View_Edit.Security.Label', { defaultValue: 'Security' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -277,14 +281,18 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WXlMw47EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_M0pnwGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
-                      <Typography id="_WXlMw47EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.ServiceUser.ServiceUser_View_Edit.personal.Icon', { defaultValue: 'Personal' })}
+                      <Typography
+                        id="User/(esm/_M0pnwGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.ServiceUser.ServiceUser_View_Edit.personal.Label', { defaultValue: 'Personal' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -476,14 +484,18 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WWPwAY7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_vzaQsGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="map" sx={{ marginRight: 1 }} />
-                      <Typography id="_WWPwAY7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.ServiceUser.ServiceUser_View_Edit.Areas.Icon', { defaultValue: 'Areas' })}
+                      <Typography
+                        id="User/(esm/_vzaQsGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.ServiceUser.ServiceUser_View_Edit.Areas.Label', { defaultValue: 'Areas' })}
                       </Typography>
                     </Grid>
                   </Grid>

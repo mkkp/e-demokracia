@@ -143,11 +143,11 @@ export default function ServiceServiceUserVotesSetSelectorPage(props: ServiceSer
   const submit = async () => {};
 
   // Action section
-  const setAction = async (selected: ServiceSimpleVoteStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceSimpleVoteStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -172,8 +172,8 @@ export default function ServiceServiceUserVotesSetSelectorPage(props: ServiceSer
   };
 
   const actions: ServiceSimpleVoteSimpleVote_TableSetSelectorDialogActions = {
-    setAction,
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),

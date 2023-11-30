@@ -153,6 +153,10 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   const backAction = async () => {
     navigateBack();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
   const refreshAction = async (
     queryCustomizer: ServiceUserManagerQueryCustomizer,
   ): Promise<ServiceUserManagerStored> => {
@@ -180,10 +184,6 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
   const updateAction = async () => {
     setIsLoading(true);
     try {
@@ -206,12 +206,6 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const usersOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceUserManagerUsersRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
   const usersFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -228,6 +222,12 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   ): Promise<ServiceServiceUserStored[]> => {
     return userServiceForAdminUserManagerImpl.listUsers(singletonHost.current, queryCustomizer);
   };
+  const usersOpenPageAction = async (target?: ServiceServiceUserStored) => {
+    await openServiceUserManagerUsersRelationViewPage(target!);
+    if (!editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
     return await userServiceForAdminUserManagerImpl.refreshForAdminUserManager({
       _mask: '{}',
@@ -236,13 +236,13 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
 
   const actions: ServiceUserManagerUserManager_View_EditPageActions = {
     backAction,
-    refreshAction,
     cancelAction,
+    refreshAction,
     updateAction,
     createUserAction,
-    usersOpenPageAction,
     usersFilterAction,
     usersRefreshAction,
+    usersOpenPageAction,
     ...(customActions ?? {}),
   };
 

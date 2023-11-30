@@ -172,9 +172,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
   const title: string = t('RatingVoteInput.RatingVoteInput_Form', { defaultValue: 'RatingVoteInput Form' });
 
   // Private actions
-  const submit = async () => {
-    await voteForRatingVoteDefinitionAction();
-  };
+  const submit = async () => {};
 
   // Action section
   const backAction = async () => {

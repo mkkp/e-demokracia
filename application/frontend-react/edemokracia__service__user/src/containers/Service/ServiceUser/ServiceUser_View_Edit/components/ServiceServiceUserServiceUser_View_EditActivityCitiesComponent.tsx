@@ -155,7 +155,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WjpS0o7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_Hm0AIIdlEe2kLcMqsIbMgQ)/TableColumnFilter/(discriminator/User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)',
         attributeName: 'representation',
         label: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'City' }) as string,
         filterType: FilterType.string,

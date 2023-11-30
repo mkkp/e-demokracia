@@ -158,7 +158,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
           return params.row.file ? (
             <ButtonGroup size="small" variant="outlined">
               <Button
-                id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_WybVsI7EEe6rlbj78nBB0Q)-download"
+                id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TableColumn/(discriminator/User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable)-download"
                 startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
                 onClick={(event: any) => {
                   event.preventDefault();
@@ -169,7 +169,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
                 {extractFileNameFromToken(params.row.file)}
               </Button>
               <Button
-                id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TabularTable/(discriminator/_WybVsI7EEe6rlbj78nBB0Q)-view"
+                id="User/(esm/_Rd-RkG5CEe2Q6M99rsfqSQ)/TableColumn/(discriminator/User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable)-view"
                 onClick={(event: any) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -238,14 +238,14 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_WygOMI7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_Rd71UG5CEe2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'link',
         label: t('service.IssueAttachment.IssueAttachment_Table.link', { defaultValue: 'Link' }) as string,
         filterType: FilterType.string,
       },
 
       {
-        id: '_Wyg1Qo7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_ReAt0G5CEe2Q6M99rsfqSQ)/TableColumnFilter/(discriminator/User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'type',
         label: t('service.IssueAttachment.IssueAttachment_Table.type', { defaultValue: 'Type' }) as string,
         filterType: FilterType.enumeration,

@@ -208,14 +208,14 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   const filterOptions = useMemo<FilterOption[]>(
     () => [
       {
-        id: '_UpIt8I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_VQUMgGk5Ee25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'created',
         label: t('service.SimpleVote.SimpleVote_Table.created', { defaultValue: 'Created' }) as string,
         filterType: FilterType.dateTime,
       },
 
       {
-        id: '_UpIt9I7EEe6rlbj78nBB0Q',
+        id: 'User/(esm/_VQZFAGk5Ee25ONJ3V89cVA)/TableColumnFilter/(discriminator/User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable)',
         attributeName: 'type',
         label: t('service.SimpleVote.SimpleVote_Table.type', { defaultValue: 'Type' }) as string,
         filterType: FilterType.enumeration,

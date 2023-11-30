@@ -170,6 +170,28 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
   const backAction = async () => {
     navigateBack();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+  };
+  const deleteAction = async () => {
+    try {
+      const confirmed = await openConfirmDialog(
+        'row-delete-action',
+        t('judo.modal.confirm.confirm-delete', {
+          defaultValue: 'Are you sure you would like to delete the selected element?',
+        }),
+        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
+      );
+      if (confirmed) {
+        await serviceVoteDefinitionServiceImpl.delete(data);
+        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
+        navigateBack();
+      }
+    } catch (error) {
+      handleError(error, undefined, data);
+    }
+  };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored> => {
@@ -200,10 +222,6 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const cancelAction = async () => {
-    // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
   const updateAction = async () => {
     setIsLoading(true);
     try {
@@ -220,33 +238,20 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
       setIsLoading(false);
     }
   };
-  const deleteAction = async () => {
-    try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
-      if (confirmed) {
-        await serviceVoteDefinitionServiceImpl.delete(data);
-        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        navigateBack();
-      }
-    } catch (error) {
-      handleError(error, undefined, data);
-    }
+  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
+    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
   };
-  const voteYesNoAbstainAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
+  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+    return serviceVoteDefinitionServiceImpl.getIssue(
+      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+      {
+        _mask: '{}',
+      },
+    );
   };
-  const voteYesNoAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
+  const voteRatingAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
       data,
     );
     if (result === 'submit' && !editMode) {
@@ -264,39 +269,34 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
       }
     }
   };
-  const voteRatingAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
+  const voteYesNoAbstainAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+    }
+  };
+  const voteYesNoAction = async () => {
+    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
       data,
     );
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
-  };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceVoteDefinitionServiceImpl.getIssue(
-      { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-      {
-        _mask: '{}',
-      },
-    );
-  };
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
-    refreshAction,
     cancelAction,
-    updateAction,
     deleteAction,
-    voteYesNoAbstainAction,
-    voteYesNoAction,
-    voteSelectAnswerAction,
-    voteRatingAction,
+    refreshAction,
+    updateAction,
     issueOpenPageAction,
     issuePreFetchAction,
+    voteRatingAction,
+    voteSelectAnswerAction,
+    voteYesNoAbstainAction,
+    voteYesNoAction,
     ...(customActions ?? {}),
   };
 

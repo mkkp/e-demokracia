@@ -21,8 +21,8 @@ import type {
   ServiceCounty,
   ServiceCityStored,
   ServiceIssueTypeStored,
-  ServiceIssueType,
   ServiceCityQueryCustomizer,
+  ServiceIssueType,
 } from '../data-api';
 import type { ServiceCreateIssueInputService } from '../data-service';
 
@@ -40,8 +40,8 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     return response.data;
   }
 
-  async getTemplateForIssueType(): Promise<ServiceIssueType> {
-    const path = '/service/IssueType/~template';
+  async getTemplateForCity(): Promise<ServiceCity> {
+    const path = '/service/City/~template';
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
@@ -50,11 +50,11 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getIssueType(
+  async getCity(
     target: JudoIdentifiable<ServiceCreateIssueInput>,
-    queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored> {
-    const path = '/service/CreateIssueInput/issueType/~get';
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored> {
+    const path = '/service/CreateIssueInput/city/~get';
     const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier!,
@@ -67,11 +67,11 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getRangeForIssueType(
+  async getRangeForCity(
     owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
-    queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<Array<ServiceIssueTypeStored>> {
-    const path = '/service/CreateIssueInput/issueType/~range';
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<Array<ServiceCityStored>> {
+    const path = '/service/CreateIssueInput/city/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},
@@ -120,46 +120,6 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     return response.data;
   }
 
-  async getTemplateForCity(): Promise<ServiceCity> {
-    const path = '/service/City/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getCity(
-    target: JudoIdentifiable<ServiceCreateIssueInput>,
-    queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored> {
-    const path = '/service/CreateIssueInput/city/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
-      },
-    });
-
-    return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForCity(
-    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
-    queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>> {
-    const path = '/service/CreateIssueInput/city/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
   async getTemplateForDistrict(): Promise<ServiceDistrict> {
     const path = '/service/District/~template';
     const response = await this.axios.get(this.getPathForActor(path));
@@ -192,6 +152,46 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>> {
     const path = '/service/CreateIssueInput/district/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  async getTemplateForIssueType(): Promise<ServiceIssueType> {
+    const path = '/service/IssueType/~template';
+    const response = await this.axios.get(this.getPathForActor(path));
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getIssueType(
+    target: JudoIdentifiable<ServiceCreateIssueInput>,
+    queryCustomizer?: ServiceIssueTypeQueryCustomizer,
+  ): Promise<ServiceIssueTypeStored> {
+    const path = '/service/CreateIssueInput/issueType/~get';
+    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssueType(
+    owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
+    queryCustomizer?: ServiceIssueTypeQueryCustomizer,
+  ): Promise<Array<ServiceIssueTypeStored>> {
+    const path = '/service/CreateIssueInput/issueType/~range';
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner ?? {},
       queryCustomizer: queryCustomizer ?? {},

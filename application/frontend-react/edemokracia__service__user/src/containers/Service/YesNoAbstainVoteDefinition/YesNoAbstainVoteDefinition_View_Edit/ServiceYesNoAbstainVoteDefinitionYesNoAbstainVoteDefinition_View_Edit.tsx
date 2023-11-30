@@ -259,12 +259,16 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
           </Grid>
 
           <Grid item xs={12} sm={12}>
-            <Card id="_WXqFQI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                      <Typography id="_WXqFQI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
+                      <Typography
+                        id="User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
                         {t(
                           'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.Label',
                           { defaultValue: 'My vote entry' },
@@ -660,7 +664,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="_WXyBEI7EEe6rlbj78nBB0Q)/LabelWrapper"
+              id="(User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -669,7 +673,11 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
             >
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography id="_WXyBEI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
+                  <Typography
+                    id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/Label"
+                    variant="h5"
+                    component="h1"
+                  >
                     {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.entries.Label', {
                       defaultValue: 'Entries',
                     })}

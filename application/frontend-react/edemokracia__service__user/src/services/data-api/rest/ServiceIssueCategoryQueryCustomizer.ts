@@ -12,6 +12,6 @@ import { FilterBytypesString } from './FilterBytypesString';
 import { FilterBytypesText } from './FilterBytypesText';
 
 export interface ServiceIssueCategoryQueryCustomizer extends QueryCustomizer<ServiceIssueCategory> {
-  title?: Array<FilterBytypesString>;
   description?: Array<FilterBytypesText>;
+  title?: Array<FilterBytypesString>;
 }

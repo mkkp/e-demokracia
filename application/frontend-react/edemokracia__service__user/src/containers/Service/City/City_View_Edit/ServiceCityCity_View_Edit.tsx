@@ -127,7 +127,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
 
           <Grid item xs={12} sm={12}>
             <Grid
-              id="_WbbK8I7EEe6rlbj78nBB0Q)/LabelWrapper"
+              id="(User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
               alignItems="center"
@@ -137,8 +137,12 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
               <Grid item xs={12} sm={12}>
                 <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                   <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
-                  <Typography id="_WbbK8I7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                    {t('service.City.City_View_Edit.districts.Icon', { defaultValue: 'Districts' })}
+                  <Typography
+                    id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/Label"
+                    variant="h5"
+                    component="h1"
+                  >
+                    {t('service.City.City_View_Edit.districts.Label', { defaultValue: 'Districts' })}
                   </Typography>
                 </Grid>
               </Grid>

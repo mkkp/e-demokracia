@@ -104,14 +104,18 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
           spacing={2}
         >
           <Grid item xs={12} sm={12}>
-            <Card id="_WV_4YI7EEe6rlbj78nBB0Q)/LabelWrapper">
+            <Card id="(User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/WrapAndLabelVisualElement)/LabelWrapper">
               <CardContent>
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
-                      <Typography id="_WV_4YI7EEe6rlbj78nBB0Q)/Label" variant="h5" component="h1">
-                        {t('service.Comment.Comment_View_Edit.group.Icon', { defaultValue: 'Comment' })}
+                      <Typography
+                        id="User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/WrapAndLabelVisualElement)/Label"
+                        variant="h5"
+                        component="h1"
+                      >
+                        {t('service.Comment.Comment_View_Edit.group.Label', { defaultValue: 'Comment' })}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -232,7 +236,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           }}
                           disabled={!actions.voteUpForCommentAction || editMode}
                         >
-                          <span>{t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: '' })}</span>
+                          <span>{t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: 'Vote Up' })}</span>
                         </LoadingButton>
                       </Grid>
 
@@ -282,7 +286,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           }}
                           disabled={!actions.voteDownForCommentAction || editMode}
                         >
-                          <span>{t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: '' })}</span>
+                          <span>{t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: 'Vote Down' })}</span>
                         </LoadingButton>
                       </Grid>
 
