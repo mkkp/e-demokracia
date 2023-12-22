@@ -6,12 +6,12 @@
 // Template name: actor/src/components/dialog/StackableDialogProvider.tsx
 // Template file: actor/src/components/dialog/StackableDialogProvider.tsx.hbs
 
-import type { ReactNode } from 'react';
-import { useRef, createContext, useContext, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
 import type { DialogProps } from '@mui/material';
-import { SlideUpTransition } from '~/theme/animations';
+import Dialog from '@mui/material/Dialog';
+import type { ReactNode } from 'react';
+import { createContext, useContext, useRef, useState } from 'react';
 import { dialogStackCloseDelay } from '~/config';
+import { SlideUpTransition } from '~/theme/animations';
 
 export type DialogOption = Omit<DialogProps, 'open'>;
 

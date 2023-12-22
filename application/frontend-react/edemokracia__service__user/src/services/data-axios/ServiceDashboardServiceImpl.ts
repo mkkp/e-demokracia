@@ -6,33 +6,33 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceVoteDefinitionStored,
-  RatingVoteInput,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceVoteDefinitionQueryCustomizer,
-  ServiceVoteEntryQueryCustomizer,
-  ServiceIssueQueryCustomizer,
-  YesNoAbstainVoteInput,
-  ServiceVoteDefinition,
-  ServiceIssueStored,
-  ServiceVoteEntry,
-  ServiceVoteEntryStored,
-  SelectAnswerVoteSelection,
-  ServiceIssue,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  ServiceDashboardQueryCustomizer,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  ServiceDashboard,
-  ServiceDashboardStored,
-  CreateArgumentInput,
-  YesNoVoteInput,
   CloseDebateInput,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateCommentInput,
+  RatingVoteInput,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceDashboard,
+  ServiceDashboardQueryCustomizer,
+  ServiceDashboardStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceVoteDefinition,
+  ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionStored,
+  ServiceVoteEntry,
+  ServiceVoteEntryQueryCustomizer,
+  ServiceVoteEntryStored,
+  YesNoAbstainVoteInput,
+  YesNoVoteInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceDashboardService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServiceDashboard
@@ -86,6 +86,36 @@ export class ServiceDashboardServiceImpl extends JudoAxiosService implements Ser
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addFavoriteIssues(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/favoriteIssues/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFavoriteIssues(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/favoriteIssues/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**
@@ -281,6 +311,36 @@ export class ServiceDashboardServiceImpl extends JudoAxiosService implements Ser
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/favoriteVoteDefinitions/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/favoriteVoteDefinitions/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -418,6 +478,36 @@ export class ServiceDashboardServiceImpl extends JudoAxiosService implements Ser
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addIssuesOwned(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/issuesOwned/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeIssuesOwned(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/issuesOwned/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**
@@ -619,6 +709,36 @@ export class ServiceDashboardServiceImpl extends JudoAxiosService implements Ser
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/ownedVoteDefinitions/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void> {
+    const path = '/service/Dashboard/~update/ownedVoteDefinitions/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**

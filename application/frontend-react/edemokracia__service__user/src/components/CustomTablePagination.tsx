@@ -7,7 +7,7 @@
 // Template file: actor/src/components/CustomTablePagination.tsx.hbs
 
 import TablePagination from '@mui/material/TablePagination';
-import type { MouseEvent, Dispatch, SetStateAction } from 'react';
+import type { Dispatch, MouseEvent, SetStateAction } from 'react';
 
 export interface CustomTablePaginationProps {
   pageChange: (isNext: boolean) => Promise<void>;

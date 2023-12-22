@@ -6,31 +6,31 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  YesNoAbstainVoteInputStored,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceYesNoAbstainVoteDefinitionStored,
-  ServiceIssueQueryCustomizer,
-  YesNoAbstainVoteInput,
-  CreateArgumentInputStored,
-  ServiceYesNoAbstainVoteDefinition,
-  ServiceIssueStored,
-  ServiceServiceUserStored,
-  ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ServiceIssue,
-  ServiceServiceUser,
-  CreateCommentInputStored,
-  CreateCommentInput,
-  CreateArgumentInput,
-  CloseDebateInputStored,
-  ServiceServiceUserQueryCustomizer,
-  ServiceYesNoAbstainVoteEntryStored,
-  ServiceYesNoAbstainVoteEntry,
   CloseDebateInput,
+  CloseDebateInputStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceYesNoAbstainVoteDefinition,
+  ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
+  ServiceYesNoAbstainVoteDefinitionStored,
+  ServiceYesNoAbstainVoteEntry,
+  ServiceYesNoAbstainVoteEntryQueryCustomizer,
+  ServiceYesNoAbstainVoteEntryStored,
+  YesNoAbstainVoteInput,
+  YesNoAbstainVoteInputStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.userOwnedYesNoAbstainVoteDefinitions
@@ -49,6 +49,18 @@ export interface UserServiceForUserOwnedYesNoAbstainVoteDefinitions {
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
+  getRangeForIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>>;
+  setIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
+  unsetIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    target: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,9 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponentActionDefinitions {
-  ownerOpenSetSelectorAction?: () => Promise<void>;
+  ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
   ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
@@ -31,6 +31,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   ownerData: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteDefinition, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -41,7 +42,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponent(
   props: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditOwnerComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -54,6 +55,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         }) as string
       }
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -91,7 +93,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       onSet={
         actions.ownerOpenSetSelectorAction
           ? async () => {
-              await actions.ownerOpenSetSelectorAction!();
+              const owner = await actions.ownerOpenSetSelectorAction!();
             }
           : undefined
       }

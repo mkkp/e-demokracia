@@ -6,25 +6,26 @@
 // Template name: actor/src/containers/container.tsx
 // Template file: actor/src/containers/container.tsx.hbs
 
-import type { Dispatch, SetStateAction, FC } from 'react';
-import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import { clsx } from 'clsx';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
-import { MdiIcon, ModeledTabs, DropdownButton, useJudoNavigation } from '~/components';
-import { isErrorOperationFault, useErrorHandler, uiDateToServiceDate, serviceDateToUiDate } from '~/utilities';
+import type { JudoIdentifiable } from '~/services/data-api/common';
+import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
@@ -65,26 +66,26 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
-import type { ServiceIssueIssue_View_EditConsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditConsComponent';
-import { ServiceIssueIssue_View_EditConsComponent } from './components/ServiceIssueIssue_View_EditConsComponent';
-import type { ServiceIssueIssue_View_EditProsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditProsComponent';
-import { ServiceIssueIssue_View_EditProsComponent } from './components/ServiceIssueIssue_View_EditProsComponent';
 import type { ServiceIssueIssue_View_EditAttachmentsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditAttachmentsComponent';
 import { ServiceIssueIssue_View_EditAttachmentsComponent } from './components/ServiceIssueIssue_View_EditAttachmentsComponent';
 import type { ServiceIssueIssue_View_EditCategoriesComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditCategoriesComponent';
 import { ServiceIssueIssue_View_EditCategoriesComponent } from './components/ServiceIssueIssue_View_EditCategoriesComponent';
-import type { ServiceIssueIssue_View_EditCommentsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditCommentsComponent';
-import { ServiceIssueIssue_View_EditCommentsComponent } from './components/ServiceIssueIssue_View_EditCommentsComponent';
-import type { ServiceIssueIssue_View_EditIssueTypeComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditIssueTypeComponent';
-import { ServiceIssueIssue_View_EditIssueTypeComponent } from './components/ServiceIssueIssue_View_EditIssueTypeComponent';
-import type { ServiceIssueIssue_View_EditOwnerComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditOwnerComponent';
-import { ServiceIssueIssue_View_EditOwnerComponent } from './components/ServiceIssueIssue_View_EditOwnerComponent';
 import type { ServiceIssueIssue_View_EditCityComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditCityComponent';
 import { ServiceIssueIssue_View_EditCityComponent } from './components/ServiceIssueIssue_View_EditCityComponent';
+import type { ServiceIssueIssue_View_EditCommentsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditCommentsComponent';
+import { ServiceIssueIssue_View_EditCommentsComponent } from './components/ServiceIssueIssue_View_EditCommentsComponent';
+import type { ServiceIssueIssue_View_EditConsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditConsComponent';
+import { ServiceIssueIssue_View_EditConsComponent } from './components/ServiceIssueIssue_View_EditConsComponent';
 import type { ServiceIssueIssue_View_EditCountyComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditCountyComponent';
 import { ServiceIssueIssue_View_EditCountyComponent } from './components/ServiceIssueIssue_View_EditCountyComponent';
 import type { ServiceIssueIssue_View_EditDistrictComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditDistrictComponent';
 import { ServiceIssueIssue_View_EditDistrictComponent } from './components/ServiceIssueIssue_View_EditDistrictComponent';
+import type { ServiceIssueIssue_View_EditIssueTypeComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditIssueTypeComponent';
+import { ServiceIssueIssue_View_EditIssueTypeComponent } from './components/ServiceIssueIssue_View_EditIssueTypeComponent';
+import type { ServiceIssueIssue_View_EditOwnerComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditOwnerComponent';
+import { ServiceIssueIssue_View_EditOwnerComponent } from './components/ServiceIssueIssue_View_EditOwnerComponent';
+import type { ServiceIssueIssue_View_EditProsComponentActionDefinitions } from './components/ServiceIssueIssue_View_EditProsComponent';
+import { ServiceIssueIssue_View_EditProsComponent } from './components/ServiceIssueIssue_View_EditProsComponent';
 
 export interface ServiceIssueIssue_View_EditActionDefinitions
   extends ServiceIssueIssue_View_EditAttachmentsComponentActionDefinitions,
@@ -142,6 +143,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
     submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
+  const { openConfirmDialog } = useConfirmDialog();
 
   useConfirmationBeforeChange(
     editMode,
@@ -341,6 +343,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                           storeDiff={storeDiff}
                           validationError={validation.get('issueType')}
                           actions={actions}
+                          submit={submit}
                         />
                       </Grid>
 
@@ -571,6 +574,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                           storeDiff={storeDiff}
                           validationError={validation.get('owner')}
                           actions={actions}
+                          submit={submit}
                         />
                       </Grid>
                     </Grid>
@@ -585,7 +589,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
               id="User/(esm/_hZfckId8Ee2kLcMqsIbMgQ)/TabBarVisualElement"
               ownerData={data}
               validation={validation}
-              orientation='horizontal'
+              orientation="horizontal"
               childTabs={[
                 {
                   id: 'User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/GroupTab',
@@ -858,6 +862,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       storeDiff={storeDiff}
                       validationError={validation.get('county')}
                       actions={actions}
+                      submit={submit}
                     />
                   </Grid>
 
@@ -869,6 +874,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       storeDiff={storeDiff}
                       validationError={validation.get('city')}
                       actions={actions}
+                      submit={submit}
                     />
                   </Grid>
 
@@ -880,6 +886,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       storeDiff={storeDiff}
                       validationError={validation.get('district')}
                       actions={actions}
+                      submit={submit}
                     />
                   </Grid>
                 </Grid>

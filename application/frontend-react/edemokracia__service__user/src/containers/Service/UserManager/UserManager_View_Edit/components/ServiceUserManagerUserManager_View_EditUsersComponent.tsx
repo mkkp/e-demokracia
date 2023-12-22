@@ -6,42 +6,45 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
-import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  booleanColumnOperators,
-  dateTimeColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import {
+  ContextMenu,
+  StripedDataGrid,
+  booleanColumnOperators,
+  columnsActionCalculator,
+  dateTimeColumnOperators,
+} from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
+import { useL10N } from '~/l10n/l10n-context';
 import type {
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -49,17 +52,16 @@ import type {
   ServiceUserManager,
   ServiceUserManagerStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
-  serviceDateToUiDate,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions {
   usersFilterAction?: (
@@ -91,6 +93,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const filterModelKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
@@ -131,114 +134,123 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   const selectedRows = useRef<ServiceServiceUserStored[]>([]);
 
+  const representationColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'representation',
+    headerName: t('service.UserManager.UserManager_View_Edit.representation', {
+      defaultValue: 'Representation',
+    }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const userNameColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'userName',
+    headerName: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const firstNameColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'firstName',
+    headerName: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const lastNameColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'lastName',
+    headerName: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const phoneColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'phone',
+    headerName: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const emailColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'email',
+    headerName: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const isAdminColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'isAdmin',
+    headerName: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 100,
+    type: 'boolean',
+    filterable: false && true,
+    align: 'center',
+    renderCell: (params: GridRenderCellParams<any, ServiceServiceUserStored>) => {
+      if (params.row.isAdmin === null || params.row.isAdmin === undefined) {
+        return <MdiIcon className="undefined" path="minus" color="#ddd" />;
+      } else if (params.row.isAdmin) {
+        return <MdiIcon className="true" path="check-circle" color="green" />;
+      }
+      return <MdiIcon className="false" path="close-circle" color="red" />;
+    },
+  };
+  const createdColumn: GridColDef<ServiceServiceUserStored> = {
+    ...baseColumnConfig,
+    field: 'created',
+    headerName: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'dateTime',
+    filterable: false && true,
+    valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+    valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+      return (
+        value &&
+        new Intl.DateTimeFormat(l10nLocale, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }).format(value)
+      );
+    },
+  };
+
   const columns = useMemo<GridColDef<ServiceServiceUserStored>[]>(
     () => [
-      {
-        ...baseColumnConfig,
-        field: 'representation',
-        headerName: t('service.UserManager.UserManager_View_Edit.representation', {
-          defaultValue: 'Representation',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'userName',
-        headerName: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'firstName',
-        headerName: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'lastName',
-        headerName: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'phone',
-        headerName: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'email',
-        headerName: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'isAdmin',
-        headerName: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 100,
-        type: 'boolean',
-        filterable: false && true,
-        align: 'center',
-        renderCell: (params: GridRenderCellParams<any, ServiceServiceUserStored>) => {
-          if (params.row.isAdmin === null || params.row.isAdmin === undefined) {
-            return <MdiIcon className="undefined" path="minus" color="#ddd" />;
-          } else if (params.row.isAdmin) {
-            return <MdiIcon className="true" path="check-circle" color="green" />;
-          }
-          return <MdiIcon className="false" path="close-circle" color="red" />;
-        },
-      },
-      {
-        ...baseColumnConfig,
-        field: 'created',
-        headerName: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'dateTime',
-        filterable: false && true,
-        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-          return (
-            value &&
-            new Intl.DateTimeFormat(l10nLocale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false,
-            }).format(value)
-          );
-        },
-      },
+      representationColumn,
+      userNameColumn,
+      firstNameColumn,
+      lastNameColumn,
+      phoneColumn,
+      emailColumn,
+      isAdminColumn,
+      createdColumn,
     ],
     [l10nLocale],
   );
@@ -346,9 +358,13 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -440,6 +456,10 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
         onSortModelChange={handleSortModelChange}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        paginationMode="server"
+        sortingMode="server"
+        filterMode="server"
+        rowCount={10}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>

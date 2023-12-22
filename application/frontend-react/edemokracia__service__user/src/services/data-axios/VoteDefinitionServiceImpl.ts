@@ -6,20 +6,20 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  SelectAnswerVoteSelectionQueryCustomizer,
   RatingVoteInput,
-  SelectAnswerVoteSelectionStored,
-  VoteDefinitionQueryCustomizer,
-  YesNoAbstainVoteInput,
-  VoteDefinition,
-  YesNoVoteInput,
-  VoteDefinitionStored,
   SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  VoteDefinition,
+  VoteDefinitionQueryCustomizer,
+  VoteDefinitionStored,
+  YesNoAbstainVoteInput,
+  YesNoVoteInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { VoteDefinitionService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for VoteDefinition

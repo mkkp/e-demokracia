@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceUserProfile,
   ServiceUserProfileStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentActionDefinitions {
-  residentCountyOpenSetSelectorAction?: () => Promise<void>;
+  residentCountyOpenSetSelectorAction?: () => Promise<ServiceCountyStored | undefined>;
+  residentCountyUnsetAction?: (target: ServiceCountyStored) => Promise<void>;
   residentCountyOpenPageAction?: (target: ServiceCountyStored) => Promise<void>;
   residentCountyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
@@ -30,6 +31,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentP
   ownerData: ServiceUserProfile | ServiceUserProfileStored;
   actions: ServiceUserProfileUserProfile_View_EditResidentCountyComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -40,7 +42,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentP
 export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
   props: ServiceUserProfileUserProfile_View_EditResidentCountyComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -51,6 +53,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
         t('service.UserProfile.UserProfile_View_Edit.residentCounty', { defaultValue: 'Resident county' }) as string
       }
       labelList={[ownerData.residentCounty?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -88,8 +91,13 @@ export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
       onSet={
         actions.residentCountyOpenSetSelectorAction
           ? async () => {
-              await actions.residentCountyOpenSetSelectorAction!();
+              const residentCounty = await actions.residentCountyOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.residentCounty && actions.residentCountyUnsetAction
+          ? async () => actions.residentCountyUnsetAction!(ownerData.residentCounty!)
           : undefined
       }
     />

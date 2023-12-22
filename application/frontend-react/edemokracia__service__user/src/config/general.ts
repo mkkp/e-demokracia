@@ -37,8 +37,8 @@ export const toastConfig: OptionsObject & { success: OptionsObject; warning: Opt
 
 export const debounceInputs: number = 500;
 
-export const animationDuration: number = 0.8;
+export const fadeTimeout: number = 1200;
 
-export const delayDuration: number = 0.2;
+export const slideTimeout: number = 300;
 
 export const dialogStackCloseDelay: number = 50;

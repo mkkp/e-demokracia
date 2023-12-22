@@ -6,8 +6,8 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { ConQueryCustomizer, Con, ConStored, CreateArgumentInput } from '../data-api';
+import { Con, ConQueryCustomizer, ConStored, CreateArgumentInput } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for Con

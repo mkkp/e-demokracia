@@ -6,20 +6,23 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  ServiceIssue,
   ServiceIssueAttachment,
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
-  ServiceIssue,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceIssueServiceForAttachments } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceIssue.attachments
  */
-export class ServiceIssueServiceForAttachmentsImpl extends JudoAxiosService implements ServiceIssueServiceForAttachments {
+export class ServiceIssueServiceForAttachmentsImpl
+  extends JudoAxiosService
+  implements ServiceIssueServiceForAttachments
+{
   /**
    * From: relation.isListable, relation.isCollection
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.

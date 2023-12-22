@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceUserProfile,
   ServiceUserProfileStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentActionDefinitions {
-  residentCityOpenSetSelectorAction?: () => Promise<void>;
+  residentCityOpenSetSelectorAction?: () => Promise<ServiceCityStored | undefined>;
+  residentCityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
   residentCityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
   residentCityAutocompleteRangeAction?: (
     queryCustomizer: ServiceCityQueryCustomizer,
@@ -30,6 +31,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentPro
   ownerData: ServiceUserProfile | ServiceUserProfileStored;
   actions: ServiceUserProfileUserProfile_View_EditResidentCityComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -40,7 +42,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentPro
 export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
   props: ServiceUserProfileUserProfile_View_EditResidentCityComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -49,6 +51,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
       id="User/(esm/_fsW_pFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.UserProfile.UserProfile_View_Edit.residentCity', { defaultValue: 'Resident city' }) as string}
       labelList={[ownerData.residentCity?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -86,8 +89,13 @@ export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
       onSet={
         actions.residentCityOpenSetSelectorAction
           ? async () => {
-              await actions.residentCityOpenSetSelectorAction!();
+              const residentCity = await actions.residentCityOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.residentCity && actions.residentCityUnsetAction
+          ? async () => actions.residentCityUnsetAction!(ownerData.residentCity!)
           : undefined
       }
     />

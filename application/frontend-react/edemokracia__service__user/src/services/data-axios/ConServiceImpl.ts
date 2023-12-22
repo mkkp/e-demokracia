@@ -6,10 +6,10 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
-import type { ConQueryCustomizer, Con, ConStored, CreateArgumentInput } from '../data-api';
+import type { Con, ConQueryCustomizer, ConStored, CreateArgumentInput } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ConService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for Con

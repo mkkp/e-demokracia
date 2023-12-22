@@ -6,42 +6,45 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
-import { MdiIcon, CustomTablePagination } from '~/components';
-import {
-  dateTimeColumnOperators,
-  singleSelectColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
-} from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import {
+  ContextMenu,
+  StripedDataGrid,
+  columnsActionCalculator,
+  dateTimeColumnOperators,
+  singleSelectColumnOperators,
+} from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
+import { useL10N } from '~/l10n/l10n-context';
 import type {
   ServiceDashboard,
   ServiceDashboardStored,
@@ -49,19 +52,20 @@ import type {
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
-  serviceDateToUiDate,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActionDefinitions {
+  favoriteIssuesOpenAddSelectorAction?: () => Promise<void>;
+  favoriteIssuesBulkRemoveAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
   favoriteIssuesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -78,6 +82,7 @@ export interface ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActio
   favoriteIssuesCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
   favoriteIssuesDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   favoriteIssuesRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  favoriteIssuesRemoveAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
   favoriteIssuesOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
@@ -100,6 +105,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const filterModelKey = `User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
@@ -140,122 +146,140 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
 
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
+  const scopeColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'scope',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'singleSelect',
+    filterable: false && true,
+    sortable: false,
+    valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+      if (value !== undefined && value !== null) {
+        return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
+      }
+    },
+    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
+  };
+  const countyRepresentationColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'countyRepresentation',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
+      defaultValue: 'CountyRepresentation',
+    }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const cityRepresentationColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'cityRepresentation',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
+      defaultValue: 'CityRepresentation',
+    }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const districtRepresentationColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'districtRepresentation',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
+      defaultValue: 'DistrictRepresentation',
+    }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const titleColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'title',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const createdColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'created',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'dateTime',
+    filterable: false && true,
+    valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+    valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+      return (
+        value &&
+        new Intl.DateTimeFormat(l10nLocale, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }).format(value)
+      );
+    },
+  };
+  const statusColumn: GridColDef<ServiceIssueStored> = {
+    ...baseColumnConfig,
+    field: 'status',
+    headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'singleSelect',
+    filterable: false && true,
+    sortable: false,
+    valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+      if (value !== undefined && value !== null) {
+        return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
+      }
+    },
+    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
+  };
+
   const columns = useMemo<GridColDef<ServiceIssueStored>[]>(
     () => [
-      {
-        ...baseColumnConfig,
-        field: 'scope',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'singleSelect',
-        filterable: false && true,
-        sortable: false,
-        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          if (value !== undefined && value !== null) {
-            return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
-          }
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'countyRepresentation',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
-          defaultValue: 'CountyRepresentation',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'cityRepresentation',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
-          defaultValue: 'CityRepresentation',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'districtRepresentation',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
-          defaultValue: 'DistrictRepresentation',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'title',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'created',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'dateTime',
-        filterable: false && true,
-        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-          return (
-            value &&
-            new Intl.DateTimeFormat(l10nLocale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false,
-            }).format(value)
-          );
-        },
-      },
-      {
-        ...baseColumnConfig,
-        field: 'status',
-        headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'singleSelect',
-        filterable: false && true,
-        sortable: false,
-        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          if (value !== undefined && value !== null) {
-            return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
-          }
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
+      scopeColumn,
+      countyRepresentationColumn,
+      cityRepresentationColumn,
+      districtRepresentationColumn,
+      titleColumn,
+      createdColumn,
+      statusColumn,
     ],
     [l10nLocale],
   );
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
+    {
+      id: 'User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
+      label: t(
+        'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.Remove',
+        { defaultValue: 'Remove' },
+      ) as string,
+      icon: <MdiIcon path="link_off" />,
+      disabled: (row: ServiceIssueStored) => !isFormUpdateable() || isLoading,
+      action: actions.favoriteIssuesRemoveAction
+        ? async (rowData) => {
+            await actions.favoriteIssuesRemoveAction!(rowData);
+          }
+        : undefined,
+    },
     {
       id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
       label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
@@ -463,9 +487,13 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -550,6 +578,11 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
           }),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         keepNonExistentRowsSelected
         onRowClick={
           actions.favoriteIssuesOpenPageAction
@@ -561,6 +594,10 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
         onSortModelChange={handleSortModelChange}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        paginationMode="server"
+        sortingMode="server"
+        filterMode="server"
+        rowCount={10}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -602,6 +639,41 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
                   {t(
                     'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.Refresh',
                     { defaultValue: 'Refresh' },
+                  )}
+                </Button>
+              ) : null}
+              {actions.favoriteIssuesOpenAddSelectorAction && isFormUpdateable() ? (
+                <Button
+                  id="User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableAddSelectorOpenButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.favoriteIssuesOpenAddSelectorAction!();
+                  }}
+                  disabled={editMode || !isFormUpdateable() || isLoading}
+                >
+                  {t(
+                    'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.Add',
+                    { defaultValue: 'Add' },
+                  )}
+                </Button>
+              ) : null}
+              {actions.favoriteIssuesBulkRemoveAction && selectionModel.length > 0 ? (
+                <Button
+                  id="User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableBulkRemoveButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const { result: bulkResult } = await actions.favoriteIssuesBulkRemoveAction!(selectedRows.current);
+                    if (bulkResult === 'submit') {
+                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  {t(
+                    'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.BulkRemove',
+                    { defaultValue: 'Remove' },
                   )}
                 </Button>
               ) : null}

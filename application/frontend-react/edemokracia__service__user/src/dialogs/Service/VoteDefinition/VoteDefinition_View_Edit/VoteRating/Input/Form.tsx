@@ -6,21 +6,21 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { RatingVoteInputRatingVoteInput_FormDialogActions } from '~/containers/RatingVoteInput/RatingVoteInput_Form/RatingVoteInputRatingVoteInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type RatingVoteInputRatingVoteInput_FormDialogActionsExtended =
   RatingVoteInputRatingVoteInput_FormDialogActions & {
@@ -180,12 +180,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
   const voteRatingForVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceVoteDefinitionServiceImpl.voteRating(ownerData, data);
+      await serviceVoteDefinitionServiceImpl.voteRating(ownerData, payloadDiff.current);
       if (customActions?.postVoteRatingForVoteDefinitionAction) {
-        await customActions.postVoteRatingForVoteDefinitionAction(
-          onSubmit,
-          onClose,
-        );
+        await customActions.postVoteRatingForVoteDefinitionAction(onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

@@ -6,19 +6,16 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { useServiceUserManagerUserManager_View_EditCreateUserOutputView } from '~/dialogs/Service/UserManager/UserManager_View_Edit/CreateUser/Output/View';
 import type { ServiceCreateUserInputCreateUserInput_FormDialogActions } from '~/containers/Service/CreateUserInput/CreateUserInput_Form/ServiceCreateUserInputCreateUserInput_FormDialogContainer';
+import { useServiceUserManagerUserManager_View_EditCreateUserOutputView } from '~/dialogs/Service/UserManager/UserManager_View_Edit/CreateUser/Output/View';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceCreateUserInput,
   ServiceCreateUserInputQueryCustomizer,
@@ -26,8 +23,11 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserManagerServiceImpl } from '~/services/data-axios/ServiceUserManagerServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended =
   ServiceCreateUserInputCreateUserInput_FormDialogActions & {
@@ -192,15 +192,9 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   const createUserForUserManagerAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceUserManagerServiceImpl.createUser(
-        data,
-      );
+      const result = await serviceUserManagerServiceImpl.createUser(payloadDiff.current);
       if (customActions?.postCreateUserForUserManagerAction) {
-        await customActions.postCreateUserForUserManagerAction(
-          result,
-          onSubmit,
-          onClose,
-        );
+        await customActions.postCreateUserForUserManagerAction(result, onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

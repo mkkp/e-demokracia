@@ -6,8 +6,8 @@
 // Template name: actor/src/components-api/components/Action.ts
 // Template file: actor/src/components-api/components/Action.ts.hbs
 
-import { NamedElement } from './NamedElement';
 import { LabeledElement } from './LabeledElement';
+import { NamedElement } from './NamedElement';
 
 export type ConfirmationType = 'NONE' | 'CONDITIONAL' | 'MANDATORY';
 

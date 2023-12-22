@@ -6,16 +6,16 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   ServiceCity,
-  ServiceCreateIssueInput,
-  ServiceCountyStored,
-  ServiceCountyQueryCustomizer,
-  ServiceCounty,
-  ServiceCityStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceCreateIssueInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceCreateIssueInput.county
@@ -27,6 +27,8 @@ export interface ServiceCreateIssueInputServiceForCounty {
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
   getTemplate(): Promise<ServiceCounty>;
+  setCounty(owner: JudoIdentifiable<ServiceCreateIssueInput>, selected: JudoIdentifiable<ServiceCounty>): Promise<void>;
+  unsetCounty(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void>;
   listCities(
     owner: JudoIdentifiable<ServiceCounty>,
     queryCustomizer?: ServiceCityQueryCustomizer,

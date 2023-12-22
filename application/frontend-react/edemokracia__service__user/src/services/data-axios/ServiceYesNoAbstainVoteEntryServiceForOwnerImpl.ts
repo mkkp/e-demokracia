@@ -6,27 +6,27 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceDistrictQueryCustomizer,
-  ServiceDistrict,
-  ServiceCountyQueryCustomizer,
-  ServiceSimpleVote,
-  ServiceServiceUserStored,
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
   ServiceCity,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
-  ServiceServiceUserQueryCustomizer,
-  ServiceCityStored,
-  ServiceYesNoAbstainVoteEntry,
-  ServiceSimpleVoteQueryCustomizer,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
+  ServiceSimpleVoteQueryCustomizer,
+  ServiceSimpleVoteStored,
+  ServiceYesNoAbstainVoteEntry,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceYesNoAbstainVoteEntryServiceForOwner } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceYesNoAbstainVoteEntry.owner
@@ -57,6 +57,52 @@ export class ServiceYesNoAbstainVoteEntryServiceForOwnerImpl
     );
 
     return response.data;
+  }
+
+  /**
+   * From: relation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwner(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry> | ServiceYesNoAbstainVoteEntry,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>> {
+    const path = '/service/YesNoAbstainVoteEntry/owner/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setOwner(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void> {
+    const path = '/service/YesNoAbstainVoteEntry/~update/owner/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * From: relation.isUnsetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetOwner(owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>): Promise<void> {
+    const path = '/service/YesNoAbstainVoteEntry/~update/owner/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async listActivityCities(

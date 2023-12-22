@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,9 @@ import type {
   ServiceIssue,
   ServiceIssueStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditCountyComponentActionDefinitions {
-  countyOpenSetSelectorAction?: () => Promise<void>;
+  countyOpenSetSelectorAction?: () => Promise<ServiceCountyStored | undefined>;
   countyUnsetAction?: (target: ServiceCountyStored) => Promise<void>;
   countyOpenPageAction?: (target: ServiceCountyStored) => Promise<void>;
   countyAutocompleteRangeAction?: (
@@ -31,6 +31,7 @@ export interface ServiceIssueIssue_View_EditCountyComponentProps {
   ownerData: ServiceIssue | ServiceIssueStored;
   actions: ServiceIssueIssue_View_EditCountyComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceIssue, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +40,7 @@ export interface ServiceIssueIssue_View_EditCountyComponentProps {
 // XMIID: User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: county
 export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIssue_View_EditCountyComponentProps) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -48,6 +49,7 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
       id="User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -85,7 +87,7 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
       onSet={
         actions.countyOpenSetSelectorAction
           ? async () => {
-              await actions.countyOpenSetSelectorAction!();
+              const county = await actions.countyOpenSetSelectorAction!();
             }
           : undefined
       }

@@ -6,23 +6,23 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceDistrictQueryCustomizer,
-  ServiceCreateIssueInput,
-  ServiceDistrict,
-  ServiceCountyQueryCustomizer,
   ServiceCity,
-  ServiceIssueTypeQueryCustomizer,
-  ServiceCreateIssueInputStored,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
-  ServiceCityStored,
-  ServiceIssueTypeStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceCreateIssueInput,
+  ServiceCreateIssueInputStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
   ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceCreateIssueInput
@@ -38,6 +38,8 @@ export interface ServiceCreateIssueInputService {
     owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
+  setCity(owner: JudoIdentifiable<ServiceCreateIssueInput>, selected: JudoIdentifiable<ServiceCity>): Promise<void>;
+  unsetCity(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void>;
   getTemplateForCounty(): Promise<ServiceCounty>;
   getCounty(
     target: JudoIdentifiable<ServiceCreateIssueInput>,
@@ -47,6 +49,8 @@ export interface ServiceCreateIssueInputService {
     owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
+  setCounty(owner: JudoIdentifiable<ServiceCreateIssueInput>, selected: JudoIdentifiable<ServiceCounty>): Promise<void>;
+  unsetCounty(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void>;
   getTemplateForDistrict(): Promise<ServiceDistrict>;
   getDistrict(
     target: JudoIdentifiable<ServiceCreateIssueInput>,
@@ -56,6 +60,11 @@ export interface ServiceCreateIssueInputService {
     owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
+  setDistrict(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceDistrict>,
+  ): Promise<void>;
+  unsetDistrict(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void>;
   getTemplateForIssueType(): Promise<ServiceIssueType>;
   getIssueType(
     target: JudoIdentifiable<ServiceCreateIssueInput>,
@@ -65,4 +74,9 @@ export interface ServiceCreateIssueInputService {
     owner?: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>>;
+  setIssueType(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceIssueType>,
+  ): Promise<void>;
+  unsetIssueType(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void>;
 }

@@ -6,8 +6,8 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder } from './MaskBuilder';
 import { ServiceServiceUserAttributes, ServiceUserManagerAttributes } from '../model';
+import { MaskBuilder } from './MaskBuilder';
 
 export class ServiceUserManagerMaskBuilder extends MaskBuilder {
   constructor(protected props: Array<ServiceUserManagerAttributes>) {

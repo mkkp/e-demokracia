@@ -6,25 +6,22 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
+import type { ServiceIssueCategoryIssueCategory_View_EditDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_View_Edit/ServiceIssueCategoryIssueCategory_View_EditDialogContainer';
 import { useServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_View_Edit/Owner/LinkSetSelectorPage';
 import { useServiceIssueCategoryOwnerRelationViewPage } from '~/dialogs/Service/IssueCategory/Owner/RelationViewPage';
 import { useServiceIssueCategorySubcategoriesRelationFormPage } from '~/dialogs/Service/IssueCategory/Subcategories/RelationFormPage';
 import { useServiceIssueCategorySubcategoriesRelationViewPage } from '~/dialogs/Service/IssueCategory/Subcategories/RelationViewPage';
-import type { ServiceIssueCategoryIssueCategory_View_EditDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_View_Edit/ServiceIssueCategoryIssueCategory_View_EditDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceIssue,
   ServiceIssueCategory,
@@ -35,8 +32,11 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueCategoryServiceImpl } from '~/services/data-axios/ServiceIssueCategoryServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended =
   ServiceIssueCategoryIssueCategory_View_EditDialogActions & {
@@ -237,7 +237,7 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       return Promise.resolve([]);
     }
   };
-  const ownerOpenSetSelectorAction = async () => {
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage(
         data,
@@ -246,8 +246,10 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('owner', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);

@@ -6,46 +6,48 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent, Dispatch, SetStateAction } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
-import { MdiIcon, CustomTablePagination } from '~/components';
-import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, MouseEvent, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   isRowSelectable,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorComponentActionDefinitions {
   filterAction?: (
@@ -77,6 +79,7 @@ export function ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorCompo
   const filterModelKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
   const handleError = useErrorHandler();
@@ -114,21 +117,18 @@ export function ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorCompo
   const [firstItem, setFirstItem] = useState<ServiceCountyStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
-  const columns = useMemo<GridColDef<ServiceCountyStored>[]>(
-    () => [
-      {
-        ...baseColumnConfig,
-        field: 'name',
-        headerName: t('service.County.County_Table.AddSelector.name', { defaultValue: 'Name' }) as string,
-        headerClassName: 'data-grid-column-header',
+  const nameColumn: GridColDef<ServiceCountyStored> = {
+    ...baseColumnConfig,
+    field: 'name',
+    headerName: t('service.County.County_Table.AddSelector.name', { defaultValue: 'Name' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-    ],
-    [],
-  );
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+
+  const columns = useMemo<GridColDef<ServiceCountyStored>[]>(() => [nameColumn], []);
 
   const rowActions: TableRowAction<ServiceCountyStored>[] = [];
 
@@ -182,9 +182,13 @@ export function ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorCompo
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -204,9 +208,12 @@ export function ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorCompo
     setIsNextButtonEnabled(!isNext);
   }
 
-  const handleIsRowSelectable = useCallback((params: GridRowParams<ServiceCountyStored & { __selected?: boolean }>) => {
-    return isRowSelectable(params.row, !true, alreadySelected);
-  }, []);
+  const handleIsRowSelectable = useCallback(
+    (params: GridRowParams<ServiceCountyStored & { __selected?: boolean }>) => {
+      return isRowSelectable(params.row, !true, alreadySelected);
+    },
+    [],
+  );
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;
@@ -305,6 +312,10 @@ export function ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorCompo
         onSortModelChange={handleSortModelChange}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        paginationMode="server"
+        sortingMode="server"
+        filterMode="server"
+        rowCount={10}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>

@@ -6,20 +6,18 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { useServiceYesNoVoteEntryOwnerRelationViewPage } from '~/dialogs/Service/YesNoVoteEntry/Owner/RelationViewPage';
 import type { ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions } from '~/containers/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer';
+import { useServiceYesNoVoteEntryOwnerRelationViewPage } from '~/dialogs/Service/YesNoVoteEntry/Owner/RelationViewPage';
+import { useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage } from '~/dialogs/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/User/LinkSetSelectorPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -31,8 +29,11 @@ import type {
   ServiceYesNoVoteEntryStored,
   YesNoVoteValue,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoVoteEntryServiceImpl } from '~/services/data-axios/ServiceYesNoVoteEntryServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended =
   ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions & {
@@ -187,6 +188,8 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     customActionsHook?.(ownerData, data, editMode, storeDiff);
 
   // Dialog hooks
+  const openServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage =
+    useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage();
   const openServiceYesNoVoteEntryOwnerRelationViewPage = useServiceYesNoVoteEntryOwnerRelationViewPage();
 
   // Calculated section
@@ -228,6 +231,33 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceYesNoVoteEntryServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
+    const { result, data: returnedData } =
+      await openServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
   const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceYesNoVoteEntryOwnerRelationViewPage(target!);
     if (!editMode) {
@@ -238,6 +268,9 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
   const actions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions = {
     backAction,
     refreshAction,
+    ownerAutocompleteRangeAction,
+    ownerOpenSetSelectorAction,
+    ownerUnsetAction,
     ownerOpenPageAction,
     ...(customActions ?? {}),
   };

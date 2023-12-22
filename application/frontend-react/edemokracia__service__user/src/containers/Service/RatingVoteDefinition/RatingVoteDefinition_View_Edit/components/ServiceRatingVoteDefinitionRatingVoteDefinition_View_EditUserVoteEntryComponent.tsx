@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,6 +17,7 @@ import type {
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
   userVoteEntryOpenPageAction?: (target: ServiceRatingVoteEntryStored) => Promise<void>;
   userVoteEntryAutocompleteRangeAction?: (
@@ -29,6 +29,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVo
   ownerData: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored;
   actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceRatingVoteDefinition, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +40,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVo
 export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponent(
   props: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -52,6 +53,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVot
         }) as string
       }
       labelList={[ownerData.userVoteEntry?.created?.toString() ?? '', ownerData.userVoteEntry?.value?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}

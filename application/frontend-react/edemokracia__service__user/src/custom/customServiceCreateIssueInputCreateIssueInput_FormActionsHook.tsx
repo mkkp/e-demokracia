@@ -3,8 +3,8 @@
  * created issue called with UserIssues 'Create new issue' button.
  */
 
-import { useMemo } from 'react';
 import type { BundleContext } from '@pandino/pandino-api';
+import { useMemo } from 'react';
 
 import { useJudoNavigation } from '~/components';
 import { processQueryCustomizer } from '~/utilities';
@@ -13,9 +13,9 @@ import {
   SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceCreateIssueInputCreateIssueInput_FormActionsHook,
 } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
+import { routeToServiceUserUserCreatedIssuesAccessViewPage } from '~/routes';
 import { ServiceIssue, ServiceIssueStored } from '~/services/data-api';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { routeToServiceUserUserCreatedIssuesAccessViewPage } from '~/routes';
 import { UserServiceForUserCreatedIssuesImpl } from '~/services/data-axios/UserServiceForUserCreatedIssuesImpl';
 
 export function registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context: BundleContext) {

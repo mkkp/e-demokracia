@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentActionDefinitions {
-  ownerOpenSetSelectorAction?: () => Promise<void>;
+  ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
+  ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -30,6 +31,7 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentPr
   ownerData: ServiceRatingVoteEntry | ServiceRatingVoteEntryStored;
   actions: ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -40,7 +42,7 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentPr
 export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent(
   props: ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -49,6 +51,7 @@ export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent(
       id="User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.RatingVoteEntry.RatingVoteEntry_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
+      required={true}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -86,8 +89,13 @@ export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent(
       onSet={
         actions.ownerOpenSetSelectorAction
           ? async () => {
-              await actions.ownerOpenSetSelectorAction!();
+              const owner = await actions.ownerOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.owner && actions.ownerUnsetAction
+          ? async () => actions.ownerUnsetAction!(ownerData.owner!)
           : undefined
       }
     />

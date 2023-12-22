@@ -6,24 +6,24 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceDistrictQueryCustomizer,
-  ServiceDistrict,
-  ServiceCountyQueryCustomizer,
-  ServiceSimpleVote,
-  ServiceServiceUserStored,
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
   ServiceCity,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
-  ServiceServiceUserQueryCustomizer,
-  ServiceCityStored,
-  ServiceSimpleVoteQueryCustomizer,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
+  ServiceSimpleVoteQueryCustomizer,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceServiceUser

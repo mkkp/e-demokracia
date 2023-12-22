@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceUserProfile,
   ServiceUserProfileStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceUserProfileUserProfile_View_EditResidentDistrictComponentActionDefinitions {
-  residentDistrictOpenSetSelectorAction?: () => Promise<void>;
+  residentDistrictOpenSetSelectorAction?: () => Promise<ServiceDistrictStored | undefined>;
+  residentDistrictUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
   residentDistrictOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
   residentDistrictAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
@@ -30,6 +31,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentDistrictComponen
   ownerData: ServiceUserProfile | ServiceUserProfileStored;
   actions: ServiceUserProfileUserProfile_View_EditResidentDistrictComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -40,7 +42,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentDistrictComponen
 export function ServiceUserProfileUserProfile_View_EditResidentDistrictComponent(
   props: ServiceUserProfileUserProfile_View_EditResidentDistrictComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -51,6 +53,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentDistrictComponent
         t('service.UserProfile.UserProfile_View_Edit.residentDistrict', { defaultValue: 'Resident district' }) as string
       }
       labelList={[ownerData.residentDistrict?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -88,8 +91,13 @@ export function ServiceUserProfileUserProfile_View_EditResidentDistrictComponent
       onSet={
         actions.residentDistrictOpenSetSelectorAction
           ? async () => {
-              await actions.residentDistrictOpenSetSelectorAction!();
+              const residentDistrict = await actions.residentDistrictOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.residentDistrict && actions.residentDistrictUnsetAction
+          ? async () => actions.residentDistrictUnsetAction!(ownerData.residentDistrict!)
           : undefined
       }
     />

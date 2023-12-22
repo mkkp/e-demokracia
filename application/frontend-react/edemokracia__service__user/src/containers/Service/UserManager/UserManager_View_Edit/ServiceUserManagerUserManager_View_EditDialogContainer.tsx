@@ -6,25 +6,25 @@
 // Template name: actor/src/containers/dialog.tsx
 // Template file: actor/src/containers/dialog.tsx.hbs
 
-import { lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import { Suspense, lazy } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon } from '~/components';
+import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
-import { processQueryCustomizer } from '~/utilities';
-import type { ServiceUserManagerUserManager_View_EditActionDefinitions } from './ServiceUserManagerUserManager_View_Edit';
 import type {
   ServiceUserManager,
-  ServiceUserManagerStored,
   ServiceUserManagerQueryCustomizer,
+  ServiceUserManagerStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
+import type { ServiceUserManagerUserManager_View_EditActionDefinitions } from './ServiceUserManagerUserManager_View_Edit';
 
 const ServiceUserManagerUserManager_View_Edit = lazy(
   () => import('~/containers/Service/UserManager/UserManager_View_Edit/ServiceUserManagerUserManager_View_Edit'),
@@ -162,17 +162,7 @@ export default function ServiceUserManagerUserManager_View_EditDialog(
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
               onClick={async () => {
-                const confirmed = await openConfirmDialog(
-                  'page-delete-action',
-                  t('judo.modal.confirm.confirm-delete', {
-                    defaultValue: 'Are you sure you would like to delete the selected element?',
-                  }),
-                  t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-                );
-
-                if (confirmed) {
-                  actions.deleteAction!();
-                }
+                actions.deleteAction!();
               }}
             >
               <span>{t('service.UserManager.UserManager_View_Edit.Delete', { defaultValue: 'Delete' })}</span>

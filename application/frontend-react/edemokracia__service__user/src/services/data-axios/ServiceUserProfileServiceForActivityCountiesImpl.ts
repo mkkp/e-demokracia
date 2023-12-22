@@ -6,18 +6,18 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceCity,
-  ServiceUserProfile,
-  ServiceCountyStored,
-  ServiceCountyQueryCustomizer,
-  ServiceCounty,
-  ServiceCityStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceUserProfile,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceUserProfileServiceForActivityCounties } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceUserProfile.activityCounties
@@ -75,6 +75,23 @@ export class ServiceUserProfileServiceForActivityCountiesImpl
   }
 
   /**
+   * From: relation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile> | ServiceUserProfile,
+    queryCustomizer?: ServiceCountyQueryCustomizer,
+  ): Promise<Array<ServiceCountyStored>> {
+    const path = '/service/UserProfile/activityCounties/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
    * From: relation.target.isTemplateable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
@@ -83,6 +100,38 @@ export class ServiceUserProfileServiceForActivityCountiesImpl
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
+  }
+
+  /**
+   * From: relation.isAddable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCounties/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * From: relation.isRemovable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCounties/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async listCities(

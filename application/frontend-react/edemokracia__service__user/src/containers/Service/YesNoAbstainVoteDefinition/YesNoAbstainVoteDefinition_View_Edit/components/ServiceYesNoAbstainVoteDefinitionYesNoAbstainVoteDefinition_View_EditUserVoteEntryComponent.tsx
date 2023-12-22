@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,6 +17,7 @@ import type {
   ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
   userVoteEntryOpenPageAction?: (target: ServiceYesNoAbstainVoteEntryStored) => Promise<void>;
   userVoteEntryAutocompleteRangeAction?: (
@@ -29,6 +29,7 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   ownerData: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored;
   actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteDefinition, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +40,7 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
 export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponent(
   props: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -52,6 +53,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
         }) as string
       }
       labelList={[ownerData.userVoteEntry?.value?.toString() ?? '', ownerData.userVoteEntry?.created?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}

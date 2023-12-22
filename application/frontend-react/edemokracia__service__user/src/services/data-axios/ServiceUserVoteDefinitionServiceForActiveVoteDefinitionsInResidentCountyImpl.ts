@@ -6,35 +6,35 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceVoteDefinitionStored,
-  RatingVoteInput,
-  YesNoAbstainVoteInputStored,
-  ServiceVoteDefinitionQueryCustomizer,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceIssueQueryCustomizer,
-  YesNoAbstainVoteInput,
-  ServiceVoteDefinition,
-  CreateArgumentInputStored,
-  ServiceIssueStored,
-  SelectAnswerVoteSelection,
-  ServiceUserVoteDefinition,
-  ServiceIssue,
-  RatingVoteInputStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  CreateCommentInputStored,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  CreateArgumentInput,
-  CloseDebateInputStored,
-  YesNoVoteInput,
   CloseDebateInput,
+  CloseDebateInputStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  RatingVoteInput,
+  RatingVoteInputStored,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceUserVoteDefinition,
+  ServiceVoteDefinition,
+  ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionStored,
+  YesNoAbstainVoteInput,
+  YesNoAbstainVoteInputStored,
+  YesNoVoteInput,
   YesNoVoteInputStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentCounty } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceUserVoteDefinition.activeVoteDefinitionsInResidentCounty
@@ -92,6 +92,23 @@ export class ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentC
   }
 
   /**
+   * From: relation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActiveVoteDefinitionsInResidentCounty(
+    owner: JudoIdentifiable<ServiceUserVoteDefinition> | ServiceUserVoteDefinition,
+    queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
+  ): Promise<Array<ServiceVoteDefinitionStored>> {
+    const path = '/service/UserVoteDefinition/activeVoteDefinitionsInResidentCounty/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -106,6 +123,38 @@ export class ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentC
     return response.data;
   }
 
+  /**
+   * From: relation.isAddable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addActiveVoteDefinitionsInResidentCounty(
+    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void> {
+    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCounty/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * From: relation.isRemovable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeActiveVoteDefinitionsInResidentCounty(
+    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void> {
+    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCounty/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
   async getIssue(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
@@ -118,6 +167,52 @@ export class ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentC
     });
 
     return response.data;
+  }
+
+  /**
+   * Form: targetRelation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssue(
+    owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
+    queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>> {
+    const path = '/service/VoteDefinition/issue/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner,
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: targetRelation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssue(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void> {
+    const path = '/service/VoteDefinition/~update/issue/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
+   * From: targetRelation.isUnsetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssue(owner: JudoIdentifiable<ServiceVoteDefinition>): Promise<void> {
+    const path = '/service/VoteDefinition/~update/issue/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
   }
 
   /**

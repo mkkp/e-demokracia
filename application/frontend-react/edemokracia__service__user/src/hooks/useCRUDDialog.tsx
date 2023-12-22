@@ -1,25 +1,25 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { ReactNode } from 'react';
-import type { JudoStored } from '@judo/data-api-common';
-import { useTranslation } from 'react-i18next';
 import LoadingButton from '@mui/lab/LoadingButton';
-import DialogContent from '@mui/material/DialogContent';
-import Grid from '@mui/material/Grid';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
+import type { LinearProgressProps } from '@mui/material';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
-import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DialogActions from '@mui/material/DialogActions';
-import Button from '@mui/material/Button';
-import type { LinearProgressProps } from '@mui/material';
-import { useSnacks } from '~/hooks';
-import { useDialog } from '~/components/dialog';
+import Typography from '@mui/material/Typography';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
+import { useDialog } from '~/components/dialog';
+import { useSnacks } from '~/hooks';
+import type { JudoStored } from '~/services/data-api/common';
 import { isErrorOperationFault } from '~/utilities';
 
 export type CRUDDialogOpenProps<T extends JudoStored<any>> = {
@@ -72,9 +72,9 @@ export const useCRUDDialog: UseCRUDDialog = () => {
 export type ItemStatus = 'success' | 'error' | 'in-progress';
 
 const iconMapping: Record<ItemStatus, ReactNode> = {
-  'in-progress': <MdiIcon path='minus' />,
-  success: <MdiIcon path='check-circle' color='green' />,
-  error: <MdiIcon path='close-circle' color='red' />,
+  'in-progress': <MdiIcon path="minus" />,
+  success: <MdiIcon path="check-circle" color="green" />,
+  error: <MdiIcon path="close-circle" color="red" />,
 };
 
 export type QueueItem = { id: string; title: string; status: ItemStatus; data: any; error?: any };

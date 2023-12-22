@@ -6,25 +6,21 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, useMemo, lazy, Suspense } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { routeToServiceUserAdminVoteDefinitionsAccessViewPage } from '~/routes';
+import type { ServiceVoteDefinitionVoteDefinition_TablePageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/ServiceVoteDefinitionVoteDefinition_TablePageContainer';
 import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNoAbstain/Input/Form';
-import type { ServiceVoteDefinitionVoteDefinition_TablePageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/ServiceVoteDefinitionVoteDefinition_TablePageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceUserAdminVoteDefinitionsAccessViewPage } from '~/routes';
 import type {
   IssueScope,
   ServiceVoteDefinition,
@@ -33,8 +29,12 @@ import type {
   VoteStatus,
   VoteType,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForAdminVoteDefinitionsImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
   ServiceVoteDefinitionVoteDefinition_TablePageActions & {
@@ -136,9 +136,8 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
     navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
   };
   const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      target,
-    );
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -159,9 +158,8 @@ export default function ServiceUserAdminVoteDefinitionsAccessTablePage() {
     }
   };
   const voteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
-      target,
-    );
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }

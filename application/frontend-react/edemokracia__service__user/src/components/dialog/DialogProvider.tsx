@@ -8,10 +8,7 @@
 
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { ConfirmationDialog } from './ConfirmationDialog';
-import { OperationFaultDialog } from './OperationFaultDialog';
-import { FilterDialog } from './FilterDialog';
-import { PageDialog } from './PageDialog';
+import type { JudoStored, QueryCustomizer } from '~/services/data-api/common';
 import type {
   ConfirmDialogProviderContext,
   DialogProviderProps,
@@ -19,7 +16,10 @@ import type {
   PageDialogProviderContext,
 } from '../../components-api';
 import type { Filter, FilterOption } from '../../components-api';
-import type { JudoStored, QueryCustomizer } from '@judo/data-api-common';
+import { ConfirmationDialog } from './ConfirmationDialog';
+import { FilterDialog } from './FilterDialog';
+import { OperationFaultDialog } from './OperationFaultDialog';
+import { PageDialog } from './PageDialog';
 import { ConfirmDialogContextState, FilterDialogContextState, PageDialogContextState } from './hooks';
 
 export const DialogProvider = ({ children }: DialogProviderProps) => {

@@ -6,13 +6,13 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceIssueAttributes,
   ServiceServiceUserAttributes,
   ServiceYesNoAbstainVoteDefinitionAttributes,
   ServiceYesNoAbstainVoteEntryAttributes,
 } from '../model';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceYesNoAbstainVoteEntryOwnerMaskBuilder } from './ServiceYesNoAbstainVoteEntryMaskBuilder';
 
 export class ServiceYesNoAbstainVoteDefinitionUserVoteEntryMaskBuilder extends RelationMaskBuilder {

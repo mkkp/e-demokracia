@@ -6,11 +6,11 @@
 // Template name: actor/src/routes.tsx
 // Template file: actor/src/routes.tsx.hbs
 
-import { Navigate, Route } from 'react-router-dom';
-import type { ReactElement } from 'react';
-import { lazy, Suspense } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { ComponentProxy } from '@pandino/react-hooks';
+import type { ReactElement } from 'react';
+import { Suspense, lazy } from 'react';
+import { Navigate, Route } from 'react-router-dom';
 
 let routes: Array<{ path: string; element: ReactElement; exact?: boolean }> = [];
 

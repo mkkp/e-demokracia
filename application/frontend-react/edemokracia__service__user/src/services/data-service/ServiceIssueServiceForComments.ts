@@ -6,19 +6,19 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
   ServiceComment,
   ServiceCommentQueryCustomizer,
-  ServiceSimpleVote,
   ServiceCommentStored,
+  ServiceIssue,
+  ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
+  ServiceSimpleVote,
   ServiceSimpleVoteQueryCustomizer,
-  ServiceIssue,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceIssue.comments

@@ -6,27 +6,24 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { routeToServiceProVotesRelationTablePage } from '~/routes';
-import { useServiceProPro_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateConArgument/Input/Form';
-import { useServiceProPro_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateProArgument/Input/Form';
+import type { ServiceProPro_View_EditDialogActions } from '~/containers/Service/Pro/Pro_View_Edit/ServiceProPro_View_EditDialogContainer';
 import { useServiceProConsRelationViewPage } from '~/dialogs/Service/Pro/Cons/RelationViewPage';
 import { useServiceProCreatedByRelationViewPage } from '~/dialogs/Service/Pro/CreatedBy/RelationViewPage';
+import { useServiceProPro_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateConArgument/Input/Form';
+import { useServiceProPro_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateProArgument/Input/Form';
 import { useServiceProProsRelationViewPage } from '~/dialogs/Service/Pro/Pros/RelationViewPage';
-import type { ServiceProPro_View_EditDialogActions } from '~/containers/Service/Pro/Pro_View_Edit/ServiceProPro_View_EditDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceProVotesRelationTablePage } from '~/routes';
 import type {
   ServiceCon,
   ServiceConQueryCustomizer,
@@ -41,8 +38,11 @@ import type {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceProServiceImpl } from '~/services/data-axios/ServiceProServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceProPro_View_EditDialogActionsExtended = ServiceProPro_View_EditDialogActions & {
   postVoteDownForProAction?: (onClose: () => Promise<void>) => Promise<void>;
@@ -445,9 +445,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       setIsLoading(true);
       await serviceProServiceImpl.voteDown(data);
       if (customActions?.postVoteDownForProAction) {
-        await customActions.postVoteDownForProAction(
-          onClose,
-        );
+        await customActions.postVoteDownForProAction(onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -467,9 +465,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       setIsLoading(true);
       await serviceProServiceImpl.voteUp(data);
       if (customActions?.postVoteUpForProAction) {
-        await customActions.postVoteUpForProAction(
-          onClose,
-        );
+        await customActions.postVoteUpForProAction(onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

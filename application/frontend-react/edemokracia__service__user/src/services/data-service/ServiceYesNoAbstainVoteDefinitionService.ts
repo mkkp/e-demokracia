@@ -6,26 +6,26 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceYesNoAbstainVoteDefinitionStored,
-  ServiceIssueQueryCustomizer,
-  YesNoAbstainVoteInput,
-  ServiceYesNoAbstainVoteDefinition,
-  ServiceIssueStored,
-  ServiceServiceUserStored,
-  ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ServiceIssue,
-  ServiceServiceUser,
-  CreateCommentInput,
-  CreateArgumentInput,
-  ServiceServiceUserQueryCustomizer,
-  ServiceYesNoAbstainVoteEntryStored,
-  ServiceYesNoAbstainVoteEntry,
   CloseDebateInput,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateCommentInput,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceYesNoAbstainVoteDefinition,
+  ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
+  ServiceYesNoAbstainVoteDefinitionStored,
+  ServiceYesNoAbstainVoteEntry,
+  ServiceYesNoAbstainVoteEntryQueryCustomizer,
+  ServiceYesNoAbstainVoteEntryStored,
+  YesNoAbstainVoteInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceYesNoAbstainVoteDefinition
@@ -44,6 +44,11 @@ export interface ServiceYesNoAbstainVoteDefinitionService {
     owner?: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  setIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
+  unsetIssue(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

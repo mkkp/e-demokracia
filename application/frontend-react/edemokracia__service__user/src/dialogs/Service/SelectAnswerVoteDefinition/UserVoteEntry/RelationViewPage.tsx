@@ -6,20 +6,18 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { useServiceSelectAnswerVoteEntryOwnerRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteEntry/Owner/RelationViewPage';
 import type { ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActions } from '~/containers/Service/SelectAnswerVoteEntry/SelectAnswerVoteEntry_View_Edit/ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogContainer';
+import { useServiceSelectAnswerVoteEntryOwnerRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteEntry/Owner/RelationViewPage';
+import { useServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerLinkSetSelectorPage } from '~/dialogs/Service/SelectAnswerVoteEntry/SelectAnswerVoteEntry_View_Edit/Owner/LinkSetSelectorPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionStored,
@@ -30,8 +28,11 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteEntryServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteEntryServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActionsExtended =
   ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActions & {
@@ -188,6 +189,8 @@ export default function ServiceSelectAnswerVoteDefinitionUserVoteEntryRelationVi
     customActionsHook?.(ownerData, data, editMode, storeDiff);
 
   // Dialog hooks
+  const openServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerLinkSetSelectorPage =
+    useServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerLinkSetSelectorPage();
   const openServiceSelectAnswerVoteEntryOwnerRelationViewPage = useServiceSelectAnswerVoteEntryOwnerRelationViewPage();
 
   // Calculated section
@@ -229,6 +232,33 @@ export default function ServiceSelectAnswerVoteDefinitionUserVoteEntryRelationVi
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceSelectAnswerVoteEntryServiceImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerLinkSetSelectorPage(
+        data,
+        data.owner ? [data.owner] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
+  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+    storeDiff('owner', null);
+  };
   const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
     await openServiceSelectAnswerVoteEntryOwnerRelationViewPage(target!);
     if (!editMode) {
@@ -239,6 +269,9 @@ export default function ServiceSelectAnswerVoteDefinitionUserVoteEntryRelationVi
   const actions: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditDialogActions = {
     backAction,
     refreshAction,
+    ownerAutocompleteRangeAction,
+    ownerOpenSetSelectorAction,
+    ownerUnsetAction,
     ownerOpenPageAction,
     ...(customActions ?? {}),
   };

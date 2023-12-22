@@ -7,10 +7,10 @@
 // Template file: data-axios/accessServiceImpl.ts.hbs
 
 import type { AxiosResponse } from 'axios';
-import type { JudoDownloadFile, JudoMetaData, JudoToken } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type { ServiceServicePrincipalUserStored } from '../data-api';
+import type { JudoDownloadFile, JudoMetaData, JudoToken } from '../data-api/common';
 import { AccessService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 export class AccessServiceImpl extends JudoAxiosService implements AccessService {
   /**

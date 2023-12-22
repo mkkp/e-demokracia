@@ -6,10 +6,10 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
-import type { CreateCommentInputStored, CreateCommentInput } from '../data-api';
+import type { CreateCommentInput, CreateCommentInputStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { CreateCommentInputService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for CreateCommentInput

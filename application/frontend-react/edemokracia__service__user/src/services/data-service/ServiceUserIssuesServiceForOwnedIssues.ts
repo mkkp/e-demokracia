@@ -6,51 +6,51 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceDistrictQueryCustomizer,
-  ServiceCommentQueryCustomizer,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceIssueQueryCustomizer,
-  ServiceIssueCategoryQueryCustomizer,
-  CreateArgumentInputStored,
-  ServiceIssueStored,
-  ServiceUserIssues,
-  ServiceConStored,
-  ServiceIssue,
-  ServiceServiceUser,
-  ServiceCity,
-  ServiceIssueTypeQueryCustomizer,
-  ServiceIssueCategory,
-  CreateCommentInput,
-  ServiceCountyStored,
-  ServiceConQueryCustomizer,
-  ServiceCounty,
-  CreateArgumentInput,
-  ServiceProStored,
-  ServicePro,
   CloseDebateInput,
-  ServiceIssueType,
-  ServiceComment,
-  ServiceIssueAttachment,
-  ServiceDistrict,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceCountyQueryCustomizer,
-  ServiceCommentStored,
-  ServiceServiceUserStored,
-  ServiceIssueCategoryStored,
-  ServiceCon,
-  CreateCommentInputStored,
-  ServiceProQueryCustomizer,
-  ServiceDistrictStored,
-  ServiceIssueAttachmentQueryCustomizer,
-  ServiceCityStored,
-  ServiceServiceUserQueryCustomizer,
   CloseDebateInputStored,
-  ServiceIssueAttachmentStored,
-  ServiceIssueTypeStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  ServiceCity,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceComment,
+  ServiceCommentQueryCustomizer,
+  ServiceCommentStored,
+  ServiceCon,
+  ServiceConQueryCustomizer,
+  ServiceConStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceIssue,
+  ServiceIssueAttachment,
+  ServiceIssueAttachmentQueryCustomizer,
+  ServiceIssueAttachmentStored,
+  ServiceIssueCategory,
+  ServiceIssueCategoryQueryCustomizer,
+  ServiceIssueCategoryStored,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
+  ServicePro,
+  ServiceProQueryCustomizer,
+  ServiceProStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceUserIssues,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceUserIssues.ownedIssues
@@ -61,7 +61,19 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored>;
+  getRangeForOwnedIssues(
+    owner: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
+    queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>>;
   update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
+  addOwnedIssues(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeOwnedIssues(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   listAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,

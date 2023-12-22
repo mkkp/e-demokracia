@@ -6,36 +6,38 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
-import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
 import type {
   ServiceDistrict,
   ServiceDistrictQueryCustomizer,
@@ -43,15 +45,15 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
-  getUpdatedRowsSelected,
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
+  getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceServiceUserServiceUser_View_EditActivityDistrictsComponentActionDefinitions {
   activityDistrictsOpenAddSelectorAction?: () => Promise<void>;
@@ -91,6 +93,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
   const filterModelKey = `User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
 
@@ -124,23 +127,18 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
 
   const selectedRows = useRef<ServiceDistrictStored[]>([]);
 
-  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(
-    () => [
-      {
-        ...baseColumnConfig,
-        field: 'representation',
-        headerName: t('service.ServiceUser.ServiceUser_View_Edit.representation', {
-          defaultValue: 'District',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
+  const representationColumn: GridColDef<ServiceDistrictStored> = {
+    ...baseColumnConfig,
+    field: 'representation',
+    headerName: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'District' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-    ],
-    [],
-  );
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+
+  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(() => [representationColumn], []);
 
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [
     {
@@ -149,7 +147,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
         defaultValue: 'Remove',
       }) as string,
       icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceDistrictStored) => isLoading,
+      disabled: (row: ServiceDistrictStored) => !isFormUpdateable() || isLoading,
       action: actions.activityDistrictsRemoveAction
         ? async (rowData) => {
             await actions.activityDistrictsRemoveAction!(rowData);
@@ -214,9 +212,13 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -321,7 +323,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
                   )}
                 </Button>
               ) : null}
-              {actions.activityDistrictsOpenAddSelectorAction && true ? (
+              {actions.activityDistrictsOpenAddSelectorAction && isFormUpdateable() ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableAddSelectorOpenButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
@@ -337,7 +339,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
                   )}
                 </Button>
               ) : null}
-              {actions.activityDistrictsClearAction && data.length ? (
+              {actions.activityDistrictsClearAction && data.length && isFormUpdateable() ? (
                 <Button
                   id="User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceTableClearButton"
                   startIcon={<MdiIcon path="link_off" />}

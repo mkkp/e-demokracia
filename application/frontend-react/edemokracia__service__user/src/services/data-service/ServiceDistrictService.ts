@@ -6,8 +6,8 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { ServiceDistrictQueryCustomizer, ServiceDistrict, ServiceDistrictStored } from '../data-api';
+import { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceDistrict

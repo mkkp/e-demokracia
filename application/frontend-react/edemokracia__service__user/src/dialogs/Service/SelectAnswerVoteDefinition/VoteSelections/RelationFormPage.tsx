@@ -6,19 +6,16 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions } from '~/containers/Service/SelectAnswerVoteSelection/SelectAnswerVoteSelection_Form/ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionStored,
@@ -26,8 +23,11 @@ import type {
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActionsExtended =
   ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions & {};
@@ -190,7 +190,10 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
   const createAction = async () => {
     try {
       setIsLoading(true);
-      const res = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.create(ownerData, data);
+      const res = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.create(
+        ownerData,
+        payloadDiff.current,
+      );
       showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
       onSubmit(res);
     } catch (error) {

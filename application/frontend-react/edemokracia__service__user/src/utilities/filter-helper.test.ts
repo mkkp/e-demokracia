@@ -1,15 +1,20 @@
-import { expect, describe, it } from 'vitest';
-import { _NumericOperation, _StringOperation, _BooleanOperation, _EnumerationOperation } from '@judo/data-api-common';
+import { describe, expect, it } from 'vitest';
+import type { Filter, FilterOption, Operation } from '~/components-api';
+import { FilterType } from '~/components-api';
+import {
+  _BooleanOperation,
+  _EnumerationOperation,
+  _NumericOperation,
+  _StringOperation,
+} from '~/services/data-api/common';
 import {
   applyInMemoryFilters,
-  filterByStringOperation,
-  filterByNumericOperation,
-  filterByDateOperation,
   filterByBooleanOperation,
+  filterByDateOperation,
   filterByEnumerationOperation,
+  filterByNumericOperation,
+  filterByStringOperation,
 } from '~/utilities/filter-helper';
-import type { Filter, Operation, FilterOption } from '~/components-api';
-import { FilterType } from '~/components-api';
 
 enum TestEnum {
   yayy = 'YAYY',

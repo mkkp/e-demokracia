@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
 import type { BundleContext } from '@pandino/pandino-api';
+import { useMemo } from 'react';
 
 import { useJudoNavigation } from '~/components';
 import { processQueryCustomizer } from '~/utilities';

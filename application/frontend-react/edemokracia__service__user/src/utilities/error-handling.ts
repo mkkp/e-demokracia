@@ -6,13 +6,13 @@
 // Template name: actor/src/utilities/error-handling.ts
 // Template file: actor/src/utilities/error-handling.ts.hbs
 
+import { useTrackService } from '@pandino/react-hooks';
+import type { OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack';
 import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTrackService } from '@pandino/react-hooks';
-import type { SnackbarMessage, OptionsObject, SnackbarKey } from 'notistack';
 import { useSnacks } from '~/hooks';
-import { exists } from './helper';
 import { toastConfig } from '../config';
+import { exists } from './helper';
 
 type EnqueueSnackbarCallback = (message: SnackbarMessage, options?: OptionsObject | undefined) => SnackbarKey;
 

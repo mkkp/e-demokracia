@@ -6,20 +6,16 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
 import type { ServiceSimpleVoteSimpleVote_View_EditPageActions } from '~/containers/Service/SimpleVote/SimpleVote_View_Edit/ServiceSimpleVoteSimpleVote_View_EditPageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
@@ -28,8 +24,12 @@ import type {
   ServiceSimpleVoteStored,
   SimpleVoteType,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSimpleVoteServiceImpl } from '~/services/data-axios/ServiceSimpleVoteServiceImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceSimpleVoteSimpleVote_View_EditPageActionsExtended =
   ServiceSimpleVoteSimpleVote_View_EditPageActions & {

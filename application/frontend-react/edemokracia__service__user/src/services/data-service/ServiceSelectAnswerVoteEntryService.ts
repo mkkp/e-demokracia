@@ -6,18 +6,18 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceSelectAnswerVoteEntryStored,
-  ServiceServiceUser,
-  ServiceSelectAnswerVoteSelectionStored,
-  ServiceServiceUserStored,
-  ServiceServiceUserQueryCustomizer,
-  ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteEntry,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ServiceSelectAnswerVoteEntryStored,
   ServiceSelectAnswerVoteSelection,
+  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceSelectAnswerVoteEntry
@@ -35,6 +35,11 @@ export interface ServiceSelectAnswerVoteEntryService {
     owner?: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
+  setOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+  unsetOwner(owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>): Promise<void>;
   getTemplateForValue(): Promise<ServiceSelectAnswerVoteSelection>;
   getValue(
     target: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
@@ -44,4 +49,9 @@ export interface ServiceSelectAnswerVoteEntryService {
     owner?: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
+  setValue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
+    selected: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
+  ): Promise<void>;
+  unsetValue(owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>): Promise<void>;
 }

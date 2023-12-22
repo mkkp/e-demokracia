@@ -6,13 +6,13 @@
 // Template name: actor/src/layout/Drawer/HorizontalBar.tsx
 // Template file: actor/src/layout/Drawer/HorizontalBar.tsx.hbs
 
-import { cloneElement } from 'react';
-import type { ReactElement } from 'react';
-import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import { useTheme } from '@mui/material/styles';
 import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { cloneElement } from 'react';
+import type { ReactElement } from 'react';
 import { useConfig } from '~/hooks';
 import { Navigation } from './DrawerContent/Navigation';
 

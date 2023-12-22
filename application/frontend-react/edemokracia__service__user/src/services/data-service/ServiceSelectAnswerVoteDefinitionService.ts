@@ -6,31 +6,31 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceSelectAnswerVoteEntryStored,
+  CloseDebateInput,
   CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceSelectAnswerVoteDefinition,
+  CreateArgumentInput,
+  CreateCommentInput,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceIssue,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
-  ServiceServiceUserStored,
-  SelectAnswerVoteSelection,
-  ServiceSelectAnswerVoteEntry,
-  ServiceIssue,
-  ServiceServiceUser,
-  ServiceSelectAnswerVoteSelectionStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  ServiceSelectAnswerVoteDefinitionStored,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  CreateArgumentInput,
-  ServiceServiceUserQueryCustomizer,
-  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
-  CloseDebateInput,
+  ServiceSelectAnswerVoteDefinitionStored,
+  ServiceSelectAnswerVoteEntry,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ServiceSelectAnswerVoteEntryStored,
   ServiceSelectAnswerVoteSelection,
+  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceSelectAnswerVoteDefinition
@@ -49,6 +49,11 @@ export interface ServiceSelectAnswerVoteDefinitionService {
     owner?: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  setIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
+  unsetIssue(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

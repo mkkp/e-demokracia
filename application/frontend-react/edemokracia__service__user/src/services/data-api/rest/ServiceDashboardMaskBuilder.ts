@@ -6,13 +6,13 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder } from './MaskBuilder';
 import {
   ServiceDashboardAttributes,
   ServiceIssueAttributes,
   ServiceVoteDefinitionAttributes,
   ServiceVoteEntryAttributes,
 } from '../model';
+import { MaskBuilder } from './MaskBuilder';
 
 export class ServiceDashboardMaskBuilder extends MaskBuilder {
   constructor(protected props: Array<ServiceDashboardAttributes>) {

@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,9 @@ import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceServiceUserServiceUser_View_EditResidentCityComponentActionDefinitions {
-  residentCityOpenSetSelectorAction?: () => Promise<void>;
+  residentCityOpenSetSelectorAction?: () => Promise<ServiceCityStored | undefined>;
   residentCityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
   residentCityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
   residentCityAutocompleteRangeAction?: (
@@ -31,6 +31,7 @@ export interface ServiceServiceUserServiceUser_View_EditResidentCityComponentPro
   ownerData: ServiceServiceUser | ServiceServiceUserStored;
   actions: ServiceServiceUserServiceUser_View_EditResidentCityComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceServiceUser, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -41,7 +42,7 @@ export interface ServiceServiceUserServiceUser_View_EditResidentCityComponentPro
 export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
   props: ServiceServiceUserServiceUser_View_EditResidentCityComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -50,6 +51,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
       id="User/(esm/_I-5hoIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.ServiceUser.ServiceUser_View_Edit.residentCity', { defaultValue: 'Resident city' }) as string}
       labelList={[ownerData.residentCity?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -87,7 +89,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
       onSet={
         actions.residentCityOpenSetSelectorAction
           ? async () => {
-              await actions.residentCityOpenSetSelectorAction!();
+              const residentCity = await actions.residentCityOpenSetSelectorAction!();
             }
           : undefined
       }

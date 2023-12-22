@@ -6,20 +6,17 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, useMemo, lazy, Suspense } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActions } from '~/containers/Service/SimpleVote/SimpleVote_Table/AddSelector/ServiceSimpleVoteSimpleVote_TableAddSelectorDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceServiceUser,
   ServiceServiceUserStored,
@@ -28,8 +25,11 @@ import type {
   ServiceSimpleVoteStored,
   SimpleVoteType,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceServiceUserServiceForVotesImpl } from '~/services/data-axios/ServiceServiceUserServiceForVotesImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActionsExtended =
   ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActions & {};

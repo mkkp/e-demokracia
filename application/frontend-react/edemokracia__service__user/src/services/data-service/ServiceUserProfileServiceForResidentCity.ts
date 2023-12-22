@@ -6,23 +6,29 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
   ServiceCity,
-  ServiceDistrictQueryCustomizer,
-  ServiceUserProfile,
-  ServiceDistrict,
-  ServiceDistrictStored,
-  ServiceCityStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceUserProfile,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceUserProfile.residentCity
  */
 export interface ServiceUserProfileServiceForResidentCity {
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCityQueryCustomizer): Promise<ServiceCityStored>;
+  getRangeForResidentCity(
+    owner: JudoIdentifiable<ServiceUserProfile> | ServiceUserProfile,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<Array<ServiceCityStored>>;
   getTemplate(): Promise<ServiceCity>;
+  setResidentCity(owner: JudoIdentifiable<ServiceUserProfile>, selected: JudoIdentifiable<ServiceCity>): Promise<void>;
+  unsetResidentCity(owner: JudoIdentifiable<ServiceUserProfile>): Promise<void>;
   listDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,

@@ -6,30 +6,26 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage } from '~/routes';
-import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
-import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/UserVoteEntryGroup/TakeVote/Vote/Relation/Table/CallSelector';
+import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions } from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer';
 import { useServiceSelectAnswerVoteDefinitionOwnerRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/Owner/RelationViewPage';
+import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/UserVoteEntryGroup/TakeVote/Vote/Relation/Table/CallSelector';
+import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
 import { useServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/UserVoteEntry/RelationViewPage';
 import { useServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/VoteEntries/RelationViewPage';
 import { useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/VoteSelections/RelationFormPage';
 import { useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/VoteSelections/RelationViewPage';
-import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions } from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage } from '~/routes';
 import type {
   ServiceIssue,
   ServiceIssueQueryCustomizer,
@@ -48,8 +44,12 @@ import type {
   ServiceServiceUserStored,
   VoteStatus,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended =
   ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions & {
@@ -220,7 +220,7 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
       return Promise.resolve([]);
     }
   };
-  const ownerOpenSetSelectorAction = async () => {
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
         data,
@@ -229,8 +229,10 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('owner', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
@@ -282,9 +284,8 @@ export default function ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessVie
     });
   };
   const voteSelectionsOpenFormAction = async () => {
-    const { result, data: returnedData } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
-      data,
-    );
+    const { result, data: returnedData } =
+      await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }

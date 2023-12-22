@@ -6,19 +6,16 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { ServiceIssueAttachmentIssueAttachment_FormDialogActions } from '~/containers/Service/IssueAttachment/IssueAttachment_Form/ServiceIssueAttachmentIssueAttachment_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   AttachmentType,
   ServiceIssue,
@@ -27,8 +24,11 @@ import type {
   ServiceIssueAttachmentStored,
   ServiceIssueStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForAttachmentsImpl } from '~/services/data-axios/ServiceIssueServiceForAttachmentsImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended =
   ServiceIssueAttachmentIssueAttachment_FormDialogActions & {};
@@ -183,7 +183,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
   const createAction = async () => {
     try {
       setIsLoading(true);
-      const res = await serviceIssueServiceForAttachmentsImpl.create(ownerData, data);
+      const res = await serviceIssueServiceForAttachmentsImpl.create(ownerData, payloadDiff.current);
       showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
       onSubmit(res);
     } catch (error) {

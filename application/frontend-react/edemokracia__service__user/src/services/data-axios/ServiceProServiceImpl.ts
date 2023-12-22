@@ -6,30 +6,30 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceProParentQueryCustomizer,
+  CreateArgumentInput,
+  ServiceCon,
   ServiceConParent,
   ServiceConParentQueryCustomizer,
   ServiceConParentStored,
-  ServiceSimpleVote,
-  ServiceServiceUserStored,
-  ServiceCon,
-  ServiceConStored,
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
-  ServiceProQueryCustomizer,
-  ServiceProParentStored,
   ServiceConQueryCustomizer,
-  ServiceProStored,
-  CreateArgumentInput,
-  ServiceProParent,
+  ServiceConStored,
   ServicePro,
+  ServiceProParent,
+  ServiceProParentQueryCustomizer,
+  ServiceProParentStored,
+  ServiceProQueryCustomizer,
+  ServiceProStored,
+  ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
   ServiceSimpleVoteQueryCustomizer,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceProService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServicePro

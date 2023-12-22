@@ -6,26 +6,26 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useState, useMemo, lazy, Suspense } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions } from '~/containers/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/CallOperation/ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   SelectAnswerVoteSelection,
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActionsExtended =
   ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions & {
@@ -156,9 +156,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
       setIsLoading(true);
       await serviceVoteDefinitionServiceImpl.voteSelectAnswer(ownerData, selectionDiff[0]);
       if (customActions?.postVoteSelectAnswerForVoteDefinitionAction) {
-        await customActions.postVoteSelectAnswerForVoteDefinitionAction(
-          onClose,
-        );
+        await customActions.postVoteSelectAnswerForVoteDefinitionAction(onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

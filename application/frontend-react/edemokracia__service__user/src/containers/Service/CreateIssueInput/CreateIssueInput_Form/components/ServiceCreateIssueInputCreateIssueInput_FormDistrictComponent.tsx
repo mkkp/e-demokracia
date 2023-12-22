@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentActionDefinitions {
-  districtOpenSetSelectorAction?: () => Promise<void>;
+  districtOpenSetSelectorAction?: () => Promise<ServiceDistrictStored | undefined>;
+  districtUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
   districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
@@ -29,6 +30,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentPr
   ownerData: ServiceCreateIssueInput | ServiceCreateIssueInputStored;
   actions: ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +41,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentPr
 export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -53,6 +55,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
         ownerData.district?.county?.toString() ?? '',
         ownerData.district?.city?.toString() ?? '',
       ]}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -83,8 +86,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
       onSet={
         actions.districtOpenSetSelectorAction
           ? async () => {
-              await actions.districtOpenSetSelectorAction!();
+              const district = await actions.districtOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.district && actions.districtUnsetAction
+          ? async () => actions.districtUnsetAction!(ownerData.district!)
           : undefined
       }
     />

@@ -6,21 +6,21 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
   ServiceComment,
   ServiceCommentQueryCustomizer,
-  ServiceSimpleVote,
   ServiceCommentStored,
+  ServiceIssue,
+  ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
+  ServiceSimpleVote,
   ServiceSimpleVoteQueryCustomizer,
-  ServiceIssue,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceIssueServiceForComments } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceIssue.comments

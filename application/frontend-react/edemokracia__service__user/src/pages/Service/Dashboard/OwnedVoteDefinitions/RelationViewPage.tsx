@@ -6,25 +6,21 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { routeToServiceVoteDefinitionIssueRelationViewPage } from '~/routes';
+import type { ServiceVoteDefinitionVoteDefinition_View_EditPageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_View_Edit/ServiceVoteDefinitionVoteDefinition_View_EditPageContainer';
 import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNoAbstain/Input/Form';
-import type { ServiceVoteDefinitionVoteDefinition_View_EditPageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_View_Edit/ServiceVoteDefinitionVoteDefinition_View_EditPageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceVoteDefinitionIssueRelationViewPage } from '~/routes';
 import type {
   IssueScope,
   ServiceDashboard,
@@ -38,8 +34,12 @@ import type {
   VoteStatus,
   VoteType,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceVoteDefinitionVoteDefinition_View_EditPageActionsExtended =
   ServiceVoteDefinitionVoteDefinition_View_EditPageActions & {
@@ -251,9 +251,8 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
     );
   };
   const voteRatingAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(
-      data,
-    );
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
@@ -277,9 +276,8 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
     }
   };
   const voteYesNoAction = async () => {
-    const { result, data: returnedData } = await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(
-      data,
-    );
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }

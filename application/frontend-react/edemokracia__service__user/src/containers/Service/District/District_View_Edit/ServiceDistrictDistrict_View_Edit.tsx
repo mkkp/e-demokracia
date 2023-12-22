@@ -6,20 +6,21 @@
 // Template name: actor/src/containers/container.tsx
 // Template file: actor/src/containers/container.tsx.hbs
 
-import type { Dispatch, SetStateAction, FC } from 'react';
-import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { clsx } from 'clsx';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
-import { MdiIcon, DropdownButton, useJudoNavigation } from '~/components';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 import {} from '@mui/x-date-pickers';
@@ -64,6 +65,7 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
     submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
+  const { openConfirmDialog } = useConfirmDialog();
 
   useConfirmationBeforeChange(
     editMode,

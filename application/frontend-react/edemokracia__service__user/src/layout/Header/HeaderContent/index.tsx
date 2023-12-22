@@ -6,15 +6,15 @@
 // Template name: actor/src/layout/Header/HeaderContent/index.tsx
 // Template file: actor/src/layout/Header/HeaderContent/index.tsx.hbs
 
-import type { Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import type { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useConfig } from '~/hooks';
 import { MenuOrientation } from '~/config';
-import { Profile } from './Profile';
-import { MobileSection } from './MobileSection';
+import { useConfig } from '~/hooks';
 import { DrawerHeader } from '../../Drawer/DrawerHeader';
 import { Customization } from './Customization';
+import { MobileSection } from './MobileSection';
+import { Profile } from './Profile';
 
 export const HeaderContent = () => {
   const { /*i18n, */ menuOrientation } = useConfig();

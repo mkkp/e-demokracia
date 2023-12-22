@@ -6,8 +6,8 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder } from './MaskBuilder';
 import {} from '../model';
+import { MaskBuilder } from './MaskBuilder';
 
 export class VoteDefinitionMaskBuilder extends MaskBuilder {
   constructor(protected props: Array<any>) {

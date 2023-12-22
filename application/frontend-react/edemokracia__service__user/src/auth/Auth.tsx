@@ -8,7 +8,7 @@
 
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
-import { useAuth, hasAuthParams } from 'react-oidc-context';
+import { hasAuthParams, useAuth } from 'react-oidc-context';
 
 export const Auth = ({ children }: { children?: ReactNode }) => {
   const { isAuthenticated, isLoading, activeNavigator, signinRedirect } = useAuth();

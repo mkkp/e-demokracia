@@ -6,35 +6,35 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceSelectAnswerVoteDefinition,
-  ServiceIssueQueryCustomizer,
-  CreateArgumentInputStored,
-  ServiceIssueStored,
-  SelectAnswerVoteSelection,
-  ServiceIssue,
-  ServiceServiceUser,
-  ServiceSelectAnswerVoteDefinitionStored,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  CreateArgumentInput,
-  ServiceSelectAnswerVoteSelectionQueryCustomizer,
   CloseDebateInput,
-  ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ServiceSelectAnswerVoteSelection,
-  ServiceSelectAnswerVoteEntryStored,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceServiceUserStored,
-  ServiceSelectAnswerVoteEntry,
-  ServiceSelectAnswerVoteSelectionStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  CreateCommentInputStored,
   CloseDebateInputStored,
-  ServiceServiceUserQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
+  ServiceSelectAnswerVoteDefinitionStored,
+  ServiceSelectAnswerVoteEntry,
+  ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ServiceSelectAnswerVoteEntryStored,
+  ServiceSelectAnswerVoteSelection,
+  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.userOwnedSelectAnswerVoteDefinitions
@@ -53,6 +53,18 @@ export interface UserServiceForUserOwnedSelectAnswerVoteDefinitions {
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
+  getRangeForIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>>;
+  setIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
+  unsetIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

@@ -6,18 +6,15 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { CloseDebateInputCloseDebateInput_FormDialogActions } from '~/containers/CloseDebateInput/CloseDebateInput_Form/CloseDebateInputCloseDebateInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   CloseDebateInput,
   CloseDebateInputQueryCustomizer,
@@ -26,8 +23,11 @@ import type {
   CloseDebateOutputVoteDefinitionReferenceStored,
   VoteTypeOnCloseDebate,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type CloseDebateInputCloseDebateInput_FormDialogActionsExtended =
   CloseDebateInputCloseDebateInput_FormDialogActions & {
@@ -196,13 +196,9 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   const closeDebateForIssueAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceImpl.closeDebate(ownerData, data);
+      const result = await serviceIssueServiceImpl.closeDebate(ownerData, payloadDiff.current);
       if (customActions?.postCloseDebateForIssueAction) {
-        await customActions.postCloseDebateForIssueAction(
-          result,
-          onSubmit,
-          onClose,
-        );
+        await customActions.postCloseDebateForIssueAction(result, onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

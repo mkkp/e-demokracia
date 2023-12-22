@@ -1,5 +1,5 @@
-import { expect, describe, it } from 'vitest';
-import type { JudoStored } from '@judo/data-api-common';
+import { describe, expect, it } from 'vitest';
+import type { JudoStored } from '~/services/data-api/common';
 import { isRowSelectable } from './table';
 
 interface TestType extends JudoStored<TestType> {

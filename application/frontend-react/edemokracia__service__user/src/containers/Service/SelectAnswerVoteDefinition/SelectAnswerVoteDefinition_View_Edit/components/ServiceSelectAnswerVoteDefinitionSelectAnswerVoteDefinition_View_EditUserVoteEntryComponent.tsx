@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,6 +17,7 @@ import type {
   ServiceSelectAnswerVoteEntryQueryCustomizer,
   ServiceSelectAnswerVoteEntryStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
   userVoteEntryOpenPageAction?: (target: ServiceSelectAnswerVoteEntryStored) => Promise<void>;
   userVoteEntryAutocompleteRangeAction?: (
@@ -29,6 +29,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   ownerData: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteDefinition, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +40,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponent(
   props: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -55,6 +56,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         ownerData.userVoteEntry?.valueRepresentation?.toString() ?? '',
         ownerData.userVoteEntry?.created?.toString() ?? '',
       ]}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}

@@ -6,53 +6,53 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceDistrictQueryCustomizer,
-  ServiceCommentQueryCustomizer,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceIssueQueryCustomizer,
-  ServiceIssueCategoryQueryCustomizer,
-  CreateArgumentInputStored,
-  ServiceYesNoAbstainVoteDefinition,
-  ServiceIssueStored,
-  ServiceConStored,
-  ServiceIssue,
-  ServiceServiceUser,
-  ServiceCity,
-  ServiceIssueTypeQueryCustomizer,
-  ServiceIssueCategory,
-  CreateCommentInput,
-  ServiceCountyStored,
-  ServiceConQueryCustomizer,
-  ServiceCounty,
-  CreateArgumentInput,
-  ServiceProStored,
-  ServicePro,
   CloseDebateInput,
-  ServiceIssueType,
-  ServiceComment,
-  ServiceIssueAttachment,
-  ServiceDistrict,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceCountyQueryCustomizer,
-  ServiceCommentStored,
-  ServiceServiceUserStored,
-  ServiceIssueCategoryStored,
-  ServiceCon,
-  CreateCommentInputStored,
-  ServiceProQueryCustomizer,
-  ServiceDistrictStored,
-  ServiceIssueAttachmentQueryCustomizer,
-  ServiceCityStored,
-  ServiceServiceUserQueryCustomizer,
   CloseDebateInputStored,
-  ServiceIssueAttachmentStored,
-  ServiceIssueTypeStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  ServiceCity,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceComment,
+  ServiceCommentQueryCustomizer,
+  ServiceCommentStored,
+  ServiceCon,
+  ServiceConQueryCustomizer,
+  ServiceConStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceIssue,
+  ServiceIssueAttachment,
+  ServiceIssueAttachmentQueryCustomizer,
+  ServiceIssueAttachmentStored,
+  ServiceIssueCategory,
+  ServiceIssueCategoryQueryCustomizer,
+  ServiceIssueCategoryStored,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
+  ServicePro,
+  ServiceProQueryCustomizer,
+  ServiceProStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceYesNoAbstainVoteDefinition,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForIssue } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceYesNoAbstainVoteDefinition.issue
@@ -83,6 +83,52 @@ export class ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl
     );
 
     return response.data;
+  }
+
+  /**
+   * From: relation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
+    queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>> {
+    const path = '/service/YesNoAbstainVoteDefinition/issue/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void> {
+    const path = '/service/YesNoAbstainVoteDefinition/~update/issue/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * From: relation.isUnsetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssue(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+    const path = '/service/YesNoAbstainVoteDefinition/~update/issue/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async listAttachments(

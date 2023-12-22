@@ -6,27 +6,27 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceDistrictQueryCustomizer,
-  ServiceDistrict,
-  ServiceCountyQueryCustomizer,
-  ServiceSimpleVote,
-  ServiceYesNoAbstainVoteDefinition,
-  ServiceServiceUserStored,
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
   ServiceCity,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
-  ServiceServiceUserQueryCustomizer,
-  ServiceCityStored,
-  ServiceSimpleVoteQueryCustomizer,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
+  ServiceSimpleVoteQueryCustomizer,
+  ServiceSimpleVoteStored,
+  ServiceYesNoAbstainVoteDefinition,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForOwner } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceYesNoAbstainVoteDefinition.owner

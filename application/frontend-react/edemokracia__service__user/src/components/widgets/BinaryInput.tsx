@@ -1,15 +1,15 @@
-import { useRef, useCallback, useState } from 'react';
-import { clsx } from 'clsx';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import { useSnacks } from '~/hooks';
+import { clsx } from 'clsx';
+import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSnacks } from '~/hooks';
 import { toastConfig } from '../../config';
-import { MdiIcon } from '../MdiIcon';
 import { fileHandling } from '../../utilities';
+import { MdiIcon } from '../MdiIcon';
 
 interface BinaryInputProps<P> {
   id: string;
@@ -79,12 +79,12 @@ export function BinaryInput<P>(props: BinaryInputProps<P>) {
                     </InputAdornment>
                   ),
                   endAdornment: (
-                    <CircularProgress size='1rem' sx={{ visibility: isUploading ? 'visible' : 'hidden' }} />
+                    <CircularProgress size="1rem" sx={{ visibility: isUploading ? 'visible' : 'hidden' }} />
                   ),
                 }
               : {
                   endAdornment: (
-                    <CircularProgress size='1rem' sx={{ visibility: isUploading ? 'visible' : 'hidden' }} />
+                    <CircularProgress size="1rem" sx={{ visibility: isUploading ? 'visible' : 'hidden' }} />
                   ),
                 }
           }

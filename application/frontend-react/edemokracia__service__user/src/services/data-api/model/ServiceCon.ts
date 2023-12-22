@@ -6,13 +6,13 @@
 // Template name: class.ts.hbs
 // Template file: model/class.ts.hbs
 
-import type { JudoStored } from '@judo/data-api-common';
+import type { JudoStored } from '../common';
 import { ServiceConParent } from './ServiceConParent';
 import { ServiceConParentStored } from './ServiceConParent';
 import { ServicePro } from './ServicePro';
+import { ServiceProStored } from './ServicePro';
 import { ServiceProParent } from './ServiceProParent';
 import { ServiceProParentStored } from './ServiceProParent';
-import { ServiceProStored } from './ServicePro';
 import { ServiceServiceUser } from './ServiceServiceUser';
 import { ServiceServiceUserStored } from './ServiceServiceUser';
 import { ServiceSimpleVote } from './ServiceSimpleVote';

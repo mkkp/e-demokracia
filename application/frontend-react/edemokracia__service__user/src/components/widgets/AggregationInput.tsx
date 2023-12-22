@@ -7,27 +7,27 @@
 // Template file: actor/src/components/widgets/AggregationInput.tsx.hbs
 
 import Autocomplete from '@mui/material/Autocomplete';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grid from '@mui/material/Grid';
+import Grow from '@mui/material/Grow';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import TextField from '@mui/material/TextField';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import TextField from '@mui/material/TextField';
 import { debounce } from '@mui/material/utils';
-import { useTranslation } from 'react-i18next';
-import type { JudoStored } from '@judo/data-api-common';
-import { useState, useEffect, useMemo, useRef } from 'react';
-import type { ReactNode } from 'react';
 import { clsx } from 'clsx';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { debounceInputs } from '~/config';
+import type { JudoStored } from '~/services/data-api/common';
 import { exists } from '../../utilities';
 import { MdiIcon } from '../MdiIcon';
 
@@ -179,7 +179,7 @@ export const AggregationInput = ({
                 ),
                 endAdornment: (
                   <>
-                    {loading ? <CircularProgress color="inherit" size='1rem' sx={{ mt: -2 }} /> : null}
+                    {loading ? <CircularProgress color="inherit" size="1rem" sx={{ mt: -2 }} /> : null}
                     {params.InputProps.endAdornment}
                   </>
                 ),

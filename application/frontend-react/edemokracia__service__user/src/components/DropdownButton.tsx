@@ -9,14 +9,14 @@
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import { useState, useRef, useEffect } from 'react';
-import type { ReactNode, KeyboardEvent, SyntheticEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent, ReactNode, SyntheticEvent } from 'react';
 import { MdiIcon } from './MdiIcon';
 
 interface DropdownMenuItem {

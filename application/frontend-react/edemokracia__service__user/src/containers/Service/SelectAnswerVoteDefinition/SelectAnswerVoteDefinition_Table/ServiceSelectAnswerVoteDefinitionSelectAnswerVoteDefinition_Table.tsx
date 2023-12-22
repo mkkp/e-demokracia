@@ -6,26 +6,27 @@
 // Template name: actor/src/containers/container.tsx
 // Template file: actor/src/containers/container.tsx.hbs
 
-import type { Dispatch, SetStateAction, FC } from 'react';
-import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import { clsx } from 'clsx';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
-import { MdiIcon, DropdownButton, useJudoNavigation } from '~/components';
-import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {
   ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
+import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentActionDefinitions } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent';
 import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent';
 
@@ -46,6 +47,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   const { navigate, back } = useJudoNavigation();
   const { refreshCounter, actions } = props;
   const { locale: l10nLocale } = useL10N();
+  const { openConfirmDialog } = useConfirmDialog();
 
   return (
     <Grid container>

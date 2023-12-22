@@ -6,7 +6,7 @@
 // Template name: queryCustomizer.ts.hbs
 // Template file: rest/queryCustomizer.ts.hbs
 
-import type { QueryCustomizer } from '@judo/data-api-common';
+import type { QueryCustomizer } from '../common';
 import { VoteDefinition } from '../model/VoteDefinition';
 
 export interface VoteDefinitionQueryCustomizer extends QueryCustomizer<VoteDefinition> {}

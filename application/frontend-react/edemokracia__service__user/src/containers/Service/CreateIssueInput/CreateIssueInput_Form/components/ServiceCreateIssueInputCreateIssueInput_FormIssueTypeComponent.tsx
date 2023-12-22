@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueTypeStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions {
-  issueTypeOpenSetSelectorAction?: () => Promise<void>;
+  issueTypeOpenSetSelectorAction?: () => Promise<ServiceIssueTypeStored | undefined>;
+  issueTypeUnsetAction?: (target: ServiceIssueTypeStored) => Promise<void>;
   issueTypeAutocompleteRangeAction?: (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ) => Promise<Array<ServiceIssueTypeStored>>;
@@ -29,6 +30,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentP
   ownerData: ServiceCreateIssueInput | ServiceCreateIssueInputStored;
   actions: ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +41,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentP
 export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -52,6 +54,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
         ownerData.issueType?.title?.toString() ?? '',
         ownerData.issueType?.description?.toString() ?? '',
       ]}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -82,8 +85,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
       onSet={
         actions.issueTypeOpenSetSelectorAction
           ? async () => {
-              await actions.issueTypeOpenSetSelectorAction!();
+              const issueType = await actions.issueTypeOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.issueType && actions.issueTypeUnsetAction
+          ? async () => actions.issueTypeUnsetAction!(ownerData.issueType!)
           : undefined
       }
     />

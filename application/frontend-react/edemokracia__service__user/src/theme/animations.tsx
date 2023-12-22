@@ -1,10 +1,10 @@
-import type { ReactElement, Ref } from 'react';
-import { forwardRef } from 'react';
 import Box from '@mui/material/Box';
+import Fade from '@mui/material/Fade';
 import Slide from '@mui/material/Slide';
 import type { TransitionProps } from '@mui/material/transitions';
-import { LazyMotion, domAnimation, m } from 'framer-motion';
-import { animationDuration, delayDuration } from '~/config/general';
+import type { ReactElement, Ref } from 'react';
+import { forwardRef, useRef } from 'react';
+import { fadeTimeout, slideTimeout } from '~/config/general';
 
 export const SlideUpTransition = forwardRef(function Transition(
   props: TransitionProps & {
@@ -15,18 +15,28 @@ export const SlideUpTransition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const pageContainerMotion = {
-  initial: { opacity: 0, x: -50 },
-  animate: { opacity: 1, x: 0, transition: { delay: delayDuration, duration: animationDuration } },
-  exit: { opacity: 0, x: -50, transition: { delay: delayDuration, duration: animationDuration } },
-};
+export const PageContainerTransition = (props: { children: ReactElement; in?: boolean }) => {
+  const wrapper = useRef(null);
 
-export const PageContainerTransition = ({ children }: { children: ReactElement }) => {
+  // - divs are necessary because animations are crashing otherwise, at least for now
+  // - since Slide needs a parent with overflow hidden, the potential box shadows of Cards are cut off, so we need a slight offset...
   return (
-    <LazyMotion features={domAnimation}>
-      <m.div initial="initial" animate="animate" exit="exit" variants={pageContainerMotion}>
-        {children}
-      </m.div>
-    </LazyMotion>
+    <Box sx={{ overflow: 'hidden', m: -1, p: 1 }} ref={wrapper}>
+      <Slide
+        direction="right"
+        in={props.in ?? true}
+        mountOnEnter
+        unmountOnExit
+        timeout={slideTimeout}
+        container={wrapper.current}
+        easing={'cubic-bezier(0, 0.9, 0.2, 0.98)'}
+      >
+        <Box>
+          <Fade in={props.in ?? true} timeout={fadeTimeout}>
+            <Box>{props.children}</Box>
+          </Fade>
+        </Box>
+      </Slide>
+    </Box>
   );
 };

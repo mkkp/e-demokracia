@@ -6,7 +6,6 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceCityAttributes,
   ServiceCountyAttributes,
@@ -14,6 +13,7 @@ import {
   ServiceServiceUserAttributes,
   ServiceSimpleVoteAttributes,
 } from '../model';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';

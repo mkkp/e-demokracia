@@ -6,59 +6,61 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
-import { MdiIcon, CustomTablePagination } from '~/components';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CustomTablePagination, MdiIcon } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
+import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
 import {
+  ContextMenu,
+  StripedDataGrid,
+  columnsActionCalculator,
   dateTimeColumnOperators,
   numericColumnOperators,
   singleSelectColumnOperators,
-  columnsActionCalculator,
-  ContextMenu,
-  StripedDataGrid,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import type { Filter, FilterOption } from '~/components-api';
-import { FilterType } from '~/components-api';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
+import { useL10N } from '~/l10n/l10n-context';
 import type {
   ServiceVoteDefinition,
   ServiceVoteDefinitionQueryCustomizer,
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
-import { useL10N } from '~/l10n/l10n-context';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
-  serviceDateToUiDate,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponentActionDefinitions {
   openAddSelectorAction?: () => Promise<void>;
@@ -103,6 +105,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
   const filterModelKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
@@ -143,133 +146,135 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
 
   const selectedRows = useRef<ServiceVoteDefinitionStored[]>([]);
 
+  const voteTypeColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'voteType',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.voteType', { defaultValue: 'VoteType' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'singleSelect',
+    filterable: false && true,
+    sortable: false,
+    valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+      if (value !== undefined && value !== null) {
+        return t(`enumerations.VoteType.${value}`, { defaultValue: value });
+      }
+    },
+    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
+  };
+  const titleColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'title',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const numberOfVotesColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'numberOfVotes',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.numberOfVotes', {
+      defaultValue: 'NumberOfVotes',
+    }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 100,
+    type: 'number',
+    filterable: false && true,
+    valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+      return value && new Intl.NumberFormat(l10nLocale).format(value);
+    },
+  };
+  const createdColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'created',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'dateTime',
+    filterable: false && true,
+    valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+    valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+      return (
+        value &&
+        new Intl.DateTimeFormat(l10nLocale, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }).format(value)
+      );
+    },
+  };
+  const statusColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'status',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'singleSelect',
+    filterable: false && true,
+    sortable: false,
+    valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+      if (value !== undefined && value !== null) {
+        return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
+      }
+    },
+    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
+  };
+  const closeAtColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'closeAt',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 170,
+    type: 'dateTime',
+    filterable: false && true,
+    valueGetter: ({ value }) => value && serviceDateToUiDate(value),
+    valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
+      return (
+        value &&
+        new Intl.DateTimeFormat(l10nLocale, {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }).format(value)
+      );
+    },
+  };
+  const descriptionColumn: GridColDef<ServiceVoteDefinitionStored> = {
+    ...baseColumnConfig,
+    field: 'description',
+    headerName: t('service.VoteDefinition.VoteDefinition_Table.description', { defaultValue: 'Description' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+
   const columns = useMemo<GridColDef<ServiceVoteDefinitionStored>[]>(
     () => [
-      {
-        ...baseColumnConfig,
-        field: 'voteType',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.voteType', { defaultValue: 'VoteType' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'singleSelect',
-        filterable: false && true,
-        sortable: false,
-        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          if (value !== undefined && value !== null) {
-            return t(`enumerations.VoteType.${value}`, { defaultValue: value });
-          }
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'title',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.title', { defaultValue: 'Title' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'numberOfVotes',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.numberOfVotes', {
-          defaultValue: 'NumberOfVotes',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 100,
-        type: 'number',
-        filterable: false && true,
-        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-          return value && new Intl.NumberFormat(l10nLocale).format(value);
-        },
-      },
-      {
-        ...baseColumnConfig,
-        field: 'created',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.created', { defaultValue: 'Created' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'dateTime',
-        filterable: false && true,
-        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-          return (
-            value &&
-            new Intl.DateTimeFormat(l10nLocale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false,
-            }).format(value)
-          );
-        },
-      },
-      {
-        ...baseColumnConfig,
-        field: 'status',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.status', { defaultValue: 'Status' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'singleSelect',
-        filterable: false && true,
-        sortable: false,
-        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          if (value !== undefined && value !== null) {
-            return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
-          }
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'closeAt',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.closeAt', { defaultValue: 'CloseAt' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 170,
-        type: 'dateTime',
-        filterable: false && true,
-        valueGetter: ({ value }) => value && serviceDateToUiDate(value),
-        valueFormatter: ({ value }: GridValueFormatterParams<Date>) => {
-          return (
-            value &&
-            new Intl.DateTimeFormat(l10nLocale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-              hour12: false,
-            }).format(value)
-          );
-        },
-      },
-      {
-        ...baseColumnConfig,
-        field: 'description',
-        headerName: t('service.VoteDefinition.VoteDefinition_Table.description', {
-          defaultValue: 'Description',
-        }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
+      voteTypeColumn,
+      titleColumn,
+      numberOfVotesColumn,
+      createdColumn,
+      statusColumn,
+      closeAtColumn,
+      descriptionColumn,
     ],
     [l10nLocale],
   );
@@ -443,9 +448,13 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -541,6 +550,10 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
         onSortModelChange={handleSortModelChange}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        paginationMode="server"
+        sortingMode="server"
+        filterMode="server"
+        rowCount={10}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>

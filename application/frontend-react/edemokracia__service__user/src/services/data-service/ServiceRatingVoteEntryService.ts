@@ -6,15 +6,15 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceServiceUser,
-  ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntry,
-  ServiceServiceUserStored,
-  ServiceServiceUserQueryCustomizer,
+  ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceRatingVoteEntry
@@ -32,4 +32,9 @@ export interface ServiceRatingVoteEntryService {
     owner?: JudoIdentifiable<ServiceRatingVoteEntry> | ServiceRatingVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
+  setOwner(
+    owner: JudoIdentifiable<ServiceRatingVoteEntry>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+  unsetOwner(owner: JudoIdentifiable<ServiceRatingVoteEntry>): Promise<void>;
 }

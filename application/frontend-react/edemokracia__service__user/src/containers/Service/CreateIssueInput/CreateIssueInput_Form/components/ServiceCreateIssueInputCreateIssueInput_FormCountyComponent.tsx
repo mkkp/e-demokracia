@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceCreateIssueInput,
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActionDefinitions {
-  countyOpenSetSelectorAction?: () => Promise<void>;
+  countyOpenSetSelectorAction?: () => Promise<ServiceCountyStored | undefined>;
+  countyUnsetAction?: (target: ServiceCountyStored) => Promise<void>;
   countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
@@ -29,6 +30,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProp
   ownerData: ServiceCreateIssueInput | ServiceCreateIssueInputStored;
   actions: ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +41,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProp
 export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -48,6 +50,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
       id="User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.CreateIssueInput.CreateIssueInput_Form.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '', ownerData.county?.name?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -78,8 +81,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
       onSet={
         actions.countyOpenSetSelectorAction
           ? async () => {
-              await actions.countyOpenSetSelectorAction!();
+              const county = await actions.countyOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.county && actions.countyUnsetAction
+          ? async () => actions.countyUnsetAction!(ownerData.county!)
           : undefined
       }
     />

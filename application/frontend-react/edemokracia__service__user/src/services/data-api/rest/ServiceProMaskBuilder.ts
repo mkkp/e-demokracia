@@ -6,13 +6,13 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceConAttributes,
   ServiceProAttributes,
   ServiceServiceUserAttributes,
   ServiceSimpleVoteAttributes,
 } from '../model';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceConConsMaskBuilder,
   ServiceConCreatedByMaskBuilder,
@@ -20,6 +20,8 @@ import {
   ServiceConParentProMaskBuilder,
   ServiceConProsMaskBuilder,
 } from './ServiceConMaskBuilder';
+import {} from './ServiceConParentMaskBuilder';
+import {} from './ServiceProParentMaskBuilder';
 import {
   ServiceServiceUserActivityCitiesMaskBuilder,
   ServiceServiceUserActivityCountiesMaskBuilder,
@@ -28,8 +30,6 @@ import {
   ServiceServiceUserResidentCountyMaskBuilder,
   ServiceServiceUserResidentDistrictMaskBuilder,
 } from './ServiceServiceUserMaskBuilder';
-import {} from './ServiceConParentMaskBuilder';
-import {} from './ServiceProParentMaskBuilder';
 
 export class ServiceProConsMaskBuilder extends RelationMaskBuilder {
   constructor(

@@ -6,18 +6,18 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceCity,
-  ServiceDistrictQueryCustomizer,
+  ServiceCityQueryCustomizer,
+  ServiceCityStored,
   ServiceCreateIssueInput,
   ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
-  ServiceCityStored,
-  ServiceCityQueryCustomizer,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceCreateIssueInputServiceForCity } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceCreateIssueInput.city
@@ -76,6 +76,35 @@ export class ServiceCreateIssueInputServiceForCityImpl
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
+  }
+
+  /**
+   * From: relation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setCity(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceCity>,
+  ): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/city/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * From: relation.isUnsetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetCity(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/city/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async listDistricts(

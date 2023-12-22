@@ -6,33 +6,36 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
+  CloseDebateInput,
   CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceYesNoVoteDefinitionStored,
+  CreateArgumentInput,
+  CreateCommentInput,
+  ServiceIssue,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
-  ServiceServiceUserStored,
-  ServiceYesNoVoteDefinitionQueryCustomizer,
-  ServiceIssue,
-  ServiceYesNoVoteDefinition,
   ServiceServiceUser,
-  ServiceYesNoVoteEntryStored,
-  ServiceYesNoVoteEntry,
-  CreateCommentInput,
-  CreateArgumentInput,
   ServiceServiceUserQueryCustomizer,
-  YesNoVoteInput,
-  CloseDebateInput,
+  ServiceServiceUserStored,
+  ServiceYesNoVoteDefinition,
+  ServiceYesNoVoteDefinitionQueryCustomizer,
+  ServiceYesNoVoteDefinitionStored,
+  ServiceYesNoVoteEntry,
   ServiceYesNoVoteEntryQueryCustomizer,
+  ServiceYesNoVoteEntryStored,
+  YesNoVoteInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceYesNoVoteDefinitionService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServiceYesNoVoteDefinition
  */
-export class ServiceYesNoVoteDefinitionServiceImpl extends JudoAxiosService implements ServiceYesNoVoteDefinitionService {
+export class ServiceYesNoVoteDefinitionServiceImpl
+  extends JudoAxiosService
+  implements ServiceYesNoVoteDefinitionService
+{
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
@@ -95,6 +98,33 @@ export class ServiceYesNoVoteDefinitionServiceImpl extends JudoAxiosService impl
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssue(
+    owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void> {
+    const path = '/service/YesNoVoteDefinition/~update/issue/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssue(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void> {
+    const path = '/service/YesNoVoteDefinition/~update/issue/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**

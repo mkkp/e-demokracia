@@ -6,25 +6,25 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceDistrictQueryCustomizer,
-  ServiceDistrict,
+  ServiceCity,
+  ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
   ServiceCountyQueryCustomizer,
-  ServiceSimpleVote,
-  ServiceServiceUserStored,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
   ServiceSelectAnswerVoteEntry,
   ServiceServiceUser,
-  ServiceSimpleVoteStored,
-  ServiceCity,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
   ServiceServiceUserQueryCustomizer,
-  ServiceCityStored,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
   ServiceSimpleVoteQueryCustomizer,
-  ServiceCityQueryCustomizer,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceSelectAnswerVoteEntry.owner
@@ -34,6 +34,15 @@ export interface ServiceSelectAnswerVoteEntryServiceForOwner {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
+  getRangeForOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+  setOwner(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void>;
+  unsetOwner(owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>): Promise<void>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,

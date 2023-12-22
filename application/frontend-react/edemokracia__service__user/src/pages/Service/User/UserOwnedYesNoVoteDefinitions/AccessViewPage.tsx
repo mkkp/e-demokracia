@@ -6,28 +6,24 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { routeToServiceYesNoVoteDefinitionIssueRelationViewPage } from '~/routes';
-import { useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
-import { useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm } from '~/dialogs/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/Vote/Input/Form';
+import type { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions } from '~/containers/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageContainer';
 import { useServiceYesNoVoteDefinitionOwnerRelationViewPage } from '~/dialogs/Service/YesNoVoteDefinition/Owner/RelationViewPage';
 import { useServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage } from '~/dialogs/Service/YesNoVoteDefinition/UserVoteEntry/RelationViewPage';
 import { useServiceYesNoVoteDefinitionVoteEntriesRelationViewPage } from '~/dialogs/Service/YesNoVoteDefinition/VoteEntries/RelationViewPage';
-import type { ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions } from '~/containers/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageContainer';
+import { useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm } from '~/dialogs/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/Vote/Input/Form';
+import { useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceYesNoVoteDefinitionIssueRelationViewPage } from '~/routes';
 import type {
   ServiceIssue,
   ServiceIssueQueryCustomizer,
@@ -43,8 +39,12 @@ import type {
   ServiceYesNoVoteEntryStored,
   VoteStatus,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActionsExtended =
   ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions & {
@@ -262,7 +262,7 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
       return Promise.resolve([]);
     }
   };
-  const ownerOpenSetSelectorAction = async () => {
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
         data,
@@ -271,8 +271,10 @@ export default function ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage()
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('owner', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);

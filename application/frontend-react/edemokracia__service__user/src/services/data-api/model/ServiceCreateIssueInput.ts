@@ -6,7 +6,7 @@
 // Template name: class.ts.hbs
 // Template file: model/class.ts.hbs
 
-import type { JudoStored } from '@judo/data-api-common';
+import type { JudoStored } from '../common';
 import { ServiceCity } from './ServiceCity';
 import { ServiceCityStored } from './ServiceCity';
 import { ServiceCounty } from './ServiceCounty';

@@ -20,20 +20,20 @@ USAGE: judo.sh COMMANDS... [OPTIONS...]
     schema-upgrade                          It can be used with persistent db (postgresql) only. It uses the current running database to
                                             generate the difference and after it applied.
     build                                   Build project.
+        -v <VERSION> --version <VERSION>    Use given version as model and application version
         -p --build-parallel                 Parallel maven build. The log can be chaotic.
         -a --build-app-module               Build app module only.
+        -sc --build-schema-cli              Build schema CLI standalon JAR file.
+        -d --docker                         Build docker images.
         -M --skip-model                     Skip model building.
         -B --skip-backend                   Skip backend building.
         -F --skip-frontend                  Skip frontend building.
-        -FR --skip-react                    Skip react frontend building.
-        -BM --skip-backendmodels            Skip Backend Models building.
         -KA --skip-karaf                    Skip Backend Karaf building.
-        -d --docker                         Build docker image.
         -S --skip-schema                    Skip building schema migration image.
-        -v <VERSION> --version <VERSION>    Record given version number frontend root application's version.html during frontend build.
+        -ma --maven-argument                Add extra maven argument.
     reckless                                Build and run project in reckless mode. It is skipping validations, docker builds and run as fast as possible.
     start                                   Run application with postgresql and keycloak.
-        -w --skip-watch-bundles             Disable watching of bundle changes
+        -W --skip-watch-bundles             Disable watching of bundle changes
         -K --skip-keycloak                  Skip starting keycloak.
         -o \"<name>=<value>,<name2>=<value2>, ...\" --options \"<name>=<value>,<name2>=<value2>, ...\"
                                             Add options (defaults can be defined in judo.properties)
@@ -47,6 +47,7 @@ USAGE: judo.sh COMMANDS... [OPTIONS...]
                                                keycloak_port = <port>
                                                compose_access_ip = <alternate ip address to access app>
                                                karaf_enable_admin_user = 1
+                                               java_compiler = ejc | javac. Which compuler can be used, default is ejc
     stop                                    Stop application, postgresql and keycloak. (if running)
     status                                  Print status of containers
 
@@ -60,9 +61,10 @@ EXAMPLES:
     ./judo.sh prune build start             Super fresh application build and start.
     ./judo.sh build clean start             Stop postgresql docker container then build and run application (including keycloak) with clean db.
     ./judo.sh build start -K                Stop postgresql docker container then build and restart application.
-    ./judo.sh build -M -F -BM clean start   Stop postgresql docker container then rebuild app and start application with clean db.
-    ./judo.sh build -M -F -BM start -K      Rebuild app and restart application.
-
+    ./judo.sh build -M -F clean start       Stop postgresql docker container then rebuild app and start application with clean db.
+    ./judo.sh build -M -F start -K          Rebuild app and restart application.
+    ./judo.sh build -ma \"-rf :${app_name}-application-karaf-offline\"
+                                            Continue build from module.
     ./judo.sh start -o \"runtime=compose,compose_env=compose-postgresql-https'\"
                                             Run application in docker compose using the compose-postgresql-https's docker-compose.yaml
 
@@ -201,10 +203,12 @@ dump_postgresql () {
 
 upgrade_postgresql_schema () {
     mvnd judo-rdbms-schema:apply \
+    ${mavenVersionArg} \
     -DjdbcUrl=jdbc:postgresql://127.0.0.1:5432/${app_name} \
     -DdbType=postgresql \
     -DdbUser=${app_name} \
     -DdbPassword=${app_name} \
+    -DschemaIgnoreModelDependency=true \
     -DupdateModel=${APP_DIR}/model/target/generated-resources/model/${app_name}-rdbms_postgresql.model \
     -f ${APP_DIR}/schema || exit
 }
@@ -219,8 +223,8 @@ reset_checksum () {
 }
 
 prune_application () {
-    if [ $prune_confirmation -eq 1 ]; then
-        [ $prune_frontend -eq 1 ] && location="frontend-react" || location="this repository"
+    if [ $pruneConfirmation -eq 1 ]; then
+        [ $pruneFrontend -eq 1 ] && location="frontend-react" || location="this repository"
         echo -ne "Prune command deletes all untracked files in $location!\nAre you sure you want to continue? [Y/n]: "
         read canContinue
     else
@@ -236,7 +240,7 @@ prune_application () {
             stop_karaf $KARAF_PORT $KARAF_DIR
         fi
 
-        if [ $prune_frontend -eq 1 ]; then
+        if [ $pruneFrontend -eq 1 ]; then
             cd ${APP_DIR}/frontend-react
             git clean -dffx
             cd $CURR_DIR
@@ -468,7 +472,7 @@ start_karaf () {
     rm -rf $KARAF_DIR && \
     mkdir $KARAF_DIR && \
     cd $KARAF_DIR && \
-    tar xvvzf $APP_DIR/karaf-offline/target/${app_name}-application-karaf-offline-${VERSION_NUMBER}.tar.gz && \
+    tar xzf $APP_DIR/karaf-offline/target/${app_name}-application-karaf-offline-${VERSION_NUMBER}.tar.gz && \
     mv $KARAF_DIR/${app_name}-application-karaf-offline-${VERSION_NUMBER}/* $KARAF_DIR/ || exit
 
     export EXTRA_JAVA_OPTS="-Xms1024m -Xmx1024m -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8"
@@ -488,7 +492,7 @@ install_bundles () {
     local modulenames=$(find ${APP_DIR}/frontend-react/${path_name}* -type f -name pom.xml | xargs -0 -I % dirname "%" | xargs -0 -I % realpath --relative-to=${APP_DIR} "%" | sed 's/\n/,/g')
     modulenames="${modulenames},model,sdk,internal,app"
     echo "Module names: $modulenames"
-    mvnd build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR} -DskipModels=true -pl ${modulenames}
+    mvnd build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR} -DskipModels=true -pl ${modulenames} ${mavenVersionArg}
 }
 
 # Args:
@@ -623,9 +627,9 @@ schema_upgrade () {
 }
 
 build () {
-    echo "Building version ${FULL_VERSION_NUMBER}"
+    echo "Building version ${versionNumber}"
     local goal="install"
-    local args="-Dsmartbuilder.profiling=true"
+    local args="$extraMavenArgs $mavenVersionArg -Dsmartbuilder.profiling=true"
     if [ $reckless -eq 1 ]; then
         if [ $karaf -eq 0 ]; then
            echo "Reckless mode can be used with local karaf only"
@@ -634,39 +638,49 @@ build () {
            start_local_env
         fi
         goal="package"
-        args="$args -Dprofile -Dmaven.test.skip=true -Dquick -DdialectList=$dbtype -DvalidateModels=false -DvalidateChecksum=false -DskipSchemaDocker -DskipSchemaCli -DuseCache=true -DskipKarafFeature=true"
+        args="$args -Dprofile -Dmaven.test.skip=true \
+        	-Dquick \
+        	-DdialectList=$dbtype \
+        	-DvalidateModels=false \
+        	-DvalidateChecksum=false \
+        	-DskipSchemaDocker=true \
+        	-DskipSchemaCli=true \
+        	-DuseCache=true \
+        	-DskipPrepareNodeJS \
+        	-DskipKarafFeature=true"
     fi
-    if [ $skipBackend -eq 1 -a $skipFrontend -eq 0 ]; then
-        [ $skipReact -eq 1 ] || mvnd install -f ${APP_DIR}/frontend-react || exit
-    elif [ $skipBackend -eq 0 -a $buildAppModule -eq 1 ]; then
-        mvnd install -f ${APP_DIR}/app || exit
-    elif [ $skipBackend -eq 0 ]; then
+    if [ $buildBackend -eq 0 -a $buildFrontend -eq 1 ]; then
+        mvnd install -f ${APP_DIR}/frontend-react $mavenVersionArg || exit
+    elif [ $buildBackend -eq 1 -a $buildAppModule -eq 1 ]; then
+        mvnd install -f ${APP_DIR}/app $mavenVersionArg|| exit
+    elif [ $buildBackend -eq 1 ]; then
 #        if [ $buildParallel -eq 1 ]; then
 #            args="$args -T 1C";
 #        fi
-        if [ $skipFrontend -eq 1 ]; then
-            args="$args -DskipFrontendReact"
+        if [ $buildFrontend -eq 0 ]; then
+            args="$args -DskipReact -DskipFrontendModel -DskipPrepareNodeJS"
         fi
-        if [ $skipReact -eq 1 ]; then
-            args="$args -DskipFrontendReact"
+        if [ $buildModel -eq 0 ]; then
+            args="$args -DskipModels"
         fi
-
-        if [ $skipBackendModels -eq 1 ]; then
-            args="$args -DskipBackendModels"
-        fi
-        if [ $karafBuilding -eq 0 ]; then
+        if [ $buildKaraf -eq 0 ]; then
             args="$args -DskipKaraf"
         fi
         if [ $dockerBuilding -eq 0 ]; then
-            args="$args -DskipDocker -DkarafOfflineZip=false"
+            args="$args -DskipDocker -DskipSchemaDocker -DkarafOfflineZip=false"
         fi
         if [ $schemaBuilding -eq 0 ]; then
             args="$args -DskipSchema"
         fi
+        if [ $schemaCliBuilding -eq 0 ]; then
+            args="$args -DskipSchemaCli"
+        fi
         mvnd $goal -f $MODEL_DIR $args || exit
     fi
     if [ $reckless -eq 1 ]; then
-        schema_upgrade
+	    if [ $schemaUpgrade -eq 0 ]; then
+	        schema_upgrade
+	    fi
         install_bundles
         (tail -n 20 -f ${KARAF_DIR}/console.out ; echo "Karaf and other services still running\n")
     fi
@@ -677,7 +691,7 @@ start_local_env () {
         start_postgres postgres-${app_name} $POSTGRES_PORT
     fi
 
-    if [ $skipKeycloak -eq 0 ]; then
+    if [ $startKeycloak -eq 1 ]; then
         start_keycloak keycloak-${app_name} $KEYCLOAK_PORT
     fi
 
@@ -725,18 +739,17 @@ build=0
 clean=0
 prune=0
 schemaBuilding=1
+schemaCliBuilding=0
 update=0
-prune_frontend=0
+pruneFrontend=0
 generate=0
-karafBuilding=1
-skipModel=0
-skipBackend=0
-prune_confirmation=1
-skipFrontend=0
-skipReact=0
-skipKeycloak=0
+buildKaraf=1
+buildModel=1
+buildBackend=1
+pruneConfirmation=1
+buildFrontend=1
+startKeycloak=1
 buildAppModule=0
-skipBackendModels=0
 import=0
 dumpName=''
 schemaUpgrade=0
@@ -744,7 +757,9 @@ watchBundles=1
 buildParallel=0
 resetChecksum=0
 
-FULL_VERSION_NUMBER="SNAPSHOT"
+versionNumber="SNAPSHOT"
+extraMavenArgs=""
+
 original_args=( "$@" )
 
 while [ $# -ne 0 ]; do
@@ -785,8 +800,8 @@ while [ $# -ne 0 ]; do
             fi
             shift 1
         ;;
-        -f)                             prune_frontend=1; shift 1;;
-        -y)                             prune_confirmation=0; shift 1;;
+        -f)                             pruneFrontend=1; shift 1;;
+        -y)                             pruneConfirmation=0; shift 1;;
 
         update)                         update=1; shift 1;;
         generate)                       generate=1; shift 1;;
@@ -796,21 +811,20 @@ while [ $# -ne 0 ]; do
         schema-upgrade)                 schemaUpgrade=1; shift 1;;
         build)                          build=1; shift 1;;
         -p | --build-parallel)          buildParallel=1; shift 1;;
-        -a | --build-app-module)        buildAppModule=1; skipModel=1; shift 1;;
-        -M | --skip-model)              skipModel=1; shift 1;;
-        -B | --skip-backend)            skipBackend=1; shift 1;;
-        -F | --skip-frontend)           skipFrontend=1; shift 1;;
-        -FR | --skip-react)             skipReact=1; shift 1;;
-        -BM | --skip-backendmodels)     skipBackendModels=1; shift 1;;
-        -KA | --skip-karaf)             karafBuilding=0; shift 1;;
+        -a | --build-app-module)        buildAppModule=1; buildModel=0; shift 1;;
+        -sc | --build-schema-cli)       schemaCliBuilding=1; shift 1;;
+        -M | --skip-model)              buildModel=0; shift 1;;
+        -B | --skip-backend)            buildBackend=0; shift 1;;
+        -F | --skip-frontend)           buildFrontend=0; shift 1;;
+        -KA | --skip-karaf)             buildKaraf=0; shift 1;;
         -d | --docker)                  dockerBuilding=1; shift 1;;
         -S | --skip-schema)             schemaBuilding=0; shift 1;;
-        -v | --version)                 shift 1; export FULL_VERSION_NUMBER=$1; shift 1;;
-        reckless)                       build=1; reckless=1; karafBuilding=0; shift 1;;
+        -v | --version)                 shift 1; versionNumber=$1; shift 1;;
+        -ma | --maven-argument)         shift 1; extraMavenArgs="$extraMavenArgs $1"; shift 1;;
+        reckless)                       build=1; reckless=1; buildKaraf=0; shift 1;;
         start)                          start=1; shift 1;;
         -w  | --skip-watch-bundles)     watchBundles=0; shift 1;;
-        -K  | --skip-keycloak)          skipKeycloak=1; shift 1;;
-
+        -K  | --skip-keycloak)          startKeycloak=0; shift 1;;
         -o | --options)                 shift 1; while read -d, -r pair; do IFS='=' read -r key val <<<"$pair"; eval "$key"="$val"; done <<<"$1,"; shift 1;;
         stop)                           stop=1; shift 1;;
         status)                         status=1; shift 1;;
@@ -822,6 +836,12 @@ while [ $# -ne 0 ]; do
         ;;
     esac
 done
+
+if [ "$versionNumber" = "SNAPSHOT" ]; then
+	mavenVersionArg=""
+else
+	mavenVersionArg="-Drevision=$versionNumber"
+fi
 
 case $runtime in
 
@@ -899,11 +919,11 @@ if [ $update -eq 1 ]; then
     sdk selfupdate
     sdk env install
     sdk env
-    mvnd clean install -DgenerateRoot -DskipApplicationBuild -DupdateJudoVersions=true -f ${MODEL_DIR} -U || exit
+    mvnd clean compile -DgenerateRoot -DskipApplicationBuild -DupdateJudoVersions=true -f ${MODEL_DIR} -U || exit
 fi
 
 if [ $generate -eq 1 ]; then
-    mvnd clean install -DgenerateApplication -DskipApplicationBuild -f ${MODEL_DIR} || exit
+    mvnd clean compile -DgenerateApplication -DskipApplicationBuild -f ${MODEL_DIR} || exit
 fi
 
 if [ $build -eq 1 ]; then

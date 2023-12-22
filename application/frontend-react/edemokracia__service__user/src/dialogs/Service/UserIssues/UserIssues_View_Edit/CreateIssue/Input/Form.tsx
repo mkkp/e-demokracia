@@ -6,22 +6,15 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/City/LinkSetSelectorPage';
-import { useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/County/LinkSetSelectorPage';
-import { useServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/District/LinkSetSelectorPage';
-import { useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/IssueType/LinkSetSelectorPage';
 import type { ServiceCreateIssueInputCreateIssueInput_FormDialogActions } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/ServiceCreateIssueInputCreateIssueInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceCity,
   ServiceCityQueryCustomizer,
@@ -41,8 +34,11 @@ import type {
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueTypeStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceImpl } from '~/services/data-axios/ServiceUserIssuesServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended =
   ServiceCreateIssueInputCreateIssueInput_FormDialogActions & {
@@ -193,14 +189,6 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     customActionsHook?.(ownerData, data, editMode, storeDiff);
 
   // Dialog hooks
-  const openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage =
-    useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage();
-  const openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage =
-    useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage();
-  const openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage =
-    useServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage();
-  const openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage =
-    useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage();
 
   // Calculated section
   const title: string = t('service.CreateIssueInput.CreateIssueInput_Form', { defaultValue: 'CreateIssueInput Form' });
@@ -211,109 +199,15 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   // Action section
-  const cityAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const cityOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
-        data,
-        data.city ? [data.city] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('city', returnedData[0]);
-      }
-    }
-  };
-  const countyAutocompleteRangeAction = async (
-    queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const countyOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage(
-        data,
-        data.county ? [data.county] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('county', returnedData[0]);
-      }
-    }
-  };
-  const districtAutocompleteRangeAction = async (
-    queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const districtOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage(
-        data,
-        data.district ? [data.district] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('district', returnedData[0]);
-      }
-    }
-  };
-  const issueTypeAutocompleteRangeAction = async (
-    queryCustomizer: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored[]> => {
-    try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(data, queryCustomizer);
-    } catch (error) {
-      handleError(error);
-      return Promise.resolve([]);
-    }
-  };
-  const issueTypeOpenSetSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage(
-        data,
-        data.issueType ? [data.issueType] : [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        storeDiff('issueType', returnedData[0]);
-      }
-    }
-  };
   const backAction = async () => {
     onClose();
   };
   const createIssueForUserIssuesAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceUserIssuesServiceImpl.createIssue(
-        data,
-      );
+      const result = await serviceUserIssuesServiceImpl.createIssue(payloadDiff.current);
       if (customActions?.postCreateIssueForUserIssuesAction) {
-        await customActions.postCreateIssueForUserIssuesAction(
-          result,
-          onSubmit,
-          onClose,
-        );
+        await customActions.postCreateIssueForUserIssuesAction(result, onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -345,14 +239,6 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   const actions: ServiceCreateIssueInputCreateIssueInput_FormDialogActions = {
-    cityAutocompleteRangeAction,
-    cityOpenSetSelectorAction,
-    countyAutocompleteRangeAction,
-    countyOpenSetSelectorAction,
-    districtAutocompleteRangeAction,
-    districtOpenSetSelectorAction,
-    issueTypeAutocompleteRangeAction,
-    issueTypeOpenSetSelectorAction,
     backAction,
     createIssueForUserIssuesAction,
     getTemplateAction,

@@ -6,20 +6,20 @@
 // Template name: actor/src/layout/Header/HeaderContent/Customization/index.tsx
 // Template file: actor/src/layout/Header/HeaderContent/Customization/index.tsx.hbs
 
-import { useMemo, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useConfig } from '~/hooks';
-import { ThemeMode as ThemeModeEnum } from '~/config';
+import { useTheme } from '@mui/material/styles';
+import { useMemo, useState } from 'react';
 import { MdiIcon, SimpleBar } from '~/components';
+import { ThemeMode as ThemeModeEnum } from '~/config';
+import { useConfig } from '~/hooks';
+import { ThemeMenuLayout } from './ThemeMenuLayout';
 import { ThemeMode } from './ThemeMode';
 import { ThemeWidth } from './ThemeWidth';
-import { ThemeMenuLayout } from './ThemeMenuLayout';
 
 export const Customization = () => {
   const theme = useTheme();

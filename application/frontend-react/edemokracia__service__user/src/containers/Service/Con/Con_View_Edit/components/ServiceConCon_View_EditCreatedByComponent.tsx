@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,8 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceConCon_View_EditCreatedByComponentActionDefinitions {
-  createdByOpenSetSelectorAction?: () => Promise<void>;
   createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -30,6 +29,7 @@ export interface ServiceConCon_View_EditCreatedByComponentProps {
   ownerData: ServiceCon | ServiceConStored;
   actions: ServiceConCon_View_EditCreatedByComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceCon, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -38,7 +38,7 @@ export interface ServiceConCon_View_EditCreatedByComponentProps {
 // XMIID: User/(esm/_WifZAIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink
 // Name: createdBy
 export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_View_EditCreatedByComponentProps) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -47,6 +47,7 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
       id="User/(esm/_WifZAIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Con.Con_View_Edit.createdBy', { defaultValue: 'Created by' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -78,13 +79,6 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
         ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
               await actions.createdByOpenPageAction!(ownerData.createdBy!);
-            }
-          : undefined
-      }
-      onSet={
-        actions.createdByOpenSetSelectorAction
-          ? async () => {
-              await actions.createdByOpenSetSelectorAction!();
             }
           : undefined
       }

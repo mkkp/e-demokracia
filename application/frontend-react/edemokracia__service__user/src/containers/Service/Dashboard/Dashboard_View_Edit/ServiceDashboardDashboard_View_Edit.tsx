@@ -6,21 +6,22 @@
 // Template name: actor/src/containers/container.tsx
 // Template file: actor/src/containers/container.tsx.hbs
 
-import type { Dispatch, SetStateAction, FC } from 'react';
-import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { clsx } from 'clsx';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
-import { MdiIcon, ModeledTabs, DropdownButton, useJudoNavigation } from '~/components';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 import {} from '@mui/x-date-pickers';
@@ -43,10 +44,10 @@ import {
 } from '~/services/data-api';
 import type { ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditFavoriteIssuesComponent';
 import { ServiceDashboardDashboard_View_EditFavoriteIssuesComponent } from './components/ServiceDashboardDashboard_View_EditFavoriteIssuesComponent';
-import type { ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditOwnedIssuesComponent';
-import { ServiceDashboardDashboard_View_EditOwnedIssuesComponent } from './components/ServiceDashboardDashboard_View_EditOwnedIssuesComponent';
 import type { ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent';
 import { ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent } from './components/ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent';
+import type { ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditOwnedIssuesComponent';
+import { ServiceDashboardDashboard_View_EditOwnedIssuesComponent } from './components/ServiceDashboardDashboard_View_EditOwnedIssuesComponent';
 import type { ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent';
 import { ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent } from './components/ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent';
 import type { ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditVoteEntriesComponent';
@@ -93,6 +94,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
     submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
+  const { openConfirmDialog } = useConfirmDialog();
 
   useConfirmationBeforeChange(
     editMode,
@@ -125,7 +127,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
               id="User/(esm/_ekzRUFw5Ee6gN-oVBDDIOQ)/TabBarVisualElement"
               ownerData={data}
               validation={validation}
-              orientation='horizontal'
+              orientation="horizontal"
               childTabs={[
                 {
                   id: 'User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupTab',
@@ -165,7 +167,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                           id="User/(esm/_CR_JgIyUEe2VSOmaAz6G9Q)/TabBarVisualElement"
                           ownerData={data}
                           validation={validation}
-                          orientation='vertical'
+                          orientation="vertical"
                           childTabs={[
                             {
                               id: 'User/(esm/_E0b4IIyUEe2VSOmaAz6G9Q)/GroupTab',
@@ -272,7 +274,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                           id="User/(esm/_ju2mUGBVEe6M1JBD8stPIg)/TabBarVisualElement"
                           ownerData={data}
                           validation={validation}
-                          orientation='vertical'
+                          orientation="vertical"
                           childTabs={[
                             {
                               id: 'User/(esm/_rK5hIGBVEe6M1JBD8stPIg)/GroupTab',

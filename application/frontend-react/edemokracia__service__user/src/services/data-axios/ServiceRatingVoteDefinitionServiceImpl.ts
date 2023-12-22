@@ -6,28 +6,28 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceRatingVoteDefinition,
-  ServiceRatingVoteEntryQueryCustomizer,
-  RatingVoteInput,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceRatingVoteDefinitionStored,
-  ServiceIssueQueryCustomizer,
-  ServiceRatingVoteDefinitionQueryCustomizer,
-  ServiceIssueStored,
-  ServiceServiceUserStored,
-  ServiceIssue,
-  ServiceServiceUser,
-  CreateCommentInput,
-  CreateArgumentInput,
-  ServiceRatingVoteEntry,
-  ServiceServiceUserQueryCustomizer,
   CloseDebateInput,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateCommentInput,
+  RatingVoteInput,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceRatingVoteDefinition,
+  ServiceRatingVoteDefinitionQueryCustomizer,
+  ServiceRatingVoteDefinitionStored,
+  ServiceRatingVoteEntry,
+  ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceRatingVoteDefinitionService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServiceRatingVoteDefinition
@@ -98,6 +98,33 @@ export class ServiceRatingVoteDefinitionServiceImpl
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssue(
+    owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void> {
+    const path = '/service/RatingVoteDefinition/~update/issue/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssue(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void> {
+    const path = '/service/RatingVoteDefinition/~update/issue/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**

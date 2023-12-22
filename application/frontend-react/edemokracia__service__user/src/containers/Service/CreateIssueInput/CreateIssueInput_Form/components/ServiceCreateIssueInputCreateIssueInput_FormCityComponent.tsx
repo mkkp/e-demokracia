@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceCreateIssueInput,
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentActionDefinitions {
-  cityOpenSetSelectorAction?: () => Promise<void>;
+  cityOpenSetSelectorAction?: () => Promise<ServiceCityStored | undefined>;
+  cityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
   cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
 }
 
@@ -27,6 +28,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps 
   ownerData: ServiceCreateIssueInput | ServiceCreateIssueInputStored;
   actions: ServiceCreateIssueInputCreateIssueInput_FormCityComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -37,7 +39,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps 
 export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -50,6 +52,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
         ownerData.city?.name?.toString() ?? '',
         ownerData.city?.county?.toString() ?? '',
       ]}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -80,9 +83,12 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
       onSet={
         actions.cityOpenSetSelectorAction
           ? async () => {
-              await actions.cityOpenSetSelectorAction!();
+              const city = await actions.cityOpenSetSelectorAction!();
             }
           : undefined
+      }
+      onUnset={
+        ownerData.city && actions.cityUnsetAction ? async () => actions.cityUnsetAction!(ownerData.city!) : undefined
       }
     />
   );

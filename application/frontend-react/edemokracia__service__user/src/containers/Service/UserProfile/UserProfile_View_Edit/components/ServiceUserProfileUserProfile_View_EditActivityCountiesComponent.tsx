@@ -6,36 +6,38 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
-import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
 import type {
   ServiceCounty,
   ServiceCountyQueryCustomizer,
@@ -43,17 +45,21 @@ import type {
   ServiceUserProfile,
   ServiceUserProfileStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
-  getUpdatedRowsSelected,
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
+  getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponentActionDefinitions {
+  activityCountiesOpenAddSelectorAction?: () => Promise<void>;
+  activityCountiesBulkRemoveAction?: (
+    selectedRows: ServiceCountyStored[],
+  ) => Promise<DialogResult<ServiceCountyStored[]>>;
   activityCountiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -61,6 +67,7 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponen
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   activityCountiesRefreshAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored[]>;
+  activityCountiesRemoveAction?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
   activityCountiesOpenPageAction?: (row: ServiceCountyStored) => Promise<void>;
 }
 
@@ -83,6 +90,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
   const filterModelKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
 
@@ -116,23 +124,35 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
 
   const selectedRows = useRef<ServiceCountyStored[]>([]);
 
-  const columns = useMemo<GridColDef<ServiceCountyStored>[]>(
-    () => [
-      {
-        ...baseColumnConfig,
-        field: 'representation',
-        headerName: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'County' }) as string,
-        headerClassName: 'data-grid-column-header',
+  const representationColumn: GridColDef<ServiceCountyStored> = {
+    ...baseColumnConfig,
+    field: 'representation',
+    headerName: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'County' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-    ],
-    [],
-  );
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
 
-  const rowActions: TableRowAction<ServiceCountyStored>[] = [];
+  const columns = useMemo<GridColDef<ServiceCountyStored>[]>(() => [representationColumn], []);
+
+  const rowActions: TableRowAction<ServiceCountyStored>[] = [
+    {
+      id: 'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableRowRemoveButton',
+      label: t(
+        'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Remove',
+        { defaultValue: 'Remove' },
+      ) as string,
+      icon: <MdiIcon path="link_off" />,
+      disabled: (row: ServiceCountyStored) => !isFormUpdateable() || isLoading,
+      action: actions.activityCountiesRemoveAction
+        ? async (rowData) => {
+            await actions.activityCountiesRemoveAction!(rowData);
+          }
+        : undefined,
+    },
+  ];
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -190,9 +210,13 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -237,6 +261,11 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
           }),
         ]}
         disableRowSelectionOnClick
+        checkboxSelection
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setSelectionModel(newRowSelectionModel);
+        }}
         keepNonExistentRowsSelected
         onRowClick={
           actions.activityCountiesOpenPageAction
@@ -289,6 +318,43 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   {t(
                     'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Refresh',
                     { defaultValue: 'Refresh' },
+                  )}
+                </Button>
+              ) : null}
+              {actions.activityCountiesOpenAddSelectorAction && isFormUpdateable() ? (
+                <Button
+                  id="User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableAddSelectorOpenButton"
+                  startIcon={<MdiIcon path="attachment-plus" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    await actions.activityCountiesOpenAddSelectorAction!();
+                  }}
+                  disabled={editMode || !isFormUpdateable() || isLoading}
+                >
+                  {t(
+                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Add',
+                    { defaultValue: 'Add' },
+                  )}
+                </Button>
+              ) : null}
+              {actions.activityCountiesBulkRemoveAction && selectionModel.length > 0 ? (
+                <Button
+                  id="User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableBulkRemoveButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const { result: bulkResult } = await actions.activityCountiesBulkRemoveAction!(
+                      selectedRows.current,
+                    );
+                    if (bulkResult === 'submit') {
+                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  {t(
+                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.BulkRemove',
+                    { defaultValue: 'Remove' },
                   )}
                 </Button>
               ) : null}

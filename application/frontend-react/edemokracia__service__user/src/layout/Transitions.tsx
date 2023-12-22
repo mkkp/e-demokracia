@@ -6,15 +6,15 @@
 // Template name: actor/src/layout/Transitions.tsx
 // Template file: actor/src/layout/Transitions.tsx.hbs
 
-import { forwardRef } from 'react';
-import type { CSSProperties, ExoticComponent, ReactElement, Ref } from 'react';
+import type { ZoomProps } from '@mui/material';
+import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Fade from '@mui/material/Fade';
-import Box from '@mui/material/Box';
 import Grow from '@mui/material/Grow';
 import Slide from '@mui/material/Slide';
 import Zoom from '@mui/material/Zoom';
-import type { ZoomProps } from '@mui/material';
+import { forwardRef } from 'react';
+import type { CSSProperties, ExoticComponent, ReactElement, Ref } from 'react';
 
 export interface TransitionProps {
   children?: ReactElement;

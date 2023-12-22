@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,9 @@ import type {
   ServiceIssue,
   ServiceIssueStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditDistrictComponentActionDefinitions {
-  districtOpenSetSelectorAction?: () => Promise<void>;
+  districtOpenSetSelectorAction?: () => Promise<ServiceDistrictStored | undefined>;
   districtUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
   districtOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
   districtAutocompleteRangeAction?: (
@@ -31,6 +31,7 @@ export interface ServiceIssueIssue_View_EditDistrictComponentProps {
   ownerData: ServiceIssue | ServiceIssueStored;
   actions: ServiceIssueIssue_View_EditDistrictComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceIssue, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +40,7 @@ export interface ServiceIssueIssue_View_EditDistrictComponentProps {
 // XMIID: User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: district
 export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssueIssue_View_EditDistrictComponentProps) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -48,6 +49,7 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
       id="User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.district', { defaultValue: 'District' }) as string}
       labelList={[ownerData.district?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -85,7 +87,7 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
       onSet={
         actions.districtOpenSetSelectorAction
           ? async () => {
-              await actions.districtOpenSetSelectorAction!();
+              const district = await actions.districtOpenSetSelectorAction!();
             }
           : undefined
       }

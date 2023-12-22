@@ -6,25 +6,25 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceDistrictQueryCustomizer,
-  ServiceCreateIssueInput,
-  ServiceDistrict,
-  ServiceCountyQueryCustomizer,
   ServiceCity,
-  ServiceIssueTypeQueryCustomizer,
-  ServiceCreateIssueInputStored,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
-  ServiceCityStored,
-  ServiceIssueTypeStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceCreateIssueInput,
+  ServiceCreateIssueInputStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
   ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceCreateIssueInputService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServiceCreateIssueInput
@@ -80,6 +80,33 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     return response.data;
   }
 
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setCity(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceCity>,
+  ): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/city/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetCity(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/city/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
   async getTemplateForCounty(): Promise<ServiceCounty> {
     const path = '/service/County/~template';
     const response = await this.axios.get(this.getPathForActor(path));
@@ -118,6 +145,33 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setCounty(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceCounty>,
+  ): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/county/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetCounty(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/county/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async getTemplateForDistrict(): Promise<ServiceDistrict> {
@@ -160,6 +214,33 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     return response.data;
   }
 
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setDistrict(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceDistrict>,
+  ): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/district/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetDistrict(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/district/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
   async getTemplateForIssueType(): Promise<ServiceIssueType> {
     const path = '/service/IssueType/~template';
     const response = await this.axios.get(this.getPathForActor(path));
@@ -198,5 +279,32 @@ export class ServiceCreateIssueInputServiceImpl extends JudoAxiosService impleme
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssueType(
+    owner: JudoIdentifiable<ServiceCreateIssueInput>,
+    selected: JudoIdentifiable<ServiceIssueType>,
+  ): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/issueType/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssueType(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void> {
+    const path = '/service/CreateIssueInput/~update/issueType/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 }

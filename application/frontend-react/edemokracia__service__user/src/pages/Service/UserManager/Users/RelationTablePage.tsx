@@ -6,22 +6,18 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useState, useMemo, lazy, Suspense } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { useServiceUserManagerUsersRelationViewPage } from '~/dialogs/Service/UserManager/Users/RelationViewPage';
 import type { ServiceServiceUserServiceUser_TablePageActions } from '~/containers/Service/ServiceUser/ServiceUser_Table/ServiceServiceUserServiceUser_TablePageContainer';
+import { useServiceUserManagerUsersRelationViewPage } from '~/dialogs/Service/UserManager/Users/RelationViewPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -29,8 +25,12 @@ import type {
   ServiceUserManager,
   ServiceUserManagerStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserManagerServiceForUsersImpl } from '~/services/data-axios/ServiceUserManagerServiceForUsersImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceServiceUserServiceUser_TablePageActionsExtended = ServiceServiceUserServiceUser_TablePageActions & {
   postRefreshAction?: (data: ServiceServiceUserStored[]) => Promise<void>;

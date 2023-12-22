@@ -6,31 +6,31 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceVoteDefinitionStored,
-  RatingVoteInput,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceVoteDefinitionQueryCustomizer,
-  ServiceVoteEntryQueryCustomizer,
-  ServiceIssueQueryCustomizer,
-  YesNoAbstainVoteInput,
-  ServiceVoteDefinition,
-  ServiceIssueStored,
-  ServiceVoteEntry,
-  ServiceVoteEntryStored,
-  SelectAnswerVoteSelection,
-  ServiceIssue,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  ServiceDashboardQueryCustomizer,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  ServiceDashboard,
-  ServiceDashboardStored,
-  CreateArgumentInput,
-  YesNoVoteInput,
   CloseDebateInput,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateCommentInput,
+  RatingVoteInput,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceDashboard,
+  ServiceDashboardQueryCustomizer,
+  ServiceDashboardStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceVoteDefinition,
+  ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionStored,
+  ServiceVoteEntry,
+  ServiceVoteEntryQueryCustomizer,
+  ServiceVoteEntryStored,
+  YesNoAbstainVoteInput,
+  YesNoVoteInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceDashboard
@@ -48,6 +48,14 @@ export interface ServiceDashboardService {
     owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addFavoriteIssues(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeFavoriteIssues(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForFavoriteIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForFavoriteIssues(
@@ -72,6 +80,14 @@ export interface ServiceDashboardService {
     owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
+  addFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void>;
+  removeFavoriteVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void>;
   voteRatingForFavoriteVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
@@ -104,6 +120,14 @@ export interface ServiceDashboardService {
     owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addIssuesOwned(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeIssuesOwned(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   deleteIssuesOwned(target: JudoIdentifiable<ServiceIssue>): Promise<void>;
   activateForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
@@ -129,6 +153,14 @@ export interface ServiceDashboardService {
     owner?: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
+  addOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void>;
+  removeOwnedVoteDefinitions(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
+  ): Promise<void>;
   deleteOwnedVoteDefinitions(target: JudoIdentifiable<ServiceVoteDefinition>): Promise<void>;
   voteRatingForOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceVoteDefinition>,

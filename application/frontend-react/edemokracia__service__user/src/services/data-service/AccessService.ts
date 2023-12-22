@@ -6,8 +6,8 @@
 // Template name: accessService.ts.hbs
 // Template file: data-service/accessService.ts.hbs
 
-import type { JudoDownloadFile, JudoMetaData } from '@judo/data-api-common';
 import { ServiceServicePrincipalUserStored } from '../data-api';
+import type { JudoDownloadFile, JudoMetaData } from '../data-api/common';
 
 export interface AccessService {
   getPrincipal(): Promise<ServiceServicePrincipalUserStored>;

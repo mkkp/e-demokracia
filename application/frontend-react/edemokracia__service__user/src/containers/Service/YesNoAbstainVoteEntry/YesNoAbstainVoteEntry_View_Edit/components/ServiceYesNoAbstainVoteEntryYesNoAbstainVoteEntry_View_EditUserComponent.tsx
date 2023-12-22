@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,10 @@ import type {
   ServiceYesNoAbstainVoteEntry,
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions {
-  ownerOpenSetSelectorAction?: () => Promise<void>;
+  ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
+  ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
@@ -30,6 +31,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUser
   ownerData: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored;
   actions: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteEntry, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -40,7 +42,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUser
 export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponent(
   props: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -51,6 +53,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserC
         t('service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry_View_Edit.user', { defaultValue: 'User' }) as string
       }
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
+      required={true}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -88,8 +91,13 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserC
       onSet={
         actions.ownerOpenSetSelectorAction
           ? async () => {
-              await actions.ownerOpenSetSelectorAction!();
+              const owner = await actions.ownerOpenSetSelectorAction!();
             }
+          : undefined
+      }
+      onUnset={
+        ownerData.owner && actions.ownerUnsetAction
+          ? async () => actions.ownerUnsetAction!(ownerData.owner!)
           : undefined
       }
     />

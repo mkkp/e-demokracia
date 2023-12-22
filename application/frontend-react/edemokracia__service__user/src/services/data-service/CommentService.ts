@@ -6,8 +6,8 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { Comment, CommentStored, CommentQueryCustomizer } from '../data-api';
+import { Comment, CommentQueryCustomizer, CommentStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for Comment

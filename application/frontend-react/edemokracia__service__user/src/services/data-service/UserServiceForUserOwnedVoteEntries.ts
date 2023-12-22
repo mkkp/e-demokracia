@@ -6,24 +6,24 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceVoteDefinitionStored,
   RatingVoteInput,
-  YesNoAbstainVoteInputStored,
-  ServiceVoteDefinitionQueryCustomizer,
-  ServiceVoteEntryQueryCustomizer,
-  YesNoAbstainVoteInput,
-  ServiceVoteDefinition,
-  ServiceVoteEntryStored,
-  ServiceVoteEntry,
-  SelectAnswerVoteSelection,
   RatingVoteInputStored,
+  SelectAnswerVoteSelection,
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
+  ServiceVoteDefinition,
+  ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionStored,
+  ServiceVoteEntry,
+  ServiceVoteEntryQueryCustomizer,
+  ServiceVoteEntryStored,
+  YesNoAbstainVoteInput,
+  YesNoAbstainVoteInputStored,
   YesNoVoteInput,
   YesNoVoteInputStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.userOwnedVoteEntries

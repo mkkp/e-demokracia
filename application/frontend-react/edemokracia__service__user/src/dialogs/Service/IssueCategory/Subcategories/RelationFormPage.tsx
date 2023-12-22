@@ -6,20 +6,17 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { useServiceIssueCategoryOwnerRelationViewPage } from '~/dialogs/Service/IssueCategory/Owner/RelationViewPage';
 import type { ServiceIssueCategoryIssueCategory_FormDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_Form/ServiceIssueCategoryIssueCategory_FormDialogContainer';
+import { useServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_Form/Owner/LinkSetSelectorPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceIssueCategory,
   ServiceIssueCategoryQueryCustomizer,
@@ -28,8 +25,11 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueCategoryServiceForSubcategoriesImpl } from '~/services/data-axios/ServiceIssueCategoryServiceForSubcategoriesImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueCategoryIssueCategory_FormDialogActionsExtended =
   ServiceIssueCategoryIssueCategory_FormDialogActions & {};
@@ -177,7 +177,8 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
   );
 
   // Dialog hooks
-  const openServiceIssueCategoryOwnerRelationViewPage = useServiceIssueCategoryOwnerRelationViewPage();
+  const openServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage =
+    useServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage();
 
   // Calculated section
   const title: string = t('service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
@@ -188,11 +189,31 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
   };
 
   // Action section
+  const ownerAutocompleteRangeAction = async (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored[]> => {
+    try {
+      return serviceIssueCategoryServiceForSubcategoriesImpl.getRangeForOwner(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
+    const { result, data: returnedData } = await openServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage(
+      data,
+      data.owner ? [data.owner] : [],
+    );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('owner', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
-  };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
   };
   const backAction = async () => {
     onClose();
@@ -200,7 +221,7 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
   const createAction = async () => {
     try {
       setIsLoading(true);
-      const res = await serviceIssueCategoryServiceForSubcategoriesImpl.create(ownerData, data);
+      const res = await serviceIssueCategoryServiceForSubcategoriesImpl.create(ownerData, payloadDiff.current);
       showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
       onSubmit(res);
     } catch (error) {
@@ -224,8 +245,9 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
   };
 
   const actions: ServiceIssueCategoryIssueCategory_FormDialogActions = {
+    ownerAutocompleteRangeAction,
+    ownerOpenSetSelectorAction,
     ownerUnsetAction,
-    ownerOpenPageAction,
     backAction,
     createAction,
     getTemplateAction,

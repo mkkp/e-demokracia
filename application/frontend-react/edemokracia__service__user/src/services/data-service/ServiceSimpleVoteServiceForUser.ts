@@ -6,24 +6,24 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceDistrictQueryCustomizer,
-  ServiceDistrict,
-  ServiceSimpleVote,
-  ServiceCountyQueryCustomizer,
-  ServiceServiceUserStored,
-  ServiceServiceUser,
-  ServiceSimpleVoteStored,
   ServiceCity,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCounty,
-  ServiceServiceUserQueryCustomizer,
-  ServiceCityStored,
-  ServiceSimpleVoteQueryCustomizer,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
+  ServiceSimpleVoteQueryCustomizer,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceSimpleVote.user
@@ -33,6 +33,12 @@ export interface ServiceSimpleVoteServiceForUser {
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
+  getRangeForUser(
+    owner: JudoIdentifiable<ServiceSimpleVote> | ServiceSimpleVote,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+  setUser(owner: JudoIdentifiable<ServiceSimpleVote>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
+  unsetUser(owner: JudoIdentifiable<ServiceSimpleVote>): Promise<void>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,

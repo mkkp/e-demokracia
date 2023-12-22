@@ -8,13 +8,13 @@
 
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
-import type { TFunction } from 'i18next';
 import type { GridColDef, GridRowParams } from '@mui/x-data-grid';
+import type { TFunction } from 'i18next';
+import { baseColumnConfig } from '../../config';
 import type { ColumnActionsProvider, ColumnsActionsOptions, TableRowAction } from '../../utilities';
 import { exists } from '../../utilities';
 import { DropdownButton } from '../DropdownButton';
 import { MdiIcon } from '../MdiIcon';
-import { baseColumnConfig } from '../../config';
 
 export const columnsActionCalculator: ColumnActionsProvider<any> = (
   id: string,

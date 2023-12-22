@@ -6,15 +6,15 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceSimpleVoteStored,
   ServiceServiceUser,
-  ServiceSimpleVote,
-  ServiceServiceUserStored,
   ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceSimpleVote,
   ServiceSimpleVoteQueryCustomizer,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceSimpleVote
@@ -32,4 +32,6 @@ export interface ServiceSimpleVoteService {
     owner?: JudoIdentifiable<ServiceSimpleVote> | ServiceSimpleVote,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
+  setUser(owner: JudoIdentifiable<ServiceSimpleVote>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
+  unsetUser(owner: JudoIdentifiable<ServiceSimpleVote>): Promise<void>;
 }

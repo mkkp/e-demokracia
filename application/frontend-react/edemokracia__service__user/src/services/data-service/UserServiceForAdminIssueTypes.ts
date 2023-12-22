@@ -6,8 +6,8 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored, ServiceIssueType } from '../data-api';
+import { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.adminIssueTypes

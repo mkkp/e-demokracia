@@ -6,16 +6,16 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceSimpleVoteStored,
+  ServiceCon,
   ServiceServiceUser,
-  ServiceSimpleVote,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
+  ServiceSimpleVote,
   ServiceSimpleVoteQueryCustomizer,
-  ServiceCon,
+  ServiceSimpleVoteStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceCon.votes
@@ -33,4 +33,10 @@ export interface ServiceConServiceForVotes {
     owner: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
+  getRangeForUser(
+    owner: JudoIdentifiable<ServiceSimpleVote> | ServiceSimpleVote,
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>>;
+  setUser(owner: JudoIdentifiable<ServiceSimpleVote>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
+  unsetUser(owner: JudoIdentifiable<ServiceSimpleVote>, target: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
 }

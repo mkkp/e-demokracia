@@ -6,37 +6,37 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceSelectAnswerVoteDefinition,
-  ServiceIssueQueryCustomizer,
-  CreateArgumentInputStored,
-  ServiceIssueStored,
-  SelectAnswerVoteSelection,
-  ServiceIssue,
-  ServiceServiceUser,
-  ServiceSelectAnswerVoteDefinitionStored,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  CreateArgumentInput,
-  ServiceSelectAnswerVoteSelectionQueryCustomizer,
   CloseDebateInput,
-  ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ServiceSelectAnswerVoteSelection,
-  ServiceSelectAnswerVoteEntryStored,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceServiceUserStored,
-  ServiceSelectAnswerVoteEntry,
-  ServiceSelectAnswerVoteSelectionStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  CreateCommentInputStored,
   CloseDebateInputStored,
-  ServiceServiceUserQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
+  ServiceSelectAnswerVoteDefinitionStored,
+  ServiceSelectAnswerVoteEntry,
+  ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ServiceSelectAnswerVoteEntryStored,
+  ServiceSelectAnswerVoteSelection,
+  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { UserServiceForUserOwnedSelectAnswerVoteDefinitions } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for User.userOwnedSelectAnswerVoteDefinitions
@@ -122,6 +122,52 @@ export class UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl
     });
 
     return response.data;
+  }
+
+  /**
+   * Form: targetRelation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition> | ServiceSelectAnswerVoteDefinition,
+    queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>> {
+    const path = '/service/SelectAnswerVoteDefinition/issue/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner,
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: targetRelation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/issue/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
+   * From: targetRelation.isUnsetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssue(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/issue/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
   }
 
   /**

@@ -6,19 +6,19 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceServiceUser,
-  ServiceCreateUserInputStored,
-  ServiceUserManagerStored,
   ServiceCreateUserInput,
-  ServiceUserManager,
+  ServiceCreateUserInputStored,
+  ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
+  ServiceUserManager,
   ServiceUserManagerQueryCustomizer,
+  ServiceUserManagerStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { UserServiceForAdminUserManager } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for User.adminUserManager

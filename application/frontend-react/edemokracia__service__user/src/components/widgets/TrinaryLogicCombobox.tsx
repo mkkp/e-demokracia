@@ -6,12 +6,12 @@
 // Template name: actor/src/components/widgets/TrinaryLogicCombobox.tsx
 // Template file: actor/src/components/widgets/TrinaryLogicCombobox.tsx.hbs
 
-import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
-import { useTranslation } from 'react-i18next';
-import type { ChangeEvent } from 'react';
+import TextField from '@mui/material/TextField';
 import { clsx } from 'clsx';
+import type { ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { TRINARY_LOGIC, TrinaryLogicProps } from '../../components-api';
 import { MdiIcon } from '../MdiIcon';
 

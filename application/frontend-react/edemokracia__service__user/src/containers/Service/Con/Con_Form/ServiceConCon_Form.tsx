@@ -6,22 +6,23 @@
 // Template name: actor/src/containers/container.tsx
 // Template file: actor/src/containers/container.tsx.hbs
 
-import type { Dispatch, SetStateAction, FC } from 'react';
-import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { clsx } from 'clsx';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
-import { MdiIcon, DropdownButton, useJudoNavigation } from '~/components';
-import { isErrorOperationFault, useErrorHandler, uiDateToServiceDate, serviceDateToUiDate } from '~/utilities';
+import type { JudoIdentifiable } from '~/services/data-api/common';
+import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
@@ -42,10 +43,10 @@ import {
 } from '~/services/data-api';
 import type { ServiceConCon_FormConsComponentActionDefinitions } from './components/ServiceConCon_FormConsComponent';
 import { ServiceConCon_FormConsComponent } from './components/ServiceConCon_FormConsComponent';
-import type { ServiceConCon_FormProsComponentActionDefinitions } from './components/ServiceConCon_FormProsComponent';
-import { ServiceConCon_FormProsComponent } from './components/ServiceConCon_FormProsComponent';
 import type { ServiceConCon_FormCreatedByComponentActionDefinitions } from './components/ServiceConCon_FormCreatedByComponent';
 import { ServiceConCon_FormCreatedByComponent } from './components/ServiceConCon_FormCreatedByComponent';
+import type { ServiceConCon_FormProsComponentActionDefinitions } from './components/ServiceConCon_FormProsComponent';
+import { ServiceConCon_FormProsComponent } from './components/ServiceConCon_FormProsComponent';
 
 export interface ServiceConCon_FormActionDefinitions
   extends ServiceConCon_FormConsComponentActionDefinitions,
@@ -88,6 +89,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
     submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
+  const { openConfirmDialog } = useConfirmDialog();
 
   useConfirmationBeforeChange(
     editMode,
@@ -334,6 +336,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               storeDiff={storeDiff}
               validationError={validation.get('createdBy')}
               actions={actions}
+              submit={submit}
             />
           </Grid>
 
@@ -342,7 +345,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               id="(User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
-              alignItems="center"
+              alignItems="stretch"
               justifyContent="flex-start"
               spacing={2}
             >
@@ -386,7 +389,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               id="(User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
               container
               direction="column"
-              alignItems="center"
+              alignItems="stretch"
               justifyContent="flex-start"
               spacing={2}
             >

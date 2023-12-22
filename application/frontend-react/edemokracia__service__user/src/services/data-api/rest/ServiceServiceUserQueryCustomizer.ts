@@ -6,7 +6,7 @@
 // Template name: queryCustomizer.ts.hbs
 // Template file: rest/queryCustomizer.ts.hbs
 
-import type { QueryCustomizer } from '@judo/data-api-common';
+import type { QueryCustomizer } from '../common';
 import { ServiceServiceUser } from '../model/ServiceServiceUser';
 import { FilterBytypesBoolean } from './FilterBytypesBoolean';
 import { FilterBytypesEmail } from './FilterBytypesEmail';

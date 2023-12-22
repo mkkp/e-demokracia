@@ -6,46 +6,48 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent, Dispatch, SetStateAction } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
-import { MdiIcon, CustomTablePagination } from '~/components';
-import { columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, MouseEvent, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
 import type { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   isRowSelectable,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelectorComponentActionDefinitions {
   filterAction?: (
@@ -77,6 +79,7 @@ export function ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelecto
   const filterModelKey = `User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
   const handleError = useErrorHandler();
@@ -114,41 +117,38 @@ export function ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelecto
   const [firstItem, setFirstItem] = useState<ServiceDistrictStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
-  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(
-    () => [
-      {
-        ...baseColumnConfig,
-        field: 'county',
-        headerName: t('service.District.District_Table.SetSelector.county', { defaultValue: 'County' }) as string,
-        headerClassName: 'data-grid-column-header',
+  const countyColumn: GridColDef<ServiceDistrictStored> = {
+    ...baseColumnConfig,
+    field: 'county',
+    headerName: t('service.District.District_Table.SetSelector.county', { defaultValue: 'County' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'city',
-        headerName: t('service.District.District_Table.SetSelector.city', { defaultValue: 'City' }) as string,
-        headerClassName: 'data-grid-column-header',
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const cityColumn: GridColDef<ServiceDistrictStored> = {
+    ...baseColumnConfig,
+    field: 'city',
+    headerName: t('service.District.District_Table.SetSelector.city', { defaultValue: 'City' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'name',
-        headerName: t('service.District.District_Table.SetSelector.name', { defaultValue: 'District name' }) as string,
-        headerClassName: 'data-grid-column-header',
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const nameColumn: GridColDef<ServiceDistrictStored> = {
+    ...baseColumnConfig,
+    field: 'name',
+    headerName: t('service.District.District_Table.SetSelector.name', { defaultValue: 'District name' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-    ],
-    [],
-  );
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+
+  const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(() => [countyColumn, cityColumn, nameColumn], []);
 
   const rowActions: TableRowAction<ServiceDistrictStored>[] = [];
 
@@ -216,9 +216,13 @@ export function ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelecto
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }
@@ -240,36 +244,23 @@ export function ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelecto
 
   const handleIsRowSelectable = useCallback(
     (params: GridRowParams<ServiceDistrictStored & { __selected?: boolean }>) => {
-      return isRowSelectable(params.row, !true, alreadySelected);
+      return isRowSelectable(params.row, !false, alreadySelected);
     },
     [],
   );
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;
-    // added new items
-    if (newSelectionModel.length > selectionModel.length) {
-      const diff = newSelectionModel.length - selectionModel.length;
-      const newItemsId = [...newSelectionModel].slice(diff * -1);
-      const newItems = data.filter((value) => newItemsId.indexOf(value.__identifier as GridRowId) !== -1);
-      setSelectionDiff((prevSelectedItems: ServiceDistrictStored[]) => {
-        if (!Array.isArray(prevSelectedItems)) return [];
-
-        return [...prevSelectedItems, ...newItems];
-      });
+    if (newSelectionModel.length === 0) {
+      setSelectionModel([]);
+      setSelectionDiff([]);
+      return;
     }
 
-    // removed items
-    if (newSelectionModel.length < selectionModel.length) {
-      const removedItemsId = selectionModel.filter((value) => newSelectionModel.indexOf(value) === -1);
-      setSelectionDiff((prevSelectedItems: ServiceDistrictStored[]) => {
-        if (!Array.isArray(prevSelectedItems)) return [];
+    const lastId = newSelectionModel[newSelectionModel.length - 1];
 
-        return [...prevSelectedItems.filter((value) => removedItemsId.indexOf(value.__identifier as GridRowId) === -1)];
-      });
-    }
-
-    setSelectionModel(newSelectionModel);
+    setSelectionModel([lastId]);
+    setSelectionDiff([data.find((value) => value.__identifier === lastId)!]);
   };
 
   async function fetchData() {
@@ -333,7 +324,7 @@ export function ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelecto
         ]}
         disableRowSelectionOnClick
         isRowSelectable={handleIsRowSelectable}
-        hideFooterSelectedRowCount={!true}
+        hideFooterSelectedRowCount={!false}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleOnSelection}
@@ -342,6 +333,10 @@ export function ServiceDistrictDistrict_TableSetSelectorDistrict_TableSetSelecto
         onSortModelChange={handleSortModelChange}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        paginationMode="server"
+        sortingMode="server"
+        filterMode="server"
+        rowCount={10}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>

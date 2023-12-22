@@ -6,33 +6,33 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceSelectAnswerVoteEntryStored,
+  CloseDebateInput,
   CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceSelectAnswerVoteDefinition,
+  CreateArgumentInput,
+  CreateCommentInput,
+  SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  ServiceIssue,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
-  ServiceServiceUserStored,
-  SelectAnswerVoteSelection,
-  ServiceSelectAnswerVoteEntry,
-  ServiceIssue,
-  ServiceServiceUser,
-  ServiceSelectAnswerVoteSelectionStored,
-  SelectAnswerVoteSelectionQueryCustomizer,
-  ServiceSelectAnswerVoteDefinitionStored,
-  SelectAnswerVoteSelectionStored,
-  CreateCommentInput,
-  CreateArgumentInput,
-  ServiceServiceUserQueryCustomizer,
-  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
-  CloseDebateInput,
+  ServiceSelectAnswerVoteDefinitionStored,
+  ServiceSelectAnswerVoteEntry,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
+  ServiceSelectAnswerVoteEntryStored,
   ServiceSelectAnswerVoteSelection,
+  ServiceSelectAnswerVoteSelectionQueryCustomizer,
+  ServiceSelectAnswerVoteSelectionStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceSelectAnswerVoteDefinitionService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServiceSelectAnswerVoteDefinition
@@ -105,6 +105,33 @@ export class ServiceSelectAnswerVoteDefinitionServiceImpl
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setIssue(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/issue/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetIssue(owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>): Promise<void> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/issue/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   /**

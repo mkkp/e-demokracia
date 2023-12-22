@@ -6,25 +6,25 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { CreateArgumentInputCreateArgumentInput_FormDialogActions } from '~/containers/CreateArgumentInput/CreateArgumentInput_Form/CreateArgumentInputCreateArgumentInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   CreateArgumentInput,
   CreateArgumentInputQueryCustomizer,
   CreateArgumentInputStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended =
   CreateArgumentInputCreateArgumentInput_FormDialogActions & {
@@ -183,12 +183,9 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   const createConArgumentForIssueAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceImpl.createConArgument(ownerData, data);
+      await serviceIssueServiceImpl.createConArgument(ownerData, payloadDiff.current);
       if (customActions?.postCreateConArgumentForIssueAction) {
-        await customActions.postCreateConArgumentForIssueAction(
-          onSubmit,
-          onClose,
-        );
+        await customActions.postCreateConArgumentForIssueAction(onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

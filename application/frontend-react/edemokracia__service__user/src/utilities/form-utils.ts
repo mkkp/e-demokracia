@@ -6,9 +6,9 @@
 // Template name: actor/src/utilities/form-utils.ts
 // Template file: actor/src/utilities/form-utils.ts.hbs
 
-import type { Dispatch, SetStateAction } from 'react';
 import { format } from 'date-fns';
 import type { TFunction } from 'i18next';
+import type { Dispatch, SetStateAction } from 'react';
 
 export const uiDateToServiceDate = (date?: any | null): string | null => {
   if (date === undefined || date === null) {

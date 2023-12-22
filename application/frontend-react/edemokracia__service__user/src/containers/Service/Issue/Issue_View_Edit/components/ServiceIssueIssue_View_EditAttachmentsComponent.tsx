@@ -6,36 +6,38 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
-import { singleSelectColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
+import { useConfirmDialog } from '~/components/dialog';
+import { ContextMenu, StripedDataGrid, columnsActionCalculator, singleSelectColumnOperators } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
 import type {
   ServiceIssue,
   ServiceIssueAttachment,
@@ -43,16 +45,16 @@ import type {
   ServiceIssueAttachmentStored,
   ServiceIssueStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
-  getUpdatedRowsSelected,
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
   fileHandling,
+  getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceIssueIssue_View_EditAttachmentsComponentActionDefinitions {
   attachmentsBulkDeleteAction?: (
@@ -91,6 +93,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const filterModelKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
@@ -125,84 +128,77 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
 
   const selectedRows = useRef<ServiceIssueAttachmentStored[]>([]);
 
-  const columns = useMemo<GridColDef<ServiceIssueAttachmentStored>[]>(
-    () => [
-      {
-        ...baseColumnConfig,
-        field: 'link',
-        headerName: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
-        headerClassName: 'data-grid-column-header',
+  const linkColumn: GridColDef<ServiceIssueAttachmentStored> = {
+    ...baseColumnConfig,
+    field: 'link',
+    headerName: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'file',
-        headerName: t('service.Issue.Issue_View_Edit.file', { defaultValue: 'File' }) as string,
-        headerClassName: 'data-grid-column-header',
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const fileColumn: GridColDef<ServiceIssueAttachmentStored> = {
+    ...baseColumnConfig,
+    field: 'file',
+    headerName: t('service.Issue.Issue_View_Edit.file', { defaultValue: 'File' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 230,
-        type: 'string',
-        filterable: false && false,
-        sortable: false,
-        align: 'center',
-        renderCell: (params: GridRenderCellParams<any, ServiceIssueAttachmentStored>) => {
-          return params.row.file ? (
-            <ButtonGroup size="small" variant="outlined">
-              <Button
-                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-download"
-                startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
-                onClick={(event: any) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  downloadFile(params.row, 'file', 'attachment');
-                }}
-              >
-                {extractFileNameFromToken(params.row.file)}
-              </Button>
-              <Button
-                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
-                onClick={(event: any) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  downloadFile(params.row, 'file', 'inline');
-                }}
-              >
-                <MdiIcon path="eye" sx={{ mr: 0.5 }} />
-              </Button>
-            </ButtonGroup>
-          ) : (
-            <MdiIcon path="minus" />
-          );
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'type',
-        headerName: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
-        headerClassName: 'data-grid-column-header',
+    width: 230,
+    type: 'string',
+    filterable: false && false,
+    sortable: false,
+    align: 'center',
+    renderCell: (params: GridRenderCellParams<any, ServiceIssueAttachmentStored>) => {
+      return params.row.file ? (
+        <ButtonGroup size="small" variant="outlined">
+          <Button
+            id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-download"
+            startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
+            onClick={(event: any) => {
+              event.preventDefault();
+              event.stopPropagation();
+              downloadFile(params.row, 'file', 'attachment');
+            }}
+          >
+            {extractFileNameFromToken(params.row.file)}
+          </Button>
+          <Button
+            id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
+            onClick={(event: any) => {
+              event.preventDefault();
+              event.stopPropagation();
+              downloadFile(params.row, 'file', 'inline');
+            }}
+          >
+            <MdiIcon path="eye" sx={{ mr: 0.5 }} />
+          </Button>
+        </ButtonGroup>
+      ) : (
+        <MdiIcon path="minus" />
+      );
+    },
+    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
+  };
+  const typeColumn: GridColDef<ServiceIssueAttachmentStored> = {
+    ...baseColumnConfig,
+    field: 'type',
+    headerName: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
+    headerClassName: 'data-grid-column-header',
 
-        width: 170,
-        type: 'singleSelect',
-        filterable: false && true,
-        sortable: false,
-        valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
-          if (value !== undefined && value !== null) {
-            return t(`enumerations.AttachmentType.${value}`, { defaultValue: value });
-          }
-        },
-        description: t('judo.pages.table.column.not-sortable', {
-          defaultValue: 'This column is not sortable.',
-        }) as string,
-      },
-    ],
-    [],
-  );
+    width: 170,
+    type: 'singleSelect',
+    filterable: false && true,
+    sortable: false,
+    valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
+      if (value !== undefined && value !== null) {
+        return t(`enumerations.AttachmentType.${value}`, { defaultValue: value });
+      }
+    },
+    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
+  };
+
+  const columns = useMemo<GridColDef<ServiceIssueAttachmentStored>[]>(() => [linkColumn, fileColumn, typeColumn], []);
 
   const rowActions: TableRowAction<ServiceIssueAttachmentStored>[] = [
     {
@@ -284,9 +280,13 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }

@@ -6,23 +6,23 @@
 // Template name: actor/src/containers/page.tsx
 // Template file: actor/src/containers/page.tsx.hbs
 
-import { lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Suspense, lazy } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon, PageHeader } from '~/components';
+import { MdiIcon, PageHeader, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
+import type {
+  ServiceCreateUserInput,
+  ServiceCreateUserInputQueryCustomizer,
+  ServiceCreateUserInputStored,
+} from '~/services/data-api';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions } from './ServiceCreateUserInputCreateUserInput_View_Edit';
-import type {
-  ServiceCreateUserInput,
-  ServiceCreateUserInputStored,
-  ServiceCreateUserInputQueryCustomizer,
-} from '~/services/data-api';
 
 const ServiceCreateUserInputCreateUserInput_View_Edit = lazy(
   () =>
@@ -125,17 +125,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_EditPage(
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
               onClick={async () => {
-                const confirmed = await openConfirmDialog(
-                  'page-delete-action',
-                  t('judo.modal.confirm.confirm-delete', {
-                    defaultValue: 'Are you sure you would like to delete the selected element?',
-                  }),
-                  t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-                );
-
-                if (confirmed) {
-                  actions.deleteAction!();
-                }
+                actions.deleteAction!();
               }}
             >
               <span>{t('service.CreateUserInput.CreateUserInput_View_Edit.Delete', { defaultValue: 'Delete' })}</span>

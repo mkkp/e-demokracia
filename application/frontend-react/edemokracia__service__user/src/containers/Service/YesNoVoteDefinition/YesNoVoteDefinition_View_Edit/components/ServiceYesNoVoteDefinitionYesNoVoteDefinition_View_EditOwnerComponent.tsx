@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,9 @@ import type {
   ServiceYesNoVoteDefinition,
   ServiceYesNoVoteDefinitionStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponentActionDefinitions {
-  ownerOpenSetSelectorAction?: () => Promise<void>;
+  ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
   ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
@@ -31,6 +31,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerCom
   ownerData: ServiceYesNoVoteDefinition | ServiceYesNoVoteDefinitionStored;
   actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceYesNoVoteDefinition, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -41,7 +42,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerCom
 export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponent(
   props: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -50,6 +51,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComp
       id="User/(esm/_UUiHQHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -87,7 +89,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditOwnerComp
       onSet={
         actions.ownerOpenSetSelectorAction
           ? async () => {
-              await actions.ownerOpenSetSelectorAction!();
+              const owner = await actions.ownerOpenSetSelectorAction!();
             }
           : undefined
       }

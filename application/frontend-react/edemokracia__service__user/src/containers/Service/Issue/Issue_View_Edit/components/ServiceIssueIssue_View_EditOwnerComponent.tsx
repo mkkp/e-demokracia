@@ -7,7 +7,6 @@
 // Template file: actor/src/containers/components/link.tsx.hbs
 
 import { useTranslation } from 'react-i18next';
-import { processQueryCustomizer } from '~/utilities';
 import { MdiIcon } from '~/components';
 import { AggregationInput } from '~/components/widgets';
 import { StringOperation } from '~/services/data-api';
@@ -18,8 +17,9 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditOwnerComponentActionDefinitions {
-  ownerOpenSetSelectorAction?: () => Promise<void>;
+  ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
   ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
   ownerAutocompleteRangeAction?: (
@@ -31,6 +31,7 @@ export interface ServiceIssueIssue_View_EditOwnerComponentProps {
   ownerData: ServiceIssue | ServiceIssueStored;
   actions: ServiceIssueIssue_View_EditOwnerComponentActionDefinitions;
   storeDiff: (attributeName: keyof ServiceIssue, value: any) => void;
+  submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
   editMode?: boolean;
@@ -39,7 +40,7 @@ export interface ServiceIssueIssue_View_EditOwnerComponentProps {
 // XMIID: User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
 // Name: owner
 export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIssue_View_EditOwnerComponentProps) {
-  const { ownerData, actions, storeDiff, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
   const { t } = useTranslation();
 
   return (
@@ -48,6 +49,7 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
       id="User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
+      required={false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
@@ -85,7 +87,7 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
       onSet={
         actions.ownerOpenSetSelectorAction
           ? async () => {
-              await actions.ownerOpenSetSelectorAction!();
+              const owner = await actions.ownerOpenSetSelectorAction!();
             }
           : undefined
       }

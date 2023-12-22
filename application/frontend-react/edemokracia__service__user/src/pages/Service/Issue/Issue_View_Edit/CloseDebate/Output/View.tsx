@@ -6,27 +6,27 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
 import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions } from '~/containers/CloseDebateOutputVoteDefinitionReference/CloseDebateOutputVoteDefinitionReference_View_Edit/CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   CloseDebateOutputVoteDefinitionReference,
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
-import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { CloseDebateOutputVoteDefinitionReferenceServiceImpl } from '~/services/data-axios/CloseDebateOutputVoteDefinitionReferenceServiceImpl';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended =
   CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions & {

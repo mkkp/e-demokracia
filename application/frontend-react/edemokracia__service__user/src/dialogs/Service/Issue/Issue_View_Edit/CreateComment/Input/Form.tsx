@@ -6,25 +6,25 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { CreateCommentInputCreateCommentInput_FormDialogActions } from '~/containers/CreateCommentInput/CreateCommentInput_Form/CreateCommentInputCreateCommentInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   CreateCommentInput,
   CreateCommentInputQueryCustomizer,
   CreateCommentInputStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type CreateCommentInputCreateCommentInput_FormDialogActionsExtended =
   CreateCommentInputCreateCommentInput_FormDialogActions & {
@@ -189,12 +189,9 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
   const createCommentForIssueAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceImpl.createComment(ownerData, data);
+      await serviceIssueServiceImpl.createComment(ownerData, payloadDiff.current);
       if (customActions?.postCreateCommentForIssueAction) {
-        await customActions.postCreateCommentForIssueAction(
-          onSubmit,
-          onClose,
-        );
+        await customActions.postCreateCommentForIssueAction(onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

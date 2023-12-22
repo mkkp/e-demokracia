@@ -6,28 +6,24 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { routeToServiceRatingVoteDefinitionIssueRelationViewPage } from '~/routes';
-import { useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
-import { useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm } from '~/dialogs/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/Vote/Input/Form';
+import type { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions } from '~/containers/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageContainer';
 import { useServiceRatingVoteDefinitionOwnerRelationViewPage } from '~/dialogs/Service/RatingVoteDefinition/Owner/RelationViewPage';
+import { useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm } from '~/dialogs/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/Vote/Input/Form';
+import { useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
 import { useServiceRatingVoteDefinitionUserVoteEntryRelationViewPage } from '~/dialogs/Service/RatingVoteDefinition/UserVoteEntry/RelationViewPage';
 import { useServiceRatingVoteDefinitionVoteEntriesRelationViewPage } from '~/dialogs/Service/RatingVoteDefinition/VoteEntries/RelationViewPage';
-import type { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions } from '~/containers/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceRatingVoteDefinitionIssueRelationViewPage } from '~/routes';
 import type {
   ServiceIssue,
   ServiceIssueQueryCustomizer,
@@ -43,8 +39,12 @@ import type {
   ServiceServiceUserStored,
   VoteStatus,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceRatingVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceRatingVoteDefinitionServiceImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActionsExtended =
   ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditPageActions & {
@@ -209,7 +209,7 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
       return Promise.resolve([]);
     }
   };
-  const ownerOpenSetSelectorAction = async () => {
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage(
         data,
@@ -218,8 +218,10 @@ export default function ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('owner', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);

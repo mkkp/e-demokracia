@@ -6,8 +6,6 @@
 // Template name: actor/src/layout/Header/HeaderContent/MobileSection.tsx
 // Template file: actor/src/layout/Header/HeaderContent/MobileSection.tsx.hbs
 
-import { useEffect, useRef, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -15,10 +13,12 @@ import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Toolbar from '@mui/material/Toolbar';
-import { ThemeMode } from '~/config';
+import { useTheme } from '@mui/material/styles';
+import { useEffect, useRef, useState } from 'react';
 import { MdiIcon } from '~/components';
-import { Profile } from './Profile';
+import { ThemeMode } from '~/config';
 import { Transitions } from '../../Transitions';
+import { Profile } from './Profile';
 
 export const MobileSection = () => {
   const theme = useTheme();

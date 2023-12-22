@@ -6,7 +6,7 @@
 // Template name: actor/src/auth/principal-context.tsx
 // Template file: actor/src/auth/principal-context.tsx.hbs
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useAuth } from 'react-oidc-context';
 import { ServiceServicePrincipalUserStored } from '~/services/data-api';

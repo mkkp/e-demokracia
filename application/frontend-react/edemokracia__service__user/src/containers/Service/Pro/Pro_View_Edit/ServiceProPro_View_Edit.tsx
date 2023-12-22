@@ -6,25 +6,26 @@
 // Template name: actor/src/containers/container.tsx
 // Template file: actor/src/containers/container.tsx.hbs
 
-import type { Dispatch, SetStateAction, FC } from 'react';
-import { forwardRef, useEffect, useState, useCallback, useImperativeHandle } from 'react';
-import { useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { clsx } from 'clsx';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import { useL10N } from '~/l10n/l10n-context';
+import { clsx } from 'clsx';
+import type { Dispatch, FC, SetStateAction } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
 import { DIVIDER_HEIGHT } from '~/config';
-import { MdiIcon, DropdownButton, useJudoNavigation } from '~/components';
-import { isErrorOperationFault, useErrorHandler, uiDateToServiceDate, serviceDateToUiDate } from '~/utilities';
+import { useL10N } from '~/l10n/l10n-context';
+import type { JudoIdentifiable } from '~/services/data-api/common';
+import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
@@ -45,10 +46,10 @@ import {
 } from '~/services/data-api';
 import type { ServiceProPro_View_EditConsComponentActionDefinitions } from './components/ServiceProPro_View_EditConsComponent';
 import { ServiceProPro_View_EditConsComponent } from './components/ServiceProPro_View_EditConsComponent';
-import type { ServiceProPro_View_EditProsComponentActionDefinitions } from './components/ServiceProPro_View_EditProsComponent';
-import { ServiceProPro_View_EditProsComponent } from './components/ServiceProPro_View_EditProsComponent';
 import type { ServiceProPro_View_EditCreatedByComponentActionDefinitions } from './components/ServiceProPro_View_EditCreatedByComponent';
 import { ServiceProPro_View_EditCreatedByComponent } from './components/ServiceProPro_View_EditCreatedByComponent';
+import type { ServiceProPro_View_EditProsComponentActionDefinitions } from './components/ServiceProPro_View_EditProsComponent';
+import { ServiceProPro_View_EditProsComponent } from './components/ServiceProPro_View_EditProsComponent';
 
 export interface ServiceProPro_View_EditActionDefinitions
   extends ServiceProPro_View_EditConsComponentActionDefinitions,
@@ -95,6 +96,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
     submit,
   } = props;
   const { locale: l10nLocale } = useL10N();
+  const { openConfirmDialog } = useConfirmDialog();
 
   useConfirmationBeforeChange(
     editMode,
@@ -228,6 +230,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           storeDiff={storeDiff}
                           validationError={validation.get('createdBy')}
                           actions={actions}
+                          submit={submit}
                         />
                       </Grid>
 
@@ -310,7 +313,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={1.0}>
-                        <Grid container sx={{ height: DIVIDER_HEIGHT }}></Grid>
+                        <Grid
+                          container
+                          sx={{ height: DIVIDER_HEIGHT }}
+                          id="User/(esm/_BHmjwIfjEe2u0fVmwtP5bA)/PlaceholderVisualElement"
+                        ></Grid>
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={1.0}>
@@ -360,7 +367,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={1.0}>
-                        <Grid container sx={{ height: DIVIDER_HEIGHT }}></Grid>
+                        <Grid
+                          container
+                          sx={{ height: DIVIDER_HEIGHT }}
+                          id="User/(esm/_OGusoIfjEe2u0fVmwtP5bA)/PlaceholderVisualElement"
+                        ></Grid>
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={2.0}>

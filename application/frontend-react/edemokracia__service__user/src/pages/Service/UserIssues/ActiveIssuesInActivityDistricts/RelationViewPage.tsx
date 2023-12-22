@@ -6,22 +6,25 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
-import { routeToServiceIssueCommentsRelationViewPage } from '~/routes';
+import type { ServiceIssueIssue_View_EditPageActions } from '~/containers/Service/Issue/Issue_View_Edit/ServiceIssueIssue_View_EditPageContainer';
+import { useServiceIssueAttachmentsRelationFormPage } from '~/dialogs/Service/Issue/Attachments/RelationFormPage';
+import { useServiceIssueAttachmentsRelationViewPage } from '~/dialogs/Service/Issue/Attachments/RelationViewPage';
+import { useServiceIssueCategoriesRelationViewPage } from '~/dialogs/Service/Issue/Categories/RelationViewPage';
+import { useServiceIssueCityRelationViewPage } from '~/dialogs/Service/Issue/City/RelationViewPage';
+import { useServiceIssueConsRelationViewPage } from '~/dialogs/Service/Issue/Cons/RelationViewPage';
+import { useServiceIssueCountyRelationViewPage } from '~/dialogs/Service/Issue/County/RelationViewPage';
+import { useServiceIssueDistrictRelationViewPage } from '~/dialogs/Service/Issue/District/RelationViewPage';
+import { useServiceIssueIssueTypeRelationViewPage } from '~/dialogs/Service/Issue/IssueType/RelationViewPage';
 import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
 import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
 import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
@@ -31,18 +34,11 @@ import { useServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage } from '~/d
 import { useServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorPage } from '~/dialogs/Service/Issue/Issue_View_Edit/Other/Area/City/LinkSetSelectorPage';
 import { useServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPage } from '~/dialogs/Service/Issue/Issue_View_Edit/Other/Area/County/LinkSetSelectorPage';
 import { useServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage } from '~/dialogs/Service/Issue/Issue_View_Edit/Other/Area/District/LinkSetSelectorPage';
-import { useServiceIssueIssue_View_EditOtherCategoriesCategoriesTableSetSelectorPage } from '~/dialogs/Service/Issue/Issue_View_Edit/Other/Categories/Categories/TableSetSelectorPage';
-import { useServiceIssueAttachmentsRelationFormPage } from '~/dialogs/Service/Issue/Attachments/RelationFormPage';
-import { useServiceIssueAttachmentsRelationViewPage } from '~/dialogs/Service/Issue/Attachments/RelationViewPage';
-import { useServiceIssueCategoriesRelationViewPage } from '~/dialogs/Service/Issue/Categories/RelationViewPage';
-import { useServiceIssueCityRelationViewPage } from '~/dialogs/Service/Issue/City/RelationViewPage';
-import { useServiceIssueConsRelationViewPage } from '~/dialogs/Service/Issue/Cons/RelationViewPage';
-import { useServiceIssueCountyRelationViewPage } from '~/dialogs/Service/Issue/County/RelationViewPage';
-import { useServiceIssueDistrictRelationViewPage } from '~/dialogs/Service/Issue/District/RelationViewPage';
-import { useServiceIssueIssueTypeRelationViewPage } from '~/dialogs/Service/Issue/IssueType/RelationViewPage';
+import { useServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSelectorPage } from '~/dialogs/Service/Issue/Issue_View_Edit/Other/Categories/Categories/TableAddSelectorPage';
 import { useServiceIssueOwnerRelationViewPage } from '~/dialogs/Service/Issue/Owner/RelationViewPage';
 import { useServiceIssueProsRelationViewPage } from '~/dialogs/Service/Issue/Pros/RelationViewPage';
-import type { ServiceIssueIssue_View_EditPageActions } from '~/containers/Service/Issue/Issue_View_Edit/ServiceIssueIssue_View_EditPageContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceIssueCommentsRelationViewPage } from '~/routes';
 import type {
   IssueScope,
   IssueStatus,
@@ -83,8 +79,12 @@ import type {
   ServiceUserIssuesStored,
   VoteType,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueIssue_View_EditPageActionsExtended = ServiceIssueIssue_View_EditPageActions & {
   postActivateForIssueAction?: () => Promise<void>;
@@ -206,8 +206,8 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
     useServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPage();
   const openServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage =
     useServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage();
-  const openServiceIssueIssue_View_EditOtherCategoriesCategoriesTableSetSelectorPage =
-    useServiceIssueIssue_View_EditOtherCategoriesCategoriesTableSetSelectorPage();
+  const openServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSelectorPage =
+    useServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSelectorPage();
   const openServiceIssueAttachmentsRelationFormPage = useServiceIssueAttachmentsRelationFormPage();
   const openServiceIssueAttachmentsRelationViewPage = useServiceIssueAttachmentsRelationViewPage();
   const openServiceIssueCategoriesRelationViewPage = useServiceIssueCategoriesRelationViewPage();
@@ -344,7 +344,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
       return Promise.resolve([]);
     }
   };
-  const issueTypeOpenSetSelectorAction = async () => {
+  const issueTypeOpenSetSelectorAction = async (): Promise<ServiceIssueTypeStored | undefined> => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelectorPage(
       data,
       data.issueType ? [data.issueType] : [],
@@ -352,8 +352,10 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('issueType', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const issueTypeUnsetAction = async (target: ServiceIssueTypeStored) => {
     storeDiff('issueType', null);
@@ -374,7 +376,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
       return Promise.resolve([]);
     }
   };
-  const ownerOpenSetSelectorAction = async () => {
+  const ownerOpenSetSelectorAction = async (): Promise<ServiceServiceUserStored | undefined> => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage(
       data,
       data.owner ? [data.owner] : [],
@@ -382,8 +384,10 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('owner', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
     storeDiff('owner', null);
@@ -404,7 +408,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
       return Promise.resolve([]);
     }
   };
-  const cityOpenSetSelectorAction = async () => {
+  const cityOpenSetSelectorAction = async (): Promise<ServiceCityStored | undefined> => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorPage(
       data,
       data.city ? [data.city] : [],
@@ -412,8 +416,10 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('city', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const cityUnsetAction = async (target: ServiceCityStored) => {
     storeDiff('city', null);
@@ -434,7 +440,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
       return Promise.resolve([]);
     }
   };
-  const countyOpenSetSelectorAction = async () => {
+  const countyOpenSetSelectorAction = async (): Promise<ServiceCountyStored | undefined> => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPage(
       data,
       data.county ? [data.county] : [],
@@ -442,8 +448,10 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('county', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const countyUnsetAction = async (target: ServiceCountyStored) => {
     storeDiff('county', null);
@@ -464,7 +472,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
       return Promise.resolve([]);
     }
   };
-  const districtOpenSetSelectorAction = async () => {
+  const districtOpenSetSelectorAction = async (): Promise<ServiceDistrictStored | undefined> => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage(
       data,
       data.district ? [data.district] : [],
@@ -472,8 +480,10 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('district', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const districtUnsetAction = async (target: ServiceDistrictStored) => {
     storeDiff('district', null);
@@ -744,7 +754,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
   };
   const categoriesOpenAddSelectorAction = async () => {
     const { result, data: returnedData } =
-      await openServiceIssueIssue_View_EditOtherCategoriesCategoriesTableSetSelectorPage(data, data.categories ?? []);
+      await openServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSelectorPage(data, data.categories ?? []);
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('categories', [...(data.categories || []), ...returnedData]);

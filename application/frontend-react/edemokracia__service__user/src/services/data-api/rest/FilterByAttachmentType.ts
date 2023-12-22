@@ -6,7 +6,7 @@
 // Template name: filterable.ts.hbs
 // Template file: rest/filterable.ts.hbs
 
-import { EnumerationOperation, AttachmentType } from '../model';
+import { AttachmentType, EnumerationOperation } from '../model';
 
 export interface FilterByAttachmentType {
   value: AttachmentType;

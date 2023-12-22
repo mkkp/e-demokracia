@@ -6,26 +6,26 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
 import type { YesNoVoteInputYesNoVoteInput_FormDialogActions } from '~/containers/YesNoVoteInput/YesNoVoteInput_Form/YesNoVoteInputYesNoVoteInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   YesNoVoteInput,
   YesNoVoteInputQueryCustomizer,
   YesNoVoteInputStored,
   YesNoVoteValue,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type YesNoVoteInputYesNoVoteInput_FormDialogActionsExtended = YesNoVoteInputYesNoVoteInput_FormDialogActions & {
   postVoteForYesNoVoteDefinitionAction?: (
@@ -185,12 +185,9 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   const voteForYesNoVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceYesNoVoteDefinitionServiceImpl.vote(ownerData, data);
+      await serviceYesNoVoteDefinitionServiceImpl.vote(ownerData, payloadDiff.current);
       if (customActions?.postVoteForYesNoVoteDefinitionAction) {
-        await customActions.postVoteForYesNoVoteDefinitionAction(
-          onSubmit,
-          onClose,
-        );
+        await customActions.postVoteForYesNoVoteDefinitionAction(onSubmit, onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

@@ -6,11 +6,11 @@
 // Template name: actor/src/components/ModeledTabs.tsx
 // Template file: actor/src/components/ModeledTabs.tsx.hbs
 
-import type { ReactNode, SyntheticEvent } from 'react';
-import { useState, useEffect } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import type { ReactNode, SyntheticEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useDataStore } from '~/hooks';
 import { MdiIcon } from './MdiIcon';
 

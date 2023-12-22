@@ -6,18 +6,18 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
-  ServiceYesNoVoteDefinition,
   ServiceServiceUser,
-  ServiceYesNoVoteEntryStored,
-  ServiceYesNoVoteEntry,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
+  ServiceYesNoVoteDefinition,
+  ServiceYesNoVoteEntry,
   ServiceYesNoVoteEntryQueryCustomizer,
+  ServiceYesNoVoteEntryStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceYesNoVoteDefinitionServiceForUserVoteEntry } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceYesNoVoteDefinition.userVoteEntry
@@ -62,5 +62,51 @@ export class ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl
     });
 
     return response.data;
+  }
+
+  /**
+   * Form: targetRelation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForOwner(
+    owner: JudoIdentifiable<ServiceYesNoVoteEntry> | ServiceYesNoVoteEntry,
+    queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<Array<ServiceServiceUserStored>> {
+    const path = '/service/YesNoVoteEntry/owner/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner,
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: targetRelation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setOwner(
+    owner: JudoIdentifiable<ServiceYesNoVoteEntry>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<void> {
+    const path = '/service/YesNoVoteEntry/~update/owner/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+  }
+
+  /**
+   * From: targetRelation.isUnsetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetOwner(owner: JudoIdentifiable<ServiceYesNoVoteEntry>): Promise<void> {
+    const path = '/service/YesNoVoteEntry/~update/owner/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
   }
 }

@@ -6,47 +6,49 @@
 // Template name: actor/src/containers/components/table.tsx
 // Template file: actor/src/containers/components/table.tsx.hbs
 
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import type { MouseEvent } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridToolbarContainer, GridLogicOperator } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
-  GridRowModel,
-  GridRowId,
   GridRenderCellParams,
+  GridRowClassNameParams,
+  GridRowId,
+  GridRowModel,
+  GridRowParams,
   GridRowSelectionModel,
   GridSortItem,
   GridSortModel,
-  GridValueFormatterParams,
-  GridRowClassNameParams,
-  GridRowParams,
   GridValidRowModel,
+  GridValueFormatterParams,
 } from '@mui/x-data-grid';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
-import { numericColumnOperators, columnsActionCalculator, ContextMenu, StripedDataGrid } from '~/components/table';
-import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import type { Filter, FilterOption } from '~/components-api';
 import { FilterType } from '~/components-api';
-import type { ServicePro, ServiceProQueryCustomizer, ServiceProStored } from '~/services/data-api';
+import { useConfirmDialog } from '~/components/dialog';
+import { ContextMenu, StripedDataGrid, columnsActionCalculator, numericColumnOperators } from '~/components/table';
+import type { ContextMenuApi } from '~/components/table/ContextMenu';
+import { baseColumnConfig, baseTableConfig } from '~/config';
+import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
+import type { ServicePro, ServiceProQueryCustomizer, ServiceProStored } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import {
-  getUpdatedRowsSelected,
+  TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
+  getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
 } from '~/utilities';
-import type { DialogResult, TableRowAction } from '~/utilities';
-import { useDataStore } from '~/hooks';
-import { OBJECTCLASS } from '@pandino/pandino-api';
+import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceProPro_View_EditProsComponentActionDefinitions {
   prosBulkDeleteAction?: (selectedRows: ServiceProStored[]) => Promise<DialogResult<ServiceProStored[]>>;
@@ -82,6 +84,7 @@ export function ServiceProPro_View_EditProsComponent(props: ServiceProPro_View_E
   const filterModelKey = `User/(esm/_KRUbNXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_KRUbNXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
+  const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
@@ -116,45 +119,45 @@ export function ServiceProPro_View_EditProsComponent(props: ServiceProPro_View_E
 
   const selectedRows = useRef<ServiceProStored[]>([]);
 
+  const titleColumn: GridColDef<ServiceProStored> = {
+    ...baseColumnConfig,
+    field: 'title',
+    headerName: t('service.Pro.Pro_View_Edit.title', { defaultValue: 'Title' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 230,
+    type: 'string',
+    filterable: false && true,
+  };
+  const upVotesColumn: GridColDef<ServiceProStored> = {
+    ...baseColumnConfig,
+    field: 'upVotes',
+    headerName: t('service.Pro.Pro_View_Edit.upVotes', { defaultValue: 'up' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 100,
+    type: 'number',
+    filterable: false && true,
+    valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+      return value && new Intl.NumberFormat(l10nLocale).format(value);
+    },
+  };
+  const downVotesColumn: GridColDef<ServiceProStored> = {
+    ...baseColumnConfig,
+    field: 'downVotes',
+    headerName: t('service.Pro.Pro_View_Edit.downVotes', { defaultValue: 'down' }) as string,
+    headerClassName: 'data-grid-column-header',
+
+    width: 100,
+    type: 'number',
+    filterable: false && true,
+    valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
+      return value && new Intl.NumberFormat(l10nLocale).format(value);
+    },
+  };
+
   const columns = useMemo<GridColDef<ServiceProStored>[]>(
-    () => [
-      {
-        ...baseColumnConfig,
-        field: 'title',
-        headerName: t('service.Pro.Pro_View_Edit.title', { defaultValue: 'Title' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 230,
-        type: 'string',
-        filterable: false && true,
-      },
-      {
-        ...baseColumnConfig,
-        field: 'upVotes',
-        headerName: t('service.Pro.Pro_View_Edit.upVotes', { defaultValue: 'up' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 100,
-        type: 'number',
-        filterable: false && true,
-        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-          return value && new Intl.NumberFormat(l10nLocale).format(value);
-        },
-      },
-      {
-        ...baseColumnConfig,
-        field: 'downVotes',
-        headerName: t('service.Pro.Pro_View_Edit.downVotes', { defaultValue: 'down' }) as string,
-        headerClassName: 'data-grid-column-header',
-
-        width: 100,
-        type: 'number',
-        filterable: false && true,
-        valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-          return value && new Intl.NumberFormat(l10nLocale).format(value);
-        },
-      },
-    ],
+    () => [titleColumn, upVotesColumn, downVotesColumn],
     [l10nLocale],
   );
 
@@ -286,9 +289,13 @@ export function ServiceProPro_View_EditProsComponent(props: ServiceProPro_View_E
       if (!!strippedQueryCustomizer._seek) {
         delete strippedQueryCustomizer._seek.lastItem;
       }
+      // we need to reset _seek so that previous configuration is erased
       return {
         ...strippedQueryCustomizer,
         _orderBy,
+        _seek: {
+          limit: 10 + 1,
+        },
       };
     });
   }

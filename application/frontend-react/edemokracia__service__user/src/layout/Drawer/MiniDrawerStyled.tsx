@@ -6,9 +6,9 @@
 // Template name: actor/src/layout/Drawer/MiniDrawerStyled.tsx
 // Template file: actor/src/layout/Drawer/MiniDrawerStyled.tsx.hbs
 
-import type { Theme, CSSObject } from '@mui/material/styles';
-import { styled } from '@mui/material/styles';
 import Drawer from '@mui/material/Drawer';
+import type { CSSObject, Theme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { DRAWER_WIDTH, ThemeMode } from '~/config';
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -31,17 +31,19 @@ const closedMixin = (theme: Theme): CSSObject => ({
   borderRight: 'none',
 });
 
-export const MiniDrawerStyled = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-  width: DRAWER_WIDTH,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
+export const MiniDrawerStyled = styled(Drawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: DRAWER_WIDTH,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
   }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
-}));
+);

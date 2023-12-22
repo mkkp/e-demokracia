@@ -6,31 +6,31 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceYesNoVoteDefinitionStored,
-  CloseDebateOutputVoteDefinitionReference,
-  ServiceIssueQueryCustomizer,
-  CreateArgumentInputStored,
-  ServiceIssueStored,
-  ServiceServiceUserStored,
-  ServiceYesNoVoteDefinitionQueryCustomizer,
-  ServiceIssue,
-  ServiceYesNoVoteDefinition,
-  ServiceServiceUser,
-  ServiceYesNoVoteEntryStored,
-  CreateCommentInputStored,
-  ServiceYesNoVoteEntry,
-  CreateCommentInput,
-  CreateArgumentInput,
-  CloseDebateInputStored,
-  ServiceServiceUserQueryCustomizer,
-  YesNoVoteInput,
   CloseDebateInput,
-  YesNoVoteInputStored,
+  CloseDebateInputStored,
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateArgumentInputStored,
+  CreateCommentInput,
+  CreateCommentInputStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceServiceUser,
+  ServiceServiceUserQueryCustomizer,
+  ServiceServiceUserStored,
+  ServiceYesNoVoteDefinition,
+  ServiceYesNoVoteDefinitionQueryCustomizer,
+  ServiceYesNoVoteDefinitionStored,
+  ServiceYesNoVoteEntry,
   ServiceYesNoVoteEntryQueryCustomizer,
+  ServiceYesNoVoteEntryStored,
+  YesNoVoteInput,
+  YesNoVoteInputStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.userOwnedYesNoVoteDefinitions
@@ -49,6 +49,18 @@ export interface UserServiceForUserOwnedYesNoVoteDefinitions {
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
+  getRangeForIssue(
+    owner: JudoIdentifiable<ServiceYesNoVoteDefinition> | ServiceYesNoVoteDefinition,
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<Array<ServiceIssueStored>>;
+  setIssue(
+    owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
+    selected: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
+  unsetIssue(
+    owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
+    target: JudoIdentifiable<ServiceIssue>,
+  ): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

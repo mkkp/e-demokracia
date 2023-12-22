@@ -6,34 +6,31 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { routeToServiceServiceUserVotesRelationTablePage } from '~/routes';
-import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCity/LinkSetSelectorPage';
-import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCounty/LinkSetSelectorPage';
-import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentDistrict/LinkSetSelectorPage';
-import { useServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Activity_cities/ActivityCities/TableSetSelectorPage';
-import { useServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Activity_districts/ActivityDistricts/TableSetSelectorPage';
-import { useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Tab_activity_counties/ActivityCounties/TableSetSelectorPage';
+import type { ServiceServiceUserServiceUser_View_EditDialogActions } from '~/containers/Service/ServiceUser/ServiceUser_View_Edit/ServiceServiceUserServiceUser_View_EditDialogContainer';
 import { useServiceServiceUserActivityCitiesRelationViewPage } from '~/dialogs/Service/ServiceUser/ActivityCities/RelationViewPage';
 import { useServiceServiceUserActivityCountiesRelationViewPage } from '~/dialogs/Service/ServiceUser/ActivityCounties/RelationViewPage';
 import { useServiceServiceUserActivityDistrictsRelationViewPage } from '~/dialogs/Service/ServiceUser/ActivityDistricts/RelationViewPage';
 import { useServiceServiceUserResidentCityRelationViewPage } from '~/dialogs/Service/ServiceUser/ResidentCity/RelationViewPage';
 import { useServiceServiceUserResidentCountyRelationViewPage } from '~/dialogs/Service/ServiceUser/ResidentCounty/RelationViewPage';
 import { useServiceServiceUserResidentDistrictRelationViewPage } from '~/dialogs/Service/ServiceUser/ResidentDistrict/RelationViewPage';
-import type { ServiceServiceUserServiceUser_View_EditDialogActions } from '~/containers/Service/ServiceUser/ServiceUser_View_Edit/ServiceServiceUserServiceUser_View_EditDialogContainer';
+import { useServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableAddSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Activity_cities/ActivityCities/TableAddSelectorPage';
+import { useServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableAddSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Activity_districts/ActivityDistricts/TableAddSelectorPage';
+import { useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableAddSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Tab_activity_counties/ActivityCounties/TableAddSelectorPage';
+import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCity/LinkSetSelectorPage';
+import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCounty/LinkSetSelectorPage';
+import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentDistrict/LinkSetSelectorPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceServiceUserVotesRelationTablePage } from '~/routes';
 import type {
   ServiceCity,
   ServiceCityQueryCustomizer,
@@ -53,8 +50,11 @@ import type {
   ServiceYesNoVoteEntry,
   ServiceYesNoVoteEntryStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceServiceUserServiceImpl } from '~/services/data-axios/ServiceServiceUserServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceServiceUserServiceUser_View_EditDialogActionsExtended =
   ServiceServiceUserServiceUser_View_EditDialogActions & {
@@ -220,12 +220,12 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
     useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyLinkSetSelectorPage();
   const openServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage =
     useServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage();
-  const openServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableSetSelectorPage =
-    useServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableSetSelectorPage();
-  const openServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableSetSelectorPage =
-    useServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableSetSelectorPage();
-  const openServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableSetSelectorPage =
-    useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableSetSelectorPage();
+  const openServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableAddSelectorPage =
+    useServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableAddSelectorPage();
+  const openServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableAddSelectorPage =
+    useServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableAddSelectorPage();
+  const openServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableAddSelectorPage =
+    useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableAddSelectorPage();
   const openServiceServiceUserActivityCitiesRelationViewPage = useServiceServiceUserActivityCitiesRelationViewPage();
   const openServiceServiceUserActivityCountiesRelationViewPage =
     useServiceServiceUserActivityCountiesRelationViewPage();
@@ -253,7 +253,7 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
       return Promise.resolve([]);
     }
   };
-  const residentCityOpenSetSelectorAction = async () => {
+  const residentCityOpenSetSelectorAction = async (): Promise<ServiceCityStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage(
         data,
@@ -262,8 +262,10 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('residentCity', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const residentCityUnsetAction = async (target: ServiceCityStored) => {
     storeDiff('residentCity', null);
@@ -284,7 +286,7 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
       return Promise.resolve([]);
     }
   };
-  const residentCountyOpenSetSelectorAction = async () => {
+  const residentCountyOpenSetSelectorAction = async (): Promise<ServiceCountyStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyLinkSetSelectorPage(
         data,
@@ -293,8 +295,10 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('residentCounty', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const residentCountyUnsetAction = async (target: ServiceCountyStored) => {
     storeDiff('residentCounty', null);
@@ -315,7 +319,7 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
       return Promise.resolve([]);
     }
   };
-  const residentDistrictOpenSetSelectorAction = async () => {
+  const residentDistrictOpenSetSelectorAction = async (): Promise<ServiceDistrictStored | undefined> => {
     const { result, data: returnedData } =
       await openServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage(
         data,
@@ -324,8 +328,10 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
     if (result === 'submit') {
       if (Array.isArray(returnedData) && returnedData.length) {
         storeDiff('residentDistrict', returnedData[0]);
+        return returnedData[0];
       }
     }
+    return undefined;
   };
   const residentDistrictUnsetAction = async (target: ServiceDistrictStored) => {
     storeDiff('residentDistrict', null);
@@ -338,7 +344,7 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
   };
   const activityCitiesOpenAddSelectorAction = async () => {
     const { result, data: returnedData } =
-      await openServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableSetSelectorPage(
+      await openServiceServiceUserServiceUser_View_EditAreasActivityActivity_citiesActivityCitiesTableAddSelectorPage(
         data,
         data.activityCities ?? [],
       );
@@ -390,7 +396,7 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
   };
   const activityDistrictsOpenAddSelectorAction = async () => {
     const { result, data: returnedData } =
-      await openServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableSetSelectorPage(
+      await openServiceServiceUserServiceUser_View_EditAreasActivityActivity_districtsActivityDistrictsTableAddSelectorPage(
         data,
         data.activityDistricts ?? [],
       );
@@ -442,7 +448,7 @@ export default function ServiceYesNoVoteEntryOwnerRelationViewPage(
   };
   const activityCountiesOpenAddSelectorAction = async () => {
     const { result, data: returnedData } =
-      await openServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableSetSelectorPage(
+      await openServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableAddSelectorPage(
         data,
         data.activityCounties ?? [],
       );

@@ -6,8 +6,8 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { CreateArgumentInputStored, CreateArgumentInput } from '../data-api';
+import { CreateArgumentInput, CreateArgumentInputStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for CreateArgumentInput

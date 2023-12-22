@@ -6,18 +6,18 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  SelectAnswerVoteSelectionQueryCustomizer,
   RatingVoteInput,
-  SelectAnswerVoteSelectionStored,
-  VoteDefinitionQueryCustomizer,
-  YesNoAbstainVoteInput,
-  VoteDefinition,
-  YesNoVoteInput,
-  VoteDefinitionStored,
   SelectAnswerVoteSelection,
+  SelectAnswerVoteSelectionQueryCustomizer,
+  SelectAnswerVoteSelectionStored,
+  VoteDefinition,
+  VoteDefinitionQueryCustomizer,
+  VoteDefinitionStored,
+  YesNoAbstainVoteInput,
+  YesNoVoteInput,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for VoteDefinition

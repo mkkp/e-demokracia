@@ -6,26 +6,23 @@
 // Template name: actor/src/dialogs/index.tsx
 // Template file: actor/src/dialogs/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { routeToServiceConVotesRelationTablePage } from '~/routes';
+import type { ServiceConCon_View_EditDialogActions } from '~/containers/Service/Con/Con_View_Edit/ServiceConCon_View_EditDialogContainer';
 import { useServiceConCon_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Con/Con_View_Edit/CreateConArgument/Input/Form';
 import { useServiceConCon_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Con/Con_View_Edit/CreateProArgument/Input/Form';
 import { useServiceConCreatedByRelationViewPage } from '~/dialogs/Service/Con/CreatedBy/RelationViewPage';
 import { useServiceConProsRelationViewPage } from '~/dialogs/Service/Con/Pros/RelationViewPage';
-import type { ServiceConCon_View_EditDialogActions } from '~/containers/Service/Con/Con_View_Edit/ServiceConCon_View_EditDialogContainer';
+import { useCRUDDialog, useSnacks } from '~/hooks';
+import { routeToServiceConVotesRelationTablePage } from '~/routes';
 import type {
   ServiceCon,
   ServiceConQueryCustomizer,
@@ -40,8 +37,11 @@ import type {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceConServiceImpl } from '~/services/data-axios/ServiceConServiceImpl';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceConCon_View_EditDialogActionsExtended = ServiceConCon_View_EditDialogActions & {
   postVoteDownForConAction?: (onClose: () => Promise<void>) => Promise<void>;
@@ -378,9 +378,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       setIsLoading(true);
       await serviceConServiceImpl.voteDown(data);
       if (customActions?.postVoteDownForConAction) {
-        await customActions.postVoteDownForConAction(
-          onClose,
-        );
+        await customActions.postVoteDownForConAction(onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -400,9 +398,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       setIsLoading(true);
       await serviceConServiceImpl.voteUp(data);
       if (customActions?.postVoteUpForConAction) {
-        await customActions.postVoteUpForConAction(
-          onClose,
-        );
+        await customActions.postVoteUpForConAction(onClose);
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,

@@ -6,9 +6,6 @@
 // Template name: actor/src/layout/Header/HeaderContent/Profile/index.tsx
 // Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
 
-import { useRef, useState, useCallback } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useTheme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -24,9 +21,12 @@ import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
+import { useCallback, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { ThemeMode } from '~/config';
 import { MdiIcon } from '~/components';
+import { ThemeMode } from '~/config';
 import { useHeroProps } from '~/hooks';
 import { Transitions } from '../../../Transitions';
 

@@ -6,20 +6,20 @@
 // Template name: actor/src/containers/dialog.tsx
 // Template file: actor/src/containers/dialog.tsx.hbs
 
-import { lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
-import DialogTitle from '@mui/material/DialogTitle';
-import IconButton from '@mui/material/IconButton';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import { Suspense, lazy } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useJudoNavigation, MdiIcon } from '~/components';
+import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
+import type { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
 import type { ServiceCityCity_TableSetSelectorActionDefinitions } from './ServiceCityCity_TableSetSelector';
-import type { ServiceCity, ServiceCityStored, ServiceCityQueryCustomizer } from '~/services/data-api';
 
 const ServiceCityCity_TableSetSelector = lazy(
   () => import('~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelector'),
@@ -116,6 +116,7 @@ export default function ServiceCityCity_TableSetSelectorDialog(props: ServiceCit
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={!selectionDiff.length}
               startIcon={<MdiIcon path="attachment-plus" />}
               onClick={async () => {
                 await actions.setAction!(selectionDiff);

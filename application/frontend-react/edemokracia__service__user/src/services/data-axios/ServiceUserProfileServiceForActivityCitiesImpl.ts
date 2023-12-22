@@ -6,18 +6,18 @@
 // Template name: relationServiceImpl.ts.hbs
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceCity,
-  ServiceDistrictQueryCustomizer,
-  ServiceUserProfile,
-  ServiceDistrict,
-  ServiceDistrictStored,
-  ServiceCityStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceUserProfile,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceUserProfileServiceForActivityCities } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Relation Service Implementation for ServiceUserProfile.activityCities
@@ -75,6 +75,23 @@ export class ServiceUserProfileServiceForActivityCitiesImpl
   }
 
   /**
+   * From: relation.isRangeable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile> | ServiceUserProfile,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+  ): Promise<Array<ServiceCityStored>> {
+    const path = '/service/UserProfile/activityCities/~range';
+    const response = await this.axios.post(this.getPathForActor(path), {
+      owner: owner ?? {},
+      queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  /**
    * From: relation.target.isTemplateable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
@@ -83,6 +100,38 @@ export class ServiceUserProfileServiceForActivityCitiesImpl
     const response = await this.axios.get(this.getPathForActor(path));
 
     return response.data;
+  }
+
+  /**
+   * From: relation.isAddable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCities/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * From: relation.isRemovable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCities/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async listDistricts(

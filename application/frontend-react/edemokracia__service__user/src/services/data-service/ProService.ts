@@ -6,8 +6,8 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { ProStored, ProQueryCustomizer, CreateArgumentInput, Pro } from '../data-api';
+import { CreateArgumentInput, Pro, ProQueryCustomizer, ProStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for Pro

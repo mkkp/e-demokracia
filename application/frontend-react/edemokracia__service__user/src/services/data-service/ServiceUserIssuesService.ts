@@ -6,28 +6,28 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
 import {
-  ServiceUserIssuesStored,
-  ServiceDistrictQueryCustomizer,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-  ServiceCreateIssueInput,
-  ServiceUserIssuesQueryCustomizer,
-  ServiceIssueQueryCustomizer,
-  ServiceCountyQueryCustomizer,
-  ServiceIssueStored,
-  ServiceUserIssues,
-  ServiceIssue,
-  ServiceIssueTypeQueryCustomizer,
-  CreateCommentInput,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  CreateArgumentInput,
-  ServiceCityStored,
   CloseDebateInput,
-  ServiceIssueTypeStored,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+  CreateArgumentInput,
+  CreateCommentInput,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceCreateIssueInput,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceIssue,
+  ServiceIssueQueryCustomizer,
+  ServiceIssueStored,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
+  ServiceUserIssues,
+  ServiceUserIssuesQueryCustomizer,
+  ServiceUserIssuesStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceUserIssues
@@ -45,6 +45,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesGlobal(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesGlobal(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesGlobal(
@@ -75,6 +83,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesInActivityCities(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesInActivityCities(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesInActivityCities(
@@ -108,6 +124,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesInActivityCounties(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesInActivityCounties(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesInActivityCounties(
@@ -141,6 +165,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesInActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesInActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesInActivityDistricts(
@@ -174,6 +206,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesInResidentCity(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesInResidentCity(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesInResidentCity(
@@ -207,6 +247,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesInResidentCounty(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesInResidentCounty(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesInResidentCounty(
@@ -240,6 +288,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addActiveIssuesInResidentDistrict(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeActiveIssuesInResidentDistrict(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForActiveIssuesInResidentDistrict(
@@ -273,6 +329,14 @@ export interface ServiceUserIssuesService {
     owner?: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
+  addOwnedIssues(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
+  removeOwnedIssues(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    selected: Array<JudoIdentifiable<ServiceIssue>>,
+  ): Promise<void>;
   activateForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForOwnedIssues(

@@ -6,7 +6,6 @@
 // Template name: mask.ts.hbs
 // Template file: rest/mask.ts.hbs
 
-import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import {
   ServiceCityAttributes,
   ServiceCommentAttributes,
@@ -20,11 +19,7 @@ import {
   ServiceProAttributes,
   ServiceServiceUserAttributes,
 } from '../model';
-import {} from './ServiceIssueAttachmentMaskBuilder';
-import {
-  ServiceIssueCategoryOwnerMaskBuilder,
-  ServiceIssueCategorySubcategoriesMaskBuilder,
-} from './ServiceIssueCategoryMaskBuilder';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
 import { ServiceCityDistrictsMaskBuilder } from './ServiceCityMaskBuilder';
 import { ServiceCommentCreatedByMaskBuilder } from './ServiceCommentMaskBuilder';
 import {
@@ -35,15 +30,12 @@ import {
   ServiceConProsMaskBuilder,
 } from './ServiceConMaskBuilder';
 import { ServiceCountyCitiesMaskBuilder } from './ServiceCountyMaskBuilder';
-import {
-  ServiceServiceUserActivityCitiesMaskBuilder,
-  ServiceServiceUserActivityCountiesMaskBuilder,
-  ServiceServiceUserActivityDistrictsMaskBuilder,
-  ServiceServiceUserResidentCityMaskBuilder,
-  ServiceServiceUserResidentCountyMaskBuilder,
-  ServiceServiceUserResidentDistrictMaskBuilder,
-} from './ServiceServiceUserMaskBuilder';
 import {} from './ServiceDistrictMaskBuilder';
+import {} from './ServiceIssueAttachmentMaskBuilder';
+import {
+  ServiceIssueCategoryOwnerMaskBuilder,
+  ServiceIssueCategorySubcategoriesMaskBuilder,
+} from './ServiceIssueCategoryMaskBuilder';
 import {} from './ServiceIssueTypeMaskBuilder';
 import {
   ServiceProConsMaskBuilder,
@@ -52,6 +44,14 @@ import {
   ServiceProParentProMaskBuilder,
   ServiceProProsMaskBuilder,
 } from './ServiceProMaskBuilder';
+import {
+  ServiceServiceUserActivityCitiesMaskBuilder,
+  ServiceServiceUserActivityCountiesMaskBuilder,
+  ServiceServiceUserActivityDistrictsMaskBuilder,
+  ServiceServiceUserResidentCityMaskBuilder,
+  ServiceServiceUserResidentCountyMaskBuilder,
+  ServiceServiceUserResidentDistrictMaskBuilder,
+} from './ServiceServiceUserMaskBuilder';
 
 export class ServiceIssueAttachmentsMaskBuilder extends RelationMaskBuilder {
   constructor(protected props: Array<ServiceIssueAttachmentAttributes>) {

@@ -6,19 +6,19 @@
 // Template name: actor/src/layout/Drawer/DrawerContent/Navigation/index.tsx
 // Template file: actor/src/layout/Drawer/DrawerContent/Navigation/index.tsx.hbs
 
-import { useEffect, useState } from 'react';
-import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useEffect, useState } from 'react';
 import { usePrincipal } from '~/auth';
-import { ServiceServicePrincipalUserStored } from '~/services/data-api';
-import { useConfig } from '~/hooks';
 import { MenuOrientation } from '~/config';
+import { useConfig } from '~/hooks';
+import { ServiceServicePrincipalUserStored } from '~/services/data-api';
 import { NavGroup } from './NavGroup';
 import { NavItem } from './NavItem';
-import { menus } from './menu-items';
 import { NavItemType } from './NavItem';
+import { menus } from './menu-items';
 
 export const Navigation = () => {
   const theme = useTheme();

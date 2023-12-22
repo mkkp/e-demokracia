@@ -6,7 +6,7 @@
 // Template name: queryCustomizer.ts.hbs
 // Template file: rest/queryCustomizer.ts.hbs
 
-import type { QueryCustomizer } from '@judo/data-api-common';
+import type { QueryCustomizer } from '../common';
 import { ServiceCreateUserInput } from '../model/ServiceCreateUserInput';
 
 export interface ServiceCreateUserInputQueryCustomizer extends QueryCustomizer<ServiceCreateUserInput> {}

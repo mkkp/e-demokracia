@@ -6,8 +6,8 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { ServiceProParentQueryCustomizer, ServiceProParentStored, ServiceProParent, ServiceCon } from '../data-api';
+import { ServiceCon, ServiceProParent, ServiceProParentQueryCustomizer, ServiceProParentStored } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceCon.parentPro

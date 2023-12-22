@@ -6,23 +6,23 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { JudoIdentifiable } from '@judo/data-api-common';
-import { JudoAxiosService } from './JudoAxiosService';
 import type {
   ServiceCity,
-  ServiceDistrictQueryCustomizer,
-  ServiceUserProfileStored,
-  ServiceUserProfile,
-  ServiceDistrict,
-  ServiceDistrictStored,
-  ServiceCountyStored,
-  ServiceCountyQueryCustomizer,
-  ServiceUserProfileQueryCustomizer,
-  ServiceCounty,
-  ServiceCityStored,
   ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCounty,
+  ServiceCountyQueryCustomizer,
+  ServiceCountyStored,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceUserProfile,
+  ServiceUserProfileQueryCustomizer,
+  ServiceUserProfileStored,
 } from '../data-api';
+import type { JudoIdentifiable } from '../data-api/common';
 import type { ServiceUserProfileService } from '../data-service';
+import { JudoAxiosService } from './JudoAxiosService';
 
 /**
  * Class Service Implementation for ServiceUserProfile
@@ -85,6 +85,36 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
     return response.data;
   }
 
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCities/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCities/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
   async getTemplateForActivityCounties(): Promise<ServiceCounty> {
     const path = '/service/County/~template';
     const response = await this.axios.get(this.getPathForActor(path));
@@ -123,6 +153,36 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCounties/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityCounties/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async getTemplateForActivityDistricts(): Promise<ServiceDistrict> {
@@ -165,6 +225,36 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
     return response.data;
   }
 
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async addActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceDistrict>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityDistricts/~add';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async removeActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceDistrict>>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/activityDistricts/~remove';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
   async getTemplateForResidentCity(): Promise<ServiceCity> {
     const path = '/service/City/~template';
     const response = await this.axios.get(this.getPathForActor(path));
@@ -203,6 +293,33 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setResidentCity(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: JudoIdentifiable<ServiceCity>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/residentCity/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetResidentCity(owner: JudoIdentifiable<ServiceUserProfile>): Promise<void> {
+    const path = '/service/UserProfile/~update/residentCity/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 
   async getTemplateForResidentCounty(): Promise<ServiceCounty> {
@@ -245,6 +362,33 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
     return response.data;
   }
 
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setResidentCounty(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: JudoIdentifiable<ServiceCounty>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/residentCounty/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetResidentCounty(owner: JudoIdentifiable<ServiceUserProfile>): Promise<void> {
+    const path = '/service/UserProfile/~update/residentCounty/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
   async getTemplateForResidentDistrict(): Promise<ServiceDistrict> {
     const path = '/service/District/~template';
     const response = await this.axios.get(this.getPathForActor(path));
@@ -283,5 +427,32 @@ export class ServiceUserProfileServiceImpl extends JudoAxiosService implements S
     });
 
     return response.data;
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setResidentDistrict(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: JudoIdentifiable<ServiceDistrict>,
+  ): Promise<void> {
+    const path = '/service/UserProfile/~update/residentDistrict/~set';
+    await this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async unsetResidentDistrict(owner: JudoIdentifiable<ServiceUserProfile>): Promise<void> {
+    const path = '/service/UserProfile/~update/residentDistrict/~unset';
+    await this.axios.post(this.getPathForActor(path), undefined, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+      },
+    });
   }
 }

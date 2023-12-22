@@ -6,20 +6,30 @@
 // Template name: actor/src/pages/index.tsx
 // Template file: actor/src/pages/index.tsx.hbs
 
-import { useCallback, useEffect, useRef, useState, useMemo, lazy, Suspense } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import type { JudoIdentifiable } from '@judo/data-api-common';
+import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { GridFilterModel } from '@mui/x-data-grid';
-import type { Filter, FilterOption } from '~/components-api';
 import { useJudoNavigation } from '~/components';
+import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import { useSnacks, useCRUDDialog } from '~/hooks';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
-import type { DialogResult } from '~/utilities';
-import { PageContainerTransition } from '~/theme/animations';
+import type { ServiceUserIssuesUserIssues_View_EditPageActions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/ServiceUserIssuesUserIssues_View_EditPageContainer';
+import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
+import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
+import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
+import { useServiceIssueIssue_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateProArgument/Input/Form';
+import { useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveGlobalIssuesActiveGlobalActiveIssuesGlobalTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveGlobalIssues/ActiveGlobal/ActiveIssuesGlobal/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCityActiveIssuesInActivityCitiesTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveIssuesByActivityArea/TabBar/ActiveByActivityInCity/ActiveIssuesInActivityCities/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveIssuesByActivityArea/TabBar/ActiveByActivityInCounty/ActiveIssuesInActivityCounties/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInDistrictActiveIssuesInActivityDistrictsTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveIssuesByActivityArea/TabBar/ActiveByActivityInDistrict/ActiveIssuesInActivityDistricts/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCityActiveIssuesInResidentCityTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveIssuesByResidentArea/TabBar/ActiveByResidentInCity/ActiveIssuesInResidentCity/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveIssuesInResidentCountyTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveIssuesByResidentArea/TabBar/ActiveByResidentInCounty/ActiveIssuesInResidentCounty/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInDistrictActiveIssuesInResidentDistrictTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/ActiveIssuesByResidentArea/TabBar/ActiveByResidentInDistrict/ActiveIssuesInResidentDistrict/TableAddSelectorPage';
+import { useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/OwnedIssuesGroup/OwnedIssues/TableAddSelectorPage';
+import { useCRUDDialog, useSnacks } from '~/hooks';
 import { routeToServiceUserIssuesActiveIssuesGlobalRelationViewPage } from '~/routes';
 import { routeToServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPage } from '~/routes';
 import { routeToServiceUserIssuesActiveIssuesInActivityCountiesRelationViewPage } from '~/routes';
@@ -28,12 +38,6 @@ import { routeToServiceUserIssuesActiveIssuesInResidentCityRelationViewPage } fr
 import { routeToServiceUserIssuesActiveIssuesInResidentCountyRelationViewPage } from '~/routes';
 import { routeToServiceUserIssuesActiveIssuesInResidentDistrictRelationViewPage } from '~/routes';
 import { routeToServiceUserIssuesOwnedIssuesRelationViewPage } from '~/routes';
-import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
-import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
-import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
-import { useServiceIssueIssue_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateProArgument/Input/Form';
-import { useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
-import type { ServiceUserIssuesUserIssues_View_EditPageActions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/ServiceUserIssuesUserIssues_View_EditPageContainer';
 import type {
   ServiceIssue,
   ServiceIssueQueryCustomizer,
@@ -42,8 +46,12 @@ import type {
   ServiceUserIssuesQueryCustomizer,
   ServiceUserIssuesStored,
 } from '~/services/data-api';
+import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserIssuesImpl } from '~/services/data-axios/UserServiceForUserIssuesImpl';
+import { PageContainerTransition } from '~/theme/animations';
+import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import type { DialogResult } from '~/utilities';
 
 export type ServiceUserIssuesUserIssues_View_EditPageActionsExtended =
   ServiceUserIssuesUserIssues_View_EditPageActions & {
@@ -188,6 +196,22 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     useServiceIssueIssue_View_EditCreateProArgumentInputForm();
   const openServiceUserIssuesUserIssues_View_EditCreateIssueInputForm =
     useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveGlobalIssuesActiveGlobalActiveIssuesGlobalTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveGlobalIssuesActiveGlobalActiveIssuesGlobalTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCityActiveIssuesInActivityCitiesTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCityActiveIssuesInActivityCitiesTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInDistrictActiveIssuesInActivityDistrictsTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInDistrictActiveIssuesInActivityDistrictsTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCityActiveIssuesInResidentCityTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCityActiveIssuesInResidentCityTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveIssuesInResidentCountyTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveIssuesInResidentCountyTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInDistrictActiveIssuesInResidentDistrictTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInDistrictActiveIssuesInResidentDistrictTableAddSelectorPage();
+  const openServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage =
+    useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage();
 
   // Calculated section
   const title: string = t('service.UserIssues.UserIssues_View_Edit', { defaultValue: 'UserIssues View / Edit' });
@@ -1222,6 +1246,68 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
     }
   };
+  const activeIssuesGlobalOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveGlobalIssuesActiveGlobalActiveIssuesGlobalTableAddSelectorPage(
+        data,
+        data.activeIssuesGlobal ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesGlobal(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesGlobalBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeGlobalIssues.activeGlobal.activeIssuesGlobal.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.title!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesGlobalRemoveAction) {
+              await actions.activeIssuesGlobalRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
+  };
   const activeIssuesGlobalFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -1238,9 +1324,94 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesGlobal(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesGlobalRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesGlobal(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesGlobalOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserIssuesActiveIssuesGlobalRelationViewPage((target || data).__signedIdentifier));
+  };
+  const activeIssuesInActivityCitiesOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCityActiveIssuesInActivityCitiesTableAddSelectorPage(
+        data,
+        data.activeIssuesInActivityCities ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesInActivityCities(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesInActivityCitiesBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByActivityArea.tabBar.activeByActivityInCity.activeIssuesInActivityCities.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesInActivityCitiesRemoveAction) {
+              await actions.activeIssuesInActivityCitiesRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const activeIssuesInActivityCitiesFilterAction = async (
     id: string,
@@ -1258,9 +1429,94 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityCities(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesInActivityCitiesRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesInActivityCities(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesInActivityCitiesOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPage((target || data).__signedIdentifier));
+  };
+  const activeIssuesInActivityCountiesOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInCountyActiveIssuesInActivityCountiesTableAddSelectorPage(
+        data,
+        data.activeIssuesInActivityCounties ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesInActivityCounties(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesInActivityCountiesBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByActivityArea.tabBar.activeByActivityInCounty.activeIssuesInActivityCounties.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesInActivityCountiesRemoveAction) {
+              await actions.activeIssuesInActivityCountiesRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const activeIssuesInActivityCountiesFilterAction = async (
     id: string,
@@ -1278,11 +1534,96 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityCounties(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesInActivityCountiesRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesInActivityCounties(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesInActivityCountiesOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(
       routeToServiceUserIssuesActiveIssuesInActivityCountiesRelationViewPage((target || data).__signedIdentifier),
     );
+  };
+  const activeIssuesInActivityDistrictsOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByActivityAreaTabBarActiveByActivityInDistrictActiveIssuesInActivityDistrictsTableAddSelectorPage(
+        data,
+        data.activeIssuesInActivityDistricts ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesInActivityDistricts(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesInActivityDistrictsBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByActivityArea.tabBar.activeByActivityInDistrict.activeIssuesInActivityDistricts.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesInActivityDistrictsRemoveAction) {
+              await actions.activeIssuesInActivityDistrictsRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const activeIssuesInActivityDistrictsFilterAction = async (
     id: string,
@@ -1300,11 +1641,96 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityDistricts(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesInActivityDistrictsRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesInActivityDistricts(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesInActivityDistrictsOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(
       routeToServiceUserIssuesActiveIssuesInActivityDistrictsRelationViewPage((target || data).__signedIdentifier),
     );
+  };
+  const activeIssuesInResidentCityOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCityActiveIssuesInResidentCityTableAddSelectorPage(
+        data,
+        data.activeIssuesInResidentCity ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesInResidentCity(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesInResidentCityBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInCity.activeIssuesInResidentCity.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesInResidentCityRemoveAction) {
+              await actions.activeIssuesInResidentCityRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const activeIssuesInResidentCityFilterAction = async (
     id: string,
@@ -1322,9 +1748,94 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentCity(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesInResidentCityRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesInResidentCity(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesInResidentCityOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserIssuesActiveIssuesInResidentCityRelationViewPage((target || data).__signedIdentifier));
+  };
+  const activeIssuesInResidentCountyOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInCountyActiveIssuesInResidentCountyTableAddSelectorPage(
+        data,
+        data.activeIssuesInResidentCounty ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesInResidentCounty(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesInResidentCountyBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInCounty.activeIssuesInResidentCounty.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.title!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesInResidentCountyRemoveAction) {
+              await actions.activeIssuesInResidentCountyRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const activeIssuesInResidentCountyFilterAction = async (
     id: string,
@@ -1342,9 +1853,94 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentCounty(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesInResidentCountyRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesInResidentCounty(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesInResidentCountyOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(routeToServiceUserIssuesActiveIssuesInResidentCountyRelationViewPage((target || data).__signedIdentifier));
+  };
+  const activeIssuesInResidentDistrictOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarActiveIssuesByResidentAreaTabBarActiveByResidentInDistrictActiveIssuesInResidentDistrictTableAddSelectorPage(
+        data,
+        data.activeIssuesInResidentDistrict ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addActiveIssuesInResidentDistrict(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const activeIssuesInResidentDistrictBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t(
+          'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInDistrict.activeIssuesInResidentDistrict.BulkRemove',
+          { defaultValue: 'Remove' },
+        ),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.activeIssuesInResidentDistrictRemoveAction) {
+              await actions.activeIssuesInResidentDistrictRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const activeIssuesInResidentDistrictFilterAction = async (
     id: string,
@@ -1362,11 +1958,95 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentDistrict(singletonHost.current, queryCustomizer);
   };
+  const activeIssuesInResidentDistrictRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeActiveIssuesInResidentDistrict(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
   const activeIssuesInResidentDistrictOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
     navigate(
       routeToServiceUserIssuesActiveIssuesInResidentDistrictRelationViewPage((target || data).__signedIdentifier),
     );
+  };
+  const ownedIssuesOpenAddSelectorAction = async () => {
+    const { result, data: returnedData } =
+      await openServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage(
+        data,
+        data.ownedIssues ?? [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        try {
+          setIsLoading(true);
+          await userServiceForUserIssuesImpl.addOwnedIssues(data, returnedData);
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    }
+  };
+
+  const ownedIssuesBulkRemoveAction = async (
+    selectedRows: ServiceIssueStored[],
+  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
+    return new Promise((resolve) => {
+      openCRUDDialog<ServiceIssueStored>({
+        dialogTitle: t('service.UserIssues.UserIssues_View_Edit.root.tabBar.ownedIssuesGroup.ownedIssues.BulkRemove', {
+          defaultValue: 'Remove',
+        }),
+        itemTitleFn: (item) => item.countyRepresentation!,
+        selectedItems: selectedRows,
+        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
+          try {
+            if (actions.ownedIssuesRemoveAction) {
+              await actions.ownedIssuesRemoveAction!(item, true);
+            }
+            successHandler();
+          } catch (error) {
+            errorHandler(error);
+          }
+        },
+        onClose: async (needsRefresh) => {
+          if (needsRefresh) {
+            if (actions.refreshAction) {
+              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            }
+            resolve({
+              result: 'submit',
+              data: [],
+            });
+          } else {
+            resolve({
+              result: 'close',
+            });
+          }
+        },
+      });
+    });
   };
   const ownedIssuesFilterAction = async (
     id: string,
@@ -1383,6 +2063,29 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     queryCustomizer: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listOwnedIssues(singletonHost.current, queryCustomizer);
+  };
+  const ownedIssuesRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
+    if (target) {
+      try {
+        if (!silentMode) {
+          setIsLoading(true);
+        }
+        await userServiceForUserIssuesImpl.removeOwnedIssues(data, [target!]);
+        if (!silentMode) {
+          if (!editMode) {
+            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          }
+        }
+      } catch (error) {
+        if (!silentMode) {
+          handleError<ServiceIssue>(error, undefined, target);
+        }
+      } finally {
+        if (!silentMode) {
+          setIsLoading(false);
+        }
+      }
+    }
   };
   const ownedIssuesOpenPageAction = async (target?: ServiceIssueStored) => {
     // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
@@ -1470,29 +2173,53 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     backAction,
     refreshAction,
     createIssueAction,
+    activeIssuesGlobalOpenAddSelectorAction,
+    activeIssuesGlobalBulkRemoveAction,
     activeIssuesGlobalFilterAction,
     activeIssuesGlobalRefreshAction,
+    activeIssuesGlobalRemoveAction,
     activeIssuesGlobalOpenPageAction,
+    activeIssuesInActivityCitiesOpenAddSelectorAction,
+    activeIssuesInActivityCitiesBulkRemoveAction,
     activeIssuesInActivityCitiesFilterAction,
     activeIssuesInActivityCitiesRefreshAction,
+    activeIssuesInActivityCitiesRemoveAction,
     activeIssuesInActivityCitiesOpenPageAction,
+    activeIssuesInActivityCountiesOpenAddSelectorAction,
+    activeIssuesInActivityCountiesBulkRemoveAction,
     activeIssuesInActivityCountiesFilterAction,
     activeIssuesInActivityCountiesRefreshAction,
+    activeIssuesInActivityCountiesRemoveAction,
     activeIssuesInActivityCountiesOpenPageAction,
+    activeIssuesInActivityDistrictsOpenAddSelectorAction,
+    activeIssuesInActivityDistrictsBulkRemoveAction,
     activeIssuesInActivityDistrictsFilterAction,
     activeIssuesInActivityDistrictsRefreshAction,
+    activeIssuesInActivityDistrictsRemoveAction,
     activeIssuesInActivityDistrictsOpenPageAction,
+    activeIssuesInResidentCityOpenAddSelectorAction,
+    activeIssuesInResidentCityBulkRemoveAction,
     activeIssuesInResidentCityFilterAction,
     activeIssuesInResidentCityRefreshAction,
+    activeIssuesInResidentCityRemoveAction,
     activeIssuesInResidentCityOpenPageAction,
+    activeIssuesInResidentCountyOpenAddSelectorAction,
+    activeIssuesInResidentCountyBulkRemoveAction,
     activeIssuesInResidentCountyFilterAction,
     activeIssuesInResidentCountyRefreshAction,
+    activeIssuesInResidentCountyRemoveAction,
     activeIssuesInResidentCountyOpenPageAction,
+    activeIssuesInResidentDistrictOpenAddSelectorAction,
+    activeIssuesInResidentDistrictBulkRemoveAction,
     activeIssuesInResidentDistrictFilterAction,
     activeIssuesInResidentDistrictRefreshAction,
+    activeIssuesInResidentDistrictRemoveAction,
     activeIssuesInResidentDistrictOpenPageAction,
+    ownedIssuesOpenAddSelectorAction,
+    ownedIssuesBulkRemoveAction,
     ownedIssuesFilterAction,
     ownedIssuesRefreshAction,
+    ownedIssuesRemoveAction,
     ownedIssuesOpenPageAction,
     ...(customActions ?? {}),
   };
