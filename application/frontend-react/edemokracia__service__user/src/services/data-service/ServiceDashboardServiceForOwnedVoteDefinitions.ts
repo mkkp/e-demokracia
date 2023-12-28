@@ -50,7 +50,6 @@ export interface ServiceDashboardServiceForOwnedVoteDefinitions {
     owner: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-  delete(target: JudoIdentifiable<ServiceVoteDefinition>): Promise<void>;
   update(target: Partial<ServiceVoteDefinitionStored>): Promise<ServiceVoteDefinitionStored>;
   addOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceDashboard>,

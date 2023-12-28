@@ -55,7 +55,6 @@ export interface ServiceIssueService {
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
-  delete(target: JudoIdentifiable<ServiceIssue>): Promise<void>;
   update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
   getTemplateForAttachments(): Promise<ServiceIssueAttachment>;
   createAttachments(

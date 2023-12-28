@@ -140,41 +140,6 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
   const backAction = async () => {
     navigateBack();
   };
-  const bulkDeleteAction = async (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
-    return new Promise((resolve) => {
-      openCRUDDialog<ServiceVoteDefinitionStored>({
-        dialogTitle: t('service.VoteDefinition.VoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' }),
-        itemTitleFn: (item) => item.title!,
-        selectedItems: selectedRows,
-        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-          try {
-            if (actions.deleteAction) {
-              await actions.deleteAction!(item, true);
-            }
-            successHandler();
-          } catch (error) {
-            errorHandler(error);
-          }
-        },
-        onClose: async (needsRefresh) => {
-          if (needsRefresh) {
-            setRefreshCounter((prev) => prev + 1);
-            resolve({
-              result: 'submit',
-              data: [],
-            });
-          } else {
-            resolve({
-              result: 'close',
-              data: [],
-            });
-          }
-        },
-      });
-    });
-  };
   const bulkRemoveAction = async (
     selectedRows: ServiceVoteDefinitionStored[],
   ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
@@ -208,30 +173,6 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
         },
       });
     });
-  };
-  const deleteAction = async (target: ServiceVoteDefinitionStored, silentMode?: boolean) => {
-    try {
-      const confirmed = !silentMode
-        ? await openConfirmDialog(
-            'row-delete-action',
-            t('judo.modal.confirm.confirm-delete', {
-              defaultValue: 'Are you sure you would like to delete the selected element?',
-            }),
-            t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-          )
-        : true;
-      if (confirmed) {
-        await serviceDashboardServiceForOwnedVoteDefinitionsImpl.delete(target);
-        if (!silentMode) {
-          showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          setRefreshCounter((prev) => prev + 1);
-        }
-      }
-    } catch (error) {
-      if (!silentMode) {
-        handleError<ServiceVoteDefinition>(error, undefined, target);
-      }
-    }
   };
   const removeAction = async (target?: ServiceVoteDefinitionStored, silentMode?: boolean) => {
     if (target) {
@@ -323,9 +264,7 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationTablePage() 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
     openAddSelectorAction,
     backAction,
-    bulkDeleteAction,
     bulkRemoveAction,
-    deleteAction,
     removeAction,
     filterAction,
     refreshAction,

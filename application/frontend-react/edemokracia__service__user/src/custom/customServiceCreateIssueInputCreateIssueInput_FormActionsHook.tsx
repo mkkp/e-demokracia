@@ -1,5 +1,5 @@
 /**
- * It navigates to User -> userCreatedIssues access view of the
+ * It navigates to User -> Issues access view of the
  * created issue called with UserIssues 'Create new issue' button.
  */
 
@@ -13,10 +13,10 @@ import {
   SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceCreateIssueInputCreateIssueInput_FormActionsHook,
 } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
-import { routeToServiceUserUserCreatedIssuesAccessViewPage } from '~/routes';
+import { routeToServiceUserIssuesAccessViewPage } from '~/routes';
 import { ServiceIssue, ServiceIssueStored } from '~/services/data-api';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { UserServiceForUserCreatedIssuesImpl } from '~/services/data-axios/UserServiceForUserCreatedIssuesImpl';
+import { UserServiceForIssuesImpl } from '~/services/data-axios/UserServiceForIssuesImpl';
 
 export function registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context: BundleContext) {
   context.registerService<ServiceCreateIssueInputCreateIssueInput_FormActionsHook>(
@@ -29,10 +29,7 @@ export function registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(
 const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCreateIssueInputCreateIssueInput_FormActionsHook =
   () => {
     const { navigate } = useJudoNavigation();
-    const userServiceForUserCreatedIssuesImpl = useMemo(
-      () => new UserServiceForUserCreatedIssuesImpl(judoAxiosProvider),
-      [],
-    );
+    const userServiceForIssuesImpl = useMemo(() => new UserServiceForIssuesImpl(judoAxiosProvider), []);
 
     return {
       postCreateIssueForUserIssuesAction: async (
@@ -49,12 +46,12 @@ const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCrea
           _identifier: id,
         };
 
-        const res = await userServiceForUserCreatedIssuesImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+        const res = await userServiceForIssuesImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
 
         await onClose();
 
         // 3. Open view page in access
-        navigate(routeToServiceUserUserCreatedIssuesAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserIssuesAccessViewPage(res[0].__signedIdentifier));
       },
     };
   };

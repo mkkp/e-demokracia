@@ -66,9 +66,6 @@ import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utili
 
 export interface ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentActionDefinitions {
   ownedVoteDefinitionsOpenAddSelectorAction?: () => Promise<void>;
-  ownedVoteDefinitionsBulkDeleteAction?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
   ownedVoteDefinitionsBulkRemoveAction?: (
     selectedRows: ServiceVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
@@ -81,7 +78,6 @@ export interface ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponen
   ownedVoteDefinitionsRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceVoteDefinitionStored[]>;
-  ownedVoteDefinitionsDeleteAction?: (row: ServiceVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
   ownedVoteDefinitionsRemoveAction?: (row: ServiceVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
   ownedVoteDefinitionsOpenPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   ownedVoteDefinitionsVoteRatingAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
@@ -340,20 +336,6 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
       action: actions.ownedVoteDefinitionsRemoveAction
         ? async (rowData) => {
             await actions.ownedVoteDefinitionsRemoveAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceTableRowDeleteButton',
-      label: t(
-        'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.myVotesGroup.ownedVoteDefinitions.Delete',
-        { defaultValue: 'Delete' },
-      ) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.ownedVoteDefinitionsDeleteAction
-        ? async (rowData) => {
-            await actions.ownedVoteDefinitionsDeleteAction!(rowData);
           }
         : undefined,
     },
@@ -718,27 +700,6 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
                   {t(
                     'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.myVotesGroup.ownedVoteDefinitions.BulkRemove',
                     { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.ownedVoteDefinitionsBulkDeleteAction && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.ownedVoteDefinitionsBulkDeleteAction!(
-                      selectedRows.current,
-                    );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.myVotesGroup.ownedVoteDefinitions.BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}

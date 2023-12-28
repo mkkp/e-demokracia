@@ -18,7 +18,7 @@ export interface ServiceDashboard {
   welcome?: null | string;
   favoriteIssues?: null | Array<ServiceIssueStored>;
   favoriteVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
-  issuesOwned?: null | Array<ServiceIssueStored>;
+  ownedIssues?: null | Array<ServiceIssueStored>;
   ownedVoteDefinitions?: null | Array<ServiceVoteDefinitionStored>;
   userVoteEntries?: null | Array<ServiceVoteEntryStored>;
 }
@@ -27,7 +27,7 @@ export type ServiceDashboardAttributes = 'welcome';
 export type ServiceDashboardRelations =
   | 'favoriteIssues'
   | 'favoriteVoteDefinitions'
-  | 'issuesOwned'
+  | 'ownedIssues'
   | 'ownedVoteDefinitions'
   | 'userVoteEntries';
 

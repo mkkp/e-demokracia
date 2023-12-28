@@ -73,18 +73,6 @@ export class ServiceIssueServiceImpl extends JudoAxiosService implements Service
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async delete(target: JudoIdentifiable<ServiceIssue>): Promise<void> {
-    const path = '/service/Issue/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
   async update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored> {
     const path = '/service/Issue/~update';
     const response = await this.axios.post(this.getPathForActor(path), target, {

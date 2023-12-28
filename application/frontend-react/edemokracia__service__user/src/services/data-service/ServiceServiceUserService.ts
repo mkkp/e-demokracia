@@ -33,7 +33,6 @@ export interface ServiceServiceUserService {
     target: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
-  delete(target: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
   update(target: Partial<ServiceServiceUserStored>): Promise<ServiceServiceUserStored>;
   getTemplateForActivityCities(): Promise<ServiceCity>;
   listActivityCities(

@@ -18,15 +18,15 @@ export function registerServiceUserVoteDefinitionUserVoteDefinition_View_EditCon
 }
 
 const customServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook: ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook =
-() => {
-  return {      
-    ownedVoteDefinitionsOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsGlobalOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsInResidentCityOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsInResidentCountyOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsInResidentDistrictOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsInActivityCitiesOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsInActivityCountiesOpenPageAction: openVoteDefinitionPage(),
-    activeVoteDefinitionsInActivityDistictsOpenPageAction: openVoteDefinitionPage(),
+  () => {
+    return {
+      ownedVoteDefinitionsOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsGlobalOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInResidentCityOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInResidentCountyOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInResidentDistrictOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInActivityCitiesOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInActivityCountiesOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInActivityDistictsOpenPageAction: openVoteDefinitionPage(),
+    };
   };
-}

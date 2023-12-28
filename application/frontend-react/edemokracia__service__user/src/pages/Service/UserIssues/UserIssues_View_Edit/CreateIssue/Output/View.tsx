@@ -171,7 +171,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
   const isFormDeleteable = useCallback(() => {
-    return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
   const pageQueryCustomizer: ServiceIssueQueryCustomizer = {
@@ -826,24 +826,6 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(pageQueryCustomizer));
   };
-  const deleteAction = async () => {
-    try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
-      if (confirmed) {
-        await serviceIssueServiceImpl.delete(data);
-        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        navigateBack();
-      }
-    } catch (error) {
-      handleError(error, undefined, data);
-    }
-  };
   const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored> => {
     try {
       setIsLoading(true);
@@ -941,7 +923,6 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
     commentsOpenPageAction,
     createCommentAction,
     cancelAction,
-    deleteAction,
     refreshAction,
     updateAction,
     ...(customActions ?? {}),

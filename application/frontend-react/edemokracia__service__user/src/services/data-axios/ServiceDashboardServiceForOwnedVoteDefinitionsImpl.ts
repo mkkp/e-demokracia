@@ -109,19 +109,6 @@ export class ServiceDashboardServiceForOwnedVoteDefinitionsImpl
   }
 
   /**
-   * From: relation.isDeletable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async delete(target: JudoIdentifiable<ServiceVoteDefinition>): Promise<void> {
-    const path = '/service/VoteDefinition/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */

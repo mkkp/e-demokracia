@@ -161,42 +161,42 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_DASHBOARD_ISSUES_OWNED_RELATION_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceDashboardIssuesOwnedRelationTablePageRoute';
-export const routeToServiceDashboardIssuesOwnedRelationTablePage = (signedIdentifier: string): string =>
-  'Service/Dashboard/IssuesOwned/RelationTablePage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDashboardIssuesOwnedRelationTablePage = lazy(
-  () => import('./pages/Service/Dashboard/IssuesOwned/RelationTablePage'),
+export const ROUTE_SERVICE_DASHBOARD_OWNED_ISSUES_RELATION_TABLE_PAGE_INTERFACE_KEY =
+  'ServiceDashboardOwnedIssuesRelationTablePageRoute';
+export const routeToServiceDashboardOwnedIssuesRelationTablePage = (signedIdentifier: string): string =>
+  'Service/Dashboard/OwnedIssues/RelationTablePage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const ServiceDashboardOwnedIssuesRelationTablePage = lazy(
+  () => import('./pages/Service/Dashboard/OwnedIssues/RelationTablePage'),
 );
 
 routes.push({
-  path: 'Service/Dashboard/IssuesOwned/RelationTablePage/:signedIdentifier',
+  path: 'Service/Dashboard/OwnedIssues/RelationTablePage/:signedIdentifier',
   element: (
     <Suspense>
       <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_ISSUES_OWNED_RELATION_TABLE_PAGE_INTERFACE_KEY})`}
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_OWNED_ISSUES_RELATION_TABLE_PAGE_INTERFACE_KEY})`}
       >
-        <ServiceDashboardIssuesOwnedRelationTablePage />
+        <ServiceDashboardOwnedIssuesRelationTablePage />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_DASHBOARD_ISSUES_OWNED_RELATION_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceDashboardIssuesOwnedRelationViewPageRoute';
-export const routeToServiceDashboardIssuesOwnedRelationViewPage = (signedIdentifier: string): string =>
-  'Service/Dashboard/IssuesOwned/RelationViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceDashboardIssuesOwnedRelationViewPage = lazy(
-  () => import('./pages/Service/Dashboard/IssuesOwned/RelationViewPage'),
+export const ROUTE_SERVICE_DASHBOARD_OWNED_ISSUES_RELATION_VIEW_PAGE_INTERFACE_KEY =
+  'ServiceDashboardOwnedIssuesRelationViewPageRoute';
+export const routeToServiceDashboardOwnedIssuesRelationViewPage = (signedIdentifier: string): string =>
+  'Service/Dashboard/OwnedIssues/RelationViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const ServiceDashboardOwnedIssuesRelationViewPage = lazy(
+  () => import('./pages/Service/Dashboard/OwnedIssues/RelationViewPage'),
 );
 
 routes.push({
-  path: 'Service/Dashboard/IssuesOwned/RelationViewPage/:signedIdentifier',
+  path: 'Service/Dashboard/OwnedIssues/RelationViewPage/:signedIdentifier',
   element: (
     <Suspense>
       <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_ISSUES_OWNED_RELATION_VIEW_PAGE_INTERFACE_KEY})`}
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_DASHBOARD_OWNED_ISSUES_RELATION_VIEW_PAGE_INTERFACE_KEY})`}
       >
-        <ServiceDashboardIssuesOwnedRelationViewPage />
+        <ServiceDashboardOwnedIssuesRelationViewPage />
       </ComponentProxy>
     </Suspense>
   ),
@@ -421,37 +421,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_USER_ACTIVE_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserActiveIssuesAccessTablePageRoute';
-export const routeToServiceUserActiveIssuesAccessTablePage = (): string => 'Service/User/ActiveIssues/AccessTablePage';
-const ServiceUserActiveIssuesAccessTablePage = lazy(() => import('./pages/Service/User/ActiveIssues/AccessTablePage'));
-
-routes.push({
-  path: 'Service/User/ActiveIssues/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ACTIVE_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}>
-        <ServiceUserActiveIssuesAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_ACTIVE_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserActiveIssuesAccessViewPageRoute';
-export const routeToServiceUserActiveIssuesAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/ActiveIssues/AccessViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserActiveIssuesAccessViewPage = lazy(() => import('./pages/Service/User/ActiveIssues/AccessViewPage'));
-
-routes.push({
-  path: 'Service/User/ActiveIssues/AccessViewPage/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ACTIVE_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}>
-        <ServiceUserActiveIssuesAccessViewPage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_USER_ADMIN_CATEGORIES_ACCESS_TABLE_PAGE_INTERFACE_KEY =
   'ServiceUserAdminCategoriesAccessTablePageRoute';
 export const routeToServiceUserAdminCategoriesAccessTablePage = (): string =>
@@ -561,21 +530,6 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_USER_ADMIN_USERS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserAdminUsersAccessTablePageRoute';
-export const routeToServiceUserAdminUsersAccessTablePage = (): string => 'Service/User/AdminUsers/AccessTablePage';
-const ServiceUserAdminUsersAccessTablePage = lazy(() => import('./pages/Service/User/AdminUsers/AccessTablePage'));
-
-routes.push({
-  path: 'Service/User/AdminUsers/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ADMIN_USERS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}>
-        <ServiceUserAdminUsersAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
 export const ROUTE_SERVICE_USER_ADMIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
   'ServiceUserAdminVoteDefinitionsAccessTablePageRoute';
 export const routeToServiceUserAdminVoteDefinitionsAccessTablePage = (): string =>
@@ -651,42 +605,114 @@ routes.push({
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_USER_USER_CREATED_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserCreatedIssuesAccessTablePageRoute';
-export const routeToServiceUserUserCreatedIssuesAccessTablePage = (): string =>
-  'Service/User/UserCreatedIssues/AccessTablePage';
-const ServiceUserUserCreatedIssuesAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserCreatedIssues/AccessTablePage'),
-);
+export const ROUTE_SERVICE_USER_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY = 'ServiceUserIssuesAccessTablePageRoute';
+export const routeToServiceUserIssuesAccessTablePage = (): string => 'Service/User/Issues/AccessTablePage';
+const ServiceUserIssuesAccessTablePage = lazy(() => import('./pages/Service/User/Issues/AccessTablePage'));
 
 routes.push({
-  path: 'Service/User/UserCreatedIssues/AccessTablePage',
+  path: 'Service/User/Issues/AccessTablePage',
   element: (
     <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_CREATED_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserCreatedIssuesAccessTablePage />
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}>
+        <ServiceUserIssuesAccessTablePage />
       </ComponentProxy>
     </Suspense>
   ),
 });
-export const ROUTE_SERVICE_USER_USER_CREATED_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserUserCreatedIssuesAccessViewPageRoute';
-export const routeToServiceUserUserCreatedIssuesAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/UserCreatedIssues/AccessViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserUserCreatedIssuesAccessViewPage = lazy(
-  () => import('./pages/Service/User/UserCreatedIssues/AccessViewPage'),
+export const ROUTE_SERVICE_USER_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY = 'ServiceUserIssuesAccessViewPageRoute';
+export const routeToServiceUserIssuesAccessViewPage = (signedIdentifier: string): string =>
+  'Service/User/Issues/AccessViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const ServiceUserIssuesAccessViewPage = lazy(() => import('./pages/Service/User/Issues/AccessViewPage'));
+
+routes.push({
+  path: 'Service/User/Issues/AccessViewPage/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}>
+        <ServiceUserIssuesAccessViewPage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
+  'ServiceUserRatingVoteDefinitionsAccessTablePageRoute';
+export const routeToServiceUserRatingVoteDefinitionsAccessTablePage = (): string =>
+  'Service/User/RatingVoteDefinitions/AccessTablePage';
+const ServiceUserRatingVoteDefinitionsAccessTablePage = lazy(
+  () => import('./pages/Service/User/RatingVoteDefinitions/AccessTablePage'),
 );
 
 routes.push({
-  path: 'Service/User/UserCreatedIssues/AccessViewPage/:signedIdentifier',
+  path: 'Service/User/RatingVoteDefinitions/AccessTablePage',
   element: (
     <Suspense>
       <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_CREATED_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
       >
-        <ServiceUserUserCreatedIssuesAccessViewPage />
+        <ServiceUserRatingVoteDefinitionsAccessTablePage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_RATING_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
+  'ServiceUserRatingVoteDefinitionsAccessViewPageRoute';
+export const routeToServiceUserRatingVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
+  'Service/User/RatingVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const ServiceUserRatingVoteDefinitionsAccessViewPage = lazy(
+  () => import('./pages/Service/User/RatingVoteDefinitions/AccessViewPage'),
+);
+
+routes.push({
+  path: 'Service/User/RatingVoteDefinitions/AccessViewPage/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_RATING_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserRatingVoteDefinitionsAccessViewPage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
+  'ServiceUserSelectAnswerVoteDefinitionsAccessTablePageRoute';
+export const routeToServiceUserSelectAnswerVoteDefinitionsAccessTablePage = (): string =>
+  'Service/User/SelectAnswerVoteDefinitions/AccessTablePage';
+const ServiceUserSelectAnswerVoteDefinitionsAccessTablePage = lazy(
+  () => import('./pages/Service/User/SelectAnswerVoteDefinitions/AccessTablePage'),
+);
+
+routes.push({
+  path: 'Service/User/SelectAnswerVoteDefinitions/AccessTablePage',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserSelectAnswerVoteDefinitionsAccessTablePage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
+  'ServiceUserSelectAnswerVoteDefinitionsAccessViewPageRoute';
+export const routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
+  'Service/User/SelectAnswerVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const ServiceUserSelectAnswerVoteDefinitionsAccessViewPage = lazy(
+  () => import('./pages/Service/User/SelectAnswerVoteDefinitions/AccessViewPage'),
+);
+
+routes.push({
+  path: 'Service/User/SelectAnswerVoteDefinitions/AccessViewPage/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserSelectAnswerVoteDefinitionsAccessViewPage />
       </ComponentProxy>
     </Suspense>
   ),
@@ -701,242 +727,6 @@ routes.push({
     <Suspense>
       <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}>
         <ServiceUserUserIssuesAccessViewPage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_ACTIVE_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedActiveIssuesAccessTablePageRoute';
-export const routeToServiceUserUserOwnedActiveIssuesAccessTablePage = (): string =>
-  'Service/User/UserOwnedActiveIssues/AccessTablePage';
-const ServiceUserUserOwnedActiveIssuesAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserOwnedActiveIssues/AccessTablePage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedActiveIssues/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_ACTIVE_ISSUES_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedActiveIssuesAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_ACTIVE_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedActiveIssuesAccessViewPageRoute';
-export const routeToServiceUserUserOwnedActiveIssuesAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/UserOwnedActiveIssues/AccessViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
-const ServiceUserUserOwnedActiveIssuesAccessViewPage = lazy(
-  () => import('./pages/Service/User/UserOwnedActiveIssues/AccessViewPage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedActiveIssues/AccessViewPage/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_ACTIVE_ISSUES_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedActiveIssuesAccessViewPage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePageRoute';
-export const routeToServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage = (): string =>
-  'Service/User/UserOwnedRatingVoteDefinitions/AccessTablePage';
-const ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserOwnedRatingVoteDefinitions/AccessTablePage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedRatingVoteDefinitions/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedRatingVoteDefinitionsAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPageRoute';
-export const routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/UserOwnedRatingVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage = lazy(
-  () => import('./pages/Service/User/UserOwnedRatingVoteDefinitions/AccessViewPage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedRatingVoteDefinitions/AccessViewPage/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_RATING_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTablePageRoute';
-export const routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTablePage = (): string =>
-  'Service/User/UserOwnedSelectAnswerVoteDefinitions/AccessTablePage';
-const ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserOwnedSelectAnswerVoteDefinitions/AccessTablePage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedSelectAnswerVoteDefinitions/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPageRoute';
-export const routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage = (
-  signedIdentifier: string,
-): string =>
-  'Service/User/UserOwnedSelectAnswerVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage = lazy(
-  () => import('./pages/Service/User/UserOwnedSelectAnswerVoteDefinitions/AccessViewPage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedSelectAnswerVoteDefinitions/AccessViewPage/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_VOTE_ENTRIES_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedVoteEntriesAccessTablePageRoute';
-export const routeToServiceUserUserOwnedVoteEntriesAccessTablePage = (): string =>
-  'Service/User/UserOwnedVoteEntries/AccessTablePage';
-const ServiceUserUserOwnedVoteEntriesAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserOwnedVoteEntries/AccessTablePage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedVoteEntries/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_VOTE_ENTRIES_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedVoteEntriesAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTablePageRoute';
-export const routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTablePage = (): string =>
-  'Service/User/UserOwnedYesNoAbstainVoteDefinitions/AccessTablePage';
-const ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserOwnedYesNoAbstainVoteDefinitions/AccessTablePage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedYesNoAbstainVoteDefinitions/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPageRoute';
-export const routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage = (
-  signedIdentifier: string,
-): string =>
-  'Service/User/UserOwnedYesNoAbstainVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage = lazy(
-  () => import('./pages/Service/User/UserOwnedYesNoAbstainVoteDefinitions/AccessViewPage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedYesNoAbstainVoteDefinitions/AccessViewPage/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_YES_NO_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePageRoute';
-export const routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage = (): string =>
-  'Service/User/UserOwnedYesNoVoteDefinitions/AccessTablePage';
-const ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage = lazy(
-  () => import('./pages/Service/User/UserOwnedYesNoVoteDefinitions/AccessTablePage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedYesNoVoteDefinitions/AccessTablePage',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_YES_NO_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedYesNoVoteDefinitionsAccessTablePage />
-      </ComponentProxy>
-    </Suspense>
-  ),
-});
-export const ROUTE_SERVICE_USER_USER_OWNED_YES_NO_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
-  'ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPageRoute';
-export const routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
-  'Service/User/UserOwnedYesNoVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(
-    /:signedIdentifier/,
-    signedIdentifier,
-  );
-const ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage = lazy(
-  () => import('./pages/Service/User/UserOwnedYesNoVoteDefinitions/AccessViewPage'),
-);
-
-routes.push({
-  path: 'Service/User/UserOwnedYesNoVoteDefinitions/AccessViewPage/:signedIdentifier',
-  element: (
-    <Suspense>
-      <ComponentProxy
-        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_OWNED_YES_NO_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
-      >
-        <ServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage />
       </ComponentProxy>
     </Suspense>
   ),
@@ -957,6 +747,104 @@ routes.push({
         filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
       >
         <ServiceUserUserVoteDefinitionsAccessViewPage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_VOTE_ENTRIES_ACCESS_TABLE_PAGE_INTERFACE_KEY =
+  'ServiceUserVoteEntriesAccessTablePageRoute';
+export const routeToServiceUserVoteEntriesAccessTablePage = (): string => 'Service/User/VoteEntries/AccessTablePage';
+const ServiceUserVoteEntriesAccessTablePage = lazy(() => import('./pages/Service/User/VoteEntries/AccessTablePage'));
+
+routes.push({
+  path: 'Service/User/VoteEntries/AccessTablePage',
+  element: (
+    <Suspense>
+      <ComponentProxy filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_VOTE_ENTRIES_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}>
+        <ServiceUserVoteEntriesAccessTablePage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
+  'ServiceUserYesNoAbstainVoteDefinitionsAccessTablePageRoute';
+export const routeToServiceUserYesNoAbstainVoteDefinitionsAccessTablePage = (): string =>
+  'Service/User/YesNoAbstainVoteDefinitions/AccessTablePage';
+const ServiceUserYesNoAbstainVoteDefinitionsAccessTablePage = lazy(
+  () => import('./pages/Service/User/YesNoAbstainVoteDefinitions/AccessTablePage'),
+);
+
+routes.push({
+  path: 'Service/User/YesNoAbstainVoteDefinitions/AccessTablePage',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserYesNoAbstainVoteDefinitionsAccessTablePage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
+  'ServiceUserYesNoAbstainVoteDefinitionsAccessViewPageRoute';
+export const routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
+  'Service/User/YesNoAbstainVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(
+    /:signedIdentifier/,
+    signedIdentifier,
+  );
+const ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage = lazy(
+  () => import('./pages/Service/User/YesNoAbstainVoteDefinitions/AccessViewPage'),
+);
+
+routes.push({
+  path: 'Service/User/YesNoAbstainVoteDefinitions/AccessViewPage/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_YES_NO_ABSTAIN_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_YES_NO_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY =
+  'ServiceUserYesNoVoteDefinitionsAccessTablePageRoute';
+export const routeToServiceUserYesNoVoteDefinitionsAccessTablePage = (): string =>
+  'Service/User/YesNoVoteDefinitions/AccessTablePage';
+const ServiceUserYesNoVoteDefinitionsAccessTablePage = lazy(
+  () => import('./pages/Service/User/YesNoVoteDefinitions/AccessTablePage'),
+);
+
+routes.push({
+  path: 'Service/User/YesNoVoteDefinitions/AccessTablePage',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_YES_NO_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserYesNoVoteDefinitionsAccessTablePage />
+      </ComponentProxy>
+    </Suspense>
+  ),
+});
+export const ROUTE_SERVICE_USER_YES_NO_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY =
+  'ServiceUserYesNoVoteDefinitionsAccessViewPageRoute';
+export const routeToServiceUserYesNoVoteDefinitionsAccessViewPage = (signedIdentifier: string): string =>
+  'Service/User/YesNoVoteDefinitions/AccessViewPage/:signedIdentifier'.replace(/:signedIdentifier/, signedIdentifier);
+const ServiceUserYesNoVoteDefinitionsAccessViewPage = lazy(
+  () => import('./pages/Service/User/YesNoVoteDefinitions/AccessViewPage'),
+);
+
+routes.push({
+  path: 'Service/User/YesNoVoteDefinitions/AccessViewPage/:signedIdentifier',
+  element: (
+    <Suspense>
+      <ComponentProxy
+        filter={`(${OBJECTCLASS}=${ROUTE_SERVICE_USER_YES_NO_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_INTERFACE_KEY})`}
+      >
+        <ServiceUserYesNoVoteDefinitionsAccessViewPage />
       </ComponentProxy>
     </Suspense>
   ),

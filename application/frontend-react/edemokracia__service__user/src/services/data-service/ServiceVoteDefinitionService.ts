@@ -34,7 +34,6 @@ export interface ServiceVoteDefinitionService {
     target: JudoIdentifiable<ServiceVoteDefinition>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored>;
-  delete(target: JudoIdentifiable<ServiceVoteDefinition>): Promise<void>;
   update(target: Partial<ServiceVoteDefinitionStored>): Promise<ServiceVoteDefinitionStored>;
   getIssue(
     target: JudoIdentifiable<ServiceVoteDefinition>,

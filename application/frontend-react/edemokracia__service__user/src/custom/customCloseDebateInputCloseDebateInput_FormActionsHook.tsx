@@ -15,17 +15,17 @@ import {
 } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
 
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { UserServiceForUserOwnedRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedRatingVoteDefinitionsImpl';
-import { UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl';
-import { UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl';
-import { UserServiceForUserOwnedYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedYesNoVoteDefinitionsImpl';
+import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
+import { UserServiceForSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForSelectAnswerVoteDefinitionsImpl';
+import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoAbstainVoteDefinitionsImpl';
+import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
 
 import {
   routeToServiceUserAdminVoteDefinitionsAccessViewPage,
-  routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage,
-  routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage,
-  routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage,
-  routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage,
+  routeToServiceUserRatingVoteDefinitionsAccessViewPage,
+  routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage,
+  routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage,
+  routeToServiceUserYesNoVoteDefinitionsAccessViewPage,
 } from '~/routes';
 
 export function registerCloseDebateInputCloseDebateInput_FormActionsHook(context: BundleContext) {
@@ -37,20 +37,20 @@ export function registerCloseDebateInputCloseDebateInput_FormActionsHook(context
 
 const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCloseDebateInput_FormActionsHook = () => {
   const { navigate } = useJudoNavigation();
-  const userServiceForUserOwnedYesNoVoteDefinitionsImpl = useMemo(
-    () => new UserServiceForUserOwnedYesNoVoteDefinitionsImpl(judoAxiosProvider),
+  const userServiceForYesNoVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForYesNoVoteDefinitionsImpl(judoAxiosProvider),
     [],
   );
-  const userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl = useMemo(
-    () => new UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider),
+  const userServiceForYesNoAbstainVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider),
     [],
   );
-  const userServiceForUserOwnedRatingVoteDefinitionsImpl = useMemo(
-    () => new UserServiceForUserOwnedRatingVoteDefinitionsImpl(judoAxiosProvider),
+  const userServiceForRatingVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForRatingVoteDefinitionsImpl(judoAxiosProvider),
     [],
   );
-  const userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl = useMemo(
-    () => new UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl(judoAxiosProvider),
+  const userServiceForSelectAnswerVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForSelectAnswerVoteDefinitionsImpl(judoAxiosProvider),
     [],
   );
 
@@ -76,32 +76,30 @@ const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCl
       // 3. Open view page in access
       if (entityType === 'edemokracia.YesNoVoteDefinition') {
         // Retrieve signedIdentifier from access
-        const res = await userServiceForUserOwnedYesNoVoteDefinitionsImpl.list(
-          processQueryCustomizer(idAccessFilterCustomizer),
-        );
+        const res = await userServiceForYesNoVoteDefinitionsImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
         // Open view page in access
-        navigate(routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
         // Retrieve signedIdentifier from access
-        const res = await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.list(
+        const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.list(
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
-        navigate(routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.RatingVoteDefinition') {
         // Retrieve signedIdentifier from access
-        const res = await userServiceForUserOwnedRatingVoteDefinitionsImpl.list(
+        const res = await userServiceForRatingVoteDefinitionsImpl.list(
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
-        navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
         // Retrieve signedIdentifier from access
-        const res = await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.list(
+        const res = await userServiceForSelectAnswerVoteDefinitionsImpl.list(
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
-        navigate(routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
       } else {
         navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(signedId));
       }

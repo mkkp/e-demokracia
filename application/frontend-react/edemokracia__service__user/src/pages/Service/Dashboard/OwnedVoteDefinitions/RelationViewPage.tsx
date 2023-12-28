@@ -131,7 +131,7 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
   const isFormDeleteable = useCallback(() => {
-    return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
   const pageQueryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
@@ -173,24 +173,6 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(pageQueryCustomizer));
-  };
-  const deleteAction = async () => {
-    try {
-      const confirmed = await openConfirmDialog(
-        'row-delete-action',
-        t('judo.modal.confirm.confirm-delete', {
-          defaultValue: 'Are you sure you would like to delete the selected element?',
-        }),
-        t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
-      );
-      if (confirmed) {
-        await serviceVoteDefinitionServiceImpl.delete(data);
-        showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        navigateBack();
-      }
-    } catch (error) {
-      handleError(error, undefined, data);
-    }
   };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
@@ -286,7 +268,6 @@ export default function ServiceDashboardOwnedVoteDefinitionsRelationViewPage() {
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditPageActions = {
     backAction,
     cancelAction,
-    deleteAction,
     refreshAction,
     updateAction,
     issueOpenPageAction,

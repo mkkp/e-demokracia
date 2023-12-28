@@ -29,7 +29,7 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceDashboardServiceForIssuesOwnedImpl } from '~/services/data-axios/ServiceDashboardServiceForIssuesOwnedImpl';
+import { ServiceDashboardServiceForOwnedIssuesImpl } from '~/services/data-axios/ServiceDashboardServiceForOwnedIssuesImpl';
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
@@ -104,8 +104,8 @@ export default function ServiceDashboardDashboard_View_EditSelectorIssuesIssueTa
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
   // Services
-  const serviceDashboardServiceForIssuesOwnedImpl = useMemo(
-    () => new ServiceDashboardServiceForIssuesOwnedImpl(judoAxiosProvider),
+  const serviceDashboardServiceForOwnedIssuesImpl = useMemo(
+    () => new ServiceDashboardServiceForOwnedIssuesImpl(judoAxiosProvider),
     [],
   );
 
@@ -165,7 +165,7 @@ export default function ServiceDashboardDashboard_View_EditSelectorIssuesIssueTa
   };
   const selectorRangeAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
     try {
-      return serviceDashboardServiceForIssuesOwnedImpl.getRangeForIssuesOwned(ownerData, queryCustomizer);
+      return serviceDashboardServiceForOwnedIssuesImpl.getRangeForOwnedIssues(ownerData, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);

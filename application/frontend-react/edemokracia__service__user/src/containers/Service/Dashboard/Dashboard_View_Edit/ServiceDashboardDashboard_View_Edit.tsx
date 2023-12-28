@@ -156,7 +156,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                   disabled: isLoading,
                   hidden: false,
                   icon: 'wechat',
-                  nestedDataKeys: ['favoriteIssues', 'issuesOwned'],
+                  nestedDataKeys: ['favoriteIssues', 'ownedIssues'],
                 },
                 {
                   id: 'User/(esm/_bFZdMGBVEe6M1JBD8stPIg)/GroupTab',
@@ -198,7 +198,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                               disabled: isLoading,
                               hidden: false,
                               icon: 'account-circle',
-                              nestedDataKeys: ['issuesOwned'],
+                              nestedDataKeys: ['ownedIssues'],
                             },
                             {
                               id: 'User/(esm/_wto7cFw4Ee6gN-oVBDDIOQ)/GroupTab',
@@ -238,7 +238,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                                     ownerData={data}
                                     editMode={editMode}
                                     isFormUpdateable={isFormUpdateable}
-                                    validationError={validation.get('issuesOwned')}
+                                    validationError={validation.get('ownedIssues')}
                                     refreshCounter={refreshCounter}
                                   />
                                 </Grid>

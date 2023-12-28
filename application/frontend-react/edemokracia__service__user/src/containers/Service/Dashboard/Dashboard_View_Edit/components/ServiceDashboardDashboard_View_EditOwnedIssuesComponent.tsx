@@ -64,28 +64,26 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDefinitions {
-  issuesOwnedOpenAddSelectorAction?: () => Promise<void>;
-  issuesOwnedBulkDeleteAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
-  issuesOwnedBulkRemoveAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
-  issuesOwnedFilterAction?: (
+  ownedIssuesOpenAddSelectorAction?: () => Promise<void>;
+  ownedIssuesBulkRemoveAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
+  ownedIssuesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  issuesOwnedRefreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
-  issuesOwnedActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedCloseVoteForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedCreateCommentAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedCreateConArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  issuesOwnedDeleteAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
-  issuesOwnedRemoveAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
-  issuesOwnedOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesRefreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  ownedIssuesActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesCloseVoteForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesCreateCommentAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesCreateConArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
+  ownedIssuesRemoveAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
+  ownedIssuesOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
 export interface ServiceDashboardDashboard_View_EditOwnedIssuesComponentProps {
@@ -275,22 +273,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       }) as string,
       icon: <MdiIcon path="link_off" />,
       disabled: (row: ServiceIssueStored) => !isFormUpdateable() || isLoading,
-      action: actions.issuesOwnedRemoveAction
+      action: actions.ownedIssuesRemoveAction
         ? async (rowData) => {
-            await actions.issuesOwnedRemoveAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Delete', {
-        defaultValue: 'Delete',
-      }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.issuesOwnedDeleteAction
-        ? async (rowData) => {
-            await actions.issuesOwnedDeleteAction!(rowData);
+            await actions.ownedIssuesRemoveAction!(rowData);
           }
         : undefined,
     },
@@ -299,9 +284,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
       icon: <MdiIcon path="lock-open" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.issuesOwnedActivateForIssueAction
+      action: actions.ownedIssuesActivateForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedActivateForIssueAction!(rowData);
+            await actions.ownedIssuesActivateForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -310,9 +295,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
       icon: <MdiIcon path="star-plus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedAddToFavoritesForIssueAction
+      action: actions.ownedIssuesAddToFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedAddToFavoritesForIssueAction!(rowData);
+            await actions.ownedIssuesAddToFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -321,9 +306,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
       icon: <MdiIcon path="vote" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.issuesOwnedCloseDebateAction
+      action: actions.ownedIssuesCloseDebateAction
         ? async (rowData) => {
-            await actions.issuesOwnedCloseDebateAction!(rowData);
+            await actions.ownedIssuesCloseDebateAction!(rowData);
           }
         : undefined,
     },
@@ -332,9 +317,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
       icon: <MdiIcon path="lock-check" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
-      action: actions.issuesOwnedCloseVoteForIssueAction
+      action: actions.ownedIssuesCloseVoteForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedCloseVoteForIssueAction!(rowData);
+            await actions.ownedIssuesCloseVoteForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -343,9 +328,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       label: t('service.Dashboard.Dashboard_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
       icon: <MdiIcon path="comment-text-multiple" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedCreateCommentAction
+      action: actions.ownedIssuesCreateCommentAction
         ? async (rowData) => {
-            await actions.issuesOwnedCreateCommentAction!(rowData);
+            await actions.ownedIssuesCreateCommentAction!(rowData);
           }
         : undefined,
     },
@@ -356,9 +341,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       }) as string,
       icon: <MdiIcon path="chat-minus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedCreateConArgumentAction
+      action: actions.ownedIssuesCreateConArgumentAction
         ? async (rowData) => {
-            await actions.issuesOwnedCreateConArgumentAction!(rowData);
+            await actions.ownedIssuesCreateConArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -369,9 +354,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       }) as string,
       icon: <MdiIcon path="chat-plus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedCreateProArgumentAction
+      action: actions.ownedIssuesCreateProArgumentAction
         ? async (rowData) => {
-            await actions.issuesOwnedCreateProArgumentAction!(rowData);
+            await actions.ownedIssuesCreateProArgumentAction!(rowData);
           }
         : undefined,
     },
@@ -380,9 +365,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
       icon: <MdiIcon path="delete" />,
       disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.issuesOwnedDeleteOrArchiveForIssueAction
+      action: actions.ownedIssuesDeleteOrArchiveForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedDeleteOrArchiveForIssueAction!(rowData);
+            await actions.ownedIssuesDeleteOrArchiveForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -393,9 +378,9 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       }) as string,
       icon: <MdiIcon path="star-minus" />,
       disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.issuesOwnedRemoveFromFavoritesForIssueAction
+      action: actions.ownedIssuesRemoveFromFavoritesForIssueAction
         ? async (rowData) => {
-            await actions.issuesOwnedRemoveFromFavoritesForIssueAction!(rowData);
+            await actions.ownedIssuesRemoveFromFavoritesForIssueAction!(rowData);
           }
         : undefined,
     },
@@ -536,7 +521,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
       setIsLoading(true);
 
       try {
-        const res = await actions.issuesOwnedRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const res = await actions.ownedIssuesRefreshAction!(processQueryCustomizer(queryCustomizer));
 
         if (res.length > 10) {
           setIsNextButtonEnabled(true);
@@ -599,8 +584,8 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         }}
         keepNonExistentRowsSelected
         onRowClick={
-          actions.issuesOwnedOpenPageAction
-            ? async (params: GridRowParams<ServiceIssueStored>) => await actions.issuesOwnedOpenPageAction!(params.row)
+          actions.ownedIssuesOpenPageAction
+            ? async (params: GridRowParams<ServiceIssueStored>) => await actions.ownedIssuesOpenPageAction!(params.row)
             : undefined
         }
         sortModel={sortModel}
@@ -614,13 +599,13 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
-              {actions.issuesOwnedFilterAction && true ? (
+              {actions.ownedIssuesFilterAction && true ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableFilterButton"
                   startIcon={<MdiIcon path="filter" />}
                   variant={'text'}
                   onClick={async () => {
-                    const filterResults = await actions.issuesOwnedFilterAction!(
+                    const filterResults = await actions.ownedIssuesFilterAction!(
                       'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableFilterButton',
                       filterOptions,
                       filterModel,
@@ -638,13 +623,13 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
-              {actions.issuesOwnedRefreshAction && true ? (
+              {actions.ownedIssuesRefreshAction && true ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRefreshButton"
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.issuesOwnedRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    await actions.ownedIssuesRefreshAction!(processQueryCustomizer(queryCustomizer));
                   }}
                   disabled={isLoading}
                 >
@@ -653,13 +638,13 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   })}
                 </Button>
               ) : null}
-              {actions.issuesOwnedOpenAddSelectorAction && isFormUpdateable() ? (
+              {actions.ownedIssuesOpenAddSelectorAction && isFormUpdateable() ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableAddSelectorOpenButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.issuesOwnedOpenAddSelectorAction!();
+                    await actions.ownedIssuesOpenAddSelectorAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
@@ -668,13 +653,13 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   })}
                 </Button>
               ) : null}
-              {actions.issuesOwnedBulkRemoveAction && selectionModel.length > 0 ? (
+              {actions.ownedIssuesBulkRemoveAction && selectionModel.length > 0 ? (
                 <Button
                   id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableBulkRemoveButton"
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
-                    const { result: bulkResult } = await actions.issuesOwnedBulkRemoveAction!(selectedRows.current);
+                    const { result: bulkResult } = await actions.ownedIssuesBulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
                       setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
@@ -684,25 +669,6 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   {t(
                     'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkRemove',
                     { defaultValue: 'Remove' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.issuesOwnedBulkDeleteAction && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableBulkDeleteButton"
-                  startIcon={<MdiIcon path="delete_forever" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.issuesOwnedBulkDeleteAction!(selectedRows.current);
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
-                >
-                  {t(
-                    'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkDelete',
-                    { defaultValue: 'Delete' },
                   )}
                 </Button>
               ) : null}

@@ -120,43 +120,42 @@ export interface UserServiceForDashboardHome {
     target: YesNoAbstainVoteInput,
   ): Promise<void>;
   getTemplateOnVoteYesNoAbstainForFavoriteVoteDefinitions(): Promise<YesNoAbstainVoteInput>;
-  listIssuesOwned(
+  listOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
-  getRangeForIssuesOwned(
+  getRangeForOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
-  deleteIssuesOwned(target: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  updateIssuesOwned(
+  updateOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
     target: Partial<ServiceIssueStored>,
   ): Promise<ServiceIssueStored>;
-  addIssuesOwned(
+  addOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
     selected: Array<JudoIdentifiable<ServiceIssue>>,
   ): Promise<void>;
-  removeIssuesOwned(
+  removeOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
     selected: Array<JudoIdentifiable<ServiceIssue>>,
   ): Promise<void>;
-  activateForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  addToFavoritesForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  closeDebateForIssuesOwned(
+  activateForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  addToFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  closeDebateForOwnedIssues(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
-  getTemplateOnCloseDebateForIssuesOwned(): Promise<CloseDebateInput>;
-  closeVoteForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  createCommentForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-  getTemplateOnCreateCommentForIssuesOwned(): Promise<CreateCommentInput>;
-  createConArgumentForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgumentForIssuesOwned(): Promise<CreateArgumentInput>;
-  createProArgumentForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgumentForIssuesOwned(): Promise<CreateArgumentInput>;
-  deleteOrArchiveForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  removeFromFavoritesForIssuesOwned(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  getTemplateOnCloseDebateForOwnedIssues(): Promise<CloseDebateInput>;
+  closeVoteForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  createCommentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
+  getTemplateOnCreateCommentForOwnedIssues(): Promise<CreateCommentInput>;
+  createConArgumentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateConArgumentForOwnedIssues(): Promise<CreateArgumentInput>;
+  createProArgumentForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
+  getTemplateOnCreateProArgumentForOwnedIssues(): Promise<CreateArgumentInput>;
+  deleteOrArchiveForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  removeFromFavoritesForOwnedIssues(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   listOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceDashboard>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
@@ -165,7 +164,6 @@ export interface UserServiceForDashboardHome {
     owner: JudoIdentifiable<ServiceDashboard> | ServiceDashboard,
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
-  deleteOwnedVoteDefinitions(target: JudoIdentifiable<ServiceVoteDefinition>): Promise<void>;
   updateOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceDashboard>,
     target: Partial<ServiceVoteDefinitionStored>,

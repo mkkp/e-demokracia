@@ -168,7 +168,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
     return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
   const isFormDeleteable = useCallback(() => {
-    return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
+    return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
   const pageQueryCustomizer: ServiceIssueQueryCustomizer = {

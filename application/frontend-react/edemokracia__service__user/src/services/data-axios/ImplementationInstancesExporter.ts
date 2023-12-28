@@ -53,26 +53,23 @@ import type { ServiceYesNoAbstainVoteDefinitionService } from '../data-service';
 import type { ServiceYesNoAbstainVoteEntryService } from '../data-service';
 import type { ServiceYesNoVoteDefinitionService } from '../data-service';
 import type { ServiceYesNoVoteEntryService } from '../data-service';
-import type { UserServiceForActiveIssues } from '../data-service';
 import type { UserServiceForAdminCategories } from '../data-service';
 import type { UserServiceForAdminCounties } from '../data-service';
 import type { UserServiceForAdminIssueTypes } from '../data-service';
 import type { UserServiceForAdminIssues } from '../data-service';
 import type { UserServiceForAdminUserManager } from '../data-service';
-import type { UserServiceForAdminUsers } from '../data-service';
 import type { UserServiceForAdminVoteDefinitions } from '../data-service';
 import type { UserServiceForAdminVoteEntries } from '../data-service';
 import type { UserServiceForDashboardHome } from '../data-service';
-import type { UserServiceForUserCreatedIssues } from '../data-service';
+import type { UserServiceForIssues } from '../data-service';
+import type { UserServiceForRatingVoteDefinitions } from '../data-service';
+import type { UserServiceForSelectAnswerVoteDefinitions } from '../data-service';
 import type { UserServiceForUserIssues } from '../data-service';
-import type { UserServiceForUserOwnedActiveIssues } from '../data-service';
-import type { UserServiceForUserOwnedRatingVoteDefinitions } from '../data-service';
-import type { UserServiceForUserOwnedSelectAnswerVoteDefinitions } from '../data-service';
-import type { UserServiceForUserOwnedVoteEntries } from '../data-service';
-import type { UserServiceForUserOwnedYesNoAbstainVoteDefinitions } from '../data-service';
-import type { UserServiceForUserOwnedYesNoVoteDefinitions } from '../data-service';
 import type { UserServiceForUserProfile } from '../data-service';
 import type { UserServiceForUserVoteDefinitions } from '../data-service';
+import type { UserServiceForVoteEntries } from '../data-service';
+import type { UserServiceForYesNoAbstainVoteDefinitions } from '../data-service';
+import type { UserServiceForYesNoVoteDefinitions } from '../data-service';
 import type { ServiceCityServiceForDistricts } from '../data-service';
 import type { ServiceCommentServiceForCreatedBy } from '../data-service';
 import type { ServiceCommentServiceForVotes } from '../data-service';
@@ -89,7 +86,7 @@ import type { ServiceCreateIssueInputServiceForDistrict } from '../data-service'
 import type { ServiceCreateIssueInputServiceForIssueType } from '../data-service';
 import type { ServiceDashboardServiceForFavoriteIssues } from '../data-service';
 import type { ServiceDashboardServiceForFavoriteVoteDefinitions } from '../data-service';
-import type { ServiceDashboardServiceForIssuesOwned } from '../data-service';
+import type { ServiceDashboardServiceForOwnedIssues } from '../data-service';
 import type { ServiceDashboardServiceForOwnedVoteDefinitions } from '../data-service';
 import type { ServiceDashboardServiceForUserVoteEntries } from '../data-service';
 import type { ServiceIssueServiceForAttachments } from '../data-service';
@@ -202,7 +199,7 @@ import { ServiceCreateIssueInputServiceImpl } from './ServiceCreateIssueInputSer
 import { ServiceCreateUserInputServiceImpl } from './ServiceCreateUserInputServiceImpl';
 import { ServiceDashboardServiceForFavoriteIssuesImpl } from './ServiceDashboardServiceForFavoriteIssuesImpl';
 import { ServiceDashboardServiceForFavoriteVoteDefinitionsImpl } from './ServiceDashboardServiceForFavoriteVoteDefinitionsImpl';
-import { ServiceDashboardServiceForIssuesOwnedImpl } from './ServiceDashboardServiceForIssuesOwnedImpl';
+import { ServiceDashboardServiceForOwnedIssuesImpl } from './ServiceDashboardServiceForOwnedIssuesImpl';
 import { ServiceDashboardServiceForOwnedVoteDefinitionsImpl } from './ServiceDashboardServiceForOwnedVoteDefinitionsImpl';
 import { ServiceDashboardServiceForUserVoteEntriesImpl } from './ServiceDashboardServiceForUserVoteEntriesImpl';
 import { ServiceDashboardServiceImpl } from './ServiceDashboardServiceImpl';
@@ -305,26 +302,23 @@ import { ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl } from './ServiceYe
 import { ServiceYesNoVoteDefinitionServiceImpl } from './ServiceYesNoVoteDefinitionServiceImpl';
 import { ServiceYesNoVoteEntryServiceForOwnerImpl } from './ServiceYesNoVoteEntryServiceForOwnerImpl';
 import { ServiceYesNoVoteEntryServiceImpl } from './ServiceYesNoVoteEntryServiceImpl';
-import { UserServiceForActiveIssuesImpl } from './UserServiceForActiveIssuesImpl';
 import { UserServiceForAdminCategoriesImpl } from './UserServiceForAdminCategoriesImpl';
 import { UserServiceForAdminCountiesImpl } from './UserServiceForAdminCountiesImpl';
 import { UserServiceForAdminIssueTypesImpl } from './UserServiceForAdminIssueTypesImpl';
 import { UserServiceForAdminIssuesImpl } from './UserServiceForAdminIssuesImpl';
 import { UserServiceForAdminUserManagerImpl } from './UserServiceForAdminUserManagerImpl';
-import { UserServiceForAdminUsersImpl } from './UserServiceForAdminUsersImpl';
 import { UserServiceForAdminVoteDefinitionsImpl } from './UserServiceForAdminVoteDefinitionsImpl';
 import { UserServiceForAdminVoteEntriesImpl } from './UserServiceForAdminVoteEntriesImpl';
 import { UserServiceForDashboardHomeImpl } from './UserServiceForDashboardHomeImpl';
-import { UserServiceForUserCreatedIssuesImpl } from './UserServiceForUserCreatedIssuesImpl';
+import { UserServiceForIssuesImpl } from './UserServiceForIssuesImpl';
+import { UserServiceForRatingVoteDefinitionsImpl } from './UserServiceForRatingVoteDefinitionsImpl';
+import { UserServiceForSelectAnswerVoteDefinitionsImpl } from './UserServiceForSelectAnswerVoteDefinitionsImpl';
 import { UserServiceForUserIssuesImpl } from './UserServiceForUserIssuesImpl';
-import { UserServiceForUserOwnedActiveIssuesImpl } from './UserServiceForUserOwnedActiveIssuesImpl';
-import { UserServiceForUserOwnedRatingVoteDefinitionsImpl } from './UserServiceForUserOwnedRatingVoteDefinitionsImpl';
-import { UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl } from './UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl';
-import { UserServiceForUserOwnedVoteEntriesImpl } from './UserServiceForUserOwnedVoteEntriesImpl';
-import { UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from './UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl';
-import { UserServiceForUserOwnedYesNoVoteDefinitionsImpl } from './UserServiceForUserOwnedYesNoVoteDefinitionsImpl';
 import { UserServiceForUserProfileImpl } from './UserServiceForUserProfileImpl';
 import { UserServiceForUserVoteDefinitionsImpl } from './UserServiceForUserVoteDefinitionsImpl';
+import { UserServiceForVoteEntriesImpl } from './UserServiceForVoteEntriesImpl';
+import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from './UserServiceForYesNoAbstainVoteDefinitionsImpl';
+import { UserServiceForYesNoVoteDefinitionsImpl } from './UserServiceForYesNoVoteDefinitionsImpl';
 import { VoteDefinitionServiceImpl } from './VoteDefinitionServiceImpl';
 import { YesNoAbstainVoteInputServiceImpl } from './YesNoAbstainVoteInputServiceImpl';
 import { YesNoVoteInputServiceImpl } from './YesNoVoteInputServiceImpl';
@@ -417,9 +411,6 @@ export const serviceYesNoVoteDefinitionServiceImpl: ServiceYesNoVoteDefinitionSe
 export const serviceYesNoVoteEntryServiceImpl: ServiceYesNoVoteEntryService = new ServiceYesNoVoteEntryServiceImpl(
   judoAxiosProvider,
 );
-export const userServiceForActiveIssuesImpl: UserServiceForActiveIssues = new UserServiceForActiveIssuesImpl(
-  judoAxiosProvider,
-);
 export const userServiceForAdminCategoriesImpl: UserServiceForAdminCategories = new UserServiceForAdminCategoriesImpl(
   judoAxiosProvider,
 );
@@ -434,9 +425,6 @@ export const userServiceForAdminIssuesImpl: UserServiceForAdminIssues = new User
 );
 export const userServiceForAdminUserManagerImpl: UserServiceForAdminUserManager =
   new UserServiceForAdminUserManagerImpl(judoAxiosProvider);
-export const userServiceForAdminUsersImpl: UserServiceForAdminUsers = new UserServiceForAdminUsersImpl(
-  judoAxiosProvider,
-);
 export const userServiceForAdminVoteDefinitionsImpl: UserServiceForAdminVoteDefinitions =
   new UserServiceForAdminVoteDefinitionsImpl(judoAxiosProvider);
 export const userServiceForAdminVoteEntriesImpl: UserServiceForAdminVoteEntries =
@@ -444,28 +432,26 @@ export const userServiceForAdminVoteEntriesImpl: UserServiceForAdminVoteEntries 
 export const userServiceForDashboardHomeImpl: UserServiceForDashboardHome = new UserServiceForDashboardHomeImpl(
   judoAxiosProvider,
 );
-export const userServiceForUserCreatedIssuesImpl: UserServiceForUserCreatedIssues =
-  new UserServiceForUserCreatedIssuesImpl(judoAxiosProvider);
+export const userServiceForIssuesImpl: UserServiceForIssues = new UserServiceForIssuesImpl(judoAxiosProvider);
+export const userServiceForRatingVoteDefinitionsImpl: UserServiceForRatingVoteDefinitions =
+  new UserServiceForRatingVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForSelectAnswerVoteDefinitionsImpl: UserServiceForSelectAnswerVoteDefinitions =
+  new UserServiceForSelectAnswerVoteDefinitionsImpl(judoAxiosProvider);
 export const userServiceForUserIssuesImpl: UserServiceForUserIssues = new UserServiceForUserIssuesImpl(
   judoAxiosProvider,
 );
-export const userServiceForUserOwnedActiveIssuesImpl: UserServiceForUserOwnedActiveIssues =
-  new UserServiceForUserOwnedActiveIssuesImpl(judoAxiosProvider);
-export const userServiceForUserOwnedRatingVoteDefinitionsImpl: UserServiceForUserOwnedRatingVoteDefinitions =
-  new UserServiceForUserOwnedRatingVoteDefinitionsImpl(judoAxiosProvider);
-export const userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl: UserServiceForUserOwnedSelectAnswerVoteDefinitions =
-  new UserServiceForUserOwnedSelectAnswerVoteDefinitionsImpl(judoAxiosProvider);
-export const userServiceForUserOwnedVoteEntriesImpl: UserServiceForUserOwnedVoteEntries =
-  new UserServiceForUserOwnedVoteEntriesImpl(judoAxiosProvider);
-export const userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl: UserServiceForUserOwnedYesNoAbstainVoteDefinitions =
-  new UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider);
-export const userServiceForUserOwnedYesNoVoteDefinitionsImpl: UserServiceForUserOwnedYesNoVoteDefinitions =
-  new UserServiceForUserOwnedYesNoVoteDefinitionsImpl(judoAxiosProvider);
 export const userServiceForUserProfileImpl: UserServiceForUserProfile = new UserServiceForUserProfileImpl(
   judoAxiosProvider,
 );
 export const userServiceForUserVoteDefinitionsImpl: UserServiceForUserVoteDefinitions =
   new UserServiceForUserVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForVoteEntriesImpl: UserServiceForVoteEntries = new UserServiceForVoteEntriesImpl(
+  judoAxiosProvider,
+);
+export const userServiceForYesNoAbstainVoteDefinitionsImpl: UserServiceForYesNoAbstainVoteDefinitions =
+  new UserServiceForYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForYesNoVoteDefinitionsImpl: UserServiceForYesNoVoteDefinitions =
+  new UserServiceForYesNoVoteDefinitionsImpl(judoAxiosProvider);
 export const serviceCityServiceForDistrictsImpl: ServiceCityServiceForDistricts =
   new ServiceCityServiceForDistrictsImpl(judoAxiosProvider);
 export const serviceCommentServiceForCreatedByImpl: ServiceCommentServiceForCreatedBy =
@@ -506,8 +492,8 @@ export const serviceDashboardServiceForFavoriteIssuesImpl: ServiceDashboardServi
   new ServiceDashboardServiceForFavoriteIssuesImpl(judoAxiosProvider);
 export const serviceDashboardServiceForFavoriteVoteDefinitionsImpl: ServiceDashboardServiceForFavoriteVoteDefinitions =
   new ServiceDashboardServiceForFavoriteVoteDefinitionsImpl(judoAxiosProvider);
-export const serviceDashboardServiceForIssuesOwnedImpl: ServiceDashboardServiceForIssuesOwned =
-  new ServiceDashboardServiceForIssuesOwnedImpl(judoAxiosProvider);
+export const serviceDashboardServiceForOwnedIssuesImpl: ServiceDashboardServiceForOwnedIssues =
+  new ServiceDashboardServiceForOwnedIssuesImpl(judoAxiosProvider);
 export const serviceDashboardServiceForOwnedVoteDefinitionsImpl: ServiceDashboardServiceForOwnedVoteDefinitions =
   new ServiceDashboardServiceForOwnedVoteDefinitionsImpl(judoAxiosProvider);
 export const serviceDashboardServiceForUserVoteEntriesImpl: ServiceDashboardServiceForUserVoteEntries =
