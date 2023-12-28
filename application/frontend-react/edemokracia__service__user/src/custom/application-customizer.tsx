@@ -9,8 +9,10 @@
 import type { BundleContext } from '@pandino/pandino-api';
 import { registerCloseDebateInputCloseDebateInput_FormActionsHook } from './customCloseDebateInputCloseDebateInput_FormActionsHook';
 import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from './customServiceCreateIssueInputCreateIssueInput_FormActionsHook';
+import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook } from './customServiceUserVoteDefinitionUserVoteDefinition_TableActionsHook';
 import { registerServiceVoteDefinitionVoteDefinition_TableActionsHook } from './customServiceVoteDefinitionVoteDefinition_TableActionsHook';
 import { ApplicationCustomizer } from './interfaces';
+import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
@@ -18,5 +20,7 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
     registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context);
     registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context);
+    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook(context);
+    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
   }
 }
