@@ -119,52 +119,6 @@ export class UserServiceForUserOwnedYesNoVoteDefinitionsImpl
   }
 
   /**
-   * Form: targetRelation.isRangeable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForIssue(
-    owner: JudoIdentifiable<ServiceYesNoVoteDefinition> | ServiceYesNoVoteDefinition,
-    queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<Array<ServiceIssueStored>> {
-    const path = '/service/YesNoVoteDefinition/issue/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner,
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * From: targetRelation.isSetable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async setIssue(
-    owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void> {
-    const path = '/service/YesNoVoteDefinition/~update/issue/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * From: targetRelation.isUnsetable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async unsetIssue(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void> {
-    const path = '/service/YesNoVoteDefinition/~update/issue/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
    * From: targetRelation.target.operations
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.

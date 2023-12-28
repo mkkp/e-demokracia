@@ -23,6 +23,8 @@ export interface ServiceProPro_View_EditCreatedByComponentActionDefinitions {
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
+  isCreatedByRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
+  isCreatedByDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceProPro_View_EditCreatedByComponentProps {
@@ -32,13 +34,15 @@ export interface ServiceProPro_View_EditCreatedByComponentProps {
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_eJsa8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink
 // Name: createdBy
 export function ServiceProPro_View_EditCreatedByComponent(props: ServiceProPro_View_EditCreatedByComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -47,12 +51,13 @@ export function ServiceProPro_View_EditCreatedByComponent(props: ServiceProPro_V
       id="User/(esm/_eJsa8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Pro.Pro_View_Edit.createdBy', { defaultValue: 'Created by' }) as string}
       labelList={[ownerData.createdBy?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isCreatedByRequired ? actions.isCreatedByRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="table_rows" />}
-      disabled={disabled}
+      disabled={actions?.isCreatedByDisabled ? actions.isCreatedByDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(createdBy) => {

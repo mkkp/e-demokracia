@@ -22,6 +22,12 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentAction
   cityOpenSetSelectorAction?: () => Promise<ServiceCityStored | undefined>;
   cityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
   cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
+  isCityRequired?: (data: ServiceCreateIssueInput | ServiceCreateIssueInputStored, editMode?: boolean) => boolean;
+  isCityDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps {
@@ -31,7 +37,9 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps 
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_TXiwANvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -39,7 +47,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps 
 export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormCityComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -52,12 +60,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCityComponent(
         ownerData.city?.name?.toString() ?? '',
         ownerData.city?.county?.toString() ?? '',
       ]}
-      required={false}
+      required={actions?.isCityRequired ? actions.isCityRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="city" />}
-      disabled={disabled}
+      disabled={actions?.isCityDisabled ? actions.isCityDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(city) => {

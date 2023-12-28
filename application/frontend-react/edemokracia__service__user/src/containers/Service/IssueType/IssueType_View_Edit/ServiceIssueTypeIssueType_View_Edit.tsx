@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -32,7 +34,34 @@ import {} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '~/services/data-api';
 
-export interface ServiceIssueTypeIssueType_View_EditActionDefinitions {}
+export const SERVICE_ISSUE_TYPE_ISSUE_TYPE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueTypeIssueType_View_EditContainerHook';
+export type ServiceIssueTypeIssueType_View_EditContainerHook = (
+  data: ServiceIssueTypeStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+) => ServiceIssueTypeIssueType_View_EditActionDefinitions;
+
+export interface ServiceIssueTypeIssueType_View_EditActionDefinitions {
+  isDescriptionRequired?: (data: ServiceIssueType | ServiceIssueTypeStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceIssueType | ServiceIssueTypeStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: ServiceIssueType | ServiceIssueTypeStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: ServiceIssueType | ServiceIssueTypeStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isVoteTypeRequired?: (data: ServiceIssueType | ServiceIssueTypeStored, editMode?: boolean) => boolean;
+  isVoteTypeDisabled?: (
+    data: ServiceIssueType | ServiceIssueTypeStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceIssueTypeIssueType_View_EditProps {
   refreshCounter: number;
@@ -52,11 +81,10 @@ export interface ServiceIssueTypeIssueType_View_EditProps {
 // XMIID: User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewPageContainer
 // Name: service::IssueType::IssueType_View_Edit
 export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueTypeIssueType_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -67,6 +95,10 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -76,6 +108,13 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceIssueTypeIssueType_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_TYPE_ISSUE_TYPE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceIssueTypeIssueType_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -94,7 +133,7 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <TextField
-                      required={true}
+                      required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                       name="title"
                       id="User/(esm/_g2oicdvDEe2Bgcx6em3jZg)/StringTypeTextInput"
                       autoFocus
@@ -104,7 +143,9 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
                         'JUDO-viewMode': !editMode,
                         'JUDO-required': true,
                       })}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                      }
                       error={!!validation.get('title')}
                       helperText={validation.get('title')}
                       onChange={(event) => {
@@ -120,12 +161,15 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
                           </InputAdornment>
                         ),
                       }}
+                      inputProps={{
+                        maxlength: 255,
+                      }}
                     />
                   </Grid>
 
                   <Grid item xs={12} sm={12}>
                     <TextField
-                      required={false}
+                      required={actions?.isVoteTypeRequired ? actions.isVoteTypeRequired(data, editMode) : false}
                       name="voteType"
                       id="User/(esm/_XP9UYOMcEe2Bgcx6em3jZg)/EnumerationTypeCombo"
                       label={
@@ -136,7 +180,9 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
                         'JUDO-viewMode': !editMode,
                         'JUDO-required': false,
                       })}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isVoteTypeDisabled ? actions.isVoteTypeDisabled(data, editMode, isLoading) : isLoading
+                      }
                       error={!!validation.get('voteType')}
                       helperText={validation.get('voteType')}
                       onChange={(event) => {
@@ -173,7 +219,7 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
 
                   <Grid item xs={12} sm={12}>
                     <TextField
-                      required={true}
+                      required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
                       name="description"
                       id="User/(esm/_g2oicNvDEe2Bgcx6em3jZg)/StringTypeTextArea"
                       label={
@@ -186,7 +232,11 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
                         'JUDO-viewMode': !editMode,
                         'JUDO-required': true,
                       })}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isDescriptionDisabled
+                          ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                          : isLoading
+                      }
                       multiline
                       minRows={4.0}
                       error={!!validation.get('description')}
@@ -203,6 +253,9 @@ export default function ServiceIssueTypeIssueType_View_Edit(props: ServiceIssueT
                             <MdiIcon path="text_fields" />
                           </InputAdornment>
                         ),
+                      }}
+                      inputProps={{
+                        maxlength: 16384,
                       }}
                     />
                   </Grid>

@@ -15,43 +15,41 @@ import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/AddSelector/ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer';
+import type { ServiceIssueTypeIssueType_TableSetSelectorDialogActions } from '~/containers/Service/IssueType/IssueType_Table/SetSelector/ServiceIssueTypeIssueType_TableSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
-  IssueScope,
-  ServiceUserVoteDefinition,
-  ServiceUserVoteDefinitionStored,
-  ServiceVoteDefinition,
-  ServiceVoteDefinitionQueryCustomizer,
-  ServiceVoteDefinitionStored,
-  VoteStatus,
+  ServiceCreateIssueInput,
+  ServiceCreateIssueInputStored,
+  ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl } from '~/services/data-axios/ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl';
+import { ServiceCreateIssueInputServiceForIssueTypeImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForIssueTypeImpl';
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended =
-  ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions & {};
+export type ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended =
+  ServiceIssueTypeIssueType_TableSetSelectorDialogActions & {};
 
-export const SERVICE_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_GLOBAL_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook';
-export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook = (
+export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_ISSUE_TYPE_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueTypeIssueType_TableSetSelectorActionsHook';
+export type ServiceIssueTypeIssueType_TableSetSelectorActionsHook = (
   ownerData: any,
-  data: ServiceVoteDefinitionStored[],
+  data: ServiceIssueTypeStored[],
   editMode: boolean,
-  selectionDiff: ServiceVoteDefinitionStored[],
-) => ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended;
+  selectionDiff: ServiceIssueTypeStored[],
+) => ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended;
 
-export const useServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorPage = (): ((
+export const useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage = (): ((
   ownerData: any,
-  alreadySelected: ServiceVoteDefinitionStored[],
-) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>) => {
+  alreadySelected: ServiceIssueTypeStored[],
+) => Promise<DialogResult<ServiceIssueTypeStored[]>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any, alreadySelected: ServiceVoteDefinitionStored[]) =>
+  return (ownerData: any, alreadySelected: ServiceIssueTypeStored[]) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -65,7 +63,7 @@ export const useServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorP
           }
         },
         children: (
-          <ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorPage
+          <ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
             onClose={async () => {
@@ -87,30 +85,30 @@ export const useServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorP
     });
 };
 
-const ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer = lazy(
+const ServiceIssueTypeIssueType_TableSetSelectorDialogContainer = lazy(
   () =>
     import(
-      '~/containers/Service/VoteDefinition/VoteDefinition_Table/AddSelector/ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer'
+      '~/containers/Service/IssueType/IssueType_Table/SetSelector/ServiceIssueTypeIssueType_TableSetSelectorDialogContainer'
     ),
 );
 
-export interface ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorPageProps {
+export interface ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPageProps {
   ownerData: any;
-  alreadySelected: ServiceVoteDefinitionStored[];
+  alreadySelected: ServiceIssueTypeStored[];
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceVoteDefinitionStored[]) => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored[]) => Promise<void>;
 }
 
-// XMIID: User/(esm/_HCMTUF5BEe6vsex_cZNQbQ)/RelationFeatureTableAddSelectorPageDefinition
-// Name: service::UserVoteDefinition::activeVoteDefinitionsGlobal::AddSelectorPage
-export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorPage(
-  props: ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddSelectorPageProps,
+// XMIID: User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition
+// Name: service::CreateIssueInput::CreateIssueInput_Form::issue::issueType::LinkSetSelectorPage
+export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage(
+  props: ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPageProps,
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
   // Services
-  const serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl = useMemo(
-    () => new ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl(judoAxiosProvider),
+  const serviceCreateIssueInputServiceForIssueTypeImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForIssueTypeImpl(judoAxiosProvider),
     [],
   );
 
@@ -128,33 +126,30 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddS
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<ServiceVoteDefinitionStored[]>([]);
-  const [selectionDiff, setSelectionDiff] = useState<ServiceVoteDefinitionStored[]>([]);
+  const [data, setData] = useState<ServiceIssueTypeStored[]>([]);
+  const [selectionDiff, setSelectionDiff] = useState<ServiceIssueTypeStored[]>([]);
 
   // Pandino Action overrides
-  const { service: customActionsHook } =
-    useTrackService<ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook>(
-      `(${OBJECTCLASS}=${SERVICE_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_GLOBAL_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-    );
-  const customActions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended | undefined =
+  const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_TableSetSelectorActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_ISSUE_TYPE_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const customActions: ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended | undefined =
     customActionsHook?.(ownerData, data, editMode, selectionDiff);
 
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('service.VoteDefinition.VoteDefinition_Table.AddSelector', {
-    defaultValue: 'VoteDefinition Table',
-  });
+  const title: string = t('service.IssueType.IssueType_Table.SetSelector', { defaultValue: 'IssueType Table' });
 
   // Private actions
   const submit = async () => {};
 
   // Action section
-  const addAction = async (selected: ServiceVoteDefinitionStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceIssueTypeStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -168,22 +163,19 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddS
     };
   };
   const selectorRangeAction = async (
-    queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl.getRangeForActiveVoteDefinitionsGlobal(
-        ownerData,
-        queryCustomizer,
-      );
+      return serviceCreateIssueInputServiceForIssueTypeImpl.getRangeForIssueType(ownerData, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
 
-  const actions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions = {
-    addAction,
+  const actions: ServiceIssueTypeIssueType_TableSetSelectorDialogActions = {
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),
@@ -193,11 +185,11 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalAddS
 
   return (
     <div
-      id="User/(esm/_HCMTUF5BEe6vsex_cZNQbQ)/RelationFeatureTableAddSelectorPageDefinition"
-      data-page-name="service::UserVoteDefinition::activeVoteDefinitionsGlobal::AddSelectorPage"
+      id="User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+      data-page-name="service::CreateIssueInput::CreateIssueInput_Form::issue::issueType::LinkSetSelectorPage"
     >
       <Suspense>
-        <ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer
+        <ServiceIssueTypeIssueType_TableSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           title={title}

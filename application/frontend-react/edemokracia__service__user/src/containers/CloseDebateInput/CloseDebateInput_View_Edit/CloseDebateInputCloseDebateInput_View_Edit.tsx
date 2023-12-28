@@ -14,9 +14,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,22 @@ import {} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
 
-export interface CloseDebateInputCloseDebateInput_View_EditActionDefinitions {}
+export const CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'CloseDebateInputCloseDebateInput_View_EditContainerHook';
+export type CloseDebateInputCloseDebateInput_View_EditContainerHook = (
+  data: CloseDebateInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void,
+) => CloseDebateInputCloseDebateInput_View_EditActionDefinitions;
+
+export interface CloseDebateInputCloseDebateInput_View_EditActionDefinitions {
+  isVoteTypeRequired?: (data: CloseDebateInput | CloseDebateInputStored, editMode?: boolean) => boolean;
+  isVoteTypeDisabled?: (
+    data: CloseDebateInput | CloseDebateInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface CloseDebateInputCloseDebateInput_View_EditProps {
   refreshCounter: number;
@@ -52,11 +69,10 @@ export interface CloseDebateInputCloseDebateInput_View_EditProps {
 export default function CloseDebateInputCloseDebateInput_View_Edit(
   props: CloseDebateInputCloseDebateInput_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -67,6 +83,10 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -76,6 +96,13 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<CloseDebateInputCloseDebateInput_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: CloseDebateInputCloseDebateInput_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -90,7 +117,7 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isVoteTypeRequired ? actions.isVoteTypeRequired(data, editMode) : true}
               name="voteType"
               id="User/(esm/_ye8zUH5VEe2kLcMqsIbMgQ)/EnumerationTypeCombo"
               autoFocus
@@ -100,7 +127,7 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isVoteTypeDisabled ? actions.isVoteTypeDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('voteType')}
               helperText={validation.get('voteType')}
               onChange={(event) => {

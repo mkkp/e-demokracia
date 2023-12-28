@@ -24,6 +24,12 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentA
   issueTypeAutocompleteRangeAction?: (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ) => Promise<Array<ServiceIssueTypeStored>>;
+  isIssueTypeRequired?: (data: ServiceCreateIssueInput | ServiceCreateIssueInputStored, editMode?: boolean) => boolean;
+  isIssueTypeDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentProps {
@@ -33,7 +39,9 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentP
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -41,7 +49,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentP
 export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -54,12 +62,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
         ownerData.issueType?.title?.toString() ?? '',
         ownerData.issueType?.description?.toString() ?? '',
       ]}
-      required={false}
+      required={actions?.isIssueTypeRequired ? actions.isIssueTypeRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="folder-open" />}
-      disabled={disabled}
+      disabled={actions?.isIssueTypeDisabled ? actions.isIssueTypeDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(issueType) => {

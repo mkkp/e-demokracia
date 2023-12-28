@@ -98,7 +98,7 @@ export function ServiceProPro_View_EditConsComponent(props: ServiceProPro_View_E
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceConStored>[]>(ownerData?.cons || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );

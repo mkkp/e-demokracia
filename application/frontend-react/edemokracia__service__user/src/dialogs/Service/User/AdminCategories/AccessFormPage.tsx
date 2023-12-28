@@ -31,7 +31,13 @@ import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueCategoryIssueCategory_FormDialogActionsExtended =
-  ServiceIssueCategoryIssueCategory_FormDialogActions & {};
+  ServiceIssueCategoryIssueCategory_FormDialogActions & {
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: ServiceIssueCategory,
+      storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_USER_ADMIN_CATEGORIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceIssueCategoryIssueCategory_FormActionsHook';
@@ -229,6 +235,12 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(true);
       const result = await userServiceForAdminCategoriesImpl.getTemplate();
       setData(result as ServiceIssueCategoryStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceIssueCategoryStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

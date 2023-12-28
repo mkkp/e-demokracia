@@ -68,7 +68,7 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
     submit,
   } = props;
   const queryCustomizer: ServiceCityQueryCustomizer = {
-    _mask: '{name,districts{name}}',
+    _mask: '{name,representation,districts{name}}',
   };
 
   return (

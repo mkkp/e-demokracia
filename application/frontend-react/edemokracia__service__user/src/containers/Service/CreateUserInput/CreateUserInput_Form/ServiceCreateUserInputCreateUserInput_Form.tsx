@@ -22,9 +22,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -42,9 +44,56 @@ import {
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
 
+export const SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCreateUserInputCreateUserInput_FormContainerHook';
+export type ServiceCreateUserInputCreateUserInput_FormContainerHook = (
+  data: ServiceCreateUserInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void,
+) => ServiceCreateUserInputCreateUserInput_FormActionDefinitions;
+
 export interface ServiceCreateUserInputCreateUserInput_FormActionDefinitions {
   cancelAction?: () => Promise<void>;
   okAction?: () => Promise<void>;
+  isEmailRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isEmailDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isFirstNameRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isFirstNameDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isLastNameRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isLastNameDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isPhoneRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isPhoneDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isHasAdminAccessRequired?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+  ) => boolean;
+  isHasAdminAccessDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isUserNameRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isUserNameDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceCreateUserInputCreateUserInput_FormProps {
@@ -67,11 +116,10 @@ export interface ServiceCreateUserInputCreateUserInput_FormProps {
 export default function ServiceCreateUserInputCreateUserInput_Form(
   props: ServiceCreateUserInputCreateUserInput_FormProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -82,6 +130,10 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -91,6 +143,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceCreateUserInputCreateUserInput_FormContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceCreateUserInputCreateUserInput_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -131,7 +190,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                     >
                       <Grid item xs={12} sm={12} md={4.0}>
                         <TextField
-                          required={true}
+                          required={actions?.isUserNameRequired ? actions.isUserNameRequired(data, editMode) : true}
                           name="userName"
                           id="User/(esm/_kCfU4I1rEe29qs15q2b6yw)/StringTypeTextInput"
                           autoFocus
@@ -145,7 +204,11 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isUserNameDisabled
+                              ? actions.isUserNameDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('userName')}
                           helperText={validation.get('userName')}
                           onChange={(event) => {
@@ -161,6 +224,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                               </InputAdornment>
                             ),
                           }}
+                          inputProps={{
+                            maxlength: 255,
+                          }}
                         />
                       </Grid>
 
@@ -174,7 +240,11 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 color: (theme) =>
                                   validation.has('hasAdminAccess') ? theme.palette.error.main : 'primary',
                               }}
-                              disabled={false || !isFormUpdateable() || isLoading}
+                              disabled={
+                                actions?.isHasAdminAccessDisabled
+                                  ? actions.isHasAdminAccessDisabled(data, editMode, isLoading)
+                                  : false || !isFormUpdateable() || isLoading
+                              }
                               control={
                                 <Checkbox
                                   checked={data.hasAdminAccess || false}
@@ -243,7 +313,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                         >
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={true}
+                              required={
+                                actions?.isFirstNameRequired ? actions.isFirstNameRequired(data, editMode) : true
+                              }
                               name="firstName"
                               id="User/(esm/_kCqUAI1rEe29qs15q2b6yw)/StringTypeTextInput"
                               label={
@@ -256,7 +328,11 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': true,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isFirstNameDisabled
+                                  ? actions.isFirstNameDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('firstName')}
                               helperText={validation.get('firstName')}
                               onChange={(event) => {
@@ -272,12 +348,15 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                   </InputAdornment>
                                 ),
                               }}
+                              inputProps={{
+                                maxlength: 255,
+                              }}
                             />
                           </Grid>
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={true}
+                              required={actions?.isLastNameRequired ? actions.isLastNameRequired(data, editMode) : true}
                               name="lastName"
                               id="User/(esm/_kCt-YI1rEe29qs15q2b6yw)/StringTypeTextInput"
                               label={
@@ -290,7 +369,11 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': true,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isLastNameDisabled
+                                  ? actions.isLastNameDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('lastName')}
                               helperText={validation.get('lastName')}
                               onChange={(event) => {
@@ -306,12 +389,15 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                   </InputAdornment>
                                 ),
                               }}
+                              inputProps={{
+                                maxlength: 255,
+                              }}
                             />
                           </Grid>
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={true}
+                              required={actions?.isEmailRequired ? actions.isEmailRequired(data, editMode) : true}
                               name="email"
                               id="User/(esm/_kCi_QI1rEe29qs15q2b6yw)/StringTypeTextInput"
                               label={
@@ -324,7 +410,11 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': true,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isEmailDisabled
+                                  ? actions.isEmailDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('email')}
                               helperText={validation.get('email')}
                               onChange={(event) => {
@@ -340,12 +430,15 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                   </InputAdornment>
                                 ),
                               }}
+                              inputProps={{
+                                maxlength: 255,
+                              }}
                             />
                           </Grid>
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={false}
+                              required={actions?.isPhoneRequired ? actions.isPhoneRequired(data, editMode) : false}
                               name="phone"
                               id="User/(esm/_pCywkI1sEe29qs15q2b6yw)/StringTypeTextInput"
                               label={
@@ -358,7 +451,11 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': false,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isPhoneDisabled
+                                  ? actions.isPhoneDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('phone')}
                               helperText={validation.get('phone')}
                               onChange={(event) => {
@@ -373,6 +470,9 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                     <MdiIcon path="phone" />
                                   </InputAdornment>
                                 ),
+                              }}
+                              inputProps={{
+                                maxlength: 20,
                               }}
                             />
                           </Grid>

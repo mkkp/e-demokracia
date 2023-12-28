@@ -100,7 +100,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceVoteEntryStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'userName', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'userName', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );

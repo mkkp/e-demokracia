@@ -14,9 +14,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -39,8 +41,35 @@ import {
 import type { ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions } from './components/ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponent';
 import { ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponent } from './components/ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponent';
 
+export const SERVICE_YES_NO_ABSTAIN_VOTE_ENTRY_YES_NO_ABSTAIN_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditContainerHook';
+export type ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditContainerHook = (
+  data: ServiceYesNoAbstainVoteEntryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteEntry, value: any) => void,
+) => ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditActionDefinitions;
+
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditActionDefinitions
-  extends ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions {}
+  extends ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions {
+  isCreatedRequired?: (
+    data: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored,
+    editMode?: boolean,
+  ) => boolean;
+  isCreatedDisabled?: (
+    data: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isValueRequired?: (
+    data: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored,
+    editMode?: boolean,
+  ) => boolean;
+  isValueDisabled?: (
+    data: ServiceYesNoAbstainVoteEntry | ServiceYesNoAbstainVoteEntryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditProps {
   refreshCounter: number;
@@ -62,11 +91,10 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditProp
 export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_Edit(
   props: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -77,6 +105,10 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -86,6 +118,14 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_YES_NO_ABSTAIN_VOTE_ENTRY_YES_NO_ABSTAIN_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -110,7 +150,7 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
               slotProps={{
                 textField: {
                   id: 'User/(esm/_eryG8FskEe6Mx9dH3yj5gQ)/TimestampTypeDateTimeInput',
-                  required: true,
+                  required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
                   helperText: validation.get('created'),
                   error: !!validation.get('created'),
                   InputProps: {
@@ -145,7 +185,7 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
               }
               value={serviceDateToUiDate(data.created ?? null)}
               readOnly={false || !isFormUpdateable()}
-              disabled={isLoading}
+              disabled={actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading}
               onChange={(newValue: Date) => {
                 storeDiff('created', newValue);
               }}
@@ -154,7 +194,7 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : true}
               name="value"
               id="User/(esm/_eryG8VskEe6Mx9dH3yj5gQ)/EnumerationTypeCombo"
               label={
@@ -167,7 +207,7 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isValueDisabled ? actions.isValueDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('value')}
               helperText={validation.get('value')}
               onChange={(event) => {
@@ -198,9 +238,11 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
 
           <Grid item xs={12} sm={12}>
             <ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponent
-              disabled={false || !isFormUpdateable()}
+              disabled={false}
+              readOnly={false || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
+              isLoading={isLoading}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

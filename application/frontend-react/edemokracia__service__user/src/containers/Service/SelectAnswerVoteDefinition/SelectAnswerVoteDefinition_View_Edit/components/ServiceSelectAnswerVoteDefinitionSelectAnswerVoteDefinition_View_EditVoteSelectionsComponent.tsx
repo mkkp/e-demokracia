@@ -101,7 +101,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     ownerData?.voteSelections || [],
   );
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'description', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'description', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );

@@ -102,7 +102,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceServiceUserStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'representation', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'representation', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );

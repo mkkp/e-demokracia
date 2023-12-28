@@ -14,9 +14,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -34,7 +36,22 @@ import {
   YesNoAbstainVoteInputStored,
 } from '~/services/data-api';
 
-export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions {}
+export const YES_NO_ABSTAIN_VOTE_INPUT_YES_NO_ABSTAIN_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'YesNoAbstainVoteInputYesNoAbstainVoteInput_FormContainerHook';
+export type YesNoAbstainVoteInputYesNoAbstainVoteInput_FormContainerHook = (
+  data: YesNoAbstainVoteInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof YesNoAbstainVoteInput, value: any) => void,
+) => YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions;
+
+export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions {
+  isValueRequired?: (data: YesNoAbstainVoteInput | YesNoAbstainVoteInputStored, editMode?: boolean) => boolean;
+  isValueDisabled?: (
+    data: YesNoAbstainVoteInput | YesNoAbstainVoteInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormProps {
   refreshCounter: number;
@@ -56,11 +73,10 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormProps {
 export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
   props: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -71,6 +87,10 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -80,6 +100,14 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<YesNoAbstainVoteInputYesNoAbstainVoteInput_FormContainerHook>(
+      `(${OBJECTCLASS}=${YES_NO_ABSTAIN_VOTE_INPUT_YES_NO_ABSTAIN_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -94,7 +122,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={false}
+              required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : false}
               name="value"
               id="User/(esm/_6ISHYOSLEe20cv3f2msZXg)/EnumerationTypeCombo"
               autoFocus
@@ -104,7 +132,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={actions?.isValueDisabled ? actions.isValueDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('value')}
               helperText={validation.get('value')}
               onChange={(event) => {

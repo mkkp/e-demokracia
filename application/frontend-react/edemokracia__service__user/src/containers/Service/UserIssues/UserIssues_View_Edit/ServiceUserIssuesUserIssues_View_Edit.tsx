@@ -14,9 +14,11 @@ import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -53,6 +55,14 @@ import { ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComp
 import type { ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponentActionDefinitions } from './components/ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent';
 import { ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent } from './components/ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent';
 
+export const SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserIssuesUserIssues_View_EditContainerHook';
+export type ServiceUserIssuesUserIssues_View_EditContainerHook = (
+  data: ServiceUserIssuesStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserIssues, value: any) => void,
+) => ServiceUserIssuesUserIssues_View_EditActionDefinitions;
+
 export interface ServiceUserIssuesUserIssues_View_EditActionDefinitions
   extends ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponentActionDefinitions,
     ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitiesComponentActionDefinitions,
@@ -83,11 +93,10 @@ export interface ServiceUserIssuesUserIssues_View_EditProps {
 // XMIID: User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewPageContainer
 // Name: service::UserIssues::UserIssues_View_Edit
 export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUserIssuesUserIssues_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -98,6 +107,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -107,6 +120,13 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceUserIssuesUserIssues_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceUserIssuesUserIssues_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

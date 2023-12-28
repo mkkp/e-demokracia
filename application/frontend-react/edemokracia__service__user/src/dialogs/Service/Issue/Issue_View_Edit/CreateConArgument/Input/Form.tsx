@@ -32,6 +32,11 @@ export type CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended =
       onSubmit: (result?: CreateArgumentInputStored) => Promise<void>,
       onClose: () => Promise<void>,
     ) => Promise<void>;
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: CreateArgumentInput,
+      storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void,
+    ) => Promise<void>;
   };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_CON_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
@@ -203,6 +208,12 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
       setIsLoading(true);
       const result = await serviceIssueServiceImpl.getTemplateOnCreateConArgument();
       setData(result as CreateArgumentInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof CreateArgumentInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

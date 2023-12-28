@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -38,8 +40,29 @@ import {
 import type { ServiceIssueCategoryIssueCategory_FormOwnerComponentActionDefinitions } from './components/ServiceIssueCategoryIssueCategory_FormOwnerComponent';
 import { ServiceIssueCategoryIssueCategory_FormOwnerComponent } from './components/ServiceIssueCategoryIssueCategory_FormOwnerComponent';
 
+export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_FormContainerHook';
+export type ServiceIssueCategoryIssueCategory_FormContainerHook = (
+  data: ServiceIssueCategoryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+) => ServiceIssueCategoryIssueCategory_FormActionDefinitions;
+
 export interface ServiceIssueCategoryIssueCategory_FormActionDefinitions
-  extends ServiceIssueCategoryIssueCategory_FormOwnerComponentActionDefinitions {}
+  extends ServiceIssueCategoryIssueCategory_FormOwnerComponentActionDefinitions {
+  isDescriptionRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceIssueCategory | ServiceIssueCategoryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: ServiceIssueCategory | ServiceIssueCategoryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceIssueCategoryIssueCategory_FormProps {
   refreshCounter: number;
@@ -59,11 +82,10 @@ export interface ServiceIssueCategoryIssueCategory_FormProps {
 // XMIID: User/(esm/_qJLksGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
 // Name: service::IssueCategory::IssueCategory_Form
 export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIssueCategoryIssueCategory_FormProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -74,6 +96,10 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -83,6 +109,13 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceIssueCategoryIssueCategory_FormContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceIssueCategoryIssueCategory_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -97,7 +130,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_T0LtQG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
               autoFocus
@@ -107,7 +140,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('title')}
               helperText={validation.get('title')}
               onChange={(event) => {
@@ -123,12 +156,15 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
               id="User/(esm/_T0Rz4G49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
               label={
@@ -139,7 +175,9 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isDescriptionDisabled ? actions.isDescriptionDisabled(data, editMode, isLoading) : isLoading
+              }
               error={!!validation.get('description')}
               helperText={validation.get('description')}
               onChange={(event) => {
@@ -155,14 +193,19 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 16384,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <ServiceIssueCategoryIssueCategory_FormOwnerComponent
-              disabled={false || !isFormUpdateable()}
+              disabled={false}
+              readOnly={false || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
+              isLoading={isLoading}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

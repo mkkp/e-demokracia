@@ -19,9 +19,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -39,7 +41,49 @@ import {
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
 
-export interface ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions {}
+export const SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCreateUserInputCreateUserInput_View_EditContainerHook';
+export type ServiceCreateUserInputCreateUserInput_View_EditContainerHook = (
+  data: ServiceCreateUserInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void,
+) => ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions;
+
+export interface ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions {
+  isEmailRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isEmailDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isFirstNameRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isFirstNameDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isHasAdminAccessRequired?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+  ) => boolean;
+  isHasAdminAccessDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isLastNameRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isLastNameDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isUserNameRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
+  isUserNameDisabled?: (
+    data: ServiceCreateUserInput | ServiceCreateUserInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceCreateUserInputCreateUserInput_View_EditProps {
   refreshCounter: number;
@@ -61,11 +105,10 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditProps {
 export default function ServiceCreateUserInputCreateUserInput_View_Edit(
   props: ServiceCreateUserInputCreateUserInput_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -76,6 +119,10 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -85,6 +132,14 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceCreateUserInputCreateUserInput_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -99,7 +154,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isUserNameRequired ? actions.isUserNameRequired(data, editMode) : true}
               name="userName"
               id="User/(esm/_kCeGwI1rEe29qs15q2b6yw)/StringTypeTextInput"
               autoFocus
@@ -111,7 +166,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isUserNameDisabled ? actions.isUserNameDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('userName')}
               helperText={validation.get('userName')}
               onChange={(event) => {
@@ -127,12 +182,15 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isEmailRequired ? actions.isEmailRequired(data, editMode) : true}
               name="email"
               id="User/(esm/_kChxII1rEe29qs15q2b6yw)/StringTypeTextInput"
               label={t('service.CreateUserInput.CreateUserInput_View_Edit.email', { defaultValue: 'Email' }) as string}
@@ -141,7 +199,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isEmailDisabled ? actions.isEmailDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('email')}
               helperText={validation.get('email')}
               onChange={(event) => {
@@ -157,6 +215,9 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
@@ -169,7 +230,11 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                     marginTop: '6px',
                     color: (theme) => (validation.has('hasAdminAccess') ? theme.palette.error.main : 'primary'),
                   }}
-                  disabled={false || !isFormUpdateable() || isLoading}
+                  disabled={
+                    actions?.isHasAdminAccessDisabled
+                      ? actions.isHasAdminAccessDisabled(data, editMode, isLoading)
+                      : false || !isFormUpdateable() || isLoading
+                  }
                   control={
                     <Checkbox
                       checked={data.hasAdminAccess || false}
@@ -194,7 +259,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isFirstNameRequired ? actions.isFirstNameRequired(data, editMode) : true}
               name="firstName"
               id="User/(esm/_kCpF4I1rEe29qs15q2b6yw)/StringTypeTextInput"
               label={
@@ -207,7 +272,9 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isFirstNameDisabled ? actions.isFirstNameDisabled(data, editMode, isLoading) : isLoading
+              }
               error={!!validation.get('firstName')}
               helperText={validation.get('firstName')}
               onChange={(event) => {
@@ -223,12 +290,15 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isLastNameRequired ? actions.isLastNameRequired(data, editMode) : true}
               name="lastName"
               id="User/(esm/_kCswQI1rEe29qs15q2b6yw)/StringTypeTextInput"
               label={
@@ -239,7 +309,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isLastNameDisabled ? actions.isLastNameDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('lastName')}
               helperText={validation.get('lastName')}
               onChange={(event) => {
@@ -254,6 +324,9 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                     <MdiIcon path="text_fields" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                maxlength: 255,
               }}
             />
           </Grid>

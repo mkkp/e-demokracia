@@ -19,9 +19,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -39,7 +41,76 @@ import {
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
 
-export interface ServiceVoteDefinitionVoteDefinition_FormActionDefinitions {}
+export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceVoteDefinitionVoteDefinition_FormContainerHook';
+export type ServiceVoteDefinitionVoteDefinition_FormContainerHook = (
+  data: ServiceVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void,
+) => ServiceVoteDefinitionVoteDefinition_FormActionDefinitions;
+
+export interface ServiceVoteDefinitionVoteDefinition_FormActionDefinitions {
+  isCloseAtRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isCloseAtDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isCreatedRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isCreatedDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isDescriptionRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isIsRatingTypeRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isIsRatingTypeDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isIsSelectAnswerTypeRequired?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isIsSelectAnswerTypeDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isIsYesNoAbstainTypeRequired?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isIsYesNoAbstainTypeDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isIsYesNoTypeRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isIsYesNoTypeDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isStatusRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isStatusDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceVoteDefinitionVoteDefinition_FormProps {
   refreshCounter: number;
@@ -59,11 +130,10 @@ export interface ServiceVoteDefinitionVoteDefinition_FormProps {
 // XMIID: User/(esm/_-gL5wH4XEe2cB7_PsKXsHQ)/TransferObjectFormPageContainer
 // Name: service::VoteDefinition::VoteDefinition_Form
 export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceVoteDefinitionVoteDefinition_FormProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -74,6 +144,10 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -83,6 +157,13 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceVoteDefinitionVoteDefinition_FormContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceVoteDefinitionVoteDefinition_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -97,7 +178,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_T5VWYI4jEe29qs15q2b6yw)/StringTypeTextInput"
               autoFocus
@@ -107,7 +188,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('title')}
               helperText={validation.get('title')}
               onChange={(event) => {
@@ -123,6 +204,9 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
@@ -137,7 +221,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               slotProps={{
                 textField: {
                   id: 'User/(esm/_T5dSMI4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                  required: false,
+                  required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : false,
                   helperText: validation.get('created'),
                   error: !!validation.get('created'),
                   InputProps: {
@@ -168,7 +252,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               label={t('service.VoteDefinition.VoteDefinition_Form.created', { defaultValue: 'Created' }) as string}
               value={serviceDateToUiDate(data.created ?? null)}
               readOnly={true || !isFormUpdateable()}
-              disabled={isLoading}
+              disabled={actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading}
               onChange={(newValue: Date) => {
                 storeDiff('created', newValue);
               }}
@@ -177,7 +261,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
               id="User/(esm/_T5l1EI4jEe29qs15q2b6yw)/StringTypeTextInput"
               label={
@@ -188,7 +272,9 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isDescriptionDisabled ? actions.isDescriptionDisabled(data, editMode, isLoading) : isLoading
+              }
               error={!!validation.get('description')}
               helperText={validation.get('description')}
               onChange={(event) => {
@@ -204,12 +290,15 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 16384,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isStatusRequired ? actions.isStatusRequired(data, editMode) : true}
               name="status"
               id="User/(esm/_T5tw4I4jEe29qs15q2b6yw)/EnumerationTypeCombo"
               label={t('service.VoteDefinition.VoteDefinition_Form.status', { defaultValue: 'Status' }) as string}
@@ -218,7 +307,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isStatusDisabled ? actions.isStatusDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('status')}
               helperText={validation.get('status')}
               onChange={(event) => {
@@ -264,7 +353,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               slotProps={{
                 textField: {
                   id: 'User/(esm/_T55XEI4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                  required: true,
+                  required: actions?.isCloseAtRequired ? actions.isCloseAtRequired(data, editMode) : true,
                   helperText: validation.get('closeAt'),
                   error: !!validation.get('closeAt'),
                   InputProps: {
@@ -295,7 +384,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
               label={t('service.VoteDefinition.VoteDefinition_Form.closeAt', { defaultValue: 'CloseAt' }) as string}
               value={serviceDateToUiDate(data.closeAt ?? null)}
               readOnly={false || !isFormUpdateable()}
-              disabled={isLoading}
+              disabled={actions?.isCloseAtDisabled ? actions.isCloseAtDisabled(data, editMode, isLoading) : isLoading}
               onChange={(newValue: Date) => {
                 storeDiff('closeAt', newValue);
               }}
@@ -311,7 +400,11 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                     marginTop: '6px',
                     color: (theme) => (validation.has('isRatingType') ? theme.palette.error.main : 'primary'),
                   }}
-                  disabled={true || !isFormUpdateable() || isLoading}
+                  disabled={
+                    actions?.isIsRatingTypeDisabled
+                      ? actions.isIsRatingTypeDisabled(data, editMode, isLoading)
+                      : true || !isFormUpdateable() || isLoading
+                  }
                   control={
                     <Checkbox
                       checked={data.isRatingType || false}
@@ -341,7 +434,11 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                     marginTop: '6px',
                     color: (theme) => (validation.has('isSelectAnswerType') ? theme.palette.error.main : 'primary'),
                   }}
-                  disabled={true || !isFormUpdateable() || isLoading}
+                  disabled={
+                    actions?.isIsSelectAnswerTypeDisabled
+                      ? actions.isIsSelectAnswerTypeDisabled(data, editMode, isLoading)
+                      : true || !isFormUpdateable() || isLoading
+                  }
                   control={
                     <Checkbox
                       checked={data.isSelectAnswerType || false}
@@ -375,7 +472,11 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                     marginTop: '6px',
                     color: (theme) => (validation.has('isYesNoAbstainType') ? theme.palette.error.main : 'primary'),
                   }}
-                  disabled={true || !isFormUpdateable() || isLoading}
+                  disabled={
+                    actions?.isIsYesNoAbstainTypeDisabled
+                      ? actions.isIsYesNoAbstainTypeDisabled(data, editMode, isLoading)
+                      : true || !isFormUpdateable() || isLoading
+                  }
                   control={
                     <Checkbox
                       checked={data.isYesNoAbstainType || false}
@@ -409,7 +510,11 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                     marginTop: '6px',
                     color: (theme) => (validation.has('isYesNoType') ? theme.palette.error.main : 'primary'),
                   }}
-                  disabled={true || !isFormUpdateable() || isLoading}
+                  disabled={
+                    actions?.isIsYesNoTypeDisabled
+                      ? actions.isIsYesNoTypeDisabled(data, editMode, isLoading)
+                      : true || !isFormUpdateable() || isLoading
+                  }
                   control={
                     <Checkbox
                       checked={data.isYesNoType || false}

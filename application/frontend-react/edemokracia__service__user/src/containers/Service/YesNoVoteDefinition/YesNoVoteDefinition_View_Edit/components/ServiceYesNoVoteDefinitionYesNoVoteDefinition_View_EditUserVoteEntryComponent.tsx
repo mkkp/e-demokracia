@@ -23,6 +23,15 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVote
   userVoteEntryAutocompleteRangeAction?: (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
   ) => Promise<Array<ServiceYesNoVoteEntryStored>>;
+  isUserVoteEntryRequired?: (
+    data: ServiceYesNoVoteDefinition | ServiceYesNoVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isUserVoteEntryDisabled?: (
+    data: ServiceYesNoVoteDefinition | ServiceYesNoVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentProps {
@@ -32,7 +41,9 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVote
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_h4NScFouEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedLink
@@ -40,7 +51,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVote
 export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponent(
   props: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -53,12 +64,15 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteE
         }) as string
       }
       labelList={[ownerData.userVoteEntry?.value?.toString() ?? '', ownerData.userVoteEntry?.created?.toString() ?? '']}
-      required={false}
+      required={actions?.isUserVoteEntryRequired ? actions.isUserVoteEntryRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="vote" />}
-      disabled={disabled}
+      disabled={
+        actions?.isUserVoteEntryDisabled ? actions.isUserVoteEntryDisabled(ownerData, editMode, isLoading) : disabled
+      }
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'value'}
       onAutoCompleteSelect={(userVoteEntry) => {

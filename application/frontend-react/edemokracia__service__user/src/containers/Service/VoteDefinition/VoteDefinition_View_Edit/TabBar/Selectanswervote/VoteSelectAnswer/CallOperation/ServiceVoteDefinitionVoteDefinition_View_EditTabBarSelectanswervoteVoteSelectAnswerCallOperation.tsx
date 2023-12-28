@@ -13,9 +13,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,6 +31,11 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponentActionDefinitions } from './components/ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponent';
 import { ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponent } from './components/ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponent';
+
+export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_TAB_BAR_SELECTANSWERVOTE_VOTE_SELECT_ANSWER_CALL_OPERATION_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationContainerHook';
+export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationContainerHook =
+  () => ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions;
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions
   extends ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponentActionDefinitions {}
@@ -45,11 +52,23 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswer
 export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperation(
   props: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationProps,
 ) {
+  // Container props
+  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff } = props;
+
+  // Container hooks
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { refreshCounter, actions, selectionDiff, setSelectionDiff } = props;
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
+
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_TAB_BAR_SELECTANSWERVOTE_VOTE_SELECT_ANSWER_CALL_OPERATION_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions =
+    customContainerHook?.() || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

@@ -14,9 +14,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -41,9 +43,30 @@ import { ServiceIssueCategoryIssueCategory_View_EditOwnerComponent } from './com
 import type { ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions } from './components/ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent';
 import { ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent } from './components/ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent';
 
+export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_View_EditContainerHook';
+export type ServiceIssueCategoryIssueCategory_View_EditContainerHook = (
+  data: ServiceIssueCategoryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+) => ServiceIssueCategoryIssueCategory_View_EditActionDefinitions;
+
 export interface ServiceIssueCategoryIssueCategory_View_EditActionDefinitions
   extends ServiceIssueCategoryIssueCategory_View_EditOwnerComponentActionDefinitions,
-    ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions {}
+    ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions {
+  isDescriptionRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceIssueCategory | ServiceIssueCategoryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: ServiceIssueCategory | ServiceIssueCategoryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceIssueCategoryIssueCategory_View_EditProps {
   refreshCounter: number;
@@ -65,11 +88,10 @@ export interface ServiceIssueCategoryIssueCategory_View_EditProps {
 export default function ServiceIssueCategoryIssueCategory_View_Edit(
   props: ServiceIssueCategoryIssueCategory_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -80,6 +102,10 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -89,6 +115,13 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceIssueCategoryIssueCategory_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceIssueCategoryIssueCategory_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -103,7 +136,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_T0J4EG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
               autoFocus
@@ -113,7 +146,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('title')}
               helperText={validation.get('title')}
               onChange={(event) => {
@@ -129,12 +162,15 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
               id="User/(esm/_T0QlwG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
               label={
@@ -147,7 +183,9 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isDescriptionDisabled ? actions.isDescriptionDisabled(data, editMode, isLoading) : isLoading
+              }
               error={!!validation.get('description')}
               helperText={validation.get('description')}
               onChange={(event) => {
@@ -163,14 +201,19 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 16384,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <ServiceIssueCategoryIssueCategory_View_EditOwnerComponent
-              disabled={false || !isFormUpdateable()}
+              disabled={false}
+              readOnly={false || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
+              isLoading={isLoading}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

@@ -75,7 +75,7 @@ export default function ServiceCityCity_View_EditDialog(props: ServiceCityCity_V
     submit,
   } = props;
   const queryCustomizer: ServiceCityQueryCustomizer = {
-    _mask: '{name,districts{name}}',
+    _mask: '{name,representation,districts{name}}',
   };
 
   return (

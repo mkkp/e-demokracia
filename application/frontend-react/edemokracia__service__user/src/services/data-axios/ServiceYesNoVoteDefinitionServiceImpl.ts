@@ -101,33 +101,6 @@ export class ServiceYesNoVoteDefinitionServiceImpl
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async setIssue(
-    owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void> {
-    const path = '/service/YesNoVoteDefinition/~update/issue/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async unsetIssue(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void> {
-    const path = '/service/YesNoVoteDefinition/~update/issue/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */

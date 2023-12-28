@@ -30,7 +30,13 @@ import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActionsExtended =
-  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions & {};
+  ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions & {
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: ServiceSelectAnswerVoteSelection,
+      storeDiff: (attributeName: keyof ServiceSelectAnswerVoteSelection, value: any) => void,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_VOTE_SELECTIONS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionsHook';
@@ -207,6 +213,12 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
       setIsLoading(true);
       const result = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.getTemplate();
       setData(result as ServiceSelectAnswerVoteSelectionStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceSelectAnswerVoteSelectionStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

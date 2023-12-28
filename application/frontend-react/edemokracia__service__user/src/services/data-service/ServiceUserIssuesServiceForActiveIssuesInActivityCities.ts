@@ -61,19 +61,7 @@ export interface ServiceUserIssuesServiceForActiveIssuesInActivityCities {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored>;
-  getRangeForActiveIssuesInActivityCities(
-    owner: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
-    queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<Array<ServiceIssueStored>>;
   update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
-  addActiveIssuesInActivityCities(
-    owner: JudoIdentifiable<ServiceUserIssues>,
-    selected: Array<JudoIdentifiable<ServiceIssue>>,
-  ): Promise<void>;
-  removeActiveIssuesInActivityCities(
-    owner: JudoIdentifiable<ServiceUserIssues>,
-    selected: Array<JudoIdentifiable<ServiceIssue>>,
-  ): Promise<void>;
   listAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,

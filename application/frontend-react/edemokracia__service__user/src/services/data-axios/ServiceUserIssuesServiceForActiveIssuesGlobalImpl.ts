@@ -110,23 +110,6 @@ export class ServiceUserIssuesServiceForActiveIssuesGlobalImpl
   }
 
   /**
-   * From: relation.isRangeable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForActiveIssuesGlobal(
-    owner: JudoIdentifiable<ServiceUserIssues> | ServiceUserIssues,
-    queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<Array<ServiceIssueStored>> {
-    const path = '/service/UserIssues/activeIssuesGlobal/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -139,38 +122,6 @@ export class ServiceUserIssuesServiceForActiveIssuesGlobalImpl
     });
 
     return response.data;
-  }
-
-  /**
-   * From: relation.isAddable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveIssuesGlobal(
-    owner: JudoIdentifiable<ServiceUserIssues>,
-    selected: Array<JudoIdentifiable<ServiceIssue>>,
-  ): Promise<void> {
-    const path = '/service/UserIssues/~update/activeIssuesGlobal/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * From: relation.isRemovable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveIssuesGlobal(
-    owner: JudoIdentifiable<ServiceUserIssues>,
-    selected: Array<JudoIdentifiable<ServiceIssue>>,
-  ): Promise<void> {
-    const path = '/service/UserIssues/~update/activeIssuesGlobal/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
   }
 
   async listAttachments(

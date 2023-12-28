@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -51,6 +53,13 @@ import { ServiceProPro_View_EditCreatedByComponent } from './components/ServiceP
 import type { ServiceProPro_View_EditProsComponentActionDefinitions } from './components/ServiceProPro_View_EditProsComponent';
 import { ServiceProPro_View_EditProsComponent } from './components/ServiceProPro_View_EditProsComponent';
 
+export const SERVICE_PRO_PRO_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceProPro_View_EditContainerHook';
+export type ServiceProPro_View_EditContainerHook = (
+  data: ServiceProStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServicePro, value: any) => void,
+) => ServiceProPro_View_EditActionDefinitions;
+
 export interface ServiceProPro_View_EditActionDefinitions
   extends ServiceProPro_View_EditConsComponentActionDefinitions,
     ServiceProPro_View_EditCreatedByComponentActionDefinitions,
@@ -60,6 +69,16 @@ export interface ServiceProPro_View_EditActionDefinitions
   voteDownForProAction?: () => Promise<void>;
   voteUpForProAction?: () => Promise<void>;
   votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  isCreatedRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
+  isCreatedDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isDescriptionRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isDownVotesRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
+  isDownVotesDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isTitleRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isUpVotesRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
+  isUpVotesDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceProPro_View_EditProps {
@@ -80,11 +99,10 @@ export interface ServiceProPro_View_EditProps {
 // XMIID: User/(esm/_qLQBQGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
 // Name: service::Pro::Pro_View_Edit
 export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -95,6 +113,10 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -104,6 +126,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceProPro_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_PRO_PRO_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceProPro_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -144,7 +173,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                     >
                       <Grid item xs={12} sm={12} md={6.0}>
                         <TextField
-                          required={true}
+                          required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_3oDAcH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
                           autoFocus
@@ -154,7 +183,9 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                          }
                           error={!!validation.get('title')}
                           helperText={validation.get('title')}
                           onChange={(event) => {
@@ -170,6 +201,9 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                               </InputAdornment>
                             ),
                           }}
+                          inputProps={{
+                            maxlength: 255,
+                          }}
                         />
                       </Grid>
 
@@ -184,7 +218,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           slotProps={{
                             textField: {
                               id: 'User/(esm/_3ntCMH4bEe2j59SYy0JH0Q)/TimestampTypeDateTimeInput',
-                              required: true,
+                              required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
                               helperText: validation.get('created'),
                               error: !!validation.get('created'),
                               InputProps: {
@@ -215,7 +249,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           label={t('service.Pro.Pro_View_Edit.created', { defaultValue: 'Created' }) as string}
                           value={serviceDateToUiDate(data.created ?? null)}
                           readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isCreatedDisabled
+                              ? actions.isCreatedDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           onChange={(newValue: Date) => {
                             storeDiff('created', newValue);
                           }}
@@ -224,9 +262,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
 
                       <Grid item xs={12} sm={12} md={3.0}>
                         <ServiceProPro_View_EditCreatedByComponent
-                          disabled={true || !isFormUpdateable()}
+                          disabled={true}
+                          readOnly={true || !isFormUpdateable()}
                           ownerData={data}
                           editMode={editMode}
+                          isLoading={isLoading}
                           storeDiff={storeDiff}
                           validationError={validation.get('createdBy')}
                           actions={actions}
@@ -236,7 +276,9 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
 
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required={true}
+                          required={
+                            actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true
+                          }
                           name="description"
                           id="User/(esm/_3n4oYH4bEe2j59SYy0JH0Q)/StringTypeTextArea"
                           label={t('service.Pro.Pro_View_Edit.description', { defaultValue: 'Description' }) as string}
@@ -245,7 +287,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isDescriptionDisabled
+                              ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           multiline
                           minRows={4.0}
                           error={!!validation.get('description')}
@@ -262,6 +308,9 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                                 <MdiIcon path="text_fields" />
                               </InputAdornment>
                             ),
+                          }}
+                          inputProps={{
+                            maxlength: 16384,
                           }}
                         />
                       </Grid>
@@ -286,7 +335,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
 
                       <Grid item xs={12} sm={12} md={1.0}>
                         <NumericInput
-                          required={false}
+                          required={actions?.isUpVotesRequired ? actions.isUpVotesRequired(data, editMode) : false}
                           name="upVotes"
                           id="User/(esm/_eJYR4IfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
                           label={t('service.Pro.Pro_View_Edit.upVotes', { defaultValue: '' }) as string}
@@ -296,7 +345,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isUpVotesDisabled
+                              ? actions.isUpVotesDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('upVotes')}
                           helperText={validation.get('upVotes')}
                           onValueChange={(values, sourceInfo) => {
@@ -340,7 +393,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
 
                       <Grid item xs={12} sm={12} md={1.0}>
                         <NumericInput
-                          required={false}
+                          required={actions?.isDownVotesRequired ? actions.isDownVotesRequired(data, editMode) : false}
                           name="downVotes"
                           id="User/(esm/_eJdxcIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
                           label={t('service.Pro.Pro_View_Edit.downVotes', { defaultValue: '' }) as string}
@@ -350,7 +403,11 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isDownVotesDisabled
+                              ? actions.isDownVotesDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('downVotes')}
                           helperText={validation.get('downVotes')}
                           onValueChange={(values, sourceInfo) => {

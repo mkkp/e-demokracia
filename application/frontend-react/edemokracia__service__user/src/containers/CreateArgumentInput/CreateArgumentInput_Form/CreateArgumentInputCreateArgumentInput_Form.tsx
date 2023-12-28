@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -36,9 +38,29 @@ import {
   CreateArgumentInputStored,
 } from '~/services/data-api';
 
+export const CREATE_ARGUMENT_INPUT_CREATE_ARGUMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'CreateArgumentInputCreateArgumentInput_FormContainerHook';
+export type CreateArgumentInputCreateArgumentInput_FormContainerHook = (
+  data: CreateArgumentInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void,
+) => CreateArgumentInputCreateArgumentInput_FormActionDefinitions;
+
 export interface CreateArgumentInputCreateArgumentInput_FormActionDefinitions {
   backAction?: () => Promise<void>;
   okAction?: () => Promise<void>;
+  isDescriptionRequired?: (data: CreateArgumentInput | CreateArgumentInputStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (
+    data: CreateArgumentInput | CreateArgumentInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: CreateArgumentInput | CreateArgumentInputStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: CreateArgumentInput | CreateArgumentInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface CreateArgumentInputCreateArgumentInput_FormProps {
@@ -61,11 +83,10 @@ export interface CreateArgumentInputCreateArgumentInput_FormProps {
 export default function CreateArgumentInputCreateArgumentInput_Form(
   props: CreateArgumentInputCreateArgumentInput_FormProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -76,6 +97,10 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -85,6 +110,13 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<CreateArgumentInputCreateArgumentInput_FormContainerHook>(
+    `(${OBJECTCLASS}=${CREATE_ARGUMENT_INPUT_CREATE_ARGUMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: CreateArgumentInputCreateArgumentInput_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -127,7 +159,7 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                     >
                       <Grid item xs={12} sm={12} md={8.0}>
                         <TextField
-                          required={true}
+                          required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_3m5J4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
                           autoFocus
@@ -139,7 +171,9 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                          }
                           error={!!validation.get('title')}
                           helperText={validation.get('title')}
                           onChange={(event) => {
@@ -155,12 +189,17 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                               </InputAdornment>
                             ),
                           }}
+                          inputProps={{
+                            maxlength: 255,
+                          }}
                         />
                       </Grid>
 
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required={true}
+                          required={
+                            actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true
+                          }
                           name="description"
                           id="User/(esm/_3nC64H4bEe2j59SYy0JH0Q)/StringTypeTextArea"
                           label={
@@ -173,7 +212,11 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isDescriptionDisabled
+                              ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           multiline
                           minRows={4.0}
                           error={!!validation.get('description')}
@@ -190,6 +233,9 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                                 <MdiIcon path="text_fields" />
                               </InputAdornment>
                             ),
+                          }}
+                          inputProps={{
+                            maxlength: 16384,
                           }}
                         />
                       </Grid>

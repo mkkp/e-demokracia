@@ -16,7 +16,7 @@ import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { MdiIcon } from '~/components';
+import { MdiIcon } from '~/components/MdiIcon';
 import { useDialog } from '~/components/dialog';
 import { useSnacks } from '~/hooks';
 import type { JudoStored } from '~/services/data-api/common';

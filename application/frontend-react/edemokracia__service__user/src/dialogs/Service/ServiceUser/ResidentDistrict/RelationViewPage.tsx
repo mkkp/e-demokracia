@@ -163,7 +163,7 @@ export default function ServiceServiceUserResidentDistrictRelationViewPage(
   }, [data]);
 
   const pageQueryCustomizer: ServiceDistrictQueryCustomizer = {
-    _mask: '{name}',
+    _mask: '{name,representation}',
   };
 
   // Pandino Action overrides

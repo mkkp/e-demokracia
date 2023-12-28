@@ -68,7 +68,7 @@ export default function ServiceCountyCounty_View_EditPage(props: ServiceCountyCo
     submit,
   } = props;
   const queryCustomizer: ServiceCountyQueryCustomizer = {
-    _mask: '{name,cities{name}}',
+    _mask: '{name,representation,cities{name}}',
   };
 
   return (

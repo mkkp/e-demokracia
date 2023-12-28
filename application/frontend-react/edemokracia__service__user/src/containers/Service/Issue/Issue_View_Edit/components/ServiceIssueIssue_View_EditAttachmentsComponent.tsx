@@ -101,7 +101,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueAttachmentStored>[]>(ownerData?.attachments || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'link', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'link', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -144,7 +144,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     headerName: t('service.Issue.Issue_View_Edit.file', { defaultValue: 'File' }) as string,
     headerClassName: 'data-grid-column-header',
 
-    width: 230,
+    width: 500,
     type: 'string',
     filterable: false && false,
     sortable: false,

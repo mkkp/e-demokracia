@@ -25,6 +25,15 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwne
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
+  isOwnerRequired?: (
+    data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    editMode?: boolean,
+  ) => boolean;
+  isOwnerDisabled?: (
+    data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentProps {
@@ -34,7 +43,9 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwne
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_Eq0jMFuXEe6T042_LMmSdQ)/TabularReferenceFieldRelationDefinedLink
@@ -42,7 +53,7 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwne
 export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent(
   props: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -53,12 +64,13 @@ export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwner
         t('service.SelectAnswerVoteEntry.SelectAnswerVoteEntry_View_Edit.owner', { defaultValue: 'Owner' }) as string
       }
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
-      required={true}
+      required={actions?.isOwnerRequired ? actions.isOwnerRequired(ownerData, editMode) : true}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="table_rows" />}
-      disabled={disabled}
+      disabled={actions?.isOwnerDisabled ? actions.isOwnerDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {

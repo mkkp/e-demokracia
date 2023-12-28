@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -44,11 +46,31 @@ import {
 import type { ServiceCommentComment_View_EditCreatedByComponentActionDefinitions } from './components/ServiceCommentComment_View_EditCreatedByComponent';
 import { ServiceCommentComment_View_EditCreatedByComponent } from './components/ServiceCommentComment_View_EditCreatedByComponent';
 
+export const SERVICE_COMMENT_COMMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCommentComment_View_EditContainerHook';
+export type ServiceCommentComment_View_EditContainerHook = (
+  data: ServiceCommentStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceComment, value: any) => void,
+) => ServiceCommentComment_View_EditActionDefinitions;
+
 export interface ServiceCommentComment_View_EditActionDefinitions
   extends ServiceCommentComment_View_EditCreatedByComponentActionDefinitions {
   voteDownForCommentAction?: () => Promise<void>;
   voteUpForCommentAction?: () => Promise<void>;
   votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  isCommentRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
+  isCommentDisabled?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isCreatedRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
+  isCreatedDisabled?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isDownVotesRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
+  isDownVotesDisabled?: (
+    data: ServiceComment | ServiceCommentStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isUpVotesRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
+  isUpVotesDisabled?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceCommentComment_View_EditProps {
@@ -69,11 +91,10 @@ export interface ServiceCommentComment_View_EditProps {
 // XMIID: User/(esm/_p_AVAGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
 // Name: service::Comment::Comment_View_Edit
 export default function ServiceCommentComment_View_Edit(props: ServiceCommentComment_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -84,6 +105,10 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -93,6 +118,13 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceCommentComment_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_COMMENT_COMMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceCommentComment_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -142,7 +174,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           slotProps={{
                             textField: {
                               id: 'User/(esm/_BYP0EG5WEe2wNaja8kBvcQ)/TimestampTypeDateTimeInput',
-                              required: false,
+                              required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : false,
                               helperText: validation.get('created'),
                               error: !!validation.get('created'),
                               InputProps: {
@@ -173,7 +205,11 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           label={t('service.Comment.Comment_View_Edit.created', { defaultValue: 'Created' }) as string}
                           value={serviceDateToUiDate(data.created ?? null)}
                           readOnly={true || !isFormUpdateable()}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isCreatedDisabled
+                              ? actions.isCreatedDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           onChange={(newValue: Date) => {
                             storeDiff('created', newValue);
                           }}
@@ -182,9 +218,11 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
 
                       <Grid item xs={12} sm={12} md={4.0}>
                         <ServiceCommentComment_View_EditCreatedByComponent
-                          disabled={true || !isFormUpdateable()}
+                          disabled={true}
+                          readOnly={true || !isFormUpdateable()}
                           ownerData={data}
                           editMode={editMode}
+                          isLoading={isLoading}
                           storeDiff={storeDiff}
                           validationError={validation.get('createdBy')}
                           actions={actions}
@@ -194,7 +232,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
 
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required={true}
+                          required={actions?.isCommentRequired ? actions.isCommentRequired(data, editMode) : true}
                           name="comment"
                           id="User/(esm/_BYJGYG5WEe2wNaja8kBvcQ)/StringTypeTextArea"
                           autoFocus
@@ -204,7 +242,11 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isCommentDisabled
+                              ? actions.isCommentDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           multiline
                           minRows={4.0}
                           error={!!validation.get('comment')}
@@ -221,6 +263,9 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                                 <MdiIcon path="text_fields" />
                               </InputAdornment>
                             ),
+                          }}
+                          inputProps={{
+                            maxlength: 16384,
                           }}
                         />
                       </Grid>
@@ -245,7 +290,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
 
                       <Grid item xs={12} sm={12} md={1.0}>
                         <NumericInput
-                          required={false}
+                          required={actions?.isUpVotesRequired ? actions.isUpVotesRequired(data, editMode) : false}
                           name="upVotes"
                           id="User/(esm/_3kpuMH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
                           label={t('service.Comment.Comment_View_Edit.upVotes', { defaultValue: '' }) as string}
@@ -255,7 +300,11 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isUpVotesDisabled
+                              ? actions.isUpVotesDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('upVotes')}
                           helperText={validation.get('upVotes')}
                           onValueChange={(values, sourceInfo) => {
@@ -299,7 +348,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
 
                       <Grid item xs={12} sm={12} md={1.0}>
                         <NumericInput
-                          required={false}
+                          required={actions?.isDownVotesRequired ? actions.isDownVotesRequired(data, editMode) : false}
                           name="downVotes"
                           id="User/(esm/_3k2igH4bEe2j59SYy0JH0Q)/NumericTypeVisualInput"
                           label={t('service.Comment.Comment_View_Edit.downVotes', { defaultValue: '' }) as string}
@@ -309,7 +358,11 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isDownVotesDisabled
+                              ? actions.isDownVotesDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('downVotes')}
                           helperText={validation.get('downVotes')}
                           onValueChange={(values, sourceInfo) => {

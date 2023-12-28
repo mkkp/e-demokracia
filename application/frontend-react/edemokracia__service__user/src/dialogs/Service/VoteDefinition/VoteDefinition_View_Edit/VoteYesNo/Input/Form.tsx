@@ -32,6 +32,11 @@ export type YesNoVoteInputYesNoVoteInput_FormDialogActionsExtended = YesNoVoteIn
     onSubmit: (result?: YesNoVoteInputStored) => Promise<void>,
     onClose: () => Promise<void>,
   ) => Promise<void>;
+  postGetTemplateAction?: (
+    ownerData: any,
+    data: YesNoVoteInput,
+    storeDiff: (attributeName: keyof YesNoVoteInput, value: any) => void,
+  ) => Promise<void>;
 };
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_VOTE_YES_NO_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
@@ -204,6 +209,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoIn
       setIsLoading(true);
       const result = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteYesNo();
       setData(result as YesNoVoteInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof YesNoVoteInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

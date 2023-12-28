@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -57,13 +59,52 @@ import { ServiceUserProfileUserProfile_View_EditResidentCountyComponent } from '
 import type { ServiceUserProfileUserProfile_View_EditResidentDistrictComponentActionDefinitions } from './components/ServiceUserProfileUserProfile_View_EditResidentDistrictComponent';
 import { ServiceUserProfileUserProfile_View_EditResidentDistrictComponent } from './components/ServiceUserProfileUserProfile_View_EditResidentDistrictComponent';
 
+export const SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserProfileUserProfile_View_EditContainerHook';
+export type ServiceUserProfileUserProfile_View_EditContainerHook = (
+  data: ServiceUserProfileStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void,
+) => ServiceUserProfileUserProfile_View_EditActionDefinitions;
+
 export interface ServiceUserProfileUserProfile_View_EditActionDefinitions
   extends ServiceUserProfileUserProfile_View_EditActivityCitiesComponentActionDefinitions,
     ServiceUserProfileUserProfile_View_EditActivityCountiesComponentActionDefinitions,
     ServiceUserProfileUserProfile_View_EditActivityDistrictsComponentActionDefinitions,
     ServiceUserProfileUserProfile_View_EditResidentCityComponentActionDefinitions,
     ServiceUserProfileUserProfile_View_EditResidentCountyComponentActionDefinitions,
-    ServiceUserProfileUserProfile_View_EditResidentDistrictComponentActionDefinitions {}
+    ServiceUserProfileUserProfile_View_EditResidentDistrictComponentActionDefinitions {
+  isEmailRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isEmailDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isPhoneRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isPhoneDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isFirstNameRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isFirstNameDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isLastNameRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isLastNameDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isUserNameRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isUserNameDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceUserProfileUserProfile_View_EditProps {
   refreshCounter: number;
@@ -83,11 +124,10 @@ export interface ServiceUserProfileUserProfile_View_EditProps {
 // XMIID: User/(esm/_1QevwFvQEe6jm_SkPSYEYw)/TransferObjectViewPageContainer
 // Name: service::UserProfile::UserProfile_View_Edit
 export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUserProfileUserProfile_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -98,6 +138,10 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -107,6 +151,13 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceUserProfileUserProfile_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceUserProfileUserProfile_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -147,7 +198,7 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                     >
                       <Grid item xs={12} sm={12} md={4.0}>
                         <TextField
-                          required={false}
+                          required={actions?.isUserNameRequired ? actions.isUserNameRequired(data, editMode) : false}
                           name="userName"
                           id="User/(esm/_WRx7kVvTEe6jm_SkPSYEYw)/StringTypeTextInput"
                           label={
@@ -160,7 +211,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isUserNameDisabled
+                              ? actions.isUserNameDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('userName')}
                           helperText={validation.get('userName')}
                           onChange={(event) => {
@@ -176,6 +231,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                               </InputAdornment>
                             ),
                           }}
+                          inputProps={{
+                            maxlength: 255,
+                          }}
                         />
                       </Grid>
 
@@ -190,7 +248,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                         >
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={true}
+                              required={
+                                actions?.isFirstNameRequired ? actions.isFirstNameRequired(data, editMode) : true
+                              }
                               name="firstName"
                               id="User/(esm/_AEEGw1vUEe6jm_SkPSYEYw)/StringTypeTextInput"
                               autoFocus
@@ -204,7 +264,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': true,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isFirstNameDisabled
+                                  ? actions.isFirstNameDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('firstName')}
                               helperText={validation.get('firstName')}
                               onChange={(event) => {
@@ -220,12 +284,15 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                   </InputAdornment>
                                 ),
                               }}
+                              inputProps={{
+                                maxlength: 255,
+                              }}
                             />
                           </Grid>
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={true}
+                              required={actions?.isLastNameRequired ? actions.isLastNameRequired(data, editMode) : true}
                               name="lastName"
                               id="User/(esm/_AEEGxFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
                               label={
@@ -238,7 +305,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': true,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isLastNameDisabled
+                                  ? actions.isLastNameDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('lastName')}
                               helperText={validation.get('lastName')}
                               onChange={(event) => {
@@ -253,6 +324,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                     <MdiIcon path="text_fields" />
                                   </InputAdornment>
                                 ),
+                              }}
+                              inputProps={{
+                                maxlength: 255,
                               }}
                             />
                           </Grid>
@@ -270,7 +344,7 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                         >
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={true}
+                              required={actions?.isEmailRequired ? actions.isEmailRequired(data, editMode) : true}
                               name="email"
                               id="User/(esm/_AEEGwFvUEe6jm_SkPSYEYw)/StringTypeTextInput"
                               label={
@@ -283,7 +357,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': true,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isEmailDisabled
+                                  ? actions.isEmailDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('email')}
                               helperText={validation.get('email')}
                               onChange={(event) => {
@@ -299,12 +377,15 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                   </InputAdornment>
                                 ),
                               }}
+                              inputProps={{
+                                maxlength: 255,
+                              }}
                             />
                           </Grid>
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <TextField
-                              required={false}
+                              required={actions?.isPhoneRequired ? actions.isPhoneRequired(data, editMode) : false}
                               name="phone"
                               id="User/(esm/_AEEGwVvUEe6jm_SkPSYEYw)/StringTypeTextInput"
                               label={
@@ -317,7 +398,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                 'JUDO-viewMode': !editMode,
                                 'JUDO-required': false,
                               })}
-                              disabled={isLoading}
+                              disabled={
+                                actions?.isPhoneDisabled
+                                  ? actions.isPhoneDisabled(data, editMode, isLoading)
+                                  : isLoading
+                              }
                               error={!!validation.get('phone')}
                               helperText={validation.get('phone')}
                               onChange={(event) => {
@@ -332,6 +417,9 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                                     <MdiIcon path="phone" />
                                   </InputAdornment>
                                 ),
+                              }}
+                              inputProps={{
+                                maxlength: 20,
                               }}
                             />
                           </Grid>
@@ -381,9 +469,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
                         >
                           <Grid item xs={12} sm={12} md={4.0}>
                             <ServiceUserProfileUserProfile_View_EditResidentCountyComponent
-                              disabled={false || !isFormUpdateable()}
+                              disabled={false}
+                              readOnly={false || !isFormUpdateable()}
                               ownerData={data}
                               editMode={editMode}
+                              isLoading={isLoading}
                               storeDiff={storeDiff}
                               validationError={validation.get('residentCounty')}
                               actions={actions}
@@ -393,9 +483,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <ServiceUserProfileUserProfile_View_EditResidentCityComponent
-                              disabled={false || !isFormUpdateable()}
+                              disabled={false}
+                              readOnly={false || !isFormUpdateable()}
                               ownerData={data}
                               editMode={editMode}
+                              isLoading={isLoading}
                               storeDiff={storeDiff}
                               validationError={validation.get('residentCity')}
                               actions={actions}
@@ -405,9 +497,11 @@ export default function ServiceUserProfileUserProfile_View_Edit(props: ServiceUs
 
                           <Grid item xs={12} sm={12} md={4.0}>
                             <ServiceUserProfileUserProfile_View_EditResidentDistrictComponent
-                              disabled={false || !isFormUpdateable()}
+                              disabled={false}
+                              readOnly={false || !isFormUpdateable()}
                               ownerData={data}
                               editMode={editMode}
+                              isLoading={isLoading}
                               storeDiff={storeDiff}
                               validationError={validation.get('residentDistrict')}
                               actions={actions}

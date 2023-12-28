@@ -163,7 +163,7 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
   }, [data]);
 
   const pageQueryCustomizer: ServiceCityQueryCustomizer = {
-    _mask: '{name,districts{name}}',
+    _mask: '{name,representation,districts{name}}',
   };
 
   // Pandino Action overrides

@@ -15,43 +15,39 @@ import { useParams } from 'react-router-dom';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueIssue_TableAddSelectorDialogActions } from '~/containers/Service/Issue/Issue_Table/AddSelector/ServiceIssueIssue_TableAddSelectorDialogContainer';
+import type { ServiceCityCity_TableSetSelectorDialogActions } from '~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
-  IssueScope,
-  IssueStatus,
-  ServiceIssue,
-  ServiceIssueQueryCustomizer,
-  ServiceIssueStored,
-  ServiceUserIssues,
-  ServiceUserIssuesStored,
-  VoteType,
+  ServiceCity,
+  ServiceCityQueryCustomizer,
+  ServiceCityStored,
+  ServiceCreateIssueInput,
+  ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceUserIssuesServiceForActiveIssuesInActivityCountiesImpl } from '~/services/data-axios/ServiceUserIssuesServiceForActiveIssuesInActivityCountiesImpl';
+import { ServiceCreateIssueInputServiceForCityImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForCityImpl';
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceIssueIssue_TableAddSelectorDialogActionsExtended =
-  ServiceIssueIssue_TableAddSelectorDialogActions & {};
+export type ServiceCityCity_TableSetSelectorDialogActionsExtended = ServiceCityCity_TableSetSelectorDialogActions & {};
 
-export const SERVICE_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueIssue_TableAddSelectorActionsHook';
-export type ServiceIssueIssue_TableAddSelectorActionsHook = (
+export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCityCity_TableSetSelectorActionsHook';
+export type ServiceCityCity_TableSetSelectorActionsHook = (
   ownerData: any,
-  data: ServiceIssueStored[],
+  data: ServiceCityStored[],
   editMode: boolean,
-  selectionDiff: ServiceIssueStored[],
-) => ServiceIssueIssue_TableAddSelectorDialogActionsExtended;
+  selectionDiff: ServiceCityStored[],
+) => ServiceCityCity_TableSetSelectorDialogActionsExtended;
 
-export const useServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage = (): ((
+export const useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage = (): ((
   ownerData: any,
-  alreadySelected: ServiceIssueStored[],
-) => Promise<DialogResult<ServiceIssueStored[]>>) => {
+  alreadySelected: ServiceCityStored[],
+) => Promise<DialogResult<ServiceCityStored[]>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any, alreadySelected: ServiceIssueStored[]) =>
+  return (ownerData: any, alreadySelected: ServiceCityStored[]) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -65,7 +61,7 @@ export const useServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage =
           }
         },
         children: (
-          <ServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage
+          <ServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
             onClose={async () => {
@@ -87,27 +83,27 @@ export const useServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage =
     });
 };
 
-const ServiceIssueIssue_TableAddSelectorDialogContainer = lazy(
-  () => import('~/containers/Service/Issue/Issue_Table/AddSelector/ServiceIssueIssue_TableAddSelectorDialogContainer'),
+const ServiceCityCity_TableSetSelectorDialogContainer = lazy(
+  () => import('~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelectorDialogContainer'),
 );
 
-export interface ServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPageProps {
+export interface ServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPageProps {
   ownerData: any;
-  alreadySelected: ServiceIssueStored[];
+  alreadySelected: ServiceCityStored[];
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueStored[]) => Promise<void>;
+  onSubmit: (result?: ServiceCityStored[]) => Promise<void>;
 }
 
-// XMIID: User/(esm/_aMsB4FrWEe6gN-oVBDDIOQ)/RelationFeatureTableAddSelectorPageDefinition
-// Name: service::UserIssues::activeIssuesInActivityCounties::AddSelectorPage
-export default function ServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage(
-  props: ServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPageProps,
+// XMIID: User/(esm/_TXiwANvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition
+// Name: service::CreateIssueInput::CreateIssueInput_Form::issue::city::LinkSetSelectorPage
+export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
+  props: ServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPageProps,
 ) {
   const { ownerData, alreadySelected, onClose, onSubmit } = props;
 
   // Services
-  const serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl = useMemo(
-    () => new ServiceUserIssuesServiceForActiveIssuesInActivityCountiesImpl(judoAxiosProvider),
+  const serviceCreateIssueInputServiceForCityImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForCityImpl(judoAxiosProvider),
     [],
   );
 
@@ -125,14 +121,14 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesAddSelect
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
-  const [data, setData] = useState<ServiceIssueStored[]>([]);
-  const [selectionDiff, setSelectionDiff] = useState<ServiceIssueStored[]>([]);
+  const [data, setData] = useState<ServiceCityStored[]>([]);
+  const [selectionDiff, setSelectionDiff] = useState<ServiceCityStored[]>([]);
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceIssueIssue_TableAddSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+  const { service: customActionsHook } = useTrackService<ServiceCityCity_TableSetSelectorActionsHook>(
+    `(${OBJECTCLASS}=${SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
-  const customActions: ServiceIssueIssue_TableAddSelectorDialogActionsExtended | undefined = customActionsHook?.(
+  const customActions: ServiceCityCity_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
     ownerData,
     data,
     editMode,
@@ -142,17 +138,17 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesAddSelect
   // Dialog hooks
 
   // Calculated section
-  const title: string = t('service.Issue.Issue_Table.AddSelector', { defaultValue: 'Issue Table' });
+  const title: string = t('service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
 
   // Private actions
   const submit = async () => {};
 
   // Action section
-  const addAction = async (selected: ServiceIssueStored[]) => {
-    onSubmit(selected);
-  };
   const backAction = async () => {
     onClose();
+  };
+  const setAction = async (selected: ServiceCityStored[]) => {
+    onSubmit(selected);
   };
   const filterAction = async (
     id: string,
@@ -165,21 +161,18 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesAddSelect
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
+  const selectorRangeAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.getRangeForActiveIssuesInActivityCounties(
-        ownerData,
-        queryCustomizer,
-      );
+      return serviceCreateIssueInputServiceForCityImpl.getRangeForCity(ownerData, queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
     }
   };
 
-  const actions: ServiceIssueIssue_TableAddSelectorDialogActions = {
-    addAction,
+  const actions: ServiceCityCity_TableSetSelectorDialogActions = {
     backAction,
+    setAction,
     filterAction,
     selectorRangeAction,
     ...(customActions ?? {}),
@@ -189,11 +182,11 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesAddSelect
 
   return (
     <div
-      id="User/(esm/_aMsB4FrWEe6gN-oVBDDIOQ)/RelationFeatureTableAddSelectorPageDefinition"
-      data-page-name="service::UserIssues::activeIssuesInActivityCounties::AddSelectorPage"
+      id="User/(esm/_TXiwANvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+      data-page-name="service::CreateIssueInput::CreateIssueInput_Form::issue::city::LinkSetSelectorPage"
     >
       <Suspense>
-        <ServiceIssueIssue_TableAddSelectorDialogContainer
+        <ServiceCityCity_TableSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           title={title}

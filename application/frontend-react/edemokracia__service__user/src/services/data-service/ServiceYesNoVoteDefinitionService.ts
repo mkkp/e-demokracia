@@ -44,11 +44,6 @@ export interface ServiceYesNoVoteDefinitionService {
     owner?: JudoIdentifiable<ServiceYesNoVoteDefinition> | ServiceYesNoVoteDefinition,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
-  setIssue(
-    owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void>;
-  unsetIssue(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

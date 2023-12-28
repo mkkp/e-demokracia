@@ -57,15 +57,6 @@ import type { JudoIdentifiable } from '../data-api/common';
  */
 export interface ServiceRatingVoteDefinitionServiceForIssue {
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored>;
-  getRangeForIssue(
-    owner: JudoIdentifiable<ServiceRatingVoteDefinition> | ServiceRatingVoteDefinition,
-    queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<Array<ServiceIssueStored>>;
-  setIssue(
-    owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void>;
-  unsetIssue(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
   listAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,

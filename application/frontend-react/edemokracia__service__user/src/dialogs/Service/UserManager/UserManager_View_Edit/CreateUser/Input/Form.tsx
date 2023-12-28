@@ -36,6 +36,11 @@ export type ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended =
       onSubmit: (result?: ServiceServiceUserStored) => Promise<void>,
       onClose: () => Promise<void>,
     ) => Promise<void>;
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: ServiceCreateUserInput,
+      storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void,
+    ) => Promise<void>;
   };
 
 export const SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CREATE_USER_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
@@ -216,6 +221,12 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
       setIsLoading(true);
       const result = await serviceUserManagerServiceImpl.getTemplateOnCreateUser();
       setData(result as ServiceCreateUserInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceCreateUserInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

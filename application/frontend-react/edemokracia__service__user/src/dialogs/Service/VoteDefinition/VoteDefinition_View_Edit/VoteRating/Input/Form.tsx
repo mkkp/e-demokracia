@@ -28,6 +28,11 @@ export type RatingVoteInputRatingVoteInput_FormDialogActionsExtended =
       onSubmit: (result?: RatingVoteInputStored) => Promise<void>,
       onClose: () => Promise<void>,
     ) => Promise<void>;
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: RatingVoteInput,
+      storeDiff: (attributeName: keyof RatingVoteInput, value: any) => void,
+    ) => Promise<void>;
   };
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_VOTE_RATING_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
@@ -200,6 +205,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
       setIsLoading(true);
       const result = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteRating();
       setData(result as RatingVoteInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof RatingVoteInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

@@ -27,7 +27,13 @@ import { UserServiceForAdminIssueTypesImpl } from '~/services/data-axios/UserSer
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceIssueTypeIssueType_FormDialogActionsExtended = ServiceIssueTypeIssueType_FormDialogActions & {};
+export type ServiceIssueTypeIssueType_FormDialogActionsExtended = ServiceIssueTypeIssueType_FormDialogActions & {
+  postGetTemplateAction?: (
+    ownerData: any,
+    data: ServiceIssueType,
+    storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+  ) => Promise<void>;
+};
 
 export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceIssueTypeIssueType_FormActionsHook';
@@ -194,6 +200,12 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
       setIsLoading(true);
       const result = await userServiceForAdminIssueTypesImpl.getTemplate();
       setData(result as ServiceIssueTypeStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceIssueTypeStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

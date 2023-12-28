@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -38,6 +40,14 @@ import {
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
 
+export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceVoteDefinitionVoteDefinition_View_EditContainerHook';
+export type ServiceVoteDefinitionVoteDefinition_View_EditContainerHook = (
+  data: ServiceVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void,
+) => ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions;
+
 export interface ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions {
   issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
@@ -45,6 +55,44 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions 
   voteSelectAnswerAction?: () => Promise<void>;
   voteYesNoAbstainAction?: () => Promise<void>;
   voteYesNoAction?: () => Promise<void>;
+  isCloseAtRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isCloseAtDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isCreatedRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isCreatedDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isDescriptionRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isStatusRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isStatusDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isRatingvoteHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isVoteRatingHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isSelectanswervoteHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isVoteSelectAnswerHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isYesnoabstainvoteHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isVoteYesNoAbstainHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isYesnovoteHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  isVoteYesNoHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
 }
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditProps {
@@ -67,11 +115,10 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditProps {
 export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
   props: ServiceVoteDefinitionVoteDefinition_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -82,6 +129,10 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -91,6 +142,13 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceVoteDefinitionVoteDefinition_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -109,7 +167,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                 <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <TextField
-                      required={true}
+                      required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                       name="title"
                       id="User/(esm/_T5STEI4jEe29qs15q2b6yw)/StringTypeTextInput"
                       autoFocus
@@ -121,7 +179,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                         'JUDO-viewMode': !editMode,
                         'JUDO-required': true,
                       })}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                      }
                       error={!!validation.get('title')}
                       helperText={validation.get('title')}
                       onChange={(event) => {
@@ -137,6 +197,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                           </InputAdornment>
                         ),
                       }}
+                      inputProps={{
+                        maxlength: 255,
+                      }}
                     />
                   </Grid>
 
@@ -151,7 +214,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                       slotProps={{
                         textField: {
                           id: 'User/(esm/_T5260I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                          required: true,
+                          required: actions?.isCloseAtRequired ? actions.isCloseAtRequired(data, editMode) : true,
                           helperText: validation.get('closeAt'),
                           error: !!validation.get('closeAt'),
                           InputProps: {
@@ -186,7 +249,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                       }
                       value={serviceDateToUiDate(data.closeAt ?? null)}
                       readOnly={false || !isFormUpdateable()}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isCloseAtDisabled ? actions.isCloseAtDisabled(data, editMode, isLoading) : isLoading
+                      }
                       onChange={(newValue: Date) => {
                         storeDiff('closeAt', newValue);
                       }}
@@ -195,7 +260,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
 
                   <Grid item xs={12} sm={12}>
                     <TextField
-                      required={true}
+                      required={actions?.isStatusRequired ? actions.isStatusRequired(data, editMode) : true}
                       name="status"
                       id="User/(esm/_T5rUoI4jEe29qs15q2b6yw)/EnumerationTypeCombo"
                       label={
@@ -208,7 +273,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                         'JUDO-viewMode': !editMode,
                         'JUDO-required': true,
                       })}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isStatusDisabled ? actions.isStatusDisabled(data, editMode, isLoading) : isLoading
+                      }
                       error={!!validation.get('status')}
                       helperText={validation.get('status')}
                       onChange={(event) => {
@@ -268,7 +335,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                       slotProps={{
                         textField: {
                           id: 'User/(esm/_T5a18I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput',
-                          required: false,
+                          required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : false,
                           helperText: validation.get('created'),
                           error: !!validation.get('created'),
                           InputProps: {
@@ -303,7 +370,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                       }
                       value={serviceDateToUiDate(data.created ?? null)}
                       readOnly={true || !isFormUpdateable()}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading
+                      }
                       onChange={(newValue: Date) => {
                         storeDiff('created', newValue);
                       }}
@@ -312,7 +381,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
 
                   <Grid item xs={12} sm={12}>
                     <TextField
-                      required={true}
+                      required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
                       name="description"
                       id="User/(esm/_T5jY0I4jEe29qs15q2b6yw)/StringTypeTextArea"
                       label={
@@ -325,7 +394,11 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                         'JUDO-viewMode': !editMode,
                         'JUDO-required': true,
                       })}
-                      disabled={isLoading}
+                      disabled={
+                        actions?.isDescriptionDisabled
+                          ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                          : isLoading
+                      }
                       multiline
                       minRows={4.0}
                       error={!!validation.get('description')}
@@ -342,6 +415,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                             <MdiIcon path="text_fields" />
                           </InputAdornment>
                         ),
+                      }}
+                      inputProps={{
+                        maxlength: 16384,
                       }}
                     />
                   </Grid>
@@ -364,7 +440,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     defaultValue: 'Yes / No vote',
                   }) as string,
                   disabled: !data.isYesNoType || isLoading,
-                  hidden: data.isNotYesNoType,
+                  hidden: actions?.isYesnovoteHidden ? actions?.isYesnovoteHidden(data, editMode) : data.isNotYesNoType,
                   nestedDataKeys: [],
                 },
                 {
@@ -374,7 +450,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     defaultValue: 'Yes / No / Abstain vote',
                   }) as string,
                   disabled: !data.isYesNoAbstainType || isLoading,
-                  hidden: data.isNotYesNoAbstainType,
+                  hidden: actions?.isYesnoabstainvoteHidden
+                    ? actions?.isYesnoabstainvoteHidden(data, editMode)
+                    : data.isNotYesNoAbstainType,
                   nestedDataKeys: [],
                 },
                 {
@@ -384,7 +462,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     defaultValue: 'Select answer vote',
                   }) as string,
                   disabled: !data.isSelectAnswerType || isLoading,
-                  hidden: data.isNotSelectAnswerType,
+                  hidden: actions?.isSelectanswervoteHidden
+                    ? actions?.isSelectanswervoteHidden(data, editMode)
+                    : data.isNotSelectAnswerType,
                   nestedDataKeys: [],
                 },
                 {
@@ -394,12 +474,14 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     defaultValue: 'Rating vote',
                   }) as string,
                   disabled: !data.isRatingType || isLoading,
-                  hidden: data.isNotRatingType,
+                  hidden: actions?.isRatingvoteHidden
+                    ? actions?.isRatingvoteHidden(data, editMode)
+                    : data.isNotRatingType,
                   nestedDataKeys: [],
                 },
               ]}
             >
-              {!data.isNotYesNoType && (
+              {(actions?.isYesnovoteHidden ? actions?.isYesnovoteHidden(data, editMode) : !data.isNotYesNoType) && (
                 <Grid item xs={12} sm={12}>
                   <Grid
                     id="User/(esm/_kxgNYI4jEe29qs15q2b6yw)/GroupVisualElement"
@@ -409,7 +491,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     justifyContent="flex-start"
                     spacing={2}
                   >
-                    {!data.isNotYesNoType && (
+                    {(actions?.isVoteYesNoHidden
+                      ? actions?.isVoteYesNoHidden(data, editMode)
+                      : !data.isNotYesNoType) && (
                       <Grid item xs={12} sm={12} md={4.0}>
                         <LoadingButton
                           id="User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormVisualElement"
@@ -436,7 +520,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                 </Grid>
               )}
 
-              {!data.isNotYesNoAbstainType && (
+              {(actions?.isYesnoabstainvoteHidden
+                ? actions?.isYesnoabstainvoteHidden(data, editMode)
+                : !data.isNotYesNoAbstainType) && (
                 <Grid item xs={12} sm={12}>
                   <Grid
                     id="User/(esm/_z_MfkI4jEe29qs15q2b6yw)/GroupVisualElement"
@@ -446,7 +532,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     justifyContent="flex-start"
                     spacing={2}
                   >
-                    {!data.isNotYesNoAbstainType && (
+                    {(actions?.isVoteYesNoAbstainHidden
+                      ? actions?.isVoteYesNoAbstainHidden(data, editMode)
+                      : !data.isNotYesNoAbstainType) && (
                       <Grid item xs={12} sm={12} md={4.0}>
                         <LoadingButton
                           id="User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormVisualElement"
@@ -473,7 +561,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                 </Grid>
               )}
 
-              {!data.isNotSelectAnswerType && (
+              {(actions?.isSelectanswervoteHidden
+                ? actions?.isSelectanswervoteHidden(data, editMode)
+                : !data.isNotSelectAnswerType) && (
                 <Grid item xs={12} sm={12}>
                   <Grid
                     id="User/(esm/_1tyvYI4jEe29qs15q2b6yw)/GroupVisualElement"
@@ -483,12 +573,14 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     justifyContent="flex-start"
                     spacing={2}
                   >
-                    {!data.isNotSelectAnswerType && <Grid item xs={12} sm={12} md={4.0}></Grid>}
+                    {(actions?.isVoteSelectAnswerHidden
+                      ? actions?.isVoteSelectAnswerHidden(data, editMode)
+                      : !data.isNotSelectAnswerType) && <Grid item xs={12} sm={12} md={4.0}></Grid>}
                   </Grid>
                 </Grid>
               )}
 
-              {!data.isNotRatingType && (
+              {(actions?.isRatingvoteHidden ? actions?.isRatingvoteHidden(data, editMode) : !data.isNotRatingType) && (
                 <Grid item xs={12} sm={12}>
                   <Grid
                     id="User/(esm/_31NH0I4jEe29qs15q2b6yw)/GroupVisualElement"
@@ -498,7 +590,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                     justifyContent="flex-start"
                     spacing={2}
                   >
-                    {!data.isNotRatingType && (
+                    {(actions?.isVoteRatingHidden
+                      ? actions?.isVoteRatingHidden(data, editMode)
+                      : !data.isNotRatingType) && (
                       <Grid item xs={12} sm={12} md={4.0}>
                         <LoadingButton
                           id="User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormVisualElement"

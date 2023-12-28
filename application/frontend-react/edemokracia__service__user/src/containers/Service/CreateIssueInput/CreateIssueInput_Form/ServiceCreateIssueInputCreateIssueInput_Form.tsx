@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -53,11 +55,44 @@ import { ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent } from '.
 import type { ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions } from './components/ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent';
 import { ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent } from './components/ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent';
 
+export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceCreateIssueInputCreateIssueInput_FormContainerHook';
+export type ServiceCreateIssueInputCreateIssueInput_FormContainerHook = (
+  data: ServiceCreateIssueInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void,
+) => ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions;
+
 export interface ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions
   extends ServiceCreateIssueInputCreateIssueInput_FormCityComponentActionDefinitions,
     ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActionDefinitions,
     ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentActionDefinitions,
-    ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions {}
+    ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions {
+  isDebateCloseAtRequired?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+  ) => boolean;
+  isDebateCloseAtDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isDescriptionRequired?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+  ) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (data: ServiceCreateIssueInput | ServiceCreateIssueInputStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormProps {
   refreshCounter: number;
@@ -79,11 +114,10 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormProps {
 export default function ServiceCreateIssueInputCreateIssueInput_Form(
   props: ServiceCreateIssueInputCreateIssueInput_FormProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -94,6 +128,10 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -103,6 +141,13 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceCreateIssueInputCreateIssueInput_FormContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -126,9 +171,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
             >
               <Grid item xs={12} sm={12}>
                 <ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent
-                  disabled={false || !isFormUpdateable()}
+                  disabled={false}
+                  readOnly={false || !isFormUpdateable()}
                   ownerData={data}
                   editMode={editMode}
+                  isLoading={isLoading}
                   storeDiff={storeDiff}
                   validationError={validation.get('issueType')}
                   actions={actions}
@@ -138,7 +185,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <TextField
-                  required={true}
+                  required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                   name="title"
                   id="User/(esm/_DenhMI1DEe2VSOmaAz6G9Q)/StringTypeTextInput"
                   autoFocus
@@ -148,7 +195,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  disabled={isLoading}
+                  disabled={actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading}
                   error={!!validation.get('title')}
                   helperText={validation.get('title')}
                   onChange={(event) => {
@@ -164,6 +211,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                       </InputAdornment>
                     ),
                   }}
+                  inputProps={{
+                    maxlength: 255,
+                  }}
                 />
               </Grid>
 
@@ -178,7 +228,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   slotProps={{
                     textField: {
                       id: 'User/(esm/_kPIZMOMfEe2Bgcx6em3jZg)/TimestampTypeDateTimeInput',
-                      required: true,
+                      required: actions?.isDebateCloseAtRequired
+                        ? actions.isDebateCloseAtRequired(data, editMode)
+                        : true,
                       helperText: validation.get('debateCloseAt'),
                       error: !!validation.get('debateCloseAt'),
                       InputProps: {
@@ -213,7 +265,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   }
                   value={serviceDateToUiDate(data.debateCloseAt ?? null)}
                   readOnly={false || !isFormUpdateable()}
-                  disabled={isLoading}
+                  disabled={
+                    actions?.isDebateCloseAtDisabled
+                      ? actions.isDebateCloseAtDisabled(data, editMode, isLoading)
+                      : isLoading
+                  }
                   onChange={(newValue: Date) => {
                     storeDiff('debateCloseAt', newValue);
                   }}
@@ -222,7 +278,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
 
               <Grid item xs={12} sm={12}>
                 <TextField
-                  required={true}
+                  required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
                   name="description"
                   id="User/(esm/_Dekd4I1DEe2VSOmaAz6G9Q)/StringTypeTextArea"
                   label={
@@ -235,7 +291,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  disabled={isLoading}
+                  disabled={
+                    actions?.isDescriptionDisabled
+                      ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                      : isLoading
+                  }
                   multiline
                   minRows={4.0}
                   error={!!validation.get('description')}
@@ -253,14 +313,19 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                       </InputAdornment>
                     ),
                   }}
+                  inputProps={{
+                    maxlength: 16384,
+                  }}
                 />
               </Grid>
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <ServiceCreateIssueInputCreateIssueInput_FormCountyComponent
-                  disabled={false || !isFormUpdateable()}
+                  disabled={false}
+                  readOnly={false || !isFormUpdateable()}
                   ownerData={data}
                   editMode={editMode}
+                  isLoading={isLoading}
                   storeDiff={storeDiff}
                   validationError={validation.get('county')}
                   actions={actions}
@@ -270,9 +335,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <ServiceCreateIssueInputCreateIssueInput_FormCityComponent
-                  disabled={false || !isFormUpdateable()}
+                  disabled={false}
+                  readOnly={false || !isFormUpdateable()}
                   ownerData={data}
                   editMode={editMode}
+                  isLoading={isLoading}
                   storeDiff={storeDiff}
                   validationError={validation.get('city')}
                   actions={actions}
@@ -282,9 +349,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent
-                  disabled={false || !isFormUpdateable()}
+                  disabled={false}
+                  readOnly={false || !isFormUpdateable()}
                   ownerData={data}
                   editMode={editMode}
+                  isLoading={isLoading}
                   storeDiff={storeDiff}
                   validationError={validation.get('district')}
                   actions={actions}

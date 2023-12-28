@@ -79,36 +79,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsGlobal(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsGlobal/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsGlobal(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsGlobal/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -246,36 +216,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
 
     return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInActivityCities(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCities/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInActivityCities(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCities/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
   }
 
   /**
@@ -419,36 +359,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInActivityCounties(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCounties/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInActivityCounties(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCounties/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -586,36 +496,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
 
     return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInActivityDistricts(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityDistricts/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInActivityDistricts(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityDistricts/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
   }
 
   /**
@@ -759,36 +639,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInResidentCity(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCity/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInResidentCity(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCity/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -929,36 +779,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
   }
 
   /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInResidentCounty(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCounty/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInResidentCounty(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCounty/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -1096,36 +916,6 @@ export class ServiceUserVoteDefinitionServiceImpl extends JudoAxiosService imple
     });
 
     return response.data;
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInResidentDistrict(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentDistrict/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInResidentDistrict(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentDistrict/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
   }
 
   /**

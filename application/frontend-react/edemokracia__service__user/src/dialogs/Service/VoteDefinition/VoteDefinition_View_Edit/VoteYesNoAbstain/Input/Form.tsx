@@ -33,6 +33,11 @@ export type YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActionsExtended
       onSubmit: (result?: YesNoAbstainVoteInputStored) => Promise<void>,
       onClose: () => Promise<void>,
     ) => Promise<void>;
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: YesNoAbstainVoteInput,
+      storeDiff: (attributeName: keyof YesNoAbstainVoteInput, value: any) => void,
+    ) => Promise<void>;
   };
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_VOTE_YES_NO_ABSTAIN_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
@@ -206,6 +211,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAb
       setIsLoading(true);
       const result = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteYesNoAbstain();
       setData(result as YesNoAbstainVoteInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof YesNoAbstainVoteInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

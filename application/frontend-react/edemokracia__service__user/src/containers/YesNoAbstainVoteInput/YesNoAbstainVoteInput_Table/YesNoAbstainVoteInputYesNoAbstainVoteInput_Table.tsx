@@ -14,9 +14,11 @@ import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,6 +30,11 @@ import {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
+
+export const YES_NO_ABSTAIN_VOTE_INPUT_YES_NO_ABSTAIN_VOTE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'YesNoAbstainVoteInputYesNoAbstainVoteInput_TableContainerHook';
+export type YesNoAbstainVoteInputYesNoAbstainVoteInput_TableContainerHook =
+  () => YesNoAbstainVoteInputYesNoAbstainVoteInput_TableActionDefinitions;
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_TableActionDefinitions {}
 
@@ -41,11 +48,23 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_TableProps {
 export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Table(
   props: YesNoAbstainVoteInputYesNoAbstainVoteInput_TableProps,
 ) {
+  // Container props
+  const { refreshCounter, actions: pageActions } = props;
+
+  // Container hooks
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { refreshCounter, actions } = props;
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
+
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<YesNoAbstainVoteInputYesNoAbstainVoteInput_TableContainerHook>(
+      `(${OBJECTCLASS}=${YES_NO_ABSTAIN_VOTE_INPUT_YES_NO_ABSTAIN_VOTE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: YesNoAbstainVoteInputYesNoAbstainVoteInput_TableActionDefinitions =
+    customContainerHook?.() || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

@@ -25,6 +25,12 @@ export interface ServiceIssueCategoryIssueCategory_View_EditOwnerComponentAction
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
+  isOwnerRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
+  isOwnerDisabled?: (
+    data: ServiceIssueCategory | ServiceIssueCategoryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceIssueCategoryIssueCategory_View_EditOwnerComponentProps {
@@ -34,7 +40,9 @@ export interface ServiceIssueCategoryIssueCategory_View_EditOwnerComponentProps 
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
@@ -42,7 +50,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditOwnerComponentProps 
 export function ServiceIssueCategoryIssueCategory_View_EditOwnerComponent(
   props: ServiceIssueCategoryIssueCategory_View_EditOwnerComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -51,12 +59,13 @@ export function ServiceIssueCategoryIssueCategory_View_EditOwnerComponent(
       id="User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.IssueCategory.IssueCategory_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isOwnerRequired ? actions.isOwnerRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="account" />}
-      disabled={disabled}
+      disabled={actions?.isOwnerDisabled ? actions.isOwnerDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {

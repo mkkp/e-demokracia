@@ -13,9 +13,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -52,6 +54,14 @@ import { ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefiniti
 import type { ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentActionDefinitions } from './components/ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent';
 import { ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent } from './components/ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent';
 
+export const SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook';
+export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook = (
+  data: ServiceUserVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceUserVoteDefinition, value: any) => void,
+) => ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions;
+
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions
   extends ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponentActionDefinitions,
     ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityCitiesComponentActionDefinitions,
@@ -82,11 +92,10 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditProps {
 export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
   props: ServiceUserVoteDefinitionUserVoteDefinition_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -97,6 +106,10 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -106,6 +119,14 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,7 +31,18 @@ import { NumericInput } from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
 
-export interface RatingVoteInputRatingVoteInput_FormActionDefinitions {}
+export const RATING_VOTE_INPUT_RATING_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'RatingVoteInputRatingVoteInput_FormContainerHook';
+export type RatingVoteInputRatingVoteInput_FormContainerHook = (
+  data: RatingVoteInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof RatingVoteInput, value: any) => void,
+) => RatingVoteInputRatingVoteInput_FormActionDefinitions;
+
+export interface RatingVoteInputRatingVoteInput_FormActionDefinitions {
+  isValueRequired?: (data: RatingVoteInput | RatingVoteInputStored, editMode?: boolean) => boolean;
+  isValueDisabled?: (data: RatingVoteInput | RatingVoteInputStored, editMode?: boolean, isLoading?: boolean) => boolean;
+}
 
 export interface RatingVoteInputRatingVoteInput_FormProps {
   refreshCounter: number;
@@ -49,11 +62,10 @@ export interface RatingVoteInputRatingVoteInput_FormProps {
 // XMIID: User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer
 // Name: RatingVoteInput::RatingVoteInput_Form
 export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInputRatingVoteInput_FormProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -64,6 +76,10 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -73,6 +89,13 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<RatingVoteInputRatingVoteInput_FormContainerHook>(
+    `(${OBJECTCLASS}=${RATING_VOTE_INPUT_RATING_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: RatingVoteInputRatingVoteInput_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -87,7 +110,7 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
         >
           <Grid item xs={12} sm={12}>
             <NumericInput
-              required={false}
+              required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : false}
               name="value"
               id="User/(esm/_UNECcOSNEe20cv3f2msZXg)/NumericTypeVisualInput"
               autoFocus
@@ -98,7 +121,7 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={actions?.isValueDisabled ? actions.isValueDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('value')}
               helperText={validation.get('value')}
               onValueChange={(values, sourceInfo) => {

@@ -25,6 +25,12 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentA
   residentCountyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
+  isResidentCountyRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isResidentCountyDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentProps {
@@ -34,7 +40,9 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentP
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_fsW_olvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedLink
@@ -42,7 +50,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentP
 export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
   props: ServiceUserProfileUserProfile_View_EditResidentCountyComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -53,12 +61,15 @@ export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
         t('service.UserProfile.UserProfile_View_Edit.residentCounty', { defaultValue: 'Resident county' }) as string
       }
       labelList={[ownerData.residentCounty?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isResidentCountyRequired ? actions.isResidentCountyRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="castle" />}
-      disabled={disabled}
+      disabled={
+        actions?.isResidentCountyDisabled ? actions.isResidentCountyDisabled(ownerData, editMode, isLoading) : disabled
+      }
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentCounty) => {

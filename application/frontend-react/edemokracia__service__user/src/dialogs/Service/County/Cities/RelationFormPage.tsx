@@ -29,7 +29,13 @@ import { ServiceCountyServiceForCitiesImpl } from '~/services/data-axios/Service
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCityCity_FormDialogActionsExtended = ServiceCityCity_FormDialogActions & {};
+export type ServiceCityCity_FormDialogActionsExtended = ServiceCityCity_FormDialogActions & {
+  postGetTemplateAction?: (
+    ownerData: any,
+    data: ServiceCity,
+    storeDiff: (attributeName: keyof ServiceCity, value: any) => void,
+  ) => Promise<void>;
+};
 
 export const SERVICE_COUNTY_CITIES_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceCityCity_FormActionsHook';
 export type ServiceCityCity_FormActionsHook = (
@@ -190,6 +196,12 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
       setIsLoading(true);
       const result = await serviceCountyServiceForCitiesImpl.getTemplate();
       setData(result as ServiceCityStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceCityStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

@@ -44,11 +44,6 @@ export interface ServiceRatingVoteDefinitionService {
     owner?: JudoIdentifiable<ServiceRatingVoteDefinition> | ServiceRatingVoteDefinition,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
-  setIssue(
-    owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void>;
-  unsetIssue(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

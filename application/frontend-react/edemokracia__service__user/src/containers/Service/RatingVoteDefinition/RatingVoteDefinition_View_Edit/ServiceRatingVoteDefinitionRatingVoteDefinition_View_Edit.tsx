@@ -17,9 +17,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -51,6 +53,14 @@ import { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryC
 import type { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentActionDefinitions } from './components/ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponent';
 import { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponent } from './components/ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponent';
 
+export const SERVICE_RATING_VOTE_DEFINITION_RATING_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditContainerHook';
+export type ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditContainerHook = (
+  data: ServiceRatingVoteDefinitionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceRatingVoteDefinition, value: any) => void,
+) => ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditActionDefinitions;
+
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditActionDefinitions
   extends ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerComponentActionDefinitions,
     ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
@@ -64,6 +74,97 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
   removeFromFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
   voteAction?: () => Promise<void>;
   takeBackVoteForRatingVoteDefinitionAction?: () => Promise<void>;
+  isCloseAtRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isCloseAtDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isCreatedRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isCreatedDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isDescriptionRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isMaxRateValueRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isMaxRateValueDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isMinRateValueRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isMinRateValueDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isStatusRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isStatusDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isTitleDisabled?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isActivateHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isAddToFavoritesHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isCloseVoteHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isDeleteOrArchiveHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isRemoveFromFavoritesHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isTakeVoteHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isUserVoteHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditProps {
@@ -86,11 +187,10 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditProps 
 export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edit(
   props: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -101,6 +201,10 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -110,6 +214,14 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_RATING_VOTE_DEFINITION_RATING_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -285,7 +397,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                       justifyContent="flex-start"
                       spacing={2}
                     >
-                      {!data.userHasNoVoteEntry && (
+                      {(actions?.isUserVoteHidden
+                        ? actions?.isUserVoteHidden(data, editMode)
+                        : !data.userHasNoVoteEntry) && (
                         <Grid item xs={12} sm={12}>
                           <Grid
                             id="User/(esm/_NHnv0VsoEe6Mx9dH3yj5gQ)/GroupVisualElement"
@@ -332,9 +446,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
                                 <Grid item xs={12} sm={12} md={2.0}>
                                   <ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponent
-                                    disabled={true || !isFormUpdateable()}
+                                    disabled={true}
+                                    readOnly={true || !isFormUpdateable()}
                                     ownerData={data}
                                     editMode={editMode}
+                                    isLoading={isLoading}
                                     storeDiff={storeDiff}
                                     validationError={validation.get('userVoteEntry')}
                                     actions={actions}
@@ -347,7 +463,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                         </Grid>
                       )}
 
-                      {!data.userHasVoteEntry && (
+                      {(actions?.isTakeVoteHidden
+                        ? actions?.isTakeVoteHidden(data, editMode)
+                        : !data.userHasVoteEntry) && (
                         <Grid item xs={12} sm={12}>
                           <Grid
                             id="User/(esm/_NHnv11soEe6Mx9dH3yj5gQ)/GroupVisualElement"
@@ -403,7 +521,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                     >
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required={true}
+                          required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_NHnIwlsoEe6Mx9dH3yj5gQ)/StringTypeTextInput"
                           autoFocus
@@ -417,7 +535,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                          }
                           error={!!validation.get('title')}
                           helperText={validation.get('title')}
                           onChange={(event) => {
@@ -433,6 +553,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                               </InputAdornment>
                             ),
                           }}
+                          inputProps={{
+                            maxlength: 255,
+                          }}
                         />
                       </Grid>
 
@@ -447,7 +570,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                           slotProps={{
                             textField: {
                               id: 'User/(esm/_NHnIw1soEe6Mx9dH3yj5gQ)/TimestampTypeDateTimeInput',
-                              required: true,
+                              required: actions?.isCloseAtRequired ? actions.isCloseAtRequired(data, editMode) : true,
                               helperText: validation.get('closeAt'),
                               error: !!validation.get('closeAt'),
                               InputProps: {
@@ -482,7 +605,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                           }
                           value={serviceDateToUiDate(data.closeAt ?? null)}
                           readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isCloseAtDisabled
+                              ? actions.isCloseAtDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           onChange={(newValue: Date) => {
                             storeDiff('closeAt', newValue);
                           }}
@@ -491,7 +618,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
                       <Grid item xs={12} sm={12} md={4.0}>
                         <TextField
-                          required={true}
+                          required={actions?.isStatusRequired ? actions.isStatusRequired(data, editMode) : true}
                           name="status"
                           id="User/(esm/_NHnIxFsoEe6Mx9dH3yj5gQ)/EnumerationTypeCombo"
                           label={
@@ -504,7 +631,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isStatusDisabled ? actions.isStatusDisabled(data, editMode, isLoading) : isLoading
+                          }
                           error={!!validation.get('status')}
                           helperText={validation.get('status')}
                           onChange={(event) => {
@@ -566,7 +695,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                           slotProps={{
                             textField: {
                               id: 'User/(esm/_NHnI0lsoEe6Mx9dH3yj5gQ)/TimestampTypeDateTimeInput',
-                              required: true,
+                              required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
                               helperText: validation.get('created'),
                               error: !!validation.get('created'),
                               InputProps: {
@@ -601,7 +730,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                           }
                           value={serviceDateToUiDate(data.created ?? null)}
                           readOnly={false || !isFormUpdateable()}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isCreatedDisabled
+                              ? actions.isCreatedDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           onChange={(newValue: Date) => {
                             storeDiff('created', newValue);
                           }}
@@ -610,9 +743,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
                       <Grid item xs={12} sm={12} md={4.0}>
                         <ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerComponent
-                          disabled={false || !isFormUpdateable()}
+                          disabled={false}
+                          readOnly={false || !isFormUpdateable()}
                           ownerData={data}
                           editMode={editMode}
+                          isLoading={isLoading}
                           storeDiff={storeDiff}
                           validationError={validation.get('owner')}
                           actions={actions}
@@ -622,7 +757,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
                       <Grid item xs={12} sm={12}>
                         <TextField
-                          required={true}
+                          required={
+                            actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true
+                          }
                           name="description"
                           id="User/(esm/_NHnI01soEe6Mx9dH3yj5gQ)/StringTypeTextArea"
                           label={
@@ -635,7 +772,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': true,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isDescriptionDisabled
+                              ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           multiline
                           minRows={4.0}
                           error={!!validation.get('description')}
@@ -653,12 +794,17 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                               </InputAdornment>
                             ),
                           }}
+                          inputProps={{
+                            maxlength: 16384,
+                          }}
                         />
                       </Grid>
 
                       <Grid item xs={12} sm={12} md={2.0}>
                         <NumericInput
-                          required={false}
+                          required={
+                            actions?.isMaxRateValueRequired ? actions.isMaxRateValueRequired(data, editMode) : false
+                          }
                           name="maxRateValue"
                           id="User/(esm/_w1QQ81soEe6Mx9dH3yj5gQ)/NumericTypeVisualInput"
                           label={
@@ -672,7 +818,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isMaxRateValueDisabled
+                              ? actions.isMaxRateValueDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('maxRateValue')}
                           helperText={validation.get('maxRateValue')}
                           onValueChange={(values, sourceInfo) => {
@@ -695,7 +845,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
                       <Grid item xs={12} sm={12} md={2.0}>
                         <NumericInput
-                          required={false}
+                          required={
+                            actions?.isMinRateValueRequired ? actions.isMinRateValueRequired(data, editMode) : false
+                          }
                           name="minRateValue"
                           id="User/(esm/_w1QQ8lsoEe6Mx9dH3yj5gQ)/NumericTypeVisualInput"
                           label={
@@ -709,7 +861,11 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             'JUDO-viewMode': !editMode,
                             'JUDO-required': false,
                           })}
-                          disabled={isLoading}
+                          disabled={
+                            actions?.isMinRateValueDisabled
+                              ? actions.isMinRateValueDisabled(data, editMode, isLoading)
+                              : isLoading
+                          }
                           error={!!validation.get('minRateValue')}
                           helperText={validation.get('minRateValue')}
                           onValueChange={(values, sourceInfo) => {

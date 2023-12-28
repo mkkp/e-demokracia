@@ -14,9 +14,11 @@ import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -53,6 +55,14 @@ import { ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent } from
 import type { ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions } from './components/ServiceDashboardDashboard_View_EditVoteEntriesComponent';
 import { ServiceDashboardDashboard_View_EditVoteEntriesComponent } from './components/ServiceDashboardDashboard_View_EditVoteEntriesComponent';
 
+export const SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceDashboardDashboard_View_EditContainerHook';
+export type ServiceDashboardDashboard_View_EditContainerHook = (
+  data: ServiceDashboardStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceDashboard, value: any) => void,
+) => ServiceDashboardDashboard_View_EditActionDefinitions;
+
 export interface ServiceDashboardDashboard_View_EditActionDefinitions
   extends ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActionDefinitions,
     ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentActionDefinitions,
@@ -78,11 +88,10 @@ export interface ServiceDashboardDashboard_View_EditProps {
 // XMIID: User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewPageContainer
 // Name: service::Dashboard::Dashboard_View_Edit
 export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashboardDashboard_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -93,6 +102,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -102,6 +115,13 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceDashboardDashboard_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceDashboardDashboard_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

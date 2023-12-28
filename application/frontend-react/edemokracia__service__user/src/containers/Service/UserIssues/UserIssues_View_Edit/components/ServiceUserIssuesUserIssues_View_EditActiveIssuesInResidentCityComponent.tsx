@@ -64,10 +64,6 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponentActionDefinitions {
-  activeIssuesInResidentCityOpenAddSelectorAction?: () => Promise<void>;
-  activeIssuesInResidentCityBulkRemoveAction?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
   activeIssuesInResidentCityFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -86,7 +82,6 @@ export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCity
   activeIssuesInResidentCityCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesInResidentCityDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesInResidentCityRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  activeIssuesInResidentCityRemoveAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
   activeIssuesInResidentCityOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
@@ -118,7 +113,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'countyRepresentation', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'countyRepresentation', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -233,20 +228,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
   );
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInCity.activeIssuesInResidentCity.Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueStored) => !isFormUpdateable() || isLoading,
-      action: actions.activeIssuesInResidentCityRemoveAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCityRemoveAction!(rowData);
-          }
-        : undefined,
-    },
     {
       id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
       label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
@@ -530,11 +511,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
           actions.activeIssuesInResidentCityOpenPageAction
@@ -591,43 +567,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
                   {t(
                     'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInCity.activeIssuesInResidentCity.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.activeIssuesInResidentCityOpenAddSelectorAction && isFormUpdateable() ? (
-                <Button
-                  id="User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.activeIssuesInResidentCityOpenAddSelectorAction!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInCity.activeIssuesInResidentCity.Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.activeIssuesInResidentCityBulkRemoveAction && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.activeIssuesInResidentCityBulkRemoveAction!(
-                      selectedRows.current,
-                    );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeIssuesByResidentArea.tabBar.activeByResidentInCity.activeIssuesInResidentCity.BulkRemove',
-                    { defaultValue: 'Remove' },
                   )}
                 </Button>
               ) : null}

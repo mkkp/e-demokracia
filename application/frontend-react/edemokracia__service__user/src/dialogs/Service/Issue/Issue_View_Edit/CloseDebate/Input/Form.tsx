@@ -36,6 +36,11 @@ export type CloseDebateInputCloseDebateInput_FormDialogActionsExtended =
       onSubmit: (result?: CloseDebateOutputVoteDefinitionReferenceStored) => Promise<void>,
       onClose: () => Promise<void>,
     ) => Promise<void>;
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: CloseDebateInput,
+      storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void,
+    ) => Promise<void>;
   };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
@@ -220,6 +225,12 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
       setIsLoading(true);
       const result = await serviceIssueServiceImpl.getTemplateOnCloseDebate();
       setData(result as CloseDebateInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof CloseDebateInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

@@ -14,9 +14,11 @@ import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -24,6 +26,10 @@ import { useL10N } from '~/l10n/l10n-context';
 import { ServiceConParent, ServiceConParentQueryCustomizer, ServiceConParentStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
+
+export const SERVICE_CON_PARENT_CON_PARENT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceConParentConParent_TableContainerHook';
+export type ServiceConParentConParent_TableContainerHook = () => ServiceConParentConParent_TableActionDefinitions;
 
 export interface ServiceConParentConParent_TableActionDefinitions {}
 
@@ -35,11 +41,21 @@ export interface ServiceConParentConParent_TableProps {
 // XMIID: User/(esm/_VIHxsFV5Ee6uPON95HTfyQ)/TransferObjectTablePageContainer
 // Name: service::ConParent::ConParent_Table
 export default function ServiceConParentConParent_Table(props: ServiceConParentConParent_TableProps) {
+  // Container props
+  const { refreshCounter, actions: pageActions } = props;
+
+  // Container hooks
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { refreshCounter, actions } = props;
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
+
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceConParentConParent_TableContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_CON_PARENT_CON_PARENT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceConParentConParent_TableActionDefinitions = customContainerHook?.() || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

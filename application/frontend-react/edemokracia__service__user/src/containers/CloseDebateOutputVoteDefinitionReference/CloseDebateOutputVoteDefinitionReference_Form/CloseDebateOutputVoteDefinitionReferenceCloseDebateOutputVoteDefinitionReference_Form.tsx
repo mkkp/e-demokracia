@@ -16,9 +16,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -36,7 +38,25 @@ import {
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
 
-export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions {}
+export const CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormContainerHook';
+export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormContainerHook = (
+  data: CloseDebateOutputVoteDefinitionReferenceStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void,
+) => CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions;
+
+export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions {
+  isContextRequired?: (
+    data: CloseDebateOutputVoteDefinitionReference | CloseDebateOutputVoteDefinitionReferenceStored,
+    editMode?: boolean,
+  ) => boolean;
+  isContextDisabled?: (
+    data: CloseDebateOutputVoteDefinitionReference | CloseDebateOutputVoteDefinitionReferenceStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormProps {
   refreshCounter: number;
@@ -58,11 +78,10 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
 export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_Form(
   props: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -73,6 +92,10 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -82,6 +105,14 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormContainerHook>(
+      `(${OBJECTCLASS}=${CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -131,7 +162,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={false}
+              required={actions?.isContextRequired ? actions.isContextRequired(data, editMode) : false}
               name="context"
               id="User/(esm/_f6jpUFv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
               autoFocus
@@ -145,7 +176,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={actions?.isContextDisabled ? actions.isContextDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('context')}
               helperText={validation.get('context')}
               onChange={(event) => {
@@ -160,6 +191,9 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
                     <MdiIcon path="format-size" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                maxlength: 255,
               }}
             />
           </Grid>

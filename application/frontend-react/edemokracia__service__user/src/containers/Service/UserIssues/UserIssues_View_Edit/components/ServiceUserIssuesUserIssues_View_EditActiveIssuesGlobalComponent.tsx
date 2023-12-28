@@ -64,10 +64,6 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponentActionDefinitions {
-  activeIssuesGlobalOpenAddSelectorAction?: () => Promise<void>;
-  activeIssuesGlobalBulkRemoveAction?: (
-    selectedRows: ServiceIssueStored[],
-  ) => Promise<DialogResult<ServiceIssueStored[]>>;
   activeIssuesGlobalFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -84,7 +80,6 @@ export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponen
   activeIssuesGlobalCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesGlobalDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesGlobalRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  activeIssuesGlobalRemoveAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
   activeIssuesGlobalOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
 }
 
@@ -116,7 +111,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -207,20 +202,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
   );
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeGlobalIssues.activeGlobal.activeIssuesGlobal.Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueStored) => !isFormUpdateable() || isLoading,
-      action: actions.activeIssuesGlobalRemoveAction
-        ? async (rowData) => {
-            await actions.activeIssuesGlobalRemoveAction!(rowData);
-          }
-        : undefined,
-    },
     {
       id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
       label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
@@ -486,11 +467,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
           actions.activeIssuesGlobalOpenPageAction
@@ -547,43 +523,6 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesGlobalComponent
                   {t(
                     'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeGlobalIssues.activeGlobal.activeIssuesGlobal.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.activeIssuesGlobalOpenAddSelectorAction && isFormUpdateable() ? (
-                <Button
-                  id="User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.activeIssuesGlobalOpenAddSelectorAction!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeGlobalIssues.activeGlobal.activeIssuesGlobal.Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.activeIssuesGlobalBulkRemoveAction && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } = await actions.activeIssuesGlobalBulkRemoveAction!(
-                      selectedRows.current,
-                    );
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserIssues.UserIssues_View_Edit.root.tabBar.activeGlobalIssues.activeGlobal.activeIssuesGlobal.BulkRemove',
-                    { defaultValue: 'Remove' },
                   )}
                 </Button>
               ) : null}

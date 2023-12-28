@@ -25,6 +25,12 @@ export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponen
   residentDistrictAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
+  isResidentDistrictRequired?: (data: ServiceServiceUser | ServiceServiceUserStored, editMode?: boolean) => boolean;
+  isResidentDistrictDisabled?: (
+    data: ServiceServiceUser | ServiceServiceUserStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponentProps {
@@ -34,7 +40,9 @@ export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponen
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_I_CEgIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
@@ -42,7 +50,7 @@ export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponen
 export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent(
   props: ServiceServiceUserServiceUser_View_EditResidentDistrictComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -53,12 +61,17 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
         t('service.ServiceUser.ServiceUser_View_Edit.residentDistrict', { defaultValue: 'Resident district' }) as string
       }
       labelList={[ownerData.residentDistrict?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isResidentDistrictRequired ? actions.isResidentDistrictRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="home-city" />}
-      disabled={disabled}
+      disabled={
+        actions?.isResidentDistrictDisabled
+          ? actions.isResidentDistrictDisabled(ownerData, editMode, isLoading)
+          : disabled
+      }
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentDistrict) => {

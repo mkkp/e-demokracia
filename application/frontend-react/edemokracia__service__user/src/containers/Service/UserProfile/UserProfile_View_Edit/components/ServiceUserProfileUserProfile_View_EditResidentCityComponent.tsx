@@ -25,6 +25,12 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentAct
   residentCityAutocompleteRangeAction?: (
     queryCustomizer: ServiceCityQueryCustomizer,
   ) => Promise<Array<ServiceCityStored>>;
+  isResidentCityRequired?: (data: ServiceUserProfile | ServiceUserProfileStored, editMode?: boolean) => boolean;
+  isResidentCityDisabled?: (
+    data: ServiceUserProfile | ServiceUserProfileStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentProps {
@@ -34,7 +40,9 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentPro
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_fsW_pFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedLink
@@ -42,7 +50,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCityComponentPro
 export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
   props: ServiceUserProfileUserProfile_View_EditResidentCityComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -51,12 +59,15 @@ export function ServiceUserProfileUserProfile_View_EditResidentCityComponent(
       id="User/(esm/_fsW_pFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.UserProfile.UserProfile_View_Edit.residentCity', { defaultValue: 'Resident city' }) as string}
       labelList={[ownerData.residentCity?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isResidentCityRequired ? actions.isResidentCityRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="city" />}
-      disabled={disabled}
+      disabled={
+        actions?.isResidentCityDisabled ? actions.isResidentCityDisabled(ownerData, editMode, isLoading) : disabled
+      }
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentCity) => {

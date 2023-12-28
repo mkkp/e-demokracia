@@ -102,7 +102,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueAttachmentStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'link', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'link', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -150,7 +150,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
     headerName: t('service.IssueAttachment.IssueAttachment_Table.file', { defaultValue: 'File' }) as string,
     headerClassName: 'data-grid-column-header',
 
-    width: 230,
+    width: 300,
     type: 'string',
     filterable: false && false,
     sortable: false,

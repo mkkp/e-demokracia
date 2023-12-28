@@ -15,9 +15,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -35,7 +37,34 @@ import {
   ServiceIssueAttachmentStored,
 } from '~/services/data-api';
 
-export interface ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions {}
+export const SERVICE_ISSUE_ATTACHMENT_ISSUE_ATTACHMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueAttachmentIssueAttachment_View_EditContainerHook';
+export type ServiceIssueAttachmentIssueAttachment_View_EditContainerHook = (
+  data: ServiceIssueAttachmentStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void,
+) => ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions;
+
+export interface ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions {
+  isFileRequired?: (data: ServiceIssueAttachment | ServiceIssueAttachmentStored, editMode?: boolean) => boolean;
+  isFileDisabled?: (
+    data: ServiceIssueAttachment | ServiceIssueAttachmentStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isLinkRequired?: (data: ServiceIssueAttachment | ServiceIssueAttachmentStored, editMode?: boolean) => boolean;
+  isLinkDisabled?: (
+    data: ServiceIssueAttachment | ServiceIssueAttachmentStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTypeRequired?: (data: ServiceIssueAttachment | ServiceIssueAttachmentStored, editMode?: boolean) => boolean;
+  isTypeDisabled?: (
+    data: ServiceIssueAttachment | ServiceIssueAttachmentStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceIssueAttachmentIssueAttachment_View_EditProps {
   refreshCounter: number;
@@ -57,11 +86,10 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditProps {
 export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
   props: ServiceIssueAttachmentIssueAttachment_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -72,6 +100,10 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -81,6 +113,14 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceIssueAttachmentIssueAttachment_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_ATTACHMENT_ISSUE_ATTACHMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -104,7 +144,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
             >
               <Grid item xs={12} sm={12} md={4.0}>
                 <TextField
-                  required={true}
+                  required={actions?.isTypeRequired ? actions.isTypeRequired(data, editMode) : true}
                   name="type"
                   id="User/(esm/_Rd-4oG5CEe2Q6M99rsfqSQ)/EnumerationTypeCombo"
                   autoFocus
@@ -116,7 +156,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  disabled={isLoading}
+                  disabled={actions?.isTypeDisabled ? actions.isTypeDisabled(data, editMode, isLoading) : isLoading}
                   error={!!validation.get('type')}
                   helperText={validation.get('type')}
                   onChange={(event) => {
@@ -150,7 +190,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <BinaryInput
-                  required={false}
+                  required={actions?.isFileRequired ? actions.isFileRequired(data, editMode) : false}
                   id="User/(esm/_Rd8cYG5CEe2Q6M99rsfqSQ)/BinaryTypeInput"
                   label={
                     t('service.IssueAttachment.IssueAttachment_View_Edit.file', { defaultValue: 'File' }) as string
@@ -165,7 +205,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
                   data={data}
                   attributeName="file"
                   attributePath="service/IssueAttachment/file"
-                  disabled={isLoading}
+                  disabled={actions?.isFileDisabled ? actions.isFileDisabled(data, editMode, isLoading) : isLoading}
                   readonly={false || !isFormUpdateable()}
                   deleteCallback={async () => {
                     storeDiff('file', null);
@@ -178,7 +218,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <TextField
-                  required={false}
+                  required={actions?.isLinkRequired ? actions.isLinkRequired(data, editMode) : false}
                   name="link"
                   id="User/(esm/_Rd6nMG5CEe2Q6M99rsfqSQ)/StringTypeTextInput"
                   label={
@@ -189,7 +229,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': false,
                   })}
-                  disabled={isLoading}
+                  disabled={actions?.isLinkDisabled ? actions.isLinkDisabled(data, editMode, isLoading) : isLoading}
                   error={!!validation.get('link')}
                   helperText={validation.get('link')}
                   onChange={(event) => {
@@ -204,6 +244,9 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
                         <MdiIcon path="text_fields" />
                       </InputAdornment>
                     ),
+                  }}
+                  inputProps={{
+                    maxlength: 1024,
                   }}
                 />
               </Grid>

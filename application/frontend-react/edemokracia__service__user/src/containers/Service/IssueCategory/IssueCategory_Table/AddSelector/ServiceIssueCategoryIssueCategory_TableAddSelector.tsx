@@ -13,9 +13,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,6 +31,11 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponentActionDefinitions } from './components/ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponent';
 import { ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponent } from './components/ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponent';
+
+export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_TableAddSelectorContainerHook';
+export type ServiceIssueCategoryIssueCategory_TableAddSelectorContainerHook =
+  () => ServiceIssueCategoryIssueCategory_TableAddSelectorActionDefinitions;
 
 export interface ServiceIssueCategoryIssueCategory_TableAddSelectorActionDefinitions
   extends ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponentActionDefinitions {}
@@ -46,11 +53,23 @@ export interface ServiceIssueCategoryIssueCategory_TableAddSelectorProps {
 export default function ServiceIssueCategoryIssueCategory_TableAddSelector(
   props: ServiceIssueCategoryIssueCategory_TableAddSelectorProps,
 ) {
+  // Container props
+  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+
+  // Container hooks
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { refreshCounter, actions, selectionDiff, setSelectionDiff, alreadySelected } = props;
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
+
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceIssueCategoryIssueCategory_TableAddSelectorContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceIssueCategoryIssueCategory_TableAddSelectorActionDefinitions =
+    customContainerHook?.() || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

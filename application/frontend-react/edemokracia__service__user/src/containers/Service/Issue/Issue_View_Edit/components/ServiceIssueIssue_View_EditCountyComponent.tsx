@@ -25,6 +25,8 @@ export interface ServiceIssueIssue_View_EditCountyComponentActionDefinitions {
   countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
+  isCountyRequired?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
+  isCountyDisabled?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceIssueIssue_View_EditCountyComponentProps {
@@ -34,13 +36,15 @@ export interface ServiceIssueIssue_View_EditCountyComponentProps {
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: county
 export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIssue_View_EditCountyComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -49,12 +53,13 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
       id="User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isCountyRequired ? actions.isCountyRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="castle" />}
-      disabled={disabled}
+      disabled={actions?.isCountyDisabled ? actions.isCountyDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(county) => {

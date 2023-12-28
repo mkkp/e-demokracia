@@ -13,9 +13,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,6 +32,11 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentActionDefinitions } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent';
 import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent';
 
+export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableContainerHook';
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableContainerHook =
+  () => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions;
+
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions
   extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentActionDefinitions {}
 
@@ -43,11 +50,23 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Tab
 export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Table(
   props: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableProps,
 ) {
+  // Container props
+  const { refreshCounter, actions: pageActions } = props;
+
+  // Container hooks
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { refreshCounter, actions } = props;
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
+
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions =
+    customContainerHook?.() || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

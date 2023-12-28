@@ -29,7 +29,13 @@ import { ServiceCityServiceForDistrictsImpl } from '~/services/data-axios/Servic
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceDistrictDistrict_FormDialogActionsExtended = ServiceDistrictDistrict_FormDialogActions & {};
+export type ServiceDistrictDistrict_FormDialogActionsExtended = ServiceDistrictDistrict_FormDialogActions & {
+  postGetTemplateAction?: (
+    ownerData: any,
+    data: ServiceDistrict,
+    storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+  ) => Promise<void>;
+};
 
 export const SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceDistrictDistrict_FormActionsHook';
@@ -196,6 +202,12 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
       setIsLoading(true);
       const result = await serviceCityServiceForDistrictsImpl.getTemplate();
       setData(result as ServiceDistrictStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceDistrictStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

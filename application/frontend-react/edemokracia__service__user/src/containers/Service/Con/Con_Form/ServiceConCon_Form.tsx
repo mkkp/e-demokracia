@@ -14,9 +14,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -48,11 +50,30 @@ import { ServiceConCon_FormCreatedByComponent } from './components/ServiceConCon
 import type { ServiceConCon_FormProsComponentActionDefinitions } from './components/ServiceConCon_FormProsComponent';
 import { ServiceConCon_FormProsComponent } from './components/ServiceConCon_FormProsComponent';
 
+export const SERVICE_CON_CON_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceConCon_FormContainerHook';
+export type ServiceConCon_FormContainerHook = (
+  data: ServiceConStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCon, value: any) => void,
+) => ServiceConCon_FormActionDefinitions;
+
 export interface ServiceConCon_FormActionDefinitions
   extends ServiceConCon_FormConsComponentActionDefinitions,
     ServiceConCon_FormCreatedByComponentActionDefinitions,
     ServiceConCon_FormProsComponentActionDefinitions {
   votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  isCreatedRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
+  isCreatedDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isCreatedByNameRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
+  isCreatedByNameDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isDescriptionRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
+  isDescriptionDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isDownVotesRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
+  isDownVotesDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isTitleRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
+  isTitleDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  isUpVotesRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
+  isUpVotesDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceConCon_FormProps {
@@ -73,11 +94,10 @@ export interface ServiceConCon_FormProps {
 // XMIID: User/(esm/_qAjNIGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
 // Name: service::Con::Con_Form
 export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -88,6 +108,10 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -97,6 +121,12 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceConCon_FormContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_CON_CON_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceConCon_FormActionDefinitions = customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -111,7 +141,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={false}
+              required={actions?.isCreatedByNameRequired ? actions.isCreatedByNameRequired(data, editMode) : false}
               name="createdByName"
               id="User/(esm/_EuIKwG5WEe2wNaja8kBvcQ)/StringTypeTextInput"
               label={t('service.Con.Con_Form.createdByName', { defaultValue: 'CreatedByName' }) as string}
@@ -120,7 +150,11 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isCreatedByNameDisabled
+                  ? actions.isCreatedByNameDisabled(data, editMode, isLoading)
+                  : isLoading
+              }
               error={!!validation.get('createdByName')}
               helperText={validation.get('createdByName')}
               onChange={(event) => {
@@ -135,6 +169,9 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                     <MdiIcon path="text_fields" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                maxlength: 255,
               }}
             />
           </Grid>
@@ -151,7 +188,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               slotProps={{
                 textField: {
                   id: 'User/(esm/_3nMr4H4bEe2j59SYy0JH0Q)/TimestampTypeDateTimeInput',
-                  required: true,
+                  required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
                   helperText: validation.get('created'),
                   error: !!validation.get('created'),
                   InputProps: {
@@ -182,7 +219,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               label={t('service.Con.Con_Form.created', { defaultValue: 'Created' }) as string}
               value={serviceDateToUiDate(data.created ?? null)}
               readOnly={false || !isFormUpdateable()}
-              disabled={isLoading}
+              disabled={actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading}
               onChange={(newValue: Date) => {
                 storeDiff('created', newValue);
               }}
@@ -191,7 +228,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
               id="User/(esm/_3nWc4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
               label={t('service.Con.Con_Form.description', { defaultValue: 'Description' }) as string}
@@ -200,7 +237,9 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isDescriptionDisabled ? actions.isDescriptionDisabled(data, editMode, isLoading) : isLoading
+              }
               error={!!validation.get('description')}
               helperText={validation.get('description')}
               onChange={(event) => {
@@ -216,12 +255,15 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 16384,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_3ng08H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
               label={t('service.Con.Con_Form.title', { defaultValue: 'Title' }) as string}
@@ -230,7 +272,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('title')}
               helperText={validation.get('title')}
               onChange={(event) => {
@@ -246,12 +288,15 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <NumericInput
-              required={false}
+              required={actions?.isUpVotesRequired ? actions.isUpVotesRequired(data, editMode) : false}
               name="upVotes"
               id="User/(esm/_cIeKEIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
               label={t('service.Con.Con_Form.upVotes', { defaultValue: 'UpVotes' }) as string}
@@ -261,7 +306,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={actions?.isUpVotesDisabled ? actions.isUpVotesDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('upVotes')}
               helperText={validation.get('upVotes')}
               onValueChange={(values, sourceInfo) => {
@@ -284,7 +329,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <NumericInput
-              required={false}
+              required={actions?.isDownVotesRequired ? actions.isDownVotesRequired(data, editMode) : false}
               name="downVotes"
               id="User/(esm/_cIh0cIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
               label={t('service.Con.Con_Form.downVotes', { defaultValue: 'DownVotes' }) as string}
@@ -294,7 +339,9 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isDownVotesDisabled ? actions.isDownVotesDisabled(data, editMode, isLoading) : isLoading
+              }
               error={!!validation.get('downVotes')}
               helperText={validation.get('downVotes')}
               onValueChange={(values, sourceInfo) => {
@@ -330,9 +377,11 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
 
           <Grid item xs={12} sm={12}>
             <ServiceConCon_FormCreatedByComponent
-              disabled={true || !isFormUpdateable()}
+              disabled={true}
+              readOnly={true || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
+              isLoading={isLoading}
               storeDiff={storeDiff}
               validationError={validation.get('createdBy')}
               actions={actions}

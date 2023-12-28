@@ -22,7 +22,13 @@ import { UserServiceForAdminCountiesImpl } from '~/services/data-axios/UserServi
 import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCountyCounty_FormDialogActionsExtended = ServiceCountyCounty_FormDialogActions & {};
+export type ServiceCountyCounty_FormDialogActionsExtended = ServiceCountyCounty_FormDialogActions & {
+  postGetTemplateAction?: (
+    ownerData: any,
+    data: ServiceCounty,
+    storeDiff: (attributeName: keyof ServiceCounty, value: any) => void,
+  ) => Promise<void>;
+};
 
 export const SERVICE_USER_ADMIN_COUNTIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceCountyCounty_FormActionsHook';
@@ -186,6 +192,12 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
       setIsLoading(true);
       const result = await userServiceForAdminCountiesImpl.getTemplate();
       setData(result as ServiceCountyStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceCountyStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

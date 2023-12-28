@@ -128,6 +128,7 @@ export const AggregationInput = ({
 
     setDropdownOpen(false);
   };
+  const effectiveReadOnly = readOnly || !onAutoCompleteSearch || !onSet;
 
   return (
     <Grid container item direction="row" justifyContent="stretch" alignContent="stretch">
@@ -136,8 +137,8 @@ export const AggregationInput = ({
           freeSolo={true}
           forcePopupIcon={!!onAutoCompleteSearch}
           id={id}
-          disabled={disabled}
-          readOnly={readOnly || !onAutoCompleteSearch || !onSet}
+          disabled={!effectiveReadOnly && disabled}
+          readOnly={effectiveReadOnly}
           onOpen={() => {
             if (!readOnly) {
               setAllowFetch(true);

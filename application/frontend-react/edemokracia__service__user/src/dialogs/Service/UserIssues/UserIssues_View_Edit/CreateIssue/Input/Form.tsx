@@ -14,6 +14,10 @@ import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type { ServiceCreateIssueInputCreateIssueInput_FormDialogActions } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/ServiceCreateIssueInputCreateIssueInput_FormDialogContainer';
+import { useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/City/LinkSetSelectorPage';
+import { useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/County/LinkSetSelectorPage';
+import { useServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/District/LinkSetSelectorPage';
+import { useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/IssueType/LinkSetSelectorPage';
 import { useCRUDDialog, useSnacks } from '~/hooks';
 import type {
   ServiceCity,
@@ -46,6 +50,11 @@ export type ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended =
       output: ServiceIssueStored,
       onSubmit: (result?: ServiceIssueStored) => Promise<void>,
       onClose: () => Promise<void>,
+    ) => Promise<void>;
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: ServiceCreateIssueInput,
+      storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void,
     ) => Promise<void>;
   };
 
@@ -189,6 +198,14 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     customActionsHook?.(ownerData, data, editMode, storeDiff);
 
   // Dialog hooks
+  const openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage =
+    useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage();
+  const openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage =
+    useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage();
+  const openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage =
+    useServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage();
+  const openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage =
+    useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage();
 
   // Calculated section
   const title: string = t('service.CreateIssueInput.CreateIssueInput_Form', { defaultValue: 'CreateIssueInput Form' });
@@ -199,6 +216,114 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   // Action section
+  const cityAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<ServiceCityStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const cityOpenSetSelectorAction = async (): Promise<ServiceCityStored | undefined> => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage(
+        data,
+        data.city ? [data.city] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('city', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
+  const cityUnsetAction = async (target: ServiceCityStored) => {
+    storeDiff('city', null);
+  };
+  const countyAutocompleteRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<ServiceCountyStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const countyOpenSetSelectorAction = async (): Promise<ServiceCountyStored | undefined> => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage(
+        data,
+        data.county ? [data.county] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('county', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
+  const countyUnsetAction = async (target: ServiceCountyStored) => {
+    storeDiff('county', null);
+  };
+  const districtAutocompleteRangeAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<ServiceDistrictStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const districtOpenSetSelectorAction = async (): Promise<ServiceDistrictStored | undefined> => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage(
+        data,
+        data.district ? [data.district] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('district', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
+  const districtUnsetAction = async (target: ServiceDistrictStored) => {
+    storeDiff('district', null);
+  };
+  const issueTypeAutocompleteRangeAction = async (
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ): Promise<ServiceIssueTypeStored[]> => {
+    try {
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(data, queryCustomizer);
+    } catch (error) {
+      handleError(error);
+      return Promise.resolve([]);
+    }
+  };
+  const issueTypeOpenSetSelectorAction = async (): Promise<ServiceIssueTypeStored | undefined> => {
+    const { result, data: returnedData } =
+      await openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage(
+        data,
+        data.issueType ? [data.issueType] : [],
+      );
+    if (result === 'submit') {
+      if (Array.isArray(returnedData) && returnedData.length) {
+        storeDiff('issueType', returnedData[0]);
+        return returnedData[0];
+      }
+    }
+    return undefined;
+  };
+  const issueTypeUnsetAction = async (target: ServiceIssueTypeStored) => {
+    storeDiff('issueType', null);
+  };
   const backAction = async () => {
     onClose();
   };
@@ -229,6 +354,12 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       setIsLoading(true);
       const result = await serviceUserIssuesServiceImpl.getTemplateOnCreateIssue();
       setData(result as ServiceCreateIssueInputStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceCreateIssueInputStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -239,6 +370,18 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   const actions: ServiceCreateIssueInputCreateIssueInput_FormDialogActions = {
+    cityAutocompleteRangeAction,
+    cityOpenSetSelectorAction,
+    cityUnsetAction,
+    countyAutocompleteRangeAction,
+    countyOpenSetSelectorAction,
+    countyUnsetAction,
+    districtAutocompleteRangeAction,
+    districtOpenSetSelectorAction,
+    districtUnsetAction,
+    issueTypeAutocompleteRangeAction,
+    issueTypeOpenSetSelectorAction,
+    issueTypeUnsetAction,
     backAction,
     createIssueForUserIssuesAction,
     getTemplateAction,

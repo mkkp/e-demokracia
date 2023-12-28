@@ -20,7 +20,6 @@ import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Se
 import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
 import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
 import { useServiceIssueIssue_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateProArgument/Input/Form';
-import { useServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage } from '~/dialogs/Service/UserIssues/ActiveIssuesInActivityCounties/AddSelectorPage';
 import { useCRUDDialog, useSnacks } from '~/hooks';
 import { routeToServiceUserIssuesActiveIssuesInActivityCountiesRelationViewPage } from '~/routes';
 import type {
@@ -100,8 +99,6 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
     useServiceIssueIssue_View_EditCreateConArgumentInputForm();
   const openServiceIssueIssue_View_EditCreateProArgumentInputForm =
     useServiceIssueIssue_View_EditCreateProArgumentInputForm();
-  const openServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage =
-    useServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage();
 
   // Calculated section
   const title: string = t('service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
@@ -224,89 +221,8 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const openAddSelectorAction = async () => {
-    const { result, data: returnedData } = await openServiceUserIssuesActiveIssuesInActivityCountiesAddSelectorPage(
-      { __signedIdentifier: signedIdentifier },
-      [],
-    );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        try {
-          setIsLoading(true);
-          await serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.addActiveIssuesInActivityCounties(
-            { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-            returnedData,
-          );
-          setRefreshCounter((prev) => prev + 1);
-        } catch (e) {
-          console.error(e);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    }
-  };
-
   const backAction = async () => {
     navigateBack();
-  };
-  const bulkRemoveAction = async (
-    selectedRows: ServiceIssueStored[],
-  ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
-    return new Promise((resolve) => {
-      openCRUDDialog<ServiceIssueStored>({
-        dialogTitle: t('service.Issue.Issue_Table.BulkRemove', { defaultValue: 'Remove' }),
-        itemTitleFn: (item) => item.title!,
-        selectedItems: selectedRows,
-        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-          try {
-            if (actions.removeAction) {
-              await actions.removeAction!(item, true);
-            }
-            successHandler();
-          } catch (error) {
-            errorHandler(error);
-          }
-        },
-        onClose: async (needsRefresh) => {
-          if (needsRefresh) {
-            setRefreshCounter((prev) => prev + 1);
-            resolve({
-              result: 'submit',
-              data: [],
-            });
-          } else {
-            resolve({
-              result: 'close',
-            });
-          }
-        },
-      });
-    });
-  };
-  const removeAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
-    if (target) {
-      try {
-        if (!silentMode) {
-          setIsLoading(true);
-        }
-        await serviceUserIssuesServiceForActiveIssuesInActivityCountiesImpl.removeActiveIssuesInActivityCounties(
-          { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-          [target!],
-        );
-        if (!silentMode) {
-          setRefreshCounter((prev) => prev + 1);
-        }
-      } catch (error) {
-        if (!silentMode) {
-          handleError<ServiceIssue>(error, undefined, target);
-        }
-      } finally {
-        if (!silentMode) {
-          setIsLoading(false);
-        }
-      }
-    }
   };
   const filterAction = async (
     id: string,
@@ -350,10 +266,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
     createConArgumentAction,
     createProArgumentAction,
     createCommentAction,
-    openAddSelectorAction,
     backAction,
-    bulkRemoveAction,
-    removeAction,
     filterAction,
     refreshAction,
     openPageAction,

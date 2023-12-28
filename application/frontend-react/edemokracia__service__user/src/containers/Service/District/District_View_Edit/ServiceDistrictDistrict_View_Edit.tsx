@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,7 +31,18 @@ import {} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
 
-export interface ServiceDistrictDistrict_View_EditActionDefinitions {}
+export const SERVICE_DISTRICT_DISTRICT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceDistrictDistrict_View_EditContainerHook';
+export type ServiceDistrictDistrict_View_EditContainerHook = (
+  data: ServiceDistrictStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+) => ServiceDistrictDistrict_View_EditActionDefinitions;
+
+export interface ServiceDistrictDistrict_View_EditActionDefinitions {
+  isNameRequired?: (data: ServiceDistrict | ServiceDistrictStored, editMode?: boolean) => boolean;
+  isNameDisabled?: (data: ServiceDistrict | ServiceDistrictStored, editMode?: boolean, isLoading?: boolean) => boolean;
+}
 
 export interface ServiceDistrictDistrict_View_EditProps {
   refreshCounter: number;
@@ -49,11 +62,10 @@ export interface ServiceDistrictDistrict_View_EditProps {
 // XMIID: User/(esm/_a0UhZn2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer
 // Name: service::District::District_View_Edit
 export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrictDistrict_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -64,6 +76,10 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -73,6 +89,13 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceDistrictDistrict_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_DISTRICT_DISTRICT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceDistrictDistrict_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -87,7 +110,7 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isNameRequired ? actions.isNameRequired(data, editMode) : true}
               name="name"
               id="User/(esm/_dMOo8H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
               autoFocus
@@ -97,7 +120,7 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isNameDisabled ? actions.isNameDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('name')}
               helperText={validation.get('name')}
               onChange={(event) => {
@@ -112,6 +135,9 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
                     <MdiIcon path="text_fields" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                maxlength: 255,
               }}
             />
           </Grid>

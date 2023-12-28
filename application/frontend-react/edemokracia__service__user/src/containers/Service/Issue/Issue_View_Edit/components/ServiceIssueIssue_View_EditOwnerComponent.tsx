@@ -25,6 +25,8 @@ export interface ServiceIssueIssue_View_EditOwnerComponentActionDefinitions {
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
+  isOwnerRequired?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
+  isOwnerDisabled?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceIssueIssue_View_EditOwnerComponentProps {
@@ -34,13 +36,15 @@ export interface ServiceIssueIssue_View_EditOwnerComponentProps {
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
 // Name: owner
 export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIssue_View_EditOwnerComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -49,12 +53,13 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
       id="User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.owner', { defaultValue: 'Owner' }) as string}
       labelList={[ownerData.owner?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isOwnerRequired ? actions.isOwnerRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="account" />}
-      disabled={disabled}
+      disabled={actions?.isOwnerDisabled ? actions.isOwnerDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {

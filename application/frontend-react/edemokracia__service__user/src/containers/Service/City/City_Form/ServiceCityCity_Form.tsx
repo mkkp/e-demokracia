@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,7 +31,17 @@ import {} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
 
-export interface ServiceCityCity_FormActionDefinitions {}
+export const SERVICE_CITY_CITY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceCityCity_FormContainerHook';
+export type ServiceCityCity_FormContainerHook = (
+  data: ServiceCityStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceCity, value: any) => void,
+) => ServiceCityCity_FormActionDefinitions;
+
+export interface ServiceCityCity_FormActionDefinitions {
+  isNameRequired?: (data: ServiceCity | ServiceCityStored, editMode?: boolean) => boolean;
+  isNameDisabled?: (data: ServiceCity | ServiceCityStored, editMode?: boolean, isLoading?: boolean) => boolean;
+}
 
 export interface ServiceCityCity_FormProps {
   refreshCounter: number;
@@ -49,11 +61,10 @@ export interface ServiceCityCity_FormProps {
 // XMIID: User/(esm/_a0Xktn2iEe2LTNnGda5kaw)/TransferObjectFormPageContainer
 // Name: service::City::City_Form
 export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -64,6 +75,10 @@ export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -73,6 +88,13 @@ export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceCityCity_FormContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_CITY_CITY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceCityCity_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -87,7 +109,7 @@ export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isNameRequired ? actions.isNameRequired(data, editMode) : true}
               name="name"
               id="User/(esm/_dL4qsH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
               autoFocus
@@ -97,7 +119,7 @@ export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isNameDisabled ? actions.isNameDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('name')}
               helperText={validation.get('name')}
               onChange={(event) => {
@@ -112,6 +134,9 @@ export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
                     <MdiIcon path="text_fields" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                maxlength: 255,
               }}
             />
           </Grid>

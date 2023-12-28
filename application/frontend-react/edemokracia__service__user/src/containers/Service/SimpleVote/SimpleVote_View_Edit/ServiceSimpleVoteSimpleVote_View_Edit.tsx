@@ -14,9 +14,11 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,7 +32,28 @@ import {} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
 
-export interface ServiceSimpleVoteSimpleVote_View_EditActionDefinitions {}
+export const SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSimpleVoteSimpleVote_View_EditContainerHook';
+export type ServiceSimpleVoteSimpleVote_View_EditContainerHook = (
+  data: ServiceSimpleVoteStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void,
+) => ServiceSimpleVoteSimpleVote_View_EditActionDefinitions;
+
+export interface ServiceSimpleVoteSimpleVote_View_EditActionDefinitions {
+  isCreatedRequired?: (data: ServiceSimpleVote | ServiceSimpleVoteStored, editMode?: boolean) => boolean;
+  isCreatedDisabled?: (
+    data: ServiceSimpleVote | ServiceSimpleVoteStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTypeRequired?: (data: ServiceSimpleVote | ServiceSimpleVoteStored, editMode?: boolean) => boolean;
+  isTypeDisabled?: (
+    data: ServiceSimpleVote | ServiceSimpleVoteStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceSimpleVoteSimpleVote_View_EditProps {
   refreshCounter: number;
@@ -50,11 +73,10 @@ export interface ServiceSimpleVoteSimpleVote_View_EditProps {
 // XMIID: User/(esm/_p81x0GksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
 // Name: service::SimpleVote::SimpleVote_View_Edit
 export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimpleVoteSimpleVote_View_EditProps) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -65,6 +87,10 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -74,6 +100,13 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<ServiceSimpleVoteSimpleVote_View_EditContainerHook>(
+    `(${OBJECTCLASS}=${SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: ServiceSimpleVoteSimpleVote_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -107,7 +140,7 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
                   slotProps={{
                     textField: {
                       id: 'User/(esm/_VQQiIGk5Ee25ONJ3V89cVA)/TimestampTypeDateTimeInput',
-                      required: true,
+                      required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
                       helperText: validation.get('created'),
                       error: !!validation.get('created'),
                       InputProps: {
@@ -138,7 +171,9 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
                   label={t('service.SimpleVote.SimpleVote_View_Edit.created', { defaultValue: 'Created' }) as string}
                   value={serviceDateToUiDate(data.created ?? null)}
                   readOnly={false || !isFormUpdateable()}
-                  disabled={isLoading}
+                  disabled={
+                    actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading
+                  }
                   onChange={(newValue: Date) => {
                     storeDiff('created', newValue);
                   }}
@@ -147,7 +182,7 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
 
               <Grid item xs={12} sm={12} md={4.0}>
                 <TextField
-                  required={true}
+                  required={actions?.isTypeRequired ? actions.isTypeRequired(data, editMode) : true}
                   name="type"
                   id="User/(esm/_VQWBsGk5Ee25ONJ3V89cVA)/EnumerationTypeCombo"
                   label={t('service.SimpleVote.SimpleVote_View_Edit.type', { defaultValue: 'Type' }) as string}
@@ -156,7 +191,7 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  disabled={isLoading}
+                  disabled={actions?.isTypeDisabled ? actions.isTypeDisabled(data, editMode, isLoading) : isLoading}
                   error={!!validation.get('type')}
                   helperText={validation.get('type')}
                   onChange={(event) => {

@@ -31,7 +31,13 @@ import { processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended =
-  ServiceIssueAttachmentIssueAttachment_FormDialogActions & {};
+  ServiceIssueAttachmentIssueAttachment_FormDialogActions & {
+    postGetTemplateAction?: (
+      ownerData: any,
+      data: ServiceIssueAttachment,
+      storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void,
+    ) => Promise<void>;
+  };
 
 export const SERVICE_ISSUE_ATTACHMENTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'ServiceIssueAttachmentIssueAttachment_FormActionsHook';
@@ -197,6 +203,12 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
       setIsLoading(true);
       const result = await serviceIssueServiceForAttachmentsImpl.getTemplate();
       setData(result as ServiceIssueAttachmentStored);
+      payloadDiff.current = {
+        ...(result as Record<keyof ServiceIssueAttachmentStored, any>),
+      };
+      if (customActions?.postGetTemplateAction) {
+        await customActions.postGetTemplateAction(ownerData, result, storeDiff);
+      }
       return result;
     } catch (error) {
       handleError(error);

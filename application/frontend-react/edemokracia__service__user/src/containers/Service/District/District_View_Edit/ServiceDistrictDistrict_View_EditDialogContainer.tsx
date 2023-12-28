@@ -76,7 +76,7 @@ export default function ServiceDistrictDistrict_View_EditDialog(props: ServiceDi
     submit,
   } = props;
   const queryCustomizer: ServiceDistrictQueryCustomizer = {
-    _mask: '{name}',
+    _mask: '{name,representation}',
   };
 
   return (

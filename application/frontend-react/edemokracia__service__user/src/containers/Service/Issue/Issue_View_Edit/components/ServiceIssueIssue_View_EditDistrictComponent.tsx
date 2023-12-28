@@ -25,6 +25,8 @@ export interface ServiceIssueIssue_View_EditDistrictComponentActionDefinitions {
   districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
+  isDistrictRequired?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
+  isDistrictDisabled?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceIssueIssue_View_EditDistrictComponentProps {
@@ -34,13 +36,15 @@ export interface ServiceIssueIssue_View_EditDistrictComponentProps {
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: district
 export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssueIssue_View_EditDistrictComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -49,12 +53,13 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
       id="User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.district', { defaultValue: 'District' }) as string}
       labelList={[ownerData.district?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isDistrictRequired ? actions.isDistrictRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="home-city" />}
-      disabled={disabled}
+      disabled={actions?.isDistrictDisabled ? actions.isDistrictDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(district) => {

@@ -24,6 +24,12 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentAc
   districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
+  isDistrictRequired?: (data: ServiceCreateIssueInput | ServiceCreateIssueInputStored, editMode?: boolean) => boolean;
+  isDistrictDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentProps {
@@ -33,7 +39,9 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentPr
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_TXklMdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -41,7 +49,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentPr
 export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -55,12 +63,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
         ownerData.district?.county?.toString() ?? '',
         ownerData.district?.city?.toString() ?? '',
       ]}
-      required={false}
+      required={actions?.isDistrictRequired ? actions.isDistrictRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="home-city" />}
-      disabled={disabled}
+      disabled={actions?.isDistrictDisabled ? actions.isDistrictDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(district) => {

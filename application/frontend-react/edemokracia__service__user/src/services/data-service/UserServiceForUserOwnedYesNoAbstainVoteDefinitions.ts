@@ -49,18 +49,6 @@ export interface UserServiceForUserOwnedYesNoAbstainVoteDefinitions {
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
-  getRangeForIssue(
-    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
-    queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<Array<ServiceIssueStored>>;
-  setIssue(
-    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void>;
-  unsetIssue(
-    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
-    target: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   closeDebateForIssue(

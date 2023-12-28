@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,9 +31,23 @@ import {} from '~/components/widgets';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { CreateCommentInput, CreateCommentInputQueryCustomizer, CreateCommentInputStored } from '~/services/data-api';
 
+export const CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'CreateCommentInputCreateCommentInput_FormContainerHook';
+export type CreateCommentInputCreateCommentInput_FormContainerHook = (
+  data: CreateCommentInputStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof CreateCommentInput, value: any) => void,
+) => CreateCommentInputCreateCommentInput_FormActionDefinitions;
+
 export interface CreateCommentInputCreateCommentInput_FormActionDefinitions {
   cancelAction?: () => Promise<void>;
   okAction?: () => Promise<void>;
+  isCommentRequired?: (data: CreateCommentInput | CreateCommentInputStored, editMode?: boolean) => boolean;
+  isCommentDisabled?: (
+    data: CreateCommentInput | CreateCommentInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface CreateCommentInputCreateCommentInput_FormProps {
@@ -54,11 +70,10 @@ export interface CreateCommentInputCreateCommentInput_FormProps {
 export default function CreateCommentInputCreateCommentInput_Form(
   props: CreateCommentInputCreateCommentInput_FormProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -69,6 +84,10 @@ export default function CreateCommentInputCreateCommentInput_Form(
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -78,6 +97,13 @@ export default function CreateCommentInputCreateCommentInput_Form(
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<CreateCommentInputCreateCommentInput_FormContainerHook>(
+    `(${OBJECTCLASS}=${CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: CreateCommentInputCreateCommentInput_FormActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -101,7 +127,7 @@ export default function CreateCommentInputCreateCommentInput_Form(
             >
               <Grid item xs={12} sm={12}>
                 <TextField
-                  required={true}
+                  required={actions?.isCommentRequired ? actions.isCommentRequired(data, editMode) : true}
                   name="comment"
                   id="User/(esm/_a5DsQIe6Ee2kLcMqsIbMgQ)/StringTypeTextArea"
                   autoFocus
@@ -111,7 +137,9 @@ export default function CreateCommentInputCreateCommentInput_Form(
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  disabled={isLoading}
+                  disabled={
+                    actions?.isCommentDisabled ? actions.isCommentDisabled(data, editMode, isLoading) : isLoading
+                  }
                   multiline
                   minRows={4.0}
                   error={!!validation.get('comment')}
@@ -128,6 +156,9 @@ export default function CreateCommentInputCreateCommentInput_Form(
                         <MdiIcon path="text_fields" />
                       </InputAdornment>
                     ),
+                  }}
+                  inputProps={{
+                    maxlength: 255,
                   }}
                 />
               </Grid>

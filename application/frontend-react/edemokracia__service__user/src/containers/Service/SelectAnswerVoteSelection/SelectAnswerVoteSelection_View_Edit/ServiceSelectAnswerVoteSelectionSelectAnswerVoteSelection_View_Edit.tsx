@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,7 +35,34 @@ import {
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
 
-export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions {}
+export const SERVICE_SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditContainerHook';
+export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditContainerHook = (
+  data: ServiceSelectAnswerVoteSelectionStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceSelectAnswerVoteSelection, value: any) => void,
+) => ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions;
+
+export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions {
+  isDescriptionRequired?: (
+    data: ServiceSelectAnswerVoteSelection | ServiceSelectAnswerVoteSelectionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isDescriptionDisabled?: (
+    data: ServiceSelectAnswerVoteSelection | ServiceSelectAnswerVoteSelectionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isTitleRequired?: (
+    data: ServiceSelectAnswerVoteSelection | ServiceSelectAnswerVoteSelectionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isTitleDisabled?: (
+    data: ServiceSelectAnswerVoteSelection | ServiceSelectAnswerVoteSelectionStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditProps {
   refreshCounter: number;
@@ -55,11 +84,10 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
 export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_Edit(
   props: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -70,6 +98,10 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -79,6 +111,14 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -93,7 +133,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
         >
           <Grid item xs={12} sm={12}>
             <TextField
-              required={true}
+              required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_sHcH0Fv1Ee6nEc5rp_Qy4A)/StringTypeTextInput"
               autoFocus
@@ -107,7 +147,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              disabled={isLoading}
+              disabled={actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading}
               error={!!validation.get('title')}
               helperText={validation.get('title')}
               onChange={(event) => {
@@ -123,12 +163,15 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={false}
+              required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : false}
               name="description"
               id="User/(esm/_teidoFv1Ee6nEc5rp_Qy4A)/StringTypeTextArea"
               label={
@@ -141,7 +184,9 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isDescriptionDisabled ? actions.isDescriptionDisabled(data, editMode, isLoading) : isLoading
+              }
               multiline
               minRows={4.0}
               error={!!validation.get('description')}
@@ -158,6 +203,9 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                     <MdiIcon path="format-size" />
                   </InputAdornment>
                 ),
+              }}
+              inputProps={{
+                maxlength: 255,
               }}
             />
           </Grid>

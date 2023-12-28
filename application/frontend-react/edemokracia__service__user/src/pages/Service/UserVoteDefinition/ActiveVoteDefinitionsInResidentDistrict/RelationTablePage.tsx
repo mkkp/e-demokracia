@@ -16,7 +16,6 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
 import type { ServiceVoteDefinitionVoteDefinition_TablePageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/ServiceVoteDefinitionVoteDefinition_TablePageContainer';
-import { useServiceUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictAddSelectorPage } from '~/dialogs/Service/UserVoteDefinition/ActiveVoteDefinitionsInResidentDistrict/AddSelectorPage';
 import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
@@ -96,8 +95,6 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   );
 
   // Dialog hooks
-  const openServiceUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictAddSelectorPage =
-    useServiceUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictAddSelectorPage();
   const openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector =
     useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector();
   const openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm =
@@ -114,90 +111,8 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   const submit = async () => {};
 
   // Action section
-  const openAddSelectorAction = async () => {
-    const { result, data: returnedData } =
-      await openServiceUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictAddSelectorPage(
-        { __signedIdentifier: signedIdentifier },
-        [],
-      );
-    if (result === 'submit') {
-      if (Array.isArray(returnedData) && returnedData.length) {
-        try {
-          setIsLoading(true);
-          await serviceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentDistrictImpl.addActiveVoteDefinitionsInResidentDistrict(
-            { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-            returnedData,
-          );
-          setRefreshCounter((prev) => prev + 1);
-        } catch (e) {
-          console.error(e);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    }
-  };
-
   const backAction = async () => {
     navigateBack();
-  };
-  const bulkRemoveAction = async (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
-    return new Promise((resolve) => {
-      openCRUDDialog<ServiceVoteDefinitionStored>({
-        dialogTitle: t('service.VoteDefinition.VoteDefinition_Table.BulkRemove', { defaultValue: 'Remove' }),
-        itemTitleFn: (item) => item.title!,
-        selectedItems: selectedRows,
-        action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
-          try {
-            if (actions.removeAction) {
-              await actions.removeAction!(item, true);
-            }
-            successHandler();
-          } catch (error) {
-            errorHandler(error);
-          }
-        },
-        onClose: async (needsRefresh) => {
-          if (needsRefresh) {
-            setRefreshCounter((prev) => prev + 1);
-            resolve({
-              result: 'submit',
-              data: [],
-            });
-          } else {
-            resolve({
-              result: 'close',
-            });
-          }
-        },
-      });
-    });
-  };
-  const removeAction = async (target?: ServiceVoteDefinitionStored, silentMode?: boolean) => {
-    if (target) {
-      try {
-        if (!silentMode) {
-          setIsLoading(true);
-        }
-        await serviceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentDistrictImpl.removeActiveVoteDefinitionsInResidentDistrict(
-          { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-          [target!],
-        );
-        if (!silentMode) {
-          setRefreshCounter((prev) => prev + 1);
-        }
-      } catch (error) {
-        if (!silentMode) {
-          handleError<ServiceVoteDefinition>(error, undefined, target);
-        }
-      } finally {
-        if (!silentMode) {
-          setIsLoading(false);
-        }
-      }
-    }
   };
   const filterAction = async (
     id: string,
@@ -267,10 +182,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
-    openAddSelectorAction,
     backAction,
-    bulkRemoveAction,
-    removeAction,
     filterAction,
     refreshAction,
     openPageAction,

@@ -13,9 +13,11 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -38,8 +40,35 @@ import {
 import type { ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentActionDefinitions } from './components/ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent';
 import { ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent } from './components/ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent';
 
+export const SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditContainerHook';
+export type ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditContainerHook = (
+  data: ServiceSelectAnswerVoteEntryStored,
+  editMode: boolean,
+  storeDiff: (attributeName: keyof ServiceSelectAnswerVoteEntry, value: any) => void,
+) => ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActionDefinitions;
+
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActionDefinitions
-  extends ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentActionDefinitions {}
+  extends ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentActionDefinitions {
+  isCreatedRequired?: (
+    data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    editMode?: boolean,
+  ) => boolean;
+  isCreatedDisabled?: (
+    data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+  isValueRepresentationRequired?: (
+    data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    editMode?: boolean,
+  ) => boolean;
+  isValueRepresentationDisabled?: (
+    data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
+}
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditProps {
   refreshCounter: number;
@@ -61,11 +90,10 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditProp
 export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_Edit(
   props: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditProps,
 ) {
-  const { t } = useTranslation();
-  const { navigate, back } = useJudoNavigation();
+  // Container props
   const {
     refreshCounter,
-    actions,
+    actions: pageActions,
     data,
     isLoading,
     isFormUpdateable,
@@ -76,6 +104,10 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
     setValidation,
     submit,
   } = props;
+
+  // Container hooks
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
 
@@ -85,6 +117,14 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
       defaultValue: 'You have potential unsaved changes in your form, are you sure you would like to navigate away?',
     }),
   );
+  // Pandino Container Action overrides
+  const { service: customContainerHook } =
+    useTrackService<ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditContainerHook>(
+      `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const containerActions: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActionDefinitions =
+    customContainerHook?.(data, editMode, storeDiff) || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>
@@ -109,7 +149,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
               slotProps={{
                 textField: {
                   id: 'User/(esm/_Kg6pUFuWEe6T042_LMmSdQ)/TimestampTypeDateTimeInput',
-                  required: true,
+                  required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
                   helperText: validation.get('created'),
                   error: !!validation.get('created'),
                   InputProps: {
@@ -144,7 +184,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
               }
               value={serviceDateToUiDate(data.created ?? null)}
               readOnly={false || !isFormUpdateable()}
-              disabled={isLoading}
+              disabled={actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading}
               onChange={(newValue: Date) => {
                 storeDiff('created', newValue);
               }}
@@ -153,7 +193,9 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
 
           <Grid item xs={12} sm={12}>
             <TextField
-              required={false}
+              required={
+                actions?.isValueRepresentationRequired ? actions.isValueRepresentationRequired(data, editMode) : false
+              }
               name="valueRepresentation"
               id="User/(esm/_Kg7QYVuWEe6T042_LMmSdQ)/StringTypeTextInput"
               label={
@@ -166,7 +208,11 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
               })}
-              disabled={isLoading}
+              disabled={
+                actions?.isValueRepresentationDisabled
+                  ? actions.isValueRepresentationDisabled(data, editMode, isLoading)
+                  : isLoading
+              }
               error={!!validation.get('valueRepresentation')}
               helperText={validation.get('valueRepresentation')}
               onChange={(event) => {
@@ -182,14 +228,19 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
                   </InputAdornment>
                 ),
               }}
+              inputProps={{
+                maxlength: 255,
+              }}
             />
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent
-              disabled={false || !isFormUpdateable()}
+              disabled={false}
+              readOnly={false || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
+              isLoading={isLoading}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

@@ -13,9 +13,11 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -25,6 +27,11 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponentActionDefinitions } from './components/CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponent';
 import { CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponent } from './components/CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponent';
+
+export const CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'CloseDebateInputCloseDebateInput_TableContainerHook';
+export type CloseDebateInputCloseDebateInput_TableContainerHook =
+  () => CloseDebateInputCloseDebateInput_TableActionDefinitions;
 
 export interface CloseDebateInputCloseDebateInput_TableActionDefinitions
   extends CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponentActionDefinitions {}
@@ -37,11 +44,21 @@ export interface CloseDebateInputCloseDebateInput_TableProps {
 // XMIID: User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTablePageContainer
 // Name: CloseDebateInput::CloseDebateInput_Table
 export default function CloseDebateInputCloseDebateInput_Table(props: CloseDebateInputCloseDebateInput_TableProps) {
+  // Container props
+  const { refreshCounter, actions: pageActions } = props;
+
+  // Container hooks
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { refreshCounter, actions } = props;
   const { locale: l10nLocale } = useL10N();
   const { openConfirmDialog } = useConfirmDialog();
+
+  // Pandino Container Action overrides
+  const { service: customContainerHook } = useTrackService<CloseDebateInputCloseDebateInput_TableContainerHook>(
+    `(${OBJECTCLASS}=${CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
+  );
+  const containerActions: CloseDebateInputCloseDebateInput_TableActionDefinitions = customContainerHook?.() || {};
+  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
 
   return (
     <Grid container>

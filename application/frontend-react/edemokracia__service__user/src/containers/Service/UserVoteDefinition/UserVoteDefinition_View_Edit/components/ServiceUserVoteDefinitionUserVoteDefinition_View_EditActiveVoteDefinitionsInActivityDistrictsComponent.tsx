@@ -65,10 +65,6 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityDistrictsComponentActionDefinitions {
-  activeVoteDefinitionsInActivityDistrictsOpenAddSelectorAction?: () => Promise<void>;
-  activeVoteDefinitionsInActivityDistrictsBulkRemoveAction?: (
-    selectedRows: ServiceVoteDefinitionStored[],
-  ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
   activeVoteDefinitionsInActivityDistrictsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -78,10 +74,6 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
   activeVoteDefinitionsInActivityDistrictsRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceVoteDefinitionStored[]>;
-  activeVoteDefinitionsInActivityDistrictsRemoveAction?: (
-    row: ServiceVoteDefinitionStored,
-    silentMode?: boolean,
-  ) => Promise<void>;
   activeVoteDefinitionsInActivityDistrictsOpenPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   activeVoteDefinitionsInActivityDistrictsVoteRatingAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   activeVoteDefinitionsInActivityDistrictsVoteSelectAnswerAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
@@ -117,7 +109,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceVoteDefinitionStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'countyRepresentation', sort: 'asc' }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'countyRepresentation', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
@@ -320,20 +312,6 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   );
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.ActiveVoteDefinitionsByOwnerActivityArea.tabBar.ActiveVoteDefinitionsInActivityDistrictGroup.activeVoteDefinitionsInActivityDistricts.Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !isFormUpdateable() || isLoading,
-      action: actions.activeVoteDefinitionsInActivityDistrictsRemoveAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsInActivityDistrictsRemoveAction!(rowData);
-          }
-        : undefined,
-    },
     {
       id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
       label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
@@ -605,11 +583,6 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
           }),
         ]}
         disableRowSelectionOnClick
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
         keepNonExistentRowsSelected
         onRowClick={
           actions.activeVoteDefinitionsInActivityDistrictsOpenPageAction
@@ -668,42 +641,6 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
                   {t(
                     'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.ActiveVoteDefinitionsByOwnerActivityArea.tabBar.ActiveVoteDefinitionsInActivityDistrictGroup.activeVoteDefinitionsInActivityDistricts.Refresh',
                     { defaultValue: 'Refresh' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.activeVoteDefinitionsInActivityDistrictsOpenAddSelectorAction && isFormUpdateable() ? (
-                <Button
-                  id="User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceTableAddSelectorOpenButton"
-                  startIcon={<MdiIcon path="attachment-plus" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    await actions.activeVoteDefinitionsInActivityDistrictsOpenAddSelectorAction!();
-                  }}
-                  disabled={editMode || !isFormUpdateable() || isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.ActiveVoteDefinitionsByOwnerActivityArea.tabBar.ActiveVoteDefinitionsInActivityDistrictGroup.activeVoteDefinitionsInActivityDistricts.Add',
-                    { defaultValue: 'Add' },
-                  )}
-                </Button>
-              ) : null}
-              {actions.activeVoteDefinitionsInActivityDistrictsBulkRemoveAction && selectionModel.length > 0 ? (
-                <Button
-                  id="User/(esm/_GD1zsF5MEe6vsex_cZNQbQ)/TabularReferenceTableBulkRemoveButton"
-                  startIcon={<MdiIcon path="link_off" />}
-                  variant={'text'}
-                  onClick={async () => {
-                    const { result: bulkResult } =
-                      await actions.activeVoteDefinitionsInActivityDistrictsBulkRemoveAction!(selectedRows.current);
-                    if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
-                    }
-                  }}
-                  disabled={isLoading}
-                >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.ActiveVoteDefinitionsByOwnerActivityArea.tabBar.ActiveVoteDefinitionsInActivityDistrictGroup.activeVoteDefinitionsInActivityDistricts.BulkRemove',
-                    { defaultValue: 'Remove' },
                   )}
                 </Button>
               ) : null}

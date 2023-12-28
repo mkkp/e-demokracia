@@ -92,23 +92,6 @@ export class ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInActivityD
   }
 
   /**
-   * From: relation.isRangeable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForActiveVoteDefinitionsInActivityDistricts(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition> | ServiceUserVoteDefinition,
-    queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<Array<ServiceVoteDefinitionStored>> {
-    const path = '/service/UserVoteDefinition/activeVoteDefinitionsInActivityDistricts/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -123,38 +106,6 @@ export class ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInActivityD
     return response.data;
   }
 
-  /**
-   * From: relation.isAddable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async addActiveVoteDefinitionsInActivityDistricts(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityDistricts/~add';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
-  /**
-   * From: relation.isRemovable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async removeActiveVoteDefinitionsInActivityDistricts(
-    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
-    selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
-  ): Promise<void> {
-    const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityDistricts/~remove';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
-      },
-    });
-  }
-
   async getIssue(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
@@ -167,52 +118,6 @@ export class ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInActivityD
     });
 
     return response.data;
-  }
-
-  /**
-   * Form: targetRelation.isRangeable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
-   */
-  async getRangeForIssue(
-    owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
-    queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<Array<ServiceIssueStored>> {
-    const path = '/service/VoteDefinition/issue/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner,
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
-  }
-
-  /**
-   * From: targetRelation.isSetable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async setIssue(
-    owner: JudoIdentifiable<ServiceVoteDefinition>,
-    selected: JudoIdentifiable<ServiceIssue>,
-  ): Promise<void> {
-    const path = '/service/VoteDefinition/~update/issue/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
-  }
-
-  /**
-   * From: targetRelation.isUnsetable
-   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
-   */
-  async unsetIssue(owner: JudoIdentifiable<ServiceVoteDefinition>): Promise<void> {
-    const path = '/service/VoteDefinition/~update/issue/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
-      headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
-      },
-    });
   }
 
   /**

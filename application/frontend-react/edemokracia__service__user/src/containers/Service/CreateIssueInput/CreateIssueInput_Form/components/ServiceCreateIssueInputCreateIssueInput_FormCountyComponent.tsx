@@ -24,6 +24,12 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActi
   countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
+  isCountyRequired?: (data: ServiceCreateIssueInput | ServiceCreateIssueInputStored, editMode?: boolean) => boolean;
+  isCountyDisabled?: (
+    data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
+    editMode?: boolean,
+    isLoading?: boolean,
+  ) => boolean;
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProps {
@@ -33,7 +39,9 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProp
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -41,7 +49,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProp
 export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -50,12 +58,13 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
       id="User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.CreateIssueInput.CreateIssueInput_Form.county', { defaultValue: 'County' }) as string}
       labelList={[ownerData.county?.representation?.toString() ?? '', ownerData.county?.name?.toString() ?? '']}
-      required={false}
+      required={actions?.isCountyRequired ? actions.isCountyRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="castle" />}
-      disabled={disabled}
+      disabled={actions?.isCountyDisabled ? actions.isCountyDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(county) => {

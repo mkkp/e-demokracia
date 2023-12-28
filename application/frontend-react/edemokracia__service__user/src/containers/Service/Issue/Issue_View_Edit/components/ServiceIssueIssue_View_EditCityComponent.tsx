@@ -23,6 +23,8 @@ export interface ServiceIssueIssue_View_EditCityComponentActionDefinitions {
   cityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
   cityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
   cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
+  isCityRequired?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
+  isCityDisabled?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceIssueIssue_View_EditCityComponentProps {
@@ -32,13 +34,15 @@ export interface ServiceIssueIssue_View_EditCityComponentProps {
   submit: () => Promise<void>;
   validationError?: string;
   disabled?: boolean;
+  readOnly?: boolean;
   editMode?: boolean;
+  isLoading?: boolean;
 }
 
 // XMIID: User/(esm/_pPQKgNvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: city
 export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssue_View_EditCityComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, editMode } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
   const { t } = useTranslation();
 
   return (
@@ -47,12 +51,13 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
       id="User/(esm/_pPQKgNvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink"
       label={t('service.Issue.Issue_View_Edit.city', { defaultValue: 'City' }) as string}
       labelList={[ownerData.city?.representation?.toString() ?? '']}
-      required={false}
+      required={actions?.isCityRequired ? actions.isCityRequired(ownerData, editMode) : false}
       ownerData={ownerData}
       error={!!validationError}
       helperText={validationError}
       icon={<MdiIcon path="city" />}
-      disabled={disabled}
+      disabled={actions?.isCityDisabled ? actions.isCityDisabled(ownerData, editMode, isLoading) : disabled}
+      readOnly={readOnly}
       editMode={editMode}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(city) => {
