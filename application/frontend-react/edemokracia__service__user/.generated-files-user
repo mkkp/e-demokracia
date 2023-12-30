@@ -653,7 +653,7 @@ src/layout/Drawer/DrawerContent/Navigation/NavItem.tsx,50c0a16148bbe65f66ceaf45d
 src/layout/Drawer/DrawerContent/Navigation/index.tsx,353b9c16f191cbe0c25d08a6241a0d00
 src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx,e20eb1d86e85a36976551767d3deb609
 src/layout/Drawer/DrawerContent/index.tsx,50c879418577b2bbd08497e1fc5eceb5
-src/layout/Drawer/DrawerHeader.tsx,9504d1a815511b6c108b4cbaacd81aca
+src/layout/Drawer/DrawerHeader.tsx,9a16971eb383a79de7833d5ee881b38a
 src/layout/Drawer/HorizontalBar.tsx,efe4ab71e47ad82fbd8445c40f294908
 src/layout/Drawer/MiniDrawerStyled.tsx,b92f4984be6f44535391bf9d169a18e4
 src/layout/Drawer/index.tsx,8c1dba1c4bb272cce732266e2727928e
