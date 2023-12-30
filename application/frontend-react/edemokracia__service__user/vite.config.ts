@@ -18,6 +18,10 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: mode !== 'reckless' ? {
+          'pandino': ['@pandino/pandino', '@pandino/react-hooks'],
+          'i18next': ['react-i18next', 'i18next'],
+          'react': ['react-dom', 'react'],
+          'react-router': ['react-router-dom', 'react-router'],
           '@mui/material': ['@mui/material'],
           '@mui/x-data-grid': ['@mui/x-data-grid'],
           '@mui/x-date-pickers': ['@mui/x-date-pickers'],

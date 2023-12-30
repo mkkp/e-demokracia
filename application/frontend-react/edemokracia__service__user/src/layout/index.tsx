@@ -6,16 +6,19 @@
 // Template name: actor/src/layout/index.tsx
 // Template file: actor/src/layout/index.tsx.hbs
 
-import { Outlet } from 'react-router-dom';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
-import { useMediaQuery, Box, Container, Toolbar } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { Outlet } from 'react-router-dom';
 import { CustomBreadcrumb } from '~/components/CustomBreadcrumb';
+import { DRAWER_WIDTH, MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
-import { MenuOrientation } from '~/config';
 import { Drawer } from './Drawer';
-import { Header } from './Header';
-import { Footer } from './Footer';
 import { HorizontalBar } from './Drawer/HorizontalBar';
+import { Footer } from './Footer';
+import { Header } from './Header';
 
 export const Layout = () => {
   const theme = useTheme();
@@ -38,7 +41,7 @@ export const Layout = () => {
       <Header />
       {!isHorizontal ? <Drawer /> : <HorizontalBar />}
 
-      <Box component="main" sx={{ width: 'calc(100% - 260px)', flexGrow: 1, p: { xs: 2, sm: 3 } }}>
+      <Box component="main" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Toolbar sx={{ mt: isHorizontal ? 8 : 'inherit' }} />
         <Container
           maxWidth={container ? 'xl' : false}

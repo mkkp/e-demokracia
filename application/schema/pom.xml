@@ -122,6 +122,23 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>schema-add-model-dependency</id>
+            <activation>
+                <property>
+                    <name>!schemaIgnoreModelDependency</name>
+                </property>
+            </activation>
+            <dependencies>
+                <!-- Too keep the order of build order. Model have to be packed before this module -->
+                <dependency>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>edemokracia-application-model</artifactId>
+                    <version>${project.version}</version>
+                </dependency>
+            </dependencies>
+	    </profile>
     </profiles>
 
     <build>
@@ -152,13 +169,6 @@
     </build>
 
     <dependencies>
-        <!-- Too keep the order of build order. Model have to be packed before this module -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>edemokracia-application-model</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>hu.blackbelt.judo</groupId>
             <artifactId>judo-rdbms-schema-cli</artifactId>

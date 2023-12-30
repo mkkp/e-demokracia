@@ -6,20 +6,22 @@
 // Template name: actor/src/theme/index.tsx
 // Template file: actor/src/theme/index.tsx.hbs
 
-import type { ReactNode } from 'react';
-import { useMemo } from 'react';
-import { createTheme, CssBaseline, StyledEngineProvider } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+import StyledEngineProvider from '@mui/material/StyledEngineProvider';
 import { amber, deepOrange, grey } from '@mui/material/colors';
+import { huHU as huHUForMaterial } from '@mui/material/locale';
+import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import type {} from '@mui/x-data-grid/themeAugmentation';
-import { huHU as huHUForMaterial } from '@mui/material/locale';
 import { huHU as huHUForGrids } from '@mui/x-data-grid';
-import { huHU as huHUForDatePickers } from '../l10n/@mui/x-date-pickers';
+import type {} from '@mui/x-data-grid/themeAugmentation';
+import type { ReactNode } from 'react';
+import { useMemo } from 'react';
 import { useConfig } from '../hooks';
-import { mainContainerPadding } from './extras';
-import { paletteThemeLight, paletteThemeDark } from './palette';
+import { huHU as huHUForDatePickers } from '../l10n/@mui/x-date-pickers';
 import { density } from './density';
+import { mainContainerPadding } from './extras';
+import { paletteThemeDark, paletteThemeLight } from './palette';
 import { typography } from './typography';
 
 const baseTheme = (paletteTheme: Theme) =>
@@ -83,7 +85,7 @@ const baseTheme = (paletteTheme: Theme) =>
         MuiFormControlLabel: {
           styleOverrides: {
             root: {
-              '&.switch > .MuiFormControlLabel-label': {
+              '&.checkbox > .MuiFormControlLabel-label': {
                 fontSize: `${density.fontSize}rem`,
               },
             },

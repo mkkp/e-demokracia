@@ -1,0 +1,214 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: #getPageContainersToGenerate(#application)
+// Path expression: 'src/containers/'+#containerPath(#self)+'/'+#containerComponentName(#self)+'PageContainer.tsx'
+// Template name: actor/src/containers/page.tsx
+// Template file: actor/src/containers/page.tsx.hbs
+
+import LoadingButton from '@mui/lab/LoadingButton';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Suspense, lazy } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import { useTranslation } from 'react-i18next';
+import { MdiIcon, PageHeader, useJudoNavigation } from '~/components';
+import { useConfirmDialog } from '~/components/dialog';
+import type {
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+} from '~/services/data-api';
+import { mainContainerPadding } from '~/theme';
+import { processQueryCustomizer } from '~/utilities';
+import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionDefinitions } from './CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_Edit';
+
+const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_Edit = lazy(
+  () =>
+    import(
+      '~/containers/CloseDebateOutputVoteDefinitionReference/CloseDebateOutputVoteDefinitionReference_View_Edit/CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_Edit'
+    ),
+);
+
+export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions
+  extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionDefinitions {
+  backAction?: () => Promise<void>;
+  cancelAction?: () => Promise<void>;
+  deleteAction?: () => Promise<void>;
+  refreshAction?: (
+    queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
+  ) => Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+  updateAction?: () => Promise<void>;
+}
+
+export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageProps {
+  title: string;
+  actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions;
+  isLoading: boolean;
+  editMode: boolean;
+  refreshCounter: number;
+  data: CloseDebateOutputVoteDefinitionReferenceStored;
+  isFormUpdateable: () => boolean;
+  isFormDeleteable: () => boolean;
+  storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void;
+  validation: Map<keyof CloseDebateOutputVoteDefinitionReference, string>;
+  setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>;
+  submit: () => Promise<void>;
+}
+
+// Name: CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_View_Edit
+export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPage(
+  props: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageProps,
+) {
+  const { openConfirmDialog } = useConfirmDialog();
+
+  const { t } = useTranslation();
+  const { navigate, back } = useJudoNavigation();
+  const {
+    title,
+    actions,
+    isLoading,
+    editMode,
+    refreshCounter,
+    data,
+    isFormUpdateable,
+    isFormDeleteable,
+    storeDiff,
+    validation,
+    setValidation,
+    submit,
+  } = props;
+  const queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
+    _mask: '{context}',
+  };
+
+  return (
+    <>
+      <PageHeader title={title}>
+        {!editMode && actions.backAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewBackButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'text'}
+              startIcon={<MdiIcon path="arrow-left" />}
+              onClick={async () => {
+                await actions.backAction!();
+              }}
+            >
+              <span>
+                {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.Back', {
+                  defaultValue: 'Back',
+                })}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {!editMode && actions.refreshAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewRefreshButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="refresh" />}
+              onClick={async () => {
+                await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+              }}
+            >
+              <span>
+                {t(
+                  'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.Refresh',
+                  { defaultValue: 'Refresh' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {!editMode && actions.deleteAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewDeleteButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="delete_forever" />}
+              onClick={async () => {
+                actions.deleteAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.Delete',
+                  { defaultValue: 'Delete' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.cancelAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewCancelButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'text'}
+              startIcon={<MdiIcon path="cancel" />}
+              onClick={async () => {
+                await actions.cancelAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.Cancel',
+                  { defaultValue: 'Cancel' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {editMode && actions.updateAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewUpdateButton"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={'contained'}
+              startIcon={<MdiIcon path="content-save" />}
+              onClick={async () => {
+                await actions.updateAction!();
+              }}
+            >
+              <span>
+                {t(
+                  'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.Update',
+                  { defaultValue: 'Save' },
+                )}
+              </span>
+            </LoadingButton>
+          </Grid>
+        )}
+        <div>{/* Placeholder */}</div>
+      </PageHeader>
+      <Suspense>
+        <Box sx={mainContainerPadding}>
+          <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_Edit
+            actions={actions}
+            refreshCounter={refreshCounter}
+            data={data}
+            isLoading={isLoading}
+            editMode={editMode}
+            storeDiff={storeDiff}
+            isFormUpdateable={isFormUpdateable}
+            isFormDeleteable={isFormDeleteable}
+            validation={validation}
+            setValidation={setValidation}
+            submit={submit}
+          />
+        </Box>
+      </Suspense>
+    </>
+  );
+}

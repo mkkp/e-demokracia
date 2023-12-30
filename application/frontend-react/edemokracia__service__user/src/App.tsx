@@ -6,14 +6,14 @@
 // Template name: actor/src/App.tsx
 // Template file: actor/src/App.tsx.hbs
 
-import { useEffect, useState } from 'react';
-import { IconButton } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import IconButton from '@mui/material/IconButton';
 import { SnackbarProvider, closeSnackbar } from 'notistack';
+import { useEffect, useState } from 'react';
+import { PrincipalProvider } from './auth';
 import { BreadcrumbProvider, MdiIcon } from './components';
 import { DialogProvider } from './components/dialog';
 import { Layout } from './layout';
-import { PrincipalProvider } from './auth';
 
 function App() {
   return (

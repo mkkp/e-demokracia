@@ -6,12 +6,12 @@
 // Template name: actor/src/layout/logo/index.tsx
 // Template file: actor/src/layout/logo/index.tsx.hbs
 
-import { Link } from 'react-router-dom';
-import { ButtonBase } from '@mui/material';
+import ButtonBase from '@mui/material/ButtonBase';
 import type { SxProps } from '@mui/system';
+import { Link } from 'react-router-dom';
 import { routeToDashboard } from '~/routes';
-import { LogoMain } from './LogoMain';
 import { LogoIcon } from './LogoIcon';
+import { LogoMain } from './LogoMain';
 
 export interface LogoSectionProps {
   reverse?: boolean;

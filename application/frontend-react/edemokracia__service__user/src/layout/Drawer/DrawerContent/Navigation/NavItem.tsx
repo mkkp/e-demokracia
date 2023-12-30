@@ -6,15 +6,19 @@
 // Template name: actor/src/layout/Drawer/DrawerContent/Navigation/NavItem.tsx
 // Template file: actor/src/layout/Drawer/DrawerContent/Navigation/NavItem.tsx.hbs
 
-import { forwardRef } from 'react';
-import type { ForwardRefExoticComponent, RefAttributes, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { ListItemButton, ListItemIcon, ListItemText, Typography, useMediaQuery } from '@mui/material';
-import { useConfig } from '~/hooks';
-import { MenuOrientation, ThemeMode } from '~/config';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { forwardRef } from 'react';
+import type { ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { MdiIcon, useJudoNavigation } from '~/components';
+import { MenuOrientation, ThemeMode } from '~/config';
+import { useConfig } from '~/hooks';
 
 export type NavItemType = {
   id?: string;

@@ -6,22 +6,17 @@
 // Template name: actor/src/utilities/error-handling.ts
 // Template file: actor/src/utilities/error-handling.ts.hbs
 
+import { useTrackService } from '@pandino/react-hooks';
+import type { OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack';
 import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTrackService } from '@pandino/react-hooks';
-import type { SnackbarMessage, OptionsObject, SnackbarKey } from 'notistack';
-import { useSnackbar } from 'notistack';
-import { exists } from './helper';
+import { useSnacks } from '~/hooks';
 import { toastConfig } from '../config';
+import { exists } from './helper';
 
 type EnqueueSnackbarCallback = (message: SnackbarMessage, options?: OptionsObject | undefined) => SnackbarKey;
 
 export interface ErrorHandlingOption<T> {
-  /**
-   * Duration to use for potential toasts, could be ignored in actual implementations.
-   */
-  duration?: number;
-
   /**
    * Callback from a component owning the form data used to set error messages on form inputs. Key-value pair is for
    * form field name and validation error message. Should be called only once per error handler call!
@@ -45,32 +40,18 @@ export interface ValidationError {
   location: string;
 }
 
-export type ErrorProcessor<T> = (
-  error: any,
-  defaultResults: ErrorProcessResult<T>,
-  options?: ErrorHandlingOption<T>,
-  payload?: T,
-) => void;
-
-export const ERROR_PROCESSOR_HOOK_INTERFACE_KEY = 'ErrorProcessorHook';
-
-export type ErrorProcessorHook<T> = () => ErrorProcessor<T>;
-
-export type ErrorHandler<T> = (error: any, options?: ErrorHandlingOption<T>, payload?: T) => void;
-
 export interface ErrorProcessResult<T> {
   errorToastConfig: OptionsObject;
   toastMessage?: string | undefined;
   validation?: Map<keyof T, string>;
 }
 
-export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
+export const useErrorHandler = () => {
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
-  const { service: processorHook } = useTrackService<ErrorProcessorHook<T>>(filter);
-  const customErrorProcessor = processorHook && processorHook();
+  const { showErrorSnack } = useSnacks();
 
-  return (error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
+  return <T>(error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
+    console.error(error);
     const errorResults: ErrorProcessResult<T> = {
       errorToastConfig: {
         ...toastConfig.error,
@@ -133,7 +114,6 @@ export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
             const errorList = response.data as ServerError<T>[];
             errorResults.errorToastConfig = {
               ...errorResults.errorToastConfig,
-              autoHideDuration: options?.duration ?? undefined,
             };
             errorResults.toastMessage = t('judo.error.validation-failed', {
               defaultValue: 'Please make sure all fields are filled in correctly.',
@@ -165,13 +145,8 @@ export const useErrorHandler = <T>(filter: string): ErrorHandler<T> => {
       }
     }
 
-    if (typeof customErrorProcessor === 'function') {
-      customErrorProcessor(error, errorResults, options, payload);
-      return;
-    }
-
     if (errorResults.toastMessage) {
-      enqueueSnackbar(errorResults.toastMessage, errorResults.errorToastConfig);
+      showErrorSnack(errorResults.toastMessage, errorResults.errorToastConfig);
     }
 
     if (typeof options?.setValidation === 'function' && errorResults.validation) {

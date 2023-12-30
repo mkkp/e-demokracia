@@ -6,7 +6,12 @@
 // Template name: actor/src/components/dialog/ConfirmationDialog.tsx
 // Template file: actor/src/components/dialog/ConfirmationDialog.tsx.hbs
 
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ConfirmationDialogProps } from '~/components-api';

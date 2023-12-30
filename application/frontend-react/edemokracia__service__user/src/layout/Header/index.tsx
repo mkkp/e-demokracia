@@ -6,14 +6,17 @@
 // Template name: actor/src/layout/Header/index.tsx
 // Template file: actor/src/layout/Header/index.tsx.hbs
 
+import type { AppBarProps } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import IconButton from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { AppBar, Toolbar, useMediaQuery, IconButton } from '@mui/material';
-import type { AppBarProps } from '@mui/material';
-import { useConfig } from '~/hooks';
-import { MenuOrientation, ThemeMode } from '~/config';
 import { MdiIcon } from '~/components';
+import { DRAWER_WIDTH, MenuOrientation, ThemeMode } from '~/config';
+import { useConfig } from '~/hooks';
 import { AppBarStyled } from './AppBarStyled';
 import { HeaderContent } from './HeaderContent';
 
@@ -47,7 +50,11 @@ export const Header = () => {
     sx: {
       borderBottom: `1px solid ${theme.palette.divider}`,
       zIndex: 1200,
-      width: isHorizontal ? '100%' : !miniDrawer ? 'calc(100% - 260px)' : { xs: '100%', lg: 'calc(100% - 60px)' },
+      width: isHorizontal
+        ? '100%'
+        : !miniDrawer
+          ? `calc(100% - ${DRAWER_WIDTH}px)`
+          : { xs: '100%', lg: 'calc(100% - 60px)' },
     },
   };
 

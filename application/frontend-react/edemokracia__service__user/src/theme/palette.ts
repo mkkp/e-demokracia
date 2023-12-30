@@ -6,7 +6,7 @@
 // Template name: actor/src/theme/palette.ts
 // Template file: actor/src/theme/palette.ts.hbs
 
-import { createTheme } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
 // You can add extra imports by overriding the `actor/src/theme/palette.ts.extra-imports.fragment.hbs` file
 
 export const paletteThemeLight = createTheme({

@@ -6,19 +6,19 @@
 // Template name: actor/src/l10n/l10n-context.tsx
 // Template file: actor/src/l10n/l10n-context.tsx.hbs
 
-import hu from 'date-fns/locale/hu';
-import enUS from 'date-fns/locale/en-US';
-import { createContext, useContext, useState, useEffect } from 'react';
-import type { ReactNode } from 'react';
-import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { I18nextProvider } from 'react-i18next';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import type { ServiceReference } from '@pandino/pandino-api';
-import { useTrackService, useBundleContext } from '@pandino/react-hooks';
+import { useBundleContext, useTrackService } from '@pandino/react-hooks';
+import type { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import enUS from 'date-fns/locale/en-US';
+import hu from 'date-fns/locale/hu';
+import i18n from 'i18next';
+import { createContext, useContext, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { I18nextProvider } from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 
 const locales = {
   'en-US': enUS,
@@ -48,8 +48,9 @@ export const L10NProvider = ({ axios, children }: { axios?: AxiosInstance; child
   const defaultLocale: LocaleKey = 'hu-HU';
   const [locale, setLocale] = useState<LocaleKey>(defaultLocale);
   const [translation, setTranslation] = useState<any>(null);
-  const [filter, setFilter] = useState<string>(`(${OBJECTCLASS}=${L10N_TRANSLATION_PROVIDER_INTERFACE_KEY})`);
-  const { service: translationProvider } = useTrackService<L10NTranslationProvider>(filter);
+  const { service: translationProvider } = useTrackService<L10NTranslationProvider>(
+    `(${OBJECTCLASS}=${L10N_TRANSLATION_PROVIDER_INTERFACE_KEY})`,
+  );
   const [interceptorId, setInterceptorId] = useState<number | null>(null);
 
   useEffect(() => {

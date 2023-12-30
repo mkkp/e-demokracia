@@ -6,12 +6,17 @@
 // Template name: actor/src/utilities/file-handling.tsx
 // Template file: actor/src/utilities/file-handling.tsx.hbs
 
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
 import jwt_decode from 'jwt-decode';
-import { Box, Button, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import { useDialog } from '~/components/dialog';
-import { accessServiceImpl } from '../generated/data-axios';
+import { accessServiceImpl } from '~/services/data-axios';
 
 export type FileHandlingHook = () => {
   downloadFile: (data: any, attributeName: string, disposition: 'inline' | 'attachment') => Promise<void>;

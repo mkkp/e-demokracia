@@ -7,19 +7,40 @@
 // Template file: actor/src/auth/axiosInterceptor.ts.hbs
 
 import type { AxiosRequestConfig } from 'axios';
-import { User } from 'oidc-client-ts';
+import { User, WebStorageStateStore } from 'oidc-client-ts';
 
-const securityStore: { authority?: string; clientId?: string } = {};
+const securityStore: { authority?: string; clientId?: string; name?: string } = {};
 
 export function storeMeta(meta: any): void {
   securityStore.authority = meta.issuer;
   securityStore.clientId = meta.clientId;
+  securityStore.name = meta.name;
 }
 
-export function getUser(): any {
-  const { authority, clientId } = securityStore;
+export const storageKey = () => `oidc.user:${securityStore.name!}`;
 
-  const oidcStorage = window.sessionStorage.getItem(`oidc.user:${authority!}:${clientId!}`);
+// We need to store the user per realm, not per actor.
+const store: Storage = {
+  ...window.sessionStorage,
+  getItem(key: string): string | null {
+    return window.sessionStorage.getItem(storageKey());
+  },
+  setItem(key: string, value: string) {
+    window.sessionStorage.setItem(storageKey(), value);
+  },
+  removeItem(key: string) {
+    window.sessionStorage.removeItem(storageKey());
+  },
+};
+
+export const clearSecurityStorage = () => store.removeItem(storageKey());
+
+export const userStore = new WebStorageStateStore({ store: store as Storage });
+
+export function getUser(): any {
+  const { name } = securityStore;
+
+  const oidcStorage = window.sessionStorage.getItem(storageKey());
   if (!oidcStorage) {
     return null;
   }

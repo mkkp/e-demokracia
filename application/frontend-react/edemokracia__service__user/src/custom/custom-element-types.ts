@@ -28,12 +28,6 @@ export interface CustomFormVisualElementProps<T> {
   readonly editMode: boolean;
 
   /**
-   * The "payloadDiff" is a `Record` where we only store changes applied to the state, and not the state as a whole.
-   * We are usually only sending this "diffed" payload on CRUD Update operations.
-   */
-  readonly payloadDiff: Record<keyof T, any>;
-
-  /**
    * State modifier method which implicitly updates the `data` and adds an entry to the `payloadDiff` as well.
    *
    * It is highly recommended to use this method to update the data/state  on pages in order to be consistent with the

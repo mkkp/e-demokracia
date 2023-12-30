@@ -11,14 +11,11 @@ import {
   ConfirmDialogProviderContext,
   FilterDialogProviderContext,
   PageDialogProviderContext,
-  RangeDialogProviderContext,
 } from '../../components-api';
 
 export const PageDialogContextState = createContext<PageDialogProviderContext>(undefined as any);
 
 export const ConfirmDialogContextState = createContext<ConfirmDialogProviderContext>(undefined as any);
-
-export const RangeDialogContextState = createContext<RangeDialogProviderContext>(undefined as any);
 
 export const FilterDialogContextState = createContext<FilterDialogProviderContext>(undefined as any);
 
@@ -47,16 +44,6 @@ export const useConfirmDialog = () => {
 
   if (context === undefined) {
     throw new Error('useConfirmDialog was used outside its Provider');
-  }
-
-  return context;
-};
-
-export const useRangeDialog = () => {
-  const context = useContext(RangeDialogContextState);
-
-  if (context === undefined) {
-    throw new Error('useRangeDialog was used outside its Provider');
   }
 
   return context;

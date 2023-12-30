@@ -1,12 +1,17 @@
-import { v1 as uuidv1 } from 'uuid';
-import { _NumericOperation, _StringOperation, _BooleanOperation, _EnumerationOperation } from '@judo/data-api-common';
-import type { GridFilterModel, GridFilterItem } from '@mui/x-data-grid';
+import type { GridFilterItem, GridFilterModel } from '@mui/x-data-grid';
 import { GridLogicOperator } from '@mui/x-data-grid';
-import { isEqual, compareAsc } from 'date-fns';
+import { compareAsc, isEqual } from 'date-fns';
+import { v1 as uuidv1 } from 'uuid';
+import {
+  _BooleanOperation,
+  _EnumerationOperation,
+  _NumericOperation,
+  _StringOperation,
+} from '~/services/data-api/common';
 import type { Filter, FilterOption, Operation } from '../components-api';
 import { FilterType } from '../components-api';
-import { dateToJudoDateString } from './helper';
 import { serviceDateToUiDate } from './form-utils';
+import { dateToJudoDateString } from './helper';
 
 type FilterBy = {
   value: any;
@@ -95,7 +100,7 @@ export function filterByStringOperation<T>(filter: Filter, data: T[]): T[] {
       return data.filter((d) => d[attributeName] !== filter.filterBy.value);
     case _StringOperation.like:
       return data.filter((d) =>
-        (d[attributeName] as string).toLowerCase().includes(filter.filterBy.value.toLowerCase()),
+        ((d[attributeName] as string) || '').toLowerCase().includes(filter.filterBy.value.toLowerCase()),
       );
     case _StringOperation.greaterOrEqual:
       return data.filter((d) => (d[attributeName] as string).localeCompare(filter.filterBy.value) >= 0);
@@ -364,7 +369,7 @@ export function mapFilterToFilterModel(filter: Filter): GridFilterItem {
       return {
         ...res,
         value: String(filterBy.value),
-        operator: filterBy.operator === ('equal' || 'equals') ? 'is' : 'not',
+        operator: filterBy.operator === 'equal' || filterBy.operator === 'equals' ? 'is' : 'not',
       };
     case FilterType.enumeration:
       return {

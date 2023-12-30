@@ -1,5 +1,5 @@
-import type { GridRowClassNameParams, GridValidRowModel } from '@mui/x-data-grid';
 import { darken, lighten } from '@mui/material/styles';
+import type { GridRowClassNameParams, GridValidRowModel } from '@mui/x-data-grid';
 
 export const TABLE_ROW_HIGHLIGHTING_HOOK_INTERFACE_KEY = 'table-row-highlighting-hook-interface-key';
 

@@ -6,7 +6,7 @@
 // Template name: actor/src/components/MdiIcon.tsx
 // Template file: actor/src/components/MdiIcon.tsx.hbs
 
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 import { mapIcon, mapMimeTypeIcon } from '../utilities/icons';
 
 export interface MdiIconProps {

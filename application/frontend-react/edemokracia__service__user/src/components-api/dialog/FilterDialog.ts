@@ -6,7 +6,12 @@
 // Template name: actor/src/components-api/dialog/FilterDialog.ts
 // Template file: actor/src/components-api/dialog/FilterDialog.ts.hbs
 
-import { _BooleanOperation, _EnumerationOperation, _NumericOperation, _StringOperation } from '@judo/data-api-common';
+import {
+  _BooleanOperation,
+  _EnumerationOperation,
+  _NumericOperation,
+  _StringOperation,
+} from '~/services/data-api/common';
 
 export interface FilterOption {
   id: string;

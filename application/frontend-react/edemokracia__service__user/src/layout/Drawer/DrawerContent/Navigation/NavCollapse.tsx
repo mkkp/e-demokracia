@@ -6,29 +6,27 @@
 // Template name: actor/src/layout/Drawer/DrawerContent/Navigation/NavCollapse.tsx
 // Template file: actor/src/layout/Drawer/DrawerContent/Navigation/NavCollapse.tsx.hbs
 
+import Box from '@mui/material/Box';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Collapse from '@mui/material/Collapse';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import Typography from '@mui/material/Typography';
+import { styled, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useJudoNavigation } from '~/components';
 import { useTranslation } from 'react-i18next';
-import { styled, useTheme } from '@mui/material/styles';
-import {
-  Box,
-  Collapse,
-  ClickAwayListener,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Paper,
-  Popper,
-  Typography,
-  useMediaQuery,
-} from '@mui/material';
-import { useConfig } from '~/hooks';
-import { MenuOrientation, ThemeMode } from '~/config';
+import { useJudoNavigation } from '~/components';
 import { MdiIcon, SimpleBar } from '~/components';
-import { NavItem } from './NavItem';
+import { MenuOrientation, ThemeMode } from '~/config';
+import { useConfig } from '~/hooks';
 import { Transitions } from '../../../Transitions';
+import { NavItem } from './NavItem';
 import { NavItemType } from './NavItem';
 
 type VirtualElement = {
@@ -143,8 +141,8 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
                 bgcolor: miniDrawer
                   ? 'transparent'
                   : theme.palette.mode === ThemeMode.DARK
-                  ? 'divider'
-                  : 'primary.lighter',
+                    ? 'divider'
+                    : 'primary.lighter',
               },
             }}
           >

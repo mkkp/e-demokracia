@@ -6,19 +6,17 @@
 // Template name: actor/src/components/DropdownButton.tsx
 // Template file: actor/src/components/DropdownButton.tsx.hbs
 
-import {
-  Button,
-  ClickAwayListener,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-  ListItemIcon,
-  ListItemText,
-} from '@mui/material';
-import { useState, useRef, useEffect } from 'react';
-import type { ReactNode, KeyboardEvent, SyntheticEvent } from 'react';
+import Button from '@mui/material/Button';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent, ReactNode, SyntheticEvent } from 'react';
 import { MdiIcon } from './MdiIcon';
 
 interface DropdownMenuItem {
@@ -26,7 +24,7 @@ interface DropdownMenuItem {
   disabled?: boolean;
   visible?: boolean;
   label?: string;
-  onClick: () => void;
+  onClick?: () => void;
   startIcon?: ReactNode;
 }
 
@@ -125,8 +123,10 @@ export function DropdownButton({
                           id={menuItem.id}
                           disabled={menuItem.disabled ?? false}
                           onClick={(event) => {
-                            handleClose(event);
-                            menuItem.onClick();
+                            if (menuItem.onClick) {
+                              handleClose(event);
+                              menuItem.onClick();
+                            }
                           }}
                         >
                           <ListItemIcon sx={{ minWidth: '0 !important', mr: 1 }}>{menuItem.startIcon}</ListItemIcon>

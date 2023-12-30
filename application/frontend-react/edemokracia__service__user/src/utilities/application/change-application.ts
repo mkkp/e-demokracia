@@ -6,12 +6,11 @@
 // Template name: actor/src/utilities/application/change-application.ts
 // Template file: actor/src/utilities/application/change-application.ts.hbs
 
+import { clearSecurityStorage } from '~/auth';
 import type { HandleApplicationChange } from './interfaces';
 
 export const changeApplication: HandleApplicationChange = (applicationKey: string) => {
-  const { pathname, origin } = window.location;
-  const base = pathname.startsWith('/') ? pathname.substring(1) : pathname;
-  const root: string = base.substring(0, base.indexOf('/'));
-
-  window.location.href = origin + '/' + root + '/' + applicationKey;
+  clearSecurityStorage();
+  const { origin } = window.location;
+  window.location.href = origin + '/' + applicationKey;
 };

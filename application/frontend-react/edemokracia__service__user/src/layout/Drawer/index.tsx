@@ -6,14 +6,16 @@
 // Template name: actor/src/layout/Drawer/index.tsx
 // Template file: actor/src/layout/Drawer/index.tsx.hbs
 
-import { useMemo } from 'react';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
 import { useTheme } from '@mui/material/styles';
-import { Box, Drawer as MuiDrawer, useMediaQuery } from '@mui/material';
-import { DrawerHeader } from './DrawerHeader';
-import { DrawerContent } from './DrawerContent';
-import { MiniDrawerStyled } from './MiniDrawerStyled';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useMemo } from 'react';
 import { DRAWER_WIDTH } from '~/config';
 import { useConfig } from '~/hooks';
+import { DrawerContent } from './DrawerContent';
+import { DrawerHeader } from './DrawerHeader';
+import { MiniDrawerStyled } from './MiniDrawerStyled';
 
 export interface DrawerProps {
   window?: () => Window;

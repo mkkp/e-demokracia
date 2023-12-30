@@ -6,18 +6,16 @@
 // Template name: actor/src/components/dialog/OperationFaultDialog.tsx
 // Template file: actor/src/components/dialog/OperationFaultDialog.tsx.hbs
 
-import { useTranslation } from 'react-i18next';
-import {
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
-  List,
-  ListItem,
-  Typography,
-} from '@mui/material';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '../MdiIcon';
 
 interface OperationFaultDialogProps {

@@ -16,13 +16,6 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.0-SNAPSHOT</revision>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <timestamp>${maven.build.timestamp}</timestamp>
-        <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-
         <surefire-version>3.0.0</surefire-version>
 
         <!--suppress UnresolvedMavenProperty -->
@@ -35,33 +28,33 @@
         <model-groupId>party.mkkp.edemokracia</model-groupId>
         <model-artifactId>edemokracia</model-artifactId>
         <model-name>edemokracia</model-name>
-        <model-version>${revision}</model-version>
+        <model-version>${project.version}</model-version>
         
         <dialectList>postgresql,hsqldb</dialectList>
         <ignoreOpenapi>true</ignoreOpenapi>
         <validateModels>false</validateModels>
-        <useCache>false</useCache>
+        <useCache>true</useCache>
         <validateChecksum>true</validateChecksum>
         <karafOfflineZip>true</karafOfflineZip>
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.judo-properties-definition.fragment.hbs' file -->
-        <structured-map-proxy-version>2.0.0.20231109_143400_56d270cc_develop</structured-map-proxy-version>
-        <judo-dao-api-version>1.0.4.20230914_110116_25a9d1dd_develop</judo-dao-api-version>
+        <structured-map-proxy-version>2.0.0.20231122_182717_c1fe065e_develop</structured-map-proxy-version>
+        <judo-dao-api-version>1.0.4.20231116_201621_0bd3620b_develop</judo-dao-api-version>
         <judo-dispatcher-api-version>1.0.3.20230826_230134_1ce94d88_develop</judo-dispatcher-api-version>
-        <judo-sdk-common-version>1.0.4.20231110_040543_2ac92f8c_develop</judo-sdk-common-version>
+        <judo-sdk-common-version>1.0.4.20231123_040623_bd1b65d6_develop</judo-sdk-common-version>
         <mapper-version>1.0.4.20230826_230852_5723dcb6_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0.20231110_040921_4d96657e_develop </judo-tatami-version>
-        <judo-platform-version>2.0.1.20231112_040539_2ae57752_develop</judo-platform-version>
-        <judo-services-version>1.1.0.20231110_041713_ac3920e6_develop</judo-services-version>
-        <judo-rdbms-schema-version>1.0.0.20231110_040920_83c55265_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20231107_042152_6390aea2_develop</judo-tatami-client-version>
+        <judo-tatami-version>1.1.0.20231221_041638_ed28e8c1_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20231221_043209_ef9f99e6_develop</judo-platform-version>
+        <judo-services-version>1.1.0.20231221_042412_acc42c68_develop</judo-services-version>
+        <judo-rdbms-schema-version>1.0.0.20231202_040605_a4bac0e0_develop</judo-rdbms-schema-version>
+        <judo-tatami-client-version>1.1.0.20231222_162626_eee5fc4c_develop</judo-tatami-client-version>
         
-        <judo-meta-ui-version>1.1.0.20231107_041319_cd61fc10_develop</judo-meta-ui-version>
+        <judo-meta-ui-version>1.1.0.20231220_172331_c7863b50_develop</judo-meta-ui-version>
         <judo-meta-psm-version>1.3.0.20231107_041329_29cfda41_develop</judo-meta-psm-version>
-        <judo-psm-generator-sdk-core-version>1.0.0.20231111_113323_fa74b1df_develop</judo-psm-generator-sdk-core-version>
-        <judo-psm-generator-jaxrs-version>1.0.0.20231110_040631_11493027_develop</judo-psm-generator-jaxrs-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20231130_090851_402cfa2a_develop</judo-psm-generator-sdk-core-version>
+        <judo-psm-generator-jaxrs-version>1.0.0.20231123_040717_25d59e05_develop</judo-psm-generator-jaxrs-version>
         <cxf-jaxrs-application-manager-version>0.7.1.20230914_110111_1c9ad225_develop</cxf-jaxrs-application-manager-version>
         
         <osgi-default-import>
@@ -91,9 +84,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
-                    <configuration>
-                        <forceJavacCompilerUse>true</forceJavacCompilerUse>
-                    </configuration>
                 </plugin>
 
                 <plugin>

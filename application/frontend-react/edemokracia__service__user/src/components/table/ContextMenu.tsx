@@ -1,12 +1,14 @@
-import type { JudoStored } from '@judo/data-api-common';
-import type { ForwardedRef, MouseEvent } from 'react';
-import type { Filter, Operation, FilterOption } from '~/components-api';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
 import type { GridColDef } from '@mui/x-data-grid';
-import { Menu, MenuItem, Typography } from '@mui/material';
-import { useState, forwardRef, useImperativeHandle } from 'react';
-import { MdiIcon } from '~/components';
-import { FilterType } from '~/components-api';
+import type { ForwardedRef, MouseEvent } from 'react';
+import { forwardRef, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { MdiIcon } from '~/components';
+import type { Filter, FilterOption, Operation } from '~/components-api';
+import { FilterType } from '~/components-api';
+import type { JudoStored } from '~/services/data-api/common';
 
 export interface ContextMenuProps<T, P extends JudoStored<T>> {
   columns: GridColDef<P>[];
@@ -36,12 +38,15 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
       mouseY: number;
     } | null>(null);
     const [field, setField] = useState<keyof P | undefined>();
-    const filterTypeMapping: Record<keyof T, FilterType> = filterOptions.reduce((prev, current) => {
-      return {
-        ...prev,
-        [current.attributeName]: current.filterType,
-      };
-    }, {} as Record<keyof T, FilterType>);
+    const filterTypeMapping: Record<keyof T, FilterType> = filterOptions.reduce(
+      (prev, current) => {
+        return {
+          ...prev,
+          [current.attributeName]: current.filterType,
+        };
+      },
+      {} as Record<keyof T, FilterType>,
+    );
 
     useImperativeHandle(ref, () => ({
       handleContextMenu,
@@ -99,7 +104,9 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
           },
           filterBy: {
             value: selectedValue,
-            operator: (filterType === FilterType.boolean || filterType === FilterType.enumeration
+            operator: (filterType === FilterType.boolean ||
+            filterType === FilterType.enumeration ||
+            filterType === FilterType.trinaryLogic
               ? 'equals'
               : 'equal') as Operation,
           },
@@ -129,11 +136,11 @@ export const ContextMenu = forwardRef<ContextMenuApi, ContextMenuProps<any, any>
           },
           filterBy: {
             value: filterType === FilterType.boolean ? !selectedValue : selectedValue, // invert bool value because we only have "equals" operator
-            operator: (filterType === FilterType.boolean
+            operator: (filterType === FilterType.boolean || filterType === FilterType.trinaryLogic
               ? 'equals'
               : filterType === FilterType.enumeration
-              ? 'notEquals'
-              : 'notEqual') as Operation,
+                ? 'notEquals'
+                : 'notEqual') as Operation,
           },
         });
       }

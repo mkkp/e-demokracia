@@ -8,27 +8,19 @@
 
 import { useState } from 'react';
 import type { ReactNode } from 'react';
-import { ConfirmationDialog } from './ConfirmationDialog';
-import { OperationFaultDialog } from './OperationFaultDialog';
-import { FilterDialog } from './FilterDialog';
-import { PageDialog } from './PageDialog';
-import { RangeDialog } from './RangeDialog';
+import type { JudoStored, QueryCustomizer } from '~/services/data-api/common';
 import type {
   ConfirmDialogProviderContext,
   DialogProviderProps,
   FilterDialogProviderContext,
-  OpenRangeDialogProps,
   PageDialogProviderContext,
-  RangeDialogProviderContext,
 } from '../../components-api';
 import type { Filter, FilterOption } from '../../components-api';
-import type { JudoStored, QueryCustomizer } from '@judo/data-api-common';
-import {
-  ConfirmDialogContextState,
-  FilterDialogContextState,
-  PageDialogContextState,
-  RangeDialogContextState,
-} from './hooks';
+import { ConfirmationDialog } from './ConfirmationDialog';
+import { FilterDialog } from './FilterDialog';
+import { OperationFaultDialog } from './OperationFaultDialog';
+import { PageDialog } from './PageDialog';
+import { ConfirmDialogContextState, FilterDialogContextState, PageDialogContextState } from './hooks';
 
 export const DialogProvider = ({ children }: DialogProviderProps) => {
   // Page Dialog
@@ -48,55 +40,6 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
 
   const pageDialogContext: PageDialogProviderContext = {
     openPageDialog: handleOpenPageDialog,
-  };
-
-  // Range Dialog
-  const [isOpenRangeDialog, setIsOpenRangeDialog] = useState(false);
-  const [rangeDialog, setRangeDialog] = useState<ReactNode>();
-
-  const handleCloseRangeDialog = () => {
-    setIsOpenRangeDialog(false);
-  };
-
-  const handleOpenRangeDialog = async <T extends JudoStored<T>, U extends QueryCustomizer<T>>({
-    id,
-    columns,
-    defaultSortField,
-    rangeCall,
-    single = false,
-    alreadySelectedItems,
-    filterOptions,
-    initialQueryCustomizer,
-    initialFilters,
-    createTrigger,
-    editMode,
-  }: OpenRangeDialogProps<T, U>) => {
-    setIsOpenRangeDialog(true);
-
-    return new Promise<{ value: T[] | T; resolveSource: 'selection' | 'create' }>((resolve) => {
-      setRangeDialog(
-        <RangeDialog<T, U>
-          id={id}
-          handleClose={handleCloseRangeDialog}
-          open={true}
-          resolve={resolve}
-          columns={columns}
-          defaultSortField={defaultSortField}
-          rangeCall={rangeCall}
-          single={single}
-          alreadySelectedItems={alreadySelectedItems}
-          filterOptions={filterOptions}
-          initalQueryCustomizer={initialQueryCustomizer}
-          initialFilters={initialFilters}
-          createTrigger={createTrigger}
-          editMode={editMode}
-        />,
-      );
-    });
-  };
-
-  const customDialogContext: RangeDialogProviderContext = {
-    openRangeDialog: handleOpenRangeDialog,
   };
 
   // Confirmation Dialog
@@ -166,15 +109,12 @@ export const DialogProvider = ({ children }: DialogProviderProps) => {
   return (
     <PageDialogContextState.Provider value={pageDialogContext}>
       <ConfirmDialogContextState.Provider value={confirmDialogContext}>
-        <RangeDialogContextState.Provider value={customDialogContext}>
-          <FilterDialogContextState.Provider value={filterDialogContext}>
-            {children}
-            {isOpenPageDialog && pageDialog}
-            {isOpenConfirmDialog && confirmDialog}
-            {isOpenRangeDialog && rangeDialog}
-            {isOpenFilterDialog && filterDialog}
-          </FilterDialogContextState.Provider>
-        </RangeDialogContextState.Provider>
+        <FilterDialogContextState.Provider value={filterDialogContext}>
+          {children}
+          {isOpenPageDialog && pageDialog}
+          {isOpenConfirmDialog && confirmDialog}
+          {isOpenFilterDialog && filterDialog}
+        </FilterDialogContextState.Provider>
       </ConfirmDialogContextState.Provider>
     </PageDialogContextState.Provider>
   );

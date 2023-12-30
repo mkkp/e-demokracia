@@ -6,29 +6,33 @@
 // Template name: actor/src/components/dialog/FilterDialog.tsx
 // Template file: actor/src/components/dialog/FilterDialog.tsx.hbs
 
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  Slide,
-  Box,
-  Container,
-  Grid,
-  TextField,
-  MenuItem,
-  Checkbox,
-  FormControlLabel,
-  InputAdornment,
-  IconButton,
-  Typography,
-} from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import Slide from '@mui/material/Slide';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import type { TransitionProps } from '@mui/material/transitions';
 import { DatePicker, DateTimePicker, TimePicker } from '@mui/x-date-pickers';
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, ReactElement, Ref } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  _BooleanOperation,
+  _EnumerationOperation,
+  _NumericOperation,
+  _StringOperation,
+} from '~/services/data-api/common';
 import type {
   Filter,
   FilterDialogProps,
@@ -38,12 +42,11 @@ import type {
   Operation,
 } from '../../components-api';
 import { FilterType } from '../../components-api';
-import { dateToJudoDateString, exists, uiDateToServiceDate, serviceDateToUiDate } from '../../utilities';
 import { mainContainerPadding } from '../../theme';
-import { _BooleanOperation, _EnumerationOperation, _NumericOperation, _StringOperation } from '@judo/data-api-common';
+import { dateToJudoDateString, exists, serviceDateToUiDate, uiDateToServiceDate } from '../../utilities';
 import { DropdownButton } from '../DropdownButton';
-import { TrinaryLogicCombobox } from '../widgets/TrinaryLogicCombobox';
 import { MdiIcon } from '../MdiIcon';
+import { TrinaryLogicCombobox } from '../widgets/TrinaryLogicCombobox';
 
 const getDefaultOperator = (filterType: FilterType) => {
   switch (filterType) {

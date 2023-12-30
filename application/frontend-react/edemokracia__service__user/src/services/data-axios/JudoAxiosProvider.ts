@@ -1,0 +1,45 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'data-axios/'+'JudoAxiosProvider.ts'
+// Template name: judoAxiosProvider.ts.hbs
+// Template file: data-axios/judoAxiosProvider.ts.hbs
+
+import type { AxiosInstance } from 'axios';
+import { AxiosProvider, JudoAxiosProviderInitData } from './AxiosProvider';
+
+export class JudoAxiosProvider implements AxiosProvider {
+  private axios?: AxiosInstance;
+  private basePathFactory?: () => string;
+  private filePathFactory?: () => string;
+
+  init(data: JudoAxiosProviderInitData): void {
+    this.axios = data.axios;
+    this.basePathFactory = data.basePathFactory;
+    this.filePathFactory = data.filePathFactory;
+  }
+
+  getAxios(): AxiosInstance {
+    if (!this.axios) {
+      throw new Error('[JudoAxiosProvider] Axios instance has not been set yet. Please init() the provider first!');
+    }
+    return this.axios;
+  }
+
+  getBasePath(suffix?: string): string {
+    let base = typeof this.basePathFactory !== 'function' ? '/User' : this.basePathFactory();
+    base = base.replace(/\/+$/, '');
+
+    return base + (suffix ? '/' + suffix : '');
+  }
+
+  getFilePath(suffix?: string): string {
+    let base = typeof this.filePathFactory !== 'function' ? '/User' : this.filePathFactory();
+    base = base.replace(/\/+$/, '');
+
+    return base + (suffix ? '/' + suffix : '');
+  }
+}
+
+export const judoAxiosProvider: AxiosProvider = new JudoAxiosProvider();

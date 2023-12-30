@@ -12,23 +12,25 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import '@mdi/font/css/materialdesignicons.css';
 
+import loaderConfiguration from '@pandino/loader-configuration-dom';
+import Pandino from '@pandino/pandino';
+import { PandinoProvider } from '@pandino/react-hooks';
+import axios from 'axios';
+import { WebStorageStateStore } from 'oidc-client-ts';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import axios from 'axios';
-import { createHashRouter, RouterProvider } from 'react-router-dom';
-import Pandino from '@pandino/pandino';
-import loaderConfiguration from '@pandino/loader-configuration-dom';
-import { PandinoProvider } from '@pandino/react-hooks';
 import { AuthProvider } from 'react-oidc-context';
-import { axiosRequestInterceptor, Auth, storeMeta, getUser } from './auth';
-import { ThemeCustomization } from './theme';
-import { applicationCustomizer } from './custom';
-import { L10NProvider } from './l10n/l10n-context';
-import { accessServiceImpl, judoAxiosProvider } from './generated/data-axios';
+import type { AuthProviderProps } from 'react-oidc-context';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
+import { accessServiceImpl, judoAxiosProvider } from '~/services/data-axios';
 import App from './App';
-import { routes } from './routes';
+import { Auth, axiosRequestInterceptor, storeMeta, userStore } from './auth';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
+import { applicationCustomizer } from './custom';
 import { ConfigProvider } from './hooks';
+import { L10NProvider } from './l10n/l10n-context';
+import { routes } from './routes';
+import { ThemeCustomization } from './theme';
 
 axios.interceptors.request.use(axiosRequestInterceptor);
 
@@ -65,14 +67,14 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
   ]);
 
   const meta = await accessServiceImpl.getMetaData();
-  const { clientId, defaultScopes, issuer } = meta.security[0];
-  storeMeta({ issuer, clientId });
-
-  const oidcConfig = {
+  const { clientId, name, issuer } = meta.security[0];
+  storeMeta({ issuer, clientId, name });
+  const oidcConfig: AuthProviderProps = {
     authority: issuer,
     client_id: clientId,
     redirect_uri: window.location.href,
     automaticSilentRenew: true,
+    userStore,
   };
 
   root.render(

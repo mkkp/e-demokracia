@@ -6,9 +6,9 @@
 // Template name: actor/src/utilities/table.ts
 // Template file: actor/src/utilities/table.ts.hbs
 
+import type { GridColDef, GridFilterModel, GridRowSelectionModel, GridSortModel } from '@mui/x-data-grid';
 import type { MutableRefObject } from 'react';
-import type { GridSortModel, GridFilterModel, GridRowSelectionModel } from '@mui/x-data-grid';
-import type { JudoStored } from '@judo/data-api-common';
+import type { JudoStored } from '~/services/data-api/common';
 import type { Filter } from '../components-api';
 
 export interface PersistedTableData {
@@ -20,6 +20,11 @@ export interface PersistedTableData {
 export interface RefreshableTable {
   fetchData: () => Promise<void>;
 }
+
+export const TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY = 'TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY';
+
+export type ColumnCustomizerHook<T extends JudoStored<T>> = () => ColumnCustomizer<T>;
+export type ColumnCustomizer<T extends JudoStored<T>> = (original: GridColDef<T>) => GridColDef<T>;
 
 export const isRowSelectable = <T extends JudoStored<T>>(
   row: T & { __selected?: boolean },
@@ -40,21 +45,25 @@ export const isRowSelectable = <T extends JudoStored<T>>(
   return true;
 };
 
-export const getUpdatedRowsSelected = <T extends JudoStored<any>>(
-  selectedRows: MutableRefObject<T[]>,
-  data: T[],
+export const getUpdatedRowsSelected = (
+  selectedRows: MutableRefObject<any[]>,
+  data: any[],
   selectionModel: GridRowSelectionModel,
-): T[] => {
-  const newSelectedRows: T[] = [];
+): any[] => {
+  const newSelectedRows: any[] = [];
+  // if we are dealing with transient items, we give up...
   // our source of truth is the `selectionModel`
   for (const selection of selectionModel) {
-    const prevItem = selectedRows.current.find((r) => r.__identifier === selection);
+    const prevItem =
+      selectedRows.current.length && selectedRows.current[0].__identifier
+        ? selectedRows.current.find((r) => r.__identifier === selection)
+        : undefined;
     if (prevItem) {
       // we already have the item in our `selectedRows`, so keep it
       newSelectedRows.push(prevItem);
     } else {
       // `selection` is a new key, we need to look up the row data in our `data`
-      const newItem = data.find((r) => r.__identifier === selection);
+      const newItem = data.length && data[0].__identifier ? data.find((r) => r.__identifier === selection) : undefined;
       if (newItem) {
         // and add it if found
         newSelectedRows.push(newItem);

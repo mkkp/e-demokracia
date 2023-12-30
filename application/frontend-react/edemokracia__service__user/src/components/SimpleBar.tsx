@@ -6,15 +6,15 @@
 // Template name: actor/src/components/SimpleBar.tsx
 // Template file: actor/src/components/SimpleBar.tsx.hbs
 
+import type { Theme } from '@mui/material';
+import Box from '@mui/material/Box';
+import { alpha, styled } from '@mui/material/styles';
+import type { MUIStyledCommonProps } from '@mui/system';
 import { forwardRef } from 'react';
 import type { ReactNode } from 'react';
-import { alpha, styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
-import type { Theme } from '@mui/material';
-import type { MUIStyledCommonProps } from '@mui/system';
+import { BrowserView, MobileView } from 'react-device-detect';
 import { default as SimpleBarOriginal } from 'simplebar-react';
 import type { Props as SimpleBarProps } from 'simplebar-react';
-import { BrowserView, MobileView } from 'react-device-detect';
 
 import 'simplebar-react/dist/simplebar.min.css';
 

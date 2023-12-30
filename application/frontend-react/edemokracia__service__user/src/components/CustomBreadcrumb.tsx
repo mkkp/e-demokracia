@@ -6,14 +6,15 @@
 // Template name: actor/src/components/CustomBreadcrumb.tsx
 // Template file: actor/src/components/CustomBreadcrumb.tsx.hbs
 
-import { Breadcrumbs, Typography, Link } from '@mui/material';
-import { useState, useContext, createContext, useMemo, useEffect, useCallback } from 'react';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
-import type { To } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import type { To } from 'react-router-dom';
 import { routeToDashboard } from '~/routes';
-import { MdiIcon } from './MdiIcon';
 import { StackableDialogProvider } from './dialog/StackableDialogProvider';
 
 interface BreadcrumbProviderProps {
@@ -150,7 +151,6 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
 
 export const CustomBreadcrumb = () => {
   const breadcrumbItems = useContext(BreadcrumbContextState);
-  const { back, isBackDisabled } = useJudoNavigation();
   const { t } = useTranslation();
 
   return (

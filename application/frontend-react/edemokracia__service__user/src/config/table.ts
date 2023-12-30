@@ -29,7 +29,3 @@ export const serverTableConfig: Partial<DataGridProps<any>> = {
   sortingMode: 'server',
   paginationMode: 'server',
 };
-
-export const rangeDialogConfig: { numberOfElements: number } = {
-  numberOfElements: 10,
-};

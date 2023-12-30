@@ -1,8 +1,10 @@
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
-import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router-dom';
 import { useTranslation, withTranslation } from 'react-i18next';
-import { Box, Typography, Button } from '@mui/material';
+import { isRouteErrorResponse, useNavigate, useRouteError } from 'react-router-dom';
 import { routeToDashboard } from '~/routes';
 import { MdiIcon } from './MdiIcon';
 
@@ -48,6 +50,10 @@ export function RootErrorBoundary() {
     });
   }
 
+  const resetSettings = () => {
+    window.sessionStorage.clear();
+  };
+
   return (
     <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
       <Box textAlign="center">
@@ -57,6 +63,9 @@ export function RootErrorBoundary() {
         <Typography variant="body1" gutterBottom>
           {body}
         </Typography>
+        <Button variant="text" color="primary" onClick={() => resetSettings()} style={{ marginTop: 16 }}>
+          {t('judo.error.boundary.reset-settings', { defaultValue: 'Reset Settings' }) as string}
+        </Button>
         <Button
           variant={isRefreshOffered ? 'text' : 'contained'}
           color="primary"

@@ -6,64 +6,24 @@
 // Template name: actor/src/components/ApplicationSelector.tsx
 // Template file: actor/src/components/ApplicationSelector.tsx.hbs
 
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import type { MouseEvent } from 'react';
-import { Typography, Button, Menu, MenuItem } from '@mui/material';
+import type { ChangeEvent, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from './MdiIcon';
-import { generateAlternativeApplications, changeApplication } from '../utilities/application';
 
-export function ApplicationSelector() {
+export const useApplicationSelector = () => {
   const { t } = useTranslation();
-  const alternativeApplications: Record<string, string> = generateAlternativeApplications(t);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const applicationSelectorOpen = Boolean(anchorEl);
 
-  const handleClickListItem = (event: MouseEvent<any>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuItemClick = (key: string) => {
-    changeApplication(key);
-    setAnchorEl(null);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  return (
-    <>
-      <Button
-        id="application-selector"
-        variant="text"
-        sx={{ width: '100%' }}
-        onClick={handleClickListItem}
-        endIcon={<MdiIcon path="chevron_down" />}
-      >
-        <Typography sx={{ fontWeight: 500 }}>{t('applications.User', { defaultValue: 'User' }) as string}</Typography>
-      </Button>
-      <Menu
-        id="application-selector-menu"
-        anchorEl={anchorEl}
-        open={applicationSelectorOpen}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'lock-button',
-          role: 'listbox',
-        }}
-      >
-        <MenuItem disabled={true}>
-          <Typography>
-            {t('judo.applications.available_applications', { defaultValue: 'Available applications' }) as string}
-          </Typography>
-        </MenuItem>
-        {Object.keys(alternativeApplications).map((key) => (
-          <MenuItem id={key} key={key} onClick={() => handleMenuItemClick(key)}>
-            <Typography>{alternativeApplications[key]}</Typography>
-          </MenuItem>
-        ))}
-      </Menu>
-    </>
-  );
-}
+  return () => {};
+};

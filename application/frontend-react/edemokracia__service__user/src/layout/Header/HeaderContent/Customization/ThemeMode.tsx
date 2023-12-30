@@ -6,11 +6,13 @@
 // Template name: actor/src/layout/Header/HeaderContent/Customization/ThemeMode.tsx
 // Template file: actor/src/layout/Header/HeaderContent/Customization/ThemeMode.tsx.hbs
 
-import type { ChangeEvent } from 'react';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import { useTheme } from '@mui/material/styles';
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { useConfig } from '~/hooks';
+import type { ChangeEvent } from 'react';
 import { ThemeMode as ThemeModeEnum } from '~/config';
+import { useConfig } from '~/hooks';
 
 export const ThemeMode = () => {
   const theme = useTheme();

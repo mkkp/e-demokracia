@@ -1,28 +1,25 @@
+import LoadingButton from '@mui/lab/LoadingButton';
+import type { LinearProgressProps } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { JudoStored } from '@judo/data-api-common';
 import { useTranslation } from 'react-i18next';
-import { LoadingButton } from '@mui/lab';
-import {
-  DialogContent,
-  Grid,
-  DialogTitle,
-  IconButton,
-  Box,
-  LinearProgress,
-  Typography,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  DialogActions,
-  Button,
-} from '@mui/material';
-import type { LinearProgressProps } from '@mui/material';
-import { useSnackbar } from 'notistack';
+import { MdiIcon } from '~/components/MdiIcon';
 import { useDialog } from '~/components/dialog';
-import { MdiIcon } from '~/components';
-import { toastConfig } from '~/config';
+import { useSnacks } from '~/hooks';
+import type { JudoStored } from '~/services/data-api/common';
 import { isErrorOperationFault } from '~/utilities';
 
 export type CRUDDialogOpenProps<T extends JudoStored<any>> = {
@@ -45,10 +42,10 @@ export const useCRUDDialog: UseCRUDDialog = () => {
       fullWidth: true,
       maxWidth: 'sm',
       onClose: (event: object, reason: string) => {
-        /*if (reason !== 'backdropClick') {
+        if (reason !== 'backdropClick') {
           closeDialog();
           onClose(false);
-        }*/
+        }
       },
       children: (
         <CRUDDialog
@@ -75,9 +72,9 @@ export const useCRUDDialog: UseCRUDDialog = () => {
 export type ItemStatus = 'success' | 'error' | 'in-progress';
 
 const iconMapping: Record<ItemStatus, ReactNode> = {
-  'in-progress': <MdiIcon path='minus' />,
-  success: <MdiIcon path='check-circle' color='green' />,
-  error: <MdiIcon path='close-circle' color='red' />,
+  'in-progress': <MdiIcon path="minus" />,
+  success: <MdiIcon path="check-circle" color="green" />,
+  error: <MdiIcon path="close-circle" color="red" />,
 };
 
 export type QueueItem = { id: string; title: string; status: ItemStatus; data: any; error?: any };
@@ -93,7 +90,7 @@ export type CRUDDialogProps = {
 
 export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSuccess, faultPrefix }: CRUDDialogProps) {
   const MAX_PROGRESS = 100;
-  const { enqueueSnackbar } = useSnackbar();
+  const { showSuccessSnack, showErrorSnack, showWarningSnack } = useSnacks();
   const { t } = useTranslation();
   const runCount = useRef<number>(0);
   const [inProgress, setInProgress] = useState<boolean>(false);
@@ -192,25 +189,17 @@ export function CRUDDialog({ title, close, queueItems, action, autoCloseOnSucces
     if (runCount.current > 0 && !inProgress) {
       if (queue.every((i) => i.status === 'success')) {
         setProgress(MAX_PROGRESS); // in case round did not end up with full value :)
-        enqueueSnackbar(
+        showSuccessSnack(
           t('judo.dialogs.crud-bulk.toast.success', { defaultValue: 'Operation(s) executed successfully' }) as string,
-          {
-            variant: 'success',
-            ...toastConfig.success,
-          },
         );
         if (autoCloseOnSuccess) {
           close(runCount.current > 0);
         }
       } else {
-        enqueueSnackbar(
+        showWarningSnack(
           t('judo.dialogs.crud-bulk.toast.warn', {
             defaultValue: 'Not all operations executed successfully!',
           }) as string,
-          {
-            variant: 'warning',
-            ...toastConfig.warning,
-          },
         );
       }
     }

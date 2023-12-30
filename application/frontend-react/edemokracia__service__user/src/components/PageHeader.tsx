@@ -6,7 +6,8 @@
 // Template name: actor/src/components/PageHeader.tsx
 // Template file: actor/src/components/PageHeader.tsx.hbs
 
-import { Grid, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useJudoNavigation } from './CustomBreadcrumb';
